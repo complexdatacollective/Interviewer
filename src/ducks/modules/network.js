@@ -26,7 +26,9 @@ export const UPDATE_EGO = 'UPDATE_EGO';
 
 // Initial network model structure
 const initialState = {
-  ego: {},
+  ego: {
+    [entityPrimaryKeyProperty]: uuidv4(),
+  },
   nodes: [],
   edges: [],
 };

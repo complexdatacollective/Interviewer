@@ -48,6 +48,7 @@ export default function reducer(state = initialState, action = {}) {
         [action.sessionId]: withTimestamp({
           path: action.path,
           promptIndex: 0,
+          caseId: action.caseId,
           network: network(state.network, action),
         }),
       };
@@ -254,11 +255,12 @@ const removeEdge = edge => (dispatch, getState) => {
   });
 };
 
-function addSession() {
+function addSession(caseId) {
   const id = uuidv4();
   return {
     type: ADD_SESSION,
     sessionId: id,
+    caseId,
     path: `/session/${id}`,
   };
 }

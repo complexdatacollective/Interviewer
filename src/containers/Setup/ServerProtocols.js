@@ -7,7 +7,6 @@ import { Redirect } from 'react-router-dom';
 import ApiClient from '../../utils/ApiClient';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { actionCreators as protocolActions } from '../../ducks/modules/protocol';
-import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as serverActions } from '../../ducks/modules/pairedServer';
 import { ServerProtocolList, ServerSetup, ServerUnavailable } from '../../components/Setup';
 
@@ -44,8 +43,7 @@ class ServerProtocols extends Component {
   }
 
   handleSelectProtocol = (protocol) => {
-    const { addSession, downloadProtocol } = this.props;
-    addSession();
+    const { downloadProtocol } = this.props;
     this.apiClient.addTrustedCert()
       .then(() => downloadProtocol(protocol.downloadPath, true));
   }
@@ -107,7 +105,6 @@ ServerProtocols.defaultProps = {
 };
 
 ServerProtocols.propTypes = {
-  addSession: PropTypes.func.isRequired,
   downloadProtocol: PropTypes.func.isRequired,
   isProtocolLoaded: PropTypes.bool.isRequired,
   openDialog: PropTypes.func.isRequired,
@@ -133,7 +130,6 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    addSession: bindActionCreators(sessionsActions.addSession, dispatch),
     downloadProtocol: bindActionCreators(protocolActions.downloadProtocol, dispatch),
     openDialog: bindActionCreators(dialogActions.openDialog, dispatch),
     unpairServer: bindActionCreators(serverActions.unpairServer, dispatch),

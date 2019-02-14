@@ -3,26 +3,45 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Swiper from 'react-id-swiper';
-
-import ProtocolCard from '../../components/Setup/ProtocolCard';
+import { NewSessionOverlay, ProtocolCard } from '../../components/Setup';
 import { actionCreators as protocolActions } from '../../ducks/modules/protocol';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
+import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 
 /**
   * Display available protocols
   */
 class ProtocolList extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showNewSessionOverlay: false,
+      protocol: null,
+    };
+
+    this.overlay = React.createRef();
+  }
   onClickNewProtocol = (protocol) => {
     if (!(protocol.isFactoryProtocol || protocol.path)) {
       return;
     }
 
-    this.props.addSession();
-    if (protocol.isFactoryProtocol) {
-      this.props.loadFactoryProtocol(protocol.path);
-    } else if (protocol.path) {
-      this.props.loadProtocol(protocol.path);
-    }
+    this.setState({ showNewSessionOverlay: true });
+  }
+
+  handleCreateSession = (caseId) => {
+    this.props.addSession(caseId);
+    this.handleCloseOverlay();
+
+    // if (protocol.isFactoryProtocol) {
+    //   this.props.loadFactoryProtocol(protocol.path);
+    // } else if (protocol.path) {
+    //   this.props.loadProtocol(protocol.path);
+    // }
+  }
+
+  handleCloseOverlay = () => {
+    this.setState({ showNewSessionOverlay: false });
   }
 
   render() {
@@ -46,17 +65,24 @@ class ProtocolList extends Component {
     };
 
     return (
-      <Swiper {...params}>
-        { protocols.map(protocol => (
-          <div key={protocol.path}>
-            <ProtocolCard
-              size="large"
-              protocol={protocol}
-              selectProtocol={() => this.onClickNewProtocol(protocol)}
-            />
-          </div>
-        )) }
-      </Swiper>
+      <React.Fragment>
+        <Swiper {...params}>
+          { protocols.map(protocol => (
+            <div key={protocol.path}>
+              <ProtocolCard
+                size="large"
+                protocol={protocol}
+                selectProtocol={() => this.onClickNewProtocol(protocol)}
+              />
+            </div>
+          )) }
+        </Swiper>
+        <NewSessionOverlay
+          handleSubmit={this.handleCreateSession}
+          onClose={this.handleCloseOverlay}
+          show={this.state.showNewSessionOverlay}
+        />
+      </React.Fragment>
     );
   }
 }
@@ -82,6 +108,7 @@ function mapDispatchToProps(dispatch) {
     addSession: bindActionCreators(sessionsActions.addSession, dispatch),
     loadProtocol: bindActionCreators(protocolActions.loadProtocol, dispatch),
     loadFactoryProtocol: bindActionCreators(protocolActions.loadFactoryProtocol, dispatch),
+    openDialog: bindActionCreators(dialogActions.openDialog, dispatch),
   };
 }
 
