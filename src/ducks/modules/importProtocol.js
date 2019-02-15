@@ -5,9 +5,9 @@ import { omit } from 'lodash';
 import { actionTypes as SessionActionTypes } from './session';
 import { supportedWorkers } from '../../utils/WorkerAgent';
 import {
-  loadProtocol,
-  importProtocol,
   downloadProtocol,
+  extractProtocol,
+  loadProtocol,
   preloadWorkers,
 } from '../../utils/protocol';
 
@@ -33,11 +33,11 @@ const END_SESSION = SessionActionTypes.END_SESSION;
 
 const DOWNLOAD_PROTOCOL = 'PROTOCOL/DOWNLOAD_PROTOCOL';
 const DOWNLOAD_PROTOCOL_FAILED = Symbol('PROTOCOL/DOWNLOAD_PROTOCOL_FAILED');
-const IMPORT_PROTOCOL = 'PROTOCOL/IMPORT_PROTOCOL';
-const IMPORT_PROTOCOL_FAILED = Symbol('PROTOCOL/IMPORT_PROTOCOL_FAILED');
+const EXTRACT_PROTOCOL = 'PROTOCOL/EXTRACT_PROTOCOL';
+const EXTRACT_PROTOCOL_FAILED = Symbol('PROTOCOL/EXTRACT_PROTOCOL_FAILED');
 const LOAD_PROTOCOL = 'LOAD_PROTOCOL';
 const LOAD_PROTOCOL_FAILED = Symbol('LOAD_PROTOCOL_FAILED');
-const IMPORT_PROTOCOL_COMPLETE = 'IMPORT_PROTOCOL_COMPLETE';
+const EXTRACT_PROTOCOL_COMPLETE = 'EXTRACT_PROTOCOL_COMPLETE';
 const SET_WORKER = 'SET_WORKER';
 
 export const initialState = {
@@ -48,13 +48,12 @@ export const initialState = {
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    case IMPORT_PROTOCOL_COMPLETE:
+    case EXTRACT_PROTOCOL_COMPLETE:
       return {
         ...state,
         ...omit(action.protocol, 'externalData'),
         path: action.path,
-        isLoaded: true,
-        isLoading: false,
+        status: 'complete',
       };
     case SET_WORKER:
       return {
@@ -64,11 +63,14 @@ export default function reducer(state = initialState, action = {}) {
     case END_SESSION:
       return initialState;
     case DOWNLOAD_PROTOCOL:
-    case IMPORT_PROTOCOL:
       return {
         ...state,
-        isLoaded: false,
-        isLoading: true,
+        status: 'downloading',
+      };
+    case EXTRACT_PROTOCOL:
+      return {
+        ...state,
+        status: 'importing',
       };
     case LOAD_PROTOCOL:
       return {
@@ -78,7 +80,7 @@ export default function reducer(state = initialState, action = {}) {
         type: action.protocolType,
       };
     case DOWNLOAD_PROTOCOL_FAILED:
-    case IMPORT_PROTOCOL_FAILED:
+    case EXTRACT_PROTOCOL_FAILED:
     case LOAD_PROTOCOL_FAILED:
       return {
         ...state,
@@ -98,9 +100,9 @@ function downloadProtocolAction(uri, forNCServer) {
   };
 }
 
-function importProtocolAction(path) {
+function extractProtocolAction(path) {
   return {
-    type: IMPORT_PROTOCOL,
+    type: EXTRACT_PROTOCOL,
     path,
   };
 }
@@ -128,9 +130,9 @@ function loadProtocolFailedAction(error) {
   };
 }
 
-function importProtocolFailedAction(error) {
+function extractProtocolFailedAction(error) {
   return {
-    type: IMPORT_PROTOCOL_FAILED,
+    type: EXTRACT_PROTOCOL_FAILED,
     error,
   };
 }
@@ -142,9 +144,9 @@ function downloadProtocolFailedAction(error) {
   };
 }
 
-function importProtocolCompleteAction(path, protocol) {
+function extractProtocolCompleteAction(path, protocol) {
   return {
-    type: IMPORT_PROTOCOL_COMPLETE,
+    type: EXTRACT_PROTOCOL_COMPLETE,
     path,
     protocol,
   };
@@ -166,8 +168,8 @@ const downloadAndInstallProtocolThunk = (uri, pairedServer) => (dispatch) => {
       // Download succeeded, temp path returned.
       (protocolPath) => {
         // console.log('downloadProtocol finished', protocolPath);
-        dispatch(importProtocolAction());
-        return importProtocol(protocolPath);
+        dispatch(extractProtocolAction());
+        return extractProtocol(protocolPath);
       },
     )
     .catch(error => dispatch(downloadProtocolFailedAction(error)))
@@ -179,12 +181,12 @@ const downloadAndInstallProtocolThunk = (uri, pairedServer) => (dispatch) => {
         return loadProtocol(appPath);
       },
     )
-    .catch(error => dispatch(importProtocolFailedAction(error)))
+    .catch(error => dispatch(extractProtocolFailedAction(error)))
     .then(
       (protocolData) => {
         // Protocol data read, JSON returned.
         // console.log('load protocol JSON finished', protocolData);
-        dispatch(importProtocolCompleteAction(protocolData));
+        dispatch(extractProtocolCompleteAction(protocolData));
       },
     )
     .catch(error => dispatch(loadProtocolFailedAction(error)));
@@ -210,23 +212,23 @@ const loadProtocolWorkerEpic = action$ =>
 const actionCreators = {
   downloadAndInstallProtocol: downloadAndInstallProtocolThunk,
   loadProtocol: loadProtocolAction,
-  importProtocol: importProtocolAction,
+  extractProtocol: extractProtocolAction,
   downloadProtocol: downloadProtocolAction,
-  importProtocolComplete: importProtocolCompleteAction,
+  extractProtocolComplete: extractProtocolCompleteAction,
   loadFactoryProtocol: loadFactoryProtocolAction,
   loadProtocolFailedAction,
-  importProtocolFailedAction,
+  extractProtocolFailedAction,
   downloadProtocolFailedAction,
 };
 
 const actionTypes = {
-  IMPORT_PROTOCOL,
-  IMPORT_PROTOCOL_FAILED,
+  EXTRACT_PROTOCOL,
+  EXTRACT_PROTOCOL_FAILED,
   DOWNLOAD_PROTOCOL,
   DOWNLOAD_PROTOCOL_FAILED,
   LOAD_PROTOCOL,
   LOAD_PROTOCOL_FAILED,
-  IMPORT_PROTOCOL_COMPLETE,
+  EXTRACT_PROTOCOL_COMPLETE,
 };
 
 const epics = combineEpics(

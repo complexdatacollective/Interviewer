@@ -3,9 +3,9 @@
 import Zip from 'jszip';
 import environments from '../environments';
 import inEnvironment from '../Environment';
-import friendlyErrorMessage from '../../utils/friendlyErrorMessage';
+import friendlyErrorMessage from '../friendlyErrorMessage';
 import { removeDirectory, ensurePathExists, readFile, writeStream, inSequence } from '../filesystem';
-import { protocolPath } from './';
+import { protocolPath } from '.';
 import { assertNonEmptyPath, assertNoTraversalInPath, assertRelativePath } from './validation/zipValidation';
 
 const isRequired = (param) => { throw new Error(`${param} is required`); };
@@ -124,7 +124,7 @@ const importZip = inEnvironment((environment) => {
   return () => Promise.reject(new Error('loadZip() not available on platform'));
 });
 
-const importProtocol = inEnvironment((environment) => {
+const extractProtocol = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
     const path = require('path');
 
@@ -145,10 +145,10 @@ const importProtocol = inEnvironment((environment) => {
     };
   }
 
-  return () => Promise.reject(new Error('importProtocol() not available on platform'));
+  return () => Promise.reject(new Error('extractProtocol() not available on platform'));
 });
 
-export default importProtocol;
+export default extractProtocol;
 
 export {
   checkZipPaths,
