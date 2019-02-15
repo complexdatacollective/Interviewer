@@ -90,16 +90,11 @@ describe('<NodeLayout />', () => {
   });
 
   describe('highlighting', () => {
-    const subject = shallow(<NodeLayout highlightAttributes={[{ variable: 'isOn', color: 'neon' }]} />);
+    const subject = shallow(<NodeLayout highlightAttribute="isOn" />);
 
     it('detects highlight state', () => {
       expect(subject.instance().isHighlighted({ attributes: { isOn: true } })).toBe(true);
       expect(subject.instance().isHighlighted({ attributes: {} })).toBe(false);
-    });
-
-    it('gets the highlight color', () => {
-      expect(subject.instance().getHighlightColor({ attributes: { isOn: true } })).toBe('neon');
-      expect(subject.instance().getHighlightColor({ attributes: {} })).toBe('');
     });
   });
 });

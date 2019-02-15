@@ -26,7 +26,6 @@ ShallowWrapper {
     onDropped={[Function]}
     onSelected={[Function]}
     selected={false}
-    selectedColor=""
     updateNode={[Function]}
   />,
   Symbol(enzyme.__renderer__): Object {
@@ -60,7 +59,6 @@ ShallowWrapper {
         onSelected={[Function]}
         scrollDirection="NO_SCROLL"
         selected={false}
-        selectedColor=""
       />,
       "className": "node-layout__node",
       "style": Object {
@@ -90,7 +88,6 @@ ShallowWrapper {
         "onSelected": [Function],
         "scrollDirection": "NO_SCROLL",
         "selected": false,
-        "selectedColor": "",
       },
       "ref": null,
       "rendered": null,
@@ -122,7 +119,6 @@ ShallowWrapper {
           onSelected={[Function]}
           scrollDirection="NO_SCROLL"
           selected={false}
-          selectedColor=""
         />,
         "className": "node-layout__node",
         "style": Object {
@@ -152,7 +148,6 @@ ShallowWrapper {
           "onSelected": [Function],
           "scrollDirection": "NO_SCROLL",
           "selected": false,
-          "selectedColor": "",
         },
         "ref": null,
         "rendered": null,
