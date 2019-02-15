@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import window from '../../ui/components/window';
 import { Icon } from '../../ui/components';
+import { Radio } from '../../ui/components/Fields';
 import { Accordion } from '.';
 
 import { makeGetEdgeColor, makeGetEdgeLabel, makeGetNodeAttributeLabel, makeGetCategoricalOptions } from '../../selectors/protocol';
@@ -24,6 +25,31 @@ class PresetSwitcherKey extends Component {
     this.setState({
       open: !this.state.open,
     });
+  }
+
+  renderHighlightLabel = (highlight, index) => {
+    const {
+      highlightIndex,
+      toggleHighlightIndex,
+    } = this.props;
+
+    const handleHighlightClick = (event) => {
+      event.stopPropagation();
+      toggleHighlightIndex(index);
+    };
+
+    return (
+      <Radio
+        className="accordion-item"
+        key={index}
+        input={{
+          value: index,
+          checked: index === highlightIndex,
+          onChange: event => handleHighlightClick(event, index),
+        }}
+        label={highlight}
+      />
+    );
   }
 
   render() {
@@ -46,15 +72,7 @@ class PresetSwitcherKey extends Component {
       <div className={classNames} ref={this.panel}>
         <div className="preset-switcher-key__content">
           <Accordion label="Attributes" onAccordionToggle={toggleHighlights}>
-            {highlightLabels.map((highlight, index) => (
-              <div className="accordion-item" key={index}>
-                <Icon
-                  name="highlighted"
-                  color={highlight.color}
-                />
-                {highlight.label}
-              </div>
-            ))}
+            {highlightLabels.map(this.renderHighlightLabel)}
           </Accordion>
           <Accordion label="Links" onAccordionToggle={toggleEdges}>
             {edges.map((edge, index) => (
@@ -88,9 +106,11 @@ PresetSwitcherKey.propTypes = {
   convexOptions: PropTypes.array,
   edges: PropTypes.array,
   highlightLabels: PropTypes.array,
+  highlightIndex: PropTypes.number,
   toggleConvex: PropTypes.func,
   toggleEdges: PropTypes.func,
   toggleHighlights: PropTypes.func,
+  toggleHighlightIndex: PropTypes.func,
   open: PropTypes.bool.isRequired,
 };
 
@@ -98,9 +118,11 @@ PresetSwitcherKey.defaultProps = {
   edges: [],
   convexOptions: [],
   highlightLabels: [],
+  highlightIndex: 0,
   toggleConvex: () => {},
   toggleEdges: () => {},
   toggleHighlights: () => {},
+  toggleHighlightIndex: () => {},
 };
 
 const makeMapStateToProps = () => {
@@ -110,8 +132,8 @@ const makeMapStateToProps = () => {
   const getCategoricalOptions = makeGetCategoricalOptions();
 
   const mapStateToProps = (state, props) => {
-    const highlightLabels = props.highlights.map(({ variable, color }) => (
-      { label: getNodeAttributeLabel(state, { variableId: variable, ...props }), color }
+    const highlightLabels = props.highlights.map(variable => (
+      getNodeAttributeLabel(state, { variableId: variable, ...props })
     ));
     const edges = props.displayEdges.map(type => (
       { label: getEdgeLabel(state, { type }), color: getEdgeColor(state, { type }) }

@@ -22,7 +22,6 @@ class LayoutNode extends PureComponent {
       linking,
       node,
       selected,
-      selectedColor,
     } = this.props;
     const nodeAttributes = getEntityAttributes(node);
 
@@ -42,7 +41,6 @@ class LayoutNode extends PureComponent {
         <EnhancedNode
           onSelected={this.props.onSelected}
           selected={selected}
-          selectedColor={selectedColor}
           linking={linking}
           allowDrag={allowPositioning}
           allowSelect={allowSelect}
@@ -66,7 +64,6 @@ LayoutNode.propTypes = {
   node: PropTypes.object.isRequired,
   onSelected: PropTypes.func.isRequired,
   selected: PropTypes.bool,
-  selectedColor: PropTypes.string,
 };
 
 LayoutNode.defaultProps = {
@@ -77,7 +74,6 @@ LayoutNode.defaultProps = {
   linking: false,
   onSelected: () => {},
   selected: false,
-  selectedColor: '',
 };
 
 export { LayoutNode };

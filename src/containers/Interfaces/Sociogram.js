@@ -83,7 +83,7 @@ const Sociogram = ({
         <ConcentricCircles
           subject={subject}
           layoutVariable={layoutVariable}
-          highlightAttributes={[{ variable: highlightAttribute }]}
+          highlightAttribute={highlightAttribute}
           allowHighlighting={allowHighlighting}
           createEdge={createEdge}
           allowPositioning={allowPositioning}

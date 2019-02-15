@@ -32,7 +32,9 @@ class PresetSwitcher extends PureComponent {
       isFreeze,
       toggleConvex,
       toggleEdges,
+      highlightIndex,
       toggleHighlights,
+      toggleHighlightIndex,
       showResetButton,
       resetInteractions,
       toggleFreeze,
@@ -55,7 +57,9 @@ class PresetSwitcher extends PureComponent {
         <PresetSwitcherKey
           subject={subject}
           highlights={currentPreset.highlight}
+          highlightIndex={highlightIndex}
           toggleHighlights={toggleHighlights}
+          toggleHighlightIndex={toggleHighlightIndex}
           displayEdges={displayEdges}
           toggleEdges={toggleEdges}
           convexHulls={convexHulls}
@@ -104,7 +108,9 @@ PresetSwitcher.propTypes = {
   isFreeze: PropTypes.bool,
   toggleConvex: PropTypes.func.isRequired,
   toggleEdges: PropTypes.func.isRequired,
+  highlightIndex: PropTypes.number.isRequired,
   toggleHighlights: PropTypes.func.isRequired,
+  toggleHighlightIndex: PropTypes.func.isRequired,
   showResetButton: PropTypes.bool.isRequired,
   resetInteractions: PropTypes.func.isRequired,
   toggleFreeze: PropTypes.func,

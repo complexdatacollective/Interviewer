@@ -25,6 +25,7 @@ class Narrative extends Component {
       showConvex: true,
       showEdges: true,
       showHighlights: true,
+      highlightIndex: 0,
       showResetButton: false,
       activeAnnotations: false,
       activeFocusNodes: false,
@@ -58,6 +59,12 @@ class Narrative extends Component {
     });
   }
 
+  toggleHighlightIndex = (index) => {
+    this.setState({
+      highlightIndex: index,
+    });
+  }
+
   toggleFreeze = () => {
     this.setState({
       isFreeze: !this.state.isFreeze,
@@ -74,6 +81,7 @@ class Narrative extends Component {
         showConvex: true,
         showEdges: true,
         showHighlights: true,
+        highlightIndex: 0,
         presetIndex: index,
         activeAnnotations: false,
         activeFocusNodes: false,
@@ -117,7 +125,8 @@ class Narrative extends Component {
             <ConcentricCircles
               subject={subject}
               layoutVariable={layoutVariable}
-              highlightAttributes={(this.state.showHighlights && highlight) || []}
+              highlightAttribute={
+                (this.state.showHighlights ? highlight[this.state.highlightIndex] : null)}
               displayEdges={(this.state.showEdges && displayEdges) || []}
               convexHulls={(this.state.showConvex && convexHulls) || ''}
               allowPositioning={allowRepositioning}
@@ -135,6 +144,8 @@ class Narrative extends Component {
             presetIndex={this.state.presetIndex}
             subject={subject}
             highlights={currentPreset.highlight}
+            highlightIndex={this.state.highlightIndex}
+            toggleHighlightIndex={this.toggleHighlightIndex}
             toggleHighlights={this.toggleHighlights}
             resetInteractions={this.resetInteractions}
             displayEdges={displayEdges}

@@ -81,16 +81,14 @@ const withSelectHandlers = compose(
         // Reset the node linking state
         updateLinkFrom(null);
       },
-    toggleHighlightAttribute: ({ allowHighlighting, highlightAttributes, toggleHighlight }) =>
+    toggleHighlightAttribute: ({ allowHighlighting, highlightAttribute, toggleHighlight }) =>
       (node) => {
         if (!allowHighlighting) { return; }
-        highlightAttributes.forEach((highlightAttribute) => {
-          const newVal = !node[entityAttributesProperty][highlightAttribute.variable];
-          toggleHighlight(
-            node[entityPrimaryKeyProperty],
-            { [highlightAttribute.variable]: newVal },
-          );
-        });
+        const newVal = !node[entityAttributesProperty][highlightAttribute];
+        toggleHighlight(
+          node[entityPrimaryKeyProperty],
+          { [highlightAttribute]: newVal },
+        );
       },
   }),
   withHandlers({
