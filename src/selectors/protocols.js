@@ -9,6 +9,6 @@ const protocolReducer = (obj, protocol) => {
 
 // @return {Object} protocol info, keyed by ID/path
 export const protocolsByPath = createDeepEqualSelector(
-  state => state.protocols.reduce(protocolReducer, {}),
+  state => state.installedProtocols.reduce(protocolReducer, {}),
   protocolData => protocolData,
 );

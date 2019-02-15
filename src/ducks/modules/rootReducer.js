@@ -4,10 +4,10 @@ import { reducer as formReducer } from 'redux-form';
 
 import externalData from './externalData';
 import sessions from './sessions';
-import session from './session';
+import activeSessionId from './session';
 import deviceSettings from './deviceSettings';
-import protocol from './protocol';
-import protocols from './protocols';
+import activeProtocol from './protocol';
+import installedProtocols from './protocols';
 import dialogs from './dialogs';
 import search from './search';
 import ui from './ui';
@@ -17,12 +17,12 @@ import { actionTypes as resetActionTypes } from './reset';
 const appReducer = combineReducers({
   router: routerReducer,
   form: formReducer,
-  session,
+  activeSessionId,
   sessions,
   deviceSettings,
   externalData,
-  protocol,
-  protocols,
+  activeProtocol,
+  installedProtocols,
   dialogs,
   search,
   ui,

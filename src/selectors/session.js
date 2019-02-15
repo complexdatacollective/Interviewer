@@ -14,13 +14,14 @@ const DefaultFinishStage = {
   label: 'Finish Interview',
 };
 
-const protocol = state => state.protocol;
+const protocol = state => state.activeProtocol;
 const currentPathname = router => router && router.location && router.location.pathname;
 const stageIndexForCurrentSession = state => currentStageIndex(currentPathname(state.router));
 const withFinishStage = stages => (stages && stages.length ? [...stages, DefaultFinishStage] : []);
 
-export const getCurrentSession = state => state.sessions[state.session];
-export const anySessionIsActive = state => state.session && state.session !== initialState;
+export const getCurrentSession = state => state.sessions[state.activeSessionId];
+export const anySessionIsActive =
+  state => state.activeSessionId && state.activeSessionId !== initialState;
 
 export const stages = createSelector(
   protocol,
@@ -34,7 +35,9 @@ export const getStageForCurrentSession = createSelector(
 );
 
 export const getPromptIndexForCurrentSession = createSelector(
-  state => (state.sessions[state.session] && state.sessions[state.session].promptIndex) || 0,
+  state => (
+    state.sessions[state.activeSessionId] && state.sessions[state.activeSessionId].promptIndex
+  ) || 0,
   promptIndex => promptIndex,
 );
 

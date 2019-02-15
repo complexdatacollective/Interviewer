@@ -16,7 +16,9 @@ class ProtocolList extends Component {
     super(props);
     this.state = {
       showNewSessionOverlay: false,
-      protocol: null,
+      protocol: {
+        name: 12,
+      },
     };
 
     this.overlay = React.createRef();
@@ -36,10 +38,10 @@ class ProtocolList extends Component {
     this.props.addSession(caseId);
     this.handleCloseOverlay();
 
-    if (this.state.protocol.isFactoryProtocol) {
-      this.props.loadFactoryProtocol(this.state.protocol.path);
-    } else if (this.state.protocol.path) {
-      this.props.loadProtocol(this.state.protocol.path);
+    if (this.state.activeProtocol.isFactoryProtocol) {
+      this.props.loadFactoryProtocol(this.state.activeProtocol.path);
+    } else if (this.state.activeProtocol.path) {
+      this.props.loadProtocol(this.state.activeProtocol.path);
     }
   }
 
@@ -48,7 +50,7 @@ class ProtocolList extends Component {
   }
 
   render() {
-    const { protocols } = this.props;
+    const { installedProtocols } = this.props;
     const params = {
       containerClass: 'protocol-list swiper-container',
       pagination: {
@@ -60,6 +62,9 @@ class ProtocolList extends Component {
         nextEl: '.swiper-button-next.swiper-button-white',
         prevEl: '.swiper-button-prev.swiper-button-white',
       },
+      on: {
+        slideChange: this.handleSwipe,
+      },
       loop: false,
       shouldSwiperUpdate: true,
       rebuildOnUpdate: true,
@@ -69,8 +74,8 @@ class ProtocolList extends Component {
 
     return (
       <React.Fragment>
-        <Swiper {...params}>
-          { protocols.map(protocol => (
+        <Swiper {...params} ref={(node) => { if (node) this.swiper = node.swiper; }}>
+          { installedProtocols.map(protocol => (
             <div key={protocol.path}>
               <ProtocolCard
                 size="large"
@@ -94,7 +99,7 @@ ProtocolList.propTypes = {
   addSession: PropTypes.func.isRequired,
   loadFactoryProtocol: PropTypes.func.isRequired,
   loadProtocol: PropTypes.func.isRequired,
-  protocols: PropTypes.array.isRequired,
+  installedProtocols: PropTypes.array.isRequired,
 };
 
 ProtocolList.defaultProps = {
@@ -102,7 +107,7 @@ ProtocolList.defaultProps = {
 
 function mapStateToProps(state) {
   return {
-    protocols: state.protocols,
+    installedProtocols: state.installedProtocols,
   };
 }
 

@@ -22,13 +22,13 @@ const formConfig = {
 };
 
 const initialValues = {
-  protocol_url: 'https://',
+  protocol_url: 'https://networkcanvas.com/protocols/snap.netcanvas',
 };
 
 class ProtocolUrlForm extends Component {
   onClickImportRemoteProtocol = (fields) => {
     if (fields) {
-      this.props.downloadProtocol(fields.protocol_url);
+      this.props.downloadAndInstallProtocol(fields.protocol_url);
       this.props.handleProtocolUpdate();
     }
   }
@@ -59,14 +59,15 @@ class ProtocolUrlForm extends Component {
 }
 
 ProtocolUrlForm.propTypes = {
-  downloadProtocol: PropTypes.func.isRequired,
+  downloadAndInstallProtocol: PropTypes.func.isRequired,
   handleProtocolUpdate: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
 };
 
 function mapDispatchToProps(dispatch) {
   return {
-    downloadProtocol: bindActionCreators(protocolActions.downloadProtocol, dispatch),
+    downloadAndInstallProtocol:
+      bindActionCreators(protocolActions.downloadAndInstallProtocol, dispatch),
     handleProtocolUpdate: () => {
       dispatch(push('/'));
     },

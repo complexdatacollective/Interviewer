@@ -139,11 +139,11 @@ function mapStateToProps(state, ownProps) {
 
   return {
     backParam: ownProps.location.search,
-    isProtocolLoaded: state.protocol.isLoaded,
+    isProtocolLoaded: state.activeProtocol.isLoaded,
     isSkipped: isStageSkipped(ownProps.computedMatch.params.stageIndex)(state),
-    protocolPath: state.protocol.path,
-    sessionId: state.session,
-    sessionUrl: state.sessions[state.session] && state.sessions[state.session].path,
+    protocolPath: state.activeProtocol.path,
+    sessionId: state.activeSessionId,
+    sessionUrl: state.sessions[state.activeSessionId] && state.sessions[state.activeSessionId].path,
     skipToIndex: getNextIndex(nextIndex)(state),
   };
 }

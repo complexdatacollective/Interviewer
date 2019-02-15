@@ -57,7 +57,7 @@ LoadScreen.defaultProps = {
 };
 
 const mapStateToProps = state => ({
-  isWorking: state.protocol.isLoading,
+  isWorking: state.activeProtocol.isLoading,
 });
 
 export default compose(

@@ -39,6 +39,7 @@ class NewSessionOverlay extends Component {
             value: this.state.caseID,
             onChange: e => this.handleUpdateCaseID(e.target.value),
           }}
+          autoFocus
           label="Case ID"
           fieldLabel=" "
         />

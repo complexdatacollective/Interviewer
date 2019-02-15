@@ -87,7 +87,7 @@ Setup.propTypes = {
   isPairedWithServer: PropTypes.bool.isRequired,
   protocolPath: PropTypes.string,
   protocolType: PropTypes.string.isRequired,
-  sessionId: PropTypes.string.isRequired,
+  sessionId: PropTypes.string,
   stageIndex: PropTypes.number,
 };
 
@@ -95,16 +95,17 @@ Setup.defaultProps = {
   protocolPath: '',
   isPairedWithServer: false,
   stageIndex: 0,
+  sessionId: null,
 };
 
 function mapStateToProps(state) {
   return {
-    isFactory: state.protocol.isFactory,
-    isProtocolLoaded: state.protocol.isLoaded,
+    isFactory: state.activeProtocol.isFactory,
+    isProtocolLoaded: state.activeProtocol.isLoaded,
     isPairedWithServer: !!state.pairedServer,
-    protocolPath: state.protocol.path,
-    protocolType: state.protocol.type,
-    sessionId: state.session,
+    protocolPath: state.activeProtocol.path,
+    protocolType: state.activeProtocol.type,
+    sessionId: state.activeSessionId,
   };
 }
 

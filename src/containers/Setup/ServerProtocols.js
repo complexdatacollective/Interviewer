@@ -69,8 +69,7 @@ class ServerProtocols extends Component {
     const { isProtocolLoaded, server } = this.props;
 
     if (isProtocolLoaded) {
-      const pathname = `/session/${this.props.sessionId}/${this.props.protocolType}/${this.props.protocolPath}/0`;
-      return (<Redirect to={{ pathname: `${pathname}` }} />);
+      return (<Redirect to={{ pathname: '/setup' }} />);
     }
 
     let content = null;
@@ -109,21 +108,18 @@ ServerProtocols.propTypes = {
   isProtocolLoaded: PropTypes.bool.isRequired,
   openDialog: PropTypes.func.isRequired,
   pairedServer: PropTypes.object.isRequired,
-  protocolPath: PropTypes.string,
-  protocolType: PropTypes.string.isRequired,
   server: PropTypes.shape({
     pairingServiceUrl: PropTypes.string.isRequired,
   }).isRequired,
-  sessionId: PropTypes.string.isRequired,
   unpairServer: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
-    isProtocolLoaded: state.protocol.isLoaded,
-    protocolPath: state.protocol.path,
-    protocolType: state.protocol.type,
-    sessionId: state.session,
+    isProtocolLoaded: state.activeProtocol.isLoaded,
+    protocolPath: state.activeProtocol.path,
+    protocolType: state.activeProtocol.type,
+    sessionId: state.activeSessionId,
     pairedServer: state.pairedServer,
   };
 }

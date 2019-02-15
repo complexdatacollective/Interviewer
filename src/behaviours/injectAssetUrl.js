@@ -5,7 +5,7 @@ import getMediaAssetUrl from '../utils/protocol/getMediaAssetUrl';
 
 // curry asset fetcher with protocol path from state
 const mapStateToProps = state => ({
-  getAssetUrl: url => getMediaAssetUrl(state.protocol.path, url, state.protocol.type),
+  getAssetUrl: url => getMediaAssetUrl(state.activeProtocol.path, url, state.activeProtocol.type),
 });
 
 const injectAssetUrl = compose(

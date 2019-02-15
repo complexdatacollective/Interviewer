@@ -35,8 +35,12 @@ const loadProtocol = (environment) => {
   if (environment !== environments.WEB) {
     return protocolName =>
       readFile(protocolPath(protocolName, 'protocol.json'))
-        .then(data => JSON.parse(data))
-        .then(verifyProtocol)
+        .then(json => JSON.parse(json))
+        .then((data) => {
+          const protocol = verifyProtocol(data);
+          const path = protocolPath(protocolName, 'protocol.json');
+          return { protocol, path };
+        })
         .catch(openError);
   }
 

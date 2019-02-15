@@ -23,10 +23,10 @@ const timelineStageHandlers = withHandlers({
 });
 
 const mapStateToProps = state => ({
-  protocolPath: state.protocol.path,
+  protocolPath: state.activeProtocol.path,
   currentStageIndex: currentStageIndex(state.router.location.pathname),
-  protocolType: state.protocol.type,
-  sessionId: state.session,
+  protocolType: state.activeProtocol.type,
+  sessionId: state.activeSessionId,
 });
 
 const mapDispatchToProps = dispatch => ({

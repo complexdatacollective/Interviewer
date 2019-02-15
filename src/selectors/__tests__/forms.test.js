@@ -27,7 +27,7 @@ describe('forms selector', () => {
 
     it('returns form if defined', () => {
       const props = { stage: { form: 'person' } };
-      expect(rehydrateForm(state, props)).toEqual(state.protocol.forms.person);
+      expect(rehydrateForm(state, props)).toEqual(state.activeProtocol.forms.person);
     });
   });
 });

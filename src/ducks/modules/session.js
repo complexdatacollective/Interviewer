@@ -5,7 +5,7 @@ const ADD_SESSION = SessionsActionTypes.ADD_SESSION;
 const SET_SESSION = 'SET_SESSION';
 const END_SESSION = 'END_SESSION';
 
-const initialState = 'CREATE_NEW';
+const initialState = null;
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {

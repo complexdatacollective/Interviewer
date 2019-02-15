@@ -1,3 +1,5 @@
+import { combineEpics } from 'redux-observable';
+import { Observable } from 'rxjs';
 import { omit } from 'lodash';
 
 import { actionTypes as SessionActionTypes } from './session';
@@ -244,7 +246,16 @@ const actionTypes = {
   SET_PROTOCOL,
 };
 
+const epics = combineEpics(
+  downloadProtocolEpic,
+  importProtocolEpic,
+  loadProtocolEpic,
+  loadFactoryProtocolEpic,
+  loadProtocolWorkerEpic,
+);
+
 export {
   actionCreators,
   actionTypes,
+  epics,
 };

@@ -16,13 +16,15 @@ import { ProtocolImport, SetupScreen } from './containers/Setup';
 
 function mapStateToProps(state) {
   return {
-    isProtocolLoaded: state.protocol.isLoaded,
-    protocolPath: state.protocol.path,
-    protocolType: state.protocol.type,
-    sessionId: state.session,
+    isProtocolLoaded: state.activeProtocol.isLoaded,
+    protocolPath: state.activeProtocol.path,
+    protocolType: state.activeProtocol.type,
+    sessionId: state.activeSessionId,
   };
 }
 
+// If there is a loaded protocol, redirect to the current active session (!incorrect assumption)
+// If not, show the setup route.
 let SetupRequiredRoute = (
   { component: Component, protocolPath, protocolType, sessionId, ...rest },
 ) => (

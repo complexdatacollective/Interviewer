@@ -86,6 +86,7 @@ class Form extends Component {
       autoFocus,
       fields,
       handleSubmit,
+      controls,
       tooltip,
       className,
     } = this.props;
@@ -104,6 +105,9 @@ class Form extends Component {
             />
           );
         }) }
+        <div className="form__button-container">
+          {controls.map(control => control)}
+        </div>
       </form>
     );
   }
