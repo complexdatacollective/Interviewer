@@ -9,7 +9,12 @@ import { actionTypes as ProtocolActionTypes } from './protocol';
  * the store is updated.
  */
 
-const SET_PROTOCOL = ProtocolActionTypes.SET_PROTOCOL;
+
+// Add new side effect here: listen for protocol import complete, and copy payload
+// to this state.
+
+
+const IMPORT_PROTOCOL_COMPLETE = ProtocolActionTypes.IMPORT_PROTOCOL_COMPLETE;
 
 const initialState = [
   {
@@ -28,19 +33,13 @@ const initialState = [
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    case SET_PROTOCOL: {
-      // TODO: Protocol should be validated before import; this check shouldn't be needed
-      if (!action.protocol.name) { return state; }
-
-      // Do not allow updates to factory protocols
-      if (action.isFactoryProtocol) { return state; }
-
+    case IMPORT_PROTOCOL_COMPLETE: {
       const newProtocol = {
-        name: action.protocol.name,
-        description: action.protocol.description,
+        ...action.protocol,
         path: action.path,
       };
 
+      // Allow for updating as well as installing new
       const existingIndex = state.findIndex(protocol => protocol.name === newProtocol.name);
 
       if (existingIndex > -1) {
