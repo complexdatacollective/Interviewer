@@ -101,7 +101,7 @@ Setup.defaultProps = {
 function mapStateToProps(state) {
   return {
     isFactory: state.activeProtocol.isFactory,
-    isProtocolLoaded: state.activeProtocol.isLoaded,
+    isProtocolLoaded: !!state.activeSessionId,
     isPairedWithServer: !!state.pairedServer,
     protocolPath: state.activeProtocol.path,
     protocolType: state.activeProtocol.type,

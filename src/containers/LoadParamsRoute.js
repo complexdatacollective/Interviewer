@@ -73,7 +73,6 @@ class LoadParamsRoute extends Component {
     const {
       backParam,
       component: RenderComponent,
-      isProtocolLoaded,
       isSkipped,
       shouldReset,
       skipToIndex,
@@ -86,7 +85,7 @@ class LoadParamsRoute extends Component {
       sessionId,
     } = this.props.computedMatch.params;
 
-    const finishedLoading = isProtocolLoaded && this.props.sessionId === sessionId;
+    const finishedLoading = this.props.sessionId === sessionId;
     if (!shouldReset && !finishedLoading) { return null; }
 
     return (
@@ -110,7 +109,6 @@ LoadParamsRoute.propTypes = {
   backParam: PropTypes.string.isRequired,
   component: PropTypes.func.isRequired,
   computedMatch: PropTypes.object.isRequired,
-  isProtocolLoaded: PropTypes.bool.isRequired,
   isSkipped: PropTypes.bool,
   loadFactoryProtocol: PropTypes.func.isRequired,
   loadProtocol: PropTypes.func.isRequired,
@@ -139,7 +137,6 @@ function mapStateToProps(state, ownProps) {
 
   return {
     backParam: ownProps.location.search,
-    isProtocolLoaded: state.activeProtocol.isLoaded,
     isSkipped: isStageSkipped(ownProps.computedMatch.params.stageIndex)(state),
     protocolPath: state.activeProtocol.path,
     sessionId: state.activeSessionId,

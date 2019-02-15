@@ -1,6 +1,5 @@
 import { combineEpics } from 'redux-observable';
 import { Observable } from 'rxjs';
-import { omit } from 'lodash';
 
 import { actionTypes as SessionActionTypes } from './session';
 import { supportedWorkers } from '../../utils/WorkerAgent';
@@ -51,8 +50,7 @@ export default function reducer(state = initialState, action = {}) {
     case EXTRACT_PROTOCOL_COMPLETE:
       return {
         ...state,
-        ...omit(action.protocol, 'externalData'),
-        path: action.path,
+        ...action.protocolData,
         status: 'complete',
       };
     case SET_WORKER:
@@ -70,47 +68,43 @@ export default function reducer(state = initialState, action = {}) {
     case EXTRACT_PROTOCOL:
       return {
         ...state,
-        status: 'importing',
+        status: 'extracting',
+        path: action.path,
       };
     case PARSE_PROTOCOL:
       return {
         ...state,
-        isLoaded: false,
-        isLoading: true,
-        type: action.protocolType,
+        status: 'parsing',
+        path: action.path,
       };
     case DOWNLOAD_PROTOCOL_FAILED:
     case EXTRACT_PROTOCOL_FAILED:
     case PARSE_PROTOCOL_FAILED:
       return {
         ...state,
-        isLoaded: false,
-        isLoading: false,
+        status: 'error',
       };
     default:
       return state;
   }
 }
 
-function downloadProtocolAction(uri, forNCServer) {
+function downloadProtocolAction() {
   return {
     type: DOWNLOAD_PROTOCOL,
-    uri,
-    forNCServer,
   };
 }
 
-function extractProtocolAction(path) {
+function extractProtocolAction(tempPath) {
   return {
     type: EXTRACT_PROTOCOL,
-    path,
+    path: tempPath,
   };
 }
 
 function parseProtocolAction(path) {
   return {
     type: PARSE_PROTOCOL,
-    protocolType: 'download',
     path,
   };
 }
@@ -144,11 +138,10 @@ function downloadProtocolFailedAction(error) {
   };
 }
 
-function extractProtocolCompleteAction(path, protocol) {
+function extractProtocolCompleteAction(protocolData) {
   return {
     type: EXTRACT_PROTOCOL_COMPLETE,
-    path,
-    protocol,
+    protocolData,
   };
 }
 
@@ -177,7 +170,7 @@ const downloadAndInstallProtocolThunk = (uri, pairedServer) => (dispatch) => {
       // Extract succeeded, app data path returned.
       (appPath) => {
         // console.log('import protocol finished', appPath);
-        dispatch(parseProtocolAction());
+        dispatch(parseProtocolAction(appPath));
         return parseProtocol(appPath);
       },
     )

@@ -85,7 +85,7 @@ class Protocol extends Component {
 
   render() {
     const {
-      isProtocolLoaded,
+      isSessionLoaded,
       pathPrefix,
       percentProgress,
       promptId,
@@ -94,7 +94,7 @@ class Protocol extends Component {
       stageIndex,
     } = this.props;
 
-    if (!isProtocolLoaded) { return null; }
+    if (!isSessionLoaded) { return null; }
 
     const duration = {
       enter: getCSSVariableAsNumber('--animation-duration-slow-ms') * 2,
@@ -103,7 +103,7 @@ class Protocol extends Component {
 
     return (
       <div className="protocol">
-        <Fade in={isProtocolLoaded} duration={duration}>
+        <Fade in={isSessionLoaded} duration={duration}>
           <Timeline
             id="TIMELINE"
             onClickBack={this.onClickBack}
@@ -134,7 +134,7 @@ Protocol.propTypes = {
   changeStage: PropTypes.func.isRequired,
   isFirstPrompt: PropTypes.func.isRequired,
   isLastPrompt: PropTypes.func.isRequired,
-  isProtocolLoaded: PropTypes.bool.isRequired,
+  isSessionLoaded: PropTypes.bool.isRequired,
   nextIndex: PropTypes.number.isRequired,
   pathPrefix: PropTypes.string,
   percentProgress: PropTypes.number,
@@ -158,7 +158,7 @@ Protocol.defaultProps = {
 function mapStateToProps(state, ownProps) {
   const rotateIndex = (max, nextIndex) => (nextIndex + max) % max;
   const maxLength = stages(state).length;
-  const sessionId = state.activeSessionId;
+  const sessionId = state.session;
   const protocolPath = state.activeProtocol.path;
   const protocolType = state.activeProtocol.type;
   const stage = stages(state)[ownProps.stageIndex] || {};
@@ -168,7 +168,7 @@ function mapStateToProps(state, ownProps) {
   const promptProgress = stage.prompts ? (promptId / stage.prompts.length) : 0;
 
   return {
-    isProtocolLoaded: state.activeProtocol.isLoaded,
+    isSessionLoaded: state.activeSessionId,
     nextIndex: rotateIndex(maxLength, stageIndex + 1),
     pathPrefix: `/session/${sessionId}/${protocolType}/${protocolPath}`,
     percentProgress: (stageProgress + (promptProgress / (maxLength - 1))) * 100,

@@ -125,6 +125,7 @@ const importZip = inEnvironment((environment) => {
 });
 
 const extractProtocol = inEnvironment((environment) => {
+  debugger;
   if (environment === environments.ELECTRON) {
     const path = require('path');
 

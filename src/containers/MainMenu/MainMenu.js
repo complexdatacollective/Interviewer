@@ -15,7 +15,7 @@ const mainMenuHandlers = withHandlers({
 });
 
 const mapStateToProps = state => ({
-  sessionLoaded: state.activeProtocol.isLoaded,
+  sessionLoaded: !!state.activeSessionId,
   isOpen: state.ui.isMenuOpen,
 });
 

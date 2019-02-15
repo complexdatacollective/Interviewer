@@ -8,6 +8,7 @@ import ApiClient from '../../utils/ApiClient';
 import { protocolIdFromSessionPath } from '../../utils/matchSessionPath';
 
 const ADD_SESSION = 'ADD_SESSION';
+const LOAD_SESSION = 'LOAD_SESSION';
 const UPDATE_SESSION = 'UPDATE_SESSION';
 const UPDATE_PROMPT = 'UPDATE_PROMPT';
 const REMOVE_SESSION = 'REMOVE_SESSION';
@@ -52,6 +53,9 @@ export default function reducer(state = initialState, action = {}) {
           network: network(state.network, action),
         }),
       };
+    case LOAD_SESSION:
+      console.log('LOAD_SESSION');
+      return state;
     case UPDATE_SESSION:
       return {
         ...state,
@@ -291,6 +295,13 @@ function removeSession(id) {
   };
 }
 
+function loadSession(caseId) {
+  return {
+    type: LOAD_SESSION,
+    caseId,
+  };
+}
+
 const sessionExportSucceeded = id => ({
   type: EXPORT_SESSION_SUCCEEDED,
   sessionId: id,
@@ -343,6 +354,7 @@ const actionCreators = {
   removeEdge,
   toggleNodeAttributes,
   addSession,
+  loadSession,
   updateSession,
   updatePrompt,
   removeSession,
@@ -363,6 +375,7 @@ const actionTypes = {
   REMOVE_EDGE,
   UPDATE_EGO,
   ADD_SESSION,
+  LOAD_SESSION,
   UPDATE_SESSION,
   UPDATE_PROMPT,
   REMOVE_SESSION,

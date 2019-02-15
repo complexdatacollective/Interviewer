@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import Swiper from 'react-id-swiper';
 import { NewSessionOverlay, ProtocolCard } from '../../components/Setup';
 import { actionCreators as protocolActions } from '../../ducks/modules/importProtocol';
-import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
+import { actionCreators as sessionActions } from '../../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 
 /**
@@ -35,14 +35,10 @@ class ProtocolList extends Component {
   }
 
   handleCreateSession = (caseId) => {
-    this.props.addSession(caseId);
+    this.props.addSession(caseId, this.state.protocol.name);
     this.handleCloseOverlay();
 
-    if (this.state.activeProtocol.isFactoryProtocol) {
-      this.props.loadFactoryProtocol(this.state.activeProtocol.path);
-    } else if (this.state.activeProtocol.path) {
-      this.props.loadProtocol(this.state.activeProtocol.path);
-    }
+    // this.props.loadSession(protocol.path);
   }
 
   handleCloseOverlay = () => {
@@ -98,7 +94,7 @@ class ProtocolList extends Component {
 ProtocolList.propTypes = {
   addSession: PropTypes.func.isRequired,
   loadFactoryProtocol: PropTypes.func.isRequired,
-  loadProtocol: PropTypes.func.isRequired,
+  loadSession: PropTypes.func.isRequired,
   installedProtocols: PropTypes.array.isRequired,
 };
 
@@ -113,8 +109,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    addSession: bindActionCreators(sessionsActions.addSession, dispatch),
-    loadProtocol: bindActionCreators(protocolActions.loadProtocol, dispatch),
+    addSession: bindActionCreators(sessionActions.addSession, dispatch),
+    loadSession: bindActionCreators(sessionActions.loadSession, dispatch),
     loadFactoryProtocol: bindActionCreators(protocolActions.loadFactoryProtocol, dispatch),
     openDialog: bindActionCreators(dialogActions.openDialog, dispatch),
   };

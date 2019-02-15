@@ -66,9 +66,9 @@ class ServerProtocols extends Component {
 
   render() {
     const { error, protocols } = this.state;
-    const { isProtocolLoaded, server } = this.props;
+    const { isProtocolFinishedImport, server } = this.props;
 
-    if (isProtocolLoaded) {
+    if (isProtocolFinishedImport) {
       return (<Redirect to={{ pathname: '/setup' }} />);
     }
 
@@ -105,7 +105,7 @@ ServerProtocols.defaultProps = {
 
 ServerProtocols.propTypes = {
   downloadProtocol: PropTypes.func.isRequired,
-  isProtocolLoaded: PropTypes.bool.isRequired,
+  isProtocolFinishedImport: PropTypes.bool.isRequired,
   openDialog: PropTypes.func.isRequired,
   pairedServer: PropTypes.object.isRequired,
   server: PropTypes.shape({
@@ -116,7 +116,7 @@ ServerProtocols.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    isProtocolLoaded: state.activeProtocol.isLoaded,
+    isProtocolFinishedImport: state.importProtocol.status === 'complete',
     protocolPath: state.activeProtocol.path,
     protocolType: state.activeProtocol.type,
     sessionId: state.activeSessionId,

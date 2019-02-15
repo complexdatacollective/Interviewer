@@ -33,6 +33,7 @@ const verifyProtocol = (protocol) => {
 
 const parseProtocol = (environment) => {
   if (environment !== environments.WEB) {
+    debugger;
     return protocolName =>
       readFile(protocolPath(protocolName, 'protocol.json'))
         .then(json => JSON.parse(json))
