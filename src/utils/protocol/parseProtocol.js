@@ -31,7 +31,7 @@ const verifyProtocol = (protocol) => {
   return protocol;
 };
 
-const loadProtocol = (environment) => {
+const parseProtocol = (environment) => {
   if (environment !== environments.WEB) {
     return protocolName =>
       readFile(protocolPath(protocolName, 'protocol.json'))
@@ -44,7 +44,7 @@ const loadProtocol = (environment) => {
         .catch(openError);
   }
 
-  return () => Promise.reject(new Error('loadProtocol() not supported on this platform'));
+  return () => Promise.reject(new Error('parseProtocol() not supported on this platform'));
 };
 
-export default inEnvironment(loadProtocol);
+export default inEnvironment(parseProtocol);

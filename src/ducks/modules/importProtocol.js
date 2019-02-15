@@ -7,7 +7,7 @@ import { supportedWorkers } from '../../utils/WorkerAgent';
 import {
   downloadProtocol,
   extractProtocol,
-  loadProtocol,
+  parseProtocol,
   preloadWorkers,
 } from '../../utils/protocol';
 
@@ -35,8 +35,8 @@ const DOWNLOAD_PROTOCOL = 'PROTOCOL/DOWNLOAD_PROTOCOL';
 const DOWNLOAD_PROTOCOL_FAILED = Symbol('PROTOCOL/DOWNLOAD_PROTOCOL_FAILED');
 const EXTRACT_PROTOCOL = 'PROTOCOL/EXTRACT_PROTOCOL';
 const EXTRACT_PROTOCOL_FAILED = Symbol('PROTOCOL/EXTRACT_PROTOCOL_FAILED');
-const LOAD_PROTOCOL = 'LOAD_PROTOCOL';
-const LOAD_PROTOCOL_FAILED = Symbol('LOAD_PROTOCOL_FAILED');
+const PARSE_PROTOCOL = 'PARSE_PROTOCOL';
+const PARSE_PROTOCOL_FAILED = Symbol('PARSE_PROTOCOL_FAILED');
 const EXTRACT_PROTOCOL_COMPLETE = 'EXTRACT_PROTOCOL_COMPLETE';
 const SET_WORKER = 'SET_WORKER';
 
@@ -72,7 +72,7 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         status: 'importing',
       };
-    case LOAD_PROTOCOL:
+    case PARSE_PROTOCOL:
       return {
         ...state,
         isLoaded: false,
@@ -81,7 +81,7 @@ export default function reducer(state = initialState, action = {}) {
       };
     case DOWNLOAD_PROTOCOL_FAILED:
     case EXTRACT_PROTOCOL_FAILED:
-    case LOAD_PROTOCOL_FAILED:
+    case PARSE_PROTOCOL_FAILED:
       return {
         ...state,
         isLoaded: false,
@@ -107,25 +107,25 @@ function extractProtocolAction(path) {
   };
 }
 
-function loadProtocolAction(path) {
+function parseProtocolAction(path) {
   return {
-    type: LOAD_PROTOCOL,
+    type: PARSE_PROTOCOL,
     protocolType: 'download',
     path,
   };
 }
 
-function loadFactoryProtocolAction(path) {
+function parseFactoryProtocolAction(path) {
   return {
-    type: LOAD_PROTOCOL,
+    type: PARSE_PROTOCOL,
     protocolType: 'factory',
     path,
   };
 }
 
-function loadProtocolFailedAction(error) {
+function parseProtocolFailedAction(error) {
   return {
-    type: LOAD_PROTOCOL_FAILED,
+    type: PARSE_PROTOCOL_FAILED,
     error,
   };
 }
@@ -177,8 +177,8 @@ const downloadAndInstallProtocolThunk = (uri, pairedServer) => (dispatch) => {
       // Extract succeeded, app data path returned.
       (appPath) => {
         // console.log('import protocol finished', appPath);
-        dispatch(loadProtocolAction());
-        return loadProtocol(appPath);
+        dispatch(parseProtocolAction());
+        return parseProtocol(appPath);
       },
     )
     .catch(error => dispatch(extractProtocolFailedAction(error)))
@@ -189,12 +189,12 @@ const downloadAndInstallProtocolThunk = (uri, pairedServer) => (dispatch) => {
         dispatch(extractProtocolCompleteAction(protocolData));
       },
     )
-    .catch(error => dispatch(loadProtocolFailedAction(error)));
+    .catch(error => dispatch(parseProtocolFailedAction(error)));
 };
 
 const loadProtocolWorkerEpic = action$ =>
   action$
-    .ofType(LOAD_PROTOCOL)
+    .ofType(PARSE_PROTOCOL)
     .switchMap(action => // Favour subsequent load actions over earlier ones
       Observable
         .fromPromise(preloadWorkers(action.path, action.protocolType === 'factory'))
@@ -211,12 +211,12 @@ const loadProtocolWorkerEpic = action$ =>
 
 const actionCreators = {
   downloadAndInstallProtocol: downloadAndInstallProtocolThunk,
-  loadProtocol: loadProtocolAction,
+  parseProtocol: parseProtocolAction,
   extractProtocol: extractProtocolAction,
   downloadProtocol: downloadProtocolAction,
   extractProtocolComplete: extractProtocolCompleteAction,
-  loadFactoryProtocol: loadFactoryProtocolAction,
-  loadProtocolFailedAction,
+  loadFactoryProtocol: parseFactoryProtocolAction,
+  parseProtocolFailedAction,
   extractProtocolFailedAction,
   downloadProtocolFailedAction,
 };
@@ -226,8 +226,8 @@ const actionTypes = {
   EXTRACT_PROTOCOL_FAILED,
   DOWNLOAD_PROTOCOL,
   DOWNLOAD_PROTOCOL_FAILED,
-  LOAD_PROTOCOL,
-  LOAD_PROTOCOL_FAILED,
+  PARSE_PROTOCOL,
+  PARSE_PROTOCOL_FAILED,
   EXTRACT_PROTOCOL_COMPLETE,
 };
 
