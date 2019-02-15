@@ -8,7 +8,6 @@ import {
   loadProtocol,
   importProtocol,
   downloadProtocol,
-  loadFactoryProtocol,
   preloadWorkers,
 } from '../../utils/protocol';
 
@@ -38,24 +37,18 @@ const IMPORT_PROTOCOL = 'PROTOCOL/IMPORT_PROTOCOL';
 const IMPORT_PROTOCOL_FAILED = Symbol('PROTOCOL/IMPORT_PROTOCOL_FAILED');
 const LOAD_PROTOCOL = 'LOAD_PROTOCOL';
 const LOAD_PROTOCOL_FAILED = Symbol('LOAD_PROTOCOL_FAILED');
-const SET_PROTOCOL = 'SET_PROTOCOL';
+const IMPORT_PROTOCOL_COMPLETE = 'IMPORT_PROTOCOL_COMPLETE';
 const SET_WORKER = 'SET_WORKER';
 
 export const initialState = {
-  isLoaded: false,
-  isLoading: false,
-  error: null,
-  name: '',
-  version: '',
-  required: '',
-  stages: [],
+  status: 'inactive',
+  errorDetail: null,
   type: 'factory',
-  workerUrlMap: null,
 };
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    case SET_PROTOCOL:
+    case IMPORT_PROTOCOL_COMPLETE:
       return {
         ...state,
         ...omit(action.protocol, 'externalData'),
@@ -128,85 +121,74 @@ function loadFactoryProtocolAction(path) {
   };
 }
 
-function loadProtocolFailed(error) {
+function loadProtocolFailedAction(error) {
   return {
     type: LOAD_PROTOCOL_FAILED,
     error,
   };
 }
 
-function importProtocolFailed(error) {
+function importProtocolFailedAction(error) {
   return {
     type: IMPORT_PROTOCOL_FAILED,
     error,
   };
 }
 
-function downloadProtocolFailed(error) {
+function downloadProtocolFailedAction(error) {
   return {
     type: DOWNLOAD_PROTOCOL_FAILED,
     error,
   };
 }
 
-function setProtocol(path, protocol, isFactoryProtocol) {
+function importProtocolCompleteAction(path, protocol) {
   return {
-    type: SET_PROTOCOL,
+    type: IMPORT_PROTOCOL_COMPLETE,
     path,
     protocol,
-    isFactoryProtocol,
   };
 }
 
 // If there's no custom worker, set to empty so we won't expect one later
-function setWorkerContent(workerUrlMap = {}) {
+function setWorkerContentAction(workerUrlMap = {}) {
   return {
     type: SET_WORKER,
     workerUrlMap,
   };
 }
 
-const downloadProtocolEpic = (action$, store) =>
-  action$.ofType(DOWNLOAD_PROTOCOL)
-    .switchMap((action) => {
-      let pairedServer;
-      if (action.forNCServer) {
-        pairedServer = store.getState().pairedServer;
-      }
-      return Observable
-        .fromPromise(downloadProtocol(action.uri, pairedServer))
-        .map(protocolPath => importProtocolAction(protocolPath))
-        .catch(error => Observable.of(downloadProtocolFailed(error)));
-    });
-
-const importProtocolEpic = action$ =>
-  action$.ofType(IMPORT_PROTOCOL)
-    .switchMap(action =>
-      Observable
-        .fromPromise(importProtocol(action.path))
-        .map(protocolFile => loadProtocolAction(protocolFile, null))
-        .catch(error => Observable.of(importProtocolFailed(error))),
-    );
-
-const loadProtocolEpic = action$ =>
-  action$
-    .filter(action => action.type === LOAD_PROTOCOL && action.protocolType !== 'factory')
-    .switchMap(action => // Favour subsequent load actions over earlier ones
-      Observable
-        .fromPromise(loadProtocol(action.path)) // Get protocol
-        .map(response => setProtocol(action.path, response, false)) // Parse and save
-        .catch(error => Observable.of(loadProtocolFailed(error))), //  ...or throw an error
-    );
-
-const loadFactoryProtocolEpic = action$ =>
-  action$
-    .filter(action => action.type === LOAD_PROTOCOL && action.protocolType === 'factory')
-    .switchMap(action => // Favour subsequent load actions over earlier ones
-      Observable
-        .fromPromise(loadFactoryProtocol(action.path)) // Get protocol
-        .map(response => setProtocol(action.path, response, true)) // Parse and save
-        .catch(error => Observable.of(loadProtocolFailed(error))), //  ...or throw an error
-    );
+const downloadAndInstallProtocolThunk = (uri, pairedServer) => (dispatch) => {
+  dispatch(downloadProtocolAction());
+  // console.log('downloadAndInstallProtocol');
+  return downloadProtocol(uri, pairedServer)
+    .then(
+      // Download succeeded, temp path returned.
+      (protocolPath) => {
+        // console.log('downloadProtocol finished', protocolPath);
+        dispatch(importProtocolAction());
+        return importProtocol(protocolPath);
+      },
+    )
+    .catch(error => dispatch(downloadProtocolFailedAction(error)))
+    .then(
+      // Extract succeeded, app data path returned.
+      (appPath) => {
+        // console.log('import protocol finished', appPath);
+        dispatch(loadProtocolAction());
+        return loadProtocol(appPath);
+      },
+    )
+    .catch(error => dispatch(importProtocolFailedAction(error)))
+    .then(
+      (protocolData) => {
+        // Protocol data read, JSON returned.
+        // console.log('load protocol JSON finished', protocolData);
+        dispatch(importProtocolCompleteAction(protocolData));
+      },
+    )
+    .catch(error => dispatch(loadProtocolFailedAction(error)));
+};
 
 const loadProtocolWorkerEpic = action$ =>
   action$
@@ -222,18 +204,19 @@ const loadProtocolWorkerEpic = action$ =>
           }
           return urlMap;
         }, {})
-        .map(workerUrlMap => setWorkerContent(workerUrlMap)),
+        .map(workerUrlMap => setWorkerContentAction(workerUrlMap)),
     );
 
 const actionCreators = {
+  downloadAndInstallProtocol: downloadAndInstallProtocolThunk,
   loadProtocol: loadProtocolAction,
   importProtocol: importProtocolAction,
   downloadProtocol: downloadProtocolAction,
-  setProtocol,
+  importProtocolComplete: importProtocolCompleteAction,
   loadFactoryProtocol: loadFactoryProtocolAction,
-  loadProtocolFailed,
-  importProtocolFailed,
-  downloadProtocolFailed,
+  loadProtocolFailedAction,
+  importProtocolFailedAction,
+  downloadProtocolFailedAction,
 };
 
 const actionTypes = {
@@ -243,14 +226,10 @@ const actionTypes = {
   DOWNLOAD_PROTOCOL_FAILED,
   LOAD_PROTOCOL,
   LOAD_PROTOCOL_FAILED,
-  SET_PROTOCOL,
+  IMPORT_PROTOCOL_COMPLETE,
 };
 
 const epics = combineEpics(
-  downloadProtocolEpic,
-  importProtocolEpic,
-  loadProtocolEpic,
-  loadFactoryProtocolEpic,
   loadProtocolWorkerEpic,
 );
 
