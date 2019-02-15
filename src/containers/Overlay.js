@@ -1,14 +1,13 @@
-import React, { Component } from 'react';
-import animejs from 'animejs';
+import React from 'react';
 import cx from 'classnames';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Modal } from '../ui/components';
-import { getCSSVariableAsNumber, getCSSVariableAsObject } from '../ui/utils/CSSVariables';
 
 /**
  * Renders a modal window.
  */
+
 class Overlay extends Component {
   constructor(props) {
     super(props);

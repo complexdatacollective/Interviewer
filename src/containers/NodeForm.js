@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { bindActionCreators, compose } from 'redux';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { reset, submit } from 'redux-form';
 import Overlay from './Overlay';
@@ -16,23 +16,11 @@ class NodeForm extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      addAnotherNode: false,
-    };
-
     this.overlay = React.createRef();
   }
 
-  onToggleClick = () => {
-    this.setState({
-      addAnotherNode: !this.state.addAnotherNode,
-    });
-  }
-
   handleSubmit = (form) => {
-    this.props.onSubmit({ form, addAnotherNode: this.state.addAnotherNode });
-    this.overlay.current.getWrappedInstance().scrollContentsToTop();
-    this.props.resetValues(reduxFormName);
+    this.props.onSubmit({ form });
   }
 
   render() {
@@ -50,7 +38,6 @@ class NodeForm extends Component {
       <Overlay
         show={show}
         title={form.title}
-        ref={this.overlay}
         onClose={this.props.onClose}
         className="node-form"
       >
@@ -97,5 +84,5 @@ const mapDispatchToProps = dispatch => ({
 export { NodeForm };
 
 export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(mapStateToProps),
 )(NodeForm);
