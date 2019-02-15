@@ -1,5 +1,30 @@
 .ego-form {
-  .slide__transition {
+  margin: 0 auto;
+  height: 100%;
+  padding: 1rem 2rem 4rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  max-width: 60rem;
+
+  &__introduction {
+    border-radius: var(--border-radius);
+    background: var(--primary);
+    padding: 4rem;
+    margin-bottom: unit(10);
+  }
+
+  &__form-container {
     height: 100%;
+
+    .scrollable {
+      padding-top: unit(4);
+      height: 100%;
+    }
+  }
+
+  .progress-bar__filler {
+    height: 100%;
+    transition: unset;
   }
 }

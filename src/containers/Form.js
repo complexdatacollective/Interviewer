@@ -8,6 +8,56 @@ import { autoInitialisedForm } from '../behaviours';
 import { Field } from '../containers/';
 import { makeRehydrateFields } from '../selectors/forms';
 
+const getScrollParent = (node) => {
+  const regex = /(auto|scroll)/;
+  const parents = (_node, ps) => {
+    if (_node.parentNode === null) { return ps; }
+    return parents(_node.parentNode, ps.concat([_node]));
+  };
+
+  const style = (_node, prop) => getComputedStyle(_node, null).getPropertyValue(prop);
+  const overflow = _node => style(_node, 'overflow') + style(_node, 'overflow-y') + style(_node, 'overflow-x');
+  const scroll = _node => regex.test(overflow(_node));
+
+  /* eslint-disable consistent-return */
+  const scrollParent = (_node) => {
+    if (!(_node instanceof HTMLElement || _node instanceof SVGElement)) {
+      return;
+    }
+
+    const ps = parents(_node.parentNode, []);
+
+    for (let i = 0; i < ps.length; i += 1) {
+      if (scroll(ps[i])) {
+        return ps[i];
+      }
+    }
+
+    return document.scrollingElement || document.documentElement;
+  };
+
+  return scrollParent(node);
+  /* eslint-enable consistent-return */
+};
+
+const scrollToFirstError = (errors) => {
+  // Todo: first item is an assumption that may not be valid. Should iterate and check
+  // vertical position
+  const firstError = Object.keys(errors)[0];
+
+  // All Fields have a name corresponding to variable ID.
+  const el = document.querySelector(`[name="${firstError}"]`);
+
+  // Subtract 200 to put more of the input in view.
+  const topPos = el.offsetTop - 200;
+
+  // Assume forms are inside a scrollable
+  const scroller = getScrollParent(el);
+
+
+  scroller.scrollTop = topPos;
+};
+
 /**
   * Renders a redux form that contains fields according to a `fields` config.
   */
@@ -36,7 +86,6 @@ class Form extends Component {
       autoFocus,
       fields,
       handleSubmit,
-      controls,
       tooltip,
       className,
     } = this.props;
@@ -55,9 +104,6 @@ class Form extends Component {
             />
           );
         }) }
-        <div className="form__button-container">
-          {controls.map(control => control)}
-        </div>
       </form>
     );
   }
@@ -72,7 +118,6 @@ Form.propTypes = {
   fields: PropTypes.array.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   meta: PropTypes.object.isRequired,
-  controls: PropTypes.array,
   className: PropTypes.string,
   tooltip: PropTypes.string,
 };
@@ -106,6 +151,7 @@ export default compose(
     enableReinitialize: true,
     touchOnChange: true,
     touchOnBlur: false,
+    onSubmitFail: scrollToFirstError,
   }),
 )(Form);
 

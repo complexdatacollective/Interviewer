@@ -5,15 +5,14 @@ import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import { isValid, isSubmitting, submit } from 'redux-form';
 import ReactMarkdown from 'react-markdown';
-import Swiper from 'react-id-swiper';
 
-import { ProgressBar } from '../../components';
+import { ProgressBar, Scroller } from '../../components';
+import { Form } from '../../containers';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { protocolForms } from '../../selectors/protocol';
 import { networkEgo } from '../../selectors/interface';
-import { SlideFormEgo } from '../AlterForms';
 import defaultMarkdownRenderers from '../../utils/markdownRenderers';
-import { getCSSVariableAsNumber } from '../../ui/utils/CSSVariables';
+import { entityAttributesProperty } from '../../ducks/modules/network';
 
 const TAGS = [
   'break',
@@ -27,121 +26,85 @@ const TAGS = [
   'thematicBreak',
 ];
 
+const FORM_NAME = 'EGO_FORM';
+
 class EgoForm extends Component {
   constructor(props) {
     super(props);
-    this.swipeRef = React.createRef();
     this.state = {
-      activeIndex: 0,
+      scrollProgress: 0,
     };
   }
 
-  getNodeFormName = activeIndex => `EGO_FORM_${activeIndex}`;
-
-  formSubmitAllowed = index => (
-    this.props.formEnabled(this.getNodeFormName(index))
+  formSubmitAllowed = () => (
+    this.props.formEnabled(this.props.form)
   );
 
   isStageBeginning = () => (
-    this.state.activeIndex === 0
+    this.state.scrollProgress === 0
   );
 
-  isStageEnding = () => (
-    this.formSubmitAllowed(this.state.activeIndex) &&
-    this.state.activeIndex === this.props.egoFormNames.length
-  );
+  isStageEnding = () => this.props.formEnabled();
 
   clickNext = () => {
-    if (this.state.activeIndex > 0) {
-      this.props.submitForm(this.getNodeFormName(this.state.activeIndex));
-    }
-    if (this.state.activeIndex < this.props.egoFormNames.length &&
-      (this.state.activeIndex === 0 || this.formSubmitAllowed(this.state.activeIndex))) {
-      this.setState({
-        activeIndex: this.state.activeIndex + 1,
-      });
-      if (this.state.activeIndex === 0) {
-        this.swipeRef.current.swiper.slideNext();
-      }
-    }
+    this.props.submitForm();
   };
 
   clickPrevious = () => {
-    if (this.state.activeIndex > 0 && this.formSubmitAllowed(this.state.activeIndex)) {
-      this.props.submitForm(this.getNodeFormName(this.state.activeIndex));
-    }
-    if (this.state.activeIndex > 0) {
-      this.setState({
-        activeIndex: this.state.activeIndex - 1,
-      });
-      if (this.state.activeIndex === 1) {
-        this.swipeRef.current.swiper.slidePrev();
-      }
+    if (this.formSubmitAllowed()) {
+      this.props.submitForm();
     }
   };
 
-  handleSubmitForm = formData => this.props.updateEgo(this.props.ego, formData);
+  handleSubmitForm = (formData) => {
+    this.props.updateEgo({}, formData);
+  }
+
+  handleScroll = (scrollTop, scrollProgress) => {
+    this.setState({ scrollProgress });
+  }
 
   render() {
     const {
-      allForms,
-      egoFormNames,
+      form,
       ego,
-      stage,
+      introductionPanel,
     } = this.props;
-
-    const swiperParams = {
-      containerClass: 'alter-form__swiper swiper-container',
-      direction: 'vertical',
-      speed: getCSSVariableAsNumber('--animation-duration-slow-ms'),
-      effect: 'coverflow',
-      coverflowEffect: {
-        rotate: 30,
-        slideShadows: false,
-      },
-      slidesPerView: 'auto',
-      centeredSlides: true,
-    };
 
     const progressClasses = cx(
       'progress-container',
       {
-        'progress-container--show': this.state.activeIndex > 0,
+        'progress-container--show': this.state.scrollProgress > 0,
       },
     );
 
-    const currentForm = this.state.activeIndex > 0 ?
-      allForms[egoFormNames[this.state.activeIndex - 1]] : allForms[egoFormNames[0]];
-    const formIndex = this.state.activeIndex > 0 ? this.state.activeIndex : 0;
-
     return (
-      <div className="ego-form alter-form swiper-no-swiping">
-        <Swiper {...swiperParams} ref={this.swipeRef} >
-          <div>
-            <div key="alter-form__introduction" className="slide-content alter-form__introduction">
-              <h1>{stage.introductionPanel.title}</h1>
+      <div className="ego-form alter-form">
+        <div className="ego-form__form-container">
+          <Scroller onScroll={this.handleScroll}>
+            <div className="ego-form__introduction">
+              <h1>{introductionPanel.title}</h1>
               <ReactMarkdown
-                source={stage.introductionPanel.text}
+                source={introductionPanel.text}
                 allowedTypes={TAGS}
                 renderers={defaultMarkdownRenderers}
               />
             </div>
-          </div>
-          <SlideFormEgo
-            ego={ego}
-            form={currentForm}
-            formName={this.getNodeFormName(formIndex)}
-            index={formIndex}
-            updateEgo={this.handleSubmitForm}
-          />
-        </Swiper>
+            <Form
+              {...form}
+              initialValues={ego[entityAttributesProperty]}
+              controls={[]}
+              autoFocus={false}
+              form={FORM_NAME}
+              onSubmit={this.handleSubmitForm}
+            />
+          </Scroller>
+        </div>
         <div className={progressClasses}>
-          <h6 className="progress-container__status-text">
-            <strong>{this.state.activeIndex}</strong> of <strong>{egoFormNames.length}</strong>
-          </h6>
+          { this.state.scrollProgress === 1 && (<span className="progress-container__status-text">Click next to continue</span>)}
           <ProgressBar
             orientation="horizontal"
-            percentProgress={((this.state.activeIndex) / egoFormNames.length) * 100}
+            percentProgress={this.state.scrollProgress * 100}
           />
         </div>
       </div>
@@ -150,32 +113,32 @@ class EgoForm extends Component {
 }
 
 EgoForm.propTypes = {
-  allForms: PropTypes.object,
-  egoFormNames: PropTypes.array,
-  ego: PropTypes.object.isRequired,
+  form: PropTypes.object.isRequired,
+  introductionPanel: PropTypes.object.isRequired,
+  ego: PropTypes.object,
   formEnabled: PropTypes.func.isRequired,
-  stage: PropTypes.object.isRequired,
   submitForm: PropTypes.func.isRequired,
   updateEgo: PropTypes.func.isRequired,
 };
 
 EgoForm.defaultProps = {
-  egoFormNames: [],
-  allForms: {},
+  ego: {},
 };
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state, props) {
+  const forms = protocolForms(state);
+  const ego = networkEgo(state);
   return {
-    allForms: protocolForms(state),
-    egoFormNames: ownProps.stage.egoForms,
-    ego: networkEgo(state),
-    formEnabled: formName => isValid(formName)(state) && !isSubmitting(formName)(state),
+    form: forms[props.stage.form],
+    introductionPanel: props.stage.introductionPanel,
+    ego,
+    formEnabled: () => isValid(FORM_NAME)(state) && !isSubmitting(FORM_NAME)(state),
   };
 }
 
 const mapDispatchToProps = dispatch => ({
-  updateEgo: bindActionCreators(sessionsActions.setEgo, dispatch),
-  submitForm: bindActionCreators(formName => submit(formName), dispatch),
+  updateEgo: bindActionCreators(sessionsActions.updateEgo, dispatch),
+  submitForm: bindActionCreators(() => submit(FORM_NAME), dispatch),
 });
 
 export { EgoForm };

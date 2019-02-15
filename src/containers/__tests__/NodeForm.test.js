@@ -34,20 +34,6 @@ describe('<NodeForm />', () => {
     expect(subject.find('FormWizard').prop('controls').length).toBe(1);
   });
 
-  it('should render a toggle to add another with prop', () => {
-    const showToggleProps = {
-      ...mockProps,
-      form: {
-        ...mockProps.form,
-        optionToAddAnother: true,
-      },
-    };
-
-    const subject = shallow(<NodeForm {...showToggleProps} />);
-
-    expect(subject.find('FormWizard').prop('controls').length).toBe(2);
-  });
-
   it('should render with prepopulated fields if provided', () => {
     const withInitialValues = {
       ...mockProps,

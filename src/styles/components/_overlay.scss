@@ -1,14 +1,14 @@
 $close-button-size: 1rem;
 
 .overlay {
-  background: var(--modal-main-panel);
+  background: var(--color-cyber-grape);
   color: var(--text-light);
   box-shadow: 0 0 4rem 0 var(--modal-window-box-shadow);
   position: relative;
   border-radius: .75rem;
   padding: 2rem;
   width: 50rem;
-  height: calc(100% - 4rem);
+  max-height: calc(100% - 4rem);
   margin: 2rem;
   display: flex;
   flex-direction: column;
@@ -49,7 +49,7 @@ $close-button-size: 1rem;
     height: 100%;
     width: 100%;
     border-radius: 0;
-    padding: 6rem;
+    padding: 6rem 10rem;
     margin: 0;
 
     .input__container--hidden {

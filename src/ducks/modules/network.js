@@ -22,11 +22,13 @@ export const ADD_EDGE = 'ADD_EDGE';
 export const UPDATE_EDGE = 'UPDATE_EDGE';
 export const TOGGLE_EDGE = 'TOGGLE_EDGE';
 export const REMOVE_EDGE = 'REMOVE_EDGE';
-export const SET_EGO = 'SET_EGO';
+export const UPDATE_EGO = 'UPDATE_EGO';
 
 // Initial network model structure
 const initialState = {
-  ego: {},
+  ego: {
+    [entityPrimaryKeyProperty]: uuidv4(),
+  },
   nodes: [],
   edges: [],
 };
@@ -61,15 +63,6 @@ const nodeWithModelandAttributeData = (modelData, attributeData) => ({
   stageId: modelData.stageId,
   type: modelData.type,
   itemType: modelData.itemType,
-});
-
-const egoWithModelandAttributeData = (modelData, attributeData) => ({
-  [entityPrimaryKeyProperty]:
-    modelData[entityPrimaryKeyProperty] ? modelData[entityPrimaryKeyProperty] : uuidv4(),
-  [entityAttributesProperty]: {
-    ...modelData[entityAttributesProperty],
-    ...attributeData,
-  },
 });
 
 const edgeWithModelandAttributeData = (modelData, attributeData) => ({
@@ -118,15 +111,16 @@ export default function reducer(state = initialState, action = {}) {
         )(),
       };
     }
-    case SET_EGO: {
+    case UPDATE_EGO: {
       return {
         ...state,
         ego: (() => ({
           ...state.ego,
-          ...egoWithModelandAttributeData(
-            action.modelData,
-            action.attributeData,
-          ),
+          ...action.modelData,
+          [entityAttributesProperty]: {
+            ...state.ego[entityAttributesProperty],
+            ...action.attributeData,
+          },
         }))(),
       };
     }
@@ -276,7 +270,7 @@ const actionTypes = {
   UPDATE_EDGE,
   TOGGLE_EDGE,
   REMOVE_EDGE,
-  SET_EGO,
+  UPDATE_EGO,
 };
 
 export {

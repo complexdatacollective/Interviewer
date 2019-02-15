@@ -1,0 +1,14 @@
+.overlay {
+  &.node-form {
+    max-height: calc(100% - 4rem);
+
+    .scrollable {
+      height: calc(100% - 4rem);
+      padding-top: 1.5rem;
+    }
+
+    .node-form__footer {
+      height: 4rem;
+    }
+  }
+}

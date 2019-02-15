@@ -34,11 +34,12 @@ class Overlay extends Component {
       show,
       title,
       useFullScreenForms,
+      className,
     } = this.props;
 
     return (
       <Modal show={show} onBlur={onBlur}>
-        <div className={cx('overlay', { 'overlay--fullscreen': useFullScreenForms })}>
+        <div className={cx('overlay', { 'overlay--fullscreen': useFullScreenForms }, className)}>
           <div className="overlay__title">
             <h1>{title}</h1>
           </div>
@@ -59,6 +60,7 @@ Overlay.propTypes = {
   show: PropTypes.bool,
   children: PropTypes.any,
   useFullScreenForms: PropTypes.bool.isRequired,
+  className: PropTypes.string,
 };
 
 Overlay.defaultProps = {
