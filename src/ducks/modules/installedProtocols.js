@@ -1,4 +1,4 @@
-import { actionTypes as ProtocolActionTypes } from './protocol';
+import { actionTypes as ProtocolActionTypes } from './importProtocol';
 
 /**
  * `protocols` maintains some cached data and metadata about the protocol files available on disk.

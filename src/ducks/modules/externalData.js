@@ -1,6 +1,6 @@
 import objectHash from 'object-hash';
 
-import { actionTypes } from './protocol';
+import { actionTypes } from './importProtocol';
 import { entityPrimaryKeyProperty } from './network';
 
 const initialState = null;

@@ -6,7 +6,7 @@ import { push } from 'react-router-redux';
 
 import Form from '../Form';
 import { Button, Icon } from '../../ui/components';
-import { actionCreators as protocolActions } from '../../ducks/modules/protocol';
+import { actionCreators as protocolActions } from '../../ducks/modules/importProtocol';
 
 const formConfig = {
   formName: 'setup',

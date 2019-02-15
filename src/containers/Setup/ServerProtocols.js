@@ -6,7 +6,7 @@ import { Redirect } from 'react-router-dom';
 
 import ApiClient from '../../utils/ApiClient';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
-import { actionCreators as protocolActions } from '../../ducks/modules/protocol';
+import { actionCreators as protocolActions } from '../../ducks/modules/importProtocol';
 import { actionCreators as serverActions } from '../../ducks/modules/pairedServer';
 import { ServerProtocolList, ServerSetup, ServerUnavailable } from '../../components/Setup';
 

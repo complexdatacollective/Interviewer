@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Swiper from 'react-id-swiper';
 import { NewSessionOverlay, ProtocolCard } from '../../components/Setup';
-import { actionCreators as protocolActions } from '../../ducks/modules/protocol';
+import { actionCreators as protocolActions } from '../../ducks/modules/importProtocol';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 

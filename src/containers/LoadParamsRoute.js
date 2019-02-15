@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators, compose } from 'redux';
 import { Redirect } from 'react-router-dom';
 
-import { actionCreators as protocolActions } from '../ducks/modules/protocol';
+import { actionCreators as protocolActions } from '../ducks/modules/importProtocol';
 import { actionCreators as resetActions } from '../ducks/modules/reset';
 import { actionCreators as sessionActions } from '../ducks/modules/session';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
