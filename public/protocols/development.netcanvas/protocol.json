@@ -599,6 +599,169 @@
         }
       }
     },
+    "ego": {
+      "label": "You",
+      "color": "node-color-seq-6",
+      "variables": {
+        "3377af3f-3c79-41da-9b0b-6570fb519b93": {
+          "name": "label",
+          "label": "Label",
+          "description": "Human readable description",
+          "type": "text",
+          "validation": {
+            "required": true,
+            "minLength": 1,
+            "maxLength": 10
+          }
+        },
+        "f3eb5f0b-84ad-43f0-8db5-9f83cd3a56de": {
+          "name": "numberVariable",
+          "label": "Number Variable",
+          "description": "Human readable description",
+          "type": "number",
+          "validation": {
+            "required": true,
+            "minValue": 16,
+            "maxValue": 100
+          }
+        },
+        "67fefac9-561f-454a-8f78-81bd9470efaa": {
+          "name": "booleanVariable",
+          "label": "Boolean Variable",
+          "description": "Human readable description",
+          "type": "boolean",
+          "validation": {
+            "required": true
+          }
+        },
+        "e7b5f733-bec1-49be-8c33-f3c772ca0653": {
+          "name": "booleanVariable2",
+          "label": "Boolean  2",
+          "description": "Human readable description",
+          "type": "boolean"
+        },
+        "4eaad411-0530-41ca-bb43-9fb6ea846d6e": {
+          "name": "checkboxVariable",
+          "label": "A Checkbox",
+          "description": "Human readable description",
+          "type": "boolean"
+        },
+        "683ad529-66c6-4c84-8e31-a31452d6b5e9": {
+          "name": "ordinalVariable",
+          "label": "Ordinal Variable",
+          "description": "Human readable description",
+          "type": "ordinal",
+          "options": [
+            {
+              "label": "Value Four",
+              "value": 4
+            },
+            {
+              "label": "Value Three is quite long",
+              "value": 3
+            },
+            {
+              "label": "Value Two",
+              "value": 2
+            },
+            {
+              "label": "Value One is also long, with break",
+              "value": 1
+            },
+            {
+              "label": "Missing Value",
+              "value": -1
+            }
+          ],
+          "validation": {
+            "required": true
+          }
+        },
+        "f3537457-41a2-4fbf-a1f8-9235b3c1edc6": {
+          "name": "categoricalVariable",
+          "label": "Categorical Variable",
+          "description": "Huam readable description",
+          "type": "categorical",
+          "options": [
+            {
+              "label": "Value A has additional text to go along with it",
+              "value": "Value A"
+            },
+            {
+              "label": "Value B",
+              "value": "Value B"
+            },
+            {
+              "label": "Value C is a label that has too much text - shorten it",
+              "value": "Value C"
+            },
+            {
+              "label": "Value D",
+              "value": "Value D"
+            },
+            {
+              "label": "Value E",
+              "value": "Value E"
+            }
+          ],
+          "validation": {
+            "minSelected": 1
+          }
+        },
+        "7c647977-f2d1-426f-b0c5-6d44c795c554": {
+          "name": "categoricalVariable2",
+          "label": "Categorical Variable2",
+          "description": "Huam readable description",
+          "type": "categorical",
+          "options": [
+            {
+              "label": "Friends",
+              "value": "Value A"
+            },
+            {
+              "label": "Family",
+              "value": "Value B"
+            },
+            {
+              "label": "Work",
+              "value": "Value C"
+            },
+            {
+              "label": "Church",
+              "value": "Value D"
+            },
+            {
+              "label": "Vikings",
+              "value": "Value E"
+            },
+            {
+              "label": "German Course",
+              "value": "Value F"
+            },
+            {
+              "label": "Gardening Club",
+              "value": "Value G"
+            },
+            {
+              "label": "Neighbors",
+              "value": "Value H"
+            },
+            {
+              "label": "Oxford Friends",
+              "value": "Value I"
+            },
+            {
+              "label": "Band",
+              "value": "Value J"
+            }
+          ],
+          "validation": {
+            "minSelected": 1,
+            "maxSelected": 4
+          }
+        }
+      }
+    },
     "edge": {
       "77199445-9d50-4646-b0bc-6d6b0c0e06bd": {
         "name": "friend",
@@ -708,7 +871,6 @@
       "title": "Add A Person",
       "entity": "node",
       "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466",
-      "optionToAddAnother": true,
       "fields": [
         {
           "variable": "6be95f85-c2d9-4daf-9de1-3939418af888",
@@ -734,7 +896,6 @@
       "title": "Test for form input controls",
       "entity": "node",
       "type": "c93af3fe-9f84-4e85-acb5-5b15f30788c7",
-      "optionToAddAnother": true,
       "fields": [
         {
           "variable": "2377af3f-3c79-41da-9b0b-6570fb519b93",
@@ -752,10 +913,6 @@
           "label": "How much do you like likert scales?"
         },
         {
-          "variable": "3eaad411-0530-41ca-bb43-9fb6ea846d6e",
-          "component": "Checkbox"
-        },
-        {
           "variable": "e3537457-41a2-4fbf-a1f8-9235b3c1edc6",
           "component": "CheckboxGroup",
           "label": "Which of these things do you like?"
@@ -764,11 +921,6 @@
           "variable": "6c647977-f2d1-426f-b0c5-6d44c795c554",
           "component": "ToggleButtonGroup",
           "label": "Which of these other things do you like?"
-        },
-        {
-          "variable": "57fefac9-561f-454a-8f78-81bd9470efaa",
-          "component": "ToggleButton",
-          "label": "Toggle button for something"
         },
         {
           "variable": "57fefac9-561f-454a-8f78-81bd9470efaa",
@@ -815,6 +967,43 @@
           "variable": "4ccba4e2-a246-46ee-a3ff-1c70fb4c449c",
           "component": "ToggleButtonGroup",
           "label": "Which of these does this person like?"
+        }
+      ]
+    },
+    "egoForm1": {
+      "title": "An example ego form",
+      "entity": "ego",
+      "fields": [
+        {
+          "variable": "3377af3f-3c79-41da-9b0b-6570fb519b93",
+          "value": "You",
+          "component": "Text",
+          "label": "What is your name?"
+        },
+        {
+          "variable": "f3eb5f0b-84ad-43f0-8db5-9f83cd3a56de",
+          "component": "Number",
+          "label": "What is your age?"
+        },
+        {
+          "variable": "683ad529-66c6-4c84-8e31-a31452d6b5e9",
+          "component": "RadioGroup",
+          "label": "How much do you like likert scales?"
+        },
+        {
+          "variable": "f3537457-41a2-4fbf-a1f8-9235b3c1edc6",
+          "component": "CheckboxGroup",
+          "label": "Which of these things do you like?"
+        },
+        {
+          "variable": "7c647977-f2d1-426f-b0c5-6d44c795c554",
+          "component": "ToggleButtonGroup",
+          "label": "Which of these other things do you like?"
+        },
+        {
+          "variable": "67fefac9-561f-454a-8f78-81bd9470efaa",
+          "component": "Toggle",
+          "label": "Is the switch below not turned on?"
         }
       ]
     },
@@ -1083,6 +1272,16 @@
           "text": "This is a NG with a node type that has no default form"
         }
       ]
+    },
+    {
+      "id": "ego-form-1",
+      "type": "EgoForm",
+      "label": "Ego Form",
+      "form": "egoForm1",
+      "introductionPanel": {
+        "title": "Introduction to the ego form",
+        "text": "There are multiple ways to describe **you**."
+      }
     },
     {
       "id": "namegen4",
@@ -1434,7 +1633,7 @@
       "form": "myAlterFormID",
       "introductionPanel": {
         "title": "Introduction to the alter form",
-        "text": "This is some **markdown** that \n* explains this interface and \n* is *marked down*. \n\nBelow this might be as much additional text as the researcher desires. The container that this content is in should dynamically expand to accomodate that."
+        "text": "This is some **markdown** that \n* explains this interface and \n* is *marked down*. \n\nBelow this might be as much additional text as the researcher desires. The container that this content is in should dynamically expand to accommodate that."
       }
     },
     {

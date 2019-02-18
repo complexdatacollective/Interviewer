@@ -34,7 +34,7 @@
     transform: translateY(-50%);
   }
 
-  // On last step, contains both "Finished" and "Add another"
+  // On last step, contains "Finished"
   .form__button-container {
     align-items: flex-end;
     flex-direction: column-reverse;
@@ -60,11 +60,8 @@
 
   form {
     > div {
-      &:not([class*='-hidden']) {
-        margin-left: auto;
-        margin-right: auto;
-        width: 50%;
-      }
+      margin-left: auto;
+      margin-right: auto;
     }
   }
 }

@@ -1,0 +1,32 @@
+.ego-form {
+  height: 100%;
+  padding: 1rem 2rem 4rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: var(--timeline-width);
+  margin-right: var(--interface-right-margin);
+
+  &__introduction {
+    border-radius: var(--border-radius);
+    background: var(--primary);
+    padding: 4rem;
+    margin-bottom: unit(10);
+  }
+
+  &__form-container {
+    height: 100%;
+    max-width: 60rem;
+
+    .scrollable {
+      padding-top: unit(4);
+      height: 100%;
+    }
+  }
+
+  .progress-bar__filler {
+    height: 100%;
+    transition: unset;
+  }
+}

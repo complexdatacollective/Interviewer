@@ -29,7 +29,7 @@ class NameGenerator extends Component {
   /**
    * Node Form submit handler
    */
-  handleSubmitForm = ({ form, addAnotherNode } = { addAnotherNode: false }) => {
+  handleSubmitForm = ({ form }) => {
     if (form) {
       if (!this.state.selectedNode) {
         /**
@@ -48,7 +48,7 @@ class NameGenerator extends Component {
       }
     }
 
-    this.setState({ showNodeForm: addAnotherNode, selectedNode: null });
+    this.setState({ showNodeForm: false, selectedNode: null });
   }
 
   /**

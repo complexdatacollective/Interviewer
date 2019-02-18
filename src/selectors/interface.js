@@ -42,6 +42,11 @@ export const networkNodes = createDeepEqualSelector(
   network => network.nodes,
 );
 
+export const networkEgo = createDeepEqualSelector(
+  getNetwork,
+  network => network.ego,
+);
+
 export const networkEdges = createDeepEqualSelector(
   getNetwork,
   network => network.edges,

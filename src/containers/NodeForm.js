@@ -1,40 +1,25 @@
 import React, { Component } from 'react';
-import { bindActionCreators, compose } from 'redux';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { reset } from 'redux-form';
-import { isEmpty } from 'lodash';
 import Overlay from './Overlay';
 import Form from './Form';
 import FormWizard from './FormWizard';
-import { Button, ToggleInput } from '../ui/components';
+import { Button } from '../ui/components';
 import { protocolForms } from '../selectors/protocol';
 import { entityAttributesProperty } from '../ducks/modules/network';
+import { Scroller } from '../components';
 
 const reduxFormName = 'NODE_FORM';
-
-const notEmpty = (...args) => !isEmpty(...args);
 
 class NodeForm extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      addAnotherNode: false,
-    };
-
     this.overlay = React.createRef();
   }
 
-  onToggleClick = () => {
-    this.setState({
-      addAnotherNode: !this.state.addAnotherNode,
-    });
-  }
-
   handleSubmit = (form) => {
-    this.props.onSubmit({ form, addAnotherNode: this.state.addAnotherNode });
-    this.overlay.current.getWrappedInstance().scrollContentsToTop();
-    this.props.resetValues(reduxFormName);
+    this.props.onSubmit({ form });
   }
 
   render() {
@@ -45,17 +30,6 @@ class NodeForm extends Component {
       initialValues,
       onSubmit: this.handleSubmit,
       autoFocus: true,
-      controls: [
-        (form && form.optionToAddAnother && <ToggleInput
-          key="toggleInput"
-          name="addAnother"
-          label="Add another?"
-          checked={this.state.addAnotherNode}
-          onCheck={this.onToggleClick}
-          inline
-        />),
-        <Button type="submit" key="submit" aria-label="Submit">Finished</Button>,
-      ].filter(notEmpty),
       form: reduxFormName,
     };
 
@@ -63,16 +37,23 @@ class NodeForm extends Component {
       <Overlay
         show={show}
         title={form.title}
-        ref={this.overlay}
         onClose={this.props.onClose}
+        className="node-form"
       >
         { this.props.useFullScreenForms ?
           <FormWizard
             {...formProps}
           /> :
-          <Form
-            {...formProps}
-          />
+          <React.Fragment>
+            <Scroller>
+              <Form
+                {...formProps}
+              />
+            </Scroller>
+            <div className="node-form__footer">
+              <Button key="submit" aria-label="Submit" onClick={this.props.submitForm}>Finished</Button>
+            </div>
+          </React.Fragment>
         }
       </Overlay>
     );
@@ -94,12 +75,8 @@ const mapStateToProps = (state, props) => {
   };
 };
 
-const mapDispatchToProps = dispatch => ({
-  resetValues: bindActionCreators(reset, dispatch),
-});
-
 export { NodeForm };
 
 export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(mapStateToProps),
 )(NodeForm);

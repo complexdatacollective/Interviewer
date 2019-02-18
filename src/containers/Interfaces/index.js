@@ -7,11 +7,11 @@ import NameGeneratorAutoComplete from './NameGeneratorAutoComplete';
 import OrdinalBin from './OrdinalBin';
 import NameGeneratorList from './NameGeneratorList';
 import Sociogram from './Sociogram';
-import Quiz from './Quiz';
 import Information from './Information';
 import CategoricalBin from './CategoricalBin';
 import Narrative from './Narrative';
 import AlterForm from './AlterForm';
+import EgoForm from './EgoForm';
 import AlterEdgeForm from './AlterEdgeForm';
 import FinishSession from './FinishSession';
 
@@ -22,12 +22,12 @@ const interfaces = {
   [StageType.NameGeneratorAutoComplete]: NameGeneratorAutoComplete,
   [StageType.NameGeneratorList]: NameGeneratorList,
   [StageType.Sociogram]: Sociogram,
-  [StageType.Quiz]: Quiz,
   [StageType.Information]: Information,
   [StageType.OrdinalBin]: OrdinalBin,
   [StageType.CategoricalBin]: CategoricalBin,
   [StageType.Narrative]: Narrative,
   [StageType.AlterForm]: AlterForm,
+  [StageType.EgoForm]: EgoForm,
   [StageType.AlterEdgeForm]: AlterEdgeForm,
   FinishSession,
 };
@@ -49,12 +49,12 @@ export {
   NameGeneratorAutoComplete,
   NameGeneratorList,
   Sociogram,
-  Quiz,
   Information,
   CategoricalBin,
   OrdinalBin,
   Narrative,
   AlterForm,
+  EgoForm,
   AlterEdgeForm,
 };
 

@@ -10,7 +10,7 @@ import { ProgressBar } from '../../components';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { makeNetworkEdgesForType } from '../../selectors/interface';
 import { protocolForms } from '../../selectors/protocol';
-import { SlideFormEdge } from '../';
+import { SlideFormEdge } from '../AlterForms';
 import defaultMarkdownRenderers from '../../utils/markdownRenderers';
 import { getCSSVariableAsNumber } from '../../ui/utils/CSSVariables';
 
@@ -38,37 +38,36 @@ class AlterEdgeForm extends Component {
   getEdgeFormName = activeIndex => `EDGE_FORM_${activeIndex}`;
 
   formSubmitAllowed = index => (
-    this.swipeRef && this.swipeRef.current.swiper &&
     this.props.formEnabled(this.getEdgeFormName(index))
   );
 
   isStageBeginning = () => (
-    this.swipeRef && this.formSubmitAllowed(this.swipeRef.current.swiper.activeIndex) &&
-    this.swipeRef.current.swiper.activeIndex === 0
+    this.state.activeIndex === 0
   );
 
   isStageEnding = () => (
-    this.swipeRef && this.formSubmitAllowed(this.swipeRef.current.swiper.activeIndex) &&
-    this.swipeRef.current.swiper.activeIndex === this.props.stageEdges.length
+    this.formSubmitAllowed(this.state.activeIndex) &&
+    this.state.activeIndex === this.props.stageEdges.length
   );
 
   clickNext = () => {
-    if (this.swipeRef && this.swipeRef.current) {
+    if (this.state.activeIndex > 0) {
       this.props.submitForm(this.getEdgeFormName(this.state.activeIndex));
-      if (this.formSubmitAllowed(this.state.activeIndex)) {
-        this.setState({
-          activeIndex: this.state.activeIndex + 1,
-        });
-        this.swipeRef.current.swiper.slideNext();
-      }
+    }
+    if (this.state.activeIndex < this.props.stageEdges.length &&
+      (this.state.activeIndex === 0 || this.formSubmitAllowed(this.state.activeIndex))) {
+      this.setState({
+        activeIndex: this.state.activeIndex + 1,
+      });
+      this.swipeRef.current.swiper.slideNext();
     }
   };
 
   clickPrevious = () => {
-    if (this.swipeRef && this.swipeRef.current) {
-      if (this.formSubmitAllowed(this.state.activeIndex)) {
-        this.props.submitForm(this.getEdgeFormName(this.state.activeIndex));
-      }
+    if (this.state.activeIndex > 0 && this.formSubmitAllowed(this.state.activeIndex)) {
+      this.props.submitForm(this.getEdgeFormName(this.state.activeIndex));
+    }
+    if (this.state.activeIndex > 0) {
       this.setState({
         activeIndex: this.state.activeIndex - 1,
       });

@@ -4,7 +4,7 @@ const appUrl = require('./appURL');
 
 const isMacOS = () => process.platform === 'darwin';
 
-const titlebarParameters = isMacOS() ? { titleBarStyle: 'hidden', frame: false } : {};
+const titlebarParameters = isMacOS() ? { titleBarStyle: 'hidden', frame: false } : { autoHideMenuBar: true };
 
 let window;
 
@@ -30,6 +30,7 @@ function createWindow() {
       minWidth: 1280,
       minHeight: 800,
       center: true,
+      fullscreen: true,
       title: 'Network Canvas',
 
     }, titlebarParameters);

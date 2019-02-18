@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import animejs from 'animejs';
+import React from 'react';
 import cx from 'classnames';
+import anime from 'animejs';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Modal } from '../ui/components';
@@ -9,7 +9,8 @@ import { getCSSVariableAsNumber, getCSSVariableAsObject } from '../ui/utils/CSSV
 /**
  * Renders a modal window.
  */
-class Overlay extends Component {
+
+class Overlay extends React.Component {
   constructor(props) {
     super(props);
     this.contentRef = React.createRef();
@@ -17,7 +18,7 @@ class Overlay extends Component {
 
   scrollContentsToTop = () => {
     if (this.contentRef.current) {
-      animejs({
+      anime({
         targets: this.contentRef.current,
         scrollTop: 0,
         duration: getCSSVariableAsNumber('--animation-duration-slow-ms'),
@@ -34,11 +35,12 @@ class Overlay extends Component {
       show,
       title,
       useFullScreenForms,
+      className,
     } = this.props;
 
     return (
       <Modal show={show} onBlur={onBlur}>
-        <div className={cx('overlay', { 'overlay--fullscreen': useFullScreenForms })}>
+        <div className={cx('overlay', { 'overlay--fullscreen': useFullScreenForms }, className)}>
           <div className="overlay__title">
             <h1>{title}</h1>
           </div>
@@ -59,6 +61,7 @@ Overlay.propTypes = {
   show: PropTypes.bool,
   children: PropTypes.any,
   useFullScreenForms: PropTypes.bool.isRequired,
+  className: PropTypes.string,
 };
 
 Overlay.defaultProps = {
