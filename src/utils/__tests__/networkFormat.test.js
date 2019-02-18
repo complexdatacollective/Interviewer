@@ -2,8 +2,8 @@
 
 import {
   asExportableNode,
+  asWorkerAgentEntity,
   asWorkerAgentEdge,
-  asWorkerAgentNode,
 } from '../networkFormat';
 
 import {
@@ -12,7 +12,7 @@ import {
   primaryKeyPropertyForWorker,
 } from '../../ducks/modules/network';
 
-describe('asWorkerAgentNode', () => {
+describe('asWorkerAgentEntity', () => {
   const nodeInNetwork = {
     attributes: {
       1234: 'userProp1value',
@@ -29,24 +29,24 @@ describe('asWorkerAgentNode', () => {
   };
 
   it('returns a node’s attributes', () => {
-    expect(asWorkerAgentNode(nodeInNetwork, nodeTypeDefinition).userProp1).toEqual('userProp1value');
+    expect(asWorkerAgentEntity(nodeInNetwork, nodeTypeDefinition).userProp1).toEqual('userProp1value');
   });
 
   it('returns a unique ID for the node', () => {
-    expect(asWorkerAgentNode(nodeInNetwork, nodeTypeDefinition)[primaryKeyPropertyForWorker]).toEqual('node1');
+    expect(asWorkerAgentEntity(nodeInNetwork, nodeTypeDefinition)[primaryKeyPropertyForWorker]).toEqual('node1');
   });
 
   it('returns a type for the node', () => {
-    expect(asWorkerAgentNode(nodeInNetwork, nodeTypeDefinition)[nodeTypePropertyForWorker]).toEqual('person');
+    expect(asWorkerAgentEntity(nodeInNetwork, nodeTypeDefinition)[nodeTypePropertyForWorker]).toEqual('person');
   });
 
   it('does not contain other private attrs props', () => {
-    expect(asWorkerAgentNode(nodeInNetwork, nodeTypeDefinition)).not.toHaveProperty('stageId');
+    expect(asWorkerAgentEntity(nodeInNetwork, nodeTypeDefinition)).not.toHaveProperty('stageId');
   });
 
   it('allows pass-though props from external data', () => {
     const externalNode = { ...nodeInNetwork, attributes: { ...nodeInNetwork.attributes, unknownProp: 'foo' } };
-    const node = asWorkerAgentNode(externalNode, nodeTypeDefinition);
+    const node = asWorkerAgentEntity(externalNode, nodeTypeDefinition);
     expect(node.unknownProp).toEqual('foo');
   });
 });
@@ -56,6 +56,7 @@ describe('asWorkerAgentEdge', () => {
     from: 'node1',
     to: 'node2',
     type: '1234',
+    [entityPrimaryKeyProperty]: 'edge1',
   };
 
   const edgeTypeDefinition = {
@@ -69,7 +70,7 @@ describe('asWorkerAgentEdge', () => {
   });
 
   it('returns a user-friendly edge type', () => {
-    expect(asWorkerAgentEdge(edgeInNetwork, edgeTypeDefinition).type).toEqual('friend');
+    expect(asWorkerAgentEntity(edgeInNetwork, edgeTypeDefinition)[nodeTypePropertyForWorker]).toEqual('friend');
   });
 });
 

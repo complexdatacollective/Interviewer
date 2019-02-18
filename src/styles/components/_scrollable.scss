@@ -11,6 +11,7 @@
   overflow-y: scroll;
   // sass-lint:disable no-vendor-prefixes
   -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
 
   &::-webkit-scrollbar {
     display: none;

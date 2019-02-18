@@ -5,13 +5,14 @@ import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import { isValid, isSubmitting, submit } from 'redux-form';
 import ReactMarkdown from 'react-markdown';
-
 import Swiper from 'react-id-swiper';
+
 import { ProgressBar } from '../../components';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { makeNetworkNodesForType } from '../../selectors/interface';
 import { protocolForms } from '../../selectors/protocol';
-import { SlideFormNode } from '../';
+import { entityPrimaryKeyProperty } from '../../ducks/modules/network';
+import { SlideFormNode } from '../AlterForms';
 import defaultMarkdownRenderers from '../../utils/markdownRenderers';
 import { getCSSVariableAsNumber } from '../../ui/utils/CSSVariables';
 
@@ -39,37 +40,36 @@ class AlterForm extends Component {
   getNodeFormName = activeIndex => `NODE_FORM_${activeIndex}`;
 
   formSubmitAllowed = index => (
-    this.swipeRef && this.swipeRef.current.swiper &&
     this.props.formEnabled(this.getNodeFormName(index))
   );
 
   isStageBeginning = () => (
-    this.swipeRef && this.formSubmitAllowed(this.swipeRef.current.swiper.activeIndex) &&
-    this.swipeRef.current.swiper.activeIndex === 0
+    this.state.activeIndex === 0
   );
 
   isStageEnding = () => (
-    this.swipeRef && this.formSubmitAllowed(this.swipeRef.current.swiper.activeIndex) &&
-    this.swipeRef.current.swiper.activeIndex === this.props.stageNodes.length
+    this.formSubmitAllowed(this.state.activeIndex) &&
+    this.state.activeIndex === this.props.stageNodes.length
   );
 
   clickNext = () => {
-    if (this.swipeRef && this.swipeRef.current) {
+    if (this.state.activeIndex > 0) {
       this.props.submitForm(this.getNodeFormName(this.state.activeIndex));
-      if (this.formSubmitAllowed(this.state.activeIndex)) {
-        this.setState({
-          activeIndex: this.state.activeIndex + 1,
-        });
-        this.swipeRef.current.swiper.slideNext();
-      }
+    }
+    if (this.state.activeIndex < this.props.stageNodes.length &&
+      (this.state.activeIndex === 0 || this.formSubmitAllowed(this.state.activeIndex))) {
+      this.setState({
+        activeIndex: this.state.activeIndex + 1,
+      });
+      this.swipeRef.current.swiper.slideNext();
     }
   };
 
   clickPrevious = () => {
-    if (this.swipeRef && this.swipeRef.current) {
-      if (this.formSubmitAllowed(this.state.activeIndex)) {
-        this.props.submitForm(this.getNodeFormName(this.state.activeIndex));
-      }
+    if (this.state.activeIndex > 0 && this.formSubmitAllowed(this.state.activeIndex)) {
+      this.props.submitForm(this.getNodeFormName(this.state.activeIndex));
+    }
+    if (this.state.activeIndex > 0) {
       this.setState({
         activeIndex: this.state.activeIndex - 1,
       });
@@ -77,12 +77,14 @@ class AlterForm extends Component {
     }
   };
 
+  handleUpdate = (node, formData) => (
+    this.props.updateNode(node[entityPrimaryKeyProperty], {}, formData));
+
   render() {
     const {
       form,
       stage,
       stageNodes,
-      updateNode,
     } = this.props;
 
     const swiperParams = {
@@ -124,7 +126,7 @@ class AlterForm extends Component {
               key={index}
               node={node}
               index={index}
-              updateNode={updateNode}
+              onUpdate={this.handleUpdate}
               form={form}
             />
           ))}

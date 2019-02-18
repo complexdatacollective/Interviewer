@@ -84,6 +84,7 @@ const StageType = Object.freeze({
   CategoricalBin: 'CategoricalBin',
   Narrative: 'Narrative',
   AlterForm: 'AlterForm',
+  EgoForm: 'EgoForm',
   AlterEdgeForm: 'AlterEdgeForm',
 });
 

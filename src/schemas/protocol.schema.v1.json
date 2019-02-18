@@ -80,8 +80,7 @@
       "required": [
         "entity",
         "fields",
-        "title",
-        "type"
+        "title"
       ],
       "title": "Form"
     },
@@ -130,6 +129,7 @@
           "enum": [
             "Narrative",
             "AlterForm",
+            "EgoForm",
             "AlterEdgeForm",
             "NameGenerator",
             "NameGeneratorList",
@@ -146,6 +146,7 @@
         "form": {
           "type": [
             "string",
+            "array",
             "null"
           ]
         },
@@ -215,6 +216,17 @@
       ],
       "title": "Interface",
       "anyOf": [
+        {
+          "properties": {
+            "type": {
+              "const": "EgoForm"
+            }
+          },
+          "required": [
+            "form",
+            "introductionPanel"
+          ]
+        },
         {
           "properties": {
             "type": {
@@ -848,6 +860,9 @@
         },
         "edge": {
           "$ref": "#/definitions/Edge"
+        },
+        "ego": {
+          "$ref": "#/definitions/Ego"
         }
       },
       "required": [],
@@ -1025,6 +1040,14 @@
       ],
       "title": "NodeTypeDef"
     },
+    "Ego": {
+      "label": "string",
+      "color": "string",
+      "title": "Ego",
+      "variables": {
+        "$ref": "#/definitions/Variables"
+      }
+    },
     "OptionElement": {
       "anyOf": [
         {
@@ -1054,7 +1077,8 @@
       "type": "string",
       "enum": [
         "edge",
-        "node"
+        "node",
+        "ego"
       ],
       "title": "Entity"
     },

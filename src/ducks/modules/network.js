@@ -22,12 +22,13 @@ export const ADD_EDGE = 'ADD_EDGE';
 export const UPDATE_EDGE = 'UPDATE_EDGE';
 export const TOGGLE_EDGE = 'TOGGLE_EDGE';
 export const REMOVE_EDGE = 'REMOVE_EDGE';
-export const SET_EGO = 'SET_EGO';
-export const UNSET_EGO = 'UNSET_EGO';
+export const UPDATE_EGO = 'UPDATE_EGO';
 
 // Initial network model structure
 const initialState = {
-  ego: {},
+  ego: {
+    [entityPrimaryKeyProperty]: uuidv4(),
+  },
   nodes: [],
   edges: [],
 };
@@ -108,6 +109,19 @@ export default function reducer(state = initialState, action = {}) {
             ),
           )
         )(),
+      };
+    }
+    case UPDATE_EGO: {
+      return {
+        ...state,
+        ego: (() => ({
+          ...state.ego,
+          ...action.modelData,
+          [entityAttributesProperty]: {
+            ...state.ego[entityAttributesProperty],
+            ...action.attributeData,
+          },
+        }))(),
       };
     }
     case BATCH_ADD_NODES: {
@@ -256,8 +270,7 @@ const actionTypes = {
   UPDATE_EDGE,
   TOGGLE_EDGE,
   REMOVE_EDGE,
-  SET_EGO,
-  UNSET_EGO,
+  UPDATE_EGO,
 };
 
 export {

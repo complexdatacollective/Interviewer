@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { isEmpty } from 'lodash';
 import Overlay from './Overlay';
 import Form from './Form';
 import FormWizard from './FormWizard';
 import { Button } from '../ui/components';
 import { protocolForms } from '../selectors/protocol';
 import { entityAttributesProperty } from '../ducks/modules/network';
+import { Scroller } from '../components';
 
 const reduxFormName = 'NODE_FORM';
-
-const notEmpty = (...args) => !isEmpty(...args);
 
 class NodeForm extends Component {
   constructor(props) {
@@ -32,9 +30,6 @@ class NodeForm extends Component {
       initialValues,
       onSubmit: this.handleSubmit,
       autoFocus: true,
-      controls: [
-        <Button type="submit" key="submit" aria-label="Submit">Finished</Button>,
-      ].filter(notEmpty),
       form: reduxFormName,
     };
 
@@ -43,14 +38,22 @@ class NodeForm extends Component {
         show={show}
         title={form.title}
         onClose={this.props.onClose}
+        className="node-form"
       >
         { this.props.useFullScreenForms ?
           <FormWizard
             {...formProps}
           /> :
-          <Form
-            {...formProps}
-          />
+          <React.Fragment>
+            <Scroller>
+              <Form
+                {...formProps}
+              />
+            </Scroller>
+            <div className="node-form__footer">
+              <Button key="submit" aria-label="Submit" onClick={this.props.submitForm}>Finished</Button>
+            </div>
+          </React.Fragment>
         }
       </Overlay>
     );

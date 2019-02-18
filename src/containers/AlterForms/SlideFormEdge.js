@@ -2,19 +2,23 @@ import React, { PureComponent } from 'react';
 import { find } from 'lodash';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { networkNodes } from '../selectors/interface';
-import { makeGetEdgeColor } from '../selectors/protocol';
 
-import { Scroller } from '../components';
-import { entityAttributesProperty, entityPrimaryKeyProperty } from '../ducks/modules/network';
-import Node from './Node';
-import { Form } from '.';
+import { networkNodes } from '../../selectors/interface';
+import { makeGetEdgeColor } from '../../selectors/protocol';
+import { Scroller } from '../../components';
+import { entityAttributesProperty, entityPrimaryKeyProperty } from '../../ducks/modules/network';
+import Node from '../Node';
+import { Form } from '..';
 
 class SlideFormEdge extends PureComponent {
+  handleSubmit = (formData) => {
+    const { edge, updateEdge } = this.props;
+    updateEdge(edge[entityPrimaryKeyProperty], {}, formData);
+  }
+
   render() {
     const {
       form,
-      updateEdge,
       edge,
       edgeColor,
       nodes,
@@ -39,7 +43,7 @@ class SlideFormEdge extends PureComponent {
                 controls={[]}
                 autoFocus={false}
                 form={`EDGE_FORM_${index + 1}`}
-                onSubmit={formData => updateEdge(edge[entityPrimaryKeyProperty], {}, formData)}
+                onSubmit={this.handleSubmit}
               />
             </Scroller>
           </div>

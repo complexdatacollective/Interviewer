@@ -6,7 +6,7 @@ import WorkerAgent from '../utils/WorkerAgent';
 import { Node as UINode } from '../ui/components';
 import { getWorkerNetwork, getNodeLabelFunction } from '../selectors/interface';
 import { getNodeLabelWorkerUrl, makeGetNodeColor, makeGetNodeTypeDefinition } from '../selectors/protocol';
-import { asWorkerAgentNode } from '../utils/networkFormat';
+import { asWorkerAgentEntity } from '../utils/networkFormat';
 
 /**
   * Renders a Node.
@@ -40,7 +40,7 @@ class Node extends PureComponent {
     }
 
     // Create an object containing the node's model properties
-    const node = asWorkerAgentNode(this.props, this.props.nodeTypeDefinition);
+    const node = asWorkerAgentEntity(this.props, this.props.nodeTypeDefinition);
 
     // Send the worker the node model properties along with the network
     const msgPromise = this.webWorker.sendMessageAsync({
