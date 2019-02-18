@@ -5,9 +5,18 @@ import reducer,
   entityPrimaryKeyProperty as PK,
   entityAttributesProperty,
 } from '../network';
+import uuidv4 from '../../../utils/uuid';
+
+jest.mock('../../../utils/uuid');
+
+const mockEgoUID = 'session-1';
+
+uuidv4.mockImplementation(() => mockEgoUID);
 
 const mockState = {
-  ego: {},
+  ego: {
+    [PK]: mockEgoUID,
+  },
   nodes: [],
   edges: [],
 };
