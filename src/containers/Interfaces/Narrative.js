@@ -25,9 +25,11 @@ class Narrative extends Component {
       showConvex: true,
       showEdges: true,
       showHighlights: true,
+      highlightIndex: 0,
       showResetButton: false,
       activeAnnotations: false,
       activeFocusNodes: false,
+      isFreeze: false,
     };
 
     this.annotationLayer = React.createRef();
@@ -57,6 +59,18 @@ class Narrative extends Component {
     });
   }
 
+  toggleHighlightIndex = (index) => {
+    this.setState({
+      highlightIndex: index,
+    });
+  }
+
+  toggleFreeze = () => {
+    this.setState({
+      isFreeze: !this.state.isFreeze,
+    });
+  }
+
   resetInteractions = () => {
     this.annotationLayer.current.reset();
   }
@@ -67,6 +81,7 @@ class Narrative extends Component {
         showConvex: true,
         showEdges: true,
         showHighlights: true,
+        highlightIndex: 0,
         presetIndex: index,
         activeAnnotations: false,
         activeFocusNodes: false,
@@ -104,12 +119,14 @@ class Narrative extends Component {
                 ref={this.annotationLayer}
                 setActiveStatus={(status) => { this.setActiveStatus('activeAnnotations', status); }}
                 key={`annotation-${currentPreset.id}`}
+                isFreeze={this.state.isFreeze}
               />
             }
             <ConcentricCircles
               subject={subject}
               layoutVariable={layoutVariable}
-              highlightAttributes={(this.state.showHighlights && highlight) || []}
+              highlightAttribute={
+                (this.state.showHighlights ? highlight[this.state.highlightIndex] : null)}
               displayEdges={(this.state.showEdges && displayEdges) || []}
               convexHulls={(this.state.showConvex && convexHulls) || ''}
               allowPositioning={allowRepositioning}
@@ -127,6 +144,8 @@ class Narrative extends Component {
             presetIndex={this.state.presetIndex}
             subject={subject}
             highlights={currentPreset.highlight}
+            highlightIndex={this.state.highlightIndex}
+            toggleHighlightIndex={this.toggleHighlightIndex}
             toggleHighlights={this.toggleHighlights}
             resetInteractions={this.resetInteractions}
             displayEdges={displayEdges}
@@ -134,6 +153,8 @@ class Narrative extends Component {
             convexHulls={convexHulls}
             toggleConvex={this.toggleConvex}
             showResetButton={showResetButton}
+            isFreeze={this.state.isFreeze}
+            toggleFreeze={this.toggleFreeze}
           />
         </div>
       </div>

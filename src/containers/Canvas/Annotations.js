@@ -5,39 +5,58 @@ import PropTypes from 'prop-types';
 import DragManager, { NO_SCROLL } from '../../behaviours/DragAndDrop/DragManager';
 import { Fade } from '../../ui/components/Transitions';
 
-const AnnotationLines = ({ lines, isDrawing }) => (
+const AnnotationLines =
+({ lines, isDrawing, isFreeze, linesShowing, linesToFade, onLineFaded }) => (
   <svg className="annotations__lines" width="100%" height="100%" viewBox="0 0 1 1" preserveAspectRatio="none">
-    {lines.map((line, index) => (
-      <AnnotationLine
-        key={index}
-        line={line}
-        showLine={isDrawing && index === lines.length - 1}
-      />
-    ))}
+    {lines.map((line, index) => {
+      const handleLineGone = () => onLineFaded(index);
+      return (
+        <AnnotationLine
+          key={index}
+          line={line}
+          showLine={(isDrawing && index === lines.length - 1) || !!linesToFade[index]}
+          freezeLine={isFreeze && !!linesShowing[index]}
+          onLineFaded={handleLineGone}
+        />
+      );
+    })}
   </svg>
 );
 
 AnnotationLines.propTypes = {
   isDrawing: PropTypes.bool.isRequired,
+  isFreeze: PropTypes.bool.isRequired,
   lines: PropTypes.array.isRequired,
+  linesShowing: PropTypes.array.isRequired,
+  linesToFade: PropTypes.array.isRequired,
+  onLineFaded: PropTypes.func.isRequired,
 };
 
-const AnnotationLine = ({ line, showLine }) => {
+const AnnotationLine = ({ line, showLine, freezeLine, onLineFaded }) => {
   const pathData = `M ${line.map(point => (`${point.x} ${point.y}`)).join(' L ')}`;
-
-  return (
+  let path = (
     <Fade
       in={showLine}
       enter={false}
       customDuration={{ enter: 0, exit: 3000 * Math.log10(line.length ** 2) }}
+      onExited={onLineFaded}
     >
       <path className="annotations__path" d={pathData} vectorEffect="non-scaling-stroke" />
     </Fade>
   );
+  if (freezeLine) {
+    path = <path className="annotations__path" d={pathData} vectorEffect="non-scaling-stroke" />;
+  }
+
+  return (
+    path
+  );
 };
 
 AnnotationLine.propTypes = {
+  freezeLine: PropTypes.bool.isRequired,
   line: PropTypes.array.isRequired,
+  onLineFaded: PropTypes.func.isRequired,
   showLine: PropTypes.bool.isRequired,
 };
 
@@ -47,6 +66,8 @@ class Annotations extends Component {
 
     this.state = {
       lines: [],
+      linesShowing: [],
+      linesToFade: [],
       activeLines: 0,
       isDrawing: false,
     };
@@ -74,6 +95,16 @@ class Annotations extends Component {
     });
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.isFreeze !== this.props.isFreeze) {
+      if (this.props.isFreeze) {
+        this.freeze();
+      } else {
+        this.unfreeze();
+      }
+    }
+  }
+
   componentWillUnmount() {
     this.cleanupDragManager();
     this.resetRemoveLineTimers();
@@ -86,10 +117,13 @@ class Annotations extends Component {
   onDragStart = (mouseEvent) => {
     const point = this.relativeCoordinatesForEvent(mouseEvent);
     const lines = this.state.lines.slice();
+    const linesShowing = this.state.linesShowing.slice();
     lines.push([point]);
+    linesShowing.push(true);
 
     this.setState({
       lines,
+      linesShowing,
       activeLines: this.state.activeLines + 1,
       isDrawing: true,
     });
@@ -113,30 +147,70 @@ class Annotations extends Component {
 
   onDragEnd = () => {
     this.setState({ isDrawing: false });
+    if (this.props.isFreeze) return;
 
-    // Add a setTimeout that decreases state.activeLines once a line has faded out.
-    // Could possibly be replaced by a callback from <Fade />?
+    // Add a setTimeout that will trigger line starting to fade.
     this.removeLineTimers.push(
       setTimeout(
-        () => {
-          this.setState({
-            activeLines: this.state.activeLines - 1,
-          }, () => {
-            if (this.state.activeLines === 0) {
-              this.props.setActiveStatus(false);
-            }
-          });
-        },
-        3000 * Math.log10(this.state.lines[this.state.lines.length - 1].length ** 2),
+        this.fadeLines.bind(null, this.state.lines.length - 1),
+        1000,
       ),
     );
   };
+
+  fadeLines = (position) => {
+    const linesToFade = this.state.linesToFade.slice();
+    linesToFade[position] = false;
+
+    this.setState({
+      linesToFade,
+    });
+  }
+
+  // callback from line Fade, reduces activeLines count as lines disappear
+  handleLineGone = (position) => {
+    const linesShowing = this.state.linesShowing.slice();
+    linesShowing[position] = false;
+
+    this.setState({
+      activeLines: this.state.activeLines - 1,
+      linesShowing,
+    }, () => {
+      if (this.state.activeLines === 0) {
+        this.props.setActiveStatus(false);
+      }
+    });
+  }
+
+  freeze = () => {
+    this.resetRemoveLineTimers();
+  }
+
+  unfreeze = () => {
+    const linesToFade = this.state.linesShowing.slice();
+    this.setState({
+      linesToFade,
+    });
+
+    this.state.linesShowing.forEach((showing, index) => {
+      if (showing) {
+        this.removeLineTimers.push(
+          setTimeout(
+            this.fadeLines.bind(null, index),
+            1000,
+          ),
+        );
+      }
+    });
+  }
 
   // Called by parent component via ref when the reset button is clicked.
   reset = () => {
     this.setState({
       lines: [],
       activeLines: 0,
+      linesToFade: [],
+      linesShowing: [],
       isDrawing: false,
     });
 
@@ -146,7 +220,9 @@ class Annotations extends Component {
 
   resetRemoveLineTimers = () => {
     if (this.removeLineTimers) {
-      this.removeLineTimers.map(timer => clearTimeout(timer));
+      this.removeLineTimers.forEach((timer) => {
+        clearTimeout(timer);
+      });
       this.removeLineTimers = [];
     }
   }
@@ -171,7 +247,11 @@ class Annotations extends Component {
       (
         <AnnotationLines
           lines={this.state.lines}
+          isFreeze={this.props.isFreeze}
+          linesShowing={this.state.linesShowing}
+          linesToFade={this.state.linesToFade}
           isDrawing={this.state.isDrawing}
+          onLineFaded={this.handleLineGone}
         />
       ),
       this.portal,
@@ -180,10 +260,12 @@ class Annotations extends Component {
 }
 
 Annotations.propTypes = {
+  isFreeze: PropTypes.bool,
   setActiveStatus: PropTypes.func,
 };
 
 Annotations.defaultProps = {
+  isFreeze: false,
   setActiveStatus: () => { },
 };
 

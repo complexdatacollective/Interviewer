@@ -11,7 +11,7 @@ import ConvexHulls from '../../containers/Canvas/ConvexHulls';
 const ConcentricCircles = ({
   subject,
   layoutVariable,
-  highlightAttributes,
+  highlightAttribute,
   allowHighlighting,
   createEdge,
   convexHulls,
@@ -49,7 +49,7 @@ const ConcentricCircles = ({
     }
     <NodeLayout
       id="NODE_LAYOUT"
-      highlightAttributes={highlightAttributes}
+      highlightAttribute={highlightAttribute}
       allowHighlighting={allowHighlighting && !createEdge}
       createEdge={createEdge}
       layoutVariable={layoutVariable}
@@ -70,7 +70,7 @@ const ConcentricCircles = ({
 ConcentricCircles.propTypes = {
   subject: PropTypes.object.isRequired,
   layoutVariable: PropTypes.string.isRequired,
-  highlightAttributes: PropTypes.array,
+  highlightAttribute: PropTypes.string,
   allowHighlighting: PropTypes.bool,
   createEdge: PropTypes.string,
   allowPositioning: PropTypes.bool,
@@ -86,7 +86,7 @@ ConcentricCircles.propTypes = {
 };
 
 ConcentricCircles.defaultProps = {
-  highlightAttributes: [],
+  highlightAttribute: null,
   allowHighlighting: false,
   createEdge: null,
   allowPositioning: true,

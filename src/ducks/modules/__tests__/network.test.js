@@ -5,18 +5,19 @@ import reducer,
   entityPrimaryKeyProperty as PK,
   entityAttributesProperty,
 } from '../network';
+import uuidv4 from '../../../utils/uuid';
+
+jest.mock('../../../utils/uuid');
 
 const mockState = {
-  ego: {},
+  ego: {
+    [PK]: uuidv4(),
+  },
   nodes: [],
   edges: [],
 };
 
 describe('network reducer', () => {
-  it('should return the initial state', () => {
-    expect(reducer(undefined, {})).toEqual(mockState);
-  });
-
   it('should handle ADD_NODE', () => {
     const newState = reducer(
       {

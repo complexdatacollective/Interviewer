@@ -70,9 +70,6 @@
         "type": {
           "type": "string"
         },
-        "optionToAddAnother": {
-          "type": "boolean"
-        },
         "fields": {
           "type": "array",
           "items": {
@@ -149,14 +146,9 @@
         "form": {
           "type": [
             "string",
+            "array",
             "null"
           ]
-        },
-        "egoForms": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
         },
         "quickAdd": {
           "type": "boolean"
@@ -190,6 +182,12 @@
             "$ref": "#/definitions/Background"
           },
           "minItems": 1
+        },
+        "sortOrder": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SortOrder"
+          }
         },
         "behaviours": {
           "type": "object",
@@ -231,7 +229,7 @@
             }
           },
           "required": [
-            "egoForms",
+            "form",
             "introductionPanel"
           ]
         },
@@ -696,7 +694,7 @@
       "type": "array",
       "additionalProperties": false,
       "items": {
-        "$ref": "#/definitions/Highlight"
+        "type": "string"
       },
       "title": "NarrativeHighlight"
     },
@@ -705,9 +703,6 @@
       "additionalProperties": false,
       "properties": {
         "variable": {
-          "type": "string"
-        },
-        "color": {
           "type": "string"
         },
         "allowHighlighting": {
