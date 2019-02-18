@@ -300,12 +300,6 @@
         "entity": "node",
         "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653"
       },
-      "sortOrder": [
-        {
-          "property": "*",
-          "direction": "asc"
-        }
-      ],
       "background": {
         "concentricCircles": 3,
         "skewedTowardCenter": true
@@ -314,6 +308,12 @@
         {
           "id": "layout",
           "text": "Please arrange the nodes on the screen. Place people who know each other near each other and place the people you know best closest to the centre. Leave space between each node if you can.",
+          "sortOrder": [
+            {
+              "property": "*",
+              "direction": "asc"
+            }
+          ],
           "layout": {
             "layoutVariable": "5f58bb3a-d8e4-43de-9add-64a95f603ace",
             "allowPositioning": true

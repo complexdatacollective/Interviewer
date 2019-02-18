@@ -65,7 +65,7 @@ const Sociogram = ({
   const backgroundImage = stage.background && stage.background.image;
   const concentricCircles = prompt.background && prompt.background.concentricCircles;
   const skewedTowardCenter = prompt.background && prompt.background.skewedTowardCenter;
-  const sortOrder = stage.sortOrder;
+  const sortOrder = prompt.sortOrder;
 
   return (
     <div className="sociogram-interface">

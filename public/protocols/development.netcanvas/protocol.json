@@ -1045,16 +1045,16 @@
         "concentricCircles": 4,
         "skewedTowardCenter": true
       },
-      "sortOrder": [
-        {
-          "property": "0e75ec18-2cb1-4606-9f18-034d28b07c19",
-          "direction": "desc"
-        }
-      ],
       "prompts": [
         {
           "id": "closeness1",
           "text": "This prompt uses a background image containing quadrants and creates an edge.",
+          "sortOrder": [
+            {
+              "property": "*",
+              "direction": "desc"
+            }
+          ],
           "layout": {
             "layoutVariable": "d13ca72d-aefe-4f48-841d-09f020e0e988",
             "allowPositioning": true
@@ -1072,6 +1072,12 @@
             "layoutVariable": "d13ca72d-aefe-4f48-841d-09f020e0e988",
             "allowPositioning": true
           },
+          "sortOrder": [
+            {
+              "property": "0e75ec18-2cb1-4606-9f18-034d28b07c19",
+              "direction": "desc"
+            }
+          ],
           "edges": {
             "display": ["77199445-9d50-4646-b0bc-6d6b0c0e06bd", "867127d9-086b-403a-a3e7-2c7d32126546"],
             "create": "867127d9-086b-403a-a3e7-2c7d32126546"
@@ -1084,6 +1090,12 @@
             "layoutVariable": "e13ca72d-aefe-4f48-841d-09f020e0e987",
             "allowPositioning": true
           },
+          "sortOrder": [
+            {
+              "property": "0e75ec18-2cb1-4606-9f18-034d28b07c19",
+              "direction": "desc"
+            }
+          ],
           "edges": {
             "display": ["77199445-9d50-4646-b0bc-6d6b0c0e06bd", "867127d9-086b-403a-a3e7-2c7d32126546"]
           },
