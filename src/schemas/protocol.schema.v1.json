@@ -146,14 +146,9 @@
         "form": {
           "type": [
             "string",
+            "array",
             "null"
           ]
-        },
-        "egoForms": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
         },
         "quickAdd": {
           "type": "boolean"
@@ -228,7 +223,7 @@
             }
           },
           "required": [
-            "egoForms",
+            "form",
             "introductionPanel"
           ]
         },
