@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { reset, submit } from 'redux-form';
 import Overlay from './Overlay';
 import Form from './Form';
 import FormWizard from './FormWizard';
@@ -75,11 +74,6 @@ const mapStateToProps = (state, props) => {
     initialValues,
   };
 };
-
-const mapDispatchToProps = dispatch => ({
-  resetValues: bindActionCreators(reset, dispatch),
-  submitForm: bindActionCreators(() => submit(reduxFormName), dispatch),
-});
 
 export { NodeForm };
 

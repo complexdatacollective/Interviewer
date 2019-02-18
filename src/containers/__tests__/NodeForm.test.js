@@ -28,11 +28,6 @@ const mockProps = {
 };
 
 describe('<NodeForm />', () => {
-  it('with default props', () => {
-    const subject = shallow(<NodeForm {...mockProps} />);
-
-    expect(subject.find('FormWizard').prop('controls').length).toBe(1);
-  });
 
   it('should render with prepopulated fields if provided', () => {
     const withInitialValues = {
