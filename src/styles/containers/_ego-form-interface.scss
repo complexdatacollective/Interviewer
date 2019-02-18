@@ -1,11 +1,12 @@
 .ego-form {
-  margin: 0 auto;
   height: 100%;
   padding: 1rem 2rem 4rem;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  max-width: 60rem;
+  align-items: center;
+  margin-left: var(--timeline-width);
+  margin-right: var(--interface-right-margin);
 
   &__introduction {
     border-radius: var(--border-radius);
@@ -16,6 +17,7 @@
 
   &__form-container {
     height: 100%;
+    max-width: 60rem;
 
     .scrollable {
       padding-top: unit(4);
