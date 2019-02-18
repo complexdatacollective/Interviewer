@@ -36,7 +36,7 @@ const EXTRACT_PROTOCOL = 'PROTOCOL/EXTRACT_PROTOCOL';
 const EXTRACT_PROTOCOL_FAILED = Symbol('PROTOCOL/EXTRACT_PROTOCOL_FAILED');
 const PARSE_PROTOCOL = 'PARSE_PROTOCOL';
 const PARSE_PROTOCOL_FAILED = Symbol('PARSE_PROTOCOL_FAILED');
-const EXTRACT_PROTOCOL_COMPLETE = 'EXTRACT_PROTOCOL_COMPLETE';
+const IMPORT_PROTOCOL_COMPLETE = 'IMPORT_PROTOCOL_COMPLETE';
 const SET_WORKER = 'SET_WORKER';
 
 export const initialState = {
@@ -47,10 +47,10 @@ export const initialState = {
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    case EXTRACT_PROTOCOL_COMPLETE:
+    case IMPORT_PROTOCOL_COMPLETE:
       return {
         ...state,
-        ...action.protocolData,
+        ...action.protocolData.protocol,
         status: 'complete',
       };
     case SET_WORKER:
@@ -138,9 +138,10 @@ function downloadProtocolFailedAction(error) {
   };
 }
 
-function extractProtocolCompleteAction(protocolData) {
+function importProtocolCompleteAction(protocolData) {
+  console.log(protocolData);
   return {
-    type: EXTRACT_PROTOCOL_COMPLETE,
+    type: IMPORT_PROTOCOL_COMPLETE,
     protocolData,
   };
 }
@@ -179,7 +180,7 @@ const downloadAndInstallProtocolThunk = (uri, pairedServer) => (dispatch) => {
       (protocolData) => {
         // Protocol data read, JSON returned.
         // console.log('load protocol JSON finished', protocolData);
-        dispatch(extractProtocolCompleteAction(protocolData));
+        dispatch(importProtocolCompleteAction(protocolData));
       },
     )
     .catch(error => dispatch(parseProtocolFailedAction(error)));
@@ -207,7 +208,7 @@ const actionCreators = {
   parseProtocol: parseProtocolAction,
   extractProtocol: extractProtocolAction,
   downloadProtocol: downloadProtocolAction,
-  extractProtocolComplete: extractProtocolCompleteAction,
+  importProtocolComplete: importProtocolCompleteAction,
   loadFactoryProtocol: parseFactoryProtocolAction,
   parseProtocolFailedAction,
   extractProtocolFailedAction,
@@ -221,7 +222,7 @@ const actionTypes = {
   DOWNLOAD_PROTOCOL_FAILED,
   PARSE_PROTOCOL,
   PARSE_PROTOCOL_FAILED,
-  EXTRACT_PROTOCOL_COMPLETE,
+  IMPORT_PROTOCOL_COMPLETE,
 };
 
 const epics = combineEpics(

@@ -16,8 +16,8 @@ import { ProtocolImport, SetupScreen } from './containers/Setup';
 
 function mapStateToProps(state) {
   return {
-    protocolPath: state.activeProtocol.path,
-    protocolType: state.activeProtocol.type,
+    protocolPath: state.importProtocol.path,
+    protocolType: state.importProtocol.type,
     sessionId: state.activeSessionId,
   };
 }

@@ -6,7 +6,7 @@ import externalData from './externalData';
 import sessions from './sessions';
 import activeSessionId from './session';
 import deviceSettings from './deviceSettings';
-import activeProtocol from './importProtocol';
+import importProtocol from './importProtocol';
 import installedProtocols from './installedProtocols';
 import dialogs from './dialogs';
 import search from './search';
@@ -21,7 +21,7 @@ const appReducer = combineReducers({
   sessions,
   deviceSettings,
   externalData,
-  activeProtocol,
+  importProtocol,
   installedProtocols,
   dialogs,
   search,

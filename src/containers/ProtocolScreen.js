@@ -159,8 +159,8 @@ function mapStateToProps(state, ownProps) {
   const rotateIndex = (max, nextIndex) => (nextIndex + max) % max;
   const maxLength = stages(state).length;
   const sessionId = state.session;
-  const protocolPath = state.activeProtocol.path;
-  const protocolType = state.activeProtocol.type;
+  const protocolPath = state.importProtocol.path;
+  const protocolType = state.importProtocol.type;
   const stage = stages(state)[ownProps.stageIndex] || {};
   const stageIndex = Math.trunc(ownProps.stageIndex) || 0;
   const promptId = getPromptIndexForCurrentSession(state);

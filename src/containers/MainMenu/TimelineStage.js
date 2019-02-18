@@ -23,9 +23,9 @@ const timelineStageHandlers = withHandlers({
 });
 
 const mapStateToProps = state => ({
-  protocolPath: state.activeProtocol.path,
+  protocolPath: state.importProtocol.path,
   currentStageIndex: currentStageIndex(state.router.location.pathname),
-  protocolType: state.activeProtocol.type,
+  protocolType: state.importProtocol.type,
   sessionId: state.activeSessionId,
 });
 

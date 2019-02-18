@@ -121,7 +121,7 @@ ServerPairing.propTypes = {
 function mapStateToProps(state) {
   return {
     deviceName: state.deviceSettings.description,
-    isFactory: state.activeProtocol.isFactory,
+    isFactory: state.importProtocol.isFactory,
   };
 }
 

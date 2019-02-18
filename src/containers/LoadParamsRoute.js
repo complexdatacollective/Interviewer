@@ -138,7 +138,7 @@ function mapStateToProps(state, ownProps) {
   return {
     backParam: ownProps.location.search,
     isSkipped: isStageSkipped(ownProps.computedMatch.params.stageIndex)(state),
-    protocolPath: state.activeProtocol.path,
+    protocolPath: state.importProtocol.path,
     sessionId: state.activeSessionId,
     sessionUrl: state.sessions[state.activeSessionId] && state.sessions[state.activeSessionId].path,
     skipToIndex: getNextIndex(nextIndex)(state),
