@@ -11,17 +11,17 @@ import { NodeLabelWorkerName } from '../utils/WorkerAgent';
 const nameDigest = name => name && crypto.createHash('sha256').update(name).digest('hex');
 
 export const protocolRegistry = createDeepEqualSelector(
-  state => state.activeProtocol && state.activeProtocol.variableRegistry,
+  state => state.importProtocol && state.importProtocol.variableRegistry,
   registry => registry,
 );
 
 export const protocolForms = createDeepEqualSelector(
-  state => state.activeProtocol.forms,
+  state => state.importProtocol.forms,
   forms => forms,
 );
 
 export const getRemoteProtocolId = createDeepEqualSelector(
-  state => state.activeProtocol && state.activeProtocol.type !== 'factory' && state.activeProtocol.name,
+  state => state.importProtocol && state.importProtocol.type !== 'factory' && state.importProtocol.name,
   remoteName => nameDigest(remoteName) || null,
 );
 
@@ -86,7 +86,7 @@ export const makeGetCategoricalOptions = () => createDeepEqualSelector(
 
 export const getNodeLabelWorkerUrl = createSelector(
   // null if URLs haven't yet loaded; false if worker does not exist
-  state => state.activeProtocol.workerUrlMap &&
-    (state.activeProtocol.workerUrlMap[NodeLabelWorkerName] || false),
+  state => state.importProtocol.workerUrlMap &&
+    (state.importProtocol.workerUrlMap[NodeLabelWorkerName] || false),
   url => url,
 );

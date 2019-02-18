@@ -117,8 +117,8 @@ ServerProtocols.propTypes = {
 function mapStateToProps(state) {
   return {
     isProtocolFinishedImport: state.importProtocol.status === 'complete',
-    protocolPath: state.activeProtocol.path,
-    protocolType: state.activeProtocol.type,
+    protocolPath: state.importProtocol.path,
+    protocolType: state.importProtocol.type,
     sessionId: state.activeSessionId,
     pairedServer: state.pairedServer,
   };

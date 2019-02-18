@@ -34,9 +34,10 @@ const initialState = [
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case IMPORT_PROTOCOL_COMPLETE: {
+      console.log('I heard you just installed a protocol?');
       const newProtocol = {
-        ...action.protocol,
-        path: action.path,
+        ...action.protocolData.protocol,
+        path: action.protocolData.path,
       };
 
       // Allow for updating as well as installing new

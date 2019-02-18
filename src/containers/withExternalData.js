@@ -17,13 +17,13 @@ import { getCurrentSession } from '../selectors/session';
 const mapStateToProps = (state) => {
   const session = getCurrentSession(state);
   const assetFiles = mapValues(
-    state.activeProtocol.assetManifest,
+    state.importProtocol.assetManifest,
     asset => asset.source,
   );
 
   return {
     protocolName: session.protocolPath,
-    protocolType: state.activeProtocol.type,
+    protocolType: state.importProtocol.type,
     assetFiles,
   };
 };
