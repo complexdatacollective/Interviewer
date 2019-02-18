@@ -9,23 +9,15 @@ import uuidv4 from '../../../utils/uuid';
 
 jest.mock('../../../utils/uuid');
 
-const mockEgoUID = 'session-1';
-
-uuidv4.mockImplementation(() => mockEgoUID);
-
 const mockState = {
   ego: {
-    [PK]: mockEgoUID,
+    [PK]: uuidv4(),
   },
   nodes: [],
   edges: [],
 };
 
 describe('network reducer', () => {
-  it('should return the initial state', () => {
-    expect(reducer(undefined, {})).toEqual(mockState);
-  });
-
   it('should handle ADD_NODE', () => {
     const newState = reducer(
       {
