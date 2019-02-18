@@ -55,14 +55,14 @@ const Sociogram = ({
   connectFrom,
   handleConnectFrom,
 }) => {
-  const subject = prompt.subject;
+  const subject = stage.subject;
   const layoutVariable = prompt.layout && prompt.layout.layoutVariable;
   const highlightAttribute = prompt.highlight && prompt.highlight.variable;
   const allowHighlighting = prompt.highlight && prompt.highlight.allowHighlighting;
   const createEdge = prompt.edges && prompt.edges.create;
   const allowPositioning = prompt.layout && prompt.layout.allowPositioning;
   const displayEdges = (prompt.edges && prompt.edges.display) || [];
-  const backgroundImage = prompt.background && prompt.background.image;
+  const backgroundImage = stage.background && stage.background.image;
   const concentricCircles = prompt.background && prompt.background.concentricCircles;
   const skewedTowardCenter = prompt.background && prompt.background.skewedTowardCenter;
   const sortOrder = prompt.sortOrder;

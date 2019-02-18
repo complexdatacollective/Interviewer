@@ -183,6 +183,12 @@
           },
           "minItems": 1
         },
+        "sortOrder": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SortOrder"
+          }
+        },
         "behaviours": {
           "type": "object",
           "items": {

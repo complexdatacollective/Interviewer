@@ -295,27 +295,27 @@
       "id": "sociogram",
       "type": "Sociogram",
       "label": "Sociogram",
+      "subject": {
+        "entity": "node",
+        "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653"
+      },
+      "background": {
+        "concentricCircles": 3,
+        "skewedTowardCenter": true
+      },
       "prompts": [
         {
           "id": "layout",
           "text": "Please arrange the nodes on the screen. Place people who know each other near each other and place the people you know best closest to the centre. Leave space between each node if you can.",
-          "subject": {
-            "entity": "node",
-            "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653"
-          },
-          "layout": {
-            "layoutVariable": "5f58bb3a-d8e4-43de-9add-64a95f603ace",
-            "allowPositioning": true
-          },
           "sortOrder": [
             {
               "property": "*",
               "direction": "asc"
             }
           ],
-          "background": {
-            "concentricCircles": 3,
-            "skewedTowardCenter": true
+          "layout": {
+            "layoutVariable": "5f58bb3a-d8e4-43de-9add-64a95f603ace",
+            "allowPositioning": true
           }
         }
       ]
@@ -336,27 +336,27 @@
       "id": "sociogram2",
       "type": "Sociogram",
       "label": "Sociogram Edges",
+      "subject": {
+        "entity": "node",
+        "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653"
+      },
+      "background": {
+        "concentricCircles": 3,
+        "skewedTowardCenter": true
+      },
+      "sortOrder": [
+        {
+          "property": "*",
+          "direction": "asc"
+        }
+      ],
       "prompts": [
         {
           "id": "edge",
           "text": "Please mark the relationships between any two people who know each other personally. Click on the first person and then the second to draw the line between two nodes. ",
-          "subject": {
-            "entity": "node",
-            "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653"
-          },
           "layout": {
             "layoutVariable": "5f58bb3a-d8e4-43de-9add-64a95f603ace",
             "allowPositioning": true
-          },
-          "sortOrder": [
-            {
-              "property": "*",
-              "direction": "asc"
-            }
-          ],
-          "background": {
-            "concentricCircles": 3,
-            "skewedTowardCenter": true
           },
           "edges": {
             "display": ["f4717921-def2-4c54-9429-719614415e89"],
@@ -366,23 +366,9 @@
         {
           "id": "select1",
           "text": "Who lives near (<5km) to you?",
-          "subject": {
-            "entity": "node",
-            "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653"
-          },
           "layout": {
             "layoutVariable": "5f58bb3a-d8e4-43de-9add-64a95f603ace",
             "allowPositioning": true
-          },
-          "sortOrder": [
-            {
-              "property": "*",
-              "direction": "asc"
-            }
-          ],
-          "background": {
-            "concentricCircles": 3,
-            "skewedTowardCenter": true
           },
           "edges": {
             "display": ["f4717921-def2-4c54-9429-719614415e89"]
@@ -395,23 +381,9 @@
         {
           "id": "select2",
           "text": "If you have a Facebook account, which of these people are your friends on Facebook?",
-          "subject": {
-            "entity": "node",
-            "type": "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653"
-          },
           "layout": {
             "layoutVariable": "5f58bb3a-d8e4-43de-9add-64a95f603ace",
             "allowPositioning": true
-          },
-          "sortOrder": [
-            {
-              "property": "*",
-              "direction": "asc"
-            }
-          ],
-          "background": {
-            "concentricCircles": 3,
-            "skewedTowardCenter": true
           },
           "edges": {
             "display": ["f4717921-def2-4c54-9429-719614415e89"]

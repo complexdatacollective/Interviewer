@@ -28,7 +28,6 @@ export const makeGetNextUnplacedNode = () =>
     getSortOptions,
     (nodes, subject, layoutVariable, sortOptions) => {
       const type = subject && subject.type;
-
       const unplacedNodes = nodes.filter((node) => {
         const attributes = getEntityAttributes(node);
         return (
@@ -38,7 +37,6 @@ export const makeGetNextUnplacedNode = () =>
       });
 
       const sorter = sortOrder(sortOptions);
-
       return first(sorter(unplacedNodes));
     },
   );
