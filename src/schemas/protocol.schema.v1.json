@@ -694,7 +694,7 @@
       "type": "array",
       "additionalProperties": false,
       "items": {
-        "$ref": "#/definitions/Highlight"
+        "type": "string"
       },
       "title": "NarrativeHighlight"
     },
@@ -703,9 +703,6 @@
       "additionalProperties": false,
       "properties": {
         "variable": {
-          "type": "string"
-        },
-        "color": {
           "type": "string"
         },
         "allowHighlighting": {

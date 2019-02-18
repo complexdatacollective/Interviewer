@@ -29,11 +29,15 @@ class PresetSwitcher extends PureComponent {
       subject,
       displayEdges,
       convexHulls,
+      isFreeze,
       toggleConvex,
       toggleEdges,
+      highlightIndex,
       toggleHighlights,
+      toggleHighlightIndex,
       showResetButton,
       resetInteractions,
+      toggleFreeze,
     } = this.props;
 
     const currentPreset = presets[presetIndex];
@@ -43,12 +47,19 @@ class PresetSwitcher extends PureComponent {
       { 'preset-switcher__navigation--hidden': this.state.openKey },
     );
 
+    const freezeClasses = cx(
+      'preset-switcher__freeze',
+      { 'preset-switcher__freeze--active': isFreeze },
+    );
+
     return (
       <div className="preset-switcher">
         <PresetSwitcherKey
           subject={subject}
           highlights={currentPreset.highlight}
+          highlightIndex={highlightIndex}
           toggleHighlights={toggleHighlights}
+          toggleHighlightIndex={toggleHighlightIndex}
           displayEdges={displayEdges}
           toggleEdges={toggleEdges}
           convexHulls={convexHulls}
@@ -61,6 +72,9 @@ class PresetSwitcher extends PureComponent {
           onClick={() => this.props.updatePreset(presetIndex - 1)}
         >
           <Icon name="chevron-left" />
+        </div>
+        <div className={freezeClasses} onClick={toggleFreeze}>
+          <h1>&#10052;</h1>
         </div>
         <div
           className={cx('preset-switcher__reset-button', { 'preset-switcher__reset-button--show': showResetButton })}
@@ -91,16 +105,22 @@ PresetSwitcher.propTypes = {
   subject: PropTypes.object.isRequired,
   displayEdges: PropTypes.array,
   convexHulls: PropTypes.string,
+  isFreeze: PropTypes.bool,
   toggleConvex: PropTypes.func.isRequired,
   toggleEdges: PropTypes.func.isRequired,
+  highlightIndex: PropTypes.number.isRequired,
   toggleHighlights: PropTypes.func.isRequired,
+  toggleHighlightIndex: PropTypes.func.isRequired,
   showResetButton: PropTypes.bool.isRequired,
   resetInteractions: PropTypes.func.isRequired,
+  toggleFreeze: PropTypes.func,
 };
 
 PresetSwitcher.defaultProps = {
   displayEdges: null,
   convexHulls: null,
+  isFreeze: false,
+  toggleFreeze: () => {},
 };
 
 export default compose(

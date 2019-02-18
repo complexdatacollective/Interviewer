@@ -17,7 +17,7 @@ class NodeLayout extends Component {
     nodes: PropTypes.array,
     onSelected: PropTypes.func.isRequired,
     connectFrom: PropTypes.string,
-    highlightAttributes: PropTypes.array,
+    highlightAttribute: PropTypes.string,
     allowPositioning: PropTypes.bool,
     allowSelect: PropTypes.bool,
     layoutVariable: PropTypes.string,
@@ -28,7 +28,7 @@ class NodeLayout extends Component {
   static defaultProps = {
     connectFrom: null,
     nodes: [],
-    highlightAttributes: [],
+    highlightAttribute: null,
     allowPositioning: true,
     allowSelect: true,
     layoutVariable: null,
@@ -38,22 +38,15 @@ class NodeLayout extends Component {
 
   shouldComponentUpdate(nextProps) {
     if (nodesLengthChanged(nextProps, this.props)) { return true; }
-    if (!isEqual(nextProps.highlightAttributes, this.props.highlightAttributes)) { return true; }
+    if (!isEqual(nextProps.highlightAttribute, this.props.highlightAttribute)) { return true; }
     if (propsChangedExcludingNodes(nextProps, this.props)) { return true; }
 
     return false;
   }
 
-  getHighlightColor(node) {
-    if (!this.isHighlighted(node)) return '';
-    return this.props.highlightAttributes.find(
-      attribute => node[entityAttributesProperty][attribute.variable] === true).color;
-  }
-
   isHighlighted(node) {
-    return !isEmpty(this.props.highlightAttributes) &&
-      !(isEmpty(this.props.highlightAttributes.find(
-        attribute => node[entityAttributesProperty][attribute.variable] === true)));
+    return !isEmpty(this.props.highlightAttribute) &&
+      node[entityAttributesProperty][this.props.highlightAttribute] === true;
   }
 
   isLinking(node) {
@@ -83,7 +76,6 @@ class NodeLayout extends Component {
               node={node}
               layoutVariable={layoutVariable}
               onSelected={() => this.props.onSelected(node)}
-              selectedColor={this.getHighlightColor(node)}
               selected={this.isHighlighted(node)}
               linking={this.isLinking(node)}
               allowPositioning={allowPositioning}
