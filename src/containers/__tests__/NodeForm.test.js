@@ -28,7 +28,6 @@ const mockProps = {
 };
 
 describe('<NodeForm />', () => {
-
   it('should render with prepopulated fields if provided', () => {
     const withInitialValues = {
       ...mockProps,

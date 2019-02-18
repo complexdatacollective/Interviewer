@@ -4,7 +4,7 @@ import React from 'react';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import { shallow, mount } from 'enzyme';
-import Form, { Form as UnconnectedForm } from '../Form';
+import Form from '../Form';
 import Field from '../Field';
 
 jest.mock('../../ui/utils/CSSVariables');
@@ -81,5 +81,4 @@ describe('<Form />', () => {
     expect(subject.find(Field).length).toBe(2);
   });
   it('Calls autoPopulate on Field blur');
-
 });

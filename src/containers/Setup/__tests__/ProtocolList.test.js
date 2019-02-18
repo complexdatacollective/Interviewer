@@ -4,7 +4,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { createStore } from 'redux';
 
-import ProtocolList, { UnconnectedProtocolList } from '../ProtocolList';
+import ProtocolList from '../ProtocolList';
 
 const mockProps = {
   addSession: jest.fn(),
@@ -35,17 +35,17 @@ describe('<ProtocolList />', () => {
   //     mockProps.loadProtocol.mockClear();
   //   });
 
-    // Removed temporarily due to refactor.
-    // it('loads a factory protocol', () => {
-    //   wrapper.instance().onClickNewProtocol(mockProtocols[0]);
-    //   expect(mockProps.loadFactoryProtocol).toHaveBeenCalled();
-    // });
+  // Removed temporarily due to refactor.
+  // it('loads a factory protocol', () => {
+  //   wrapper.instance().onClickNewProtocol(mockProtocols[0]);
+  //   expect(mockProps.loadFactoryProtocol).toHaveBeenCalled();
+  // });
 
-    // it('loads a remote protocol', () => {
-    //   const protocol = { ...mockProtocols[0], isFactoryProtocol: undefined };
-    //   wrapper.instance().onClickNewProtocol(protocol);
-    //   expect(mockProps.loadFactoryProtocol).not.toHaveBeenCalled();
-    //   expect(mockProps.loadProtocol).toHaveBeenCalledWith(protocol.path);
-    // });
+  // it('loads a remote protocol', () => {
+  //   const protocol = { ...mockProtocols[0], isFactoryProtocol: undefined };
+  //   wrapper.instance().onClickNewProtocol(protocol);
+  //   expect(mockProps.loadFactoryProtocol).not.toHaveBeenCalled();
+  //   expect(mockProps.loadProtocol).toHaveBeenCalledWith(protocol.path);
+  // });
   // });
 });

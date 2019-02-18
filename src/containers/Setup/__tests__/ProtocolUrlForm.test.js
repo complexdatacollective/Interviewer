@@ -6,7 +6,7 @@ import { createStore } from 'redux';
 
 import ProtocolUrlForm from '../ProtocolUrlForm';
 
-const isSumbitButton = btn => btn.prop('type') !== 'reset' && btn.prop('type') !== 'button';
+// const isSumbitButton = btn => btn.prop('type') !== 'reset' && btn.prop('type') !== 'button';
 
 describe('ProtocolUrlForm', () => {
   let component;
