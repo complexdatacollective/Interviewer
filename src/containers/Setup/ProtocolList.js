@@ -16,33 +16,27 @@ class ProtocolList extends Component {
     super(props);
     this.state = {
       showNewSessionOverlay: false,
-      protocol: {
-        name: 12,
-      },
+      selectedProtocol: null,
     };
 
     this.overlay = React.createRef();
   }
-  onClickNewProtocol = (protocol) => {
-    if (!(protocol.isFactoryProtocol || protocol.path)) {
-      return;
-    }
-
+  onClickProtocolCard = (protocolUID) => {
     this.setState({
       showNewSessionOverlay: true,
-      protocol,
+      selectedProtocol: protocolUID,
     });
   }
 
   handleCreateSession = (caseId) => {
-    this.props.addSession(caseId, this.state.protocol.name);
+    this.props.addSession(caseId, this.state.selectedProtocol);
     this.handleCloseOverlay();
 
     // this.props.loadSession(protocol.path);
   }
 
   handleCloseOverlay = () => {
-    this.setState({ showNewSessionOverlay: false });
+    this.setState({ showNewSessionOverlay: false, selectedProtocol: null });
   }
 
   render() {
@@ -77,7 +71,7 @@ class ProtocolList extends Component {
                 <ProtocolCard
                   size="large"
                   protocol={protocol}
-                  selectProtocol={() => this.onClickNewProtocol(protocol)}
+                  selectProtocol={() => this.onClickProtocolCard(uid)}
                 />
               </div>
             )) }

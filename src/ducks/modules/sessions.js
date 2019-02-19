@@ -5,11 +5,9 @@ import { combineEpics } from 'redux-observable';
 import uuidv4 from '../../utils/uuid';
 import network, { entityPrimaryKeyProperty, ADD_NODE, BATCH_ADD_NODES, REMOVE_NODE, REMOVE_NODE_FROM_PROMPT, UPDATE_NODE, TOGGLE_NODE_ATTRIBUTES, ADD_EDGE, UPDATE_EDGE, TOGGLE_EDGE, REMOVE_EDGE, UPDATE_EGO } from './network';
 import ApiClient from '../../utils/ApiClient';
-import { protocolIdFromSessionPath } from '../../utils/matchSessionPath';
 
 const ADD_SESSION = 'ADD_SESSION';
 const LOAD_SESSION = 'LOAD_SESSION';
-const UPDATE_SESSION = 'UPDATE_SESSION';
 const UPDATE_PROMPT = 'UPDATE_PROMPT';
 const REMOVE_SESSION = 'REMOVE_SESSION';
 const EXPORT_SESSION = 'EXPORT_SESSION';
@@ -47,25 +45,14 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         [action.sessionId]: withTimestamp({
-          path: action.path,
+          protocolUID: action.protocolUID,
           promptIndex: 0,
           caseId: action.caseId,
           network: network(state.network, action),
         }),
       };
     case LOAD_SESSION:
-      console.log('LOAD_SESSION');
       return state;
-    case UPDATE_SESSION:
-      return {
-        ...state,
-        [action.sessionId]: withTimestamp({
-          ...state[action.sessionId],
-          path: action.path,
-          protocolPath: protocolIdFromSessionPath(action.path),
-          promptIndex: 0,
-        }),
-      };
     case UPDATE_PROMPT:
       return {
         ...state,
@@ -259,22 +246,13 @@ const removeEdge = edge => (dispatch, getState) => {
   });
 };
 
-function addSession(caseId) {
+function addSession(caseId, protocolUID) {
   const id = uuidv4();
   return {
     type: ADD_SESSION,
     sessionId: id,
     caseId,
-    path: `/session/${id}`,
-  };
-}
-
-// This specifically updates the path/URL
-function updateSession(id, path) {
-  return {
-    type: UPDATE_SESSION,
-    sessionId: id,
-    path,
+    protocolUID,
   };
 }
 
@@ -355,7 +333,6 @@ const actionCreators = {
   toggleNodeAttributes,
   addSession,
   loadSession,
-  updateSession,
   updatePrompt,
   removeSession,
   exportSession,
@@ -376,7 +353,6 @@ const actionTypes = {
   UPDATE_EGO,
   ADD_SESSION,
   LOAD_SESSION,
-  UPDATE_SESSION,
   UPDATE_PROMPT,
   REMOVE_SESSION,
   EXPORT_SESSION,

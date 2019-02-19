@@ -54,7 +54,6 @@ export default function reducer(state = initialState, action = {}) {
         tempPath: action.tempPath,
       };
     case PARSE_PROTOCOL:
-      console.log(action);
       return {
         ...state,
         status: 'parsing',
@@ -114,7 +113,6 @@ function downloadProtocolFailedAction(error) {
 }
 
 function importProtocolCompleteAction(protocolData, uid) {
-  console.log(protocolData);
   return {
     type: IMPORT_PROTOCOL_COMPLETE,
     protocolContent: protocolData.protocol,

@@ -158,18 +158,18 @@ Protocol.defaultProps = {
 function mapStateToProps(state, ownProps) {
   const rotateIndex = (max, nextIndex) => (nextIndex + max) % max;
   const maxLength = stages(state).length;
-  const sessionId = state.session;
-  const protocolPath = state.importProtocol.path;
+  const sessionId = state.activeSessionId;
+  const protocolUID = state.sessions[sessionId].protocolUID;
   const stage = stages(state)[ownProps.stageIndex] || {};
   const stageIndex = Math.trunc(ownProps.stageIndex) || 0;
   const promptId = getPromptIndexForCurrentSession(state);
   const stageProgress = stageIndex / (maxLength - 1);
   const promptProgress = stage.prompts ? (promptId / stage.prompts.length) : 0;
-
+  console.log('protocolscreen');
   return {
     isSessionLoaded: state.activeSessionId,
     nextIndex: rotateIndex(maxLength, stageIndex + 1),
-    pathPrefix: `/session/${sessionId}/${protocolPath}`,
+    pathPrefix: `/session/${protocolUID}/${sessionId}`,
     percentProgress: (stageProgress + (promptProgress / (maxLength - 1))) * 100,
     previousIndex: rotateIndex(maxLength, stageIndex - 1),
     promptId,

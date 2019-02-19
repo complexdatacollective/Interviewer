@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { get } from 'lodash';
 import { Link, Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
@@ -34,7 +35,7 @@ class Setup extends Component {
   render() {
     if (this.props.isProtocolLoaded) {
       const stageIndex = this.props.stageIndex ? this.props.stageIndex : 0;
-      const pathname = `/session/${this.props.sessionId}/${this.props.protocolPath}/${stageIndex}`;
+      const pathname = `/session/${this.props.protocolUID}/${this.props.sessionId}/${stageIndex}`;
       return (<Redirect to={{ pathname: `${pathname}` }} />);
     }
 
@@ -85,14 +86,14 @@ class Setup extends Component {
 Setup.propTypes = {
   isProtocolLoaded: PropTypes.bool.isRequired,
   isPairedWithServer: PropTypes.bool.isRequired,
-  protocolPath: PropTypes.string,
+  protocolUID: PropTypes.string,
   sessionId: PropTypes.string,
   stageIndex: PropTypes.number,
 };
 
 Setup.defaultProps = {
-  protocolPath: '',
   isPairedWithServer: false,
+  protocolUID: 'balls',
   stageIndex: 0,
   sessionId: null,
 };
@@ -102,7 +103,7 @@ function mapStateToProps(state) {
     isFactory: state.importProtocol.isFactory,
     isProtocolLoaded: !!state.activeSessionId,
     isPairedWithServer: !!state.pairedServer,
-    protocolPath: state.importProtocol.path,
+    protocolUID: get(state.sessions[state.activeSessionId], 'protocolUID'),
     sessionId: state.activeSessionId,
   };
 }
