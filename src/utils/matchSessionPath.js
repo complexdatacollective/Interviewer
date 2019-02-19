@@ -2,7 +2,7 @@ import { matchPath } from 'react-router-dom';
 
 const ProtocolIdKey = 'protocolId';
 
-const SessionPath = `/session/:sessionId/:protocolType/:${ProtocolIdKey}/:stageIndex`;
+const SessionPath = `/session/:sessionId/:${ProtocolIdKey}/:stageIndex`;
 
 const matchSessionPath = pathname => matchPath(pathname, { path: SessionPath });
 

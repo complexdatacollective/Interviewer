@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Swiper from 'react-id-swiper';
+import { size, map } from 'lodash';
 import { NewSessionOverlay, ProtocolCard } from '../../components/Setup';
 import { actionCreators as sessionActions } from '../../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
@@ -69,10 +70,10 @@ class ProtocolList extends Component {
 
     return (
       <React.Fragment>
-        { installedProtocols && installedProtocols.length > 0 ?
+        { size(installedProtocols) > 0 ?
           <Swiper {...params} ref={(node) => { if (node) this.swiper = node.swiper; }}>
-            { installedProtocols.map(protocol => (
-              <div key={protocol.path}>
+            { map(installedProtocols, (protocol, uid) => (
+              <div key={uid}>
                 <ProtocolCard
                   size="large"
                   protocol={protocol}
@@ -97,7 +98,7 @@ class ProtocolList extends Component {
 ProtocolList.propTypes = {
   addSession: PropTypes.func.isRequired,
   loadSession: PropTypes.func.isRequired,
-  installedProtocols: PropTypes.array.isRequired,
+  installedProtocols: PropTypes.object.isRequired,
 };
 
 ProtocolList.defaultProps = {

@@ -23,7 +23,6 @@ const mapStateToProps = (state) => {
 
   return {
     protocolName: session.protocolPath,
-    protocolType: state.importProtocol.type,
     assetFiles,
   };
 };
@@ -59,7 +58,6 @@ const withExternalData = (sourceProperty, dataProperty) =>
       loadExternalData: ({
         setExternalData,
         protocolName,
-        protocolType,
         assetFiles,
       }) =>
         (sourceId) => {
@@ -69,7 +67,7 @@ const withExternalData = (sourceProperty, dataProperty) =>
 
           const sourceFile = assetFiles[sourceId];
 
-          loadExternalData(protocolName, sourceFile, protocolType)
+          loadExternalData(protocolName, sourceFile)
             .then((externalData) => {
               setExternalData(externalData);
             });

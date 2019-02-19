@@ -16,30 +16,29 @@ import { actionTypes as ProtocolActionTypes } from './importProtocol';
 
 const IMPORT_PROTOCOL_COMPLETE = ProtocolActionTypes.IMPORT_PROTOCOL_COMPLETE;
 
-const initialState = [
-];
+const initialState = {};
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case IMPORT_PROTOCOL_COMPLETE: {
       const newProtocol = {
-        ...action.protocolData.protocol,
-        path: action.protocolData.path,
+        ...action.protocolContent,
+        appDataPath: action.appDataPath,
       };
 
-      // Allow for updating as well as installing new
-      const existingIndex = state.findIndex(protocol => protocol.name === newProtocol.name);
+      // // Allow for updating as well as installing new
+      // const existingIndex = state.findIndex(protocol => protocol.name === newProtocol.name);
 
-      if (existingIndex > -1) {
-        const updatedState = [...state];
-        updatedState.splice(existingIndex, 1, newProtocol);
-        return updatedState;
-      }
+      // if (existingIndex > -1) {
+      //   const updatedState = [...state];
+      //   updatedState.splice(existingIndex, 1, newProtocol);
+      //   return updatedState;
+      // }
 
-      return [
+      return {
         ...state,
-        newProtocol,
-      ];
+        [action.uid]: newProtocol,
+      };
     }
     default:
       return state;

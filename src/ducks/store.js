@@ -28,12 +28,11 @@ if (window) {
 
 const persistWhitelist = [
   'deviceSettings',
-  'externalData',
   'pairedServer',
-  'protocols',
+  'installedProtocols',
   'router',
   'search',
-  'session',
+  'activeSessionId',
   'sessions',
 ];
 

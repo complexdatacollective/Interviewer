@@ -23,7 +23,6 @@ const pathInfo = (sessionPath) => {
     info.sessionId = matchedPath.params.sessionId;
     info.caseId = matchedPath.params.caseId;
     info.protocol = matchedPath.params.protocolId;
-    info.protocolType = matchedPath.params.protocolType;
     info.stageIndex = matchedPath.params.stageIndex;
   }
   return info;

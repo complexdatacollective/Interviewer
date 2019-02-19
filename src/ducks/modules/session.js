@@ -22,11 +22,10 @@ export default function reducer(state = initialState, action = {}) {
 /**
  * setSession can be used to resume an interview (e.g. from GUI, or URL on load)
  */
-function setSession(id, protocolType) {
+function setSession(id) {
   return {
     type: SET_SESSION,
     sessionId: id,
-    protocolType,
   };
 }
 

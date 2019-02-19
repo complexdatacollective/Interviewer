@@ -118,7 +118,6 @@ function mapStateToProps(state) {
   return {
     isProtocolFinishedImport: state.importProtocol.status === 'complete',
     protocolPath: state.importProtocol.path,
-    protocolType: state.importProtocol.type,
     sessionId: state.activeSessionId,
     pairedServer: state.pairedServer,
   };

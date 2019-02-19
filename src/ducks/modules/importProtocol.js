@@ -12,10 +12,10 @@ import {
 
 const END_SESSION = SessionActionTypes.END_SESSION;
 
-const DOWNLOAD_PROTOCOL = 'PROTOCOL/DOWNLOAD_PROTOCOL';
-const DOWNLOAD_PROTOCOL_FAILED = Symbol('PROTOCOL/DOWNLOAD_PROTOCOL_FAILED');
-const EXTRACT_PROTOCOL = 'PROTOCOL/EXTRACT_PROTOCOL';
-const EXTRACT_PROTOCOL_FAILED = Symbol('PROTOCOL/EXTRACT_PROTOCOL_FAILED');
+const DOWNLOAD_PROTOCOL = 'DOWNLOAD_PROTOCOL';
+const DOWNLOAD_PROTOCOL_FAILED = Symbol('DOWNLOAD_PROTOCOL_FAILED');
+const EXTRACT_PROTOCOL = 'EXTRACT_PROTOCOL';
+const EXTRACT_PROTOCOL_FAILED = Symbol('EXTRACT_PROTOCOL_FAILED');
 const PARSE_PROTOCOL = 'PARSE_PROTOCOL';
 const PARSE_PROTOCOL_FAILED = Symbol('PARSE_PROTOCOL_FAILED');
 const IMPORT_PROTOCOL_COMPLETE = 'IMPORT_PROTOCOL_COMPLETE';
@@ -31,7 +31,8 @@ export default function reducer(state = initialState, action = {}) {
     case IMPORT_PROTOCOL_COMPLETE:
       return {
         ...state,
-        ...action.protocolData.protocol,
+        ...action.protocolContent,
+        appDataPath: action.appDataPath,
         status: 'complete',
       };
     case SET_WORKER:
@@ -50,13 +51,14 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         status: 'extracting',
-        path: action.path,
+        tempPath: action.tempPath,
       };
     case PARSE_PROTOCOL:
+      console.log(action);
       return {
         ...state,
         status: 'parsing',
-        path: action.path,
+        uid: action.uid,
       };
     case DOWNLOAD_PROTOCOL_FAILED:
     case EXTRACT_PROTOCOL_FAILED:
@@ -79,14 +81,14 @@ function downloadProtocolAction() {
 function extractProtocolAction(tempPath) {
   return {
     type: EXTRACT_PROTOCOL,
-    path: tempPath,
+    tempPath,
   };
 }
 
-function parseProtocolAction(path) {
+function parseProtocolAction(uid) {
   return {
     type: PARSE_PROTOCOL,
-    path,
+    uid,
   };
 }
 
@@ -111,10 +113,13 @@ function downloadProtocolFailedAction(error) {
   };
 }
 
-function importProtocolCompleteAction(protocolData) {
+function importProtocolCompleteAction(protocolData, uid) {
+  console.log(protocolData);
   return {
     type: IMPORT_PROTOCOL_COMPLETE,
-    protocolData,
+    protocolContent: protocolData.protocol,
+    appDataPath: protocolData.path,
+    uid,
   };
 }
 
@@ -127,6 +132,7 @@ function setWorkerContentAction(workerUrlMap = {}) {
 }
 
 const downloadAndInstallProtocolThunk = (uri, pairedServer) => (dispatch) => {
+  let UID = null;
   dispatch(downloadProtocolAction());
   // console.log('downloadAndInstallProtocol');
   return downloadProtocol(uri, pairedServer)
@@ -134,17 +140,18 @@ const downloadAndInstallProtocolThunk = (uri, pairedServer) => (dispatch) => {
       // Download succeeded, temp path returned.
       (protocolPath) => {
         // console.log('downloadProtocol finished', protocolPath);
-        dispatch(extractProtocolAction());
+        dispatch(extractProtocolAction(protocolPath));
         return extractProtocol(protocolPath);
       },
     )
     .catch(error => dispatch(downloadProtocolFailedAction(error)))
     .then(
       // Extract succeeded, app data path returned.
-      (appPath) => {
-        // console.log('import protocol finished', appPath);
-        dispatch(parseProtocolAction(appPath));
-        return parseProtocol(appPath);
+      (protocolUID) => {
+        UID = protocolUID;
+        // console.log('import protocol finished', protocolUID);
+        dispatch(parseProtocolAction(protocolUID));
+        return parseProtocol(protocolUID);
       },
     )
     .catch(error => dispatch(extractProtocolFailedAction(error)))
@@ -152,7 +159,7 @@ const downloadAndInstallProtocolThunk = (uri, pairedServer) => (dispatch) => {
       (protocolData) => {
         // Protocol data read, JSON returned.
         // console.log('load protocol JSON finished', protocolData);
-        dispatch(importProtocolCompleteAction(protocolData));
+        dispatch(importProtocolCompleteAction(protocolData, UID));
       },
     )
     .catch(error => dispatch(parseProtocolFailedAction(error)));

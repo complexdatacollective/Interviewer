@@ -34,7 +34,7 @@ class Setup extends Component {
   render() {
     if (this.props.isProtocolLoaded) {
       const stageIndex = this.props.stageIndex ? this.props.stageIndex : 0;
-      const pathname = `/session/${this.props.sessionId}/${this.props.protocolType}/${this.props.protocolPath}/${stageIndex}`;
+      const pathname = `/session/${this.props.sessionId}/${this.props.protocolPath}/${stageIndex}`;
       return (<Redirect to={{ pathname: `${pathname}` }} />);
     }
 
@@ -86,7 +86,6 @@ Setup.propTypes = {
   isProtocolLoaded: PropTypes.bool.isRequired,
   isPairedWithServer: PropTypes.bool.isRequired,
   protocolPath: PropTypes.string,
-  protocolType: PropTypes.string.isRequired,
   sessionId: PropTypes.string,
   stageIndex: PropTypes.number,
 };
@@ -104,7 +103,6 @@ function mapStateToProps(state) {
     isProtocolLoaded: !!state.activeSessionId,
     isPairedWithServer: !!state.pairedServer,
     protocolPath: state.importProtocol.path,
-    protocolType: state.importProtocol.type,
     sessionId: state.activeSessionId,
   };
 }
