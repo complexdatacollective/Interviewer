@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Swiper from 'react-id-swiper';
 import { NewSessionOverlay, ProtocolCard } from '../../components/Setup';
-import { actionCreators as protocolActions } from '../../ducks/modules/importProtocol';
 import { actionCreators as sessionActions } from '../../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 
@@ -70,17 +69,21 @@ class ProtocolList extends Component {
 
     return (
       <React.Fragment>
-        <Swiper {...params} ref={(node) => { if (node) this.swiper = node.swiper; }}>
-          { installedProtocols.map(protocol => (
-            <div key={protocol.path}>
-              <ProtocolCard
-                size="large"
-                protocol={protocol}
-                selectProtocol={() => this.onClickNewProtocol(protocol)}
-              />
-            </div>
-          )) }
-        </Swiper>
+        { installedProtocols && installedProtocols.length > 0 ?
+          <Swiper {...params} ref={(node) => { if (node) this.swiper = node.swiper; }}>
+            { installedProtocols.map(protocol => (
+              <div key={protocol.path}>
+                <ProtocolCard
+                  size="large"
+                  protocol={protocol}
+                  selectProtocol={() => this.onClickNewProtocol(protocol)}
+                />
+              </div>
+            )) }
+          </Swiper>
+          :
+          <div><h1>No protocols installed</h1></div>
+        }
         <NewSessionOverlay
           handleSubmit={this.handleCreateSession}
           onClose={this.handleCloseOverlay}
@@ -93,7 +96,6 @@ class ProtocolList extends Component {
 
 ProtocolList.propTypes = {
   addSession: PropTypes.func.isRequired,
-  loadFactoryProtocol: PropTypes.func.isRequired,
   loadSession: PropTypes.func.isRequired,
   installedProtocols: PropTypes.array.isRequired,
 };
@@ -111,7 +113,6 @@ function mapDispatchToProps(dispatch) {
   return {
     addSession: bindActionCreators(sessionActions.addSession, dispatch),
     loadSession: bindActionCreators(sessionActions.loadSession, dispatch),
-    loadFactoryProtocol: bindActionCreators(protocolActions.loadFactoryProtocol, dispatch),
     openDialog: bindActionCreators(dialogActions.openDialog, dispatch),
   };
 }

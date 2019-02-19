@@ -22,7 +22,7 @@ const formConfig = {
 };
 
 const initialValues = {
-  protocol_url: 'https://networkcanvas.com/protocols/snap.netcanvas',
+  protocol_url: 'https://github.com/codaco/factory-protocols/blob/master/development.netcanvas?raw=true',
 };
 
 class ProtocolUrlForm extends Component {

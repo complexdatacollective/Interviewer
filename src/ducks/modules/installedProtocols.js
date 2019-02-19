@@ -17,24 +17,11 @@ import { actionTypes as ProtocolActionTypes } from './importProtocol';
 const IMPORT_PROTOCOL_COMPLETE = ProtocolActionTypes.IMPORT_PROTOCOL_COMPLETE;
 
 const initialState = [
-  {
-    name: 'Teaching Protocol',
-    description: 'A built-in protocol that demonstrates some typical network capture techniques.',
-    path: 'teaching-protocol.netcanvas',
-    isFactoryProtocol: true,
-  },
-  {
-    name: 'Development Protocol',
-    description: 'A built-in protocol for developers to test Network Canvas functionality.',
-    path: 'development.netcanvas',
-    isFactoryProtocol: true,
-  },
 ];
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case IMPORT_PROTOCOL_COMPLETE: {
-      console.log('I heard you just installed a protocol?');
       const newProtocol = {
         ...action.protocolData.protocol,
         path: action.protocolData.path,

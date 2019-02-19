@@ -10,24 +10,6 @@ import {
   preloadWorkers,
 } from '../../utils/protocol';
 
-/**
- * `protocol` maintains information about the currently-loaded protocol for session, and
- * provides actions for downloading, importing, etc. It does a reference to data in `./protocols`.
- *
- * Typical action flow:
- *
- * 1. Download: Fetch a remote .netcanvas file from network, save to tmp dir
- * 2. Import: extract .netcanvas contents & move files to user data dir
- * 3. Load: Read & parse protocol.json from imported files
- * 4. Set Protocol: store parsed protocol JSON in state
- *   - Side effect: if this is a new protocol, persist data & metadata (see ./protocols)
- *
- * Notes:
- * - As a side effect of END_SESSION, clear out the current protocol contents here
- * - Typically, an interface will call addSession() to begin a new session before a protocol
- *   is loaded; loading state is maintained here.
- */
-
 const END_SESSION = SessionActionTypes.END_SESSION;
 
 const DOWNLOAD_PROTOCOL = 'PROTOCOL/DOWNLOAD_PROTOCOL';
@@ -42,7 +24,6 @@ const SET_WORKER = 'SET_WORKER';
 export const initialState = {
   status: 'inactive',
   errorDetail: null,
-  type: 'factory',
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -109,14 +90,6 @@ function parseProtocolAction(path) {
   };
 }
 
-function parseFactoryProtocolAction(path) {
-  return {
-    type: PARSE_PROTOCOL,
-    protocolType: 'factory',
-    path,
-  };
-}
-
 function parseProtocolFailedAction(error) {
   return {
     type: PARSE_PROTOCOL_FAILED,
@@ -139,7 +112,6 @@ function downloadProtocolFailedAction(error) {
 }
 
 function importProtocolCompleteAction(protocolData) {
-  console.log(protocolData);
   return {
     type: IMPORT_PROTOCOL_COMPLETE,
     protocolData,
@@ -209,7 +181,6 @@ const actionCreators = {
   extractProtocol: extractProtocolAction,
   downloadProtocol: downloadProtocolAction,
   importProtocolComplete: importProtocolCompleteAction,
-  loadFactoryProtocol: parseFactoryProtocolAction,
   parseProtocolFailedAction,
   extractProtocolFailedAction,
   downloadProtocolFailedAction,

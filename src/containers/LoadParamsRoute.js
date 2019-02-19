@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators, compose } from 'redux';
 import { Redirect } from 'react-router-dom';
 
-import { actionCreators as protocolActions } from '../ducks/modules/importProtocol';
 import { actionCreators as resetActions } from '../ducks/modules/reset';
 import { actionCreators as sessionActions } from '../ducks/modules/session';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
@@ -21,22 +20,17 @@ class LoadParamsRoute extends Component {
 
     if (params && params.sessionId) {
       if (this.props.sessionId !== params.sessionId) {
-        const protocolType = (params.protocolId && params.protocolId !== this.props.protocolPath) ?
-          params.protocolType : '';
-        this.props.setSession(params.sessionId, protocolType);
+        this.props.setSession(params.sessionId);
       }
       if (url !== this.props.sessionUrl) {
         this.props.updateSession(params.sessionId, url);
       }
     }
 
-    if (params && params.protocolId && params.protocolId !== this.props.protocolPath) {
-      if (params.protocolType === 'factory') {
-        this.props.loadFactoryProtocol(params.protocolId);
-      } else {
-        this.props.loadProtocol(params.protocolId);
-      }
-    }
+    // Switch protocol if the path is different.
+    // if (params && params.protocolId && params.protocolId !== this.props.protocolPath) {
+    //   this.props.loadProtocol(params.protocolId);
+    // }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -46,25 +40,12 @@ class LoadParamsRoute extends Component {
     }
 
     const { params: nextParams, url: nextUrl } = nextProps.computedMatch;
-    const { params } = this.props.computedMatch;
 
     if (nextParams && nextParams.sessionId) {
       if (this.props.sessionId !== nextParams.sessionId) {
-        const protocolType =
-          (nextParams.protocolId && nextParams.protocolId !== this.props.protocolPath) ?
-            nextParams.protocolType : '';
-        this.props.setSession(nextParams.sessionId, protocolType);
+        this.props.setSession(nextParams.sessionId);
       } else if (nextUrl && nextUrl !== this.props.sessionUrl) {
         this.props.updateSession(nextParams.sessionId, nextUrl);
-      }
-    }
-
-    if (nextParams && nextParams !== params && nextParams.protocolId &&
-        nextParams.protocolId !== this.props.protocolPath) {
-      if (nextParams.protocolType === 'factory') {
-        this.props.loadFactoryProtocol(nextParams.protocolId);
-      } else {
-        this.props.loadProtocol(nextParams.protocolId);
       }
     }
   }
@@ -75,13 +56,12 @@ class LoadParamsRoute extends Component {
       component: RenderComponent,
       isSkipped,
       shouldReset,
-      skipToIndex,
+      stageIndex,
       ...rest
     } = this.props;
 
     const {
       protocolId,
-      protocolType,
       sessionId,
     } = this.props.computedMatch.params;
 
@@ -92,7 +72,7 @@ class LoadParamsRoute extends Component {
       isSkipped ?
         (<Redirect to={
           {
-            pathname: `/session/${sessionId}/${protocolType}/${protocolId}/${skipToIndex}`,
+            pathname: `/session/${sessionId}/${protocolId}/${stageIndex}`,
             search: backParam,
           }}
         />) :
@@ -110,15 +90,13 @@ LoadParamsRoute.propTypes = {
   component: PropTypes.func.isRequired,
   computedMatch: PropTypes.object.isRequired,
   isSkipped: PropTypes.bool,
-  loadFactoryProtocol: PropTypes.func.isRequired,
-  loadProtocol: PropTypes.func.isRequired,
   protocolPath: PropTypes.string,
   resetState: PropTypes.func.isRequired,
   sessionId: PropTypes.string.isRequired,
   sessionUrl: PropTypes.string,
   setSession: PropTypes.func.isRequired,
   shouldReset: PropTypes.bool,
-  skipToIndex: PropTypes.number.isRequired,
+  stageIndex: PropTypes.number.isRequired,
   updateSession: PropTypes.func.isRequired,
 };
 
@@ -141,14 +119,12 @@ function mapStateToProps(state, ownProps) {
     protocolPath: state.importProtocol.path,
     sessionId: state.activeSessionId,
     sessionUrl: state.sessions[state.activeSessionId] && state.sessions[state.activeSessionId].path,
-    skipToIndex: getNextIndex(nextIndex)(state),
+    stageIndex: getNextIndex(nextIndex)(state),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    loadFactoryProtocol: bindActionCreators(protocolActions.loadFactoryProtocol, dispatch),
-    loadProtocol: bindActionCreators(protocolActions.loadProtocol, dispatch),
     resetState: bindActionCreators(resetActions.resetAppState, dispatch),
     setSession: bindActionCreators(sessionActions.setSession, dispatch),
     updateSession: bindActionCreators(sessionsActions.updateSession, dispatch),
