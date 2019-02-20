@@ -10,18 +10,38 @@ import { NodeLabelWorkerName } from '../utils/WorkerAgent';
  */
 const nameDigest = name => name && crypto.createHash('sha256').update(name).digest('hex');
 
-export const protocolRegistry = createDeepEqualSelector(
-  state => state.importProtocol && state.importProtocol.variableRegistry,
-  registry => registry,
+export const activeSession = state => state.sessions[state.activeSessionId];
+
+export const installedProtocols = state => state.installedProtocols;
+
+export const activeProtocol = createSelector(
+  activeSession,
+  installedProtocols,
+  (session, protocols) => {
+    if (!session) {
+      return {};
+    }
+    return protocols[session.protocolUID];
+  },
 );
 
-export const protocolForms = createDeepEqualSelector(
-  state => state.importProtocol.forms,
-  forms => forms,
+export const protocolRegistry = createSelector(
+  activeProtocol,
+  protocol => protocol.variableRegistry,
+);
+
+// export const protocolRegistry = createDeepEqualSelector(
+//   state => state.activeSessionId && state.installedProtocols[activeSession.protocolUID].variableRegistry,
+//   registry => registry,
+// );
+
+export const protocolForms = createSelector(
+  activeProtocol,
+  protocol => protocol.forms,
 );
 
 export const getRemoteProtocolId = createDeepEqualSelector(
-  state => state.importProtocol && state.importProtocol.type !== 'factory' && state.importProtocol.name,
+  activeProtocol,
   remoteName => nameDigest(remoteName) || null,
 );
 
@@ -85,8 +105,9 @@ export const makeGetCategoricalOptions = () => createDeepEqualSelector(
 );
 
 export const getNodeLabelWorkerUrl = createSelector(
+  activeProtocol,
   // null if URLs haven't yet loaded; false if worker does not exist
-  state => state.importProtocol.workerUrlMap &&
-    (state.importProtocol.workerUrlMap[NodeLabelWorkerName] || false),
+  state => activeProtocol.workerUrlMap &&
+    (activeProtocol.workerUrlMap[NodeLabelWorkerName] || false),
   url => url,
 );

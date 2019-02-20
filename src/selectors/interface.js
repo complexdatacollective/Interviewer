@@ -83,8 +83,11 @@ export const makeGetSubject = () =>
     (stage, prompt) => getSubject(stage, prompt),
   );
 
-const nodeTypeIsDefined = (variableRegistry, nodeType) =>
-  variableRegistry.node && !!variableRegistry.node[nodeType];
+const nodeTypeIsDefined = (variableRegistry, nodeType) => {
+  if (!variableRegistry) { return false; }
+  console.log(variableRegistry);
+  return variableRegistry.node[nodeType];
+};
 
 // TODO: Once schema validation is in place, we don't need these asserts.
 export const makeGetSubjectType = () => (createSelector(

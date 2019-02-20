@@ -14,7 +14,12 @@ const DefaultFinishStage = {
   label: 'Finish Interview',
 };
 
-const protocol = state => state.importProtocol;
+const protocol = (state) => {
+  console.log(state);
+  if (!state.activeSessionId) { return false; }
+  return state.installedProtocols[state.sessions[state.activeSessionId].protocolUID];
+};
+
 const currentPathname = router => router && router.location && router.location.pathname;
 const stageIndexForCurrentSession = state => currentStageIndex(currentPathname(state.router));
 const withFinishStage = stages => (stages && stages.length ? [...stages, DefaultFinishStage] : []);

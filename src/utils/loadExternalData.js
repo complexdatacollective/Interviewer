@@ -31,10 +31,10 @@ const fetchNetwork = inEnvironment(
     }
 
     if (environment === environments.CORDOVA) {
-      return (url, { fileName, protocolType, protocolName }) => {
+      return (url, { fileName, protocolType, protocolUID }) => {
         if (protocolType === 'factory') {
           return readFile(
-            getFactoryProtocolPath(protocolName, `assets/${fileName}`)
+            getFactoryProtocolPath(protocolUID, `assets/${fileName}`)
           )
             .then(data => JSON.parse(data))
             .then((json) => {
@@ -59,13 +59,13 @@ const fetchNetwork = inEnvironment(
 /**
  * Loads network data from assets and appends objectHash uids.
  *
- * @param {string} protocolName - Filename of the protocol
+ * @param {string} protocolUID - UID of the protocol
  * @param {string} fileName - Filename of the network assets
  * @returns {object} Network object in format { nodes, edges }
  *
  */
-const loadExternalData = (protocolName, fileName, protocolType) =>
-  getAssetUrl(protocolName, fileName, protocolType)
-    .then(url => fetchNetwork(url, { fileName, protocolType, protocolName }));
+const loadExternalData = (protocolUID, fileName, protocolType) =>
+  getAssetUrl(protocolUID, fileName, protocolType)
+    .then(url => fetchNetwork(url, { fileName, protocolType, protocolUID }));
 
 export default loadExternalData;

@@ -167,7 +167,7 @@ function mapStateToProps(state, ownProps) {
   const promptProgress = stage.prompts ? (promptId / stage.prompts.length) : 0;
   console.log('protocolscreen');
   return {
-    isSessionLoaded: state.activeSessionId,
+    isSessionLoaded: !!state.activeSessionId,
     nextIndex: rotateIndex(maxLength, stageIndex + 1),
     pathPrefix: `/session/${protocolUID}/${sessionId}`,
     percentProgress: (stageProgress + (promptProgress / (maxLength - 1))) * 100,
