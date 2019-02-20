@@ -153,6 +153,7 @@ class Narrative extends Component {
             convexHulls={convexHulls}
             toggleConvex={this.toggleConvex}
             showResetButton={showResetButton}
+            showFreezeButton={freeDraw}
             isFreeze={this.state.isFreeze}
             toggleFreeze={this.toggleFreeze}
           />
