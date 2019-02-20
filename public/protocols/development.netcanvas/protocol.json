@@ -601,7 +601,6 @@
     },
     "ego": {
       "label": "You",
-      "color": "node-color-seq-6",
       "variables": {
         "3377af3f-3c79-41da-9b0b-6570fb519b93": {
           "name": "label",

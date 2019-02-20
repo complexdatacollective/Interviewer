@@ -115,7 +115,7 @@ PresetSwitcher.propTypes = {
   toggleHighlights: PropTypes.func.isRequired,
   toggleHighlightIndex: PropTypes.func.isRequired,
   showResetButton: PropTypes.bool.isRequired,
-  showFreezeButton: PropTypes.bool.isRequired,
+  showFreezeButton: PropTypes.bool,
   resetInteractions: PropTypes.func.isRequired,
   toggleFreeze: PropTypes.func,
 };
@@ -124,6 +124,7 @@ PresetSwitcher.defaultProps = {
   displayEdges: null,
   convexHulls: null,
   isFreeze: false,
+  showFreezeButton: true,
   toggleFreeze: () => {},
 };
 

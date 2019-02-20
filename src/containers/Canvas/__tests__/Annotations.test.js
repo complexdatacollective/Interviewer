@@ -11,6 +11,16 @@ describe('Annotations', () => {
     subject.setState({ lines: [[{ x: 0, y: 0 }, { x: 1, y: 1 }]] });
     const lines = subject.find('AnnotationLines').dive();
     const firstLine = lines.find('AnnotationLine').dive();
+    expect(firstLine.find('Fade')).toHaveLength(1);
+    expect(firstLine.find('path')).toHaveLength(1);
+  });
+
+  it('freezes lines drawn by user', () => {
+    const subject = shallow(<Annotations isFreeze />);
+    subject.setState({ lines: [[{ x: 0, y: 0 }, { x: 1, y: 1 }]], linesShowing: [true, true] });
+    const lines = subject.find('AnnotationLines').dive();
+    const firstLine = lines.find('AnnotationLine').dive();
+    expect(firstLine.find('Fade')).toHaveLength(0);
     expect(firstLine.find('path')).toHaveLength(1);
   });
 });
