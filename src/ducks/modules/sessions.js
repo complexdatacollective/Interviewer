@@ -85,7 +85,10 @@ export default function reducer(state = initialState, action = {}) {
  * @memberof! NetworkActionCreators
  */
 const batchAddNodes = (nodeList, attributeData) => (dispatch, getState) => {
-  const { session: sessionId, protocol: { variableRegistry: { node: nodeRegistry } } } = getState();
+  const { activeSessionId, sessions, installedProtocols } = getState();
+
+  const activeProtocol = installedProtocols[sessions[activeSessionId].protocolUID];
+  const nodeRegistry = activeProtocol.variableRegistry.node;
   const nodeTypes = map(nodeList, 'type');
 
   const registryForTypes = {};
@@ -95,7 +98,7 @@ const batchAddNodes = (nodeList, attributeData) => (dispatch, getState) => {
 
   dispatch({
     type: BATCH_ADD_NODES,
-    sessionId,
+    sessionId: activeSessionId,
     nodeList,
     attributeData,
     registryForTypes,
@@ -122,12 +125,17 @@ const getDefaultAttributesForEntityType = (registryForType = {}) => {
 };
 
 const addNode = (modelData, attributeData = {}) => (dispatch, getState) => {
-  const { session: sessionId, protocol: { variableRegistry: { node: nodeRegistry } } } = getState();
+  const { activeSessionId, sessions, installedProtocols } = getState();
+
+
+  const activeProtocol = installedProtocols[sessions[activeSessionId].protocolUID];
+  const nodeRegistry = activeProtocol.variableRegistry.node;
+
   const registryForType = nodeRegistry[modelData.type].variables;
 
   dispatch({
     type: ADD_NODE,
-    sessionId,
+    sessionId: activeSessionId,
     modelData,
     attributeData: {
       ...getDefaultAttributesForEntityType(registryForType),
@@ -137,11 +145,11 @@ const addNode = (modelData, attributeData = {}) => (dispatch, getState) => {
 };
 
 const updateNode = (nodeId, newModelData = {}, newAttributeData = {}) => (dispatch, getState) => {
-  const { session } = getState();
+  const { activeSessionId } = getState();
 
   dispatch({
     type: UPDATE_NODE,
-    sessionId: session,
+    sessionId: activeSessionId,
     nodeId,
     newModelData,
     newAttributeData,
@@ -149,32 +157,32 @@ const updateNode = (nodeId, newModelData = {}, newAttributeData = {}) => (dispat
 };
 
 const toggleNodeAttributes = (uid, attributes) => (dispatch, getState) => {
-  const { session } = getState();
+  const { activeSessionId } = getState();
 
   dispatch({
     type: TOGGLE_NODE_ATTRIBUTES,
-    sessionId: session,
+    sessionId: activeSessionId,
     [entityPrimaryKeyProperty]: uid,
     attributes,
   });
 };
 
 const removeNode = uid => (dispatch, getState) => {
-  const { session } = getState();
+  const { activeSessionId } = getState();
 
   dispatch({
     type: REMOVE_NODE,
-    sessionId: session,
+    sessionId: activeSessionId,
     [entityPrimaryKeyProperty]: uid,
   });
 };
 
 const removeNodeFromPrompt = (nodeId, promptId, promptAttributes) => (dispatch, getState) => {
-  const { session } = getState();
+  const { activeSessionId } = getState();
 
   dispatch({
     type: REMOVE_NODE_FROM_PROMPT,
-    sessionId: session,
+    sessionId: activeSessionId,
     nodeId,
     promptId,
     promptAttributes,
@@ -182,10 +190,14 @@ const removeNodeFromPrompt = (nodeId, promptId, promptAttributes) => (dispatch, 
 };
 
 const updateEgo = (modelData = {}, attributeData = {}) => (dispatch, getState) => {
-  const { session: sessionId, protocol: { variableRegistry: { ego: egoRegistry } } } = getState();
+  const { activeSessionId, sessions, installedProtocols } = getState();
+
+  const activeProtocol = installedProtocols[sessions[activeSessionId].protocolUID];
+  const egoRegistry = activeProtocol.variableRegistry.node;
+
   dispatch({
     type: UPDATE_EGO,
-    sessionId,
+    sessionId: activeSessionId,
     modelData,
     attributeData: {
       ...getDefaultAttributesForEntityType(egoRegistry.variables),
@@ -195,12 +207,16 @@ const updateEgo = (modelData = {}, attributeData = {}) => (dispatch, getState) =
 };
 
 const addEdge = (modelData, attributeData = {}) => (dispatch, getState) => {
-  const { session: sessionId, protocol: { variableRegistry: { edge: edgeRegistry } } } = getState();
+  const { activeSessionId, sessions, installedProtocols } = getState();
+
+  const activeProtocol = installedProtocols[sessions[activeSessionId].protocolUID];
+  const edgeRegistry = activeProtocol.variableRegistry.edge;
+
   const registryForType = edgeRegistry[modelData.type].variables;
 
   dispatch({
     type: ADD_EDGE,
-    sessionId,
+    sessionId: activeSessionId,
     modelData,
     attributeData: {
       ...getDefaultAttributesForEntityType(registryForType),
@@ -210,11 +226,11 @@ const addEdge = (modelData, attributeData = {}) => (dispatch, getState) => {
 };
 
 const updateEdge = (edgeId, newModelData = {}, newAttributeData = {}) => (dispatch, getState) => {
-  const { session } = getState();
+  const { activeSessionId } = getState();
 
   dispatch({
     type: UPDATE_EDGE,
-    sessionId: session,
+    sessionId: activeSessionId,
     edgeId,
     newModelData,
     newAttributeData,
@@ -222,12 +238,16 @@ const updateEdge = (edgeId, newModelData = {}, newAttributeData = {}) => (dispat
 };
 
 const toggleEdge = (modelData, attributeData = {}) => (dispatch, getState) => {
-  const { session: sessionId, protocol: { variableRegistry: { edge: edgeRegistry } } } = getState();
+  const { activeSessionId, sessions, installedProtocols } = getState();
+
+  const activeProtocol = installedProtocols[sessions[activeSessionId].protocolUID];
+  const edgeRegistry = activeProtocol.variableRegistry.edge;
+
   const registryForType = edgeRegistry[modelData.type].variables;
 
   dispatch({
     type: TOGGLE_EDGE,
-    sessionId,
+    sessionId: activeSessionId,
     modelData,
     attributeData: {
       ...getDefaultAttributesForEntityType(registryForType),
@@ -237,11 +257,11 @@ const toggleEdge = (modelData, attributeData = {}) => (dispatch, getState) => {
 };
 
 const removeEdge = edge => (dispatch, getState) => {
-  const { session } = getState();
+  const { activeSessionId } = getState();
 
   dispatch({
     type: REMOVE_EDGE,
-    sessionId: session,
+    sessionId: activeSessionId,
     edge,
   });
 };
@@ -257,11 +277,11 @@ function addSession(caseId, protocolUID) {
 }
 
 const updatePrompt = promptIndex => (dispatch, getState) => {
-  const { session } = getState();
+  const { activeSessionId } = getState();
 
   dispatch({
     type: UPDATE_PROMPT,
-    sessionId: session,
+    sessionId: activeSessionId,
     promptIndex,
   });
 };
