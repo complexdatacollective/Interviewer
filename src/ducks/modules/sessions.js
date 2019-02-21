@@ -276,12 +276,15 @@ function addSession(caseId, protocolUID) {
   };
 }
 
-const updatePrompt = promptIndex => (dispatch, getState) => {
-  const { activeSessionId } = getState();
+const updatePrompt = (sessionId, promptIndex) => (dispatch, getState) => {
+  if (!sessionId) {
+    const state = getState();
+    sessionId = state.activeSessionId;
+  }
 
   dispatch({
     type: UPDATE_PROMPT,
-    sessionId: activeSessionId,
+    sessionId,
     promptIndex,
   });
 };

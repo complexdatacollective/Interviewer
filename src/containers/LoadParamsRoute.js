@@ -10,21 +10,26 @@ import { getNextIndex, isStageSkipped } from '../selectors/skip-logic';
 
 class LoadParamsRoute extends Component {
   componentWillMount() {
+    console.log('cwm', this.props);
     if (this.props.shouldReset) {
       this.props.resetState();
       return;
     }
+    if (this.props.sessionId) {
+      this.props.updatePrompt(this.props.sessionId, 0);
+    }
 
-    // const { params, url } = this.props.computedMatch;
-
-    // if (params && params.sessionId) {
-    //   if (this.props.sessionId !== params.sessionId) {
-    //     this.props.setSession(params.sessionId);
-    //   }
-    //   if (url !== this.props.sessionUrl) {
-    //     this.props.updateSession(params.sessionId, url);
-    //   }
-    // }
+    const { params, url } = this.props.computedMatch;
+    // params: sessionID, protocolUID, stageIndex
+    if (params && params.sessionId) {
+      console.log('params and sessionId');
+      // if (this.props.sessionId !== params.sessionId) {
+      //   this.props.setSession(params.sessionId);
+      // }
+      // if (url !== this.props.sessionUrl) {
+      //   this.props.updatePrompt(params.sessionId, 0);
+      // }
+    }
 
     // Switch protocol if the path is different.
     // if (params && params.protocolUID && params.protocolUID !== this.props.protocolUID) {
@@ -33,20 +38,17 @@ class LoadParamsRoute extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log('cwrp', nextProps);
     if (nextProps.shouldReset) {
       nextProps.resetState();
       return;
     }
 
-    // const { params: nextParams, url: nextUrl } = nextProps.computedMatch;
-
-    // if (nextParams && nextParams.sessionId) {
-    //   if (this.props.sessionId !== nextParams.sessionId) {
-    //     this.props.setSession(nextParams.sessionId);
-    //   } else if (nextUrl && nextUrl !== this.props.sessionUrl) {
-    //     this.props.updateSession(nextParams.sessionId, nextUrl);
-    //   }
-    // }
+    const { params: nextParams } = nextProps.computedMatch;
+    console.log('nextparams', nextParams);
+    if (nextParams && nextParams.stageIndex && nextParams.stageIndex !== this.props.stageIndex) {
+      this.props.updatePrompt(nextParams.sessionId, 0);
+    }
   }
 
   render() {
@@ -98,6 +100,7 @@ LoadParamsRoute.propTypes = {
   setSession: PropTypes.func.isRequired,
   shouldReset: PropTypes.bool,
   stageIndex: PropTypes.number.isRequired,
+  updatePrompt: PropTypes.func.isRequired,
 };
 
 LoadParamsRoute.defaultProps = {
@@ -119,7 +122,6 @@ function mapStateToProps(state, ownProps) {
     isSkipped: isStageSkipped(ownProps.computedMatch.params.stageIndex)(state),
     protocolUID: get(state.sessions[state.activeSessionId], 'protocolUID'),
     sessionId: state.activeSessionId,
-    // sessionUrl: state.sessions[state.activeSessionId] && state.sessions[state.activeSessionId].path,
     stageIndex: getNextIndex(nextIndex)(state),
   };
 }
@@ -127,6 +129,7 @@ function mapStateToProps(state, ownProps) {
 function mapDispatchToProps(dispatch) {
   return {
     resetState: bindActionCreators(resetActions.resetAppState, dispatch),
+    updatePrompt: bindActionCreators(sessionsActions.updatePrompt, dispatch),
   };
 }
 
