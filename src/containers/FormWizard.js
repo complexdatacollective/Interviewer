@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Icon } from '../ui/components';
+import { Button, Icon } from '../ui/components';
 import { Pips } from '../components/';
 import { Form } from '../containers/';
 
@@ -18,9 +18,6 @@ class FormWizard extends Component {
       return;
     }
     this.props.onSubmit(formData, dispatch, form);
-    this.setState({
-      fieldIndex: 0,
-    });
   }
 
   nextField = () => {
@@ -54,11 +51,20 @@ class FormWizard extends Component {
   }
 
   render() {
-    const nextButton = (
-      <button key="next" className="form__next-button" aria-label="Submit">
-        <Icon name="form-arrow-right" />
-      </button>
+    let nextButton = (
+      <div className="form__button-container">
+        <button key="next" className="form__next-button" aria-label="Submit">
+          <Icon name="form-arrow-right" />
+        </button>
+      </div>
     );
+    if (!this.shouldShowNextButton()) {
+      nextButton = (
+        <div className="form__button-container">
+          <Button type="submit" key="submit" aria-label="Submit">Finished</Button>
+        </div>
+      );
+    }
 
     const formProps = {
       ...this.props,
@@ -76,7 +82,7 @@ class FormWizard extends Component {
         </div>
         <Form
           {...formProps}
-          controls={this.shouldShowNextButton() ? [nextButton] : this.props.controls}
+          submitButton={nextButton}
         />
       </div>
     );

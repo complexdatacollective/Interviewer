@@ -40,7 +40,6 @@ class SlideFormEdge extends PureComponent {
                 {...form}
                 className="alter-form__form"
                 initialValues={edge[entityAttributesProperty]}
-                controls={[]}
                 autoFocus={false}
                 form={`EDGE_FORM_${index + 1}`}
                 onSubmit={this.handleSubmit}
