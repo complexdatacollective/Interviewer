@@ -36,6 +36,7 @@ class PresetSwitcher extends PureComponent {
       toggleHighlights,
       toggleHighlightIndex,
       showResetButton,
+      showFreezeButton,
       resetInteractions,
       toggleFreeze,
     } = this.props;
@@ -73,9 +74,11 @@ class PresetSwitcher extends PureComponent {
         >
           <Icon name="chevron-left" />
         </div>
-        <div className={freezeClasses} onClick={toggleFreeze}>
-          <h1>&#10052;</h1>
-        </div>
+        {showFreezeButton &&
+          <div className={freezeClasses} onClick={toggleFreeze}>
+            <h1>&#10052;</h1>
+          </div>
+        }
         <div
           className={cx('preset-switcher__reset-button', { 'preset-switcher__reset-button--show': showResetButton })}
           onClick={resetInteractions}
@@ -112,6 +115,7 @@ PresetSwitcher.propTypes = {
   toggleHighlights: PropTypes.func.isRequired,
   toggleHighlightIndex: PropTypes.func.isRequired,
   showResetButton: PropTypes.bool.isRequired,
+  showFreezeButton: PropTypes.bool,
   resetInteractions: PropTypes.func.isRequired,
   toggleFreeze: PropTypes.func,
 };
@@ -120,6 +124,7 @@ PresetSwitcher.defaultProps = {
   displayEdges: null,
   convexHulls: null,
   isFreeze: false,
+  showFreezeButton: true,
   toggleFreeze: () => {},
 };
 
