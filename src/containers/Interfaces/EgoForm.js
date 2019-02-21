@@ -94,7 +94,7 @@ class EgoForm extends Component {
               {...form}
               initialValues={ego[entityAttributesProperty]}
               controls={[]}
-              autoFocus={false}
+              autoFocus
               form={FORM_NAME}
               onSubmit={this.handleSubmitForm}
             />
