@@ -12,7 +12,7 @@ const timelineStageHandlers = withHandlers({
         protocolPath,
         sessionId,
         protocolType,
-        index: stageIndex,
+        item: { index: stageIndex },
         openStage,
       } = props;
 

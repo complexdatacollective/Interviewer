@@ -67,4 +67,6 @@ SlideFormEdge.propTypes = {
   index: PropTypes.number.isRequired,
 };
 
+export { SlideFormEdge };
+
 export default connect(mapStateToProps)(SlideFormEdge);
