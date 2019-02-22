@@ -65,7 +65,6 @@ ShallowWrapper {
             <Connect(AutoInitialisedForm)
               autoFocus={false}
               className="alter-form__form"
-              controls={Array []}
               entity="edge"
               form="EDGE_FORM_NaN"
               initialValues={undefined}
@@ -105,7 +104,6 @@ ShallowWrapper {
               <Connect(AutoInitialisedForm)
                 autoFocus={false}
                 className="alter-form__form"
-                controls={Array []}
                 entity="edge"
                 form="EDGE_FORM_NaN"
                 initialValues={undefined}
@@ -164,7 +162,6 @@ ShallowWrapper {
               <Connect(AutoInitialisedForm)
                 autoFocus={false}
                 className="alter-form__form"
-                controls={Array []}
                 entity="edge"
                 form="EDGE_FORM_NaN"
                 initialValues={undefined}
@@ -184,7 +181,6 @@ ShallowWrapper {
               "children": <Connect(AutoInitialisedForm)
                 autoFocus={false}
                 className="alter-form__form"
-                controls={Array []}
                 entity="edge"
                 form="EDGE_FORM_NaN"
                 initialValues={undefined}
@@ -203,7 +199,6 @@ ShallowWrapper {
               "props": Object {
                 "autoFocus": false,
                 "className": "alter-form__form",
-                "controls": Array [],
                 "entity": "edge",
                 "form": "EDGE_FORM_NaN",
                 "initialValues": undefined,
@@ -253,7 +248,6 @@ ShallowWrapper {
               <Connect(AutoInitialisedForm)
                 autoFocus={false}
                 className="alter-form__form"
-                controls={Array []}
                 entity="edge"
                 form="EDGE_FORM_NaN"
                 initialValues={undefined}
@@ -293,7 +287,6 @@ ShallowWrapper {
                 <Connect(AutoInitialisedForm)
                   autoFocus={false}
                   className="alter-form__form"
-                  controls={Array []}
                   entity="edge"
                   form="EDGE_FORM_NaN"
                   initialValues={undefined}
@@ -352,7 +345,6 @@ ShallowWrapper {
                 <Connect(AutoInitialisedForm)
                   autoFocus={false}
                   className="alter-form__form"
-                  controls={Array []}
                   entity="edge"
                   form="EDGE_FORM_NaN"
                   initialValues={undefined}
@@ -372,7 +364,6 @@ ShallowWrapper {
                 "children": <Connect(AutoInitialisedForm)
                   autoFocus={false}
                   className="alter-form__form"
-                  controls={Array []}
                   entity="edge"
                   form="EDGE_FORM_NaN"
                   initialValues={undefined}
@@ -391,7 +382,6 @@ ShallowWrapper {
                 "props": Object {
                   "autoFocus": false,
                   "className": "alter-form__form",
-                  "controls": Array [],
                   "entity": "edge",
                   "form": "EDGE_FORM_NaN",
                   "initialValues": undefined,
