@@ -156,6 +156,7 @@ const downloadAndInstallProtocolThunk = (uri, pairedServer) => (dispatch) => {
     .then(
       (protocolData) => {
         // Protocol data read, JSON returned.
+        // { protocol, protocolPath }
         // console.log('load protocol JSON finished', protocolData);
         dispatch(importProtocolCompleteAction(protocolData, UID));
       },
@@ -165,12 +166,13 @@ const downloadAndInstallProtocolThunk = (uri, pairedServer) => (dispatch) => {
 
 const loadProtocolWorkerEpic = action$ =>
   action$
-    .ofType(PARSE_PROTOCOL)
+    .ofType(IMPORT_PROTOCOL_COMPLETE)
     .switchMap(action => // Favour subsequent load actions over earlier ones
       Observable
-        .fromPromise(preloadWorkers(action.path, action.protocolType === 'factory'))
+        .fromPromise(preloadWorkers(action.appDataPath))
         .mergeMap(urls => urls)
         .reduce((urlMap, workerUrl, i) => {
+          console.log(urlMap, workerUrl, i);
           if (workerUrl) {
             // eslint-disable-next-line no-param-reassign
             urlMap[supportedWorkers[i]] = workerUrl;

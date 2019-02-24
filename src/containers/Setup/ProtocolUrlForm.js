@@ -22,7 +22,7 @@ const formConfig = {
 };
 
 const initialValues = {
-  protocol_url: 'https://github.com/codaco/factory-protocols/blob/master/development.netcanvas?raw=true',
+  protocol_url: 'http://localhost:8000/development-11.netcanvas',
 };
 
 class ProtocolUrlForm extends Component {

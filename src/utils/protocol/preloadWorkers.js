@@ -68,7 +68,7 @@ const compileWorker = (src, funcName) => {
  */
 const preloadWorkers = environment =>
   (protocolName, isFactory) => {
-    if (environment === environments.WEB && !isFactory) {
+    if (environment === environments.WEB) {
       return Promise.reject(new Error('preloadWorkers() not supported on this platform'));
     }
 

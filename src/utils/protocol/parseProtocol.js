@@ -38,7 +38,7 @@ const parseProtocol = (environment) => {
         .then(json => JSON.parse(json))
         .then((data) => {
           const protocol = verifyProtocol(data);
-          const path = protocolPath(protocolName, 'protocol.json');
+          const path = protocolPath(protocolName);
           return { protocol, path };
         })
         .catch(openError);
