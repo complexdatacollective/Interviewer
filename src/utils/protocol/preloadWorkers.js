@@ -72,6 +72,8 @@ const preloadWorkers = environment =>
       return Promise.reject(new Error('preloadWorkers() not supported on this platform'));
     }
 
+    console.log('preloadworkers');
+
     return Promise.all(supportedWorkers.map((workerName) => {
       let workerFile;
       let promise;

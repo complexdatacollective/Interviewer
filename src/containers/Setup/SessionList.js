@@ -8,7 +8,6 @@ import { isEmpty } from 'lodash';
 
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
-import { protocolsByPath } from '../../selectors/protocols';
 import { CardList } from '../../components';
 import { matchSessionPath } from '../../utils/matchSessionPath';
 
@@ -51,11 +50,10 @@ class SessionList extends Component {
 
   render() {
     const { protocolData, removeSession, sessions } = this.props;
-
+    console.log(sessions);
     // Display most recent first, and filter out any session that doesn't have a protocol
     const sessionList = Object.keys(sessions)
-      .map(key => ({ uuid: key, value: sessions[key] }))
-      .filter(s => s.value.protocolPath);
+      .map(key => ({ uuid: key, value: sessions[key] }));
     sessionList.sort((a, b) => b.value.updatedAt - a.value.updatedAt);
 
     if (isEmpty(sessionList)) {
@@ -108,7 +106,7 @@ SessionList.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    protocolData: protocolsByPath(state),
+    protocolData: state.installedProtocols,
     getSessionPath: sessionId => state.sessions[sessionId].path,
     sessions: state.sessions,
   };

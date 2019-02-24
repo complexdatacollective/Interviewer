@@ -123,6 +123,7 @@ function importProtocolCompleteAction(protocolData, uid) {
 
 // If there's no custom worker, set to empty so we won't expect one later
 function setWorkerContentAction(workerUrlMap = {}) {
+  console.log('setWorkerContentAction', workerUrlMap);
   return {
     type: SET_WORKER,
     workerUrlMap,
