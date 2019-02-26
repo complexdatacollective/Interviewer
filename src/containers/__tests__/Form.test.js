@@ -37,22 +37,21 @@ describe('<Form />', () => {
     expect(subject).toMatchSnapshot();
   });
 
-  // Disabled for now due to refactor
-  // it('should render multiple buttons', () => {
-  //   const multipleControls = mount((
-  //     <Form
-  //       {...props()}
-  //       controls={[<button key="one">one</button>, <button key="two">two</button>]}
-  //       store={mockStore()}
-  //     />
-  //   ));
-  //   const singularForm = mount((
-  //     <Form {...props()} store={mockStore()} />
-  //   ));
-
-  //   expect(multipleControls.find('button').length).toBe(2);
-  //   expect(singularForm.find('button').length).toBe(1);
-  // });
+  it('should render custom button', () => {
+    const customSubmit = mount((
+      <Form
+        {...props()}
+        submitButton={<button key="customSubmit" className="custom">Custom Submit</button>}
+        store={mockStore()}
+      />
+    ));
+    const defaultSubmit = mount((
+      <Form {...props()} store={mockStore()} />
+    ));
+    expect(customSubmit.find('.custom').length).toBe(1);
+    expect(defaultSubmit.find('.custom').length).toBe(0);
+    expect(defaultSubmit.find('button').length).toBe(1);
+  });
 
   it('renders an array of <Field />', () => {
     const fields = [

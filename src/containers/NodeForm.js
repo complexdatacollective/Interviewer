@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { compose } from 'redux';
+import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
+import { submit } from 'redux-form';
+
 import Overlay from './Overlay';
 import Form from './Form';
 import FormWizard from './FormWizard';
@@ -20,10 +22,11 @@ class NodeForm extends Component {
 
   handleSubmit = (form) => {
     this.props.onSubmit({ form });
+    this.props.onClose();
   }
 
   render() {
-    const { show, form, initialValues } = this.props;
+    const { show, form, initialValues, submitForm } = this.props;
 
     const formProps = {
       ...form,
@@ -51,7 +54,9 @@ class NodeForm extends Component {
               />
             </Scroller>
             <div className="node-form__footer">
-              <Button key="submit" aria-label="Submit" onClick={this.props.submitForm}>Finished</Button>
+              <Button key="submit" aria-label="Submit" type="submit" onClick={submitForm}>
+                Finished
+              </Button>
             </div>
           </React.Fragment>
         }
@@ -75,8 +80,12 @@ const mapStateToProps = (state, props) => {
   };
 };
 
+const mapDispatchToProps = dispatch => ({
+  submitForm: bindActionCreators(() => submit(reduxFormName), dispatch),
+});
+
 export { NodeForm };
 
 export default compose(
-  connect(mapStateToProps),
+  connect(mapStateToProps, mapDispatchToProps),
 )(NodeForm);

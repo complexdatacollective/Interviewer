@@ -59,7 +59,7 @@ $close-button-size: 1rem;
     .form {
       &__button-container {
         display: flex;
-        justify-content: space-around;
+        justify-content: flex-end;
 
         .toggle__container {
           padding-left: 2em;

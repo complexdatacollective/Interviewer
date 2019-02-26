@@ -29,7 +29,6 @@ class SlideForm extends PureComponent {
                 {...form}
                 className="alter-form__form"
                 initialValues={node[entityAttributesProperty]}
-                controls={[]}
                 autoFocus={false}
                 form={`NODE_FORM_${index + 1}`}
                 onSubmit={this.handleSubmit}
