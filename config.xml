@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="40018" id="org.codaco.networkCanvas" ios-CFBundleIdentifier="networkCanvas" ios-CFBundleVersion="40018" version="4.0.0-alpha.12" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="40019" id="org.codaco.networkCanvas" ios-CFBundleIdentifier="networkCanvas" ios-CFBundleVersion="40019" version="4.0.0-alpha.12" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>NetworkCanvas</name>
     <description>
         Simplifying complex network data collection.
@@ -58,7 +58,6 @@
     <preference name="AllowInlineMediaPlayback" value="true" />
     <preference name="android-minSdkVersion" value="25" />
     <preference name="android-targetSdkVersion" value="27" />
-    <preference name="android-maxSdkVersion" value="27" />
     <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
     <plugin name="cordova-plugin-file" spec="^5.0.0" />
     <plugin name="cordova-plugin-file-transfer" spec="^1.7.1" />
