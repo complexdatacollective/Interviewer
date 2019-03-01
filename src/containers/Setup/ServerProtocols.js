@@ -8,7 +8,9 @@ import ApiClient from '../../utils/ApiClient';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { actionCreators as protocolActions } from '../../ducks/modules/protocol';
 import { actionCreators as serverActions } from '../../ducks/modules/pairedServer';
-import { ServerProtocolList, ServerSetup, ServerUnavailable } from '../../components/Setup';
+import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
+import { actionCreators as sessionActions } from '../../ducks/modules/session';
+import { NewSessionOverlay, ServerProtocolList, ServerSetup, ServerUnavailable } from '../../components/Setup';
 
 /**
  * @class
@@ -17,7 +19,9 @@ import { ServerProtocolList, ServerSetup, ServerUnavailable } from '../../compon
 class ServerProtocols extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      showNewSessionOverlay: false,
+    };
   }
 
   componentDidMount() {
@@ -44,6 +48,7 @@ class ServerProtocols extends Component {
 
   handleSelectProtocol = (protocol) => {
     const { downloadProtocol } = this.props;
+    this.setState({ showNewSessionOverlay: true });
     this.apiClient.addTrustedCert()
       .then(() => downloadProtocol(protocol.downloadPath, true));
   }
@@ -64,11 +69,28 @@ class ServerProtocols extends Component {
     });
   }
 
+  handleCreateSession = (caseId) => {
+    this.props.addSession(caseId);
+    this.setState({ showNewSessionOverlay: false });
+  }
+
+  handleCloseOverlay = () => {
+    this.props.endSession();
+    this.setState({ showNewSessionOverlay: false });
+  }
+
   render() {
     const { error, protocols } = this.state;
     const { isProtocolLoaded, server } = this.props;
 
-    if (isProtocolLoaded) {
+    if (this.state.showNewSessionOverlay && isProtocolLoaded) {
+      return (
+        <NewSessionOverlay
+          handleSubmit={this.handleCreateSession}
+          onClose={this.handleCloseOverlay}
+          show={this.state.showNewSessionOverlay}
+        />);
+    } else if (isProtocolLoaded) {
       const pathname = `/session/${this.props.sessionId}/${this.props.protocolType}/${this.props.protocolPath}/0`;
       return (<Redirect to={{ pathname: `${pathname}` }} />);
     }
@@ -105,7 +127,9 @@ ServerProtocols.defaultProps = {
 };
 
 ServerProtocols.propTypes = {
+  addSession: PropTypes.func.isRequired,
   downloadProtocol: PropTypes.func.isRequired,
+  endSession: PropTypes.func.isRequired,
   isProtocolLoaded: PropTypes.bool.isRequired,
   openDialog: PropTypes.func.isRequired,
   pairedServer: PropTypes.object.isRequired,
@@ -130,7 +154,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    addSession: bindActionCreators(sessionsActions.addSession, dispatch),
     downloadProtocol: bindActionCreators(protocolActions.downloadProtocol, dispatch),
+    endSession: bindActionCreators(sessionActions.endSession, dispatch),
     openDialog: bindActionCreators(dialogActions.openDialog, dispatch),
     unpairServer: bindActionCreators(serverActions.unpairServer, dispatch),
   };
