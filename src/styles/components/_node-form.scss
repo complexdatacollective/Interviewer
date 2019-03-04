@@ -2,6 +2,15 @@
   &.node-form {
     max-height: calc(100% - 4rem);
 
+    &.overlay--fullscreen {
+      max-height: 100%;
+    }
+
+    .overlay__content {
+      display: flex;
+      flex-direction: column;
+    }
+
     .scrollable {
       height: calc(100% - 4rem);
       padding-top: 1.5rem;

@@ -3,7 +3,6 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { reduxForm, getFormValues, getFormMeta } from 'redux-form';
-import { Button } from '../ui/components';
 import { autoInitialisedForm } from '../behaviours';
 import { Field } from '../containers/';
 import { makeRehydrateFields } from '../selectors/forms';
@@ -89,6 +88,7 @@ class Form extends Component {
       controls,
       tooltip,
       className,
+      submitButton,
     } = this.props;
 
     return (
@@ -105,9 +105,7 @@ class Form extends Component {
             />
           );
         }) }
-        <div className="form__button-container">
-          {controls.map(control => control)}
-        </div>
+        {submitButton}
       </form>
     );
   }
@@ -124,14 +122,16 @@ Form.propTypes = {
   meta: PropTypes.object.isRequired,
   className: PropTypes.string,
   tooltip: PropTypes.string,
+  submitButton: PropTypes.object,
 };
 
 Form.defaultProps = {
   autoFocus: false,
   autoPopulate: null,
-  controls: [<Button type="submit" key="submit" aria-label="Submit">Submit</Button>],
   className: null,
   tooltip: 'none',
+  submitButton: <button type="submit" key="submit" aria-label="Submit" hidden />,
+  // redux wants a "submit" button in order to enable submit with an enter key, even if hidden
 };
 
 function makeMapStateToProps() {
@@ -152,7 +152,6 @@ export default compose(
   connect(makeMapStateToProps),
   autoInitialisedForm,
   reduxForm({
-    enableReinitialize: true,
     touchOnChange: true,
     touchOnBlur: false,
     onSubmitFail: scrollToFirstError,

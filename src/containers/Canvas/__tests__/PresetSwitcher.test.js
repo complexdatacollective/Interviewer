@@ -20,4 +20,23 @@ describe('<PresetSwitcher />', () => {
     next.simulate('click');
     expect(handler).toHaveBeenCalled();
   });
+
+  it('enables freeze button', () => {
+    const handler = jest.fn();
+    const subject = shallow(<PresetSwitcher {...props} toggleFreeze={handler} />);
+    const next = subject.dive().find('.preset-switcher__freeze');
+    next.simulate('click');
+    expect(handler).toHaveBeenCalled();
+    expect(subject.dive().find('.preset-switcher__freeze--active')).toHaveLength(0);
+  });
+
+  it('activates freeze button', () => {
+    const subject = shallow(<PresetSwitcher {...props} isFreeze />);
+    expect(subject.dive().find('.preset-switcher__freeze--active')).toHaveLength(1);
+  });
+
+  it('hides freeze button', () => {
+    const subject = shallow(<PresetSwitcher {...props} showFreezeButton={false} />);
+    expect(subject.dive().find('.preset-switcher__freeze')).toHaveLength(0);
+  });
 });
