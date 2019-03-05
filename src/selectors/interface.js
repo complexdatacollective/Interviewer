@@ -126,7 +126,7 @@ export const makeGetVariableOptions = () =>
     makeGetNodeVariables(), makeGetPromptVariable(),
     (nodeVariables, promptVariable) => {
       const optionValues = nodeVariables[promptVariable].options;
-      return optionValues;
+      return optionValues || [];
     },
   );
 

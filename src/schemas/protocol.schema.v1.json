@@ -947,7 +947,8 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/OptionElement"
-          }
+          },
+          "minItems": 1
         }
       },
       "required": [
