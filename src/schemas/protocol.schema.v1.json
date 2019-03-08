@@ -948,7 +948,7 @@
           "items": {
             "$ref": "#/definitions/OptionElement"
           },
-          "minItems": 1
+          "minItems": 2
         }
       },
       "required": [
