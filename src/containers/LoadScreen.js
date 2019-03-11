@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 import { compose } from 'redux';
-import { Spinner } from '../ui/components';
+
+import { Icon, Spinner } from '../ui/components';
 import Fade from '../ui/components/Transitions/Fade';
+import { actionCreators as sessionActions } from '../ducks/modules/session';
 
 const minimumTimeToDisplaySpinner = 1000;
 
@@ -18,6 +21,7 @@ class LoadScreen extends Component {
 
   constructor(props) {
     super(props);
+    this.timer = () => this.setState({ minimumTimeMet: true });
     this.state = {
       minimumTimeMet: true,
     };
@@ -33,14 +37,24 @@ class LoadScreen extends Component {
 
   scheduleSpinnerExpiration() {
     if (this.props.isWorking) {
-      setTimeout(() => this.setState({ minimumTimeMet: true }), minimumTimeToDisplaySpinner);
+      setTimeout(this.timer, minimumTimeToDisplaySpinner);
     }
+  }
+
+  handleClose = () => {
+    this.state = {
+      minimumTimeMet: true,
+    };
+    this.props.endSession();
+    clearTimeout(this.timer);
+    this.timer();
   }
 
   render() {
     return (
       <Fade in={this.props.isWorking || !this.state.minimumTimeMet}>
         <div className="load-screen">
+          <Icon name="close" onClick={this.handleClose} />
           <Spinner large />
         </div>
       </Fade>
@@ -50,6 +64,7 @@ class LoadScreen extends Component {
 
 LoadScreen.propTypes = {
   isWorking: PropTypes.bool,
+  endSession: PropTypes.func.isRequired,
 };
 
 LoadScreen.defaultProps = {
@@ -60,6 +75,13 @@ const mapStateToProps = state => ({
   isWorking: state.protocol.isLoading,
 });
 
+const mapDispatchToProps = dispatch => ({
+  endSession: () => {
+    dispatch(sessionActions.endSession());
+    dispatch(push('/'));
+  },
+});
+
 export default compose(
-  connect(mapStateToProps),
+  connect(mapStateToProps, mapDispatchToProps),
 )(LoadScreen);

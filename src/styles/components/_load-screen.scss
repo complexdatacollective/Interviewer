@@ -9,4 +9,10 @@
   background-color: palette('background');
   width: 100%;
   height: 100%;
+
+  & .icon[name='close'] {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+  }
 }
