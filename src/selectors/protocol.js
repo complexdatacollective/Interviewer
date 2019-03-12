@@ -30,11 +30,6 @@ export const protocolRegistry = createSelector(
   protocol => protocol.variableRegistry,
 );
 
-// export const protocolRegistry = createDeepEqualSelector(
-//   state => state.activeSessionId && state.installedProtocols[activeSession.protocolUID].variableRegistry,
-//   registry => registry,
-// );
-
 export const protocolForms = createSelector(
   activeProtocol,
   protocol => protocol.forms,
@@ -107,7 +102,5 @@ export const makeGetCategoricalOptions = () => createDeepEqualSelector(
 export const getNodeLabelWorkerUrl = createSelector(
   activeProtocol,
   // null if URLs haven't yet loaded; false if worker does not exist
-  state => activeProtocol.workerUrlMap &&
-    (activeProtocol.workerUrlMap[NodeLabelWorkerName] || false),
-  url => url,
+  protocol => protocol.workerUrlMap && (protocol.workerUrlMap[NodeLabelWorkerName] || false),
 );

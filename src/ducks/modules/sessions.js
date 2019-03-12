@@ -279,6 +279,7 @@ function addSession(caseId, protocolUID) {
 const updatePrompt = (sessionId, promptIndex) => (dispatch, getState) => {
   if (!sessionId) {
     const state = getState();
+    // eslint-disable-next-line no-param-reassign
     sessionId = state.activeSessionId;
   }
 

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 
 import Form from '../Form';
-import { Button, Icon } from '../../ui/components';
+import { Button } from '../../ui/components';
 import { actionCreators as protocolActions } from '../../ducks/modules/importProtocol';
 
 const formConfig = {
@@ -36,24 +36,23 @@ class ProtocolUrlForm extends Component {
   render() {
     const { onCancel } = this.props;
     return (
-      <Form
-        className="protocol-url-form"
-        form={formConfig.formName}
-        onSubmit={this.onClickImportRemoteProtocol}
-        initialValues={initialValues}
-        controls={[
-          <Button
-            onClick={onCancel}
-            key="cancel"
-            color="platinum"
-            icon={<Icon name="close" />}
-            content="Cancel"
-            type="button"
-          />,
-          <Button key="submit" type="submit">Import remote protocol</Button>,
-        ]}
-        {...formConfig}
-      />
+      <React.Fragment>
+        <Form
+          className="protocol-url-form"
+          form={formConfig.formName}
+          onSubmit={this.onClickImportRemoteProtocol}
+          initialValues={initialValues}
+          {...formConfig}
+        >
+          <Button aria-label="Submit" type="submit">
+            Import
+          </Button>
+          <Button color="platinum" aria-label="Cancel" type="button" onClick={onCancel}>
+            Cancel
+          </Button>
+        </Form>
+      </React.Fragment>
+
     );
   }
 }

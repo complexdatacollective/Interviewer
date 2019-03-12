@@ -1,10 +1,10 @@
 import { readFile } from '../filesystem';
 import environments from '../environments';
 import inEnvironment from '../Environment';
-import factoryProtocolPath from './factoryProtocolPath';
-import protocolPath from './protocolPath';
 
 import { urlForWorkerSource, supportedWorkers } from '../WorkerAgent';
+
+const path = require('path');
 
 /**
  * Builds source code for a Web Worker based on the protocol's
@@ -22,10 +22,12 @@ import { urlForWorkerSource, supportedWorkers } from '../WorkerAgent';
  * @private
  */
 const compileWorker = (src, funcName) => {
+  console.log('compile worker');
   if (supportedWorkers.indexOf(funcName) < 0) {
     throw new Error('Unsupported worker function name', funcName);
   }
   /* eslint-disable indent, no-undef, no-console */
+  console.log(src);
   return `
     ${src}
     ;
@@ -67,21 +69,25 @@ const compileWorker = (src, funcName) => {
  * By preloading any existing, we can bootstrap before protocol.json is parsed.
  */
 const preloadWorkers = environment =>
-  (protocolName, isFactory) => {
+  (protocolPath) => {
     if (environment === environments.WEB) {
       return Promise.reject(new Error('preloadWorkers() not supported on this platform'));
     }
 
-    console.log('preloadworkers');
+    console.log('preloadworkers', protocolPath);
 
     return Promise.all(supportedWorkers.map((workerName) => {
+      console.log('preloadWorkers - worker name: ', workerName);
       let workerFile;
       let promise;
       if (environment === environments.WEB) {
-        workerFile = `/protocols/${protocolName}/${workerName}.js`;
+        console.log('preloadWorkers - environment: web');
+        workerFile = `/protocols/${protocolPath}/${workerName}.js`;
         promise = fetch(workerFile).then(resp => resp.arrayBuffer());
       } else {
-        workerFile = (isFactory ? factoryProtocolPath : protocolPath)(protocolName, `${workerName}.js`);
+        // workerFile = protocolPath + protocolPath + `${workerName}.js`;
+        workerFile = path.join(protocolPath, `${workerName}.js`);
+        console.log('preloadWorkers - ', workerFile);
         promise = readFile(workerFile);
       }
       return promise

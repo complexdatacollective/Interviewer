@@ -15,7 +15,6 @@ const DefaultFinishStage = {
 };
 
 const protocol = (state) => {
-  console.log(state);
   if (!state.activeSessionId) { return false; }
   return state.installedProtocols[state.sessions[state.activeSessionId].protocolUID];
 };

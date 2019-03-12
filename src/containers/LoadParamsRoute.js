@@ -10,7 +10,6 @@ import { getNextIndex, isStageSkipped } from '../selectors/skip-logic';
 
 class LoadParamsRoute extends Component {
   componentWillMount() {
-    console.log('cwm', this.props);
     if (this.props.shouldReset) {
       this.props.resetState();
       return;
@@ -19,33 +18,30 @@ class LoadParamsRoute extends Component {
       this.props.updatePrompt(this.props.sessionId, 0);
     }
 
-    const { params, url } = this.props.computedMatch;
-    // params: sessionID, protocolUID, stageIndex
-    if (params && params.sessionId) {
-      console.log('params and sessionId');
-      // if (this.props.sessionId !== params.sessionId) {
-      //   this.props.setSession(params.sessionId);
-      // }
-      // if (url !== this.props.sessionUrl) {
-      //   this.props.updatePrompt(params.sessionId, 0);
-      // }
-    }
-
-    // Switch protocol if the path is different.
-    // if (params && params.protocolUID && params.protocolUID !== this.props.protocolUID) {
-    //   this.props.loadProtocol(params.protocolUID);
+    // const { params, url } = this.props.computedMatch;
+    // // params: sessionID, protocolUID, stageIndex
+    // if (params && params.sessionId) {
+    //   // if (this.props.sessionId !== params.sessionId) {
+    //   //   this.props.setSession(params.sessionId);
+    //   // }
+    //   // if (url !== this.props.sessionUrl) {
+    //   //   this.props.updatePrompt(params.sessionId, 0);
+    //   // }
     // }
+
+    // // Switch protocol if the path is different.
+    // // if (params && params.protocolUID && params.protocolUID !== this.props.protocolUID) {
+    // //   this.props.loadProtocol(params.protocolUID);
+    // // }
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('cwrp', nextProps);
     if (nextProps.shouldReset) {
       nextProps.resetState();
       return;
     }
 
     const { params: nextParams } = nextProps.computedMatch;
-    console.log('nextparams', nextParams);
     if (nextParams && nextParams.stageIndex && nextParams.stageIndex !== this.props.stageIndex) {
       this.props.updatePrompt(nextParams.sessionId, 0);
     }
@@ -68,8 +64,6 @@ class LoadParamsRoute extends Component {
 
     const finishedLoading = this.props.sessionId;
     if (!shouldReset && !finishedLoading) { return null; }
-
-    console.log(this.props);
 
     return (
       isSkipped ?

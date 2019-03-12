@@ -1,6 +1,3 @@
-import { combineEpics } from 'redux-observable';
-import { Observable } from 'rxjs';
-
 import { actionTypes as SessionActionTypes } from './session';
 import { supportedWorkers } from '../../utils/WorkerAgent';
 import {
@@ -19,7 +16,7 @@ const EXTRACT_PROTOCOL_FAILED = Symbol('EXTRACT_PROTOCOL_FAILED');
 const PARSE_PROTOCOL = 'PARSE_PROTOCOL';
 const PARSE_PROTOCOL_FAILED = Symbol('PARSE_PROTOCOL_FAILED');
 const IMPORT_PROTOCOL_COMPLETE = 'IMPORT_PROTOCOL_COMPLETE';
-const SET_WORKER = 'SET_WORKER';
+const SET_WORKER_MAP = 'SET_WORKER_MAP';
 
 export const initialState = {
   status: 'inactive',
@@ -31,14 +28,12 @@ export default function reducer(state = initialState, action = {}) {
     case IMPORT_PROTOCOL_COMPLETE:
       return {
         ...state,
-        ...action.protocolContent,
-        appDataPath: action.appDataPath,
         status: 'complete',
       };
-    case SET_WORKER:
+    case SET_WORKER_MAP:
       return {
         ...state,
-        workerUrlMap: action.workerUrlMap,
+        status: 'initialising-workers',
       };
     case END_SESSION:
       return initialState;
@@ -51,13 +46,11 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         status: 'extracting',
-        tempPath: action.tempPath,
       };
     case PARSE_PROTOCOL:
       return {
         ...state,
         status: 'parsing',
-        uid: action.uid,
       };
     case DOWNLOAD_PROTOCOL_FAILED:
     case EXTRACT_PROTOCOL_FAILED:
@@ -65,6 +58,7 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         status: 'error',
+        errorDetail: action.error,
       };
     default:
       return state;
@@ -77,17 +71,15 @@ function downloadProtocolAction() {
   };
 }
 
-function extractProtocolAction(tempPath) {
+function extractProtocolAction() {
   return {
     type: EXTRACT_PROTOCOL,
-    tempPath,
   };
 }
 
-function parseProtocolAction(uid) {
+function parseProtocolAction() {
   return {
     type: PARSE_PROTOCOL,
-    uid,
   };
 }
 
@@ -112,76 +104,73 @@ function downloadProtocolFailedAction(error) {
   };
 }
 
-function importProtocolCompleteAction(protocolData, uid) {
+function importProtocolCompleteAction(protocolData) {
   return {
     type: IMPORT_PROTOCOL_COMPLETE,
-    protocolContent: protocolData.protocol,
-    appDataPath: protocolData.path,
-    uid,
+    protocolData,
   };
 }
 
 // If there's no custom worker, set to empty so we won't expect one later
-function setWorkerContentAction(workerUrlMap = {}) {
-  console.log('setWorkerContentAction', workerUrlMap);
+function setWorkerContentAction() {
   return {
-    type: SET_WORKER,
-    workerUrlMap,
+    type: SET_WORKER_MAP,
   };
 }
 
 const downloadAndInstallProtocolThunk = (uri, pairedServer) => (dispatch) => {
-  let UID = null;
+  const protocolData = {};
+
   dispatch(downloadProtocolAction());
   // console.log('downloadAndInstallProtocol');
   return downloadProtocol(uri, pairedServer)
     .then(
       // Download succeeded, temp path returned.
-      (protocolPath) => {
-        // console.log('downloadProtocol finished', protocolPath);
-        dispatch(extractProtocolAction(protocolPath));
-        return extractProtocol(protocolPath);
+      (temporaryProtocolPath) => {
+        // console.log('downloadProtocol finished', temporaryProtocolPath);
+        dispatch(extractProtocolAction());
+        return extractProtocol(temporaryProtocolPath);
       },
     )
     .catch(error => dispatch(downloadProtocolFailedAction(error)))
     .then(
-      // Extract succeeded, app data path returned.
+      // Extract succeeded, UID returned.
       (protocolUID) => {
-        UID = protocolUID;
-        // console.log('import protocol finished', protocolUID);
-        dispatch(parseProtocolAction(protocolUID));
+        protocolData.UID = protocolUID;
+        dispatch(parseProtocolAction());
         return parseProtocol(protocolUID);
       },
     )
     .catch(error => dispatch(extractProtocolFailedAction(error)))
     .then(
-      (protocolData) => {
+      (protocolContent) => {
         // Protocol data read, JSON returned.
-        // { protocol, protocolPath }
-        // console.log('load protocol JSON finished', protocolData);
-        dispatch(importProtocolCompleteAction(protocolData, UID));
+        // { protocol, path }
+        protocolData.protocolContent = protocolContent.protocol;
+        protocolData.path = protocolContent.path;
+        return preloadWorkers(protocolContent.path);
       },
     )
-    .catch(error => dispatch(parseProtocolFailedAction(error)));
-};
-
-const loadProtocolWorkerEpic = action$ =>
-  action$
-    .ofType(IMPORT_PROTOCOL_COMPLETE)
-    .switchMap(action => // Favour subsequent load actions over earlier ones
-      Observable
-        .fromPromise(preloadWorkers(action.appDataPath))
-        .mergeMap(urls => urls)
-        .reduce((urlMap, workerUrl, i) => {
-          console.log(urlMap, workerUrl, i);
+    .catch(error => dispatch(parseProtocolFailedAction(error)))
+    .then(
+      (workerUrls) => {
+        console.log('workerUrls');
+        const map = workerUrls.reduce((urlMap, workerUrl, i) => {
           if (workerUrl) {
             // eslint-disable-next-line no-param-reassign
             urlMap[supportedWorkers[i]] = workerUrl;
           }
           return urlMap;
-        }, {})
-        .map(workerUrlMap => setWorkerContentAction(workerUrlMap)),
+        }, {});
+        protocolData.workerUrlMap = map;
+        return dispatch(setWorkerContentAction());
+      },
+    )
+    .catch(error => console.log('worker stuff failed', error))
+    .then(
+      () => dispatch(importProtocolCompleteAction(protocolData)),
     );
+};
 
 const actionCreators = {
   downloadAndInstallProtocol: downloadAndInstallProtocolThunk,
@@ -190,6 +179,7 @@ const actionCreators = {
   downloadProtocol: downloadProtocolAction,
   importProtocolComplete: importProtocolCompleteAction,
   parseProtocolFailedAction,
+  setWorkerContentAction,
   extractProtocolFailedAction,
   downloadProtocolFailedAction,
 };
@@ -201,15 +191,11 @@ const actionTypes = {
   DOWNLOAD_PROTOCOL_FAILED,
   PARSE_PROTOCOL,
   PARSE_PROTOCOL_FAILED,
+  SET_WORKER_MAP,
   IMPORT_PROTOCOL_COMPLETE,
 };
-
-const epics = combineEpics(
-  loadProtocolWorkerEpic,
-);
 
 export {
   actionCreators,
   actionTypes,
-  epics,
 };
