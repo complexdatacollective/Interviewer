@@ -54,7 +54,7 @@ class LoadScreen extends Component {
     return (
       <Fade in={this.props.isWorking || !this.state.minimumTimeMet}>
         <div className="load-screen">
-          <Icon name="close" onClick={this.handleClose} />
+          <Icon className="load-screen__close" name="close" onClick={this.handleClose} />
           <Spinner large />
         </div>
       </Fade>
