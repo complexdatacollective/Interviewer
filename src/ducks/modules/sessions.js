@@ -266,15 +266,22 @@ const removeEdge = edge => (dispatch, getState) => {
   });
 };
 
-function addSession(caseId, protocolUID) {
+const addSession = (caseId, protocolUID) => (dispatch) => {
   const id = uuidv4();
-  return {
+
+  dispatch({
     type: ADD_SESSION,
     sessionId: id,
     caseId,
     protocolUID,
-  };
-}
+  });
+};
+
+const loadSession = () => (dispatch) => {
+  dispatch({
+    type: LOAD_SESSION,
+  });
+};
 
 const updatePrompt = (sessionId, promptIndex) => (dispatch, getState) => {
   if (!sessionId) {
@@ -294,13 +301,6 @@ function removeSession(id) {
   return {
     type: REMOVE_SESSION,
     sessionId: id,
-  };
-}
-
-function loadSession(caseId) {
-  return {
-    type: LOAD_SESSION,
-    caseId,
   };
 }
 

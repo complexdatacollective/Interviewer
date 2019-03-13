@@ -5,7 +5,8 @@ import PropTypes from 'prop-types';
 import WorkerAgent from '../utils/WorkerAgent';
 import { Node as UINode } from '../ui/components';
 import { getWorkerNetwork, getNodeLabelFunction } from '../selectors/interface';
-import { getNodeLabelWorkerUrl, makeGetNodeColor, makeGetNodeTypeDefinition } from '../selectors/protocol';
+import { makeGetNodeColor, makeGetNodeTypeDefinition } from '../selectors/protocol';
+import { getNodeLabelWorkerUrl } from '../selectors/activeSessionWorkers';
 import { asWorkerAgentEntity } from '../utils/networkFormat';
 
 /**

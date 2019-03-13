@@ -2,9 +2,9 @@ import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 import { reducer as formReducer } from 'redux-form';
 
-import externalData from './externalData';
 import sessions from './sessions';
 import activeSessionId from './session';
+import activeSessionWorkers from './sessionWorkers';
 import deviceSettings from './deviceSettings';
 import importProtocol from './importProtocol';
 import installedProtocols from './installedProtocols';
@@ -18,9 +18,9 @@ const appReducer = combineReducers({
   router: routerReducer,
   form: formReducer,
   activeSessionId,
+  activeSessionWorkers,
   sessions,
   deviceSettings,
-  externalData,
   importProtocol,
   installedProtocols,
   dialogs,

@@ -1,10 +1,8 @@
 import { actionTypes as SessionActionTypes } from './session';
-import { supportedWorkers } from '../../utils/WorkerAgent';
 import {
   downloadProtocol,
   extractProtocol,
   parseProtocol,
-  preloadWorkers,
 } from '../../utils/protocol';
 
 const END_SESSION = SessionActionTypes.END_SESSION;
@@ -17,6 +15,7 @@ const PARSE_PROTOCOL = 'PARSE_PROTOCOL';
 const PARSE_PROTOCOL_FAILED = Symbol('PARSE_PROTOCOL_FAILED');
 const IMPORT_PROTOCOL_COMPLETE = 'IMPORT_PROTOCOL_COMPLETE';
 const SET_WORKER_MAP = 'SET_WORKER_MAP';
+const SET_WORKER_MAP_FAILED = 'SET_WORKER_MAP_FAILED';
 
 export const initialState = {
   status: 'inactive',
@@ -26,17 +25,12 @@ export const initialState = {
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case IMPORT_PROTOCOL_COMPLETE:
-      return {
-        ...state,
-        status: 'complete',
-      };
+      return initialState;
     case SET_WORKER_MAP:
       return {
         ...state,
         status: 'initialising-workers',
       };
-    case END_SESSION:
-      return initialState;
     case DOWNLOAD_PROTOCOL:
       return {
         ...state,
@@ -55,11 +49,14 @@ export default function reducer(state = initialState, action = {}) {
     case DOWNLOAD_PROTOCOL_FAILED:
     case EXTRACT_PROTOCOL_FAILED:
     case PARSE_PROTOCOL_FAILED:
+    case SET_WORKER_MAP_FAILED:
       return {
         ...state,
         status: 'error',
         errorDetail: action.error,
       };
+    case END_SESSION:
+      return initialState;
     default:
       return state;
   }
@@ -111,13 +108,6 @@ function importProtocolCompleteAction(protocolData) {
   };
 }
 
-// If there's no custom worker, set to empty so we won't expect one later
-function setWorkerContentAction() {
-  return {
-    type: SET_WORKER_MAP,
-  };
-}
-
 const downloadAndInstallProtocolThunk = (uri, pairedServer) => (dispatch) => {
   const protocolData = {};
 
@@ -144,32 +134,12 @@ const downloadAndInstallProtocolThunk = (uri, pairedServer) => (dispatch) => {
     .catch(error => dispatch(extractProtocolFailedAction(error)))
     .then(
       (protocolContent) => {
-        // Protocol data read, JSON returned.
-        // { protocol, path }
         protocolData.protocolContent = protocolContent.protocol;
         protocolData.path = protocolContent.path;
-        return preloadWorkers(protocolContent.path);
+        dispatch(importProtocolCompleteAction(protocolData));
       },
     )
-    .catch(error => dispatch(parseProtocolFailedAction(error)))
-    .then(
-      (workerUrls) => {
-        console.log('workerUrls');
-        const map = workerUrls.reduce((urlMap, workerUrl, i) => {
-          if (workerUrl) {
-            // eslint-disable-next-line no-param-reassign
-            urlMap[supportedWorkers[i]] = workerUrl;
-          }
-          return urlMap;
-        }, {});
-        protocolData.workerUrlMap = map;
-        return dispatch(setWorkerContentAction());
-      },
-    )
-    .catch(error => console.log('worker stuff failed', error))
-    .then(
-      () => dispatch(importProtocolCompleteAction(protocolData)),
-    );
+    .catch(error => dispatch(parseProtocolFailedAction(error)));
 };
 
 const actionCreators = {
@@ -179,7 +149,6 @@ const actionCreators = {
   downloadProtocol: downloadProtocolAction,
   importProtocolComplete: importProtocolCompleteAction,
   parseProtocolFailedAction,
-  setWorkerContentAction,
   extractProtocolFailedAction,
   downloadProtocolFailedAction,
 };
@@ -191,7 +160,6 @@ const actionTypes = {
   DOWNLOAD_PROTOCOL_FAILED,
   PARSE_PROTOCOL,
   PARSE_PROTOCOL_FAILED,
-  SET_WORKER_MAP,
   IMPORT_PROTOCOL_COMPLETE,
 };
 
