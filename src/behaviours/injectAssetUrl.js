@@ -7,11 +7,11 @@ import getMediaAssetUrl from '../utils/protocol/getMediaAssetUrl';
 const mapStateToProps = state => ({
   getAssetUrl: (url) => {
     const protocol = state.installedProtocols[state.sessions[state.activeSessionId].protocolUID];
-    const protocolPath = protocol.path;
-    console.log('getasseturl', protocol, protocolPath);
+    const protocolUID = state.sessions[state.activeSessionId].protocolUID;
+    console.log('getasseturl', protocol, protocolUID);
 
     return getMediaAssetUrl(
-      protocolPath,
+      protocolUID,
       url,
     );
   },

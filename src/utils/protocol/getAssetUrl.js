@@ -10,20 +10,18 @@ const assetUrl = (environment) => {
       protocolUID = isRequired('protocolUID'),
       assetPath = isRequired('assetPath'),
       /* protocolType, */
-    ) =>
-      Promise.resolve(`asset://${protocolUID}/assets/${assetPath}`);
+    ) => {
+      console.log('getAssetURl', protocolUID, assetPath);
+      console.log(`asset://${protocolUID}/assets/${assetPath}`);
+      return Promise.resolve(`asset://${protocolUID}/assets/${assetPath}`);
+    };
   }
 
   if (environment === environments.CORDOVA) {
     return (
       protocolUID = isRequired('protocolUID'),
       assetPath = isRequired('assetPath'),
-      protocolType,
     ) => {
-      if (protocolType === 'factory') {
-        return Promise.resolve(`protocols/${protocolUID}/assets/${assetPath}`);
-      }
-
       const sourceFilename = protocolPath(protocolUID, `assets/${assetPath}`);
 
       return Promise.resolve(sourceFilename);
