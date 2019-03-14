@@ -1,10 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { PersistGate } from 'redux-persist/integration/react';
 import { ready as secureCommsReady } from 'secure-comms-api/cipher';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 
-import { history, store } from './ducks/store';
+import { history, store, persistor } from './ducks/store';
 import { actionCreators } from './ducks/modules/deviceSettings';
 import App from './containers/App';
 import { isCordova, isElectron } from './utils/Environment';
@@ -25,11 +26,13 @@ const startApp = () => {
 
   ReactDOM.render(
     <Provider store={store}>
-      <ConnectedRouter history={history}>
-        <App>
-          <AppRouter />
-        </App>
-      </ConnectedRouter>
+      <PersistGate loading={null} persistor={persistor}>
+        <ConnectedRouter history={history}>
+          <App>
+            <AppRouter />
+          </App>
+        </ConnectedRouter>
+      </PersistGate>
     </Provider>,
     document.getElementById('root'),
   );

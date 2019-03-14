@@ -1,7 +1,7 @@
 import { omit, each, map } from 'lodash';
 import { Observable } from 'rxjs';
 import { combineEpics } from 'redux-observable';
-
+import { actionCreators as SessionWorkerActions } from './sessionWorkers';
 import uuidv4 from '../../utils/uuid';
 import network, { entityPrimaryKeyProperty, ADD_NODE, BATCH_ADD_NODES, REMOVE_NODE, REMOVE_NODE_FROM_PROMPT, UPDATE_NODE, TOGGLE_NODE_ATTRIBUTES, ADD_EDGE, UPDATE_EDGE, TOGGLE_EDGE, REMOVE_EDGE, UPDATE_EGO } from './network';
 import ApiClient from '../../utils/ApiClient';
@@ -266,8 +266,12 @@ const removeEdge = edge => (dispatch, getState) => {
   });
 };
 
-const addSession = (caseId, protocolUID) => (dispatch) => {
+const addSession = (caseId, protocolUID) => (dispatch, getState) => {
   const id = uuidv4();
+  const { installedProtocols } = getState();
+  const sessionProtocolPath = installedProtocols[protocolUID].path;
+
+  dispatch(SessionWorkerActions.initializeSessionWorkersThunk(sessionProtocolPath));
 
   dispatch({
     type: ADD_SESSION,

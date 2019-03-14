@@ -22,12 +22,10 @@ const path = require('path');
  * @private
  */
 const compileWorker = (src, funcName) => {
-  console.log('compile worker');
   if (supportedWorkers.indexOf(funcName) < 0) {
     throw new Error('Unsupported worker function name', funcName);
   }
   /* eslint-disable indent, no-undef, no-console */
-  console.log(src);
   return `
     ${src}
     ;
@@ -74,20 +72,16 @@ const preloadWorkers = environment =>
       return Promise.reject(new Error('preloadWorkers() not supported on this platform'));
     }
 
-    console.log('preloadworkers', protocolPath);
 
     return Promise.all(supportedWorkers.map((workerName) => {
-      console.log('preloadWorkers - worker name: ', workerName);
       let workerFile;
       let promise;
       if (environment === environments.WEB) {
-        console.log('preloadWorkers - environment: web');
         workerFile = `/protocols/${protocolPath}/${workerName}.js`;
         promise = fetch(workerFile).then(resp => resp.arrayBuffer());
       } else {
         // workerFile = protocolPath + protocolPath + `${workerName}.js`;
         workerFile = path.join(protocolPath, `${workerName}.js`);
-        console.log('preloadWorkers - ', workerFile);
         promise = readFile(workerFile);
       }
       return promise

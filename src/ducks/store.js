@@ -1,5 +1,6 @@
 import { createStore, applyMiddleware, compose } from 'redux';
-import { persistStore, autoRehydrate } from 'redux-persist';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 import thunk from 'redux-thunk';
 import { routerMiddleware } from 'react-router-redux';
 import createHistory from 'history/createHashHistory';
@@ -8,13 +9,40 @@ import logger from './middleware/logger';
 import epics from './middleware/epics';
 import rootReducer from './modules/rootReducer';
 
+const persistConfig = {
+  key: 'root',
+  storage,
+  whitelist: [
+    'deviceSettings',
+    'pairedServer',
+    'installedProtocols',
+    'router',
+    'search',
+    'activeSessionId',
+    'sessions',
+  ],
+};
+
 export const history = createHistory();
 
+// export const store = createStore(
+//   rootReducer,
+//   undefined,
+//   compose(
+//     autoRehydrate(),
+//     applyMiddleware(routerMiddleware(history), thunk, epics, logger),
+//     typeof window === 'object' && typeof window.devToolsExtension !== 'undefined'
+//       ? window.devToolsExtension()
+//       : f => f,
+//   ),
+// );
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
 export const store = createStore(
-  rootReducer,
+  persistedReducer,
   undefined,
   compose(
-    autoRehydrate(),
     applyMiddleware(routerMiddleware(history), thunk, epics, logger),
     typeof window === 'object' && typeof window.devToolsExtension !== 'undefined'
       ? window.devToolsExtension()
@@ -22,18 +50,4 @@ export const store = createStore(
   ),
 );
 
-if (window) {
-  window.store = store; // TODO: remove in production.
-}
-
-const persistWhitelist = [
-  'deviceSettings',
-  'pairedServer',
-  'installedProtocols',
-  'router',
-  'search',
-  'activeSessionId',
-  'sessions',
-];
-
-export const persistor = persistStore(store, { whitelist: persistWhitelist });
+export const persistor = persistStore(store);

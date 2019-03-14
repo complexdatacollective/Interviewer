@@ -6,10 +6,14 @@ import { Redirect } from 'react-router-dom';
 import { get } from 'lodash';
 import { actionCreators as resetActions } from '../ducks/modules/reset';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
+import { actionCreators as sessionActions } from '../ducks/modules/session';
 import { getNextIndex, isStageSkipped } from '../selectors/skip-logic';
 
 class LoadParamsRoute extends Component {
   componentWillMount() {
+    const { params } = this.props.computedMatch;
+    this.props.setSession(params.sessionId);
+
     if (this.props.shouldReset) {
       this.props.resetState();
       return;
@@ -17,22 +21,6 @@ class LoadParamsRoute extends Component {
     if (this.props.sessionId) {
       this.props.updatePrompt(this.props.sessionId, 0);
     }
-
-    // const { params, url } = this.props.computedMatch;
-    // // params: sessionID, protocolUID, stageIndex
-    // if (params && params.sessionId) {
-    //   // if (this.props.sessionId !== params.sessionId) {
-    //   //   this.props.setSession(params.sessionId);
-    //   // }
-    //   // if (url !== this.props.sessionUrl) {
-    //   //   this.props.updatePrompt(params.sessionId, 0);
-    //   // }
-    // }
-
-    // // Switch protocol if the path is different.
-    // // if (params && params.protocolUID && params.protocolUID !== this.props.protocolUID) {
-    // //   this.props.loadProtocol(params.protocolUID);
-    // // }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -124,6 +112,7 @@ function mapDispatchToProps(dispatch) {
   return {
     resetState: bindActionCreators(resetActions.resetAppState, dispatch),
     updatePrompt: bindActionCreators(sessionsActions.updatePrompt, dispatch),
+    setSession: bindActionCreators(sessionActions.setSession, dispatch),
   };
 }
 
