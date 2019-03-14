@@ -11,8 +11,6 @@ const workers = {};
 
 // Maintain one worker per source URL
 const getSharedWorker = (url) => {
-  console.log('worker url');
-  console.log(url);
   if (!workers[url]) {
     const worker = new Worker(url);
     worker.workMap = {};

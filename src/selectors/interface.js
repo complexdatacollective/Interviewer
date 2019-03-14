@@ -85,7 +85,6 @@ export const makeGetSubject = () =>
 
 const nodeTypeIsDefined = (variableRegistry, nodeType) => {
   if (!variableRegistry) { return false; }
-  console.log(variableRegistry);
   return variableRegistry.node[nodeType];
 };
 

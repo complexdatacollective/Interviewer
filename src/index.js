@@ -7,6 +7,7 @@ import { ConnectedRouter } from 'react-router-redux';
 
 import { history, store, persistor } from './ducks/store';
 import { actionCreators } from './ducks/modules/deviceSettings';
+import { Spinner } from './ui/components';
 import App from './containers/App';
 import { isCordova, isElectron } from './utils/Environment';
 import AppRouter from './routes';
@@ -26,7 +27,7 @@ const startApp = () => {
 
   ReactDOM.render(
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
+      <PersistGate loading={<Spinner />} persistor={persistor}>
         <ConnectedRouter history={history}>
           <App>
             <AppRouter />

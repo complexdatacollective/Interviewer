@@ -50,7 +50,6 @@ class SessionList extends Component {
 
   render() {
     const { protocolData, removeSession, sessions } = this.props;
-    console.log(sessions);
     // Display most recent first, and filter out any session that doesn't have a protocol
     const sessionList = Object.keys(sessions)
       .map(key => ({ uuid: key, value: sessions[key] }));

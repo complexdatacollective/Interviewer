@@ -165,7 +165,7 @@ function mapStateToProps(state, ownProps) {
   const promptId = getPromptIndexForCurrentSession(state);
   const stageProgress = stageIndex / (maxLength - 1);
   const promptProgress = stage.prompts ? (promptId / stage.prompts.length) : 0;
-  console.log('protocolscreen');
+
   return {
     isSessionLoaded: !!state.activeSessionId,
     nextIndex: rotateIndex(maxLength, stageIndex + 1),

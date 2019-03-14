@@ -38,8 +38,6 @@ export default function withPrompt(WrappedComponent) {
 
     render() {
       const { promptIndex, ...rest } = this.props;
-      console.log('render()');
-      console.log(this.props);
       return (
         <WrappedComponent
           prompt={this.prompt()}

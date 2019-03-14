@@ -31,10 +31,8 @@ function resetWorkerMapAction() {
   };
 }
 
-const initializeSessionWorkersThunk = protocolPath => (dispatch) => {
-  console.log('initializeSessionWorkersThunk');
-  console.log(protocolPath);
-  return preloadWorkers(protocolPath)
+const initializeSessionWorkersThunk = protocolPath => dispatch =>
+  preloadWorkers(protocolPath)
     .then(
       (workerUrls) => {
         const map = workerUrls.reduce((urlMap, workerUrl, i) => {
@@ -47,8 +45,7 @@ const initializeSessionWorkersThunk = protocolPath => (dispatch) => {
         return dispatch(setWorkerMapAction(map));
       },
     )
-    .catch(error => console.warn('Generating wortker map failed: ', error));
-};
+    .catch(error => console.warn('Generating worker map failed: ', error)); // eslint-disable-line no-console
 
 const actionCreators = {
   setWorkerMapAction,
