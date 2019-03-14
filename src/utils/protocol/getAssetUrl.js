@@ -9,12 +9,7 @@ const assetUrl = (environment) => {
     return (
       protocolUID = isRequired('protocolUID'),
       assetPath = isRequired('assetPath'),
-      /* protocolType, */
-    ) => {
-      console.log('getAssetURl', protocolUID, assetPath);
-      console.log(`asset://${protocolUID}/assets/${assetPath}`);
-      return Promise.resolve(`asset://${protocolUID}/assets/${assetPath}`);
-    };
+    ) => Promise.resolve(`asset://${protocolUID}/assets/${assetPath}`);
   }
 
   if (environment === environments.CORDOVA) {

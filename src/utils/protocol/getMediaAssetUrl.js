@@ -34,7 +34,6 @@ const mediaAssetUrl = (environment) => {
         });
     };
   }
-  console.log('in electron so passing to getAssertURL');
   return getAssetUrl;
 };
 

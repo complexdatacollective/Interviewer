@@ -7,7 +7,6 @@ const matchSessionPath = pathname => matchPath(pathname, { path: SessionPath });
 
 const currentStageIndex = (path) => {
   const matchedPath = matchSessionPath(path);
-  console.log('currentStageIndex', path, matchedPath);
   if (matchedPath) {
     return parseInt(matchedPath.params.stageIndex, 10);
   }
