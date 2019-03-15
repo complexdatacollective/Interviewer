@@ -32,6 +32,7 @@ const fileError = friendlyErrorMessage('The protocol could not be saved to your 
  * @return {string} output filepath
  */
 const downloadProtocol = inEnvironment((environment) => {
+  console.log('downloadProtocol');
   if (environment === environments.ELECTRON) {
     const request = require('request-promise-native');
     const path = require('path');
@@ -39,9 +40,11 @@ const downloadProtocol = inEnvironment((environment) => {
     const tempPath = (electron.app || electron.remote.app).getPath('temp');
     const destination = path.join(tempPath, getProtocolName());
 
-    return (uri, pairedServer) => {
+    return (uri, pairedServer = false) => {
+      console.log('download parameters: ', uri, pairedServer);
       let promisedResponse;
       if (pairedServer) {
+        console.log('paired server detected');
         promisedResponse = new ApiClient(pairedServer).downloadProtocol(uri);
       } else {
         promisedResponse = getURL(uri)

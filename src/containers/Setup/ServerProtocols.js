@@ -3,12 +3,14 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-
+import { push } from 'react-router-redux';
 import ApiClient from '../../utils/ApiClient';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { actionCreators as protocolActions } from '../../ducks/modules/importProtocol';
 import { actionCreators as serverActions } from '../../ducks/modules/pairedServer';
-import { ServerProtocolList, ServerSetup, ServerUnavailable } from '../../components/Setup';
+import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
+import { actionCreators as sessionActions } from '../../ducks/modules/session';
+import { NewSessionOverlay, ServerProtocolList, ServerSetup, ServerUnavailable } from '../../components/Setup';
 
 /**
  * @class
@@ -17,7 +19,9 @@ import { ServerProtocolList, ServerSetup, ServerUnavailable } from '../../compon
 class ServerProtocols extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      showNewSessionOverlay: false,
+    };
   }
 
   componentDidMount() {
@@ -43,9 +47,17 @@ class ServerProtocols extends Component {
   }
 
   handleSelectProtocol = (protocol) => {
-    const { downloadProtocol } = this.props;
+    const { downloadAndInstallProtocol, returnToStartScreen } = this.props;
+    this.setState({ showNewSessionOverlay: true });
     this.apiClient.addTrustedCert()
-      .then(() => downloadProtocol(protocol.downloadPath, true));
+      // .then(() => downloadProtocol(protocol.downloadPath, true));
+      .then(
+        () => {
+          console.log(protocol);
+          returnToStartScreen();
+          return downloadAndInstallProtocol(protocol.downloadPath, true);
+        },
+      );
   }
 
   handleUnpairRequest = () => {
@@ -64,12 +76,30 @@ class ServerProtocols extends Component {
     });
   }
 
+  handleCreateSession = (caseId) => {
+    this.props.addSession(caseId);
+    this.setState({ showNewSessionOverlay: false });
+  }
+
+  handleCloseOverlay = () => {
+    this.props.endSession();
+    this.setState({ showNewSessionOverlay: false });
+  }
+
   render() {
     const { error, protocols } = this.state;
     const { isProtocolFinishedImport, server } = this.props;
 
-    if (isProtocolFinishedImport) {
-      return (<Redirect to={{ pathname: '/setup' }} />);
+    if (this.state.showNewSessionOverlay && isProtocolFinishedImport) {
+      return (
+        <NewSessionOverlay
+          handleSubmit={this.handleCreateSession}
+          onClose={this.handleCloseOverlay}
+          show={this.state.showNewSessionOverlay}
+        />);
+    } else if (isProtocolFinishedImport) {
+      const pathname = `/session/${this.props.sessionId}/0`;
+      return (<Redirect to={{ pathname: `${pathname}` }} />);
     }
 
     let content = null;
@@ -104,10 +134,15 @@ ServerProtocols.defaultProps = {
 };
 
 ServerProtocols.propTypes = {
+  addSession: PropTypes.func.isRequired,
   downloadProtocol: PropTypes.func.isRequired,
+  downloadAndInstallProtocol: PropTypes.func.isRequired,
+  returnToStartScreen: PropTypes.func.isRequired,
+  endSession: PropTypes.func.isRequired,
   isProtocolFinishedImport: PropTypes.bool.isRequired,
   openDialog: PropTypes.func.isRequired,
   pairedServer: PropTypes.object.isRequired,
+  sessionId: PropTypes.string.isRequired,
   server: PropTypes.shape({
     pairingServiceUrl: PropTypes.string.isRequired,
   }).isRequired,
@@ -125,9 +160,16 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    addSession: bindActionCreators(sessionsActions.addSession, dispatch),
     downloadProtocol: bindActionCreators(protocolActions.downloadProtocol, dispatch),
+    downloadAndInstallProtocol:
+    bindActionCreators(protocolActions.downloadAndInstallProtocol, dispatch),
+    endSession: bindActionCreators(sessionActions.endSession, dispatch),
     openDialog: bindActionCreators(dialogActions.openDialog, dispatch),
     unpairServer: bindActionCreators(serverActions.unpairServer, dispatch),
+    returnToStartScreen: () => {
+      dispatch(push('/'));
+    },
   };
 }
 

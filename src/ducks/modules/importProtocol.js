@@ -4,6 +4,7 @@ import {
   extractProtocol,
   parseProtocol,
 } from '../../utils/protocol';
+import { store } from '../../ducks/store';
 
 const END_SESSION = SessionActionTypes.END_SESSION;
 
@@ -108,38 +109,56 @@ function importProtocolCompleteAction(protocolData) {
   };
 }
 
-const downloadAndInstallProtocolThunk = (uri, pairedServer) => (dispatch) => {
+const downloadAndInstallProtocolThunk = (uri, usePairedServer) => (dispatch) => {
   const protocolData = {};
 
   dispatch(downloadProtocolAction());
-  // console.log('downloadAndInstallProtocol');
+  let pairedServer;
+
+  if (usePairedServer) {
+    pairedServer = store.getState().pairedServer;
+    console.log('Using paired server for download:', pairedServer);
+  }
+
   return downloadProtocol(uri, pairedServer)
     .then(
       // Download succeeded, temp path returned.
       (temporaryProtocolPath) => {
+        if (!temporaryProtocolPath) {
+          return Promise.reject('No temporary protocol path.');
+        }
         // console.log('downloadProtocol finished', temporaryProtocolPath);
         dispatch(extractProtocolAction());
         return extractProtocol(temporaryProtocolPath);
       },
+      error => dispatch(downloadProtocolFailedAction(error)),
     )
-    .catch(error => dispatch(downloadProtocolFailedAction(error)))
     .then(
       // Extract succeeded, UID returned.
       (protocolUID) => {
+        if (!protocolUID) {
+          return Promise.reject('No protocol UID.');
+        }
+
         protocolData.UID = protocolUID;
         dispatch(parseProtocolAction());
+
         return parseProtocol(protocolUID);
       },
+      error => dispatch(extractProtocolFailedAction(error)),
     )
-    .catch(error => dispatch(extractProtocolFailedAction(error)))
     .then(
       (protocolContent) => {
+        if (!protocolContent) {
+          return Promise.reject('No protocol content.');
+        }
+
         protocolData.protocolContent = protocolContent.protocol;
         protocolData.path = protocolContent.path;
-        dispatch(importProtocolCompleteAction(protocolData));
+        return dispatch(importProtocolCompleteAction(protocolData));
       },
-    )
-    .catch(error => dispatch(parseProtocolFailedAction(error)));
+      error => dispatch(parseProtocolFailedAction(error)),
+    );
 };
 
 const actionCreators = {

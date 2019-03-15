@@ -71,11 +71,17 @@ const handleError = (err) => {
  */
 class ApiClient {
   constructor(pairingUrlOrPairedServer) {
+    console.log('API client constructor');
+    console.log(pairingUrlOrPairedServer);
+
     let pairingUrl;
     let pairedServer;
+
     if (isString(pairingUrlOrPairedServer)) {
+      // We have a pairing URL
       pairingUrl = pairingUrlOrPairedServer;
     } else if (pairingUrlOrPairedServer) {
+      // We are already paired
       pairedServer = pairingUrlOrPairedServer;
     }
 
@@ -95,12 +101,16 @@ class ApiClient {
         const cert = pairedServer.sslCertificate;
         this.httpsClient = new cordova.plugins.NetworkCanvasClient(deviceId, cert, secureURL);
       } else if (isElectron()) {
+        console.log('creating https client');
         this.httpsClient = axios.create({
           baseURL: secureURL,
           headers: defaultHeaders,
         });
       }
     }
+
+    console.log('constructor finished');
+    console.log(this);
   }
 
   /**
@@ -113,13 +123,20 @@ class ApiClient {
    *                   rejects if there is no paired Server, or trust cannot be established
    */
   addTrustedCert() {
+    console.log('APIClient.addTrustedCert');
     if (!this.httpsClient) {
+      console.log('no client');
+      console.log(this);
       return Promise.reject('No secure client available');
     }
+
+    console.log('passed test for https client');
+    console.log(this);
 
     if (isCordova()) {
       return this.httpsClient.acceptCertificate().catch(handleError);
     } else if (isElectron()) {
+      console.log('addTrustedCert returning');
       return new Promise((resolve, reject) => {
         if (!this.pairedServer || !this.pairedServer.sslCertificate) {
           reject(new Error('No trusted Server cert available'));
