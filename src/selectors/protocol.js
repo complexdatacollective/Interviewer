@@ -35,7 +35,7 @@ export const protocolForms = createSelector(
 
 export const getRemoteProtocolId = createDeepEqualSelector(
   activeProtocol,
-  remoteName => nameDigest(remoteName) || null,
+  protocol => nameDigest(protocol.name) || null,
 );
 
 // The user-defined name of a node type; e.g. `variableRegistry.node[uuid].name == 'person'`

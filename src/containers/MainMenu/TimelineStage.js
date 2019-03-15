@@ -9,20 +9,17 @@ const timelineStageHandlers = withHandlers({
   handleOpenStage: props =>
     () => {
       const {
-        protocolUID,
         sessionId,
         item: { index: stageIndex },
         openStage,
       } = props;
 
-      const path = protocolUID ? `/session/${protocolUID}/${sessionId}/${stageIndex}` : '/';
-
+      const path = sessionId ? `/session/${sessionId}/${stageIndex}` : '/';
       openStage(path);
     },
 });
 
 const mapStateToProps = state => ({
-  protocolUID: state.importProtocol.path,
   currentStageIndex: currentStageIndex(state.router.location.pathname),
   sessionId: state.activeSessionId,
 });

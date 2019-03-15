@@ -10,9 +10,18 @@
 
   &__introduction {
     border-radius: var(--border-radius);
-    background: var(--primary);
-    padding: 4rem;
+    background: var(--form-intro-panel-background);
     margin-bottom: unit(10);
+
+    max-height: 80vh;
+    width: auto;
+    padding: unit(6);
+    overflow: hidden;
+    flex-direction: column;
+
+    h1 {
+      text-align: center;
+    }
   }
 
   &__form-container {

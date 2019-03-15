@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators, compose } from 'redux';
 import { Redirect } from 'react-router-dom';
-import { get } from 'lodash';
 import { actionCreators as resetActions } from '../ducks/modules/reset';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { actionCreators as sessionActions } from '../ducks/modules/session';
@@ -46,7 +45,6 @@ class LoadParamsRoute extends Component {
     } = this.props;
 
     const {
-      protocolUID,
       sessionId,
     } = this.props.computedMatch.params;
 
@@ -57,7 +55,7 @@ class LoadParamsRoute extends Component {
       isSkipped ?
         (<Redirect to={
           {
-            pathname: `/session/${protocolUID}/${sessionId}/${stageIndex}`,
+            pathname: `/session/${sessionId}/${stageIndex}`,
             search: backParam,
           }}
         />) :
@@ -75,7 +73,6 @@ LoadParamsRoute.propTypes = {
   component: PropTypes.func.isRequired,
   computedMatch: PropTypes.object.isRequired,
   isSkipped: PropTypes.bool,
-  protocolUID: PropTypes.string,
   resetState: PropTypes.func.isRequired,
   sessionId: PropTypes.string,
   sessionUrl: PropTypes.string,
@@ -87,7 +84,6 @@ LoadParamsRoute.propTypes = {
 
 LoadParamsRoute.defaultProps = {
   isSkipped: false,
-  protocolUID: '',
   sessionId: '',
   sessionUrl: '/setup',
   shouldReset: false,
@@ -102,7 +98,6 @@ function mapStateToProps(state, ownProps) {
   return {
     backParam: ownProps.location.search,
     isSkipped: isStageSkipped(ownProps.computedMatch.params.stageIndex)(state),
-    protocolUID: get(state.sessions[state.activeSessionId], 'protocolUID'),
     sessionId: state.activeSessionId,
     stageIndex: getNextIndex(nextIndex)(state),
   };

@@ -7,12 +7,11 @@ const initialState = {};
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case IMPORT_PROTOCOL_COMPLETE: {
-      const { protocolContent, path, workerUrlMap, UID } = action.protocolData;
+      const { protocolContent, path, UID } = action.protocolData;
 
       const newProtocol = {
         ...protocolContent,
         path,
-        workerUrlMap,
       };
 
       // // Allow for updating as well as installing new

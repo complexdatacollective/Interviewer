@@ -28,8 +28,13 @@ const setSession = id => (dispatch, getState) => {
   const { sessions, installedProtocols } = getState();
   if (!sessions[id]) { return; }
 
-  const protocolUID = sessions[id].protocolUID;
-  const sessionProtocolPath = installedProtocols[protocolUID].path;
+  const sessionProtocolUID = sessions[id].protocolUID;
+
+  if (!installedProtocols[sessionProtocolUID] || !installedProtocols[sessionProtocolUID].path) {
+    return;
+  }
+
+  const sessionProtocolPath = installedProtocols[sessionProtocolUID].path;
 
   dispatch(SessionWorkerActions.initializeSessionWorkersThunk(sessionProtocolPath));
 
