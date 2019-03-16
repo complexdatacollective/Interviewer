@@ -7,6 +7,7 @@ import { size, map } from 'lodash';
 import { NewSessionOverlay, ProtocolCard } from '../../components/Setup';
 import { actionCreators as sessionActions } from '../../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
+import { actionCreators as importProtocolActions } from '../../ducks/modules/importProtocol';
 
 /**
   * Display available protocols
@@ -40,7 +41,13 @@ class ProtocolList extends Component {
   }
 
   render() {
-    const { installedProtocols } = this.props;
+    const {
+      installedProtocols,
+      // importProtocolStatus: {
+      //   status,
+      // },
+    } = this.props;
+
     const params = {
       containerClass: 'protocol-list swiper-container',
       pagination: {
@@ -77,7 +84,16 @@ class ProtocolList extends Component {
             )) }
           </Swiper>
           :
-          <div><h1>No protocols installed</h1></div>
+          <div className="protocol-list protocol-list--empty">
+            <div className="protocol-list--empty getting-started">
+              <h1>No interview protocols installed</h1>
+              <p>
+                To get started, install an interview protocol on this device. To do this,
+                pair with an instance of Server, import a protocol from a URL, or drag and
+                drop a .netcanvas file into this app.
+              </p>
+            </div>
+          </div>
         }
         <NewSessionOverlay
           handleSubmit={this.handleCreateSession}
@@ -101,6 +117,7 @@ ProtocolList.defaultProps = {
 function mapStateToProps(state) {
   return {
     installedProtocols: state.installedProtocols,
+    importProtocolStatus: state.importProtocol,
   };
 }
 
@@ -109,6 +126,7 @@ function mapDispatchToProps(dispatch) {
     addSession: bindActionCreators(sessionActions.addSession, dispatch),
     loadSession: bindActionCreators(sessionActions.loadSession, dispatch),
     openDialog: bindActionCreators(dialogActions.openDialog, dispatch),
+    resetImportProtocol: bindActionCreators(importProtocolActions.resetImportProtocol, dispatch),
   };
 }
 
