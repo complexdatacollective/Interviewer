@@ -10,7 +10,6 @@ const errorActions = [
   importProtocolErrorActionTypes.DOWNLOAD_PROTOCOL_FAILED,
   importProtocolErrorActionTypes.EXTRACT_PROTOCOL_FAILED,
   importProtocolErrorActionTypes.PARSE_PROTOCOL_FAILED,
-  importProtocolErrorActionTypes.SET_WORKER_MAP_FAILED,
   serverActionTypes.SERVER_PAIRING_FAILED,
   sessionsActionTypes.EXPORT_SESSION_FAILED,
 ];

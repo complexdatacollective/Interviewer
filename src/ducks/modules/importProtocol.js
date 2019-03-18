@@ -12,8 +12,6 @@ const EXTRACT_PROTOCOL_FAILED = Symbol('EXTRACT_PROTOCOL_FAILED');
 const PARSE_PROTOCOL = 'PARSE_PROTOCOL';
 const PARSE_PROTOCOL_FAILED = Symbol('PARSE_PROTOCOL_FAILED');
 const IMPORT_PROTOCOL_COMPLETE = 'IMPORT_PROTOCOL_COMPLETE';
-const SET_WORKER_MAP = 'SET_WORKER_MAP';
-const SET_WORKER_MAP_FAILED = 'SET_WORKER_MAP_FAILED';
 const RESET_IMPORT = 'RESET_IMPORT';
 
 export const initialState = {
@@ -26,35 +24,21 @@ export default function reducer(state = initialState, action = {}) {
     case IMPORT_PROTOCOL_COMPLETE:
     case RESET_IMPORT:
       return initialState;
-    case SET_WORKER_MAP:
-      return {
-        ...state,
-        status: 'initialising-workers',
-      };
     case DOWNLOAD_PROTOCOL:
       return {
-        ...state,
         status: 'downloading',
       };
     case EXTRACT_PROTOCOL:
       return {
-        ...state,
         status: 'extracting',
       };
     case PARSE_PROTOCOL:
       return {
-        ...state,
         status: 'parsing',
       };
     case DOWNLOAD_PROTOCOL_FAILED:
     case EXTRACT_PROTOCOL_FAILED:
     case PARSE_PROTOCOL_FAILED:
-    case SET_WORKER_MAP_FAILED:
-      return {
-        ...state,
-        status: 'error',
-        errorDetail: action.error,
-      };
     default:
       return state;
   }
