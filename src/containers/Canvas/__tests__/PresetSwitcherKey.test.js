@@ -17,7 +17,7 @@ describe('<PresetSwitcherKey />', () => {
 
 describe('Connect(PresetSwitcherKey)', () => {
   const mockState = {
-    protocol: { variableRegistry: {} },
+    protocol: { codebook: {} },
   };
   const mockProps = {
     displayEdges: [],

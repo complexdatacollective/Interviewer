@@ -88,7 +88,7 @@ const batchAddNodes = (nodeList, attributeData) => (dispatch, getState) => {
   const { activeSessionId, sessions, installedProtocols } = getState();
 
   const activeProtocol = installedProtocols[sessions[activeSessionId].protocolUID];
-  const nodeRegistry = activeProtocol.variableRegistry.node;
+  const nodeRegistry = activeProtocol.codebook.node;
   const nodeTypes = map(nodeList, 'type');
 
   const registryForTypes = {};
@@ -129,7 +129,7 @@ const addNode = (modelData, attributeData = {}) => (dispatch, getState) => {
 
 
   const activeProtocol = installedProtocols[sessions[activeSessionId].protocolUID];
-  const nodeRegistry = activeProtocol.variableRegistry.node;
+  const nodeRegistry = activeProtocol.codebook.node;
 
   const registryForType = nodeRegistry[modelData.type].variables;
 
@@ -193,7 +193,7 @@ const updateEgo = (modelData = {}, attributeData = {}) => (dispatch, getState) =
   const { activeSessionId, sessions, installedProtocols } = getState();
 
   const activeProtocol = installedProtocols[sessions[activeSessionId].protocolUID];
-  const egoRegistry = activeProtocol.variableRegistry.node;
+  const egoRegistry = activeProtocol.codebook.node;
 
   dispatch({
     type: UPDATE_EGO,
@@ -210,7 +210,7 @@ const addEdge = (modelData, attributeData = {}) => (dispatch, getState) => {
   const { activeSessionId, sessions, installedProtocols } = getState();
 
   const activeProtocol = installedProtocols[sessions[activeSessionId].protocolUID];
-  const edgeRegistry = activeProtocol.variableRegistry.edge;
+  const edgeRegistry = activeProtocol.codebook.edge;
 
   const registryForType = edgeRegistry[modelData.type].variables;
 
@@ -241,7 +241,7 @@ const toggleEdge = (modelData, attributeData = {}) => (dispatch, getState) => {
   const { activeSessionId, sessions, installedProtocols } = getState();
 
   const activeProtocol = installedProtocols[sessions[activeSessionId].protocolUID];
-  const edgeRegistry = activeProtocol.variableRegistry.edge;
+  const edgeRegistry = activeProtocol.codebook.edge;
 
   const registryForType = edgeRegistry[modelData.type].variables;
 

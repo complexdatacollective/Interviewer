@@ -70,7 +70,7 @@ const mockProtocol = {
       nodes: [externalNode1, externalNode2, externalNode3, externalNode4],
     },
   },
-  variableRegistry: {
+  codebook: {
     node: {
       person: {
         displayVariable: 'name',

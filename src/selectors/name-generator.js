@@ -76,8 +76,8 @@ export const getDataByPrompt = createSelector(
 export const makeGetNodeIconName = () => createSelector(
   protocolRegistry,
   makeGetSubjectType(),
-  (variableRegistry, nodeType) => {
-    const nodeInfo = variableRegistry.node;
+  (codebook, nodeType) => {
+    const nodeInfo = codebook.node;
     return (nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].iconVariant) || 'add-a-person';
   },
 );

@@ -14,7 +14,7 @@ jest.mock('../../utils/WorkerAgent', () => function MockWorkerAgent() {
 
 const mockState = {
   protocol: {
-    variableRegistry: {},
+    codebook: {},
   },
 };
 

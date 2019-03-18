@@ -14,11 +14,11 @@ const fifo = ({ createdIndex }) => createdIndex;
  * Returns a configured sorting function
  * @param {Array} sortConfig - list of rules to sort by, as an array of objects where each object
  * has two properties ("property", and "direction"), and direction can be either "asc" or "desc".
- * @param {Object} variableRegistry - an object containing variables for the node type as specified
- * at: `variableRegistry.node[nodeType]variables`
+ * @param {Object} codebook - an object containing variables for the node type as specified
+ * at: `codebook.node[nodeType]variables`
  * TODO: Use variable registry to respect variable type?
  */
-const sortOrder = (sortConfig = [], variableRegistry = {}) => { // eslint-disable-line
+const sortOrder = (sortConfig = [], codebook = {}) => { // eslint-disable-line
   // '*' is a special prop to sort by the order in which nodes were added to the network
   const isFifoLifo = rule => rule.property === '*';
 

@@ -19,8 +19,8 @@
         "networkCanvasVersion": {
           "type": "string"
         },
-        "variableRegistry": {
-          "$ref": "#/definitions/VariableRegistry"
+        "codebook": {
+          "$ref": "#/definitions/codebook"
         },
         "assetManifest": {
           "$ref": "#/definitions/AssetManifest"
@@ -39,7 +39,7 @@
       "required": [
         "name",
         "stages",
-        "variableRegistry"
+        "codebook"
       ],
       "title": "Protocol"
     },
@@ -854,7 +854,7 @@
         }
       ]
     },
-    "VariableRegistry": {
+    "codebook": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
@@ -869,7 +869,7 @@
         }
       },
       "required": [],
-      "title": "VariableRegistry"
+      "title": "codebook"
     },
     "Edge": {
       "type": "object",

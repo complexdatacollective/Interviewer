@@ -16,9 +16,9 @@ const {
  */
 const validateLogic = (protocol) => {
   const v = new Validator(protocol);
-  const registry = protocol.variableRegistry;
+  const registry = protocol.codebook;
 
-  v.addValidation('variableRegistry.node.*',
+  v.addValidation('codebook.node.*',
     nodeType => nodeVarsIncludeDisplayVar(nodeType),
     nodeType => `node displayVariable "${nodeType.displayVariable}" did not match any node variable`);
 
@@ -30,36 +30,36 @@ const validateLogic = (protocol) => {
   v.addValidationSequence('stages[].subject',
     [
       subject => registry[subject.entity],
-      subject => `"${subject.entity}" is not defined in the variableRegistry`,
+      subject => `"${subject.entity}" is not defined in the codebook`,
     ],
     [
       subject => Object.keys(registry[subject.entity]).includes(subject.type),
-      subject => `"${subject.type}" definition not found in variableRegistry["${subject.entity}"]`,
+      subject => `"${subject.type}" definition not found in codebook["${subject.entity}"]`,
     ],
   );
 
   v.addValidationSequence('forms.*',
     [
       form => registry[form.entity],
-      form => `form entity "${form.entity}" is not defined in variableRegistry`,
+      form => `form entity "${form.entity}" is not defined in codebook`,
     ],
     [
       form => (registry[form.entity][form.type] || !form.type),
-      form => `"${form.type}" definition not found in variableRegistry["${form.entity}"]`,
+      form => `"${form.type}" definition not found in codebook["${form.entity}"]`,
     ],
     [
       form =>
         form.fields.every(field => (form.type ?
           registry[form.entity][form.type].variables[field.variable] :
           registry[form.entity].variables[field.variable])),
-      form => `Undefined form field variables in variableRegistry: ${undefinedFormVariables(form, registry)}`,
+      form => `Undefined form field variables in codebook: ${undefinedFormVariables(form, registry)}`,
     ],
   );
 
   v.addValidationSequence('filter.rules[]',
     [
       rule => entityDefFromRule(rule, registry),
-      rule => `Rule option type "${rule.options.type}" is not defined in variableRegistry`,
+      rule => `Rule option type "${rule.options.type}" is not defined in codebook`,
     ],
     [
       (rule) => {
@@ -95,41 +95,41 @@ const validateLogic = (protocol) => {
     items => `Items contain duplicate ID "${duplicateId(items)}"`,
   );
 
-  v.addValidation('variableRegistry.*.*.variables',
+  v.addValidation('codebook.*.*.variables',
     variableMap => !duplicateInArray(getVariableNames(variableMap)),
     variableMap => `Duplicate variable name "${duplicateInArray(getVariableNames(variableMap))}"`,
   );
 
   v.addValidation('prompts[].variable',
     (variable, subject) => getVariablesForSubject(registry, subject)[variable],
-    (variable, subject) => `"${variable}" not defined in variableRegistry[${subject.entity}][${subject.type}].variables`,
+    (variable, subject) => `"${variable}" not defined in codebook[${subject.entity}][${subject.type}].variables`,
   );
 
   v.addValidation('prompts[].cardOptions.additionalProperties[].variable',
     (variable, subject) => getVariablesForSubject(registry, subject)[variable],
-    (variable, subject) => `"${variable}" not defined in variableRegistry[${subject.entity}][${subject.type}].variables`,
+    (variable, subject) => `"${variable}" not defined in codebook[${subject.entity}][${subject.type}].variables`,
   );
 
   v.addValidation('prompts[].sortOptions.sortOrder[].property',
     (prop, subject) => getVariablesForSubject(registry, subject)[prop],
-    (prop, subject) => `Sort order property "${prop}" not defined in variableRegistry[${subject.entity}][${subject.type}].variables`,
+    (prop, subject) => `Sort order property "${prop}" not defined in codebook[${subject.entity}][${subject.type}].variables`,
   );
 
   v.addValidation('prompts[].sortOptions.sortableProperties[].variable',
     (variable, subject) => getVariablesForSubject(registry, subject)[variable],
-    (variable, subject) => `Sortable property "${variable}" not defined in variableRegistry[${subject.entity}][${subject.type}].variables`,
+    (variable, subject) => `Sortable property "${variable}" not defined in codebook[${subject.entity}][${subject.type}].variables`,
   );
 
   v.addValidation('prompts[].layout.layoutVariable',
     (variable, subject) => getVariablesForSubject(registry, subject)[variable],
-    (variable, subject) => `Layout variable "${variable}" not defined in variableRegistry[${subject.entity}][${subject.type}].variables`,
+    (variable, subject) => `Layout variable "${variable}" not defined in codebook[${subject.entity}][${subject.type}].variables`,
   );
 
   v.addValidation('prompts[].additionalAttributes',
     (attrMap, subject) => Object.keys(attrMap).every(attr => (
       getVariablesForSubject(registry, subject)[attr]
     )),
-    attrMap => `One or more sortable properties not defined in variableRegistry: ${Object.keys(attrMap)}`,
+    attrMap => `One or more sortable properties not defined in codebook: ${Object.keys(attrMap)}`,
   );
 
   v.runValidations();

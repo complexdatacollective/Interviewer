@@ -121,7 +121,7 @@ describe('sessions actions', () => {
       sessions: { a: {} },
       session: 'a',
       protocol: {
-        variableRegistry: {
+        codebook: {
           node: {
             nodeType: {
               variables: {},
@@ -190,7 +190,7 @@ describe('sessions actions', () => {
       sessions: { a: {} },
       session: 'a',
       protocol: {
-        variableRegistry: {
+        codebook: {
           node: {
             nodeType: {
               variables: {},

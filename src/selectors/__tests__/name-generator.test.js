@@ -47,7 +47,7 @@ const externalNode = {
 };
 
 const mockProtocol = {
-  variableRegistry: {
+  codebook: {
     node: {
       person: {
         iconVariant: 'add-a-person',

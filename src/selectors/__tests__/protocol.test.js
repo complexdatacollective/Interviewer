@@ -19,7 +19,7 @@ const externalData = {
 
 const mockProtocol = {
   externalData,
-  variableRegistry: {
+  codebook: {
     node: nodeVariables,
   },
   forms: protocolForm,

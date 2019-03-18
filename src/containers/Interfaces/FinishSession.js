@@ -76,8 +76,8 @@ class FinishSession extends Component {
   }
 
   export(currentSession) {
-    const { remoteProtocolId, sessionId, variableRegistry } = this.props;
-    const sessionData = asExportableNetwork(currentSession.network, variableRegistry);
+    const { remoteProtocolId, sessionId, codebook } = this.props;
+    const sessionData = asExportableNetwork(currentSession.network, codebook);
     this.props.exportSession(remoteProtocolId, sessionId, sessionData);
   }
 
@@ -118,7 +118,7 @@ class FinishSession extends Component {
               <Button
                 color="platinum"
                 onClick={() => createGraphML(this.props.currentNetwork,
-                  this.props.variableRegistry, this.handleExportError)
+                  this.props.codebook, this.handleExportError)
                 }
               >
                 Download
@@ -146,12 +146,12 @@ FinishSession.propTypes = {
   openDialog: PropTypes.func.isRequired,
   remoteProtocolId: PropTypes.string,
   sessionId: PropTypes.string.isRequired,
-  variableRegistry: PropTypes.object,
+  codebook: PropTypes.object,
 };
 
 FinishSession.defaultProps = {
   defaultServer: null,
-  variableRegistry: {},
+  codebook: {},
   remoteProtocolId: null,
 };
 
@@ -167,7 +167,7 @@ function mapStateToProps(state) {
     remoteProtocolId: getRemoteProtocolId(state),
     sessionId: state.activeSessionId,
     defaultServer: state.pairedServer,
-    variableRegistry: protocolRegistry(state),
+    codebook: protocolRegistry(state),
   };
 }
 

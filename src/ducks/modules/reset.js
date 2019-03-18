@@ -16,7 +16,7 @@ const resetPropertyForAllNodes = property =>
         },
       },
       protocol: {
-        variableRegistry: {
+        codebook: {
           node: nodeRegistry,
         },
       },

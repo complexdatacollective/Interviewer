@@ -86,7 +86,7 @@ describe('<MainMenu />', () => {
       const mockStore = getMockStore({
         ui: { isMenuOpen: true },
         protocol: {
-          variableRegistry: {
+          codebook: {
             node: {
               abcdef: {
                 name: 'person',

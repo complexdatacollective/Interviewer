@@ -11,7 +11,7 @@ jest.mock('../protocolPath');
 
 const validProtocol = {
   name: 'bar',
-  variableRegistry: {},
+  codebook: {},
   stages: [{ id: '1', type: 'Information', label: '', items: [] }],
 };
 
@@ -43,9 +43,9 @@ describe('loadProtocol', () => {
       });
     });
 
-    describe('when protocol has no variableRegistry', () => {
+    describe('when protocol has no codebook', () => {
       beforeAll(() => {
-        mockProtocol = { ...validProtocol, variableRegistry: undefined };
+        mockProtocol = { ...validProtocol, codebook: undefined };
       });
 
       it('rejects loading', async () => {

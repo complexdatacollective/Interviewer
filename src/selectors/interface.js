@@ -83,18 +83,18 @@ export const makeGetSubject = () =>
     (stage, prompt) => getSubject(stage, prompt),
   );
 
-const nodeTypeIsDefined = (variableRegistry, nodeType) => {
-  if (!variableRegistry) { return false; }
-  return variableRegistry.node[nodeType];
+const nodeTypeIsDefined = (codebook, nodeType) => {
+  if (!codebook) { return false; }
+  return codebook.node[nodeType];
 };
 
 // TODO: Once schema validation is in place, we don't need these asserts.
 export const makeGetSubjectType = () => (createSelector(
   protocolRegistry,
   makeGetSubject(),
-  (variableRegistry, subject) => {
+  (codebook, subject) => {
     assert(subject, 'The "subject" property is not defined for this prompt');
-    assert(nodeTypeIsDefined(variableRegistry, subject.type), `Node type "${subject.type}" is not defined in the registry`);
+    assert(nodeTypeIsDefined(codebook, subject.type), `Node type "${subject.type}" is not defined in the registry`);
     return subject && subject.type;
   },
 ));
@@ -102,8 +102,8 @@ export const makeGetSubjectType = () => (createSelector(
 export const makeGetNodeDisplayVariable = () => createDeepEqualSelector(
   protocolRegistry,
   makeGetSubjectType(),
-  (variableRegistry, nodeType) => {
-    const nodeInfo = variableRegistry.node;
+  (codebook, nodeType) => {
+    const nodeInfo = codebook.node;
     return nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].displayVariable;
   },
 );
@@ -111,8 +111,8 @@ export const makeGetNodeDisplayVariable = () => createDeepEqualSelector(
 export const makeGetNodeVariables = () => createDeepEqualSelector(
   protocolRegistry,
   makeGetSubjectType(),
-  (variableRegistry, nodeType) => {
-    const nodeInfo = variableRegistry.node;
+  (codebook, nodeType) => {
+    const nodeInfo = codebook.node;
     return nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].variables;
   },
 );
@@ -134,8 +134,8 @@ export const makeGetVariableOptions = () =>
 
 export const getNodeLabelFunction = createDeepEqualSelector(
   protocolRegistry,
-  variableRegistry => (node) => {
-    const nodeInfo = variableRegistry.node;
+  codebook => (node) => {
+    const nodeInfo = codebook.node;
 
     // Get the display variable by looking up the node type in the variable registry
     const displayVariable = nodeInfo && node && node.type && nodeInfo[node.type] &&

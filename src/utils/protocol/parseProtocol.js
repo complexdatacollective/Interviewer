@@ -3,7 +3,7 @@ import environments from '../environments';
 import inEnvironment from '../Environment';
 import protocolPath from './protocolPath';
 import friendlyErrorMessage from '../../utils/friendlyErrorMessage';
-import { validateSchema, validateLogic, logErrors } from './validation';
+import { validateSchema, validateLogic } from './validation';
 
 const openError = friendlyErrorMessage("We couldn't open that Network Canvas protocol. Check the format, and try again.");
 
@@ -14,20 +14,12 @@ const verifyProtocol = (protocol) => {
   const logicErrors = validateLogic(protocol);
 
   // For now, just log failures
-  logErrors(schemaErrors, 'Protocol schema errors');
-  logErrors(logicErrors, 'Protocol logic errors');
+  // if (schemaErrors || logicErrors) {
+  //   const noRegistryError = new Error('Invalid protocol');
+  //   noRegistryError.friendlyMessage = 'Invalid protocol: missing codebook';
+  //   return Promise.reject(protocolErrors);
+  // }
 
-  // TODO: remove assertions below once we're enforcing schema
-  if (!protocol.stages || !protocol.stages.length) {
-    const noStagesError = new Error('Invalid protocol');
-    noStagesError.friendlyMessage = 'Invalid protocol: no stages defined';
-    throw noStagesError;
-  }
-  if (!protocol.variableRegistry) {
-    const noRegistryError = new Error('Invalid protocol');
-    noRegistryError.friendlyMessage = 'Invalid protocol: missing variableRegistry';
-    throw noRegistryError;
-  }
   return protocol;
 };
 

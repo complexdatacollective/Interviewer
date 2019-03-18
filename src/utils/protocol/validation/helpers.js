@@ -18,17 +18,17 @@ const errToString = (errorObj) => {
   return str;
 };
 
-const undefinedFormVariables = (form, variableRegistry) =>
+const undefinedFormVariables = (form, codebook) =>
   form.fields
     .map(f => f.variable)
-    .filter(variable => !variableRegistry[form.entity][form.type].variables[variable]);
+    .filter(variable => !codebook[form.entity][form.type].variables[variable]);
 
 const nodeVarsIncludeDisplayVar = node =>
   !node.displayVariable // displayVariable is optional
     || Object.keys(node.variables).some(variableId => variableId === node.displayVariable);
 
-const entityDefFromRule = (rule, variableRegistry) =>
-  variableRegistry[rule.type === 'edge' ? 'edge' : 'node'][rule.options.type];
+const entityDefFromRule = (rule, codebook) =>
+  codebook[rule.type === 'edge' ? 'edge' : 'node'][rule.options.type];
 
 const getVariablesForSubject = (registry, subject = {}) =>
   (

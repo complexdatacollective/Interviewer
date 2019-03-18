@@ -2,7 +2,7 @@
   "name": "Teaching Protocol",
   "lastModified": "2018-10-01T00:00:00.000Z",
   "networkCanvasVersion": "~4.0.0",
-  "variableRegistry": {
+  "codebook": {
     "node": {
       "0289b2cc-e348-4dfd-bb79-f2d6b8a9e653": {
         "name": "person",

@@ -25,7 +25,7 @@ export const activeProtocol = createSelector(
 
 export const protocolRegistry = createSelector(
   activeProtocol,
-  protocol => protocol.variableRegistry,
+  protocol => protocol.codebook,
 );
 
 export const protocolForms = createSelector(
@@ -38,12 +38,12 @@ export const getRemoteProtocolId = createDeepEqualSelector(
   protocol => nameDigest(protocol.name) || null,
 );
 
-// The user-defined name of a node type; e.g. `variableRegistry.node[uuid].name == 'person'`
+// The user-defined name of a node type; e.g. `codebook.node[uuid].name == 'person'`
 export const makeGetNodeTypeDefinition = () => createDeepEqualSelector(
   protocolRegistry,
   (state, props) => props.type,
-  (variableRegistry, nodeType) => {
-    const nodeInfo = variableRegistry && variableRegistry.node;
+  (codebook, nodeType) => {
+    const nodeInfo = codebook && codebook.node;
     return nodeInfo && nodeInfo[nodeType];
   },
 );
@@ -51,8 +51,8 @@ export const makeGetNodeTypeDefinition = () => createDeepEqualSelector(
 export const makeGetNodeColor = () => createDeepEqualSelector(
   protocolRegistry,
   (_, props) => props.type,
-  (variableRegistry, nodeType) => {
-    const nodeInfo = variableRegistry.node;
+  (codebook, nodeType) => {
+    const nodeInfo = codebook.node;
     return (nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].color) || 'node-color-seq-1';
   },
 );
@@ -60,8 +60,8 @@ export const makeGetNodeColor = () => createDeepEqualSelector(
 export const makeGetEdgeLabel = () => createDeepEqualSelector(
   protocolRegistry,
   (_, props) => props.type,
-  (variableRegistry, edgeType) => {
-    const edgeInfo = variableRegistry.edge;
+  (codebook, edgeType) => {
+    const edgeInfo = codebook.edge;
     return (edgeInfo && edgeInfo[edgeType] && edgeInfo[edgeType].label) || '';
   },
 );
@@ -69,8 +69,8 @@ export const makeGetEdgeLabel = () => createDeepEqualSelector(
 export const makeGetEdgeColor = () => createDeepEqualSelector(
   protocolRegistry,
   (_, props) => props.type,
-  (variableRegistry, edgeType) => {
-    const edgeInfo = variableRegistry.edge;
+  (codebook, edgeType) => {
+    const edgeInfo = codebook.edge;
     return (edgeInfo && edgeInfo[edgeType] && edgeInfo[edgeType].color) || 'edge-color-seq-1';
   },
 );
@@ -79,8 +79,8 @@ export const makeGetNodeAttributeLabel = () => createDeepEqualSelector(
   protocolRegistry,
   (_, props) => props.subject.type,
   (_, props) => props.variableId,
-  (variableRegistry, nodeType, variableId) => {
-    const nodeInfo = variableRegistry.node;
+  (codebook, nodeType, variableId) => {
+    const nodeInfo = codebook.node;
     const variables = (nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].variables) || {};
     return (variables && variables[variableId] && variables[variableId].label) || [];
   },
@@ -90,8 +90,8 @@ export const makeGetCategoricalOptions = () => createDeepEqualSelector(
   protocolRegistry,
   (_, props) => props.subject.type,
   (_, props) => props.variableId,
-  (variableRegistry, nodeType, variableId) => {
-    const nodeInfo = variableRegistry.node;
+  (codebook, nodeType, variableId) => {
+    const nodeInfo = codebook.node;
     const variables = (nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].variables) || {};
     return (variables && variables[variableId] && variables[variableId].options) || [];
   },
