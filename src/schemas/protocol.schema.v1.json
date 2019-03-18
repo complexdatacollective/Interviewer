@@ -947,13 +947,33 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/OptionElement"
-          }
+          },
+          "minItems": 2
         }
       },
       "required": [
         "type"
       ],
-      "title": "Variable"
+      "title": "Variable",
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "enum": [
+                  "ordinal",
+                  "categorical"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "options"
+            ]
+          }
+        }
+      ]
     },
     "OptionClass": {
       "type": "object",
