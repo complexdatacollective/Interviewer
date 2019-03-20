@@ -2,7 +2,6 @@
 
 import environments from '../../environments';
 import { getEnvironment } from '../../Environment';
-import loadProtocol from '../loadProtocol';
 import protocolPath from '../protocolPath';
 import { readFile } from '../../filesystem';
 

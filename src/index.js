@@ -4,7 +4,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { ready as secureCommsReady } from 'secure-comms-api/cipher';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
-
+import initFileOpener from './utils/initFileOpener';
 import { history, store, persistor } from './ducks/store';
 import { actionCreators } from './ducks/modules/deviceSettings';
 import { Spinner } from './ui/components';
@@ -24,6 +24,9 @@ document.addEventListener('dragover', (e) => {
 
 const startApp = () => {
   store.dispatch(actionCreators.deviceReady());
+
+  // Listen for file open events.
+  initFileOpener();
 
   ReactDOM.render(
     <Provider store={store}>

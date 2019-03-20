@@ -3,9 +3,10 @@
 import { isString } from 'lodash';
 import environments from '../environments';
 import inEnvironment from '../Environment';
-import { userDataPath } from '../filesystem';
+import { userDataPath, appPath } from '../filesystem';
 
-const isValidProtocolName = protocolName => (isString(protocolName) && protocolName.length > 0);
+
+const isValidProtocolUID = protocolUID => (isString(protocolUID) && protocolUID.length > 0);
 const ensureArray = (filePath) => {
   if (isString(filePath)) {
     return [filePath];
@@ -14,21 +15,42 @@ const ensureArray = (filePath) => {
   return filePath;
 };
 
-const protocolPath = (environment) => {
+export const factoryProtocolPath = (environment) => {
   if (environment === environments.ELECTRON) {
     const path = require('path');
 
-    return (protocolName, filePath = []) => {
-      if (!isValidProtocolName(protocolName)) throw Error('Protocol name is not valid');
-      return path.join(userDataPath(), 'protocols', protocolName, ...ensureArray(filePath));
+    return (protocolUID, filePath = '') => {
+      if (!isValidProtocolUID(protocolUID)) throw Error('Protocol name is not valid');
+      return path.join(appPath(), 'protocols', protocolUID, filePath);
     };
   }
 
   if (environment === environments.CORDOVA) {
-    return (protocolName, filePath) => {
-      if (!isValidProtocolName(protocolName)) throw Error('Protocol name is not valid');
+    return (protocolUID, filePath) => {
+      if (!isValidProtocolUID(protocolUID)) throw Error('Protocol name is not valid');
 
-      return [userDataPath(), 'protocols', protocolName].concat(ensureArray(filePath)).join('/');
+      return [appPath(), 'www', 'protocols', protocolUID].concat([filePath]).join('/');
+    };
+  }
+
+  throw new Error('factoryProtocolPath() is not supported on this platform');
+};
+
+const protocolPath = (environment) => {
+  if (environment === environments.ELECTRON) {
+    const path = require('path');
+
+    return (protocolUID, filePath = []) => {
+      if (!isValidProtocolUID(protocolUID)) throw Error('Protocol name is not valid');
+      return path.join(userDataPath(), 'protocols', protocolUID, ...ensureArray(filePath));
+    };
+  }
+
+  if (environment === environments.CORDOVA) {
+    return (protocolUID, filePath) => {
+      if (!isValidProtocolUID(protocolUID)) throw Error('Protocol name is not valid');
+
+      return [userDataPath(), 'protocols', protocolUID].concat(ensureArray(filePath)).join('/');
     };
   }
 

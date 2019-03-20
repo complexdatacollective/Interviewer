@@ -6,22 +6,20 @@ import {
 import { store } from '../../ducks/store';
 
 const DOWNLOAD_PROTOCOL = 'DOWNLOAD_PROTOCOL';
-const DOWNLOAD_PROTOCOL_FAILED = Symbol('DOWNLOAD_PROTOCOL_FAILED');
 const EXTRACT_PROTOCOL = 'EXTRACT_PROTOCOL';
-const EXTRACT_PROTOCOL_FAILED = Symbol('EXTRACT_PROTOCOL_FAILED');
 const PARSE_PROTOCOL = 'PARSE_PROTOCOL';
-const PARSE_PROTOCOL_FAILED = Symbol('PARSE_PROTOCOL_FAILED');
+const IMPORT_PROTOCOL_FAILED = Symbol('IMPORT_PROTOCOL_FAILED');
 const IMPORT_PROTOCOL_COMPLETE = 'IMPORT_PROTOCOL_COMPLETE';
 const RESET_IMPORT = 'RESET_IMPORT';
 
 export const initialState = {
   status: 'inactive',
-  errorDetail: null,
 };
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case IMPORT_PROTOCOL_COMPLETE:
+    case IMPORT_PROTOCOL_FAILED:
     case RESET_IMPORT:
       return initialState;
     case DOWNLOAD_PROTOCOL:
@@ -36,9 +34,6 @@ export default function reducer(state = initialState, action = {}) {
       return {
         status: 'parsing',
       };
-    case DOWNLOAD_PROTOCOL_FAILED:
-    case EXTRACT_PROTOCOL_FAILED:
-    case PARSE_PROTOCOL_FAILED:
     default:
       return state;
   }
@@ -62,23 +57,9 @@ function parseProtocolAction() {
   };
 }
 
-function parseProtocolFailedAction(error) {
+function importProtocolFailedAction(error) {
   return {
-    type: PARSE_PROTOCOL_FAILED,
-    error,
-  };
-}
-
-function extractProtocolFailedAction(error) {
-  return {
-    type: EXTRACT_PROTOCOL_FAILED,
-    error,
-  };
-}
-
-function downloadProtocolFailedAction(error) {
-  return {
-    type: DOWNLOAD_PROTOCOL_FAILED,
+    type: IMPORT_PROTOCOL_FAILED,
     error,
   };
 }
@@ -96,85 +77,57 @@ function resetImportAction() {
   };
 }
 
-const downloadAndInstallProtocolThunk = (uri, usePairedServer) => (dispatch) => {
-  const protocolData = {};
+const catchError = error => Promise.reject(error);
 
-  dispatch(downloadProtocolAction());
+const installProtocolFromURI = (uri, usePairedServer) => (dispatch) => {
   let pairedServer;
 
   if (usePairedServer) {
     pairedServer = store.getState().pairedServer;
   }
 
+  dispatch(downloadProtocolAction());
+
   return downloadProtocol(uri, pairedServer)
-    .then(
-      // Download succeeded, temp path returned.
-      (temporaryProtocolPath) => {
-        // console.log('downloadProtocol finished', temporaryProtocolPath);
-        dispatch(extractProtocolAction());
-        return extractProtocol(temporaryProtocolPath);
-      },
-    )
+    .then(extractProtocol, catchError)
+    .then(parseProtocol, catchError)
+    .then(protocolContent => dispatch(importProtocolCompleteAction(protocolContent)), catchError)
     .catch(
       (error) => {
-        if (error) {
-          dispatch(downloadProtocolFailedAction(error));
-        }
+        dispatch(importProtocolFailedAction(error));
       },
-    )
-    .then(
-      // Extract succeeded, UID returned.
-      (protocolUID) => {
-        if (!protocolUID) {
-          return Promise.reject();
-        }
-        protocolData.UID = protocolUID;
-        dispatch(parseProtocolAction());
-        return parseProtocol(protocolUID);
-      },
-    )
+    );
+};
+
+const installProtocolFromFile = filePath => (dispatch) => {
+  dispatch(extractProtocolAction());
+
+  return extractProtocol(filePath)
+    .then(parseProtocol, catchError)
+    .then(protocolContent => dispatch(importProtocolCompleteAction(protocolContent)), catchError)
     .catch(
       (error) => {
-        if (error) {
-          dispatch(extractProtocolFailedAction(error));
-        }
-      },
-    )
-    .then(
-      (protocolContent) => {
-        protocolData.protocolContent = protocolContent.protocol;
-        protocolData.path = protocolContent.path;
-        return dispatch(importProtocolCompleteAction(protocolData));
-      },
-    )
-    .catch(
-      (error) => {
-        if (error) {
-          console.warn('Import protocol failed.');
-        }
+        dispatch(importProtocolFailedAction(error));
       },
     );
 };
 
 const actionCreators = {
-  downloadAndInstallProtocol: downloadAndInstallProtocolThunk,
+  installProtocolFromURI,
+  installProtocolFromFile,
   parseProtocol: parseProtocolAction,
   extractProtocol: extractProtocolAction,
   downloadProtocol: downloadProtocolAction,
   importProtocolComplete: importProtocolCompleteAction,
-  parseProtocolFailedAction,
-  extractProtocolFailedAction,
-  downloadProtocolFailedAction,
+  importProtocolFailed: importProtocolFailedAction,
   resetImportProtocol: resetImportAction,
 };
 
 const actionTypes = {
   EXTRACT_PROTOCOL,
-  EXTRACT_PROTOCOL_FAILED,
   DOWNLOAD_PROTOCOL,
-  DOWNLOAD_PROTOCOL_FAILED,
   PARSE_PROTOCOL,
-  PARSE_PROTOCOL_FAILED,
+  IMPORT_PROTOCOL_FAILED,
   IMPORT_PROTOCOL_COMPLETE,
   RESET_IMPORT,
 };

@@ -25,18 +25,12 @@ export default function reducer(state = initialState, action = {}) {
  * setSession can be used to resume an interview (e.g. from GUI, or URL on load)
  */
 const setSession = id => (dispatch, getState) => {
-  const { sessions, installedProtocols } = getState();
+  const { sessions } = getState();
   if (!sessions[id]) { return; }
 
   const sessionProtocolUID = sessions[id].protocolUID;
 
-  if (!installedProtocols[sessionProtocolUID] || !installedProtocols[sessionProtocolUID].path) {
-    return;
-  }
-
-  const sessionProtocolPath = installedProtocols[sessionProtocolUID].path;
-
-  dispatch(SessionWorkerActions.initializeSessionWorkersThunk(sessionProtocolPath));
+  dispatch(SessionWorkerActions.initializeSessionWorkersThunk(sessionProtocolUID));
 
   dispatch({
     type: SET_SESSION,

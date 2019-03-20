@@ -28,7 +28,7 @@ const initialValues = {
 class ProtocolUrlForm extends Component {
   onClickImportRemoteProtocol = (fields) => {
     if (fields) {
-      this.props.downloadAndInstallProtocol(fields.protocol_url);
+      this.props.installProtocolFromURI(fields.protocol_url);
       this.props.returnToStartScreen();
     }
   }
@@ -58,15 +58,15 @@ class ProtocolUrlForm extends Component {
 }
 
 ProtocolUrlForm.propTypes = {
-  downloadAndInstallProtocol: PropTypes.func.isRequired,
+  installProtocolFromURI: PropTypes.func.isRequired,
   returnToStartScreen: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
 };
 
 function mapDispatchToProps(dispatch) {
   return {
-    downloadAndInstallProtocol:
-      bindActionCreators(protocolActions.downloadAndInstallProtocol, dispatch),
+    installProtocolFromURI:
+      bindActionCreators(protocolActions.installProtocolFromURI, dispatch),
     returnToStartScreen: () => {
       dispatch(push('/'));
     },

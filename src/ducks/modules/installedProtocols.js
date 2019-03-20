@@ -7,13 +7,6 @@ const initialState = {};
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case IMPORT_PROTOCOL_COMPLETE: {
-      const { protocolContent, path, UID } = action.protocolData;
-
-      const newProtocol = {
-        ...protocolContent,
-        path,
-      };
-
       // // Allow for updating as well as installing new
       // const existingIndex = state.findIndex(protocol => protocol.name === newProtocol.name);
 
@@ -23,9 +16,12 @@ export default function reducer(state = initialState, action = {}) {
       //   return updatedState;
       // }
 
+
+      // TODO: require action.protocolData.uid, or fail.
+
       return {
         ...state,
-        [UID]: newProtocol,
+        [action.protocolData.uid]: action.protocolData,
       };
     }
     default:

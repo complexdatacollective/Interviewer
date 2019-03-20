@@ -266,12 +266,10 @@ const removeEdge = edge => (dispatch, getState) => {
   });
 };
 
-const addSession = (caseId, protocolUID) => (dispatch, getState) => {
+const addSession = (caseId, protocolUID) => (dispatch) => {
   const id = uuidv4();
-  const { installedProtocols } = getState();
-  const sessionProtocolPath = installedProtocols[protocolUID].path;
 
-  dispatch(SessionWorkerActions.initializeSessionWorkersThunk(sessionProtocolPath));
+  dispatch(SessionWorkerActions.initializeSessionWorkersThunk(protocolUID));
 
   dispatch({
     type: ADD_SESSION,

@@ -1,6 +1,7 @@
 /* eslint-disable global-require */
 
 import Zip from 'jszip';
+import uuid from 'uuid/v4';
 import environments from '../environments';
 import inEnvironment from '../Environment';
 import friendlyErrorMessage from '../friendlyErrorMessage';
@@ -16,6 +17,8 @@ const loadError = friendlyErrorMessage("We couldn't load that Network Canvas pro
 const prepareDestination = destination =>
   removeDirectory(destination)
     .then(() => ensurePathExists(destination));
+
+const generateProtocolUID = () => uuid(); // generate a filename
 
 const extractZipDirectory = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
@@ -125,23 +128,11 @@ const importZip = inEnvironment((environment) => {
 });
 
 const extractProtocol = inEnvironment((environment) => {
-  if (environment === environments.ELECTRON) {
-    const path = require('path');
-
+  if (environment === environments.ELECTRON || environment === environments.CORDOVA) {
     return (protocolFile = isRequired('protocolFile')) => {
-      const protocolName = path.basename(protocolFile);
+      const protocolName = generateProtocolUID();
       const destination = protocolPath(protocolName);
-
       return importZip(protocolFile, protocolName, destination);
-    };
-  }
-
-  if (environment === environments.CORDOVA) {
-    return (protocolFileUri = isRequired('protocolFileUri')) => {
-      const protocolName = new URL(protocolFileUri).pathname.split('/').pop();
-      const destination = protocolPath(protocolName);
-
-      return importZip(protocolFileUri, protocolName, destination);
     };
   }
 

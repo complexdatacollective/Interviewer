@@ -31,8 +31,8 @@ function resetWorkerMapAction() {
   };
 }
 
-const initializeSessionWorkersThunk = protocolPath => dispatch =>
-  preloadWorkers(protocolPath)
+const initializeSessionWorkersThunk = protocolUID => dispatch =>
+  preloadWorkers(protocolUID)
     .then(
       (workerUrls) => {
         const map = workerUrls.reduce((urlMap, workerUrl, i) => {
