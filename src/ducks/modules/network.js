@@ -23,6 +23,7 @@ export const UPDATE_EDGE = 'UPDATE_EDGE';
 export const TOGGLE_EDGE = 'TOGGLE_EDGE';
 export const REMOVE_EDGE = 'REMOVE_EDGE';
 export const UPDATE_EGO = 'UPDATE_EGO';
+export const ADD_SESSION = 'ADD_SESSION';
 
 // Initial network model structure
 const initialState = {
@@ -250,6 +251,13 @@ export default function reducer(state = initialState, action = {}) {
     }
     case REMOVE_EDGE:
       return removeEdge(state, action.edgeId);
+    case ADD_SESSION:
+      return {
+        ...initialState,
+        ego: {
+          [entityPrimaryKeyProperty]: uuidv4(),
+        },
+      };
     default:
       return state;
   }
