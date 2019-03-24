@@ -95,13 +95,14 @@ export const asExportableEgo = (ego, egoDefinition) => ({
  * @param  {Object} registry the variableRegistry from a protocol
  * @return {Object} externalNetwork
  */
-export const asExportableNetwork = (network = {}, registry = {}) => {
+export const asExportableNetwork = (network = {}, registry = {}, sessionVariables = {}) => {
   const { nodes = [], edges = [], ego = {} } = network;
   const { node: nodeRegistry = {}, edge: edgeRegistry = {}, ego: egoRegistry = {} } = registry;
   return ({
     nodes: nodes.map(node => asExportableNode(node, nodeRegistry[node.type])),
     edges: edges.map(edge => asExportableEdge(edge, edgeRegistry[edge.type])),
     ego: asExportableEgo(ego, egoRegistry),
+    sessionVariables,
   });
 };
 

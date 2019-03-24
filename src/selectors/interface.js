@@ -32,6 +32,11 @@ const propPromptId = (_, props) => props.prompt.id;
 // State selectors
 
 // MemoedSelectors
+const getCaseId = createDeepEqualSelector(
+  getCurrentSession,
+  session => (session && session.caseId),
+);
+
 export const getNetwork = createDeepEqualSelector(
   getCurrentSession,
   session => (session && session.network) || { nodes: [], edges: [] },
@@ -55,7 +60,8 @@ export const networkEdges = createDeepEqualSelector(
 export const getExportableNetwork = createDeepEqualSelector(
   getNetwork,
   protocolRegistry,
-  (network, registry) => asExportableNetwork(network, registry),
+  getCaseId,
+  (network, registry, _caseID) => asExportableNetwork(network, registry, { _caseID }),
 );
 
 export const getWorkerNetwork = createDeepEqualSelector(
