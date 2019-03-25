@@ -6,6 +6,8 @@ import inEnvironment from '../Environment';
 import { writeFile } from '../filesystem';
 import friendlyErrorMessage from '../../utils/friendlyErrorMessage';
 import ApiClient from '../../utils/ApiClient';
+import { store } from '../../ducks/store';
+import { actionCreators as importActions } from '../../ducks/modules/importProtocol';
 
 const getURL = uri =>
   new Promise((resolve, reject) => {
@@ -32,6 +34,7 @@ const fileError = friendlyErrorMessage('The protocol could not be saved to your 
  * @return {string} output filepath
  */
 const downloadProtocol = inEnvironment((environment) => {
+  store.dispatch(importActions.downloadProtocol());
   if (environment === environments.ELECTRON) {
     const request = require('request-promise-native');
     const path = require('path');

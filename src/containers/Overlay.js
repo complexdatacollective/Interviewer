@@ -41,9 +41,11 @@ class Overlay extends React.Component {
     return (
       <Modal show={show} onBlur={onBlur}>
         <div className={cx('overlay', { 'overlay--fullscreen': useFullScreenForms }, className)}>
-          <div className="overlay__title">
-            <h1>{title}</h1>
-          </div>
+          { title && (
+            <div className="overlay__title">
+              <h1>{title}</h1>
+            </div>
+          )}
           <div className="overlay__content" ref={this.contentRef}>
             {children}
           </div>
@@ -55,9 +57,9 @@ class Overlay extends React.Component {
 }
 
 Overlay.propTypes = {
-  onClose: PropTypes.func.isRequired,
+  onClose: PropTypes.func,
   onBlur: PropTypes.func,
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
   show: PropTypes.bool,
   children: PropTypes.any,
   useFullScreenForms: PropTypes.bool.isRequired,
@@ -66,6 +68,8 @@ Overlay.propTypes = {
 
 Overlay.defaultProps = {
   onBlur: () => {},
+  onClose: () => {},
+  title: null,
   className: '',
   show: false,
   children: null,

@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 
 import logo from '../../images/NC-Round.svg';
 import { Icon } from '../../ui/components';
-import { ProtocolList, SessionList } from '.';
+import { ProtocolList, SessionList, ImportProtocolOverlay } from '.';
 
 /**
   * Setup screen
@@ -49,6 +49,10 @@ class Setup extends Component {
 
     return (
       <div className="setup">
+        <ImportProtocolOverlay
+          show={this.props.importProtocolProgress.step > 0}
+          progress={this.props.importProtocolProgress}
+        />
         <div className="setup__header">
           <div className="header-content">
             <div className="header-content__title">
@@ -88,6 +92,7 @@ Setup.propTypes = {
   isPairedWithServer: PropTypes.bool.isRequired,
   sessionId: PropTypes.string,
   stageIndex: PropTypes.number,
+  importProtocolProgress: PropTypes.object.isRequired,
 };
 
 Setup.defaultProps = {
@@ -103,6 +108,7 @@ function mapStateToProps(state) {
     isPairedWithServer: !!state.pairedServer,
     protocolUID: get(state.sessions[state.activeSessionId], 'protocolUID'),
     sessionId: state.activeSessionId,
+    importProtocolProgress: state.importProtocol,
   };
 }
 

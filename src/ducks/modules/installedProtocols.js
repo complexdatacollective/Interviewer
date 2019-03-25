@@ -1,3 +1,4 @@
+import { omit, findKey } from 'lodash';
 import { actionTypes as ProtocolActionTypes } from './importProtocol';
 
 const IMPORT_PROTOCOL_COMPLETE = ProtocolActionTypes.IMPORT_PROTOCOL_COMPLETE;
@@ -7,21 +8,21 @@ const initialState = {};
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case IMPORT_PROTOCOL_COMPLETE: {
-      // // Allow for updating as well as installing new
-      // const existingIndex = state.findIndex(protocol => protocol.name === newProtocol.name);
+      const newProtocol = action.protocolData;
 
-      // if (existingIndex > -1) {
-      //   const updatedState = [...state];
-      //   updatedState.splice(existingIndex, 1, newProtocol);
-      //   return updatedState;
-      // }
-
-
-      // TODO: require action.protocolData.uid, or fail.
+      // If the protocol name (which is the true UID of protocol) already exists, overwrite.
+      const existingIndex = findKey(state, protocol => protocol.name === newProtocol.name);
+      console.log('existingIndex', existingIndex);
+      if (existingIndex) {
+        return {
+          ...state,
+          [existingIndex]: omit(newProtocol, 'uid'),
+        };
+      }
 
       return {
         ...state,
-        [action.protocolData.uid]: action.protocolData,
+        [newProtocol.uid]: omit(newProtocol, 'uid'),
       };
     }
     default:

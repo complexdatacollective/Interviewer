@@ -8,31 +8,45 @@ import { store } from '../../ducks/store';
 const DOWNLOAD_PROTOCOL = 'DOWNLOAD_PROTOCOL';
 const EXTRACT_PROTOCOL = 'EXTRACT_PROTOCOL';
 const PARSE_PROTOCOL = 'PARSE_PROTOCOL';
+const IMPORT_PROTOCOL_START = 'IMPORT_PROTOCOL_START';
 const IMPORT_PROTOCOL_FAILED = Symbol('IMPORT_PROTOCOL_FAILED');
 const IMPORT_PROTOCOL_COMPLETE = 'IMPORT_PROTOCOL_COMPLETE';
 const RESET_IMPORT = 'RESET_IMPORT';
 
 export const initialState = {
   status: 'inactive',
+  step: 0,
 };
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    case IMPORT_PROTOCOL_COMPLETE:
     case IMPORT_PROTOCOL_FAILED:
     case RESET_IMPORT:
       return initialState;
+    case IMPORT_PROTOCOL_START:
+      return {
+        statusText: 'Initialising protocol import...',
+        step: 1,
+      };
     case DOWNLOAD_PROTOCOL:
       return {
-        status: 'downloading',
+        statusText: 'Downloading protocol...',
+        step: 2,
       };
     case EXTRACT_PROTOCOL:
       return {
-        status: 'extracting',
+        statusText: 'Extracting protocol to temporary storage...',
+        step: 3,
       };
     case PARSE_PROTOCOL:
       return {
-        status: 'parsing',
+        statusText: 'Parsing and validating protocol...',
+        step: 4,
+      };
+    case IMPORT_PROTOCOL_COMPLETE:
+      return {
+        statusText: 'Protocol imported successfully!',
+        step: 5,
       };
     default:
       return state;
@@ -54,6 +68,12 @@ function extractProtocolAction() {
 function parseProtocolAction() {
   return {
     type: PARSE_PROTOCOL,
+  };
+}
+
+function importProtocolStartAction() {
+  return {
+    type: IMPORT_PROTOCOL_START,
   };
 }
 
@@ -86,8 +106,7 @@ const installProtocolFromURI = (uri, usePairedServer) => (dispatch) => {
     pairedServer = store.getState().pairedServer;
   }
 
-  dispatch(downloadProtocolAction());
-
+  dispatch(importProtocolStartAction());
   return downloadProtocol(uri, pairedServer)
     .then(extractProtocol, catchError)
     .then(parseProtocol, catchError)
@@ -100,8 +119,7 @@ const installProtocolFromURI = (uri, usePairedServer) => (dispatch) => {
 };
 
 const installProtocolFromFile = filePath => (dispatch) => {
-  dispatch(extractProtocolAction());
-
+  dispatch(importProtocolStartAction());
   return extractProtocol(filePath)
     .then(parseProtocol, catchError)
     .then(protocolContent => dispatch(importProtocolCompleteAction(protocolContent)), catchError)
@@ -112,12 +130,14 @@ const installProtocolFromFile = filePath => (dispatch) => {
     );
 };
 
+
 const actionCreators = {
   installProtocolFromURI,
   installProtocolFromFile,
   parseProtocol: parseProtocolAction,
   extractProtocol: extractProtocolAction,
   downloadProtocol: downloadProtocolAction,
+  importProtocolStart: importProtocolStartAction,
   importProtocolComplete: importProtocolCompleteAction,
   importProtocolFailed: importProtocolFailedAction,
   resetImportProtocol: resetImportAction,
@@ -127,6 +147,7 @@ const actionTypes = {
   EXTRACT_PROTOCOL,
   DOWNLOAD_PROTOCOL,
   PARSE_PROTOCOL,
+  IMPORT_PROTOCOL_START,
   IMPORT_PROTOCOL_FAILED,
   IMPORT_PROTOCOL_COMPLETE,
   RESET_IMPORT,
