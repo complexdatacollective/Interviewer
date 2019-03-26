@@ -22,7 +22,7 @@ const ProtocolCard = ({ protocol, selectProtocol, className, size }) => {
       </div>
       <div className="protocol-card__labels">
         <h2 className={sized('protocol-card__name')}>{protocol.name}</h2>
-        <p className="protocol-card__description">{protocol.description}</p>
+        { protocol.description ? (<p className="protocol-card__description">{protocol.description}</p>) : ''}
       </div>
     </div>
   );
@@ -32,7 +32,7 @@ ProtocolCard.defaultProps = {
   className: '',
   selectProtocol: () => {},
   size: '',
-  description: '',
+  description: null,
 };
 
 ProtocolCard.propTypes = {

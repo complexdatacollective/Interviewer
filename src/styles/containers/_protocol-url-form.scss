@@ -1,13 +1,2 @@
 .protocol-url-form {
-  &__cancel {
-    @include text-button;
-  }
-
-  &__cancel-button {
-    &[name='close'] { // specificity needed to override NC-UI
-      height: .5rem;
-      margin-right: .5rem;
-      width: .5rem;
-    }
-  }
 }

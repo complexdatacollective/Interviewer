@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
 
 import Form from '../Form';
 import { Button } from '../../ui/components';
@@ -22,21 +21,22 @@ const formConfig = {
 };
 
 const initialValues = {
-  protocol_url: 'http://localhost:8000/development-11.netcanvas',
+  protocol_url: 'https://',
 };
 
 class ProtocolUrlForm extends Component {
   onClickImportRemoteProtocol = (fields) => {
     if (fields) {
       this.props.installProtocolFromURI(fields.protocol_url);
-      this.props.returnToStartScreen();
     }
   }
 
   render() {
-    const { onCancel } = this.props;
     return (
       <React.Fragment>
+        <p>
+          Enter the full URL to a protocol file below, including <code>http://</code> or <code>https://</code> at the start.
+        </p>
         <Form
           className="protocol-url-form"
           form={formConfig.formName}
@@ -44,12 +44,11 @@ class ProtocolUrlForm extends Component {
           initialValues={initialValues}
           {...formConfig}
         >
-          <Button aria-label="Submit" type="submit">
-            Import
-          </Button>
-          <Button color="platinum" aria-label="Cancel" type="button" onClick={onCancel}>
-            Cancel
-          </Button>
+          <div className="protocol-import--footer">
+            <Button aria-label="Submit" type="submit">
+              Import
+            </Button>
+          </div>
         </Form>
       </React.Fragment>
 
@@ -59,17 +58,12 @@ class ProtocolUrlForm extends Component {
 
 ProtocolUrlForm.propTypes = {
   installProtocolFromURI: PropTypes.func.isRequired,
-  returnToStartScreen: PropTypes.func.isRequired,
-  onCancel: PropTypes.func.isRequired,
 };
 
 function mapDispatchToProps(dispatch) {
   return {
     installProtocolFromURI:
       bindActionCreators(protocolActions.installProtocolFromURI, dispatch),
-    returnToStartScreen: () => {
-      dispatch(push('/'));
-    },
   };
 }
 

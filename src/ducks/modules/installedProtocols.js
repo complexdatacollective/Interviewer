@@ -12,7 +12,7 @@ export default function reducer(state = initialState, action = {}) {
 
       // If the protocol name (which is the true UID of protocol) already exists, overwrite.
       const existingIndex = findKey(state, protocol => protocol.name === newProtocol.name);
-      console.log('existingIndex', existingIndex);
+
       if (existingIndex) {
         return {
           ...state,

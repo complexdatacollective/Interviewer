@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
 import ApiClient from '../../utils/ApiClient';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { actionCreators as protocolActions } from '../../ducks/modules/importProtocol';
@@ -44,15 +43,10 @@ class ServerProtocols extends Component {
   }
 
   handleSelectProtocol = (protocol) => {
-    const { installProtocolFromURI, returnToStartScreen } = this.props;
+    const { installProtocolFromURI } = this.props;
     this.setState({ showNewSessionOverlay: true });
     this.apiClient.addTrustedCert()
-      .then(
-        () => {
-          returnToStartScreen();
-          return installProtocolFromURI(protocol.downloadPath, true);
-        },
-      );
+      .then(() => installProtocolFromURI(protocol.downloadPath, true));
   }
 
   handleUnpairRequest = () => {
@@ -112,7 +106,6 @@ ServerProtocols.defaultProps = {
 
 ServerProtocols.propTypes = {
   installProtocolFromURI: PropTypes.func.isRequired,
-  returnToStartScreen: PropTypes.func.isRequired,
   openDialog: PropTypes.func.isRequired,
   pairedServer: PropTypes.object.isRequired,
   server: PropTypes.shape({
@@ -134,9 +127,6 @@ function mapDispatchToProps(dispatch) {
     bindActionCreators(protocolActions.installProtocolFromURI, dispatch),
     openDialog: bindActionCreators(dialogActions.openDialog, dispatch),
     unpairServer: bindActionCreators(serverActions.unpairServer, dispatch),
-    returnToStartScreen: () => {
-      dispatch(push('/'));
-    },
   };
 }
 

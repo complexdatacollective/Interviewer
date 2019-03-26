@@ -4,7 +4,7 @@
   height: 100%;
   justify-content: center;
   overflow-y: auto;
-  padding: spacing(large);
+
 
   &--available {
     display: block;
@@ -17,11 +17,9 @@
 
   &__placeholder {
     text-align: center;
-
-    .spinner,
-    .icon {
-      display: inline-block;
-      padding-bottom: spacing(large);
-    }
+    padding: unit(2) 0 unit(4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 }

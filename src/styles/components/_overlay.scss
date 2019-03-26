@@ -15,6 +15,10 @@ $close-button-size: 1rem;
 
   &__title {
     text-align: center;
+
+    h1 {
+      margin-top: 0;
+    }
   }
 
   &__content {

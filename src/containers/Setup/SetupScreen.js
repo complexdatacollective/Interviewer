@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { get } from 'lodash';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
-
-
 import logo from '../../images/NC-Round.svg';
 import { Icon } from '../../ui/components';
-import { ProtocolList, SessionList, ImportProtocolOverlay } from '.';
+import { ProtocolList, ProtocolImportOverlay, SessionList, ImportProgressOverlay } from '.';
 
 /**
   * Setup screen
@@ -19,6 +17,7 @@ class Setup extends Component {
     super(props);
     this.state = {
       showOptions: 'protocol',
+      showImportProtocolOverlay: false,
     };
   }
 
@@ -45,11 +44,13 @@ class Setup extends Component {
       currentTab = <SessionList />;
     }
 
-    const startScreenIcon = () => (this.props.isPairedWithServer ? 'add-a-protocol' : 'pair-a-server');
-
     return (
       <div className="setup">
-        <ImportProtocolOverlay
+        <ProtocolImportOverlay
+          show={this.state.showImportProtocolOverlay}
+          onClose={() => this.setState({ showImportProtocolOverlay: false })}
+        />
+        <ImportProgressOverlay
           show={this.props.importProtocolProgress.step > 0}
           progress={this.props.importProtocolProgress}
         />
@@ -78,9 +79,11 @@ class Setup extends Component {
           {currentTab}
         </main>
         { this.isShowProtocols() &&
-          <Link to="/protocol-import">
-            <Icon name={startScreenIcon()} className="setup__server-button" />
-          </Link>
+          <Icon
+            name="add-a-protocol"
+            className="setup__server-button"
+            onClick={() => this.setState({ showImportProtocolOverlay: true })}
+          />
         }
       </div>
     );
@@ -89,7 +92,6 @@ class Setup extends Component {
 
 Setup.propTypes = {
   isProtocolLoaded: PropTypes.bool.isRequired,
-  isPairedWithServer: PropTypes.bool.isRequired,
   sessionId: PropTypes.string,
   stageIndex: PropTypes.number,
   importProtocolProgress: PropTypes.object.isRequired,

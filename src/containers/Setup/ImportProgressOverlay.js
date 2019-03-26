@@ -6,7 +6,7 @@ import { Spinner, Modal, Button, Icon } from '../../ui/components';
 import { ProgressBar } from '../../components';
 import { actionCreators as importProtocolActions } from '../../ducks/modules/importProtocol';
 
-class ImportProtocolOverlay extends Component {
+class ImportProgressOverlay extends Component {
   constructor(props) {
     super(props);
 
@@ -41,7 +41,7 @@ class ImportProtocolOverlay extends Component {
             { progress.step === 5 ? (
               <Icon name="protocol-card" />
             ) : (
-              <Spinner size="large" />
+              <Spinner large />
             )}
             <h4>{progress.statusText}</h4>
             { progress.step === 5 ? (
@@ -56,13 +56,13 @@ class ImportProtocolOverlay extends Component {
   }
 }
 
-ImportProtocolOverlay.propTypes = {
+ImportProgressOverlay.propTypes = {
   show: PropTypes.bool,
   progress: PropTypes.object,
   resetImportProtocol: PropTypes.func.isRequired,
 };
 
-ImportProtocolOverlay.defaultProps = {
+ImportProgressOverlay.defaultProps = {
   show: false,
   progress: null,
 };
@@ -73,4 +73,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(null, mapDispatchToProps)(ImportProtocolOverlay);
+export default connect(null, mapDispatchToProps)(ImportProgressOverlay);

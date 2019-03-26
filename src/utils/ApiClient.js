@@ -88,6 +88,8 @@ class ApiClient {
       this.pairingClient = axios.create({
         baseURL: pairingUrl.replace(/\/$/, ''),
         headers: defaultHeaders,
+        // This timeout governs the time before the user clicks 'pair with device' in Server.
+        // timeout: 15000,
       });
     }
 

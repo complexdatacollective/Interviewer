@@ -12,10 +12,17 @@ const ServerSetup = ({ children, handleUnpair, server }) => (
   <div className="server-setup">
     <div className="server-setup__server">
       <ServerCard className="server-setup__card" data={server} />
-      {
-        handleUnpair && server.secureServiceUrl &&
-        <Button size="small" color="mustard" onClick={handleUnpair}>Unpair</Button>
-      }
+      <div>
+        {
+          handleUnpair && server.secureServiceUrl && (
+            <React.Fragment>
+              <h4>Select a protocol to import</h4>
+              <p>Select a protocol from this Server to import onto this device.</p>
+              <Button size="small" color="mustard" onClick={handleUnpair}>Unpair</Button>
+            </React.Fragment>
+          )
+        }
+      </div>
     </div>
     <React.Fragment>
       { children }
