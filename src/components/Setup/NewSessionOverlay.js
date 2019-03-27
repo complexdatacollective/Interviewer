@@ -43,7 +43,9 @@ class NewSessionOverlay extends Component {
           label="Case ID"
           fieldLabel=" "
         />
-        <Button key="submit" aria-label="Submit" onClick={() => handleSubmit(this.state.caseID)}>Start Interview</Button>
+        <div className="protocol-import--footer">
+          <Button key="submit" aria-label="Submit" onClick={() => handleSubmit(this.state.caseID)}>Start Interview</Button>
+        </div>
       </Overlay>
     );
   }

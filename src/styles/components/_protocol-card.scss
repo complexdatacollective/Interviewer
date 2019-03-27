@@ -18,6 +18,12 @@ $component: 'protocol-card';
     width: 5rem;
   }
 
+  &__name {
+    &--large {
+      text-align: center;
+    }
+  }
+
   // Large variant displayed on the startup screen
   &--large {
     background-color: var(--light-background);
@@ -25,17 +31,11 @@ $component: 'protocol-card';
     width: 25vw;
     height: 25vh;
     margin: 0 auto;
-    text-align: center;
     padding: spacing(huge);
-
-    .#{$component}__icon-wrapper {
-      margin-bottom: 1rem;
-    }
 
     .#{$component}__icon {
       height: 7rem;
       width: 7rem;
-      margin-bottom: 1rem;
     }
   }
 
