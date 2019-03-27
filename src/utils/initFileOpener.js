@@ -37,7 +37,7 @@ const initFileOpener = () => {
       return;
     }
 
-    store.dispatch(protocolActions.installProtocolFromFile(protocolPath));
+    store.dispatch(protocolActions.importProtocolFromFile(protocolPath));
   });
 
   ipcRenderer.send('GET_ARGF');

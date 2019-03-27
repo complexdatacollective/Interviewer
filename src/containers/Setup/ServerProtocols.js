@@ -43,10 +43,10 @@ class ServerProtocols extends Component {
   }
 
   handleSelectProtocol = (protocol) => {
-    const { installProtocolFromURI } = this.props;
+    const { importProtocolFromURI } = this.props;
     this.setState({ showNewSessionOverlay: true });
     this.apiClient.addTrustedCert()
-      .then(() => installProtocolFromURI(protocol.downloadPath, true));
+      .then(() => importProtocolFromURI(protocol.downloadPath, true));
   }
 
   handleUnpairRequest = () => {
@@ -105,7 +105,7 @@ ServerProtocols.defaultProps = {
 };
 
 ServerProtocols.propTypes = {
-  installProtocolFromURI: PropTypes.func.isRequired,
+  importProtocolFromURI: PropTypes.func.isRequired,
   openDialog: PropTypes.func.isRequired,
   pairedServer: PropTypes.object.isRequired,
   server: PropTypes.shape({
@@ -123,8 +123,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    installProtocolFromURI:
-    bindActionCreators(protocolActions.installProtocolFromURI, dispatch),
+    importProtocolFromURI:
+    bindActionCreators(protocolActions.importProtocolFromURI, dispatch),
     openDialog: bindActionCreators(dialogActions.openDialog, dispatch),
     unpairServer: bindActionCreators(serverActions.unpairServer, dispatch),
   };

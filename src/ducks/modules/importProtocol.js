@@ -99,7 +99,7 @@ function resetImportAction() {
 
 const catchError = error => Promise.reject(error);
 
-const installProtocolFromURI = (uri, usePairedServer) => (dispatch) => {
+const importProtocolFromURI = (uri, usePairedServer) => (dispatch) => {
   let pairedServer;
 
   if (usePairedServer) {
@@ -118,7 +118,7 @@ const installProtocolFromURI = (uri, usePairedServer) => (dispatch) => {
     );
 };
 
-const installProtocolFromFile = filePath => (dispatch) => {
+const importProtocolFromFile = filePath => (dispatch) => {
   dispatch(importProtocolStartAction());
   return extractProtocol(filePath)
     .then(parseProtocol, catchError)
@@ -132,8 +132,8 @@ const installProtocolFromFile = filePath => (dispatch) => {
 
 
 const actionCreators = {
-  installProtocolFromURI,
-  installProtocolFromFile,
+  importProtocolFromURI,
+  importProtocolFromFile,
   parseProtocol: parseProtocolAction,
   extractProtocol: extractProtocolAction,
   downloadProtocol: downloadProtocolAction,
