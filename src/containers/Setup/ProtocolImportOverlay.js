@@ -6,6 +6,7 @@ import ProtocolUrlForm from './ProtocolUrlForm';
 import ServerPairing from './ServerPairing';
 import ServerProtocols from './ServerProtocols';
 import { ServerAddressForm, DiscoveredServerList } from '../../components/Setup';
+import { importLocalProtocol } from '../../utils/protocol';
 import Overlay from '../Overlay';
 import { Button } from '../../ui/components';
 
@@ -123,7 +124,7 @@ class ProtocolImportOverlay extends PureComponent {
         </div>
         <div
           className="tab"
-          onClick={() => this.setState({ importMode: 'url' })}
+          onClick={() => importLocalProtocol('heh')}
         >
           Local file
         </div>

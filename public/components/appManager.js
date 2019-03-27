@@ -2,6 +2,7 @@ const { ipcMain, app, BrowserWindow } = require('electron');
 const path = require('path');
 const windowManager = require('./windowManager');
 const registerAssetProtocol = require('./assetProtocol').registerProtocol;
+const { openDialog } = require('./dialogs');
 
 function getFileFromArgs(argv) {
   if (argv.length >= 2) {
@@ -16,7 +17,7 @@ function getFileFromArgs(argv) {
 
 const appManager = {
   openFileWhenReady: null,
-  init: function init() {
+  init: () => {
     ipcMain.on('GET_ARGF', (event) => {
       if (process.platform === 'win32') {
         const filePath = getFileFromArgs(process.argv);
@@ -30,6 +31,13 @@ const appManager = {
         this.openFileWhenReady = null;
       }
     });
+
+    ipcMain.on('OPEN_DIALOG', () =>
+      openDialog()
+        .then(filePath =>
+          windowManager.getWindow().then(window => window.webContents.send('OPEN_FILE', filePath)))
+        .catch(err => console.log(err)),
+    );
   },
   loadDevTools: () => {
     const extensions = process.env.NC_DEVTOOLS_EXENSION_PATH;
