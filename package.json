@@ -26,7 +26,7 @@
     "build-docs": "cross-env NODE_ENV=production jsdoc src -r -d docs-build -c ./jsdoc.conf.json --verbose",
     "electron": "electron ./www",
     "electron:dev": "cross-env NODE_ENV=development NC_DEVSERVER_FILE=\".devserver\" electron public/",
-    "ios:dev": "node scripts/check-dev-server.js && cross-env LIVE_RELOAD=1 cordova run ios --buildFlag='-UseModernBuildSystem=0' --developmentTeam=85EZ69PQHJ --target='iPad-Pro, 12.1' --",
+    "ios:dev": "node scripts/check-dev-server.js && cross-env LIVE_RELOAD=1 cordova run ios --buildFlag='-UseModernBuildSystem=0' --developmentTeam=85EZ69PQHJ --",
     "android:dev": "node scripts/check-dev-server.js && cross-env LIVE_RELOAD=1 cordova run android",
     "generate-icons": "node scripts/generate-app-icons.js",
     "dist:android": "npm run build:android && cordova build android --release",
@@ -155,9 +155,10 @@
     "xss": "^0.3.4"
   },
   "dependencies": {
-    "cordova-android": "^7.1.2",
+    "cordova-android": "^8.0.0",
     "cordova-ios": "^5.0.0",
     "cordova-plugin-app-version": "^0.1.9",
+    "cordova-plugin-chooser": "^1.2.5",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-file": "^5.0.0",
     "cordova-plugin-file-transfer": "^1.7.1",
@@ -227,8 +228,8 @@
   },
   "cordova": {
     "platforms": [
-      "android",
-      "ios"
+      "ios",
+      "android"
     ],
     "plugins": {
       "cordova-plugin-app-version": {},
@@ -239,7 +240,8 @@
       "cordova-plugin-whitelist": {},
       "cordova-plugin-zeroconf": {},
       "cordova-plugin-device": {},
-      "cordova-plugin-network-canvas-client": {}
+      "cordova-plugin-network-canvas-client": {},
+      "cordova-plugin-chooser": {}
     }
   }
 }

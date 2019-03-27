@@ -47,42 +47,9 @@ if (isElectron()) {
   webFrame.registerURLSchemeAsPrivileged('asset');
 }
 
-function setupOpenwith() {
-  function initSuccess() { console.log('init success!'); }
-  function initError(err) { console.log('init failed: ', err); }
-
-  // Increase verbosity if you need more logs
-  // cordova.openwith.setVerbosity(cordova.openwith.DEBUG);
-
-  // Initialize the plugin
-  window.cordova.openwith.init(initSuccess, initError);
-
-  function myHandler(intent) {
-    console.log('intent received');
-
-    console.log('action: ', intent.action); // type of action requested by the user
-    console.log('exit: ', intent.exit); // if true, you should exit the app after processing
-
-    for (let i = 0; i < intent.items.length; ++i) {
-      const item = intent.items[i];
-      console.log('  type: ', item.type); // mime type
-      console.log('  uri:  ', item.uri); // uri to the file, probably NOT a web uri
-
-      // some optional additional info
-      console.log('  text: ', item.text); // text to share alongside the item, iOS only
-      console.log('  name: ', item.name); // suggested name of the image, iOS 11+ only
-      console.log('  utis: ', item.utis);
-      console.log('  path: ', item.path); // path on the device, generally undefined
-    }
-  }
-
-  // Define your file handler
-  window.cordova.openwith.addHandler(myHandler);
-}
-
 secureCommsReady.then(() => {
   if (isCordova()) {
-    document.addEventListener('deviceready', () => { startApp(); setupOpenwith(); }, false);
+    document.addEventListener('deviceready', startApp, false);
   } else if (document.readyState === 'complete') {
     startApp();
     // Listen for file open events.
