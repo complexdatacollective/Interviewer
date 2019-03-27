@@ -28,6 +28,7 @@ class NewSessionOverlay extends Component {
         title="Enter a Case ID"
         ref={this.overlay}
         onClose={onClose}
+        forceDisableFullScreen
       >
         <p>
           Before the interview begins, enter a case ID.

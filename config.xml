@@ -67,12 +67,6 @@
     <plugin name="cordova-plugin-zeroconf" spec="^1.3.3" />
     <plugin name="cordova-plugin-device" spec="^2.0.2" />
     <plugin name="cordova-plugin-network-canvas-client" spec="./cordova-plugin-network-canvas-client" />
-    <plugin name="cc.fovea.cordova.openwith" spec="^1.2.0">
-        <variable name="ANDROID_MIME_TYPE" value="application/zip" />
-        <variable name="IOS_URL_SCHEME" value="ccfoveaopenwithdemo" />
-        <variable name="IOS_UNIFORM_TYPE_IDENTIFIER" value="public.filename-extension" />
-        <variable name="ANDROID_EXTRA_ACTIONS" value=" " />
-    </plugin>
-    <engine name="ios" spec="^4.5.5" />
     <engine name="android" spec="^7.1.2" />
+    <engine name="ios" spec="^5.0.0" />
 </widget>

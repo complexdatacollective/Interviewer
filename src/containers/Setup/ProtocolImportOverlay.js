@@ -113,19 +113,19 @@ class ProtocolImportOverlay extends PureComponent {
           className={cx('tab', { 'tab--selected': this.state.importMode === 'server' })}
           onClick={() => this.setState({ importMode: 'server' })}
         >
-          Import from Server
+          From Server
         </div>
         <div
           className={cx('tab', { 'tab--selected': this.state.importMode === 'url' })}
           onClick={() => this.setState({ importMode: 'url' })}
         >
-          Import from URL
+          From URL
         </div>
         <div
           className="tab"
           onClick={() => this.setState({ importMode: 'url' })}
         >
-          Import local file
+          Local file
         </div>
       </div>
     );

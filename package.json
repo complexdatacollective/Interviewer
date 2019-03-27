@@ -156,9 +156,8 @@
     "xss": "^0.3.4"
   },
   "dependencies": {
-    "cc.fovea.cordova.openwith": "^1.2.0",
     "cordova-android": "^7.1.2",
-    "cordova-ios": "^4.5.5",
+    "cordova-ios": "^5.0.0",
     "cordova-plugin-app-version": "^0.1.9",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-file": "^5.0.0",
@@ -229,8 +228,8 @@
   },
   "cordova": {
     "platforms": [
-      "ios",
-      "android"
+      "android",
+      "ios"
     ],
     "plugins": {
       "cordova-plugin-app-version": {},
@@ -241,13 +240,7 @@
       "cordova-plugin-whitelist": {},
       "cordova-plugin-zeroconf": {},
       "cordova-plugin-device": {},
-      "cordova-plugin-network-canvas-client": {},
-      "cc.fovea.cordova.openwith": {
-        "ANDROID_MIME_TYPE": "application/zip",
-        "IOS_URL_SCHEME": "ccfoveaopenwithdemo",
-        "IOS_UNIFORM_TYPE_IDENTIFIER": "public.filename-extension",
-        "ANDROID_EXTRA_ACTIONS": " "
-      }
+      "cordova-plugin-network-canvas-client": {}
     }
   }
 }
