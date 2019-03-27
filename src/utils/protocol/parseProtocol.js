@@ -5,8 +5,8 @@ import protocolPath from './protocolPath';
 import friendlyErrorMessage from '../../utils/friendlyErrorMessage';
 import { store } from '../../ducks/store';
 import { actionCreators as importActions } from '../../ducks/modules/importProtocol';
-import { validateSchema, validateLogic } from './validation';
-import { errToString } from './validation/helpers';
+import { validateSchema, validateLogic } from './protocol-validation/validation';
+import { errToString } from './protocol-validation/validation/helpers';
 
 const openError = friendlyErrorMessage("There was an error reading that protocol file. It doesn't seem to be a valid JSON object. Check the format of your protocol, and try again.");
 const validationError = friendlyErrorMessage('Your protocol file failed validation. See below for the specific problems we found. This is often caused by attempting to open a protocol file authored in an incompatible version of Architect.');

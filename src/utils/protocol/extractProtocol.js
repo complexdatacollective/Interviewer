@@ -7,7 +7,7 @@ import inEnvironment from '../Environment';
 import friendlyErrorMessage from '../friendlyErrorMessage';
 import { removeDirectory, ensurePathExists, readFile, writeStream, inSequence } from '../filesystem';
 import { protocolPath } from '.';
-import { assertNonEmptyPath, assertNoTraversalInPath, assertRelativePath } from './validation/zipValidation';
+import { assertNonEmptyPath, assertNoTraversalInPath, assertRelativePath } from './protocol-validation/validation/zipValidation';
 import { store } from '../../ducks/store';
 import { actionCreators as importActions } from '../../ducks/modules/importProtocol';
 
