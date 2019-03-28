@@ -77,7 +77,11 @@ class FinishSession extends Component {
 
   export(currentSession) {
     const { remoteProtocolId, sessionId, codebook } = this.props;
-    const sessionData = asExportableNetwork(currentSession.network, codebook);
+    const sessionData = asExportableNetwork(
+      currentSession.network,
+      codebook,
+      { _caseID: currentSession.caseId },
+    );
     this.props.exportSession(remoteProtocolId, sessionId, sessionData);
   }
 

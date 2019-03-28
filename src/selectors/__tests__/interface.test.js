@@ -79,6 +79,13 @@ const mockProtocol = {
           nickname: {
             type: 'text',
           },
+          cat1: {
+            type: 'categorical',
+            options: [123, 456],
+          },
+          ord1: {
+            type: 'ordinal',
+          },
         },
       },
     },
@@ -155,6 +162,12 @@ describe('interface selector', () => {
     it('should get displayVariable', () => {
       const selected = Interface.makeGetNodeDisplayVariable();
       expect(selected(mockState, mockProps)).toEqual('name');
+    });
+
+    it('makeGetVariableOptions', () => {
+      const selected = Interface.makeGetVariableOptions();
+      expect(selected(mockState, { ...mockProps, prompt: { ...mockPrompt, variable: 'cat1' } })).toEqual([123, 456]);
+      expect(selected(mockState, { ...mockProps, prompt: { ...mockPrompt, variable: 'ord1' } })).toEqual([]);
     });
 
     it('should get node label function', () => {
