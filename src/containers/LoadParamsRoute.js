@@ -6,7 +6,7 @@ import { Redirect } from 'react-router-dom';
 import { actionCreators as resetActions } from '../ducks/modules/reset';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { actionCreators as sessionActions } from '../ducks/modules/session';
-import { getNextIndex, isStageSkipped } from '../selectors/skip-logic';
+import { isStageSkipped } from '../selectors/skip-logic';
 
 class LoadParamsRoute extends Component {
   componentWillMount() {
@@ -18,7 +18,7 @@ class LoadParamsRoute extends Component {
       return;
     }
     if (this.props.sessionId) {
-      this.props.updatePrompt(this.props.sessionId, 0);
+      this.props.updatePrompt(0);
     }
   }
 
@@ -29,8 +29,11 @@ class LoadParamsRoute extends Component {
     }
 
     const { params: nextParams } = nextProps.computedMatch;
+
+    // Reset promptIndex when stage changes.
     if (nextParams && nextParams.stageIndex && nextParams.stageIndex !== this.props.stageIndex) {
-      this.props.updatePrompt(nextParams.sessionId, 0);
+      this.props.updateStage(parseInt(nextParams.stageIndex, 10));
+      this.props.updatePrompt(0);
     }
   }
 
@@ -80,6 +83,7 @@ LoadParamsRoute.propTypes = {
   shouldReset: PropTypes.bool,
   stageIndex: PropTypes.number.isRequired,
   updatePrompt: PropTypes.func.isRequired,
+  updateStage: PropTypes.func.isRequired,
 };
 
 LoadParamsRoute.defaultProps = {
@@ -90,16 +94,17 @@ LoadParamsRoute.defaultProps = {
 };
 
 function mapStateToProps(state, ownProps) {
-  let nextIndex = Math.trunc(ownProps.computedMatch.params.stageIndex) + 1;
-  if (ownProps.location && ownProps.location.search === '?back') {
-    nextIndex = Math.trunc(ownProps.computedMatch.params.stageIndex) - 1;
-  }
+  // let nextIndex = Math.trunc(ownProps.computedMatch.params.stageIndex) + 1;
+  // if (ownProps.location && ownProps.location.search === '?back') {
+  //   nextIndex = Math.trunc(ownProps.computedMatch.params.stageIndex) - 1;
+  // }
 
   return {
     backParam: ownProps.location.search,
     isSkipped: isStageSkipped(ownProps.computedMatch.params.stageIndex)(state),
     sessionId: state.activeSessionId,
-    stageIndex: getNextIndex(nextIndex)(state),
+    // stageIndex: getNextIndex(nextIndex)(state),
+    stageIndex: state.activeSessionId && state.sessions[state.activeSessionId].stageIndex,
   };
 }
 
@@ -107,6 +112,7 @@ function mapDispatchToProps(dispatch) {
   return {
     resetState: bindActionCreators(resetActions.resetAppState, dispatch),
     updatePrompt: bindActionCreators(sessionsActions.updatePrompt, dispatch),
+    updateStage: bindActionCreators(sessionsActions.updateStage, dispatch),
     setSession: bindActionCreators(sessionActions.setSession, dispatch),
   };
 }

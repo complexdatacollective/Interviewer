@@ -9,6 +9,7 @@ import ApiClient from '../../utils/ApiClient';
 const ADD_SESSION = 'ADD_SESSION';
 const LOAD_SESSION = 'LOAD_SESSION';
 const UPDATE_PROMPT = 'UPDATE_PROMPT';
+const UPDATE_STAGE = 'UPDATE_STAGE';
 const REMOVE_SESSION = 'REMOVE_SESSION';
 const EXPORT_SESSION = 'EXPORT_SESSION';
 const EXPORT_SESSION_FAILED = 'EXPORT_SESSION_FAILED';
@@ -47,6 +48,7 @@ export default function reducer(state = initialState, action = {}) {
         [action.sessionId]: withTimestamp({
           protocolUID: action.protocolUID,
           promptIndex: 0,
+          stageIndex: 0,
           caseId: action.caseId,
           network: network(state.network, action),
         }),
@@ -59,6 +61,14 @@ export default function reducer(state = initialState, action = {}) {
         [action.sessionId]: withTimestamp({
           ...state[action.sessionId],
           promptIndex: action.promptIndex,
+        }),
+      };
+    case UPDATE_STAGE:
+      return {
+        ...state,
+        [action.sessionId]: withTimestamp({
+          ...state[action.sessionId],
+          stageIndex: action.stageIndex,
         }),
       };
     case REMOVE_SESSION:
@@ -285,17 +295,25 @@ const loadSession = () => (dispatch) => {
   });
 };
 
-const updatePrompt = (sessionId, promptIndex) => (dispatch, getState) => {
-  if (!sessionId) {
-    const state = getState();
-    // eslint-disable-next-line no-param-reassign
-    sessionId = state.activeSessionId;
-  }
+const updatePrompt = promptIndex => (dispatch, getState) => {
+  const state = getState();
+  const sessionId = state.activeSessionId;
 
   dispatch({
     type: UPDATE_PROMPT,
     sessionId,
     promptIndex,
+  });
+};
+
+const updateStage = stageIndex => (dispatch, getState) => {
+  const state = getState();
+  const sessionId = state.activeSessionId;
+
+  dispatch({
+    type: UPDATE_STAGE,
+    sessionId,
+    stageIndex,
   });
 };
 
@@ -360,6 +378,7 @@ const actionCreators = {
   addSession,
   loadSession,
   updatePrompt,
+  updateStage,
   removeSession,
   exportSession,
   sessionExportFailed,
@@ -380,6 +399,7 @@ const actionTypes = {
   ADD_SESSION,
   LOAD_SESSION,
   UPDATE_PROMPT,
+  UPDATE_STAGE,
   REMOVE_SESSION,
   EXPORT_SESSION,
   EXPORT_SESSION_FAILED,

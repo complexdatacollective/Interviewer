@@ -25,13 +25,13 @@ export default function withPrompt(WrappedComponent) {
     }
 
     promptForward = () => {
-      this.props.updatePrompt(null,
+      this.props.updatePrompt(
         (this.promptsCount() + this.props.promptIndex + 1) % this.promptsCount(),
       );
     }
 
     promptBackward = () => {
-      this.props.updatePrompt(null,
+      this.props.updatePrompt(
         (this.promptsCount() + this.props.promptIndex - 1) % this.promptsCount(),
       );
     }

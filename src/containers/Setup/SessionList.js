@@ -8,23 +8,10 @@ import { isEmpty } from 'lodash';
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { CardList } from '../../components';
-import { matchSessionPath } from '../../utils/matchSessionPath';
 
 const displayDate = timestamp => timestamp && new Date(timestamp).toLocaleString(undefined, { year: 'numeric', month: 'numeric', day: 'numeric' });
 
 const oneBasedIndex = i => parseInt(i || 0, 10) + 1;
-
-const pathInfo = (sessionPath) => {
-  const info = { path: sessionPath };
-  const matchedPath = matchSessionPath(sessionPath);
-  if (matchedPath) {
-    info.sessionId = matchedPath.params.sessionId;
-    info.caseId = matchedPath.params.caseId;
-    info.protocol = matchedPath.params.protocolId;
-    info.stageIndex = matchedPath.params.stageIndex;
-  }
-  return info;
-};
 
 const emptyView = (
   <div className="session-list--empty">
@@ -73,7 +60,6 @@ class SessionList extends Component {
           getKey={sessionInfo => sessionInfo.uuid}
           details={(sessionInfo) => {
             const session = sessionInfo.value;
-            const info = pathInfo(session.path);
             const exportedAt = session.lastExportedAt;
             const exportedDisplay = exportedAt ? new Date(exportedAt).toLocaleString() : 'never';
             const protocol = installedProtocols[session.protocolUID] || {};
@@ -81,7 +67,7 @@ class SessionList extends Component {
             return [
               { 'Last Changed': displayDate(session.updatedAt) },
               { Protocol: protocolLabel },
-              { Stage: oneBasedIndex(info.stageIndex) },
+              { Stage: oneBasedIndex(session.stageIndex) },
               { Exported: exportedDisplay },
             ];
           }}

@@ -32,9 +32,11 @@ class Setup extends Component {
   isShowSessions = () => this.state.showOptions === 'session';
 
   render() {
-    if (this.props.isProtocolLoaded) {
+    if (this.props.isSessionActive) {
       const stageIndex = this.props.stageIndex ? this.props.stageIndex : 0;
-      const pathname = `/session/${this.props.sessionId}/${stageIndex}`;
+      const stageIndexx = this.props.sessions[this.props.sessionId].stageIndex;
+      const pathname = `/session/${this.props.sessionId}/${stageIndexx}`;
+      console.log('isSessionActive:', pathname, this.props.stageIndex, stageIndex, stageIndexx);
       return (<Redirect to={{ pathname: `${pathname}` }} />);
     }
 
@@ -91,7 +93,7 @@ class Setup extends Component {
 }
 
 Setup.propTypes = {
-  isProtocolLoaded: PropTypes.bool.isRequired,
+  isSessionActive: PropTypes.bool.isRequired,
   sessionId: PropTypes.string,
   stageIndex: PropTypes.number,
   importProtocolProgress: PropTypes.object.isRequired,
@@ -105,11 +107,12 @@ Setup.defaultProps = {
 
 function mapStateToProps(state) {
   return {
-    isFactory: state.importProtocol.isFactory,
-    isProtocolLoaded: !!state.activeSessionId,
+    stageIndex: state.activeIndex && state.sessions[state.activeSessionId].stageIndex,
+    isSessionActive: !!state.activeSessionId,
     isPairedWithServer: !!state.pairedServer,
     protocolUID: get(state.sessions[state.activeSessionId], 'protocolUID'),
     sessionId: state.activeSessionId,
+    sessions: state.sessions,
     importProtocolProgress: state.importProtocol,
   };
 }

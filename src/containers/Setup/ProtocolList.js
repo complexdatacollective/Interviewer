@@ -89,8 +89,8 @@ class ProtocolList extends Component {
               <h1>No interview protocols installed</h1>
               <p>
                 To get started, install an interview protocol on this device. To do this,
-                pair with an instance of Server, import a protocol from a URL, or drag and
-                drop a .netcanvas file into this app.
+                click the button in the bottom left to pair with an instance of Server,
+                import a protocol from a URL, or add a local .netcanvas file.
               </p>
             </div>
           </div>

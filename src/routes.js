@@ -25,7 +25,7 @@ let SetupRequiredRoute = (
   { component: Component, protocolUID, sessionId, ...rest },
 ) => (
   sessionId ? (
-    <Redirect to={{ pathname: `/session/${sessionId}/0` }} {...rest} />
+    <Redirect to={{ pathname: `/session/${sessionId}/3` }} {...rest} />
   ) : (
     <Redirect to={{ pathname: '/setup' }} />
   )
