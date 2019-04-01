@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
-import reducer from '../protocols';
-import { actionTypes as ProtocolActionTypes } from '../protocol';
+import reducer from '../installedProtocols';
+import { actionTypes as ProtocolActionTypes } from '../importProtocol';
 
 const initialState = [
   {

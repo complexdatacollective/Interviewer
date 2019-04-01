@@ -2,7 +2,7 @@
 
 import environments from '../../environments';
 import { getEnvironment } from '../../Environment';
-import { checkZipPaths } from '../importProtocol';
+import { checkZipPaths } from '../extractProtocol';
 
 const validZipPath = ['assets/example'];
 const protocolPath = ['protocol.json'];

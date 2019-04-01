@@ -3,7 +3,7 @@
 import { ActionsObservable } from 'redux-observable';
 import { omit } from 'lodash';
 
-import reducer, { actionCreators, epics, initialState } from '../protocol';
+import reducer, { actionCreators, epics, initialState } from '../importProtocol';
 import { actionTypes as SessionActionTypes } from '../session';
 import environments from '../../../utils/environments';
 import { getEnvironment } from '../../../utils/Environment';

@@ -2,17 +2,10 @@
 import { ActionsObservable } from 'redux-observable';
 import { omit } from 'lodash';
 import { actionCreators as dialogActions } from '../dialogs';
-import { actionCreators as protocolActions } from '../protocol';
+import { actionCreators as importProtocolActions } from '../importProtocol';
 import { actionCreators as serverActions } from '../pairedServer';
 import { actionCreators as sessionsActions } from '../sessions';
 import { epics as errorsEpic } from '../errors';
-
-//  loadProtocolFailed,
-// importProtocolFailed,
-// downloadProtocolFailed,
-// serverActionTypes.SERVER_PAIRING_FAILED,
-// sessionsActionTypes.EXPORT_SESSION_FAILED,
-
 
 const mockError = new Error('foo');
 
@@ -38,18 +31,8 @@ const expectDialogErrorAction = (action, error) => {
 describe('errors', () => {
   describe('epics', () => {
     it(
-      'loadProtocolFailed',
-      () => expectDialogErrorAction(protocolActions.loadProtocolFailed, mockError),
-    );
-
-    it(
       'importProtocolFailed',
-      () => expectDialogErrorAction(protocolActions.importProtocolFailed, mockError),
-    );
-
-    it(
-      'downloadProtocolFailed',
-      () => expectDialogErrorAction(protocolActions.downloadProtocolFailed, mockError),
+      () => expectDialogErrorAction(importProtocolActions.importProtocolFailed, mockError),
     );
 
     it(

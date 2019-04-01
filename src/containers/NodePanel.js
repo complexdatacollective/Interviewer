@@ -61,7 +61,6 @@ class NodePanel extends PureComponent {
       nodes,
       ...nodeListProps
     } = this.props;
-
     return (
       <Panel
         title={title}
@@ -114,7 +113,6 @@ const makeGetNodes = () => {
       [],
     )
       .filter(notInSet(new Set([...nodeIds.prompt, ...nodeIds.other])));
-
     return nodes;
   };
 };

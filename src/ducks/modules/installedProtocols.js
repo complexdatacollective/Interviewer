@@ -1,7 +1,7 @@
 import { omit, findKey } from 'lodash';
-import { actionTypes as ProtocolActionTypes } from './importProtocol';
+import { actionTypes as importProtocolActions } from './importProtocol';
 
-const IMPORT_PROTOCOL_COMPLETE = ProtocolActionTypes.IMPORT_PROTOCOL_COMPLETE;
+const IMPORT_PROTOCOL_COMPLETE = importProtocolActions.IMPORT_PROTOCOL_COMPLETE;
 
 const initialState = {};
 

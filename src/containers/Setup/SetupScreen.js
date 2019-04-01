@@ -33,10 +33,8 @@ class Setup extends Component {
 
   render() {
     if (this.props.isSessionActive) {
-      const stageIndex = this.props.stageIndex ? this.props.stageIndex : 0;
-      const stageIndexx = this.props.sessions[this.props.sessionId].stageIndex;
-      const pathname = `/session/${this.props.sessionId}/${stageIndexx}`;
-      console.log('isSessionActive:', pathname, this.props.stageIndex, stageIndex, stageIndexx);
+      const stageIndex = this.props.sessions[this.props.sessionId].stageIndex;
+      const pathname = `/session/${this.props.sessionId}/${stageIndex}`;
       return (<Redirect to={{ pathname: `${pathname}` }} />);
     }
 
@@ -95,19 +93,17 @@ class Setup extends Component {
 Setup.propTypes = {
   isSessionActive: PropTypes.bool.isRequired,
   sessionId: PropTypes.string,
-  stageIndex: PropTypes.number,
+  sessions: PropTypes.object.isRequired,
   importProtocolProgress: PropTypes.object.isRequired,
 };
 
 Setup.defaultProps = {
   isPairedWithServer: false,
-  stageIndex: 0,
   sessionId: null,
 };
 
 function mapStateToProps(state) {
   return {
-    stageIndex: state.activeIndex && state.sessions[state.activeSessionId].stageIndex,
     isSessionActive: !!state.activeSessionId,
     isPairedWithServer: !!state.pairedServer,
     protocolUID: get(state.sessions[state.activeSessionId], 'protocolUID'),
