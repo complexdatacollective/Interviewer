@@ -1,5 +1,5 @@
 import { supportedWorkers } from '../../utils/WorkerAgent';
-import { preloadWorkers } from '../../utils/protocol';
+import preloadWorkers from '../../utils/protocol/preloadWorkers';
 
 const SET_WORKER_MAP = 'SET_WORKER_MAP';
 const RESET_WORKER_MAP = 'RESET_WORKER_MAP';

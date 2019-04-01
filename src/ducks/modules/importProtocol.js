@@ -1,9 +1,6 @@
-import {
-  downloadProtocol,
-  extractProtocol,
-  parseProtocol,
-} from '../../utils/protocol';
-import { store } from '../../ducks/store';
+import downloadProtocol from '../../utils/protocol/downloadProtocol';
+import extractProtocol from '../../utils/protocol/extractProtocol';
+import parseProtocol from '../../utils/protocol/parseProtocol';
 
 const DOWNLOAD_PROTOCOL = 'DOWNLOAD_PROTOCOL';
 const EXTRACT_PROTOCOL = 'EXTRACT_PROTOCOL';
@@ -99,11 +96,11 @@ function resetImportAction() {
 
 const catchError = error => Promise.reject(error);
 
-const importProtocolFromURI = (uri, usePairedServer) => (dispatch) => {
+const importProtocolFromURI = (uri, usePairedServer) => (dispatch, getState) => {
   let pairedServer;
 
   if (usePairedServer) {
-    pairedServer = store.getState().pairedServer;
+    pairedServer = getState().pairedServer;
   }
 
   dispatch(importProtocolStartAction());
