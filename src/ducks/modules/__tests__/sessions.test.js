@@ -112,7 +112,6 @@ describe('sessions reducer', () => {
 });
 
 describe('sessions actions', () => {
-
   it('should add an UPDATE_PROMPT action', () => {
     const store = mockStore({ activeSessionId: 'a', sessions: { a: {} } });
 

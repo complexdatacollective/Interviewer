@@ -3,7 +3,6 @@
 import { matchSessionPath } from '../matchSessionPath';
 
 describe('session path helpers', () => {
-
   const example = '/session/session1/0';
 
   describe('matchSessionPath', () => {

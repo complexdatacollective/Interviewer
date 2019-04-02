@@ -155,14 +155,12 @@ describe('<MainMenu />', () => {
 
   describe('Stage screen', () => {
     let store;
-    let actions;
     let subject;
 
     beforeEach(() => {
       const mockStore = getMockStore(initialState);
 
       store = mockStore.store;
-      actions = mockStore.actions;
 
       subject = getSubject(store);
 

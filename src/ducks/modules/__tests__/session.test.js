@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import reducer, { actionCreators, actionTypes } from '../session';
+import reducer, { actionTypes } from '../session';
 
 const initialState = null;
 

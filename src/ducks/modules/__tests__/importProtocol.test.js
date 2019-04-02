@@ -9,6 +9,7 @@ describe('protocol module', () => {
       ).toEqual(initialState);
     });
 
+    // TODO: rewrite these to account for the new import thunk flow.
     // it('setProtocol() sets protocol on state and changes the loaded state', () => {
     //   expect(
     //     reducer(
@@ -112,7 +113,8 @@ describe('protocol module', () => {
   //       actionCreators.downloadProtocol('https://tmp/foo/mockPath.protocol'),
   //     );
 
-  //     const expectedActions = [actionCreators.importProtocol('/downloaded/protocol/to/temp/path')];
+  //     const expectedActions =
+  //        [actionCreators.importProtocol('/downloaded/protocol/to/temp/path')];
   //     return epics(action$).toArray().toPromise().then((result) => {
   //       expect(result).toEqual(expectedActions);
   //     });
