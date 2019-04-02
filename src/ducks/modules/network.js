@@ -12,18 +12,18 @@ export const entityAttributesProperty = 'attributes';
 export const primaryKeyPropertyForWorker = 'networkCanvasId';
 export const nodeTypePropertyForWorker = 'networkCanvasType';
 
-export const ADD_NODE = 'ADD_NODE';
-export const BATCH_ADD_NODES = 'BATCH_ADD_NODES';
-export const REMOVE_NODE = 'REMOVE_NODE';
-export const REMOVE_NODE_FROM_PROMPT = 'REMOVE_NODE_FROM_PROMPT';
-export const UPDATE_NODE = 'UPDATE_NODE';
-export const TOGGLE_NODE_ATTRIBUTES = 'TOGGLE_NODE_ATTRIBUTES';
-export const ADD_EDGE = 'ADD_EDGE';
-export const UPDATE_EDGE = 'UPDATE_EDGE';
-export const TOGGLE_EDGE = 'TOGGLE_EDGE';
-export const REMOVE_EDGE = 'REMOVE_EDGE';
-export const UPDATE_EGO = 'UPDATE_EGO';
-export const ADD_SESSION = 'ADD_SESSION';
+const ADD_NODE = 'ADD_NODE';
+const BATCH_ADD_NODES = 'BATCH_ADD_NODES';
+const REMOVE_NODE = 'REMOVE_NODE';
+const REMOVE_NODE_FROM_PROMPT = 'REMOVE_NODE_FROM_PROMPT';
+const UPDATE_NODE = 'UPDATE_NODE';
+const TOGGLE_NODE_ATTRIBUTES = 'TOGGLE_NODE_ATTRIBUTES';
+const ADD_EDGE = 'ADD_EDGE';
+const UPDATE_EDGE = 'UPDATE_EDGE';
+const TOGGLE_EDGE = 'TOGGLE_EDGE';
+const REMOVE_EDGE = 'REMOVE_EDGE';
+const UPDATE_EGO = 'UPDATE_EGO';
+const ADD_SESSION = 'ADD_SESSION';
 
 // Initial network model structure
 const initialState = {

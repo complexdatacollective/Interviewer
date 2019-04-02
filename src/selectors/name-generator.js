@@ -3,7 +3,7 @@
 import { createSelector } from 'reselect';
 import { has } from 'lodash';
 import { makeGetSubject, makeGetIds, makeGetSubjectType } from './interface';
-import { protocolRegistry } from './protocol';
+import { getProtocolCodebook } from './protocol';
 import { getExternalData } from './externalData';
 
 // Selectors that are specific to the name generator
@@ -74,7 +74,7 @@ export const getDataByPrompt = createSelector(
 );
 
 export const makeGetNodeIconName = () => createSelector(
-  protocolRegistry,
+  getProtocolCodebook,
   makeGetSubjectType(),
   (codebook, nodeType) => {
     const nodeInfo = codebook.node;

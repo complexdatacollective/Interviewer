@@ -13,10 +13,16 @@ jest.mock('../../selectors/session', () => ({
 describe('withPrompt', () => {
   const MockWithPrompt = withPrompt(() => (<div />));
   const mockState = {
-    session: '1',
-    sessions: {},
-    protocol: {
-      stages: [{}, {}],
+    activeSessionId: 'session1',
+    sessions: {
+      session1: {
+        protocolUID: 'mockProtocol',
+      },
+    },
+    installedProtocols: {
+      mockProtocol: {
+        stages: [{}, {}],
+      },
     },
   };
 

@@ -3,7 +3,7 @@ import { find } from 'lodash';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { networkNodes } from '../../selectors/interface';
+import { getNetworkNodes } from '../../selectors/network';
 import { makeGetEdgeColor } from '../../selectors/protocol';
 import { Scroller } from '../../components';
 import { entityAttributesProperty, entityPrimaryKeyProperty } from '../../ducks/modules/network';
@@ -55,7 +55,7 @@ class SlideFormEdge extends PureComponent {
 function mapStateToProps(state, props) {
   const getEdgeColor = makeGetEdgeColor();
   return {
-    nodes: networkNodes(state),
+    nodes: getNetworkNodes(state),
     edgeColor: getEdgeColor(state, props.edge),
   };
 }

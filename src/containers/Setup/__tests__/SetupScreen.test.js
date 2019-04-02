@@ -5,27 +5,9 @@ import { shallow } from 'enzyme';
 import { UnconnectedSetup as SetupScreen } from '../SetupScreen';
 
 describe('<SetupScreen>', () => {
-  it('links to protocol import screen', () => {
-    const component = shallow((
-      <SetupScreen
-        setDeviceDescription={jest.fn()}
-        protocolType=""
-        isProtocolLoaded={false}
-      />
-    ));
-
-    const link = component.find('Link');
-    expect(link).toHaveLength(1);
-    expect(link.prop('to')).toMatch('protocol-import');
-  });
-
   it('switches to session view', () => {
     const component = shallow((
-      <SetupScreen
-        setDeviceDescription={jest.fn()}
-        protocolType=""
-        isProtocolLoaded={false}
-      />
+      <SetupScreen />
     ));
 
     expect(component.find('.setup__link').at(0).hasClass('setup__link--active'));

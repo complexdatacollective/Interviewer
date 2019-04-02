@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import PropTypes from 'prop-types';
 
-import { stages } from '../../selectors/session';
+import { getProtocolStages } from '../../selectors/protocol';
 import {
   PresetSwitcher,
   Annotations,
@@ -169,7 +169,7 @@ Narrative.propTypes = {
 
 function mapStateToProps(state, ownProps) {
   return {
-    stage: ownProps.stage || stages(state)[ownProps.stageIndex],
+    stage: ownProps.stage || getProtocolStages(state)[ownProps.stageIndex],
   };
 }
 

@@ -51,7 +51,7 @@ class Setup extends Component {
           onClose={() => this.setState({ showImportProtocolOverlay: false })}
         />
         <ImportProgressOverlay
-          show={this.props.importProtocolProgress.step > 0}
+          show={this.props.importProtocolProgress && this.props.importProtocolProgress.step > 0}
           progress={this.props.importProtocolProgress}
         />
         <div className="setup__header">

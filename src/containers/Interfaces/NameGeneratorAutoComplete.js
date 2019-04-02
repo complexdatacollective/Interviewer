@@ -10,7 +10,8 @@ import Search from '../../containers/Search';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as searchActions } from '../../ducks/modules/search';
 import { entityAttributesProperty } from '../../ducks/modules/network';
-import { getNodeLabelFunction, makeGetSubjectType, makeNetworkNodesForPrompt, networkNodes, makeGetAdditionalAttributes } from '../../selectors/interface';
+import { makeGetSubjectType, makeNetworkNodesForPrompt, makeGetAdditionalAttributes } from '../../selectors/interface';
+import { getNetworkNodes, getNodeLabelFunction } from '../../selectors/network';
 import { getCardDisplayLabel, getCardAdditionalProperties, makeGetNodeIconName, makeGetPromptNodeModelData } from '../../selectors/name-generator';
 import { PromptSwiper } from '../';
 import { NodeBin, NodeList } from '../../components/';
@@ -149,7 +150,7 @@ function makeMapStateToProps() {
 
   return function mapStateToProps(state, props) {
     return {
-      excludedNodes: networkNodes(state, props),
+      excludedNodes: getNetworkNodes(state, props),
       getLabel: getNodeLabelFunction(state),
       labelKey: getCardDisplayLabel(state, props),
       newNodeAttributes: getPromptNodeAttributes(state, props),

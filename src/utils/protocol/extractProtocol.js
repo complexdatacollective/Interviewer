@@ -6,10 +6,8 @@ import environments from '../environments';
 import inEnvironment from '../Environment';
 import friendlyErrorMessage from '../friendlyErrorMessage';
 import { removeDirectory, ensurePathExists, readFile, writeStream, inSequence } from '../filesystem';
-import { protocolPath } from '.';
+import protocolPath from './protocolPath';
 import { assertNonEmptyPath, assertNoTraversalInPath, assertRelativePath } from './protocol-validation/validation/zipValidation';
-import { store } from '../../ducks/store';
-import { actionCreators as importActions } from '../../ducks/modules/importProtocol';
 
 const isRequired = (param) => { throw new Error(`${param} is required`); };
 
@@ -131,7 +129,6 @@ const importZip = inEnvironment((environment) => {
 
 const extractProtocol = inEnvironment((environment) => {
   if (environment === environments.ELECTRON || environment === environments.CORDOVA) {
-    store.dispatch(importActions.extractProtocol());
     return (protocolFile = isRequired('protocolFile')) => {
       const protocolName = generateProtocolUID();
       const destination = protocolPath(protocolName);

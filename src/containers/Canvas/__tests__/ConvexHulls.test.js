@@ -9,7 +9,7 @@ import ConvexHulls from '../ConvexHulls';
 describe('Connect(ConvexHulls)', () => {
   const mockState = {
     sessions: {},
-    protocol: { codebook: {} },
+    installedProtocols: { codebook: {} },
   };
   const mockProps = {
     subject: {},

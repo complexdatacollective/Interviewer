@@ -5,7 +5,7 @@ import { getNextIndex, isStageSkipped } from '../skip-logic';
 import { stages as getStages } from '../session';
 
 const mockState = {
-  session: 'a',
+  activeSessionId: 'a',
   sessions: {
     a: {
       network: {
@@ -21,7 +21,7 @@ const mockState = {
       },
     },
   },
-  protocol: {
+  installedProtocols: {
     stages: [
       { id: 1 },
       {

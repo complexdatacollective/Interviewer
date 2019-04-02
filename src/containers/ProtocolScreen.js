@@ -10,7 +10,8 @@ import { Timeline } from '../components';
 import { Stage as StageTransition } from '../components/Transition';
 import { Fade } from '../ui/components/Transitions';
 import Stage from './Stage';
-import { stages, getPromptIndexForCurrentSession } from '../selectors/session';
+import { getPromptIndexForCurrentSession } from '../selectors/session';
+import { getProtocolStages } from '../selectors/protocol';
 import { getCSSVariableAsNumber } from '../ui/utils/CSSVariables';
 
 /**
@@ -157,9 +158,9 @@ Protocol.defaultProps = {
 
 function mapStateToProps(state, ownProps) {
   const rotateIndex = (max, nextIndex) => (nextIndex + max) % max;
-  const maxLength = stages(state).length;
+  const maxLength = getProtocolStages(state).length;
   const sessionId = state.activeSessionId;
-  const stage = stages(state)[ownProps.stageIndex] || {};
+  const stage = getProtocolStages(state)[ownProps.stageIndex] || {};
   const stageIndex = Math.trunc(ownProps.stageIndex) || 0;
   const promptId = getPromptIndexForCurrentSession(state);
   const stageProgress = stageIndex / (maxLength - 1);

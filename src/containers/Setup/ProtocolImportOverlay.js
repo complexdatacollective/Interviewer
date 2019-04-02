@@ -6,7 +6,7 @@ import ProtocolUrlForm from './ProtocolUrlForm';
 import ServerPairing from './ServerPairing';
 import ServerProtocols from './ServerProtocols';
 import { ServerAddressForm, DiscoveredServerList } from '../../components/Setup';
-import { importLocalProtocol } from '../../utils/protocol';
+import importLocalProtocol from '../../utils/protocol/importLocalProtocol';
 import Overlay from '../Overlay';
 import { Button } from '../../ui/components';
 

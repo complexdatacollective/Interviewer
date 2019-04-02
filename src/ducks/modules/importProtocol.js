@@ -104,15 +104,24 @@ const importProtocolFromURI = (uri, usePairedServer) => (dispatch, getState) => 
   }
 
   dispatch(importProtocolStartAction());
-  return downloadProtocol(uri, pairedServer)
-    .then(extractProtocol, catchError)
-    .then(parseProtocol, catchError)
-    .then(protocolContent => dispatch(importProtocolCompleteAction(protocolContent)), catchError)
-    .catch(
-      (error) => {
-        dispatch(importProtocolFailedAction(error));
-      },
-    );
+  return () => {
+    dispatch(downloadProtocol());
+    return downloadProtocol(uri, pairedServer)
+      .then((tempLocation) => {
+        dispatch(extractProtocol());
+        return extractProtocol(tempLocation);
+      }, catchError)
+      .then((protocolPath) => {
+        dispatch(parseProtocol());
+        return parseProtocol(protocolPath);
+      }, catchError)
+      .then(protocolContent => dispatch(importProtocolCompleteAction(protocolContent)), catchError)
+      .catch(
+        (error) => {
+          dispatch(importProtocolFailedAction(error));
+        },
+      );
+  };
 };
 
 const importProtocolFromFile = filePath => (dispatch) => {

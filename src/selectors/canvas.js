@@ -1,5 +1,5 @@
 import { first, has, isNil } from 'lodash';
-import { networkNodes, networkEdges } from './interface';
+import { getNetworkNodes, getNetworkEdges } from './network';
 import { createDeepEqualSelector } from './utils';
 import sortOrder from '../utils/sortOrder';
 import {
@@ -22,7 +22,7 @@ const getDisplayEdges = (_, props) => props.displayEdges;
  */
 export const makeGetNextUnplacedNode = () =>
   createDeepEqualSelector(
-    networkNodes,
+    getNetworkNodes,
     getSubject,
     getLayout,
     getSortOptions,
@@ -49,7 +49,7 @@ export const makeGetNextUnplacedNode = () =>
  */
 export const makeGetPlacedNodes = () =>
   createDeepEqualSelector(
-    networkNodes,
+    getNetworkNodes,
     getSubject,
     getLayout,
     (nodes, subject, layoutVariable) => {
@@ -135,7 +135,7 @@ export const makeGetDisplayEdges = () => {
 
   return createDeepEqualSelector(
     getPlacedNodes,
-    networkEdges,
+    getNetworkEdges,
     getDisplayEdges,
     getLayout,
     (nodes, edges, displayEdges, layout) => {

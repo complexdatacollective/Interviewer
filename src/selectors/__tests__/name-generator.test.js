@@ -78,7 +78,9 @@ const edges = [{ to: 'bar', from: 'foo' }, { to: 'asdf', from: 'qwerty' }];
 
 const mockState = {
   network: { nodes, edges },
-  protocol: mockProtocol,
+  installedProtocols: {
+    mockProtocol,
+  },
   externalData: {
     schoolPupils: {
       nodes: [externalNode],

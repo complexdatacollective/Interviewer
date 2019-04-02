@@ -5,7 +5,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import withPrompt from '../behaviours/withPrompt';
 import { entityAttributesProperty } from '../ducks/modules/network';
-import { makeGetNodeDisplayVariable } from '../selectors/interface';
+import { makeGetNodeDisplayVariable } from '../selectors/network';
 import { Icon } from '../ui/components/';
 import { Node } from './';
 

@@ -1,6 +1,16 @@
 import crypto from 'crypto';
 import { createSelector } from 'reselect';
 import { createDeepEqualSelector } from './utils';
+import { getActiveSession } from './session';
+import uuidv4 from '../utils/uuid';
+
+const DefaultFinishStage = {
+  // `id` is used as component key; must be unique from user input
+  id: uuidv4(),
+  type: 'FinishSession',
+  label: 'Finish Interview',
+};
+
 
 /**
  * The remote protocol ID on any instance of Server is the hex-encoded sha256 of its [unique] name.
@@ -8,13 +18,11 @@ import { createDeepEqualSelector } from './utils';
  */
 const nameDigest = name => name && crypto.createHash('sha256').update(name).digest('hex');
 
-export const activeSession = state => state.sessions[state.activeSessionId];
+export const getInstalledProtocols = state => state.installedProtocols;
 
-export const installedProtocols = state => state.installedProtocols;
-
-export const activeProtocol = createSelector(
-  activeSession,
-  installedProtocols,
+export const getActiveProtocol = createSelector(
+  (state, props) => getActiveSession(state, props),
+  getInstalledProtocols,
   (session, protocols) => {
     if (!session) {
       return {};
@@ -23,24 +31,31 @@ export const activeProtocol = createSelector(
   },
 );
 
-export const protocolRegistry = createSelector(
-  activeProtocol,
+export const getProtocolCodebook = createSelector(
+  getActiveProtocol,
   protocol => protocol.codebook,
 );
 
-export const protocolForms = createSelector(
-  activeProtocol,
+export const getProtocolForms = createSelector(
+  getActiveProtocol,
   protocol => protocol.forms,
 );
 
 export const getRemoteProtocolId = createDeepEqualSelector(
-  activeProtocol,
+  getActiveProtocol,
   protocol => nameDigest(protocol.name) || null,
+);
+
+const withFinishStage = stages => (stages && stages.length ? [...stages, DefaultFinishStage] : []);
+
+export const getProtocolStages = createSelector(
+  getActiveProtocol,
+  protocol => withFinishStage(protocol.stages),
 );
 
 // The user-defined name of a node type; e.g. `codebook.node[uuid].name == 'person'`
 export const makeGetNodeTypeDefinition = () => createDeepEqualSelector(
-  protocolRegistry,
+  getProtocolCodebook,
   (state, props) => props.type,
   (codebook, nodeType) => {
     const nodeInfo = codebook && codebook.node;
@@ -49,7 +64,7 @@ export const makeGetNodeTypeDefinition = () => createDeepEqualSelector(
 );
 
 export const makeGetNodeColor = () => createDeepEqualSelector(
-  protocolRegistry,
+  getProtocolCodebook,
   (_, props) => props.type,
   (codebook, nodeType) => {
     const nodeInfo = codebook.node;
@@ -58,7 +73,7 @@ export const makeGetNodeColor = () => createDeepEqualSelector(
 );
 
 export const makeGetEdgeLabel = () => createDeepEqualSelector(
-  protocolRegistry,
+  getProtocolCodebook,
   (_, props) => props.type,
   (codebook, edgeType) => {
     const edgeInfo = codebook.edge;
@@ -67,7 +82,7 @@ export const makeGetEdgeLabel = () => createDeepEqualSelector(
 );
 
 export const makeGetEdgeColor = () => createDeepEqualSelector(
-  protocolRegistry,
+  getProtocolCodebook,
   (_, props) => props.type,
   (codebook, edgeType) => {
     const edgeInfo = codebook.edge;
@@ -76,7 +91,7 @@ export const makeGetEdgeColor = () => createDeepEqualSelector(
 );
 
 export const makeGetNodeAttributeLabel = () => createDeepEqualSelector(
-  protocolRegistry,
+  getProtocolCodebook,
   (_, props) => props.subject.type,
   (_, props) => props.variableId,
   (codebook, nodeType, variableId) => {
@@ -87,7 +102,7 @@ export const makeGetNodeAttributeLabel = () => createDeepEqualSelector(
 );
 
 export const makeGetCategoricalOptions = () => createDeepEqualSelector(
-  protocolRegistry,
+  (state, props) => getProtocolCodebook(state, props),
   (_, props) => props.subject.type,
   (_, props) => props.variableId,
   (codebook, nodeType, variableId) => {

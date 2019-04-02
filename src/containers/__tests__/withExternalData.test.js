@@ -9,13 +9,15 @@ import loadExternalData from '../../utils/loadExternalData';
 jest.mock('../../utils/loadExternalData');
 
 const mockReducer = () => ({
+  installedProtocols: {
+    mockProtocol: {},
+  },
+  activeSessionId: 'foo',
   sessions: {
-    foo: { protocolPath: 'fakeProtocol' },
+    foo: {
+      protocolUID: 'mockProtocol',
+    },
   },
-  protocol: {
-    type: 'bazz',
-  },
-  session: 'foo',
 });
 
 const mockResult = {

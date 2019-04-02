@@ -4,7 +4,8 @@ import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
-import { stages, getPromptIndexForCurrentSession } from '../selectors/session';
+import { getPromptIndexForCurrentSession } from '../selectors/session';
+import { getProtocolStages } from '../selectors/protocol';
 
 export default function withPrompt(WrappedComponent) {
   class WithPrompt extends Component {
@@ -67,7 +68,7 @@ export default function withPrompt(WrappedComponent) {
     }
     return {
       promptIndex,
-      stage: ownProps.stage || stages(state)[ownProps.stageIndex],
+      stage: ownProps.stage || getProtocolStages(state)[ownProps.stageIndex],
     };
   }
 

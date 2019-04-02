@@ -1,8 +1,12 @@
 import { supportedWorkers } from '../../utils/WorkerAgent';
 import preloadWorkers from '../../utils/protocol/preloadWorkers';
+// import { actionTypes as sessionActions } from './session';
+
+// const END_SESSION = sessionActions.END_SESSION;
 
 const SET_WORKER_MAP = 'SET_WORKER_MAP';
 const RESET_WORKER_MAP = 'RESET_WORKER_MAP';
+
 
 const initialState = null;
 
@@ -11,6 +15,7 @@ export default function reducer(state = initialState, action = {}) {
     case SET_WORKER_MAP:
       return action.map;
     case RESET_WORKER_MAP:
+    // case END_SESSION:
       return initialState;
     default:
       return state;

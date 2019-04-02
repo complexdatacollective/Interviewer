@@ -13,7 +13,7 @@ jest.mock('../../utils/WorkerAgent', () => function MockWorkerAgent() {
 });
 
 const mockState = {
-  protocol: {
+  installedProtocols: {
     codebook: {},
   },
 };

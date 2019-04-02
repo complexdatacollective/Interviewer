@@ -3,7 +3,6 @@ import { actionCreators as SessionWorkerActions } from './sessionWorkers';
 
 const ADD_SESSION = SessionsActionTypes.ADD_SESSION;
 
-
 const SET_SESSION = 'SET_SESSION';
 const END_SESSION = 'END_SESSION';
 
@@ -39,7 +38,6 @@ const setSession = id => (dispatch, getState) => {
 };
 
 const endSession = () => (dispatch) => {
-  dispatch(SessionWorkerActions.resetWorkerMapAction());
   dispatch({
     type: END_SESSION,
   });

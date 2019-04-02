@@ -7,7 +7,7 @@ import Overlay from './Overlay';
 import Form from './Form';
 import FormWizard from './FormWizard';
 import { Button } from '../ui/components';
-import { protocolForms } from '../selectors/protocol';
+import { getProtocolForms } from '../selectors/protocol';
 import { entityAttributesProperty } from '../ducks/modules/network';
 import { Scroller } from '../components';
 
@@ -66,7 +66,7 @@ class NodeForm extends Component {
 }
 
 const mapStateToProps = (state, props) => {
-  const forms = protocolForms(state);
+  const forms = getProtocolForms(state);
   const nodeAttributes = props.node ? props.node[entityAttributesProperty] : {};
 
   const initialValues = {

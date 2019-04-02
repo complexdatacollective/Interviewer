@@ -9,9 +9,9 @@ import { Button } from '../../ui/components';
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
-import { getNetwork } from '../../selectors/interface';
-import { getCurrentSession } from '../../selectors/session';
-import { protocolRegistry, getRemoteProtocolId } from '../../selectors/protocol';
+import { getNetwork } from '../../selectors/network';
+import { getActiveSession } from '../../selectors/session';
+import { getProtocolCodebook, getRemoteProtocolId } from '../../selectors/protocol';
 import { asExportableNetwork } from '../../utils/networkFormat';
 
 const ExportSection = ({ defaultServer, children }) => (
@@ -167,11 +167,11 @@ ExportSection.propTypes = {
 function mapStateToProps(state) {
   return {
     currentNetwork: getNetwork(state),
-    currentSession: getCurrentSession(state),
+    currentSession: getActiveSession(state),
     remoteProtocolId: getRemoteProtocolId(state),
-    sessionId: state.activeSessionId,
+    sessionId: state.getActiveSessionId,
     defaultServer: state.pairedServer,
-    codebook: protocolRegistry(state),
+    codebook: getProtocolCodebook(state),
   };
 }
 

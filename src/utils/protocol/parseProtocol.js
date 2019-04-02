@@ -3,8 +3,6 @@ import environments from '../environments';
 import inEnvironment from '../Environment';
 import protocolPath from './protocolPath';
 import friendlyErrorMessage from '../../utils/friendlyErrorMessage';
-import { store } from '../../ducks/store';
-import { actionCreators as importActions } from '../../ducks/modules/importProtocol';
 import { validateSchema, validateLogic } from './protocol-validation/validation';
 import { errToString } from './protocol-validation/validation/helpers';
 
@@ -26,7 +24,7 @@ const validateProtocol = (protocol) => {
 
 const parseProtocol = (environment) => {
   if (environment !== environments.WEB) {
-    store.dispatch(importActions.parseProtocol());
+    // store.dispatch(importActions.parseProtocol());
     return protocolUID =>
       readFile(protocolPath(protocolUID, 'protocol.json'))
         .then(json => JSON.parse(json))

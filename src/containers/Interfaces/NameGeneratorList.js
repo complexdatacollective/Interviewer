@@ -6,7 +6,8 @@ import { differenceBy, omit, get } from 'lodash';
 import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { entityPrimaryKeyProperty, getEntityAttributes, entityAttributesProperty } from '../../ducks/modules/network';
-import { makeNetworkNodesForOtherPrompts, networkNodes, makeGetAdditionalAttributes } from '../../selectors/interface';
+import { makeNetworkNodesForOtherPrompts, makeGetAdditionalAttributes } from '../../selectors/interface';
+import { getNetworkNodes } from '../../selectors/network';
 import {
   getCardDisplayLabel,
   getCardAdditionalProperties,
@@ -155,7 +156,7 @@ function makeMapStateToProps() {
       newNodeModelData: getPromptNodeModelData(state, props),
       nodesForList,
       initialSortOrder: getInitialSortOrder(state, props),
-      selectedNodes: networkNodes(state),
+      selectedNodes: getNetworkNodes(state),
       sortFields: getSortableFields(state, props),
       visibleSupplementaryFields: getCardAdditionalProperties(state, props),
     };
