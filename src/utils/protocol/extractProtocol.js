@@ -14,54 +14,8 @@ import {
 } from '../filesystem';
 import protocolPath from './protocolPath';
 import {
-  assertNonEmptyPath,
+  checkZipPaths,
 } from './protocol-validation/validation/zipValidation';
-
-/**
- * Guard against directory traversal / escape
- * On Cordova, no traversal is allowed (even if it doesn't result in escaping the directory).
- * @param {string} pathname a pathname contained in a protocol archive
- * @throws {Error} If pathname escapes directory
- */
-const assertNoTraversalInPath = inEnvironment((environment) => {
-  const message = 'Invalid archive (directory traversal not allowed)';
-  if (environment === environments.ELECTRON) {
-    return (pathname) => {
-      // eslint-disable-next-line global-require
-      if (require('path').normalize(pathname).startsWith('..')) {
-        throw new Error(message);
-      }
-    };
-  }
-  if (environment === environments.CORDOVA) {
-    return (pathname) => {
-      if (pathname.startsWith('..') || pathname.includes('../')) {
-        throw new Error(message);
-      }
-    };
-  }
-  throw new Error('assertNoTraversalInPath() not available on platform');
-});
-
-const assertRelativePath = inEnvironment((environment) => {
-  const message = 'Invalid archive (absolute paths not allowed)';
-  if (environment === environments.ELECTRON) {
-    return (pathname) => {
-      // eslint-disable-next-line global-require
-      if (require('path').isAbsolute(pathname)) {
-        throw new Error(message);
-      }
-    };
-  }
-  if (environment === environments.CORDOVA) {
-    return (pathname) => {
-      if (pathname.startsWith('/')) {
-        throw new Error(message);
-      }
-    };
-  }
-  throw new Error('assertRelativePath() not available on platform');
-});
 
 const isRequired = (param) => { throw new Error(`${param} is required`); };
 
@@ -115,27 +69,6 @@ const extractZipFile = inEnvironment((environment) => {
   }
 
   return () => Promise.reject(new Error('extractZipFile() not available on platform'));
-});
-
-const checkZipPaths = inEnvironment((environment) => {
-  if (environment === environments.ELECTRON || environment === environments.CORDOVA) {
-    return zipPaths =>
-      new Promise((resolve, reject) => {
-        try {
-          zipPaths.forEach((pathname) => {
-            assertNonEmptyPath(pathname);
-            assertRelativePath(pathname);
-            assertNoTraversalInPath(pathname);
-          });
-        } catch (err) {
-          reject(err);
-          return;
-        }
-        resolve();
-      });
-  }
-
-  return () => Promise.reject(new Error('checkZipPaths() not available on platform'));
 });
 
 const extractZip = inEnvironment((environment) => {
