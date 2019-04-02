@@ -18,6 +18,4 @@ jobs:
       script: npm run lint -- --max-warnings 0 &&
               npm run sass-lint -- --max-warnings 0 &&
               npm run test &&
-              npm run build &&
-              npm run validate-protocol &&
-              npm run validate-protocol ./public/protocols/teaching-protocol.netcanvas/protocol.json
+              npm run build
