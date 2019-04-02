@@ -5,18 +5,20 @@ import { createStore } from 'redux';
 
 import withPrompt from '../withPrompt';
 
-jest.mock('../../selectors/session', () => ({
-  getPromptIndexForCurrentSession: jest.fn().mockReturnValue(99),
-  stages: jest.fn().mockReturnValue([{}]),
-}));
+// jest.mock('../../selectors/session', () => ({
+//   getPromptIndexForCurrentSession: jest.fn().mockReturnValue(99),
+//   stages: jest.fn().mockReturnValue([{}]),
+// }));
 
 describe('withPrompt', () => {
   const MockWithPrompt = withPrompt(() => (<div />));
+
   const mockState = {
     activeSessionId: 'session1',
     sessions: {
       session1: {
         protocolUID: 'mockProtocol',
+        promptIndex: 99,
       },
     },
     installedProtocols: {

@@ -36,16 +36,6 @@ const mockStage = {
   ],
 };
 
-const externalNode = {
-  uid: 'person_1',
-  type: 'person',
-  attributes: {
-    name: 'F. Anita',
-    nickname: 'Annie',
-    age: 23,
-  },
-};
-
 const mockProtocol = {
   codebook: {
     node: {
@@ -77,14 +67,15 @@ const nodes = [personNode, closeFriendNode, { uid: 3, attributes: { name: 'baz',
 const edges = [{ to: 'bar', from: 'foo' }, { to: 'asdf', from: 'qwerty' }];
 
 const mockState = {
-  network: { nodes, edges },
+  activeSessionId: 'a',
+  sessions: {
+    a: {
+      network: { nodes, edges },
+      protocolUID: 'mockProtocol',
+    },
+  },
   installedProtocols: {
     mockProtocol,
-  },
-  externalData: {
-    schoolPupils: {
-      nodes: [externalNode],
-    },
   },
 };
 
@@ -135,10 +126,6 @@ describe('name generator selector', () => {
     it('should get sort defaults', () => {
       expect(NameGen.getInitialSortOrder(mockState, mockProps)).toEqual([{ property: 'name', direction: 'asc' }]);
       expect(NameGen.getInitialSortOrder(null, emptyProps)).toEqual([]);
-    });
-
-    it('should get data by prompt', () => {
-      expect(NameGen.getDataByPrompt(mockState, mockProps)).toEqual([externalNode]);
     });
 
     it('should get node icon name', () => {

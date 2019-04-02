@@ -67,12 +67,6 @@ export const getInitialSortOrder = createSelector(
   sortOptions => (has(sortOptions, 'sortOrder') ? sortOptions.sortOrder : []),
 );
 
-export const getDataByPrompt = createSelector(
-  getExternalData,
-  getDatasourceKey,
-  (externalData, key) => externalData[key].nodes,
-);
-
 export const makeGetNodeIconName = () => createSelector(
   getProtocolCodebook,
   makeGetSubjectType(),

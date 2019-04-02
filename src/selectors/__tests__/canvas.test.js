@@ -16,7 +16,7 @@ const node5 = { _uid: 5, type: 'person', [entityAttributesProperty]: { role: ['b
 
 
 const mockState = {
-  session: 'testSession',
+  activeSessionId: 'testSession',
   sessions: {
     testSession: {
       network: {

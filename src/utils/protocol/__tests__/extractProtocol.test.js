@@ -18,7 +18,7 @@ const traversalError = /directory traversal not allowed/;
 const absPathError = /absolute paths not allowed/;
 const emptyPathError = /empty paths not allowed/;
 
-describe('importProtocol', () => {
+describe('extractProtocol', () => {
   ([environments.CORDOVA, environments.ELECTRON]).forEach((platform) => {
     describe(`with platform ${platform.toString()}`, () => {
       beforeAll(() => {

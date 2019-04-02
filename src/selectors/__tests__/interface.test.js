@@ -118,6 +118,7 @@ const mockState = {
   sessions: {
     a: {
       network: { nodes, edges },
+      protocolUID: 'mockProtocol',
     },
   },
   activeSessionId: 'a',
@@ -126,14 +127,6 @@ const mockState = {
 
 describe('interface selector', () => {
   describe('memoed selectors', () => {
-    it('should get network nodes', () => {
-      expect(Interface.networkNodes(mockState)).toEqual(nodes);
-    });
-
-    it('should get network edges', () => {
-      expect(Interface.networkEdges(mockState)).toEqual(edges);
-    });
-
     it('makeGetIds()', () => {
       const selected = Interface.makeGetIds();
       expect(selected(mockState, mockProps)).toEqual({

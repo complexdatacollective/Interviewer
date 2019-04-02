@@ -19,10 +19,6 @@ describe('<ServerPairingForm>', () => {
     expect(component.find('form')).toHaveLength(1);
   });
 
-  it('renders a submit button', () => {
-    expect(component.find('Button').prop('type')).toEqual('submit');
-  });
-
   it('calls the completion handler', () => {
     component.setState({ submittable: true });
     component.find('form').simulate('submit', mockSubmitEvt);

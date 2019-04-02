@@ -5,7 +5,7 @@ import { makeRehydrateForm } from '../forms';
 describe('forms selector', () => {
   describe('makeRehydrateForm', () => {
     const state = {
-      activeSessionId: 2,
+      activeSessionId: 'a',
       sessions: {
         a: {
           protocolUID: 'mockProtocol',
@@ -23,19 +23,20 @@ describe('forms selector', () => {
       rehydrateForm = makeRehydrateForm();
     });
 
-    // it('defaults to null', () => {
-    //   const props = { stage: {} };
-    //   expect(rehydrateForm(state, props)).toBe(null);
-    // });
+    it('defaults to null', () => {
+      const props = { stage: {} };
+      expect(rehydrateForm(state, props)).toBe(null);
+    });
 
-    // it('returns null when defined as null (from Architect)', () => {
-    //   const props = { stage: { person: null } };
-    //   expect(rehydrateForm(state, props)).toBe(null);
-    // });
+    it('returns null when defined as null (from Architect)', () => {
+      const props = { stage: { person: null } };
+      expect(rehydrateForm(state, props)).toBe(null);
+    });
 
     it('returns form if defined', () => {
       const props = { stage: { form: 'person' } };
-      expect(rehydrateForm(state, props)).toEqual(state.installedProtocols.mockProtocol.forms.person);
+      expect(rehydrateForm(state, props))
+        .toEqual(state.installedProtocols.mockProtocol.forms.person);
     });
   });
 });

@@ -2,12 +2,13 @@
 
 import { getNextIndex, isStageSkipped } from '../skip-logic';
 
-import { stages as getStages } from '../session';
+import { getProtocolStages } from '../protocol';
 
 const mockState = {
   activeSessionId: 'a',
   sessions: {
     a: {
+      protocolUID: 'mockProtocol',
       network: {
         edges: [
           { id: 1, type: 'friend', to: 1, from: 2 },
@@ -22,154 +23,156 @@ const mockState = {
     },
   },
   installedProtocols: {
-    stages: [
-      { id: 1 },
-      {
-        id: 2,
-        skipLogic: {
-          action: 'SHOW',
-          operator: 'LESS_THAN_OR_EQUAL',
-          value: 3,
-          filter: {
-            rules: [
-              {
-                type: 'alter',
-                options: {
-                  type: 'person',
-                  attribute: 'name',
-                  operator: 'GREATER_THAN',
-                  value: 't',
+    mockProtocol: {
+      stages: [
+        { id: 1 },
+        {
+          id: 2,
+          skipLogic: {
+            action: 'SHOW',
+            operator: 'LESS_THAN_OR_EQUAL',
+            value: 3,
+            filter: {
+              rules: [
+                {
+                  type: 'alter',
+                  options: {
+                    type: 'person',
+                    attribute: 'name',
+                    operator: 'GREATER_THAN',
+                    value: 't',
+                  },
                 },
-              },
-            ],
+              ],
+            },
           },
         },
-      },
-      {
-        id: 3,
-        skipLogic: {
-          action: 'SHOW',
-          operator: 'EXACTLY',
-          value: 1,
-          filter: {
-            rules: [
-              {
-                type: 'edge',
-                options: {
-                  type: 'friend',
-                  attribute: 'type',
-                  operator: 'EXISTS',
+        {
+          id: 3,
+          skipLogic: {
+            action: 'SHOW',
+            operator: 'EXACTLY',
+            value: 1,
+            filter: {
+              rules: [
+                {
+                  type: 'edge',
+                  options: {
+                    type: 'friend',
+                    attribute: 'type',
+                    operator: 'EXISTS',
+                  },
                 },
-              },
-            ],
+              ],
+            },
           },
         },
-      },
-      {
-        id: 4,
-        skipLogic: {
-          action: 'SKIP',
-          operator: 'GREATER_THAN',
-          value: 2,
-          filter: {
-            rules: [
-              {
-                type: 'alter',
-                options: {
-                  type: 'person',
-                  attribute: 'id',
-                  operator: 'GREATER_THAN_OR_EQUAL',
-                  value: '1',
+        {
+          id: 4,
+          skipLogic: {
+            action: 'SKIP',
+            operator: 'GREATER_THAN',
+            value: 2,
+            filter: {
+              rules: [
+                {
+                  type: 'alter',
+                  options: {
+                    type: 'person',
+                    attribute: 'id',
+                    operator: 'GREATER_THAN_OR_EQUAL',
+                    value: '1',
+                  },
                 },
-              },
-            ],
+              ],
+            },
           },
         },
-      },
-      {
-        id: 5,
-        skipLogic: {
-          action: 'SKIP',
-          operator: 'NOT',
-          value: 1,
-          filter: {
-            rules: [
-              {
-                type: 'alter',
-                options: {
-                  type: 'person',
-                  attribute: 'name',
-                  operator: 'EXACTLY',
-                  value: 'soAndSo',
+        {
+          id: 5,
+          skipLogic: {
+            action: 'SKIP',
+            operator: 'NOT',
+            value: 1,
+            filter: {
+              rules: [
+                {
+                  type: 'alter',
+                  options: {
+                    type: 'person',
+                    attribute: 'name',
+                    operator: 'EXACTLY',
+                    value: 'soAndSo',
+                  },
                 },
-              },
-            ],
+              ],
+            },
           },
         },
-      },
-      {
-        id: 6,
-        skipLogic: {
-          action: 'SKIP',
-          operator: 'GREATER_THAN',
-          value: 1,
-          filter: {
-            join: 'AND',
-            rules: [
-              {
-                type: 'alter',
-                options: {
-                  type: 'person',
-                  attribute: 'name',
-                  operator: 'EXACTLY',
-                  value: 'soAndSo',
+        {
+          id: 6,
+          skipLogic: {
+            action: 'SKIP',
+            operator: 'GREATER_THAN',
+            value: 1,
+            filter: {
+              join: 'AND',
+              rules: [
+                {
+                  type: 'alter',
+                  options: {
+                    type: 'person',
+                    attribute: 'name',
+                    operator: 'EXACTLY',
+                    value: 'soAndSo',
+                  },
                 },
-              },
-              {
-                type: 'alter',
-                options: {
-                  type: 'person',
-                  attribute: 'id',
-                  operator: 'EXACTLY',
-                  value: 2,
+                {
+                  type: 'alter',
+                  options: {
+                    type: 'person',
+                    attribute: 'id',
+                    operator: 'EXACTLY',
+                    value: 2,
+                  },
                 },
-              },
-            ],
+              ],
+            },
           },
         },
-      },
-      {
-        id: 7,
-        skipLogic: {
-          action: 'SKIP',
-          operator: 'GREATER_THAN',
-          value: 1,
-          filter: {
-            join: 'OR',
-            rules: [
-              {
-                type: 'alter',
-                options: {
-                  type: 'person',
-                  attribute: 'name',
-                  operator: 'EXACTLY',
-                  value: 'soAndSo',
+        {
+          id: 7,
+          skipLogic: {
+            action: 'SKIP',
+            operator: 'GREATER_THAN',
+            value: 1,
+            filter: {
+              join: 'OR',
+              rules: [
+                {
+                  type: 'alter',
+                  options: {
+                    type: 'person',
+                    attribute: 'name',
+                    operator: 'EXACTLY',
+                    value: 'soAndSo',
+                  },
                 },
-              },
-              {
-                type: 'alter',
-                options: {
-                  type: 'person',
-                  attribute: 'id',
-                  operator: 'EXACTLY',
-                  value: 2,
+                {
+                  type: 'alter',
+                  options: {
+                    type: 'person',
+                    attribute: 'id',
+                    operator: 'EXACTLY',
+                    value: 2,
+                  },
                 },
-              },
-            ],
+              ],
+            },
           },
         },
-      },
-    ],
+      ],
+    },
   },
 };
 
@@ -181,7 +184,7 @@ describe('skip-logic selector', () => {
     });
 
     it('rotates the index if out of bounds', () => {
-      const stageCount = getStages(mockState).length;
+      const stageCount = getProtocolStages(mockState).length;
       const index = getNextIndex(stageCount)(mockState);
       expect(index).toEqual(0);
     });
