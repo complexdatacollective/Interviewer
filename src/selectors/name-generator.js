@@ -4,7 +4,6 @@ import { createSelector } from 'reselect';
 import { has } from 'lodash';
 import { makeGetSubject, makeGetIds, makeGetSubjectType } from './interface';
 import { getProtocolCodebook } from './protocol';
-import { getExternalData } from './externalData';
 
 // Selectors that are specific to the name generator
 
@@ -22,7 +21,6 @@ const defaultPanelConfiguration = {
 
 // MemoedSelectors
 
-const getDatasourceKey = (_, props) => props.prompt.dataSource;
 const propCardOptions = (_, props) => props.prompt.cardOptions;
 const propSortOptions = (_, props) => props.prompt.sortOptions;
 const propPanels = (_, props) => props.stage.panels;
