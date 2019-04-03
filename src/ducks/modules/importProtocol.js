@@ -124,8 +124,12 @@ const importProtocolFromURI = (uri, usePairedServer) => (dispatch, getState) => 
 
 const importProtocolFromFile = filePath => (dispatch) => {
   dispatch(importProtocolStartAction());
+  dispatch(extractProtocolAction());
   return extractProtocol(filePath)
-    .then(parseProtocol, catchError)
+    .then((protocolPath) => {
+      dispatch(parseProtocolAction());
+      return parseProtocol(protocolPath);
+    }, catchError)
     .then(protocolContent => dispatch(importProtocolCompleteAction(protocolContent)), catchError)
     .catch(
       (error) => {
