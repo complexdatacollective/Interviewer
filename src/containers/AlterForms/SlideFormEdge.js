@@ -3,8 +3,7 @@ import { find } from 'lodash';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { getNetworkNodes } from '../../selectors/network';
-import { makeGetEdgeColor } from '../../selectors/protocol';
+import { makeGetEdgeColor, getNetworkNodes } from '../../selectors/network';
 import { Scroller } from '../../components';
 import { entityAttributesProperty, entityPrimaryKeyProperty } from '../../ducks/modules/network';
 import Node from '../Node';

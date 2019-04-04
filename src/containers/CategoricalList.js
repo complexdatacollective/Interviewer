@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { Flipper } from 'react-flip-toolkit';
 import cx from 'classnames';
 import { makeNetworkNodesForType, makeGetVariableOptions, makeGetPromptVariable } from '../selectors/interface';
-import { makeGetNodeDisplayVariable } from '../selectors/network';
+import { getLabelVariableForStageSubject } from '../selectors/network';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { CategoricalItem } from '../components/';
 import { MonitorDragSource } from '../behaviours/DragAndDrop';
@@ -235,7 +235,7 @@ function makeMapStateToProps() {
   const getCategoricalValues = makeGetVariableOptions();
   const getPromptVariable = makeGetPromptVariable();
   const getStageNodes = makeNetworkNodesForType();
-  const getNodeDisplayVariable = makeGetNodeDisplayVariable();
+
 
   return function mapStateToProps(state, props) {
     const stageNodes = getStageNodes(state, props);
@@ -256,7 +256,7 @@ function makeMapStateToProps() {
             nodes,
           };
         }),
-      displayVariable: getNodeDisplayVariable(state, props),
+      displayVariable: getLabelVariableForStageSubject(state, props)[0],
     };
   };
 }

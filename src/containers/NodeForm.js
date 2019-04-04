@@ -7,7 +7,6 @@ import Overlay from './Overlay';
 import Form from './Form';
 import FormWizard from './FormWizard';
 import { Button } from '../ui/components';
-import { getProtocolForms } from '../selectors/protocol';
 import { entityAttributesProperty } from '../ducks/modules/network';
 import { Scroller } from '../components';
 
@@ -26,13 +25,14 @@ class NodeForm extends Component {
   }
 
   render() {
-    const { show, form, initialValues, submitForm } = this.props;
+    const { show, form, initialValues, submitForm, stage } = this.props;
 
     const formProps = {
       ...form,
       initialValues,
       onSubmit: this.handleSubmit,
       autoFocus: true,
+      stage,
       form: reduxFormName,
     };
 
@@ -66,7 +66,6 @@ class NodeForm extends Component {
 }
 
 const mapStateToProps = (state, props) => {
-  const forms = getProtocolForms(state);
   const nodeAttributes = props.node ? props.node[entityAttributesProperty] : {};
 
   const initialValues = {
@@ -74,7 +73,7 @@ const mapStateToProps = (state, props) => {
   };
 
   return {
-    form: forms[props.stage.form],
+    form: props.stage.form,
     useFullScreenForms: state.deviceSettings.useFullScreenForms,
     initialValues,
   };

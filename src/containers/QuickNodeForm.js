@@ -5,7 +5,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import withPrompt from '../behaviours/withPrompt';
 import { entityAttributesProperty } from '../ducks/modules/network';
-import { makeGetNodeDisplayVariable } from '../selectors/network';
+import { getLabelVariableForStageSubject } from '../selectors/network';
 import { Icon } from '../ui/components/';
 import { Node } from './';
 
@@ -118,10 +118,9 @@ class QuickNodeForm extends PureComponent {
 }
 
 const mapStateToProps = (state, props) => {
-  const getNodeDisplayVariable = makeGetNodeDisplayVariable();
-
+  const getLabel = getLabelVariableForStageSubject();
   return {
-    displayVariable: getNodeDisplayVariable(state, props),
+    displayVariable: getLabel(state, props)[0],
   };
 };
 

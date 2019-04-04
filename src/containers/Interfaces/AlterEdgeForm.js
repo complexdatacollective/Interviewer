@@ -9,7 +9,6 @@ import Swiper from 'react-id-swiper';
 import { ProgressBar } from '../../components';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { makeNetworkEdgesForType } from '../../selectors/interface';
-import { getProtocolForms } from '../../selectors/protocol';
 import { SlideFormEdge } from '../AlterForms';
 import defaultMarkdownRenderers from '../../utils/markdownRenderers';
 import { getCSSVariableAsNumber } from '../../ui/utils/CSSVariables';
@@ -155,8 +154,7 @@ function makeMapStateToProps() {
   const getStageEdges = makeNetworkEdgesForType();
 
   return function mapStateToProps(state, props) {
-    const forms = getProtocolForms(state);
-    const currentForm = forms[props.stage.form];
+    const currentForm = props.stage.form;
     const entity = currentForm && currentForm.entity;
     const type = currentForm && currentForm.type;
     const stageEdges = getStageEdges(state, {
