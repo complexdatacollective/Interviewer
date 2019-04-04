@@ -81,7 +81,7 @@ LoadParamsRoute.propTypes = {
   sessionUrl: PropTypes.string,
   setSession: PropTypes.func.isRequired,
   shouldReset: PropTypes.bool,
-  stageIndex: PropTypes.number.isRequired,
+  stageIndex: PropTypes.number,
   updatePrompt: PropTypes.func.isRequired,
   updateStage: PropTypes.func.isRequired,
 };
@@ -91,19 +91,14 @@ LoadParamsRoute.defaultProps = {
   sessionId: '',
   sessionUrl: '/setup',
   shouldReset: false,
+  stageIndex: 0,
 };
 
 function mapStateToProps(state, ownProps) {
-  // let nextIndex = Math.trunc(ownProps.computedMatch.params.stageIndex) + 1;
-  // if (ownProps.location && ownProps.location.search === '?back') {
-  //   nextIndex = Math.trunc(ownProps.computedMatch.params.stageIndex) - 1;
-  // }
-
   return {
     backParam: ownProps.location.search,
     isSkipped: isStageSkipped(ownProps.computedMatch.params.stageIndex)(state),
     sessionId: state.activeSessionId,
-    // stageIndex: getNextIndex(nextIndex)(state),
     stageIndex: state.activeSessionId && state.sessions[state.activeSessionId].stageIndex,
   };
 }

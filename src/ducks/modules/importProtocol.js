@@ -104,30 +104,32 @@ const importProtocolFromURI = (uri, usePairedServer) => (dispatch, getState) => 
   }
 
   dispatch(importProtocolStartAction());
-  return () => {
-    dispatch(downloadProtocol());
-    return downloadProtocol(uri, pairedServer)
-      .then((tempLocation) => {
-        dispatch(extractProtocol());
-        return extractProtocol(tempLocation);
-      }, catchError)
-      .then((protocolPath) => {
-        dispatch(parseProtocol());
-        return parseProtocol(protocolPath);
-      }, catchError)
-      .then(protocolContent => dispatch(importProtocolCompleteAction(protocolContent)), catchError)
-      .catch(
-        (error) => {
-          dispatch(importProtocolFailedAction(error));
-        },
-      );
-  };
+  dispatch(downloadProtocolAction());
+  return downloadProtocol(uri, pairedServer)
+    .then((tempLocation) => {
+      dispatch(extractProtocolAction());
+      return extractProtocol(tempLocation);
+    }, catchError)
+    .then((protocolPath) => {
+      dispatch(parseProtocolAction());
+      return parseProtocol(protocolPath);
+    }, catchError)
+    .then(protocolContent => dispatch(importProtocolCompleteAction(protocolContent)), catchError)
+    .catch(
+      (error) => {
+        dispatch(importProtocolFailedAction(error));
+      },
+    );
 };
 
 const importProtocolFromFile = filePath => (dispatch) => {
   dispatch(importProtocolStartAction());
+  dispatch(extractProtocolAction());
   return extractProtocol(filePath)
-    .then(parseProtocol, catchError)
+    .then((protocolPath) => {
+      dispatch(parseProtocolAction());
+      return parseProtocol(protocolPath);
+    }, catchError)
     .then(protocolContent => dispatch(importProtocolCompleteAction(protocolContent)), catchError)
     .catch(
       (error) => {
