@@ -93,6 +93,7 @@ class EgoForm extends Component {
               {...form}
               initialValues={ego[entityAttributesProperty]}
               form={FORM_NAME}
+              subject={{ entity: 'ego' }}
               onSubmit={this.handleSubmitForm}
             />
           </Scroller>

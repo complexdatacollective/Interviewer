@@ -52,6 +52,7 @@ ShallowWrapper {
               form="NODE_FORM_1"
               initialValues={undefined}
               onSubmit={[Function]}
+              subject={undefined}
               title="alpha"
               type="person"
             />
@@ -84,6 +85,7 @@ ShallowWrapper {
                 form="NODE_FORM_1"
                 initialValues={undefined}
                 onSubmit={[Function]}
+                subject={undefined}
                 title="alpha"
                 type="person"
               />
@@ -121,6 +123,7 @@ ShallowWrapper {
                 form="NODE_FORM_1"
                 initialValues={undefined}
                 onSubmit={[Function]}
+                subject={undefined}
                 title="alpha"
                 type="person"
               />
@@ -140,6 +143,7 @@ ShallowWrapper {
                 form="NODE_FORM_1"
                 initialValues={undefined}
                 onSubmit={[Function]}
+                subject={undefined}
                 title="alpha"
                 type="person"
               />,
@@ -158,6 +162,7 @@ ShallowWrapper {
                 "form": "NODE_FORM_1",
                 "initialValues": undefined,
                 "onSubmit": [Function],
+                "subject": undefined,
                 "title": "alpha",
                 "type": "person",
               },
@@ -200,6 +205,7 @@ ShallowWrapper {
                 form="NODE_FORM_1"
                 initialValues={undefined}
                 onSubmit={[Function]}
+                subject={undefined}
                 title="alpha"
                 type="person"
               />
@@ -232,6 +238,7 @@ ShallowWrapper {
                   form="NODE_FORM_1"
                   initialValues={undefined}
                   onSubmit={[Function]}
+                  subject={undefined}
                   title="alpha"
                   type="person"
                 />
@@ -269,6 +276,7 @@ ShallowWrapper {
                   form="NODE_FORM_1"
                   initialValues={undefined}
                   onSubmit={[Function]}
+                  subject={undefined}
                   title="alpha"
                   type="person"
                 />
@@ -288,6 +296,7 @@ ShallowWrapper {
                   form="NODE_FORM_1"
                   initialValues={undefined}
                   onSubmit={[Function]}
+                  subject={undefined}
                   title="alpha"
                   type="person"
                 />,
@@ -306,6 +315,7 @@ ShallowWrapper {
                   "form": "NODE_FORM_1",
                   "initialValues": undefined,
                   "onSubmit": [Function],
+                  "subject": undefined,
                   "title": "alpha",
                   "type": "person",
                 },

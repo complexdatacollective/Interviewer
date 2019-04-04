@@ -123,6 +123,7 @@ class AlterForm extends Component {
           {stageNodes.map((node, index) => (
             <SlideFormNode
               key={index}
+              subject={stage.subject}
               node={node}
               index={index}
               onUpdate={this.handleUpdate}
@@ -159,16 +160,10 @@ function makeMapStateToProps() {
   const getStageNodes = makeNetworkNodesForType();
 
   return function mapStateToProps(state, props) {
-    const currentForm = props.stage.form;
-    const entity = currentForm && currentForm.entity;
-    const type = currentForm && currentForm.type;
-    const stageNodes = getStageNodes(state, {
-      ...props,
-      stage: { ...props.stage, subject: { entity, type } },
-    });
+    const stageNodes = getStageNodes(state, props);
 
     return {
-      form: currentForm,
+      form: props.stage.form,
       formEnabled: formName => isValid(formName)(state) && !isSubmitting(formName)(state),
       stageNodes,
     };

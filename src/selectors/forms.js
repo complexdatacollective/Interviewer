@@ -4,10 +4,9 @@ import { getProtocolCodebook } from './protocol';
 // Prop selectors
 
 const propFields = (_, props) => props.fields;
-const propStageSubject = (_, props) => (props.stage && props.stage.subject) || { entity: 'ego' };
+const propStageSubject = (_, props) => props.subject || { entity: 'ego' };
 
 // MemoedSelectors
-
 
 export const rehydrateField = ({ codebook, entity, type, field }) => {
   if (!field.variable) { return field; }

@@ -85,16 +85,6 @@ describe('protocol selector', () => {
       expect(Protocol.getProtocolCodebook(mockState)).toEqual({ node: nodeVariables });
       expect(Protocol.getProtocolCodebook(emptyState)).toEqual(undefined);
     });
-
-    it('should get protocol forms', () => {
-      expect(Protocol.getProtocolForms(mockState)).toEqual(protocolForm);
-      expect(Protocol.getProtocolForms(emptyState)).toEqual(undefined);
-    });
-
-    it('should get node color', () => {
-      const selected = Protocol.makeGetNodeColor();
-      expect(selected(mockState, mockProps)).toEqual('node-color-seq-2');
-    });
   });
 });
 

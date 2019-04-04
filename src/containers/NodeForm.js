@@ -32,7 +32,7 @@ class NodeForm extends Component {
       initialValues,
       onSubmit: this.handleSubmit,
       autoFocus: true,
-      stage,
+      subject: stage.subject,
       form: reduxFormName,
     };
 

@@ -119,6 +119,7 @@ class AlterEdgeForm extends Component {
           {stageEdges.map((edge, index) => (
             <SlideFormEdge
               key={index}
+              subject={stage.subject}
               edge={edge}
               index={index}
               updateEdge={updateEdge}
@@ -155,12 +156,7 @@ function makeMapStateToProps() {
 
   return function mapStateToProps(state, props) {
     const currentForm = props.stage.form;
-    const entity = currentForm && currentForm.entity;
-    const type = currentForm && currentForm.type;
-    const stageEdges = getStageEdges(state, {
-      ...props,
-      stage: { ...props.stage, subject: { entity, type } },
-    });
+    const stageEdges = getStageEdges(state, props);
 
     return {
       form: currentForm,

@@ -22,6 +22,7 @@ class SlideFormEdge extends PureComponent {
       edgeColor,
       nodes,
       index,
+      subject,
     } = this.props;
 
     const fromNode = find(nodes, [entityPrimaryKeyProperty, edge.from]);
@@ -40,6 +41,7 @@ class SlideFormEdge extends PureComponent {
                 className="alter-form__form"
                 initialValues={edge[entityAttributesProperty]}
                 autoFocus={false}
+                subject={subject}
                 form={`EDGE_FORM_${index + 1}`}
                 onSubmit={this.handleSubmit}
               />
@@ -62,6 +64,7 @@ function mapStateToProps(state, props) {
 SlideFormEdge.propTypes = {
   form: PropTypes.object.isRequired,
   updateEdge: PropTypes.func.isRequired,
+  subject: PropTypes.object.isRequired,
   edge: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
 };

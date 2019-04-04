@@ -17,6 +17,7 @@ class SlideForm extends PureComponent {
       form,
       node,
       index,
+      subject,
     } = this.props;
 
     return (
@@ -30,6 +31,7 @@ class SlideForm extends PureComponent {
                 className="alter-form__form"
                 initialValues={node[entityAttributesProperty]}
                 autoFocus={false}
+                subject={subject}
                 form={`NODE_FORM_${index + 1}`}
                 onSubmit={this.handleSubmit}
               />
@@ -43,6 +45,7 @@ class SlideForm extends PureComponent {
 
 SlideForm.propTypes = {
   form: PropTypes.object,
+  subject: PropTypes.object.isRequired,
   node: PropTypes.object,
   onUpdate: PropTypes.func,
   index: PropTypes.number,

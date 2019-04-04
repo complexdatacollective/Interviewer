@@ -125,7 +125,7 @@ class SettingsMenu extends PureComponent {
                 </section>
                 <section>
                   <p>
-                    The full screen node form is optomised for smaller devices, or devices with
+                    The full screen node form is optimized for smaller devices, or devices with
                     no physical keyboard.
                   </p>
                   <Toggle

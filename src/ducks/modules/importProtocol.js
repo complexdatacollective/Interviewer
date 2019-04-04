@@ -22,7 +22,7 @@ export default function reducer(state = initialState, action = {}) {
       return initialState;
     case IMPORT_PROTOCOL_START:
       return {
-        statusText: 'Initialising protocol import...',
+        statusText: 'Initializing protocol import...',
         step: 1,
       };
     case DOWNLOAD_PROTOCOL:
