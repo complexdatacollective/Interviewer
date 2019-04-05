@@ -43,7 +43,6 @@ class Protocol extends Component {
       let skipToIndex = this.props.nextIndex;
 
       while (this.props.isSkipped(skipToIndex)) {
-        console.info('Skipping stage', skipToIndex);
         skipToIndex += 1;
       }
 
@@ -66,7 +65,6 @@ class Protocol extends Component {
       let skipToIndex = this.props.previousIndex;
 
       while (this.props.isSkipped(skipToIndex)) {
-        console.info('Skipping stage', skipToIndex);
         skipToIndex -= 1;
       }
       this.props.changeStage(`${this.props.pathPrefix}/${skipToIndex}`);
