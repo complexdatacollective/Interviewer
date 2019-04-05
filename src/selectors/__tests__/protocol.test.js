@@ -25,10 +25,6 @@ const mockProtocol = {
   forms: protocolForm,
 };
 
-const mockProps = {
-  type: 'person',
-};
-
 const mockState = {
   activeSessionId: 'mockSession',
   activeSessionWorkers: { nodeLabelWorker: 'blob:http://192.168.1.196:3000/b6cac5c5-1b4d-4db0-be86-fa55239fd62c' },

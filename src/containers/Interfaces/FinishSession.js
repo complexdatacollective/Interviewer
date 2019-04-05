@@ -169,7 +169,7 @@ function mapStateToProps(state) {
     currentNetwork: getNetwork(state),
     currentSession: getActiveSession(state),
     remoteProtocolId: getRemoteProtocolId(state),
-    sessionId: state.getActiveSessionId,
+    sessionId: state.activeSessionId,
     defaultServer: state.pairedServer,
     codebook: getProtocolCodebook(state),
   };

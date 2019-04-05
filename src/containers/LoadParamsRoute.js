@@ -54,11 +54,12 @@ class LoadParamsRoute extends Component {
     const finishedLoading = this.props.sessionId;
     if (!shouldReset && !finishedLoading) { return null; }
 
+    console.log('isSkipped is:', isSkipped);
     return (
       isSkipped ?
         (<Redirect to={
           {
-            pathname: `/session/${sessionId}/${stageIndex}`,
+            pathname: `/session/${sessionId}/${stageIndex + 1}`,
             search: backParam,
           }}
         />) :

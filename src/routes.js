@@ -22,10 +22,10 @@ function mapStateToProps(state) {
 
 // If there is an activeSessionId, redirect to it
 let SetupRequiredRoute = (
-  { component: Component, protocolUID, sessionId, ...rest },
+  { component: Component, sessionId, ...rest },
 ) => (
   sessionId ? (
-    <Redirect to={{ pathname: `/session/${sessionId}/3` }} {...rest} />
+    <Redirect to={{ pathname: `/session/${sessionId}/0` }} {...rest} />
   ) : (
     <Redirect to={{ pathname: '/setup' }} />
   )
