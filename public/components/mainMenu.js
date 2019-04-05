@@ -1,27 +1,13 @@
 const { dialog } = require('electron');
 const updater = require('./updater');
 const appUrl = require('./appURL');
-
-const openDialogOptions = {
-  buttonLabel: 'Open',
-  nameFieldLabel: 'Open:',
-  defaultPath: 'Protocol.netcanvas',
-  filters: [{ name: 'Network Canvas', extensions: ['netcanvas'] }],
-  properties: ['openFile'],
-};
-
-const openDialog = () =>
-  new Promise((resolve, reject) => {
-    dialog.showOpenDialog(openDialogOptions, (filename) => {
-      if (filename === undefined) { reject(); return; }
-      resolve(filename[0]);
-    });
-  });
+const { openDialog } = require('./dialogs');
 
 const openFile = window =>
   () =>
     openDialog()
-      .then(filePath => window.webContents.send('OPEN_FILE', filePath));
+      .then(filePath => window.webContents.send('OPEN_FILE', filePath))
+      .catch(err => console.log(err));
 
 const MenuTemplate = (window) => {
   const menu = [
@@ -29,8 +15,24 @@ const MenuTemplate = (window) => {
       label: 'File',
       submenu: [
         {
-          label: 'Open...',
+          label: 'Import Protocol...',
           click: openFile(window),
+        },
+        {
+          label: 'Reset Data...',
+          click: () => {
+            dialog.showMessageBox({
+              message: 'Destroy all application files and data?',
+              detail: 'This includes all application settings, imported protocols, and interview data.',
+              buttons: ['Reset Data', 'Cancel'],
+            }, (response) => {
+              if (response === 0) {
+                window.webContents.session.clearStorageData({}, () => {
+                  window.loadURL(appUrl);
+                });
+              }
+            });
+          },
         },
       ],
     },
@@ -57,22 +59,6 @@ const MenuTemplate = (window) => {
         { role: 'reload' },
         { role: 'forcereload' },
         { role: 'toggledevtools' },
-        { type: 'separator' },
-        {
-          label: 'Clear storage data',
-          click: () => {
-            dialog.showMessageBox({
-              message: 'This will reset all app data, are you sure?',
-              buttons: ['OK', 'Cancel'],
-            }, (response) => {
-              if (response === 0) {
-                window.webContents.session.clearStorageData({}, () => {
-                  window.loadURL(appUrl);
-                });
-              }
-            });
-          },
-        },
       ],
     },
     {
@@ -85,10 +71,12 @@ const MenuTemplate = (window) => {
   ];
 
   const appMenu = [
+    { role: 'about' },
     {
       label: 'Check for updates...',
       click: () => updater.checkForUpdates(),
     },
+    { type: 'separator' },
     { role: 'quit' },
   ];
 

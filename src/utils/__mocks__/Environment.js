@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import environments from '../../utils/environments';
+import environments from '../environments';
 
 export const isElectron = () => !!window.require;
 

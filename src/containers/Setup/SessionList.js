@@ -2,32 +2,16 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { push } from 'react-router-redux';
 import { Link } from 'react-router-dom';
 import { isEmpty } from 'lodash';
 
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
-import { protocolsByPath } from '../../selectors/protocols';
 import { CardList } from '../../components';
-import { matchSessionPath } from '../../utils/matchSessionPath';
 
 const displayDate = timestamp => timestamp && new Date(timestamp).toLocaleString(undefined, { year: 'numeric', month: 'numeric', day: 'numeric' });
 
 const oneBasedIndex = i => parseInt(i || 0, 10) + 1;
-
-const pathInfo = (sessionPath) => {
-  const info = { path: sessionPath };
-  const matchedPath = matchSessionPath(sessionPath);
-  if (matchedPath) {
-    info.sessionId = matchedPath.params.sessionId;
-    info.caseId = matchedPath.params.caseId;
-    info.protocol = matchedPath.params.protocolId;
-    info.protocolType = matchedPath.params.protocolType;
-    info.stageIndex = matchedPath.params.stageIndex;
-  }
-  return info;
-};
 
 const emptyView = (
   <div className="session-list--empty">
@@ -45,18 +29,14 @@ const emptyView = (
   */
 class SessionList extends Component {
   onClickLoadSession = (session) => {
-    const pathname = this.props.getSessionPath(session.uuid);
     this.props.setSession(session.uuid);
-    this.props.loadSession(pathname);
   }
 
   render() {
-    const { protocolData, removeSession, sessions } = this.props;
-
+    const { installedProtocols, removeSession, sessions } = this.props;
     // Display most recent first, and filter out any session that doesn't have a protocol
     const sessionList = Object.keys(sessions)
-      .map(key => ({ uuid: key, value: sessions[key] }))
-      .filter(s => s.value.protocolPath);
+      .map(key => ({ uuid: key, value: sessions[key] }));
     sessionList.sort((a, b) => b.value.updatedAt - a.value.updatedAt);
 
     if (isEmpty(sessionList)) {
@@ -80,15 +60,14 @@ class SessionList extends Component {
           getKey={sessionInfo => sessionInfo.uuid}
           details={(sessionInfo) => {
             const session = sessionInfo.value;
-            const info = pathInfo(session.path);
             const exportedAt = session.lastExportedAt;
             const exportedDisplay = exportedAt ? new Date(exportedAt).toLocaleString() : 'never';
-            const protocol = protocolData[session.protocolPath] || {};
+            const protocol = installedProtocols[session.protocolUID] || {};
             const protocolLabel = protocol.name || '[version out of date]';
             return [
               { 'Last Changed': displayDate(session.updatedAt) },
               { Protocol: protocolLabel },
-              { Stage: oneBasedIndex(info.stageIndex) },
+              { Stage: oneBasedIndex(session.stageIndex) },
               { Exported: exportedDisplay },
             ];
           }}
@@ -99,9 +78,7 @@ class SessionList extends Component {
 }
 
 SessionList.propTypes = {
-  getSessionPath: PropTypes.func.isRequired,
-  loadSession: PropTypes.func.isRequired,
-  protocolData: PropTypes.object.isRequired,
+  installedProtocols: PropTypes.object.isRequired,
   removeSession: PropTypes.func.isRequired,
   sessions: PropTypes.object.isRequired,
   setSession: PropTypes.func.isRequired,
@@ -109,15 +86,13 @@ SessionList.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    protocolData: protocolsByPath(state),
-    getSessionPath: sessionId => state.sessions[sessionId].path,
+    installedProtocols: state.installedProtocols,
     sessions: state.sessions,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    loadSession: path => dispatch(push(path)),
     removeSession: bindActionCreators(sessionsActions.removeSession, dispatch),
     setSession: bindActionCreators(sessionActions.setSession, dispatch),
   };

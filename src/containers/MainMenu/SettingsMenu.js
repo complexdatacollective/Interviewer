@@ -7,6 +7,7 @@ import SettingsMenu from '../../components/MainMenu/SettingsMenu';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
 import { actionCreators as mockActions } from '../../ducks/modules/mock';
 import { actionCreators as dialogsActions } from '../../ducks/modules/dialogs';
+import { actionCreators as importProtocolActions } from '../../ducks/modules/importProtocol';
 import { actionCreators as deviceSettingsActions } from '../../ducks/modules/deviceSettings';
 import { getAdditionalAttributesForCurrentPrompt, getNodeEntryForCurrentPrompt } from '../../selectors/session';
 
@@ -38,6 +39,8 @@ const mapDispatchToProps = dispatch => ({
   openDialog: bindActionCreators(dialogsActions.openDialog, dispatch),
   resetState: () => dispatch(push('/reset')),
   generateNodes: bindActionCreators(mockActions.generateNodes, dispatch),
+  importProtocolFromURI:
+    bindActionCreators(importProtocolActions.importProtocolFromURI, dispatch),
   setDeviceDescription: name => dispatch(deviceSettingsActions.setDescription(name)),
   toggleUseFullScreenForms: () => dispatch(deviceSettingsActions.toggleSetting('useFullScreenForms')),
   toggleUseDynamicScaling: () => dispatch(deviceSettingsActions.toggleSetting('useDynamicScaling')),
@@ -45,7 +48,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const mapStateToProps = state => ({
-  protocol: state.protocol,
+  protocol: state.importProtocol,
   nodeVariableEntry: getNodeEntryForCurrentPrompt(state),
   shouldShowMocksItem: !!getNodeEntryForCurrentPrompt(state),
   additionalMockAttributes: getAdditionalAttributesForCurrentPrompt(state),

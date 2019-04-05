@@ -17,7 +17,60 @@ const actionLogger = actions =>
         return next(action);
       };
 
-const getMockStore = (initialState = undefined) => {
+const initialState = {
+  activeSessionId: '62415a79-cd46-409a-98b3-5a0a2fef1f97',
+  activeSessionWorkers: { nodeLabelWorker: 'blob:http://192.168.1.196:3000/b6cac5c5-1b4d-4db0-be86-fa55239fd62c' },
+  deviceSettings: {
+    description: 'Kirby (macOS)',
+    useDynamicScaling: true,
+    useFullScreenForms: false,
+    interfaceScale: 100,
+  },
+  dialogs: { dialogs: Array(0) },
+  form: {},
+  importProtocol: { status: 'inactive', step: 0 },
+  installedProtocols: {
+    'c67ae04d-e5d8-402a-9ded-49205bf6f290': {
+      name: 'Protocol Name',
+      codebook: {
+        node: {
+          abcdef: {
+            name: 'person',
+            variables: {},
+          },
+        },
+      },
+      assetManifest: {},
+      description: '',
+      forms: {},
+      lastModified: '2018-10-01T00:00:00.000Z',
+      stages: [{ subject: { type: 'abcdef' }, prompts: [{}] }],
+    },
+  },
+  pairedServer: null,
+  search: {
+    collapsed: true,
+    selectedResults: [],
+  },
+  sessions: {
+    '62415a79-cd46-409a-98b3-5a0a2fef1f97': {
+      caseId: 'josh2',
+      network: { ego: {}, nodes: [], edges: [] },
+      promptIndex: 0,
+      protocolUID: 'c67ae04d-e5d8-402a-9ded-49205bf6f290',
+      stageIndex: 0,
+      updatedAt: 1554130548004,
+    },
+  },
+  ui: { isMenuOpen: true },
+  router: {
+    location: {
+      pathname: '',
+    },
+  },
+};
+
+const getMockStore = () => {
   const actions = [];
 
   const store = createStore(
@@ -83,29 +136,7 @@ describe('<MainMenu />', () => {
     let subject;
 
     beforeEach(() => {
-      const mockStore = getMockStore({
-        ui: { isMenuOpen: true },
-        protocol: {
-          variableRegistry: {
-            node: {
-              abcdef: {
-                name: 'person',
-                variables: {},
-              },
-            },
-          },
-          stages: [{ subject: { type: 'abcdef' }, prompts: [{}] }],
-        },
-        session: '1234-5678',
-        sessions: {
-          '1234-5678': {
-            network: {
-              nodes: [],
-            },
-          },
-        },
-      });
-
+      const mockStore = getMockStore();
       store = mockStore.store;
       actions = mockStore.actions;
 
@@ -113,19 +144,6 @@ describe('<MainMenu />', () => {
 
       gotoSettings(subject);
     });
-
-    // Todo: reinstate this test taking into account the dialog box
-    // it('Reset state button', () => {
-    //   subject.find('Button[children="Reset Network Canvas data"]').at(0).simulate('click');
-
-    //   const redirectAction = actions.find(({ type }) => type === '@@router/CALL_HISTORY_METHOD');
-
-    //   expect(redirectAction.payload).toMatchObject({
-    //     method: 'push',
-    //     args: ['/reset'],
-    //   });
-    //   expect(isMenuOpen(subject)).toBe(false);
-    // });
 
     it('Mock data button', () => {
       subject.find('Button[children="Add mock nodes"]').at(0).simulate('click');
@@ -137,43 +155,16 @@ describe('<MainMenu />', () => {
 
   describe('Stage screen', () => {
     let store;
-    let actions;
     let subject;
 
     beforeEach(() => {
-      const mockStore = getMockStore({
-        protocol: {
-          isLoaded: true,
-          path: 'foo',
-          type: 'bar',
-          stages: [
-            { id: '1234-5678-stage' },
-          ],
-        },
-        session: '1234-5678-session',
-        router: { location: { pathname: '/session/1234-5678-session/bar/foo/0' } },
-        ui: { isMenuOpen: true },
-      });
+      const mockStore = getMockStore(initialState);
 
       store = mockStore.store;
-      actions = mockStore.actions;
 
       subject = getSubject(store);
 
       gotoStages(subject);
-    });
-
-    it('Click stage', () => {
-      subject.find('TimelineStage').at(0).simulate('click');
-
-      const redirectAction = actions.find(({ type }) => type === '@@router/CALL_HISTORY_METHOD');
-
-      expect(redirectAction.payload).toMatchObject({
-        method: 'push',
-        args: ['/session/1234-5678-session/bar/foo/0'],
-      });
-
-      expect(isMenuOpen(subject)).toBe(false);
     });
   });
 });

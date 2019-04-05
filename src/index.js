@@ -1,11 +1,15 @@
+/* eslint-disable */
+
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { PersistGate } from 'redux-persist/integration/react';
 import { ready as secureCommsReady } from 'secure-comms-api/cipher';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
-
-import { history, store } from './ducks/store';
+import initFileOpener from './utils/initFileOpener';
+import { history, store, persistor } from './ducks/store';
 import { actionCreators } from './ducks/modules/deviceSettings';
+import { Spinner } from './ui/components';
 import App from './containers/App';
 import { isCordova, isElectron } from './utils/Environment';
 import AppRouter from './routes';
@@ -25,11 +29,13 @@ const startApp = () => {
 
   ReactDOM.render(
     <Provider store={store}>
-      <ConnectedRouter history={history}>
-        <App>
-          <AppRouter />
-        </App>
-      </ConnectedRouter>
+      <PersistGate loading={<Spinner />} persistor={persistor}>
+        <ConnectedRouter history={history}>
+          <App>
+            <AppRouter />
+          </App>
+        </ConnectedRouter>
+      </PersistGate>
     </Provider>,
     document.getElementById('root'),
   );
@@ -46,10 +52,14 @@ secureCommsReady.then(() => {
     document.addEventListener('deviceready', startApp, false);
   } else if (document.readyState === 'complete') {
     startApp();
+    // Listen for file open events.
+    initFileOpener();
   } else {
     document.onreadystatechange = () => {
       if (document.readyState === 'complete') {
         startApp();
+        // Listen for file open events.
+        initFileOpener();
       }
     };
   }

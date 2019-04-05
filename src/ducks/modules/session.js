@@ -1,11 +1,12 @@
 import { actionTypes as SessionsActionTypes } from './sessions';
+import { actionCreators as SessionWorkerActions } from './sessionWorkers';
 
 const ADD_SESSION = SessionsActionTypes.ADD_SESSION;
 
 const SET_SESSION = 'SET_SESSION';
 const END_SESSION = 'END_SESSION';
 
-const initialState = 'CREATE_NEW';
+const initialState = null;
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
@@ -22,19 +23,25 @@ export default function reducer(state = initialState, action = {}) {
 /**
  * setSession can be used to resume an interview (e.g. from GUI, or URL on load)
  */
-function setSession(id, protocolType) {
-  return {
+const setSession = id => (dispatch, getState) => {
+  const { sessions } = getState();
+  if (!sessions[id]) { return; }
+
+  const sessionProtocolUID = sessions[id].protocolUID;
+
+  dispatch(SessionWorkerActions.initializeSessionWorkersThunk(sessionProtocolUID));
+
+  dispatch({
     type: SET_SESSION,
     sessionId: id,
-    protocolType,
-  };
-}
+  });
+};
 
-function endSession() {
-  return {
+const endSession = () => (dispatch) => {
+  dispatch({
     type: END_SESSION,
-  };
-}
+  });
+};
 
 const actionCreators = {
   endSession,

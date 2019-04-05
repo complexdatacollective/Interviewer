@@ -7,24 +7,17 @@ const isRequired = (param) => { throw new Error(`${param} is required`); };
 const assetUrl = (environment) => {
   if (environment === environments.ELECTRON) {
     return (
-      protocolName = isRequired('protocolName'),
+      protocolUID = isRequired('protocolUID'),
       assetPath = isRequired('assetPath'),
-      /* protocolType, */
-    ) =>
-      Promise.resolve(`asset://${protocolName}/assets/${assetPath}`);
+    ) => Promise.resolve(`asset://${protocolUID}/assets/${assetPath}`);
   }
 
   if (environment === environments.CORDOVA) {
     return (
-      protocolName = isRequired('protocolName'),
+      protocolUID = isRequired('protocolUID'),
       assetPath = isRequired('assetPath'),
-      protocolType,
     ) => {
-      if (protocolType === 'factory') {
-        return Promise.resolve(`protocols/${protocolName}/assets/${assetPath}`);
-      }
-
-      const sourceFilename = protocolPath(protocolName, `assets/${assetPath}`);
+      const sourceFilename = protocolPath(protocolUID, `assets/${assetPath}`);
 
       return Promise.resolve(sourceFilename);
     };
@@ -32,10 +25,10 @@ const assetUrl = (environment) => {
 
   if (environment === environments.WEB) {
     return (
-      protocolName = isRequired('protocolName'),
+      protocolUID = isRequired('protocolUID'),
       assetPath = isRequired('assetPath'),
     ) =>
-      Promise.resolve(`/protocols/${protocolName}/assets/${assetPath}`);
+      Promise.resolve(`/protocols/${protocolUID}/assets/${assetPath}`);
   }
 
   return () => Promise.reject(new Error('assetUrl is not supported on this platform'));

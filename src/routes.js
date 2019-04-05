@@ -12,36 +12,29 @@ import {
   ProtocolScreen,
 } from './containers';
 
-import { ProtocolImport, SetupScreen } from './containers/Setup';
+import { SetupScreen } from './containers/Setup';
 
 function mapStateToProps(state) {
   return {
-    isProtocolLoaded: state.protocol.isLoaded,
-    protocolPath: state.protocol.path,
-    protocolType: state.protocol.type,
-    sessionId: state.session,
+    sessionId: state.activeSessionId,
   };
 }
 
+// If there is an activeSessionId, redirect to it
 let SetupRequiredRoute = (
-  { component: Component, protocolPath, protocolType, sessionId, ...rest },
+  { component: Component, protocolUID, sessionId, ...rest },
 ) => (
-  rest.isProtocolLoaded ? (
-    <Redirect to={{ pathname: `/session/${sessionId}/${protocolType}/${protocolPath}/0` }} {...rest} />
+  sessionId ? (
+    <Redirect to={{ pathname: `/session/${sessionId}/3` }} {...rest} />
   ) : (
     <Redirect to={{ pathname: '/setup' }} />
   )
 );
 
+
 SetupRequiredRoute.propTypes = {
   component: PropTypes.func.isRequired,
-  protocolPath: PropTypes.string,
-  protocolType: PropTypes.string.isRequired,
   sessionId: PropTypes.string.isRequired,
-};
-
-SetupRequiredRoute.defaultProps = {
-  protocolPath: '',
 };
 
 SetupRequiredRoute = connect(mapStateToProps)(SetupRequiredRoute);
@@ -49,11 +42,11 @@ SetupRequiredRoute = connect(mapStateToProps)(SetupRequiredRoute);
 export default () => (
   <Switch>
     <SetupRequiredRoute exact path="/session" component={ProtocolScreen} />
-    <LoadParamsRoute path="/session/:sessionId/:protocolType/:protocolId/:stageIndex" component={ProtocolScreen} />
-    <LoadParamsRoute path="/session/:sessionId/:protocolType/:protocolId" component={ProtocolScreen} />
+    <LoadParamsRoute path="/session/:sessionId/:stageIndex" component={ProtocolScreen} />
+    <LoadParamsRoute path="/session/:sessionId" component={ProtocolScreen} />
     <LoadParamsRoute path="/reset" shouldReset component={Redirect} to={{ pathname: '/setup' }} />
-    <Route path="/protocol-import" component={ProtocolImport} />
     <Route path="/setup" component={SetupScreen} />
     <Redirect to={{ pathname: '/setup' }} />
   </Switch>
 );
+

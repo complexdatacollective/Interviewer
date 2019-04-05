@@ -8,8 +8,8 @@ import ServerCard from '../../components/Setup/ServerCard';
 
 const loadingPlaceholder = (
   <div className="server-list__placeholder">
-    <Spinner />
     <h4>Listening for nearby Servers...</h4>
+    <Spinner small />
   </div>
 );
 
@@ -88,17 +88,20 @@ class DiscoveredServerList extends Component {
   renderServerList() {
     const { selectServer } = this.props;
     return (
-      <div className="server-list__content">
-        {
-          this.state.servers.map(server => (
-            <ServerCard
-              key={server.pairingServiceUrl}
-              data={server}
-              selectServer={selectServer}
-            />
-          ))
-        }
-      </div>
+      <React.Fragment>
+        <h4>Nearby devices running Server:</h4>
+        <div className="server-list__content">
+          {
+            this.state.servers.map(server => (
+              <ServerCard
+                key={server.pairingServiceUrl}
+                data={server}
+                selectServer={selectServer}
+              />
+            ))
+          }
+        </div>
+      </React.Fragment>
     );
   }
 

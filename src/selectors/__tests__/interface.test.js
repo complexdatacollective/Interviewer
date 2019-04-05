@@ -70,7 +70,7 @@ const mockProtocol = {
       nodes: [externalNode1, externalNode2, externalNode3, externalNode4],
     },
   },
-  variableRegistry: {
+  codebook: {
     node: {
       person: {
         displayVariable: 'name',
@@ -118,22 +118,15 @@ const mockState = {
   sessions: {
     a: {
       network: { nodes, edges },
+      protocolUID: 'mockProtocol',
     },
   },
-  session: 'a',
-  protocol: mockProtocol,
+  activeSessionId: 'a',
+  installedProtocols: { mockProtocol },
 };
 
 describe('interface selector', () => {
   describe('memoed selectors', () => {
-    it('should get network nodes', () => {
-      expect(Interface.networkNodes(mockState)).toEqual(nodes);
-    });
-
-    it('should get network edges', () => {
-      expect(Interface.networkEdges(mockState)).toEqual(edges);
-    });
-
     it('makeGetIds()', () => {
       const selected = Interface.makeGetIds();
       expect(selected(mockState, mockProps)).toEqual({
@@ -159,23 +152,10 @@ describe('interface selector', () => {
       expect(selected(mockState, mockProps)).toEqual('person');
     });
 
-    it('should get displayVariable', () => {
-      const selected = Interface.makeGetNodeDisplayVariable();
-      expect(selected(mockState, mockProps)).toEqual('name');
-    });
-
     it('makeGetVariableOptions', () => {
       const selected = Interface.makeGetVariableOptions();
       expect(selected(mockState, { ...mockProps, prompt: { ...mockPrompt, variable: 'cat1' } })).toEqual([123, 456]);
       expect(selected(mockState, { ...mockProps, prompt: { ...mockPrompt, variable: 'ord1' } })).toEqual([]);
-    });
-
-    it('should get node label function', () => {
-      const getLabel = Interface.getNodeLabelFunction(mockState, mockProps);
-      expect(getLabel(externalNode1)).toEqual('Custom Label');
-      expect(getLabel(externalNode2)).toEqual('H. Barry');
-      expect(getLabel(externalNode3)).toEqual('Carl');
-      expect(getLabel(externalNode4)).toEqual('No label');
     });
 
     it('makeNetworkNodesForType()', () => {

@@ -10,7 +10,7 @@ import Swiper from 'react-id-swiper';
 import { ProgressBar } from '../../components';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { makeNetworkNodesForType } from '../../selectors/interface';
-import { protocolForms } from '../../selectors/protocol';
+import { getProtocolForms } from '../../selectors/protocol';
 import { entityPrimaryKeyProperty } from '../../ducks/modules/network';
 import { SlideFormNode } from '../AlterForms';
 import defaultMarkdownRenderers from '../../utils/markdownRenderers';
@@ -160,7 +160,7 @@ function makeMapStateToProps() {
   const getStageNodes = makeNetworkNodesForType();
 
   return function mapStateToProps(state, props) {
-    const forms = protocolForms(state);
+    const forms = getProtocolForms(state);
     const currentForm = forms[props.stage.form];
     const entity = currentForm && currentForm.entity;
     const type = currentForm && currentForm.type;

@@ -13,7 +13,7 @@ const mockStore = () =>
   createStore(
     () => (
       {
-        protocol: {
+        installedProtocols: {
           config: {
             registry: {},
           },

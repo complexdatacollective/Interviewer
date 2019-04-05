@@ -83,7 +83,7 @@ class ServerPairing extends Component {
   }
 
   render() {
-    const { server } = this.props;
+    const { server, onCancel } = this.props;
     const { loading } = this.state;
 
     return (
@@ -93,6 +93,7 @@ class ServerPairing extends Component {
             className="server-pairing__form"
             completePairing={this.completePairing}
             loading={loading}
+            onCancel={onCancel}
           />
         }
       </ServerSetup>
@@ -116,12 +117,13 @@ ServerPairing.propTypes = {
     host: PropTypes.string,
   }).isRequired,
   setPairedServer: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
     deviceName: state.deviceSettings.description,
-    isFactory: state.protocol.isFactory,
+    isFactory: state.importProtocol.isFactory,
   };
 }
 

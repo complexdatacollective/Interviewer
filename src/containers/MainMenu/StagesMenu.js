@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
 import StagesMenu from '../../components/MainMenu/StagesMenu';
-import { stages } from '../../selectors/session';
+import { getProtocolStages } from '../../selectors/protocol';
 
 function mapStateToProps(state) {
-  const currentStages = stages(state);
+  const currentStages = getProtocolStages(state);
 
   const withIndex = currentStages.map((stage, index) => ({ ...stage, index }));
 

@@ -3,8 +3,7 @@
 import { createSelector } from 'reselect';
 import { has } from 'lodash';
 import { makeGetSubject, makeGetIds, makeGetSubjectType } from './interface';
-import { protocolRegistry } from './protocol';
-import { getExternalData } from './externalData';
+import { getProtocolCodebook } from './protocol';
 
 // Selectors that are specific to the name generator
 
@@ -22,7 +21,6 @@ const defaultPanelConfiguration = {
 
 // MemoedSelectors
 
-const getDatasourceKey = (_, props) => props.prompt.dataSource;
 const propCardOptions = (_, props) => props.prompt.cardOptions;
 const propSortOptions = (_, props) => props.prompt.sortOptions;
 const propPanels = (_, props) => props.stage.panels;
@@ -67,17 +65,11 @@ export const getInitialSortOrder = createSelector(
   sortOptions => (has(sortOptions, 'sortOrder') ? sortOptions.sortOrder : []),
 );
 
-export const getDataByPrompt = createSelector(
-  getExternalData,
-  getDatasourceKey,
-  (externalData, key) => externalData[key].nodes,
-);
-
 export const makeGetNodeIconName = () => createSelector(
-  protocolRegistry,
+  getProtocolCodebook,
   makeGetSubjectType(),
-  (variableRegistry, nodeType) => {
-    const nodeInfo = variableRegistry.node;
+  (codebook, nodeType) => {
+    const nodeInfo = codebook.node;
     return (nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].iconVariant) || 'add-a-person';
   },
 );

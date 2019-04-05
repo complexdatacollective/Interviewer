@@ -5,8 +5,16 @@ import { makeRehydrateForm } from '../forms';
 describe('forms selector', () => {
   describe('makeRehydrateForm', () => {
     const state = {
-      protocol: {
-        forms: { person: {} },
+      activeSessionId: 'a',
+      sessions: {
+        a: {
+          protocolUID: 'mockProtocol',
+        },
+      },
+      installedProtocols: {
+        mockProtocol: {
+          forms: { person: {} },
+        },
       },
     };
     let rehydrateForm;
@@ -27,7 +35,8 @@ describe('forms selector', () => {
 
     it('returns form if defined', () => {
       const props = { stage: { form: 'person' } };
-      expect(rehydrateForm(state, props)).toEqual(state.protocol.forms.person);
+      expect(rehydrateForm(state, props))
+        .toEqual(state.installedProtocols.mockProtocol.forms.person);
     });
   });
 });

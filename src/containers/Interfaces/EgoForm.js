@@ -9,8 +9,8 @@ import ReactMarkdown from 'react-markdown';
 import { ProgressBar, Scroller } from '../../components';
 import { Form } from '../../containers';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
-import { protocolForms } from '../../selectors/protocol';
-import { networkEgo } from '../../selectors/interface';
+import { getProtocolForms } from '../../selectors/protocol';
+import { getNetworkEgo } from '../../selectors/network';
 import defaultMarkdownRenderers from '../../utils/markdownRenderers';
 import { entityAttributesProperty } from '../../ducks/modules/network';
 
@@ -124,8 +124,8 @@ EgoForm.defaultProps = {
 };
 
 function mapStateToProps(state, props) {
-  const forms = protocolForms(state);
-  const ego = networkEgo(state);
+  const forms = getProtocolForms(state);
+  const ego = getNetworkEgo(state);
   return {
     form: forms[props.stage.form],
     introductionPanel: props.stage.introductionPanel,

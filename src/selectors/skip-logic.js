@@ -2,12 +2,12 @@ import { createSelector } from 'reselect';
 
 import * as query from '../utils/networkQuery/query';
 import predicate from '../utils/networkQuery/predicate';
-import { stages as getStages } from './session';
-import { getNetwork } from './interface';
+import { getProtocolStages } from './protocol';
+import { getNetwork } from './network';
 import { FilterJoin, RuleType, SkipLogicAction, SkipLogicOperator } from '../protocol-consts';
 
 const rotateIndex = (max, nextIndex) => (nextIndex + max) % max;
-const maxLength = state => getStages(state).length;
+const maxLength = state => getProtocolStages(state).length;
 
 const mapRuleType = (type) => {
   switch (type) {
@@ -28,7 +28,7 @@ export const getNextIndex = index => createSelector(
 );
 
 const getSkipLogic = index => createSelector(
-  getStages,
+  getProtocolStages,
   stages => stages && stages[index] && stages[index].skipLogic,
 );
 

@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
-import { addPairingUrlToService, pairingApiProtocol, isValidAddress, isValidPort, maxPort, minPort } from '../../utils/serverAddressing';
+import { addPairingUrlToService, isValidAddress, isValidPort, maxPort, minPort } from '../../utils/serverAddressing';
 import { Button } from '../../ui/components';
 
 /**
@@ -13,7 +13,7 @@ class ServerAddressForm extends PureComponent {
     this.state = {
       error: {},
       address: props.address || '',
-      port: props.port || '',
+      port: props.port || '51001',
     };
   }
 
@@ -25,6 +25,7 @@ class ServerAddressForm extends PureComponent {
     });
     if (server.pairingServiceUrl) {
       this.props.selectServer(server);
+      this.props.onCancel();
     } else {
       this.setState({
         error: {
@@ -65,49 +66,38 @@ class ServerAddressForm extends PureComponent {
   }
 
   render() {
-    const { cancel } = this.props;
+    const { onCancel } = this.props;
     const { error } = this.state;
     const inputClass = 'server-address-form__input';
     const inputErrorClass = `${inputClass} ${inputClass}--error`;
-    const labelClass = 'server-address-form__label';
-    const labelErrorClass = `${labelClass} ${labelClass}--error`;
 
     return (
       <form className="server-address-form" onSubmit={this.onSubmit}>
-        <h2>Server Connection</h2>
+        <h2>Manual connection information</h2>
         <p>
-          Enter the address and port number of your running Server instance.
-          The local network IP and port number can be found on your Server’s overview screen.
+          Enter the address and port number of the computer running Server.
+          These can be found on your Server’s overview screen.
         </p>
         <fieldset className="server-address-form__fields">
-          <div className="server-address-form__field">
-            <p className="server-address-form__text">{pairingApiProtocol}://</p>
-          </div>
-          <div className="server-address-form__field">
+
+          <div className="form-field-container">
+            <h4>Server Address</h4>
             <input
               type="text"
               autoComplete="off"
               autoCorrect="off"
-              className={error.address ? inputErrorClass : inputClass}
+              className={`form-field form-field-text form-field-text__input ${error.port ? inputErrorClass : inputClass}`}
               id="server-address-form-input-ip"
               placeholder="192.168.99.99"
               value={this.state.address}
               onChange={evt => this.setAddress(evt.target.value)}
               onBlur={evt => this.validateAddress(evt.target.value)}
             />
-            <label
-              className={error.address ? labelErrorClass : labelClass}
-              htmlFor="server-address-form-input-ip"
-            >
-              Address
-            </label>
           </div>
-          <div className="server-address-form__field">
-            <p className="server-address-form__text">:</p>
-          </div>
-          <div className="server-address-form__field">
+          <div className="form-field-container">
+            <h4>Port</h4>
             <input
-              className={error.port ? inputErrorClass : inputClass}
+              className={`form-field form-field-text form-field-text__input ${error.port ? inputErrorClass : inputClass}`}
               id="server-address-form-input-port"
               autoComplete="off"
               autoCorrect="off"
@@ -120,23 +110,18 @@ class ServerAddressForm extends PureComponent {
               onChange={evt => this.setPort(evt.target.value)}
               onBlur={evt => this.validatePort(evt.target.value)}
             />
-            <label
-              className={error.port ? labelErrorClass : labelClass}
-              htmlFor="server-address-form-input-port"
-            >
-              Port
-            </label>
           </div>
         </fieldset>
-        {
-          cancel &&
-          <Button color="platinum" onClick={() => cancel()} icon="close" type="button">
-            Cancel
-          </Button>
-        }
-        <span className="server-address-form__submit">
-          <Button content="Pair" type="submit" />
-        </span>
+        <div className="protocol-import--footer">
+          <div>
+            <Button color="platinum" onClick={() => onCancel()} type="button">
+              Cancel
+            </Button>
+            <span className="server-address-form__submit">
+              <Button content="Pair" type="submit" />
+            </span>
+          </div>
+        </div>
       </form>
     );
   }
@@ -144,13 +129,13 @@ class ServerAddressForm extends PureComponent {
 
 ServerAddressForm.defaultProps = {
   address: '',
-  cancel: null,
+  onCancel: null,
   port: '',
 };
 
 ServerAddressForm.propTypes = {
   address: PropTypes.string,
-  cancel: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired,
   port: PropTypes.string,
   selectServer: PropTypes.func.isRequired,
 };

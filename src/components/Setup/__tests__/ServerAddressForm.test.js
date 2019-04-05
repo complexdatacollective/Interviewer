@@ -12,7 +12,7 @@ describe('<ServerAddressForm>', () => {
 
   beforeEach(() => {
     selectHandler = jest.fn();
-    component = shallow(<ServerAddressForm selectServer={selectHandler} cancel={jest.fn()} />);
+    component = shallow(<ServerAddressForm selectServer={selectHandler} onCancel={jest.fn()} />);
   });
 
   it('allows selection', () => {

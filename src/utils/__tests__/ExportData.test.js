@@ -11,7 +11,7 @@ window.XMLSerializer = window.XMLSerializer || mockSerializeToString;
 jest.mock('../SaveFile');
 saveFile.mockImplementation(data => data);
 
-const variableRegistry = {
+const codebook = {
   node: {
     person: {
       variables: {
@@ -108,12 +108,12 @@ const sessionA = {
 
 describe('export data function', () => {
   it('should create valid xml for network data', () => {
-    const xmlResult = ExportData(sessionA.network, variableRegistry, () => {});
+    const xmlResult = ExportData(sessionA.network, codebook, () => {});
     expect(xmlResult).toMatchSnapshot();
   });
 
   it('translates node primary key to "id" attribute', () => {
-    const xml = ExportData(sessionA.network, variableRegistry, () => {});
+    const xml = ExportData(sessionA.network, codebook, () => {});
     const doc = new DOMParser().parseFromString(xml, 'application/xml');
     const node = doc.querySelector('graph node:first-child');
     expect(node.id).toEqual(`${sessionA.network.nodes[0][entityPrimaryKeyProperty]}`);
@@ -121,7 +121,7 @@ describe('export data function', () => {
   });
 
   it('adds layout attrs', () => {
-    const xml = ExportData(sessionA.network, variableRegistry, () => {});
+    const xml = ExportData(sessionA.network, codebook, () => {});
     const doc = new DOMParser().parseFromString(xml, 'application/xml');
     const node = doc.querySelector('graph node:first-child');
     expect(node.querySelector('[key=aLayoutX]').innerHTML).toEqual(sessionA.network.nodes[0].attributes.aLayout.x.toString());

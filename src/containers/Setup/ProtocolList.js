@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Swiper from 'react-id-swiper';
+import { size, map } from 'lodash';
 import { NewSessionOverlay, ProtocolCard } from '../../components/Setup';
-import { actionCreators as protocolActions } from '../../ducks/modules/protocol';
-import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
+import { actionCreators as sessionActions } from '../../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
+import { actionCreators as importProtocolActions } from '../../ducks/modules/importProtocol';
 
 /**
   * Display available protocols
@@ -16,39 +17,37 @@ class ProtocolList extends Component {
     super(props);
     this.state = {
       showNewSessionOverlay: false,
-      protocol: null,
+      selectedProtocol: null,
     };
 
     this.overlay = React.createRef();
   }
-  onClickNewProtocol = (protocol) => {
-    if (!(protocol.isFactoryProtocol || protocol.path)) {
-      return;
-    }
-
+  onClickProtocolCard = (protocolUID) => {
     this.setState({
       showNewSessionOverlay: true,
-      protocol,
+      selectedProtocol: protocolUID,
     });
   }
 
   handleCreateSession = (caseId) => {
-    this.props.addSession(caseId);
+    this.props.addSession(caseId, this.state.selectedProtocol);
     this.handleCloseOverlay();
 
-    if (this.state.protocol.isFactoryProtocol) {
-      this.props.loadFactoryProtocol(this.state.protocol.path);
-    } else if (this.state.protocol.path) {
-      this.props.loadProtocol(this.state.protocol.path);
-    }
+    // this.props.loadSession(protocol.path);
   }
 
   handleCloseOverlay = () => {
-    this.setState({ showNewSessionOverlay: false });
+    this.setState({ showNewSessionOverlay: false, selectedProtocol: null });
   }
 
   render() {
-    const { protocols } = this.props;
+    const {
+      installedProtocols,
+      // importProtocolStatus: {
+      //   status,
+      // },
+    } = this.props;
+
     const params = {
       containerClass: 'protocol-list swiper-container',
       pagination: {
@@ -60,6 +59,9 @@ class ProtocolList extends Component {
         nextEl: '.swiper-button-next.swiper-button-white',
         prevEl: '.swiper-button-prev.swiper-button-white',
       },
+      on: {
+        slideChange: this.handleSwipe,
+      },
       loop: false,
       shouldSwiperUpdate: true,
       rebuildOnUpdate: true,
@@ -69,17 +71,30 @@ class ProtocolList extends Component {
 
     return (
       <React.Fragment>
-        <Swiper {...params}>
-          { protocols.map(protocol => (
-            <div key={protocol.path}>
-              <ProtocolCard
-                size="large"
-                protocol={protocol}
-                selectProtocol={() => this.onClickNewProtocol(protocol)}
-              />
+        { size(installedProtocols) > 0 ?
+          <Swiper {...params} ref={(node) => { if (node) this.swiper = node.swiper; }}>
+            { map(installedProtocols, (protocol, uid) => (
+              <div key={uid}>
+                <ProtocolCard
+                  size="large"
+                  protocol={protocol}
+                  selectProtocol={() => this.onClickProtocolCard(uid)}
+                />
+              </div>
+            )) }
+          </Swiper>
+          :
+          <div className="protocol-list protocol-list--empty">
+            <div className="protocol-list--empty getting-started">
+              <h1>No interview protocols installed</h1>
+              <p>
+                To get started, install an interview protocol on this device. To do this,
+                click the button in the bottom left to pair with an instance of Server,
+                import a protocol from a URL, or add a local .netcanvas file.
+              </p>
             </div>
-          )) }
-        </Swiper>
+          </div>
+        }
         <NewSessionOverlay
           handleSubmit={this.handleCreateSession}
           onClose={this.handleCloseOverlay}
@@ -92,9 +107,8 @@ class ProtocolList extends Component {
 
 ProtocolList.propTypes = {
   addSession: PropTypes.func.isRequired,
-  loadFactoryProtocol: PropTypes.func.isRequired,
-  loadProtocol: PropTypes.func.isRequired,
-  protocols: PropTypes.array.isRequired,
+  loadSession: PropTypes.func.isRequired,
+  installedProtocols: PropTypes.object.isRequired,
 };
 
 ProtocolList.defaultProps = {
@@ -102,16 +116,17 @@ ProtocolList.defaultProps = {
 
 function mapStateToProps(state) {
   return {
-    protocols: state.protocols,
+    installedProtocols: state.installedProtocols,
+    importProtocolStatus: state.importProtocol,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    addSession: bindActionCreators(sessionsActions.addSession, dispatch),
-    loadProtocol: bindActionCreators(protocolActions.loadProtocol, dispatch),
-    loadFactoryProtocol: bindActionCreators(protocolActions.loadFactoryProtocol, dispatch),
+    addSession: bindActionCreators(sessionActions.addSession, dispatch),
+    loadSession: bindActionCreators(sessionActions.loadSession, dispatch),
     openDialog: bindActionCreators(dialogActions.openDialog, dispatch),
+    resetImportProtocol: bindActionCreators(importProtocolActions.resetImportProtocol, dispatch),
   };
 }
 

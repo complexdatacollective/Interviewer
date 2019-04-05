@@ -28,6 +28,7 @@ class NewSessionOverlay extends Component {
         title="Enter a Case ID"
         ref={this.overlay}
         onClose={onClose}
+        forceDisableFullScreen
       >
         <p>
           Before the interview begins, enter a case ID.
@@ -39,10 +40,13 @@ class NewSessionOverlay extends Component {
             value: this.state.caseID,
             onChange: e => this.handleUpdateCaseID(e.target.value),
           }}
+          autoFocus
           label="Case ID"
           fieldLabel=" "
         />
-        <Button key="submit" aria-label="Submit" onClick={() => handleSubmit(this.state.caseID)}>Start Interview</Button>
+        <div className="protocol-import--footer">
+          <Button key="submit" aria-label="Submit" onClick={() => handleSubmit(this.state.caseID)}>Start Interview</Button>
+        </div>
       </Overlay>
     );
   }

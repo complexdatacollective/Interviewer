@@ -1,6 +1,6 @@
 .pairing-form {
   &__submit {
-    float: right;
+    margin-left: 1.5rem;
   }
 
   .button {
@@ -14,5 +14,6 @@
     align-items: center;
     display: flex;
     justify-content: center;
+    margin: unit(4);
   }
 }

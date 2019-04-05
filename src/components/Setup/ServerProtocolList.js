@@ -11,29 +11,21 @@ const EmptyProtocolList = (
 );
 
 const ServerProtocolList = ({ protocols, selectProtocol }) => {
-  let leftBorderClass = 'server-protocol-list__left-border';
   if (!protocols.length) {
     return EmptyProtocolList;
   }
 
-  if (protocols.length === 1) {
-    leftBorderClass += ` ${leftBorderClass}--single-protocol`;
-  }
   return (
     <div className="server-protocol-list">
-      <div className="server-protocol-list__prefix" />
       <Scroller className="server-protocol-list__scroller">
-        <div key="left-border" className={leftBorderClass} />
         {
           protocols.map(protocol => (
-            <div className="server-protocol-list__bordered-card" key={protocol.id}>
-              <div className="server-protocol-list__card-border" />
-              <ProtocolCard
-                className="server-protocol-list__card"
-                selectProtocol={p => selectProtocol(p)}
-                protocol={protocol}
-              />
-            </div>
+            <ProtocolCard
+              key={protocol.id}
+              className="server-protocol-list__card"
+              selectProtocol={p => selectProtocol(p)}
+              protocol={protocol}
+            />
           ))
         }
       </Scroller>

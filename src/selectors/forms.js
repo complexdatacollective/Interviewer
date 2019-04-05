@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { protocolRegistry, protocolForms } from './protocol';
+import { getProtocolCodebook, getProtocolForms } from './protocol';
 
 // Prop selectors
 
@@ -37,7 +37,9 @@ const rehydrateField = ({ registry, entity, type, field }) => {
 
 export const makeRehydrateFields = () =>
   createSelector(
-    [propForm, propFields, protocolRegistry],
+    propForm,
+    propFields,
+    (state, props) => getProtocolCodebook(state, props),
     ({ entity, type }, fields, registry) =>
       fields.map(
         field => rehydrateField({ registry, entity, type, field }),
@@ -46,6 +48,7 @@ export const makeRehydrateFields = () =>
 
 export const makeRehydrateForm = () =>
   createSelector(
-    [propStageForm, protocolForms],
+    propStageForm,
+    (state, props) => getProtocolForms(state, props),
     (form, forms) => forms[form] || null,
   );

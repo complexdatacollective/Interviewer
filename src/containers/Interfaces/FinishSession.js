@@ -9,9 +9,9 @@ import { Button } from '../../ui/components';
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
-import { getNetwork } from '../../selectors/interface';
-import { getCurrentSession } from '../../selectors/session';
-import { protocolRegistry, getRemoteProtocolId } from '../../selectors/protocol';
+import { getNetwork } from '../../selectors/network';
+import { getActiveSession } from '../../selectors/session';
+import { getProtocolCodebook, getRemoteProtocolId } from '../../selectors/protocol';
 import { asExportableNetwork } from '../../utils/networkFormat';
 
 const ExportSection = ({ defaultServer, children }) => (
@@ -76,10 +76,10 @@ class FinishSession extends Component {
   }
 
   export(currentSession) {
-    const { remoteProtocolId, sessionId, variableRegistry } = this.props;
+    const { remoteProtocolId, sessionId, codebook } = this.props;
     const sessionData = asExportableNetwork(
       currentSession.network,
-      variableRegistry,
+      codebook,
       { _caseID: currentSession.caseId },
     );
     this.props.exportSession(remoteProtocolId, sessionId, sessionData);
@@ -122,7 +122,7 @@ class FinishSession extends Component {
               <Button
                 color="platinum"
                 onClick={() => createGraphML(this.props.currentNetwork,
-                  this.props.variableRegistry, this.handleExportError)
+                  this.props.codebook, this.handleExportError)
                 }
               >
                 Download
@@ -150,12 +150,12 @@ FinishSession.propTypes = {
   openDialog: PropTypes.func.isRequired,
   remoteProtocolId: PropTypes.string,
   sessionId: PropTypes.string.isRequired,
-  variableRegistry: PropTypes.object,
+  codebook: PropTypes.object,
 };
 
 FinishSession.defaultProps = {
   defaultServer: null,
-  variableRegistry: {},
+  codebook: {},
   remoteProtocolId: null,
 };
 
@@ -167,11 +167,11 @@ ExportSection.propTypes = {
 function mapStateToProps(state) {
   return {
     currentNetwork: getNetwork(state),
-    currentSession: getCurrentSession(state),
+    currentSession: getActiveSession(state),
     remoteProtocolId: getRemoteProtocolId(state),
-    sessionId: state.session,
+    sessionId: state.getActiveSessionId,
     defaultServer: state.pairedServer,
-    variableRegistry: protocolRegistry(state),
+    codebook: getProtocolCodebook(state),
   };
 }
 

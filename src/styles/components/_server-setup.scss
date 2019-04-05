@@ -1,12 +1,12 @@
 .server-setup {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   height: 100%;
 
   &__server {
     align-items: center;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-self: center;
   }
 

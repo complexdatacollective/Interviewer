@@ -73,9 +73,12 @@ class ApiClient {
   constructor(pairingUrlOrPairedServer) {
     let pairingUrl;
     let pairedServer;
+
     if (isString(pairingUrlOrPairedServer)) {
+      // We have a pairing URL
       pairingUrl = pairingUrlOrPairedServer;
     } else if (pairingUrlOrPairedServer) {
+      // We are already paired
       pairedServer = pairingUrlOrPairedServer;
     }
 
@@ -85,6 +88,8 @@ class ApiClient {
       this.pairingClient = axios.create({
         baseURL: pairingUrl.replace(/\/$/, ''),
         headers: defaultHeaders,
+        // This timeout governs the time before the user clicks 'pair with device' in Server.
+        // timeout: 15000,
       });
     }
 
@@ -116,6 +121,7 @@ class ApiClient {
     if (!this.httpsClient) {
       return Promise.reject('No secure client available');
     }
+
 
     if (isCordova()) {
       return this.httpsClient.acceptCertificate().catch(handleError);

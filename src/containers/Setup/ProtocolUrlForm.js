@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
 
 import Form from '../Form';
-import { Button, Icon } from '../../ui/components';
-import { actionCreators as protocolActions } from '../../ducks/modules/protocol';
+import { Button } from '../../ui/components';
+import { actionCreators as protocolActions } from '../../ducks/modules/importProtocol';
 
 const formConfig = {
   formName: 'setup',
@@ -28,48 +27,43 @@ const initialValues = {
 class ProtocolUrlForm extends Component {
   onClickImportRemoteProtocol = (fields) => {
     if (fields) {
-      this.props.downloadProtocol(fields.protocol_url);
-      this.props.handleProtocolUpdate();
+      this.props.importProtocolFromURI(fields.protocol_url);
     }
   }
 
   render() {
-    const { onCancel } = this.props;
     return (
-      <Form
-        className="protocol-url-form"
-        form={formConfig.formName}
-        onSubmit={this.onClickImportRemoteProtocol}
-        initialValues={initialValues}
-        controls={[
-          <Button
-            onClick={onCancel}
-            key="cancel"
-            color="platinum"
-            icon={<Icon name="close" />}
-            content="Cancel"
-            type="button"
-          />,
-          <Button key="submit" type="submit">Import remote protocol</Button>,
-        ]}
-        {...formConfig}
-      />
+      <React.Fragment>
+        <p>
+          Enter the full URL to a protocol file below, including <code>http://</code> or <code>https://</code> at the start.
+        </p>
+        <Form
+          className="protocol-url-form"
+          form={formConfig.formName}
+          onSubmit={this.onClickImportRemoteProtocol}
+          initialValues={initialValues}
+          {...formConfig}
+        >
+          <div className="protocol-import--footer">
+            <Button aria-label="Submit" type="submit">
+              Import
+            </Button>
+          </div>
+        </Form>
+      </React.Fragment>
+
     );
   }
 }
 
 ProtocolUrlForm.propTypes = {
-  downloadProtocol: PropTypes.func.isRequired,
-  handleProtocolUpdate: PropTypes.func.isRequired,
-  onCancel: PropTypes.func.isRequired,
+  importProtocolFromURI: PropTypes.func.isRequired,
 };
 
 function mapDispatchToProps(dispatch) {
   return {
-    downloadProtocol: bindActionCreators(protocolActions.downloadProtocol, dispatch),
-    handleProtocolUpdate: () => {
-      dispatch(push('/'));
-    },
+    importProtocolFromURI:
+      bindActionCreators(protocolActions.importProtocolFromURI, dispatch),
   };
 }
 

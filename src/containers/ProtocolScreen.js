@@ -10,7 +10,8 @@ import { Timeline } from '../components';
 import { Stage as StageTransition } from '../components/Transition';
 import { Fade } from '../ui/components/Transitions';
 import Stage from './Stage';
-import { stages, getPromptIndexForCurrentSession } from '../selectors/session';
+import { getPromptIndexForCurrentSession } from '../selectors/session';
+import { getProtocolStages } from '../selectors/protocol';
 import { getCSSVariableAsNumber } from '../ui/utils/CSSVariables';
 
 /**
@@ -85,7 +86,7 @@ class Protocol extends Component {
 
   render() {
     const {
-      isProtocolLoaded,
+      isSessionLoaded,
       pathPrefix,
       percentProgress,
       promptId,
@@ -94,7 +95,7 @@ class Protocol extends Component {
       stageIndex,
     } = this.props;
 
-    if (!isProtocolLoaded) { return null; }
+    if (!isSessionLoaded) { return null; }
 
     const duration = {
       enter: getCSSVariableAsNumber('--animation-duration-slow-ms') * 2,
@@ -103,7 +104,7 @@ class Protocol extends Component {
 
     return (
       <div className="protocol">
-        <Fade in={isProtocolLoaded} duration={duration}>
+        <Fade in={isSessionLoaded} duration={duration}>
           <Timeline
             id="TIMELINE"
             onClickBack={this.onClickBack}
@@ -134,7 +135,7 @@ Protocol.propTypes = {
   changeStage: PropTypes.func.isRequired,
   isFirstPrompt: PropTypes.func.isRequired,
   isLastPrompt: PropTypes.func.isRequired,
-  isProtocolLoaded: PropTypes.bool.isRequired,
+  isSessionLoaded: PropTypes.bool.isRequired,
   nextIndex: PropTypes.number.isRequired,
   pathPrefix: PropTypes.string,
   percentProgress: PropTypes.number,
@@ -157,20 +158,18 @@ Protocol.defaultProps = {
 
 function mapStateToProps(state, ownProps) {
   const rotateIndex = (max, nextIndex) => (nextIndex + max) % max;
-  const maxLength = stages(state).length;
-  const sessionId = state.session;
-  const protocolPath = state.protocol.path;
-  const protocolType = state.protocol.type;
-  const stage = stages(state)[ownProps.stageIndex] || {};
+  const maxLength = getProtocolStages(state).length;
+  const sessionId = state.activeSessionId;
+  const stage = getProtocolStages(state)[ownProps.stageIndex] || {};
   const stageIndex = Math.trunc(ownProps.stageIndex) || 0;
   const promptId = getPromptIndexForCurrentSession(state);
   const stageProgress = stageIndex / (maxLength - 1);
   const promptProgress = stage.prompts ? (promptId / stage.prompts.length) : 0;
 
   return {
-    isProtocolLoaded: state.protocol.isLoaded,
+    isSessionLoaded: !!state.activeSessionId,
     nextIndex: rotateIndex(maxLength, stageIndex + 1),
-    pathPrefix: `/session/${sessionId}/${protocolType}/${protocolPath}`,
+    pathPrefix: `/session/${sessionId}`,
     percentProgress: (stageProgress + (promptProgress / (maxLength - 1))) * 100,
     previousIndex: rotateIndex(maxLength, stageIndex - 1),
     promptId,

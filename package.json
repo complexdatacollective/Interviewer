@@ -26,7 +26,7 @@
     "build-docs": "cross-env NODE_ENV=production jsdoc src -r -d docs-build -c ./jsdoc.conf.json --verbose",
     "electron": "electron ./www",
     "electron:dev": "cross-env NODE_ENV=development NC_DEVSERVER_FILE=\".devserver\" electron public/",
-    "ios:dev": "node scripts/check-dev-server.js && cross-env LIVE_RELOAD=1 cordova run ios --buildFlag='-UseModernBuildSystem=0' --developmentTeam=85EZ69PQHJ",
+    "ios:dev": "node scripts/check-dev-server.js && cross-env LIVE_RELOAD=1 cordova run ios --buildFlag='-UseModernBuildSystem=0' --developmentTeam=85EZ69PQHJ --",
     "android:dev": "node scripts/check-dev-server.js && cross-env LIVE_RELOAD=1 cordova run android",
     "generate-icons": "node scripts/generate-app-icons.js",
     "dist:android": "npm run build:android && cordova build android --release",
@@ -35,8 +35,7 @@
     "dist:mac": "npm run build:electron && electron-builder -m --publish=always",
     "dist:win": "npm run build:electron && electron-builder -w --publish=always",
     "bump": "sh scripts/bump",
-    "preflight": "npm run lint -- --max-warnings 0 && npm run sass-lint -- --max-warnings 0 && npm test -- --coverage",
-    "validate-protocol": "node scripts/schema/validate-protocol.js"
+    "preflight": "npm run lint -- --max-warnings 0 && npm run sass-lint -- --max-warnings 0 && npm test -- --coverage"
   },
   "repository": {
     "type": "git"
@@ -132,7 +131,7 @@
     "redux-logger": "^2.7.4",
     "redux-mock-store": "^1.5.3",
     "redux-observable": "^0.14.1",
-    "redux-persist": "^4.9.1",
+    "redux-persist": "^5.10.0",
     "redux-thunk": "^2.3.0",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.5",
@@ -156,9 +155,10 @@
     "xss": "^0.3.4"
   },
   "dependencies": {
-    "cordova-android": "^7.1.2",
-    "cordova-ios": "^4.5.5",
+    "cordova-android": "^8.0.0",
+    "cordova-ios": "^5.0.0",
     "cordova-plugin-app-version": "^0.1.9",
+    "cordova-plugin-chooser": "^1.2.5",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-file": "^5.0.0",
     "cordova-plugin-file-transfer": "^1.7.1",
@@ -240,7 +240,8 @@
       "cordova-plugin-whitelist": {},
       "cordova-plugin-zeroconf": {},
       "cordova-plugin-device": {},
-      "cordova-plugin-network-canvas-client": {}
+      "cordova-plugin-network-canvas-client": {},
+      "cordova-plugin-chooser": {}
     }
   }
 }

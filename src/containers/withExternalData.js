@@ -12,18 +12,17 @@ import {
   mapValues,
 } from 'lodash';
 import loadExternalData from '../utils/loadExternalData';
-import { getCurrentSession } from '../selectors/session';
 
 const mapStateToProps = (state) => {
-  const session = getCurrentSession(state);
+  const session = state.sessions[state.activeSessionId];
+  const protocolUID = session.protocolUID;
   const assetFiles = mapValues(
-    state.protocol.assetManifest,
+    state.installedProtocols[protocolUID].assetManifest,
     asset => asset.source,
   );
 
   return {
-    protocolName: session.protocolPath,
-    protocolType: state.protocol.type,
+    protocolUID,
     assetFiles,
   };
 };
@@ -58,8 +57,7 @@ const withExternalData = (sourceProperty, dataProperty) =>
     withHandlers({
       loadExternalData: ({
         setExternalData,
-        protocolName,
-        protocolType,
+        protocolUID,
         assetFiles,
       }) =>
         (sourceId) => {
@@ -69,7 +67,7 @@ const withExternalData = (sourceProperty, dataProperty) =>
 
           const sourceFile = assetFiles[sourceId];
 
-          loadExternalData(protocolName, sourceFile, protocolType)
+          loadExternalData(protocolUID, sourceFile)
             .then((externalData) => {
               setExternalData(externalData);
             });

@@ -19,7 +19,7 @@ const externalData = {
 
 const mockProtocol = {
   externalData,
-  variableRegistry: {
+  codebook: {
     node: nodeVariables,
   },
   forms: protocolForm,
@@ -30,23 +30,65 @@ const mockProps = {
 };
 
 const mockState = {
-  protocol: mockProtocol,
+  activeSessionId: 'mockSession',
+  activeSessionWorkers: { nodeLabelWorker: 'blob:http://192.168.1.196:3000/b6cac5c5-1b4d-4db0-be86-fa55239fd62c' },
+  deviceSettings: {
+    description: 'Kirby (macOS)',
+    useDynamicScaling: true,
+    useFullScreenForms: false,
+    interfaceScale: 100,
+  },
+  dialogs: { dialogs: Array(0) },
+  form: {},
+  importProtocol: { status: 'inactive', step: 0 },
+  installedProtocols: {
+    'c67ae04d-e5d8-402a-9ded-49205bf6f290': {
+      name: 'Protocol Name',
+      codebook: {},
+      assetManifest: {},
+      description: '',
+      forms: {},
+      lastModified: '2018-10-01T00:00:00.000Z',
+      stages: [],
+    },
+    mockProtocol,
+  },
+  pairedServer: null,
+  search: {
+    collapsed: true,
+    selectedResults: [],
+  },
+  sessions: {
+    '62415a79-cd46-409a-98b3-5a0a2fef1f97': {
+      caseId: 'josh2',
+      network: { ego: {}, nodes: [], edges: [] },
+      promptIndex: 0,
+      protocolUID: 'c67ae04d-e5d8-402a-9ded-49205bf6f290',
+      stageIndex: 0,
+      updatedAt: 1554130548004,
+    },
+    mockSession: {
+      protocolUID: 'mockProtocol',
+    },
+  },
+  ui: { isMenuOpen: false },
 };
 
+
 const emptyState = {
-  protocol: {},
+  installedProtocols: {},
 };
 
 describe('protocol selector', () => {
   describe('memoed selectors', () => {
-    it('should get protocol variable registery', () => {
-      expect(Protocol.protocolRegistry(mockState)).toEqual({ node: nodeVariables });
-      expect(Protocol.protocolRegistry(emptyState)).toEqual(undefined);
+    it('should get protocol codebook', () => {
+      expect(Protocol.getProtocolCodebook(mockState)).toEqual({ node: nodeVariables });
+      expect(Protocol.getProtocolCodebook(emptyState)).toEqual(undefined);
     });
 
     it('should get protocol forms', () => {
-      expect(Protocol.protocolForms(mockState)).toEqual(protocolForm);
-      expect(Protocol.protocolForms(emptyState)).toEqual(undefined);
+      expect(Protocol.getProtocolForms(mockState)).toEqual(protocolForm);
+      expect(Protocol.getProtocolForms(emptyState)).toEqual(undefined);
     });
 
     it('should get node color', () => {

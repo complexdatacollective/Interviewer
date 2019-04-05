@@ -42,6 +42,8 @@ const getScrollParent = (node) => {
 const scrollToFirstError = (errors) => {
   // Todo: first item is an assumption that may not be valid. Should iterate and check
   // vertical position
+  if (!errors) { return; }
+
   const firstError = Object.keys(errors)[0];
 
   // All Fields have a name corresponding to variable ID.
@@ -88,6 +90,7 @@ class Form extends Component {
       tooltip,
       className,
       submitButton,
+      children,
     } = this.props;
 
     return (
@@ -105,6 +108,7 @@ class Form extends Component {
           );
         }) }
         {submitButton}
+        {children}
       </form>
     );
   }

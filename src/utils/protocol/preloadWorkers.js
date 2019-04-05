@@ -1,10 +1,10 @@
 import { readFile } from '../filesystem';
 import environments from '../environments';
 import inEnvironment from '../Environment';
-import factoryProtocolPath from './factoryProtocolPath';
 import protocolPath from './protocolPath';
-
 import { urlForWorkerSource, supportedWorkers } from '../WorkerAgent';
+
+const path = require('path');
 
 /**
  * Builds source code for a Web Worker based on the protocol's
@@ -67,8 +67,8 @@ const compileWorker = (src, funcName) => {
  * By preloading any existing, we can bootstrap before protocol.json is parsed.
  */
 const preloadWorkers = environment =>
-  (protocolName, isFactory) => {
-    if (environment === environments.WEB && !isFactory) {
+  (protocolUID) => {
+    if (environment === environments.WEB) {
       return Promise.reject(new Error('preloadWorkers() not supported on this platform'));
     }
 
@@ -76,10 +76,10 @@ const preloadWorkers = environment =>
       let workerFile;
       let promise;
       if (environment === environments.WEB) {
-        workerFile = `/protocols/${protocolName}/${workerName}.js`;
+        workerFile = `/protocols/${protocolUID}/${workerName}.js`;
         promise = fetch(workerFile).then(resp => resp.arrayBuffer());
       } else {
-        workerFile = (isFactory ? factoryProtocolPath : protocolPath)(protocolName, `${workerName}.js`);
+        workerFile = path.join(protocolPath(protocolUID), `${workerName}.js`);
         promise = readFile(workerFile);
       }
       return promise

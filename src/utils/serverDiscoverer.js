@@ -41,7 +41,7 @@ class ServerDiscoverer {
     }
 
     if (!window.navigator.onLine) {
-      this.emitErrorMessage('The Server Discovery service requires a network connection.');
+      this.emitErrorMessage('Automatic Server discovery requires a network connection. Make sure your device is connected to a network, and try again.');
     }
   }
 

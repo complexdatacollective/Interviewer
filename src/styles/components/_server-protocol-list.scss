@@ -1,57 +1,25 @@
 .server-protocol-list {
-  --border-color: var(--color-neon-coral);
-  --border-width: .25rem;
-  --card-height: 8rem;
-
   display: flex;
   flex: auto;
   flex-direction: row;
-  margin-top: -1 * $scroller-top-padding;
+  margin-bottom: -1.5rem;
+  max-height: 25rem;
 
   &--empty {
     padding-top: $scroller-top-padding;
   }
 
   &__scroller {
-    padding-top: $scroller-top-padding;
+    padding: 1.5rem 0;
     position: relative;
   }
 
-  &__prefix {
-    border-bottom: var(--border-width) solid var(--border-color);
-    height: 0;
-    margin-top: calc(var(--card-height) - var(--border-width));
-    width: 1rem;
-  }
-
-  &__left-border {
-    border-left: var(--border-width) solid var(--border-color);
-    height: calc(100% - var(--card-height) - #{$scroller-top-padding});
-    margin: calc(.5 * var(--card-height)) 0;
-    position: absolute;
-
-    &--single-protocol {
-      // If there's only one protocol card, extend height to meet 'prefix' line
-      height: 2rem;
-    }
-  }
-
-  &__bordered-card {
+  &__card {
     display: flex;
     flex-direction: row;
-    height: var(--card-height);
-    margin-bottom: spacing(small);
-  }
-
-  &__card-border {
-    border-top: var(--border-width) solid var(--border-color);
-    flex: none;
-    margin-top: calc(.5 * var(--card-height));
-    top: 50%;
-    width: 2rem;
-  }
-
-  &__card {
+    margin-bottom: unit(2);
     flex: auto;
+    background: var(--light-background);
+    padding: unit(2);
   }
 }

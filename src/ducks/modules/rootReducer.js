@@ -2,12 +2,12 @@ import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 import { reducer as formReducer } from 'redux-form';
 
-import externalData from './externalData';
 import sessions from './sessions';
-import session from './session';
+import activeSessionId from './session';
+import activeSessionWorkers from './sessionWorkers';
 import deviceSettings from './deviceSettings';
-import protocol from './protocol';
-import protocols from './protocols';
+import importProtocol from './importProtocol';
+import installedProtocols from './installedProtocols';
 import dialogs from './dialogs';
 import search from './search';
 import ui from './ui';
@@ -17,12 +17,12 @@ import { actionTypes as resetActionTypes } from './reset';
 const appReducer = combineReducers({
   router: routerReducer,
   form: formReducer,
-  session,
+  activeSessionId,
+  activeSessionWorkers,
   sessions,
   deviceSettings,
-  externalData,
-  protocol,
-  protocols,
+  importProtocol,
+  installedProtocols,
   dialogs,
   search,
   ui,

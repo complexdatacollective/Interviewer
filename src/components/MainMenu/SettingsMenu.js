@@ -12,6 +12,7 @@ class SettingsMenu extends PureComponent {
       onClickInactive,
       handleAddMockNodes,
       handleResetAppData,
+      importProtocolFromURI,
       toggleUseFullScreenForms,
       useFullScreenForms,
       shouldShowMocksItem,
@@ -73,6 +74,18 @@ class SettingsMenu extends PureComponent {
                     onClick={handleResetAppData}
                   >
                     Reset Network Canvas data
+                  </Button>
+                </section>
+                <section>
+                  <p>
+                    The button below will import the latest development protocol for this version
+                    of Network Canvas.
+                  </p>
+                  <Button
+                    color="mustard"
+                    onClick={() => importProtocolFromURI('https://github.com/codaco/development-protocol/releases/download/20190327011037-d3c8615/development-protocol.netcanvas')}
+                  >
+                    Import development protocol
                   </Button>
                 </section>
               </fieldset>
@@ -138,6 +151,7 @@ SettingsMenu.propTypes = {
   active: PropTypes.bool,
   onClickInactive: PropTypes.func,
   handleResetAppData: PropTypes.func.isRequired,
+  importProtocolFromURI: PropTypes.func.isRequired,
   handleAddMockNodes: PropTypes.func.isRequired,
   shouldShowMocksItem: PropTypes.bool,
   toggleUseFullScreenForms: PropTypes.func.isRequired,

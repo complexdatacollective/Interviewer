@@ -1,18 +1,12 @@
 /* eslint-disable import/prefer-default-export */
 
 import { createSelector } from 'reselect';
-import { findKey, filter, includes } from 'lodash';
+import { filter, includes } from 'lodash';
 import { assert, createDeepEqualSelector } from './utils';
-import { protocolRegistry } from './protocol';
+import { getProtocolCodebook } from './protocol';
+import { getNetworkEdges, getNetworkNodes } from './network';
 import { getAdditionalAttributes, getSubject } from '../utils/protocol/accessors';
-import { getCurrentSession } from './session';
-import {
-  getEntityAttributes,
-} from '../ducks/modules/network';
-import {
-  asExportableNetwork,
-  asWorkerAgentNetwork,
-} from '../utils/networkFormat';
+
 
 // Selectors that are generic between interfaces
 
@@ -28,47 +22,6 @@ const propStage = (_, props) => props.stage;
 const propPrompt = (_, props) => props.prompt;
 const propStageId = (_, props) => props.stage.id;
 const propPromptId = (_, props) => props.prompt.id;
-
-// State selectors
-
-// MemoedSelectors
-const getCaseId = createDeepEqualSelector(
-  getCurrentSession,
-  session => (session && session.caseId),
-);
-
-export const getNetwork = createDeepEqualSelector(
-  getCurrentSession,
-  session => (session && session.network) || { nodes: [], edges: [] },
-);
-
-export const networkNodes = createDeepEqualSelector(
-  getNetwork,
-  network => network.nodes,
-);
-
-export const networkEgo = createDeepEqualSelector(
-  getNetwork,
-  network => network.ego,
-);
-
-export const networkEdges = createDeepEqualSelector(
-  getNetwork,
-  network => network.edges,
-);
-
-export const getExportableNetwork = createDeepEqualSelector(
-  getNetwork,
-  protocolRegistry,
-  getCaseId,
-  (network, registry, _caseID) => asExportableNetwork(network, registry, { _caseID }),
-);
-
-export const getWorkerNetwork = createDeepEqualSelector(
-  getNetwork,
-  protocolRegistry,
-  (network, registry) => asWorkerAgentNetwork(network, registry),
-);
 
 // Returns current stage and prompt ID
 export const makeGetIds = () =>
@@ -89,34 +42,27 @@ export const makeGetSubject = () =>
     (stage, prompt) => getSubject(stage, prompt),
   );
 
-const nodeTypeIsDefined = (variableRegistry, nodeType) =>
-  variableRegistry.node && !!variableRegistry.node[nodeType];
+const nodeTypeIsDefined = (codebook, nodeType) => {
+  if (!codebook) { return false; }
+  return codebook.node[nodeType];
+};
 
 // TODO: Once schema validation is in place, we don't need these asserts.
 export const makeGetSubjectType = () => (createSelector(
-  protocolRegistry,
+  (state, props) => getProtocolCodebook(state, props),
   makeGetSubject(),
-  (variableRegistry, subject) => {
+  (codebook, subject) => {
     assert(subject, 'The "subject" property is not defined for this prompt');
-    assert(nodeTypeIsDefined(variableRegistry, subject.type), `Node type "${subject.type}" is not defined in the registry`);
+    assert(nodeTypeIsDefined(codebook, subject.type), `Node type "${subject.type}" is not defined in the registry`);
     return subject && subject.type;
   },
 ));
 
-export const makeGetNodeDisplayVariable = () => createDeepEqualSelector(
-  protocolRegistry,
-  makeGetSubjectType(),
-  (variableRegistry, nodeType) => {
-    const nodeInfo = variableRegistry.node;
-    return nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].displayVariable;
-  },
-);
-
 export const makeGetNodeVariables = () => createDeepEqualSelector(
-  protocolRegistry,
+  (state, props) => getProtocolCodebook(state, props),
   makeGetSubjectType(),
-  (variableRegistry, nodeType) => {
-    const nodeInfo = variableRegistry.node;
+  (codebook, nodeType) => {
+    const nodeInfo = codebook.node;
     return nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].variables;
   },
 );
@@ -136,32 +82,6 @@ export const makeGetVariableOptions = () =>
     },
   );
 
-export const getNodeLabelFunction = createDeepEqualSelector(
-  protocolRegistry,
-  variableRegistry => (node) => {
-    const nodeInfo = variableRegistry.node;
-
-    // Get the display variable by looking up the node type in the variable registry
-    const displayVariable = nodeInfo && node && node.type && nodeInfo[node.type] &&
-      nodeInfo[node.type].displayVariable;
-
-    // For fallback: get the first variable of type 'text'
-    const firstTextVariable = nodeInfo && node && node.type && nodeInfo[node.type] &&
-      nodeInfo[node.type].variables && findKey(nodeInfo[node.type].variables, ['type', 'text']);
-
-    // Get the data model properties from the node
-    const nodeDataModelProps = getEntityAttributes(node);
-    // Try to return the label prop
-    // else try to use the displayVariable
-    // else try to use the first text variable
-    // else return the string "No label"
-    return nodeDataModelProps.label ||
-      (displayVariable && nodeDataModelProps[displayVariable]) ||
-      (firstTextVariable && nodeDataModelProps[firstTextVariable]) ||
-      'No label';
-  },
-);
-
 /**
  * makeNetworkEdgesForType()
  * Get the current prompt/stage subject, and filter the network by this edge type.
@@ -169,7 +89,7 @@ export const getNodeLabelFunction = createDeepEqualSelector(
 
 export const makeNetworkEdgesForType = () =>
   createSelector(
-    networkEdges,
+    (state, props) => getNetworkEdges(state, props),
     makeGetSubject(),
     (edges, subject) => filter(edges, ['type', subject.type]),
   );
@@ -181,7 +101,7 @@ export const makeNetworkEdgesForType = () =>
 
 export const makeNetworkNodesForType = () =>
   createSelector(
-    networkNodes,
+    (state, props) => getNetworkNodes(state, props),
     makeGetSubject(),
     (nodes, subject) => filter(nodes, ['type', subject.type]),
   );
@@ -193,9 +113,9 @@ export const makeNetworkNodesForType = () =>
 */
 
 export const makeNetworkNodesForPrompt = () => {
-  const networkNodesForSubject = makeNetworkNodesForType();
+  const getNetworkNodesForSubject = makeNetworkNodesForType();
   return createSelector(
-    networkNodesForSubject, propPromptId,
+    getNetworkNodesForSubject, propPromptId,
     (nodes, promptId) => filter(nodes, node => includes(node.promptIDs, promptId)),
   );
 };
@@ -208,10 +128,10 @@ export const makeNetworkNodesForPrompt = () => {
 */
 
 export const makeNetworkNodesForOtherPrompts = () => {
-  const networkNodesForSubject = makeNetworkNodesForType();
+  const getNetworkNodesForSubject = makeNetworkNodesForType();
 
   return createSelector(
-    networkNodesForSubject, propPromptId,
+    getNetworkNodesForSubject, propPromptId,
     (nodes, promptId) => filter(nodes, node => !includes(node.promptIDs, promptId)),
   );
 };

@@ -18,9 +18,9 @@ const getURL = uri =>
 
 const getProtocolName = () => uuid(); // generate a filename
 
-const urlError = friendlyErrorMessage("The location you gave us doesn't seem to be valid. Check the location, and try again.");
-const networkError = friendlyErrorMessage("We weren't able to fetch your protocol at this time. Your device may not have an active network connection - connect to a network, and try again.");
-const fileError = friendlyErrorMessage('The protocol could not be saved to your device.');
+const urlError = friendlyErrorMessage("The location you gave us doesn't seem to be a valid URL. Check the location, and try again.");
+const networkError = friendlyErrorMessage("We weren't able to fetch your protocol. Your device may not have an active network connection, or you may have mistyped the URL. Ensure you are connected to a network, double check your URL, and try again.");
+const fileError = friendlyErrorMessage('The protocol could not be saved to your device. You might not have enough storage available. ');
 
 /**
  * Download a protocol from a remote server.
@@ -39,7 +39,7 @@ const downloadProtocol = inEnvironment((environment) => {
     const tempPath = (electron.app || electron.remote.app).getPath('temp');
     const destination = path.join(tempPath, getProtocolName());
 
-    return (uri, pairedServer) => {
+    return (uri, pairedServer = false) => {
       let promisedResponse;
       if (pairedServer) {
         promisedResponse = new ApiClient(pairedServer).downloadProtocol(uri);

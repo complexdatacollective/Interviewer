@@ -7,9 +7,6 @@
     <author email="developers@coda.co" href="http://coda.co">
         Complex Data Collective
     </author>
-    <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/supports-screens">
-        <supports-screens android:anyDensity="false" android:largeScreens="true" android:normalScreens="false" android:requiresSmallestWidthDp="600" android:resizeable="false" android:smallScreens="false" android:xlargeScreens="true" />
-    </edit-config>
     <content src="index.html" />
     <access origin="*" />
     <access origin="cdvfile://*" />
@@ -27,6 +24,12 @@
         <icon density="xhdpi" src="www/icons/android/NC-Round-xhdpi.png" />
         <icon density="xxhdpi" src="www/icons/android/NC-Round-xxhdpi.png" />
         <icon density="xxxhdpi" src="www/icons/android/NC-Round-xxxhdpi.png" />
+        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
+            <application android:largeHeap="true" />
+        </edit-config>
+        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/supports-screens">
+            <supports-screens android:anyDensity="false" android:largeScreens="true" android:normalScreens="false" android:requiresSmallestWidthDp="600" android:resizeable="false" android:smallScreens="false" android:xlargeScreens="true" />
+        </edit-config>
     </platform>
     <platform name="ios">
         <allow-navigation href="*" />
@@ -67,6 +70,6 @@
     <plugin name="cordova-plugin-zeroconf" spec="^1.3.3" />
     <plugin name="cordova-plugin-device" spec="^2.0.2" />
     <plugin name="cordova-plugin-network-canvas-client" spec="./cordova-plugin-network-canvas-client" />
-    <engine name="ios" spec="^4.5.5" />
-    <engine name="android" spec="^7.1.2" />
+    <engine name="ios" spec="^5.0.0" />
+    <engine name="android" spec="^8.0.0" />
 </widget>

@@ -92,7 +92,7 @@ export const asExportableEgo = (ego, egoDefinition) => ({
  * Also available as a memoized selector; see selectors/interface.
  *
  * @param  {Object} network  the entire network (in redux state)
- * @param  {Object} registry the variableRegistry from a protocol
+ * @param  {Object} registry the codebook from a protocol
  * @return {Object} externalNetwork
  */
 export const asExportableNetwork = (network = {}, registry = {}, sessionVariables = {}) => {
@@ -113,7 +113,7 @@ export const asExportableNetwork = (network = {}, registry = {}, sessionVariable
  * but user data is always preserved in the event of conflicts.
  *
  * @param  {Object} entity
- * @param  {Object} entityTypeDefinition The variableRegistry entry for this entity type
+ * @param  {Object} entityTypeDefinition The codebook entry for this entity type
  * @return {Object} entity data safe to supply to user-defined workers.
  */
 export const asWorkerAgentEntity = (entity, entityTypeDefinition) => ({
@@ -131,7 +131,7 @@ export const asWorkerAgentEdge = (edge, edgeTypeDefinition) => ({
  * Produces a network suitable for worker scripts.
  *
  * @param  {Object} network  the entire network (in redux state)
- * @param  {Object} registry the variableRegistry from a protocol
+ * @param  {Object} registry the codebook from a protocol
  * @return {Object} workerNetwork
  */
 export const asWorkerAgentNetwork = (network = {}, registry = {}) => {

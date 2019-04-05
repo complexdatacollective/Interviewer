@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link, Redirect } from 'react-router-dom';
+import { get } from 'lodash';
+import { Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
-
-
 import logo from '../../images/NC-Round.svg';
 import { Icon } from '../../ui/components';
-import { ProtocolList, SessionList } from '.';
+import { ProtocolList, ProtocolImportOverlay, SessionList, ImportProgressOverlay } from '.';
 
 /**
   * Setup screen
@@ -18,6 +17,7 @@ class Setup extends Component {
     super(props);
     this.state = {
       showOptions: 'protocol',
+      showImportProtocolOverlay: false,
     };
   }
 
@@ -32,9 +32,9 @@ class Setup extends Component {
   isShowSessions = () => this.state.showOptions === 'session';
 
   render() {
-    if (this.props.isProtocolLoaded) {
-      const stageIndex = this.props.stageIndex ? this.props.stageIndex : 0;
-      const pathname = `/session/${this.props.sessionId}/${this.props.protocolType}/${this.props.protocolPath}/${stageIndex}`;
+    if (this.props.isSessionActive) {
+      const stageIndex = this.props.sessions[this.props.sessionId].stageIndex;
+      const pathname = `/session/${this.props.sessionId}/${stageIndex}`;
       return (<Redirect to={{ pathname: `${pathname}` }} />);
     }
 
@@ -44,10 +44,16 @@ class Setup extends Component {
       currentTab = <SessionList />;
     }
 
-    const startScreenIcon = () => (this.props.isPairedWithServer ? 'add-a-protocol' : 'pair-a-server');
-
     return (
       <div className="setup">
+        <ProtocolImportOverlay
+          show={this.state.showImportProtocolOverlay}
+          onClose={() => this.setState({ showImportProtocolOverlay: false })}
+        />
+        <ImportProgressOverlay
+          show={this.props.importProtocolProgress && this.props.importProtocolProgress.step > 0}
+          progress={this.props.importProtocolProgress}
+        />
         <div className="setup__header">
           <div className="header-content">
             <div className="header-content__title">
@@ -73,9 +79,11 @@ class Setup extends Component {
           {currentTab}
         </main>
         { this.isShowProtocols() &&
-          <Link to="/protocol-import">
-            <Icon name={startScreenIcon()} className="setup__server-button" />
-          </Link>
+          <Icon
+            name="add-a-protocol"
+            className="setup__server-button"
+            onClick={() => this.setState({ showImportProtocolOverlay: true })}
+          />
         }
       </div>
     );
@@ -83,28 +91,25 @@ class Setup extends Component {
 }
 
 Setup.propTypes = {
-  isProtocolLoaded: PropTypes.bool.isRequired,
-  isPairedWithServer: PropTypes.bool.isRequired,
-  protocolPath: PropTypes.string,
-  protocolType: PropTypes.string.isRequired,
-  sessionId: PropTypes.string.isRequired,
-  stageIndex: PropTypes.number,
+  isSessionActive: PropTypes.bool.isRequired,
+  sessionId: PropTypes.string,
+  sessions: PropTypes.object.isRequired,
+  importProtocolProgress: PropTypes.object.isRequired,
 };
 
 Setup.defaultProps = {
-  protocolPath: '',
   isPairedWithServer: false,
-  stageIndex: 0,
+  sessionId: null,
 };
 
 function mapStateToProps(state) {
   return {
-    isFactory: state.protocol.isFactory,
-    isProtocolLoaded: state.protocol.isLoaded,
+    isSessionActive: !!state.activeSessionId,
     isPairedWithServer: !!state.pairedServer,
-    protocolPath: state.protocol.path,
-    protocolType: state.protocol.type,
-    sessionId: state.session,
+    protocolUID: get(state.sessions[state.activeSessionId], 'protocolUID'),
+    sessionId: state.activeSessionId,
+    sessions: state.sessions,
+    importProtocolProgress: state.importProtocol,
   };
 }
 

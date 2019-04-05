@@ -17,19 +17,19 @@ const setUpXml = () => {
   return (new DOMParser()).parseFromString(graphMLOutline, 'text/xml');
 };
 
-const getVariableInfo = (variableRegistry, type, element, key) => (
-  variableRegistry[type] && variableRegistry[type][element.type] &&
-  variableRegistry[type][element.type].variables &&
-  variableRegistry[type][element.type].variables[key]
+const getVariableInfo = (codebook, type, element, key) => (
+  codebook[type] && codebook[type][element.type] &&
+  codebook[type][element.type].variables &&
+  codebook[type][element.type].variables[key]
 );
 
-const isVariableRegistryExists = (variableRegistry, type, element, key) => {
-  const variableInfo = getVariableInfo(variableRegistry, type, element, key);
+const iscodebookExists = (codebook, type, element, key) => {
+  const variableInfo = getVariableInfo(codebook, type, element, key);
   return variableInfo && variableInfo.type && VariableTypeValues.includes(variableInfo.type);
 };
 
-const getTypeFromVariableRegistry = (variableRegistry, type, element, key, variableAttribute = 'type') => {
-  const variableInfo = getVariableInfo(variableRegistry, type, element, key);
+const getTypeFromcodebook = (codebook, type, element, key, variableAttribute = 'type') => {
+  const variableInfo = getVariableInfo(codebook, type, element, key);
   return variableInfo && variableInfo[variableAttribute];
 };
 
@@ -61,7 +61,7 @@ const generateKeys = (
   elements, // networkData.nodes
   type, // 'node' - node type?
   excludeList, // Variables to exlude
-  variableRegistry, // variable registry
+  codebook, // variable registry
   layoutVariable, // boolean value uses for edges?
 ) => {
   // generate keys for attributes
@@ -100,17 +100,17 @@ const generateKeys = (
 
     Object.keys(iterableElement).forEach((key) => {
       // transpose ids to names based on registry
-      const keyName = getTypeFromVariableRegistry(variableRegistry, type, element, key, 'name') || key;
+      const keyName = getTypeFromcodebook(codebook, type, element, key, 'name') || key;
       if (done.indexOf(keyName) === -1 && !excludeList.includes(keyName)) {
         const keyElement = document.createElementNS(graphML.namespaceURI, 'key');
         keyElement.setAttribute('id', keyName);
         keyElement.setAttribute('attr.name', keyName);
 
-        if (!isVariableRegistryExists(variableRegistry, type, element, key)) {
+        if (!iscodebookExists(codebook, type, element, key)) {
           missingVariables.push(`"${key}" in ${type}.${element.type}`);
         }
 
-        const variableType = getTypeFromVariableRegistry(variableRegistry, type, element, key);
+        const variableType = getTypeFromcodebook(codebook, type, element, key);
         switch (variableType) {
           case VariableType.boolean:
             keyElement.setAttribute('attr.type', variableType);
@@ -167,7 +167,7 @@ const addElements = (
   dataList, // List of nodes or edges
   type, // Element type to be created. "node" or "egde"
   excludeList, // Attributes to exclude lookup of in variable registry
-  variableRegistry, // Copy of variable registry
+  codebook, // Copy of variable registry
   layoutVariable, // Primary layout variable. Null for edges
   extra = false, // ???
 ) => {
@@ -185,20 +185,20 @@ const addElements = (
     graph.appendChild(domElement);
 
     if (extra) {
-      const label = variableRegistry && variableRegistry[type] &&
-        variableRegistry[type][dataElement.type] && (variableRegistry[type][dataElement.type].name
-          || variableRegistry[type][dataElement.type].label);
+      const label = codebook && codebook[type] &&
+        codebook[type][dataElement.type] && (codebook[type][dataElement.type].name
+          || codebook[type][dataElement.type].label);
       domElement.appendChild(getDataElement(uri, 'label', label));
     }
 
     // Add entity attributes
     Object.keys(nodeAttrs).forEach((key) => {
-      const keyName = getTypeFromVariableRegistry(variableRegistry, type, dataElement, key, 'name') || key;
+      const keyName = getTypeFromcodebook(codebook, type, dataElement, key, 'name') || key;
       if (!excludeList.includes(keyName) && nodeAttrs[key] !== null) {
         if (typeof nodeAttrs[key] !== 'object') {
           domElement.appendChild(
             getDataElement(uri, keyName, nodeAttrs[key]));
-        } else if (getTypeFromVariableRegistry(variableRegistry, type, dataElement, key) === 'layout') {
+        } else if (getTypeFromcodebook(codebook, type, dataElement, key) === 'layout') {
           domElement.appendChild(getDataElement(uri, `${keyName}X`, nodeAttrs[key].x));
           domElement.appendChild(getDataElement(uri, `${keyName}Y`, nodeAttrs[key].y));
         } else {
@@ -226,7 +226,7 @@ const xmlToString = (xmlData) => {
   return xmlString;
 };
 
-const createGraphML = (networkData, variableRegistry, onError) => {
+const createGraphML = (networkData, codebook, onError) => {
   // default graph structure
   const xml = setUpXml();
   const graph = xml.getElementsByTagName('graph')[0];
@@ -234,7 +234,7 @@ const createGraphML = (networkData, variableRegistry, onError) => {
 
   // find the first variable of type layout
   let layoutVariable;
-  forInRight(variableRegistry.node, (value) => {
+  forInRight(codebook.node, (value) => {
     layoutVariable = findKey(value.variables, { type: 'layout' });
   });
 
@@ -245,7 +245,7 @@ const createGraphML = (networkData, variableRegistry, onError) => {
     networkData.nodes,
     'node',
     [entityPrimaryKeyProperty],
-    variableRegistry,
+    codebook,
     layoutVariable,
   );
 
@@ -256,7 +256,7 @@ const createGraphML = (networkData, variableRegistry, onError) => {
     networkData.edges,
     'edge',
     [entityPrimaryKeyProperty, 'from', 'to', 'type'],
-    variableRegistry,
+    codebook,
   ));
 
   if (missingVariables.length > 0) {
@@ -268,8 +268,8 @@ const createGraphML = (networkData, variableRegistry, onError) => {
   }
 
   // add nodes and edges to graph
-  addElements(graph, graphML.namespaceURI, networkData.nodes, 'node', [entityPrimaryKeyProperty, entityAttributesProperty], variableRegistry, layoutVariable);
-  addElements(graph, graphML.namespaceURI, networkData.edges, 'edge', [entityPrimaryKeyProperty, entityAttributesProperty, 'from', 'to', 'type'], variableRegistry, null, true);
+  addElements(graph, graphML.namespaceURI, networkData.nodes, 'node', [entityPrimaryKeyProperty, entityAttributesProperty], codebook, layoutVariable);
+  addElements(graph, graphML.namespaceURI, networkData.edges, 'edge', [entityPrimaryKeyProperty, entityAttributesProperty, 'from', 'to', 'type'], codebook, null, true);
 
   return saveFile(xmlToString(xml), onError, 'graphml', ['graphml'], 'networkcanvas.graphml', 'text/xml',
     { message: 'Your network canvas graphml file.', subject: 'network canvas export' });
