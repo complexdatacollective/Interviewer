@@ -4,7 +4,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { TransitionGroup } from 'react-transition-group';
 import { push } from 'react-router-redux';
-
+import { isStageSkipped } from '../selectors/skip-logic';
 import withPrompt from '../behaviours/withPrompt';
 import { Timeline } from '../components';
 import { Stage as StageTransition } from '../components/Transition';
@@ -39,7 +39,15 @@ class Protocol extends Component {
       if (interfaceRefInstance) {
         interfaceRefInstance.clickNext();
       }
-      this.props.changeStage(`${this.props.pathPrefix}/${this.props.nextIndex}`);
+
+      let skipToIndex = this.props.nextIndex;
+
+      while (this.props.isSkipped(skipToIndex)) {
+        console.info('Skipping stage', skipToIndex);
+        skipToIndex += 1;
+      }
+
+      this.props.changeStage(`${this.props.pathPrefix}/${skipToIndex}`);
     } else {
       this.props.promptForward();
     }
@@ -54,7 +62,14 @@ class Protocol extends Component {
       if (interfaceRefInstance) {
         interfaceRefInstance.clickPrevious();
       }
-      this.props.changeStage(`${this.props.pathPrefix}/${this.props.previousIndex}?back`);
+
+      let skipToIndex = this.props.previousIndex;
+
+      while (this.props.isSkipped(skipToIndex)) {
+        console.info('Skipping stage', skipToIndex);
+        skipToIndex -= 1;
+      }
+      this.props.changeStage(`${this.props.pathPrefix}/${skipToIndex}`);
     } else {
       this.props.promptBackward();
     }
@@ -135,6 +150,7 @@ Protocol.propTypes = {
   changeStage: PropTypes.func.isRequired,
   isFirstPrompt: PropTypes.func.isRequired,
   isLastPrompt: PropTypes.func.isRequired,
+  isSkipped: PropTypes.func.isRequired,
   isSessionLoaded: PropTypes.bool.isRequired,
   nextIndex: PropTypes.number.isRequired,
   pathPrefix: PropTypes.string,
@@ -170,6 +186,7 @@ function mapStateToProps(state, ownProps) {
     isSessionLoaded: !!state.activeSessionId,
     nextIndex: rotateIndex(maxLength, stageIndex + 1),
     pathPrefix: `/session/${sessionId}`,
+    isSkipped: index => isStageSkipped(index)(state),
     percentProgress: (stageProgress + (promptProgress / (maxLength - 1))) * 100,
     previousIndex: rotateIndex(maxLength, stageIndex - 1),
     promptId,
