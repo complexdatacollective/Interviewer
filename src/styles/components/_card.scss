@@ -6,8 +6,8 @@
   transition: border-color var(--animation-duration-fast) var(--animation-easing);
   cursor: pointer;
   display: flex;
-  margin: 1rem;
   padding: 1.5rem;
+  height: 100%;
 
   &--multiselect {
     cursor: default;
