@@ -41,7 +41,7 @@ export const getWorkerNetwork = createDeepEqualSelector(
 // The user-defined name of a node type; e.g. `codebook.node[uuid].name == 'person'`
 export const makeGetNodeTypeDefinition = () => createDeepEqualSelector(
   (state, props) => getProtocolCodebook(state, props),
-  (_, props) => props.type,
+  (state, props) => (props && props.type) || (state && state.type),
   (codebook, nodeType) => {
     const nodeInfo = codebook && codebook.node;
     return nodeInfo && nodeInfo[nodeType];
@@ -52,10 +52,10 @@ const labelLogic = (codebookForNodeType) => {
   // Get the display variable, if explicitly set.
   const displayVariable = codebookForNodeType && codebookForNodeType.displayVariable;
 
-  // First fallback: get any variable with the name "label"
+  // Get any variable with the name "label"
   const variableCalledLabel = codebookForNodeType && codebookForNodeType.variables && findKey(codebookForNodeType.variables, ['name', 'label']);
 
-  // Second fallback: get the first variable of type 'text'
+  // Get the first variable of type 'text'
   const firstTextVariable = codebookForNodeType && codebookForNodeType.variables && findKey(codebookForNodeType.variables, ['type', 'text']);
 
   // First, try to use the displayVariable for the node type
