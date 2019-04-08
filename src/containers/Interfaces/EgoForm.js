@@ -9,7 +9,6 @@ import ReactMarkdown from 'react-markdown';
 import { ProgressBar, Scroller } from '../../components';
 import { Form } from '../../containers';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
-import { getProtocolForms } from '../../selectors/protocol';
 import { getNetworkEgo } from '../../selectors/network';
 import defaultMarkdownRenderers from '../../utils/markdownRenderers';
 import { entityAttributesProperty } from '../../ducks/modules/network';
@@ -94,6 +93,7 @@ class EgoForm extends Component {
               {...form}
               initialValues={ego[entityAttributesProperty]}
               form={FORM_NAME}
+              subject={{ entity: 'ego' }}
               onSubmit={this.handleSubmitForm}
             />
           </Scroller>
@@ -124,10 +124,9 @@ EgoForm.defaultProps = {
 };
 
 function mapStateToProps(state, props) {
-  const forms = getProtocolForms(state);
   const ego = getNetworkEgo(state);
   return {
-    form: forms[props.stage.form],
+    form: props.stage.form,
     introductionPanel: props.stage.introductionPanel,
     ego,
     formEnabled: () => isValid(FORM_NAME)(state) && !isSubmitting(FORM_NAME)(state),

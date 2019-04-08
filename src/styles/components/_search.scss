@@ -1,4 +1,4 @@
-$content-padding: 1rem;
+$content-padding: 1rem 2rem;
 $module-name: search;
 $results-height: calc(100vh - 23rem);
 
@@ -17,6 +17,7 @@ $results-height: calc(100vh - 23rem);
 
   &__header {
     padding: 1rem 0;
+    margin: 0;
     text-align: center;
     text-overflow: ellipsis;
     white-space: nowrap;

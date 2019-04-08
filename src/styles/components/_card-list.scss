@@ -1,36 +1,41 @@
 .card-list {
-  --card-margin: 1rem;
-
   flex-wrap: wrap;
   padding-bottom: 10em;
-  padding-top: calc(#{$scroller-top-padding} - var(--card-margin));
+  padding-top: calc(#{$scroller-top-padding});
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  @media screen and (min-width: 1200px) {
-    grid-template-columns: 1fr 1fr 1fr;
-  }
-  @media screen and (min-width: 1600px) {
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr;
+  grid-gap: 2rem;
+
+  @media screen and (min-aspect-ratio: 4 / 3) {
+    grid-template-columns: 1fr 1fr;
   }
 
-  // Single-column layout variant
-  &--single {
-    display: flex;
-    flex-direction: column;
+  @media screen and (min-aspect-ratio: 16 / 10) {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  @media screen and (min-aspect-ratio: 16 / 9) {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
   }
 
   &__content {
     position: relative;
   }
 
+  &--single {
+    .card {
+      background: var(--background);
+    }
+  }
+
   &__delete-button {
     --button-size: 1rem;
-    --button-padding: #{spacing(small)};
+    --button-padding: #{unit(2)};
 
     cursor: pointer;
     position: absolute;
-    right: var(--card-margin);
-    top: var(--card-margin);
+    right: var(--button-padding);
+    top: var(--button-padding);
     padding: var(--button-padding);
 
     &[name='close'] {

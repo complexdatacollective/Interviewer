@@ -1,26 +1,25 @@
 import { createSelector } from 'reselect';
-import { getProtocolCodebook, getProtocolForms } from './protocol';
+import { getProtocolCodebook } from './protocol';
 
 // Prop selectors
 
 const propFields = (_, props) => props.fields;
-const propStageForm = (_, props) => props.stage.form;
-const propForm = (_, { entity, type }) => ({ entity, type });
+const propStageSubject = (_, props) => props.subject || { entity: 'ego' };
 
 // MemoedSelectors
 
-
-const rehydrateField = ({ registry, entity, type, field }) => {
+export const rehydrateField = ({ codebook, entity, type, field }) => {
   if (!field.variable) { return field; }
 
   let entityVars;
-  if (!type) {
-    entityVars = registry[entity] ?
-      registry[entity].variables[field.variable] :
+
+  if (entity === 'ego') {
+    entityVars = codebook[entity] ?
+      codebook[entity].variables[field.variable] :
       {};
   } else {
-    entityVars = registry[entity][type] ?
-      registry[entity][type].variables[field.variable] :
+    entityVars = codebook[entity][type] ?
+      codebook[entity][type].variables[field.variable] :
       {};
   }
 
@@ -28,8 +27,9 @@ const rehydrateField = ({ registry, entity, type, field }) => {
     ...entityVars,
     name: field.variable,
     component: field.component,
-    fieldLabel: field.label,
+    fieldLabel: field.prompt,
     value: field.value,
+    validation: field.validation,
   };
 
   return returnObject;
@@ -37,18 +37,10 @@ const rehydrateField = ({ registry, entity, type, field }) => {
 
 export const makeRehydrateFields = () =>
   createSelector(
-    propForm,
+    propStageSubject,
     propFields,
     (state, props) => getProtocolCodebook(state, props),
-    ({ entity, type }, fields, registry) =>
-      fields.map(
-        field => rehydrateField({ registry, entity, type, field }),
-      ),
-  );
-
-export const makeRehydrateForm = () =>
-  createSelector(
-    propStageForm,
-    (state, props) => getProtocolForms(state, props),
-    (form, forms) => forms[form] || null,
+    ({ entity, type }, fields, codebook) => fields.map(
+      field => rehydrateField({ codebook, entity, type, field }),
+    ),
   );

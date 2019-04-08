@@ -69,6 +69,7 @@ ShallowWrapper {
               form="EDGE_FORM_NaN"
               initialValues={undefined}
               onSubmit={[Function]}
+              subject={undefined}
               title="alpha"
               type="friend"
             />
@@ -108,6 +109,7 @@ ShallowWrapper {
                 form="EDGE_FORM_NaN"
                 initialValues={undefined}
                 onSubmit={[Function]}
+                subject={undefined}
                 title="alpha"
                 type="friend"
               />
@@ -166,6 +168,7 @@ ShallowWrapper {
                 form="EDGE_FORM_NaN"
                 initialValues={undefined}
                 onSubmit={[Function]}
+                subject={undefined}
                 title="alpha"
                 type="friend"
               />
@@ -185,6 +188,7 @@ ShallowWrapper {
                 form="EDGE_FORM_NaN"
                 initialValues={undefined}
                 onSubmit={[Function]}
+                subject={undefined}
                 title="alpha"
                 type="friend"
               />,
@@ -203,6 +207,7 @@ ShallowWrapper {
                 "form": "EDGE_FORM_NaN",
                 "initialValues": undefined,
                 "onSubmit": [Function],
+                "subject": undefined,
                 "title": "alpha",
                 "type": "friend",
               },
@@ -252,6 +257,7 @@ ShallowWrapper {
                 form="EDGE_FORM_NaN"
                 initialValues={undefined}
                 onSubmit={[Function]}
+                subject={undefined}
                 title="alpha"
                 type="friend"
               />
@@ -291,6 +297,7 @@ ShallowWrapper {
                   form="EDGE_FORM_NaN"
                   initialValues={undefined}
                   onSubmit={[Function]}
+                  subject={undefined}
                   title="alpha"
                   type="friend"
                 />
@@ -349,6 +356,7 @@ ShallowWrapper {
                   form="EDGE_FORM_NaN"
                   initialValues={undefined}
                   onSubmit={[Function]}
+                  subject={undefined}
                   title="alpha"
                   type="friend"
                 />
@@ -368,6 +376,7 @@ ShallowWrapper {
                   form="EDGE_FORM_NaN"
                   initialValues={undefined}
                   onSubmit={[Function]}
+                  subject={undefined}
                   title="alpha"
                   type="friend"
                 />,
@@ -386,6 +395,7 @@ ShallowWrapper {
                   "form": "EDGE_FORM_NaN",
                   "initialValues": undefined,
                   "onSubmit": [Function],
+                  "subject": undefined,
                   "title": "alpha",
                   "type": "friend",
                 },

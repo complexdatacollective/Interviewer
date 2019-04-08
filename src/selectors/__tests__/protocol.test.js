@@ -25,10 +25,6 @@ const mockProtocol = {
   forms: protocolForm,
 };
 
-const mockProps = {
-  type: 'person',
-};
-
 const mockState = {
   activeSessionId: 'mockSession',
   activeSessionWorkers: { nodeLabelWorker: 'blob:http://192.168.1.196:3000/b6cac5c5-1b4d-4db0-be86-fa55239fd62c' },
@@ -84,16 +80,6 @@ describe('protocol selector', () => {
     it('should get protocol codebook', () => {
       expect(Protocol.getProtocolCodebook(mockState)).toEqual({ node: nodeVariables });
       expect(Protocol.getProtocolCodebook(emptyState)).toEqual(undefined);
-    });
-
-    it('should get protocol forms', () => {
-      expect(Protocol.getProtocolForms(mockState)).toEqual(protocolForm);
-      expect(Protocol.getProtocolForms(emptyState)).toEqual(undefined);
-    });
-
-    it('should get node color', () => {
-      const selected = Protocol.makeGetNodeColor();
-      expect(selected(mockState, mockProps)).toEqual('node-color-seq-2');
     });
   });
 });

@@ -8,7 +8,7 @@ import { Icon } from '../../ui/components';
 import { Radio } from '../../ui/components/Fields';
 import { Accordion } from '.';
 
-import { makeGetEdgeColor, makeGetEdgeLabel, makeGetNodeAttributeLabel, makeGetCategoricalOptions } from '../../selectors/protocol';
+import { makeGetEdgeColor, makeGetEdgeLabel, makeGetNodeAttributeLabel, makeGetCategoricalOptions } from '../../selectors/network';
 
 class PresetSwitcherKey extends Component {
   constructor() {

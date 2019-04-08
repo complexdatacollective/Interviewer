@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 
 import WorkerAgent from '../utils/WorkerAgent';
 import { Node as UINode } from '../ui/components';
-import { getWorkerNetwork, getNodeLabelFunction } from '../selectors/network';
-import { makeGetNodeColor, makeGetNodeTypeDefinition } from '../selectors/protocol';
+import { getWorkerNetwork, makeGetNodeLabel, makeGetNodeColor, makeGetNodeTypeDefinition } from '../selectors/network';
 import { getNodeLabelWorkerUrl } from '../selectors/activeSessionWorkers';
 import { asWorkerAgentEntity } from '../utils/networkFormat';
 
@@ -81,11 +80,12 @@ class Node extends PureComponent {
 function mapStateToProps(state, props) {
   const getNodeColor = makeGetNodeColor();
   const getNodeTypeDefinition = makeGetNodeTypeDefinition();
+  const getNodeLabel = makeGetNodeLabel();
 
   return {
     color: getNodeColor(state, props),
     nodeTypeDefinition: getNodeTypeDefinition(state, props),
-    getLabel: getNodeLabelFunction(state),
+    getLabel: getNodeLabel(state, props),
     workerUrl: getNodeLabelWorkerUrl(state),
     workerNetwork: (getNodeLabelWorkerUrl(state) && getWorkerNetwork(state)) || null,
   };

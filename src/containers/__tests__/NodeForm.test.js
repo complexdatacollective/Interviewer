@@ -14,13 +14,17 @@ const mockProps = {
       component: 'Text',
     },
   ],
-  entity: 'node',
-  type: 'person',
   closeModal: () => {},
   openModal: () => {},
   resetValues: () => {},
   initialValues: {},
   show: true,
+  stage: {
+    subject: {
+      entity: 'node',
+      type: 'person',
+    },
+  },
   useFullScreenForms: true,
   form: {
     title: 'alpha',

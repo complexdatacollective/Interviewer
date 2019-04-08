@@ -4,7 +4,7 @@ import { withBounds } from '../../behaviours';
 
 import ConvexHulls from '../../components/Canvas/ConvexHulls';
 import { makeGetNodesByCategorical } from '../../selectors/canvas';
-import { makeGetCategoricalOptions } from '../../selectors/protocol';
+import { makeGetCategoricalOptions } from '../../selectors/network';
 
 function makeMapStateToProps() {
   const getNodesByGroup = makeGetNodesByCategorical();

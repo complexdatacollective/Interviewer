@@ -2,11 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators, compose } from 'redux';
-import { Redirect } from 'react-router-dom';
 import { actionCreators as resetActions } from '../ducks/modules/reset';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { actionCreators as sessionActions } from '../ducks/modules/session';
-import { isStageSkipped } from '../selectors/skip-logic';
 
 class LoadParamsRoute extends Component {
   componentWillMount() {
@@ -41,33 +39,20 @@ class LoadParamsRoute extends Component {
     const {
       backParam,
       component: RenderComponent,
-      isSkipped,
       shouldReset,
       stageIndex,
       ...rest
     } = this.props;
 
-    const {
-      sessionId,
-    } = this.props.computedMatch.params;
-
     const finishedLoading = this.props.sessionId;
     if (!shouldReset && !finishedLoading) { return null; }
 
     return (
-      isSkipped ?
-        (<Redirect to={
-          {
-            pathname: `/session/${sessionId}/${stageIndex}`,
-            search: backParam,
-          }}
-        />) :
-        (<RenderComponent
-          {...rest}
-          stageIndex={this.props.computedMatch.params.stageIndex || 0}
-          stageBackward={!!backParam}
-        />)
-    );
+      <RenderComponent
+        {...rest}
+        stageIndex={this.props.computedMatch.params.stageIndex || 0}
+        stageBackward={!!backParam}
+      />);
   }
 }
 
@@ -75,7 +60,6 @@ LoadParamsRoute.propTypes = {
   backParam: PropTypes.string.isRequired,
   component: PropTypes.func.isRequired,
   computedMatch: PropTypes.object.isRequired,
-  isSkipped: PropTypes.bool,
   resetState: PropTypes.func.isRequired,
   sessionId: PropTypes.string,
   sessionUrl: PropTypes.string,
@@ -87,7 +71,6 @@ LoadParamsRoute.propTypes = {
 };
 
 LoadParamsRoute.defaultProps = {
-  isSkipped: false,
   sessionId: '',
   sessionUrl: '/setup',
   shouldReset: false,
@@ -97,7 +80,6 @@ LoadParamsRoute.defaultProps = {
 function mapStateToProps(state, ownProps) {
   return {
     backParam: ownProps.location.search,
-    isSkipped: isStageSkipped(ownProps.computedMatch.params.stageIndex)(state),
     sessionId: state.activeSessionId,
     stageIndex: state.activeSessionId && state.sessions[state.activeSessionId].stageIndex,
   };

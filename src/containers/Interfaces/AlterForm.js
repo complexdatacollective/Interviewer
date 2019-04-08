@@ -10,7 +10,6 @@ import Swiper from 'react-id-swiper';
 import { ProgressBar } from '../../components';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { makeNetworkNodesForType } from '../../selectors/interface';
-import { getProtocolForms } from '../../selectors/protocol';
 import { entityPrimaryKeyProperty } from '../../ducks/modules/network';
 import { SlideFormNode } from '../AlterForms';
 import defaultMarkdownRenderers from '../../utils/markdownRenderers';
@@ -124,6 +123,7 @@ class AlterForm extends Component {
           {stageNodes.map((node, index) => (
             <SlideFormNode
               key={index}
+              subject={stage.subject}
               node={node}
               index={index}
               onUpdate={this.handleUpdate}
@@ -160,17 +160,10 @@ function makeMapStateToProps() {
   const getStageNodes = makeNetworkNodesForType();
 
   return function mapStateToProps(state, props) {
-    const forms = getProtocolForms(state);
-    const currentForm = forms[props.stage.form];
-    const entity = currentForm && currentForm.entity;
-    const type = currentForm && currentForm.type;
-    const stageNodes = getStageNodes(state, {
-      ...props,
-      stage: { ...props.stage, subject: { entity, type } },
-    });
+    const stageNodes = getStageNodes(state, props);
 
     return {
-      form: currentForm,
+      form: props.stage.form,
       formEnabled: formName => isValid(formName)(state) && !isSubmitting(formName)(state),
       stageNodes,
     };

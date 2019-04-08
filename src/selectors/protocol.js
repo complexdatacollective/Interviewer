@@ -36,11 +36,6 @@ export const getProtocolCodebook = createSelector(
   protocol => protocol.codebook,
 );
 
-export const getProtocolForms = createSelector(
-  getActiveProtocol,
-  protocol => protocol.forms,
-);
-
 export const getRemoteProtocolId = createDeepEqualSelector(
   getActiveProtocol,
   protocol => nameDigest(protocol.name) || null,
@@ -51,63 +46,4 @@ const withFinishStage = stages => (stages && stages.length ? [...stages, Default
 export const getProtocolStages = createSelector(
   getActiveProtocol,
   protocol => withFinishStage(protocol.stages),
-);
-
-// The user-defined name of a node type; e.g. `codebook.node[uuid].name == 'person'`
-export const makeGetNodeTypeDefinition = () => createDeepEqualSelector(
-  getProtocolCodebook,
-  (state, props) => props.type,
-  (codebook, nodeType) => {
-    const nodeInfo = codebook && codebook.node;
-    return nodeInfo && nodeInfo[nodeType];
-  },
-);
-
-export const makeGetNodeColor = () => createDeepEqualSelector(
-  getProtocolCodebook,
-  (_, props) => props.type,
-  (codebook, nodeType) => {
-    const nodeInfo = codebook.node;
-    return (nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].color) || 'node-color-seq-1';
-  },
-);
-
-export const makeGetEdgeLabel = () => createDeepEqualSelector(
-  getProtocolCodebook,
-  (_, props) => props.type,
-  (codebook, edgeType) => {
-    const edgeInfo = codebook.edge;
-    return (edgeInfo && edgeInfo[edgeType] && edgeInfo[edgeType].label) || '';
-  },
-);
-
-export const makeGetEdgeColor = () => createDeepEqualSelector(
-  getProtocolCodebook,
-  (_, props) => props.type,
-  (codebook, edgeType) => {
-    const edgeInfo = codebook.edge;
-    return (edgeInfo && edgeInfo[edgeType] && edgeInfo[edgeType].color) || 'edge-color-seq-1';
-  },
-);
-
-export const makeGetNodeAttributeLabel = () => createDeepEqualSelector(
-  getProtocolCodebook,
-  (_, props) => props.subject.type,
-  (_, props) => props.variableId,
-  (codebook, nodeType, variableId) => {
-    const nodeInfo = codebook.node;
-    const variables = (nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].variables) || {};
-    return (variables && variables[variableId] && variables[variableId].label) || [];
-  },
-);
-
-export const makeGetCategoricalOptions = () => createDeepEqualSelector(
-  (state, props) => getProtocolCodebook(state, props),
-  (_, props) => props.subject.type,
-  (_, props) => props.variableId,
-  (codebook, nodeType, variableId) => {
-    const nodeInfo = codebook.node;
-    const variables = (nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].variables) || {};
-    return (variables && variables[variableId] && variables[variableId].options) || [];
-  },
 );
