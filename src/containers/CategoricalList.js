@@ -240,6 +240,7 @@ function makeMapStateToProps() {
   return function mapStateToProps(state, props) {
     const stageNodes = getStageNodes(state, props);
     const activePromptVariable = getPromptVariable(state, props);
+    const labelVariable = getLabelVariableForStageSubject();
 
     return {
       activePromptVariable,
@@ -256,7 +257,7 @@ function makeMapStateToProps() {
             nodes,
           };
         }),
-      displayVariable: getLabelVariableForStageSubject(state, props)[0],
+      displayVariable: labelVariable(state, props)[0],
     };
   };
 }
