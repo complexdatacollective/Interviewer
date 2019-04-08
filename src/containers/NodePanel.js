@@ -18,16 +18,16 @@ class NodePanel extends PureComponent {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.nodes.length !== this.props.nodes.length) {
-      this.sendNodesUpdate(nextProps.nodes);
+      console.log('nodes length changed', nextProps.nodes.length, this.props.nodes.length);
+      this.sendNodesUpdate(nextProps.nodes, nextProps.externalData);
     }
   }
 
   // Because the index is used to determine whether node originated in this list
   // we need to supply an index for the unfiltered list for externalData.
-  fullNodeIndex = (nodes) => {
+  fullNodeIndex = (nodes, externalData) => {
     const {
       dataSource,
-      externalData,
     } = this.props;
     const externalNodes = get(externalData, 'nodes', []);
     const allNodes = (dataSource === 'existing' ? nodes : externalNodes);
@@ -39,10 +39,14 @@ class NodePanel extends PureComponent {
   // is 'empty'
   nodeDisplayCount = nodes => nodes.length;
 
-  sendNodesUpdate = (nodes) => {
+  sendNodesUpdate = (nodes, externalData) => {
+    console.log({
+      nodecount: this.nodeDisplayCount(nodes),
+      nodeindex: this.fullNodeIndex(nodes),
+    });
     this.props.onUpdate(
       this.nodeDisplayCount(nodes),
-      this.fullNodeIndex(nodes),
+      this.fullNodeIndex(nodes, externalData),
     );
   }
 
@@ -105,8 +109,9 @@ const makeGetNodes = () => {
       return nodes;
     }
 
+    console.log('we got here', props.key);
     if (!props.externalData) { return []; }
-
+    console.log('we got excternal data', props.key);
     const nodes = get(
       props.externalData,
       'nodes',
