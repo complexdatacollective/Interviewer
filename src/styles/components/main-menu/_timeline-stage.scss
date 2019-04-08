@@ -47,12 +47,14 @@
   }
 
   &__preview {
-    flex: 0 0 10rem;
+    flex: 0 0 12rem;
     margin: 1rem 2rem;
 
     img {
       max-width: 100%;
       border-radius: var(--border-radius);
+      padding: 0.5rem;
+      background: var(--background);
     }
   }
 
