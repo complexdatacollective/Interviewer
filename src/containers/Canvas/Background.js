@@ -16,8 +16,10 @@ class Background extends PureComponent {
     image: null,
   };
 
+
   render() {
     const { concentricCircles, skewedTowardCenter, image } = this.props;
+    console.log('background render:', this.props);
     let background;
     if (image) {
       background = <BackgroundImage className="canvas-background__image" url={image} />;

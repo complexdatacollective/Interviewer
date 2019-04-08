@@ -63,8 +63,8 @@ const Sociogram = ({
   const allowPositioning = prompt.layout && prompt.layout.allowPositioning;
   const displayEdges = (prompt.edges && prompt.edges.display) || [];
   const backgroundImage = stage.background && stage.background.image;
-  const concentricCircles = prompt.background && prompt.background.concentricCircles;
-  const skewedTowardCenter = prompt.background && prompt.background.skewedTowardCenter;
+  const concentricCircles = stage.background && stage.background.concentricCircles;
+  const skewedTowardCenter = stage.background && stage.background.skewedTowardCenter;
   const sortOrder = prompt.sortOrder;
 
   return (
