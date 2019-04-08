@@ -18,7 +18,6 @@ class NodePanel extends PureComponent {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.nodes.length !== this.props.nodes.length) {
-      console.log('nodes length changed', nextProps.nodes.length, this.props.nodes.length);
       this.sendNodesUpdate(nextProps.nodes, nextProps.externalData);
     }
   }
@@ -40,10 +39,6 @@ class NodePanel extends PureComponent {
   nodeDisplayCount = nodes => nodes.length;
 
   sendNodesUpdate = (nodes, externalData) => {
-    console.log({
-      nodecount: this.nodeDisplayCount(nodes),
-      nodeindex: this.fullNodeIndex(nodes),
-    });
     this.props.onUpdate(
       this.nodeDisplayCount(nodes),
       this.fullNodeIndex(nodes, externalData),
@@ -109,9 +104,8 @@ const makeGetNodes = () => {
       return nodes;
     }
 
-    console.log('we got here', props.key);
     if (!props.externalData) { return []; }
-    console.log('we got excternal data', props.key);
+
     const nodes = get(
       props.externalData,
       'nodes',
