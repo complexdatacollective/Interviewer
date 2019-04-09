@@ -13,35 +13,35 @@ import { entityPrimaryKeyProperty } from '../ducks/modules/network';
 
 class NodePanel extends PureComponent {
   componentDidMount() {
-    this.sendNodesUpdate(this.props.nodes);
+    this.sendNodesUpdate();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.nodes.length !== this.props.nodes.length) {
-      this.sendNodesUpdate(nextProps.nodes, nextProps.externalData);
+  componentDidUpdate(prevProps) {
+    if (prevProps.nodes.length !== this.props.nodes.length) {
+      this.sendNodesUpdate();
     }
   }
 
   // Because the index is used to determine whether node originated in this list
   // we need to supply an index for the unfiltered list for externalData.
-  fullNodeIndex = (nodes, externalData) => {
+  fullNodeIndex = () => {
     const {
       dataSource,
     } = this.props;
-    const externalNodes = get(externalData, 'nodes', []);
-    const allNodes = (dataSource === 'existing' ? nodes : externalNodes);
+    const externalNodes = get(this.props.externalData, 'nodes', []);
+    const allNodes = (dataSource === 'existing' ? this.props.nodes : externalNodes);
 
     return new Set(allNodes.map(node => node[entityPrimaryKeyProperty]));
   }
 
   // This can use the displayed nodes for a count as it is used to see whether the panel
   // is 'empty'
-  nodeDisplayCount = nodes => nodes.length;
+  nodeDisplayCount = () => this.props.nodes.length;
 
-  sendNodesUpdate = (nodes, externalData) => {
+  sendNodesUpdate = () => {
     this.props.onUpdate(
-      this.nodeDisplayCount(nodes),
-      this.fullNodeIndex(nodes, externalData),
+      this.nodeDisplayCount(),
+      this.fullNodeIndex(),
     );
   }
 
