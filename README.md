@@ -135,11 +135,11 @@ Troubleshooting:
 
 Electron supports [extensions to Chrome devtools](https://electronjs.org/docs/tutorial/devtools-extension) such as Redux DevTools.
 
-In the development environment, these will be loaded if you provide one or more paths to your extensions (semicolon-separated) in the `NC_DEVTOOLS_EXENSION_PATH` environment variable. The electron docs describe how to find the filepath for an extension once installed.
+In the development environment, these will be loaded if you provide one or more paths to your extensions (semicolon-separated) in the `NC_DEVTOOLS_EXTENSION_PATH` environment variable. The electron docs describe how to find the filepath for an extension once installed.
 
 Example: enabling Redux Devtools on macOS:
 ```bash
-NC_DEVTOOLS_EXENSION_PATH=~/Library/Application\ Support/Google/Chrome/Default/Extensions/lmhkpmbekcpmknklioeibfkpmmfibljd/2.15.2_0 npm run electron:dev
+NC_DEVTOOLS_EXTENSION_PATH=~/Library/Application\ Support/Google/Chrome/Default/Extensions/lmhkpmbekcpmknklioeibfkpmmfibljd/2.15.2_0 npm run electron:dev
 ```
 
 ## Application Structure

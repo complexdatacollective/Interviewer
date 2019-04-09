@@ -99,16 +99,6 @@ describe('sessions reducer', () => {
 
     expect(newState[mockSessionId]).toEqual(undefined);
   });
-
-  it('should throw if ADD_NODES called without an active session', () => {
-    expect(() => reducer(mockState,
-      {
-        type: actionTypes.ADD_NODE,
-        sessionId: 'a',
-        nodes: [{}],
-      },
-    )).toThrowError(/property.*undefined/);
-  });
 });
 
 describe('sessions actions', () => {
