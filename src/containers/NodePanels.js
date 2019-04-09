@@ -82,7 +82,6 @@ class NodePanels extends PureComponent {
     const {
       panels,
       meta,
-      newNodeAttributes,
     } = this.props;
 
     const panel = panels[index];
@@ -93,9 +92,9 @@ class NodePanels extends PureComponent {
 
     // Rules for when panel contains existing nodes
     if (panel.dataSource === 'existing') {
+      // Don't allow nodes into existing panel if this is their last prompt ID
       return (
-        meta.stageId !== newNodeAttributes.stageId ||
-        meta.promptId !== newNodeAttributes.promptId
+        meta.promptIDs.length !== 1
       );
     }
 
