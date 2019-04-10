@@ -1,10 +1,11 @@
 /* eslint-disable quotes, quote-props, comma-dangle */
 import objectHash from 'object-hash';
-import { get } from 'lodash';
+import * as csv from 'csvtojson';
+import { get, omit } from 'lodash';
 import environments from './environments';
 import inEnvironment from './Environment';
 import { readFile } from './filesystem';
-import { entityPrimaryKeyProperty } from '../ducks/modules/network';
+import { entityPrimaryKeyProperty, entityAttributesProperty } from '../ducks/modules/network';
 import getAssetUrl from './protocol/getAssetUrl';
 
 const withKeys = data =>
@@ -17,12 +18,43 @@ const withKeys = data =>
     };
   });
 
+/**
+ * Converts a CSV file into a Network Canvas node list JSON
+ *
+ * @param {string} data - the contents of a CSV file
+ *
+ * See: https://github.com/Keyang/node-csvtojson We may want to introduce buffering
+ * to this function to increase performance particularly on cordova.
+ *
+ */
+const CSVToJSONNetworkFormat = (data) => {
+  const withTypeAndAttributes = node => ({
+    type: node.type,
+    [entityAttributesProperty]: {
+      ...omit(node, 'type'),
+    }
+  });
+
+  return csv().fromString(data)
+    .then((json) => {
+      const nodeList = json.map(entry => withTypeAndAttributes(entry));
+      return { nodes: nodeList };
+    });
+};
+
 const fetchNetwork = inEnvironment(
   (environment) => {
     if (environment === environments.ELECTRON || environment === environments.WEB) {
-      return url =>
+      return (url, fileType) =>
         fetch(url)
-          .then(response => response.json())
+          .then((response) => {
+            if (fileType === 'csv') {
+              return response.text().then(
+                data => CSVToJSONNetworkFormat(data)
+              );
+            }
+            return response.json();
+          })
           .then((json) => {
             const nodes = get(json, 'nodes', []);
             return ({ nodes: withKeys(nodes) });
@@ -30,8 +62,13 @@ const fetchNetwork = inEnvironment(
     }
 
     if (environment === environments.CORDOVA) {
-      return url => readFile(url)
-        .then(response => JSON.parse(response))
+      return (url, fileType) => readFile(url)
+        .then((response) => {
+          if (fileType === 'csv') {
+            return CSVToJSONNetworkFormat(response);
+          }
+          return JSON.parse(response);
+        })
         .then((json) => {
           const nodes = get(json, 'nodes', []);
           return ({ nodes: withKeys(nodes) });
@@ -41,14 +78,6 @@ const fetchNetwork = inEnvironment(
     return Promise.reject('Environment not supported');
   },
 );
-
-const parseJSON = (fileContents) => {
-
-};
-
-const parseCSV = (fileContents) => {
-
-};
 
 const fileExtension = fileName => fileName.split('.').pop();
 
@@ -60,12 +89,16 @@ const fileExtension = fileName => fileName.split('.').pop();
  * @returns {object} Network object in format { nodes, edges }
  *
  */
-const loadExternalData = (protocolUID, fileName) => {
+const loadExternalData = (protocolUID, fileName, type) => {
   const fileType = fileExtension(fileName) === 'csv' ? 'csv' : 'json';
 
-  return getAssetUrl(protocolUID, fileName)
-    .then(url => fetchNetwork(url, fileType));
+  switch (type) {
+    case 'network':
+      return getAssetUrl(protocolUID, fileName)
+        .then(url => fetchNetwork(url, fileType));
+    default:
+      return new Error('You must specify an external data type.');
+  }
 };
-
 
 export default loadExternalData;

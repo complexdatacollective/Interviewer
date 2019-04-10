@@ -20,13 +20,15 @@ const mapStateToProps = (state) => {
   const session = state.sessions[state.activeSessionId];
   const protocolUID = session.protocolUID;
   const protocolCodebook = state.installedProtocols[protocolUID].codebook;
+  const assetManifest = state.installedProtocols[protocolUID].assetManifest;
   const assetFiles = mapValues(
-    state.installedProtocols[protocolUID].assetManifest,
+    assetManifest,
     asset => asset.source,
   );
 
   return {
     protocolUID,
+    assetManifest,
     assetFiles,
     protocolCodebook,
   };
@@ -58,6 +60,24 @@ const getObjectUUIDByValue = (object, toFind) => {
 
   return foundKey || toFind;
 };
+
+const withUUIDReplacement = (nodeList, codebook) => nodeList.map(
+  (node) => {
+    const nodeTypeUUID = getObjectUUIDByValue(codebook.node, node.type);
+    const codebookDefinition = codebook.node[nodeTypeUUID] || {};
+
+    const attributes = mapKeys(node[entityAttributesProperty],
+      (attributeValue, attributeKey) =>
+        getObjectUUIDByValue(codebookDefinition.variables, attributeKey),
+    );
+
+    return {
+      ...node,
+      type: nodeTypeUUID,
+      [entityAttributesProperty]: attributes,
+    };
+  },
+);
 
 /**
  * Creates a higher order component which can be used to load data from network assets in
@@ -95,38 +115,22 @@ const withExternalData = (sourceProperty, dataProperty) =>
         setExternalData,
         protocolUID,
         assetFiles,
+        assetManifest,
         protocolCodebook,
       }) =>
         (sourceId) => {
           if (!sourceId) { return; }
-
           // This is where we could set the loading state for URL assets
           setExternalData(null);
 
           const sourceFile = assetFiles[sourceId];
+          const type = assetManifest[sourceId].type;
 
-          loadExternalData(protocolUID, sourceFile)
-            .then((externalData) => {
-              const withUUIDReplacement = nodeList => nodeList.map(
-                (node) => {
-                  const nodeTypeUUID = getObjectUUIDByValue(protocolCodebook.node, node.type);
-                  const codebookDefinition = protocolCodebook.node[nodeTypeUUID] || {};
-
-                  const attributes = mapKeys(node[entityAttributesProperty],
-                    (attributeValue, attributeKey) =>
-                      getObjectUUIDByValue(codebookDefinition.variables, attributeKey),
-                  );
-
-                  return {
-                    ...node,
-                    type: nodeTypeUUID,
-                    [entityAttributesProperty]: attributes,
-                  };
-                },
-              );
-
-              setExternalData({ nodes: withUUIDReplacement(externalData.nodes) });
-            });
+          loadExternalData(protocolUID, sourceFile, type)
+            .then(externalData =>
+              setExternalData({
+                nodes: withUUIDReplacement(externalData.nodes, protocolCodebook),
+              }));
         },
     }),
     lifecycle({
