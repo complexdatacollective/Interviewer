@@ -12,6 +12,7 @@ import {
   mapValues,
   mapKeys,
   findKey,
+  isEmpty,
 } from 'lodash';
 import loadExternalData from '../utils/loadExternalData';
 import { entityAttributesProperty } from '../ducks/modules/network';
@@ -51,7 +52,7 @@ const mapStateToProps = (state) => {
  * Finally, if neither approach finds a UUID, {toFind} is returned.
  */
 const getObjectUUIDByValue = (object, toFind) => {
-  if (object[toFind]) { // should pass if UUID is used
+  if (isEmpty(object) || object[toFind]) {
     return toFind;
   }
 
