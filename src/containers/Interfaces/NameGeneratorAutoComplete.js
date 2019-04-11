@@ -9,12 +9,13 @@ import withPrompt from '../../behaviours/withPrompt';
 import Search from '../../containers/Search';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as searchActions } from '../../ducks/modules/search';
-import { entityAttributesProperty } from '../../ducks/modules/network';
+import { entityAttributesProperty, entityPrimaryKeyProperty } from '../../ducks/modules/network';
 import { makeGetSubjectType, makeNetworkNodesForPrompt, makeGetAdditionalAttributes } from '../../selectors/interface';
 import { getNetworkNodes } from '../../selectors/network';
 import { getCardDisplayLabel, getCardAdditionalProperties, makeGetNodeIconName, makeGetPromptNodeModelData } from '../../selectors/name-generator';
 import { PromptSwiper } from '../';
 import { NodeBin, NodeList } from '../../components/';
+
 
 /**
   * NameGeneratorAutoComplete Interface
@@ -103,6 +104,11 @@ class NameGeneratorAutoComplete extends Component {
 
         <div className="name-generator-auto-complete-interface__node-bin">
           <NodeBin id="NODE_BIN" />
+          <NodeBin
+            accepts={meta => meta.itemType === 'EXISTING_NODE'}
+            dropHandler={meta => this.props.removeNode(meta[entityPrimaryKeyProperty])}
+            id="NODE_BIN"
+          />
         </div>
 
       </div>
@@ -112,6 +118,7 @@ class NameGeneratorAutoComplete extends Component {
 
 NameGeneratorAutoComplete.propTypes = {
   batchAddNodes: PropTypes.func.isRequired,
+  removeNode: PropTypes.func.isRequired,
   closeSearch: PropTypes.func.isRequired,
   excludedNodes: PropTypes.array.isRequired,
   labelKey: PropTypes.string.isRequired,
@@ -134,6 +141,7 @@ function mapDispatchToProps(dispatch) {
     batchAddNodes: bindActionCreators(sessionsActions.batchAddNodes, dispatch),
     closeSearch: bindActionCreators(searchActions.closeSearch, dispatch),
     toggleSearch: bindActionCreators(searchActions.toggleSearch, dispatch),
+    removeNode: bindActionCreators(sessionsActions.removeNode, dispatch),
   };
 }
 

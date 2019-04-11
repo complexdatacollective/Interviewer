@@ -176,14 +176,8 @@ class NameGenerator extends Component {
           />
         }
         <NodeBin
-          accepts={(meta) => {
-            console.log('accepts', meta);
-            return meta.itemType === 'EXISTING_NODE';
-          }}
-          dropHandler={(meta) => {
-            console.log('drop handler', meta);
-            this.props.removeNode(meta[entityPrimaryKeyProperty]);
-          }}
+          accepts={meta => meta.itemType === 'EXISTING_NODE'}
+          dropHandler={meta => this.props.removeNode(meta[entityPrimaryKeyProperty])}
           id="NODE_BIN"
         />
       </div>
