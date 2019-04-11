@@ -46,7 +46,7 @@ const SearchResults = (props) => {
     content = (
       <CardList
         className="card-list--single"
-        nodes={results}
+        items={results}
         {...rest}
       />
     );

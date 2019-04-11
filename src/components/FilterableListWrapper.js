@@ -94,12 +94,13 @@ class FilterableListWrapper extends Component {
       sortFields,
       ListComponent,
       listComponentProps,
-      nodes,
+      items,
     } = this.props;
 
     const sorter = sortOrder([this.state.activeSortOrder]);
-    const sortedNodes = this.getFilteredList(sorter(nodes));
-
+    const sortedNodes = this.getFilteredList(sorter(items));
+    console.log(this.props);
+    console.log(items);
     return (
       <div className="list-select">
         <div className="list-select__sort">
@@ -122,7 +123,7 @@ class FilterableListWrapper extends Component {
         </div>
         <ListComponent
           {...listComponentProps}
-          nodes={sortedNodes}
+          items={sortedNodes}
         />
       </div>
     );
@@ -131,7 +132,7 @@ class FilterableListWrapper extends Component {
 
 FilterableListWrapper.propTypes = {
   initialSortOrder: PropTypes.array,
-  nodes: PropTypes.array.isRequired,
+  items: PropTypes.array.isRequired,
   allowFiltering: PropTypes.bool,
   sortFields: PropTypes.array,
   ListComponent: PropTypes.func.isRequired,

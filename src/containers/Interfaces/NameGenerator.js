@@ -138,13 +138,12 @@ class NameGenerator extends Component {
           </div>
           <div className="name-generator-interface__nodes">
             <NodeList
-              nodes={nodesForPrompt}
-              listId={`${stage.id}_${prompt.id}_MAIN_NODE_LIST`}
-              id={'MAIN_NODE_LIST'}
+              items={nodesForPrompt}
+              id={`${stage.id}_${prompt.id}_MAIN_NODE_LIST`}
               accepts={({ meta }) => get(meta, 'itemType', null) === 'NEW_NODE'}
               itemType="EXISTING_NODE"
               onDrop={this.handleDropNode}
-              onSelect={this.handleSelectNode}
+              onItemClick={this.handleSelectNode}
             />
           </div>
         </div>
@@ -176,7 +175,17 @@ class NameGenerator extends Component {
             newNodeModelData={newNodeModelData}
           />
         }
-        <NodeBin id="NODE_BIN" />
+        <NodeBin
+          accepts={(meta) => {
+            console.log('accepts', meta);
+            return meta.itemType === 'EXISTING_NODE';
+          }}
+          dropHandler={(meta) => {
+            console.log('drop handler', meta);
+            this.props.removeNode(meta[entityPrimaryKeyProperty]);
+          }}
+          id="NODE_BIN"
+        />
       </div>
     );
   }
@@ -201,6 +210,7 @@ NameGenerator.propTypes = {
   promptForward: PropTypes.func.isRequired,
   stage: PropTypes.object.isRequired,
   updateNode: PropTypes.func.isRequired,
+  removeNode: PropTypes.func.isRequired,
 };
 
 function makeMapStateToProps() {
@@ -224,6 +234,7 @@ function mapDispatchToProps(dispatch) {
   return {
     addNode: bindActionCreators(sessionsActions.addNode, dispatch),
     updateNode: bindActionCreators(sessionsActions.updateNode, dispatch),
+    removeNode: bindActionCreators(sessionsActions.removeNode, dispatch),
   };
 }
 

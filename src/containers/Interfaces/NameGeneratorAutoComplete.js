@@ -11,7 +11,7 @@ import { actionCreators as sessionsActions } from '../../ducks/modules/sessions'
 import { actionCreators as searchActions } from '../../ducks/modules/search';
 import { entityAttributesProperty } from '../../ducks/modules/network';
 import { makeGetSubjectType, makeNetworkNodesForPrompt, makeGetAdditionalAttributes } from '../../selectors/interface';
-import { getNetworkNodes, makeGetNodeLabel } from '../../selectors/network';
+import { getNetworkNodes } from '../../selectors/network';
 import { getCardDisplayLabel, getCardAdditionalProperties, makeGetNodeIconName, makeGetPromptNodeModelData } from '../../selectors/name-generator';
 import { PromptSwiper } from '../';
 import { NodeBin, NodeList } from '../../components/';
@@ -35,7 +35,6 @@ class NameGeneratorAutoComplete extends Component {
     const {
       closeSearch,
       excludedNodes,
-      getLabel,
       labelKey,
       nodeIconName,
       nodesForPrompt,
@@ -77,10 +76,8 @@ class NameGeneratorAutoComplete extends Component {
 
         <div className={`${baseClass}__nodes`}>
           <NodeList
-            id={ListId}
-            label={getLabel}
-            listId={`${stage.id}_${prompt.id}_${ListId}`}
-            nodes={nodesForPrompt}
+            id={`${stage.id}_${prompt.id}_${ListId}`}
+            items={nodesForPrompt}
             itemType="EXISTING_NODE"
           />
         </div>
@@ -117,7 +114,6 @@ NameGeneratorAutoComplete.propTypes = {
   batchAddNodes: PropTypes.func.isRequired,
   closeSearch: PropTypes.func.isRequired,
   excludedNodes: PropTypes.array.isRequired,
-  getLabel: PropTypes.func.isRequired,
   labelKey: PropTypes.string.isRequired,
   newNodeAttributes: PropTypes.object.isRequired,
   newNodeModelData: PropTypes.object.isRequired,
@@ -151,7 +147,6 @@ function makeMapStateToProps() {
   return function mapStateToProps(state, props) {
     return {
       excludedNodes: getNetworkNodes(state, props),
-      getLabel: makeGetNodeLabel(state),
       labelKey: getCardDisplayLabel(state, props),
       newNodeAttributes: getPromptNodeAttributes(state, props),
       newNodeModelData: getPromptNodeModelData(state, props),

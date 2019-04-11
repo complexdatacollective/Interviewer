@@ -2,23 +2,27 @@ import React from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-
 import { scrollable, selectable } from '../behaviours';
-import { Card } from '.';
+import { SessionCard } from '.';
 import { entityPrimaryKeyProperty } from '../ducks/modules/network';
+import {
+  DragSource,
+  MonitorDragSource,
+} from '../behaviours/DragAndDrop';
 
-const EnhancedCard = selectable(Card);
+const EnhancedSessionCard = DragSource(selectable(SessionCard));
 
 /**
-  * Card List
+  * SessionCard List
   */
-const CardList = (props) => {
+const SessionList = (props) => {
   const {
     className,
     details,
     label,
     items,
     onItemClick,
+    onDeleteCard,
     isItemSelected,
     getKey,
   } = props;
@@ -30,11 +34,14 @@ const CardList = (props) => {
       {
         items.map(node => (
           <span className="card-list__content" key={getKey(node)}>
-            <EnhancedCard
+            <EnhancedSessionCard
+              {...this.props}
               label={label(node)}
               selected={isItemSelected(node)}
               details={details(node)}
+              meta={() => ({ uuid: node.uuid })}
               onSelected={() => onItemClick(node)}
+              onDeleteCard={() => onDeleteCard(node)}
             />
           </span>
         ))
@@ -43,26 +50,32 @@ const CardList = (props) => {
   );
 };
 
-CardList.propTypes = {
+SessionList.propTypes = {
   className: PropTypes.string,
   details: PropTypes.func,
   label: PropTypes.func,
   items: PropTypes.array.isRequired,
   onItemClick: PropTypes.func,
+  onDeleteCard: PropTypes.func,
   isItemSelected: PropTypes.func,
   getKey: PropTypes.func,
 };
 
-CardList.defaultProps = {
+SessionList.defaultProps = {
   className: '',
   details: () => (''),
   label: () => (''),
   items: [],
   onItemClick: () => {},
+  onDeleteCard: () => {},
   isItemSelected: () => false,
+  itemType: 'SESSION',
+  isDragging: false,
+  meta: {},
   getKey: node => node[entityPrimaryKeyProperty],
 };
 
 export default compose(
+  MonitorDragSource(['meta', 'isDragging']),
   scrollable,
-)(CardList);
+)(SessionList);

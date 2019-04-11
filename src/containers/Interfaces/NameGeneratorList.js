@@ -106,7 +106,7 @@ class NameGeneratorList extends Component {
           key={`select-${prompt.id}`}
           initialSortOrder={initialSortOrder}
           sortFields={sortFields}
-          nodes={nodesForList}
+          items={nodesForList}
           ListComponent={NodeList}
           listComponentProps={{
             details: this.details,

@@ -6,7 +6,7 @@ import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import logo from '../../images/NC-Round.svg';
 import { Icon } from '../../ui/components';
-import { ProtocolList, ProtocolImportOverlay, SessionList, ImportProgressOverlay } from '.';
+import { ProtocolList, ProtocolImportOverlay, ResumeSession, ImportProgressOverlay } from '.';
 
 /**
   * Setup screen
@@ -41,7 +41,7 @@ class Setup extends Component {
     let currentTab = <ProtocolList />;
 
     if (this.isShowSessions()) {
-      currentTab = <SessionList />;
+      currentTab = <ResumeSession />;
     }
 
     return (

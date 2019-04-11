@@ -182,8 +182,8 @@ class Search extends Component {
             results={this.state.searchResults}
             label={getLabel}
             details={getDetails}
-            selected={getSelected}
-            onToggleCard={item => this.toggleSelectedResult(item)}
+            isItemSelected={getSelected}
+            onItemClick={item => this.toggleSelectedResult(item)}
           />
 
           {
