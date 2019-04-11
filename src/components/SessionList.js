@@ -27,13 +27,13 @@ const SessionList = (props) => {
     getKey,
   } = props;
 
-  const classNames = cx('card-list', className);
+  const classNames = cx('session-list', className);
 
   return (
     <div className={classNames}>
       {
         items.map(node => (
-          <span className="card-list__content" key={getKey(node)}>
+          <span className="session-list__content" key={getKey(node)}>
             <EnhancedSessionCard
               {...this.props}
               label={label(node)}

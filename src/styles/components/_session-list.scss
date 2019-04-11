@@ -1,0 +1,50 @@
+.session-list {
+  flex-wrap: wrap;
+  padding-bottom: 10em;
+  padding-top: calc(#{$scroller-top-padding});
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 2rem;
+
+  @media screen and (min-aspect-ratio: 4 / 3) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media screen and (min-aspect-ratio: 16 / 10) {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  @media screen and (min-aspect-ratio: 16 / 9) {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+
+  &__content {
+    position: relative;
+  }
+
+  &--single {
+    .card {
+      background: var(--background);
+    }
+  }
+
+  &__delete-button {
+    --button-size: 1rem;
+    --button-padding: #{unit(2)};
+
+    cursor: pointer;
+    position: absolute;
+    right: var(--button-padding);
+    top: var(--button-padding);
+    padding: var(--button-padding);
+
+    &[name='close'] {
+      height: calc(var(--button-size) + 2 * var(--button-padding));
+      width: calc(var(--button-size) + 2 * var(--button-padding));
+
+      .cls-1 {
+        fill: var(--transparent-light);
+      }
+    }
+  }
+}

@@ -1,3 +1,36 @@
+@keyframes move-bg-2 {
+  0% { transform: scale(1.7) rotate(0deg) translateX(1rem) rotate(0deg); }
+  100%   { transform: scale(1.2) rotate(360deg) translateX(1rem) rotate(-360deg); }
+}
+
+.bg {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  mix-blend-mode: screen;
+  background-size: contain;
+  background-repeat: no-repeat;
+  height: 100%;
+  width: 100%;
+  transform: scale(2);
+}
+
+.bg-1 {
+  background-image: url('../images/main-background.svg');
+}
+
+.bg-2 {
+  background-image: url('../images/main-background.svg');
+  animation-duration: 45s;
+  mix-blend-mode: screen;
+  animation-name: move-bg-2;
+  animation-direction: alternate;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
 .setup {
   $active-border-color: rgba(255, 255, 255, .5);
   --active-border-color: $active-border-color;
@@ -7,6 +40,7 @@
   height: 100%;
   width: 100%;
   min-height: 15rem;
+  z-index: 9;
 
   &__header {
     align-items: center;

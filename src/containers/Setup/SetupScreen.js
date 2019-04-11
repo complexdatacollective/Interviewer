@@ -45,47 +45,51 @@ class Setup extends Component {
     }
 
     return (
-      <div className="setup">
-        <ProtocolImportOverlay
-          show={this.state.showImportProtocolOverlay}
-          onClose={() => this.setState({ showImportProtocolOverlay: false })}
-        />
-        <ImportProgressOverlay
-          show={this.props.importProtocolProgress && this.props.importProtocolProgress.step > 0}
-          progress={this.props.importProtocolProgress}
-        />
-        <div className="setup__header">
-          <div className="header-content">
-            <div className="header-content__title">
-              <img src={logo} className="logo header-content__logo" alt="Network Canvas" />
-              <div className="header-content__title-text">
-                <h1 className="type--title-1">Network Canvas</h1>
-                <h4>Alpha 12 - No Coffee</h4>
+      <React.Fragment>
+        <div className="bg bg-1" />
+        <div className="bg bg-2" />
+        <div className="setup">
+          <ProtocolImportOverlay
+            show={this.state.showImportProtocolOverlay}
+            onClose={() => this.setState({ showImportProtocolOverlay: false })}
+          />
+          <ImportProgressOverlay
+            show={this.props.importProtocolProgress && this.props.importProtocolProgress.step > 0}
+            progress={this.props.importProtocolProgress}
+          />
+          <div className="setup__header">
+            <div className="header-content">
+              <div className="header-content__title">
+                <img src={logo} className="logo header-content__logo" alt="Network Canvas" />
+                <div className="header-content__title-text">
+                  <h1 className="type--title-1">Network Canvas</h1>
+                  <h4>Alpha 12 - No Coffee</h4>
+                </div>
+              </div>
+              <div className="header-content__nav">
+                <nav>
+                  <span className={`setup__link ${this.isShowProtocols() ? 'setup__link--active' : ''}`} role="button" tabIndex="0" onClick={() => this.setOptions('protocol')}>
+                    Start new interview
+                  </span>
+                  <span className={`setup__link ${this.isShowSessions() ? 'setup__link--active' : ''}`} role="button" tabIndex="0" onClick={() => this.setOptions('session')}>
+                    Resume interview
+                  </span>
+                </nav>
               </div>
             </div>
-            <div className="header-content__nav">
-              <nav>
-                <span className={`setup__link ${this.isShowProtocols() ? 'setup__link--active' : ''}`} role="button" tabIndex="0" onClick={() => this.setOptions('protocol')}>
-                  Start new interview
-                </span>
-                <span className={`setup__link ${this.isShowSessions() ? 'setup__link--active' : ''}`} role="button" tabIndex="0" onClick={() => this.setOptions('session')}>
-                  Resume interview
-                </span>
-              </nav>
-            </div>
           </div>
+          <main className="setup__main">
+            {currentTab}
+          </main>
+          { this.isShowProtocols() &&
+            <Icon
+              name="add-a-protocol"
+              className="setup__server-button"
+              onClick={() => this.setState({ showImportProtocolOverlay: true })}
+            />
+          }
         </div>
-        <main className="setup__main">
-          {currentTab}
-        </main>
-        { this.isShowProtocols() &&
-          <Icon
-            name="add-a-protocol"
-            className="setup__server-button"
-            onClick={() => this.setState({ showImportProtocolOverlay: true })}
-          />
-        }
-      </div>
+      </React.Fragment>
     );
   }
 }
