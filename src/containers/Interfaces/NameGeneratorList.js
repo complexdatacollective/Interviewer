@@ -16,7 +16,7 @@ import {
   makeGetPromptNodeModelData,
 } from '../../selectors/name-generator';
 import { PromptSwiper } from '../../containers';
-import { ListSelect, CardList, NodeList } from '../../components';
+import { FilterableListWrapper, NodeList } from '../../components';
 import withExternalData from '../../containers/withExternalData';
 
 /**
@@ -53,6 +53,24 @@ class NameGeneratorList extends Component {
 
   label = node => getEntityAttributes(node)[this.props.labelKey];
 
+
+  isNodeSelected = node =>
+    !!this.props.selectedNodes
+      .find(current => current[entityPrimaryKeyProperty] === node[entityPrimaryKeyProperty]);
+
+  /**
+    * toggle whether the card is selected or not.
+    * @param {object} node
+    */
+  toggleCard = (node) => {
+    if (this.isNodeSelected(node)) {
+      this.onRemoveNode(node);
+      return;
+    }
+
+    this.onSubmitNewNode(node);
+  };
+
   details = (node) => {
     const attrs = getEntityAttributes(node);
     const fields = this.props.visibleSupplementaryFields;
@@ -67,7 +85,6 @@ class NameGeneratorList extends Component {
       prompt,
       promptBackward,
       promptForward,
-      selectedNodes,
       sortFields,
     } = this.props;
 
@@ -85,7 +102,7 @@ class NameGeneratorList extends Component {
             prompts={prompts}
           />
         </div>
-        <ListSelect
+        <FilterableListWrapper
           key={`select-${prompt.id}`}
           initialSortOrder={initialSortOrder}
           sortFields={sortFields}
@@ -96,9 +113,8 @@ class NameGeneratorList extends Component {
             title: prompt.text,
             label: this.label,
             labelKey,
-            onRemoveNode: this.onRemoveNode,
-            onSubmitNode: this.onSubmitNewNode,
-            selectedNodes,
+            onItemClick: this.toggleCard,
+            isItemSelected: this.isNodeSelected,
           }}
         />
       </div>
@@ -113,11 +129,11 @@ NameGeneratorList.propTypes = {
   newNodeAttributes: PropTypes.object.isRequired,
   newNodeModelData: PropTypes.object.isRequired,
   nodesForList: PropTypes.array.isRequired,
+  selectedNodes: PropTypes.array.isRequired,
   prompt: PropTypes.object.isRequired,
   promptForward: PropTypes.func.isRequired,
   promptBackward: PropTypes.func.isRequired,
   removeNode: PropTypes.func.isRequired,
-  selectedNodes: PropTypes.array.isRequired,
   sortFields: PropTypes.array.isRequired,
   stage: PropTypes.object.isRequired,
   visibleSupplementaryFields: PropTypes.array.isRequired,

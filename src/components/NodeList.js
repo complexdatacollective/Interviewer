@@ -80,10 +80,9 @@ class NodeList extends Component {
 
   render() {
     const {
-      nodeColor,
       label,
-      selected,
-      onSelect,
+      isItemSelected,
+      onItemClick,
       itemType,
       isOver,
       willAccept,
@@ -127,10 +126,9 @@ class NodeList extends Component {
               stagger={stagger}
             >
               <EnhancedNode
-                color={nodeColor}
                 label={`${label(node)}`}
-                selected={selected(node)}
-                onSelected={() => onSelect(node)}
+                selected={isItemSelected(node)}
+                onSelected={() => onItemClick(node)}
                 meta={() => ({ ...node, itemType })}
                 itemType={itemType}
                 {...node}
@@ -145,13 +143,11 @@ class NodeList extends Component {
 
 NodeList.propTypes = {
   nodes: PropTypes.array.isRequired,
-  nodeColor: PropTypes.string,
   hoverColor: PropTypes.string,
-  onSelect: PropTypes.func,
-  id: PropTypes.string.isRequired,
+  onItemClick: PropTypes.func,
   itemType: PropTypes.string,
   label: PropTypes.func,
-  selected: PropTypes.func,
+  isItemSelected: PropTypes.func,
   isOver: PropTypes.bool,
   willAccept: PropTypes.bool,
   meta: PropTypes.object,
@@ -161,11 +157,10 @@ NodeList.propTypes = {
 
 NodeList.defaultProps = {
   nodes: [],
-  nodeColor: '',
   hoverColor: null,
   label: () => (''),
-  selected: () => false,
-  onSelect: () => {},
+  isItemSelected: () => false,
+  onItemClick: () => {},
   onDrop: () => {},
   itemType: 'NODE',
   isOver: false,

@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
 import { Button } from '../ui/components';
-import { entityPrimaryKeyProperty, entityAttributesProperty } from '../ducks/modules/network';
+import { entityAttributesProperty } from '../ducks/modules/network';
 import sortOrder from '../utils/sortOrder';
 
-class ListSelect extends Component {
+class FilterableListWrapper extends Component {
   constructor(props) {
     super(props);
 
@@ -79,13 +78,6 @@ class ListSelect extends Component {
   };
 
   /**
-    * @param {object} node
-    */
-  isNodeSelected = node =>
-    !!this.props.selectedNodes
-      .find(current => current[entityPrimaryKeyProperty] === node[entityPrimaryKeyProperty]);
-
-  /**
     * changes direction of current sort
     */
   toggleSortDirection = () => {
@@ -95,20 +87,6 @@ class ListSelect extends Component {
         property: this.state.activeSortOrder.property,
       },
     });
-  };
-
-  /**
-    * toggle whether the card is selected or not.
-    * @param {object} node
-    */
-  toggleCard = (node) => {
-    const matchingPK = n => n[entityPrimaryKeyProperty] === node[entityPrimaryKeyProperty];
-    const index = this.props.selectedNodes.findIndex(matchingPK);
-    if (index !== -1) {
-      this.props.onRemoveNode(this.props.nodes.find(matchingPK));
-    } else {
-      this.props.onSubmitNode(this.props.nodes.find(matchingPK));
-    }
   };
 
   render() {
@@ -121,7 +99,7 @@ class ListSelect extends Component {
 
     const sorter = sortOrder([this.state.activeSortOrder]);
     const sortedNodes = this.getFilteredList(sorter(nodes));
-    console.log('list-select', this.props);
+
     return (
       <div className="list-select">
         <div className="list-select__sort">
@@ -151,33 +129,23 @@ class ListSelect extends Component {
   }
 }
 
-ListSelect.propTypes = {
-  // details: PropTypes.func,
+FilterableListWrapper.propTypes = {
   initialSortOrder: PropTypes.array,
   nodes: PropTypes.array.isRequired,
-  // label: PropTypes.func,
-  // onRemoveNode: PropTypes.func,
-  // onSubmitNode: PropTypes.func,
-  // selectedNodes: PropTypes.array,
+  allowFiltering: PropTypes.bool,
   sortFields: PropTypes.array,
   ListComponent: PropTypes.func.isRequired,
   listComponentProps: PropTypes.shape({
-
   }).isRequired,
 };
 
-ListSelect.defaultProps = {
-  // details: () => {},
+FilterableListWrapper.defaultProps = {
   initialSortOrder: [{
     property: '',
     direction: 'asc',
   }],
-  // label: () => {},
-  // nodes: [],
-  // onRemoveNode: () => {},
-  // onSubmitNode: () => {},
-  // selectedNodes: [],
+  allowFiltering: true,
   sortFields: [],
 };
 
-export default ListSelect;
+export default FilterableListWrapper;

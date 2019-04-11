@@ -5,7 +5,6 @@ import cx from 'classnames';
 
 import { scrollable, selectable } from '../behaviours';
 import { Card } from '.';
-import { Icon } from '../ui/components';
 import { entityPrimaryKeyProperty } from '../ducks/modules/network';
 
 const EnhancedCard = selectable(Card);
@@ -19,14 +18,13 @@ const CardList = (props) => {
     details,
     label,
     nodes,
-    onDeleteCard,
-    onToggleCard,
-    selected,
+    onItemClick,
+    isItemSelected,
     getKey,
   } = props;
 
   const classNames = cx('card-list', className);
-  console.log('cardlist', props);
+
   return (
     <div className={classNames}>
       {
@@ -34,14 +32,10 @@ const CardList = (props) => {
           <span className="card-list__content" key={getKey(node)}>
             <EnhancedCard
               label={label(node)}
-              selected={selected(node)}
+              selected={isItemSelected(node)}
               details={details(node)}
-              onSelected={() => onToggleCard(node)}
+              onSelected={() => onItemClick(node)}
             />
-            {
-              onDeleteCard &&
-              <Icon className="card-list__delete-button" name="close" onClick={() => onDeleteCard(node)} />
-            }
           </span>
         ))
       }
@@ -54,9 +48,8 @@ CardList.propTypes = {
   details: PropTypes.func,
   label: PropTypes.func,
   nodes: PropTypes.array.isRequired,
-  onDeleteCard: PropTypes.func,
-  onToggleCard: PropTypes.func,
-  selected: PropTypes.func,
+  onItemClick: PropTypes.func,
+  isItemSelected: PropTypes.func,
   getKey: PropTypes.func,
 };
 
@@ -65,9 +58,8 @@ CardList.defaultProps = {
   details: () => (''),
   label: () => (''),
   nodes: [],
-  onDeleteCard: null,
-  onToggleCard: () => {},
-  selected: () => false,
+  onItemClick: () => {},
+  isItemSelected: () => false,
   getKey: node => node[entityPrimaryKeyProperty],
 };
 
