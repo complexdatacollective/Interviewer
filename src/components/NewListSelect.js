@@ -1,11 +1,20 @@
 import React, { Component } from 'react';
+import cx from 'classnames';
 import PropTypes from 'prop-types';
-
+import { compose } from 'redux';
+import Scroller from './Scroller';
 import { Button } from '../ui/components';
-import { entityPrimaryKeyProperty, entityAttributesProperty } from '../ducks/modules/network';
+import { entityPrimaryKeyProperty } from '../ducks/modules/network';
 import sortOrder from '../utils/sortOrder';
+import { selectable } from '../behaviours';
+import {
+  DragSource,
+  DropTarget,
+  MonitorDropTarget,
+  MonitorDragSource,
+} from '../behaviours/DragAndDrop';
 
-class ListSelect extends Component {
+class NewListSelect extends Component {
   constructor(props) {
     super(props);
 
@@ -39,22 +48,33 @@ class ListSelect extends Component {
 
   /**
     * @return filtered list
-    * This filter works by testing if the filterValue is present in either the any of node
-    * node attributes.
+    * This filter works by testing if the filterValue is present in either:
+    *  - The node label
+    *  - Or one of the details passed to the node
     *
-    * TODO: specify search attributes, include fuzziness, match start of string only.
+    * TODO: Expand filtering to look at all node properties, not just ones passed as card details.
     */
   getFilteredList = (list) => {
-    const filterValue = this.state.filterValue.toLowerCase();
-    if (!filterValue) { return list; }
-
     const filteredList = list.filter(
       (node) => {
-        const nodeDetails = Object.values(node[entityAttributesProperty]);
-        // Include in filtered list if any of the attribute property values
-        // include the filter value
-        return nodeDetails.some(
-          item => item.toString().toLowerCase().includes(filterValue),
+        // Lowercase for comparison
+        const nodeLabel = (this.props.label(node) || '').toLowerCase();
+        const filterValue = this.state.filterValue.toLowerCase();
+
+        const nodeDetails = this.props.details(node);
+
+        // Include in filtered list if:
+        // - The label includes the filter value, OR
+        // - Any of the detail property values include the filter value
+        return (
+          nodeLabel.includes(filterValue) ||
+          nodeDetails.some((detail) => {
+            const detailProperties = Object.values(detail);
+
+            return detailProperties.some(
+              item => item.toString().toLowerCase().includes(filterValue),
+            );
+          })
         );
       },
     );
@@ -105,23 +125,29 @@ class ListSelect extends Component {
     const matchingPK = n => n[entityPrimaryKeyProperty] === node[entityPrimaryKeyProperty];
     const index = this.props.selectedNodes.findIndex(matchingPK);
     if (index !== -1) {
-      this.props.onRemoveNode(this.props.nodes.find(matchingPK));
+      this.props.onRemoveNode(this.props.items.find(matchingPK));
     } else {
-      this.props.onSubmitNode(this.props.nodes.find(matchingPK));
+      this.props.onSubmitNode(this.props.items.find(matchingPK));
     }
   };
 
   render() {
     const {
+      items,
       sortFields,
-      ListComponent,
-      listComponentProps,
-      nodes,
+      itemComponent,
+      onItemClick,
+      itemProperties,
     } = this.props;
 
+    const EnhancedItem = DragSource(selectable(itemComponent));
+
     const sorter = sortOrder([this.state.activeSortOrder]);
-    const sortedNodes = this.getFilteredList(sorter(nodes));
-    console.log('list-select', this.props);
+    const sortedItems = sorter(items);
+
+    const classNames = cx('card-list');
+
+    console.log(this.props);
     return (
       <div className="list-select">
         <div className="list-select__sort">
@@ -142,42 +168,45 @@ class ListSelect extends Component {
             value={this.state.filterValue}
           />
         </div>
-        <ListComponent
-          {...listComponentProps}
-          nodes={sortedNodes}
-        />
+        <Scroller className={classNames}>
+          {
+            sortedItems.map(item => (
+              <span className="card-list__content">
+                <EnhancedItem
+                  onClick={self => onItemClick(self)}
+                  {...item}
+                  {...itemProperties}
+                />
+              </span>
+            ))
+          }
+        </Scroller>
       </div>
     );
   }
 }
 
-ListSelect.propTypes = {
-  // details: PropTypes.func,
+NewListSelect.propTypes = {
   initialSortOrder: PropTypes.array,
-  nodes: PropTypes.array.isRequired,
-  // label: PropTypes.func,
-  // onRemoveNode: PropTypes.func,
-  // onSubmitNode: PropTypes.func,
-  // selectedNodes: PropTypes.array,
+  items: PropTypes.array.isRequired,
+  onItemClick: PropTypes.func,
   sortFields: PropTypes.array,
-  ListComponent: PropTypes.func.isRequired,
-  listComponentProps: PropTypes.shape({
-
-  }).isRequired,
+  itemComponent: PropTypes.func.isRequired,
+  itemProperties: PropTypes.object,
 };
 
-ListSelect.defaultProps = {
-  // details: () => {},
+NewListSelect.defaultProps = {
   initialSortOrder: [{
-    property: '',
+    property: '*',
     direction: 'asc',
   }],
-  // label: () => {},
-  // nodes: [],
-  // onRemoveNode: () => {},
-  // onSubmitNode: () => {},
-  // selectedNodes: [],
   sortFields: [],
+  onItemClick: () => {},
+  itemProperties: {},
 };
 
-export default ListSelect;
+export default compose(
+  DropTarget,
+  MonitorDropTarget(['isOver', 'willAccept']),
+  MonitorDragSource(['meta', 'isDragging']),
+)(NewListSelect);

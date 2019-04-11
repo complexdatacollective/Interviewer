@@ -16,10 +16,8 @@ const EnhancedCard = selectable(Card);
 const CardList = (props) => {
   const {
     className,
-    compact,
     details,
     label,
-    multiselect,
     nodes,
     onDeleteCard,
     onToggleCard,
@@ -28,7 +26,7 @@ const CardList = (props) => {
   } = props;
 
   const classNames = cx('card-list', className);
-
+  console.log('cardlist', props);
   return (
     <div className={classNames}>
       {
@@ -36,8 +34,6 @@ const CardList = (props) => {
           <span className="card-list__content" key={getKey(node)}>
             <EnhancedCard
               label={label(node)}
-              multiselect={multiselect}
-              compact={compact}
               selected={selected(node)}
               details={details(node)}
               onSelected={() => onToggleCard(node)}
@@ -55,10 +51,8 @@ const CardList = (props) => {
 
 CardList.propTypes = {
   className: PropTypes.string,
-  compact: PropTypes.bool,
   details: PropTypes.func,
   label: PropTypes.func,
-  multiselect: PropTypes.bool,
   nodes: PropTypes.array.isRequired,
   onDeleteCard: PropTypes.func,
   onToggleCard: PropTypes.func,
@@ -68,10 +62,8 @@ CardList.propTypes = {
 
 CardList.defaultProps = {
   className: '',
-  compact: false,
   details: () => (''),
   label: () => (''),
-  multiselect: true,
   nodes: [],
   onDeleteCard: null,
   onToggleCard: () => {},
