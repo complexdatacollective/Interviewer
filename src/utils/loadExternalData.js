@@ -6,7 +6,7 @@ import inEnvironment from './Environment';
 import { readFile } from './filesystem';
 import { entityPrimaryKeyProperty } from '../ducks/modules/network';
 import getAssetUrl from './protocol/getAssetUrl';
-import Worker from './utils/csvDecover.worker.js';
+import Worker from './csvDecoder.worker';
 
 const withKeys = data =>
   data.map((node) => {
@@ -25,15 +25,19 @@ const fetchNetwork = inEnvironment(
         fetch(url)
           .then((response) => {
             if (fileType === 'csv') {
-              return response.text().then(
-                (data) => {
-                  const worker = new Worker();
-                  // Send the worker the node model properties along with the network
-                  worker.postMessage(data);
-
-                  worker.onmessage(decodedData => decodedData.data);
-                }
-              );
+              const worker = new Worker();
+              return response.text()
+                .then(
+                  data => new Promise((resolve, reject) => {
+                    worker.postMessage(data);
+                    worker.onerror = (event) => {
+                      reject(event);
+                    };
+                    worker.onmessage = (event) => {
+                      resolve(event.data);
+                    };
+                  })
+                );
             }
 
             return response.json();
@@ -48,12 +52,17 @@ const fetchNetwork = inEnvironment(
       return (url, fileType) => readFile(url)
         .then((response) => {
           if (fileType === 'csv') {
-            const webWorker = new WorkerAgent('something');
-            // Send the worker the node model properties along with the network
-            const msgPromise = webWorker.sendMessageAsync(response.toString('utf8'));
+            const worker = new Worker();
 
-            return msgPromise
-              .then(decodedData => decodedData).catch(workerError => workerError);
+            return new Promise((resolve, reject) => {
+              worker.postMessage(response.toString('utf8'));
+              worker.onerror = (event) => {
+                reject(event);
+              };
+              worker.onmessage = (event) => {
+                resolve(event.data);
+              };
+            });
           }
           return JSON.parse(response);
         })
