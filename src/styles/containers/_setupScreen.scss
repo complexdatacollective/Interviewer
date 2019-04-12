@@ -1,6 +1,11 @@
+@keyframes move-bg-1 {
+  0% { transform: scale(1.5) rotate(0deg) translateX(-1.1rem) rotate(0deg); }
+  100%   { transform: scale(1.2) rotate(360deg) translateX(-0.8rem) rotate(-360deg); }
+}
+
 @keyframes move-bg-2 {
-  0% { transform: scale(1.7) rotate(0deg) translateX(1rem) rotate(0deg); }
-  100%   { transform: scale(1.2) rotate(360deg) translateX(1rem) rotate(-360deg); }
+  0% { transform: scale(1.7) rotate(0deg) translateX(-1rem) rotate(0deg); }
+  100%   { transform: scale(1) rotate(360deg) translateX(-1rem) rotate(-360deg); }
 }
 
 .bg {
@@ -14,17 +19,22 @@
   background-repeat: no-repeat;
   height: 100%;
   width: 100%;
-  transform: scale(2);
+  background-position: center;
 }
 
 .bg-1 {
   background-image: url('../images/main-background.svg');
+  animation-duration: 50s;
+  animation-name: move-bg-1;
+  animation-direction: alternate-reverse;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
 }
 
 .bg-2 {
   background-image: url('../images/main-background.svg');
-  animation-duration: 45s;
   mix-blend-mode: screen;
+  animation-duration: 50s;
   animation-name: move-bg-2;
   animation-direction: alternate;
   animation-timing-function: ease-in-out;
@@ -32,69 +42,33 @@
 }
 
 .setup {
-  $active-border-color: rgba(255, 255, 255, .5);
-  --active-border-color: $active-border-color;
-  --setup-header-height: 30vh;
   display: flex;
   flex-direction: column;
   height: 100%;
   width: 100%;
-  min-height: 15rem;
-  z-index: 9;
+  z-index: var(--z-default);
 
   &__header {
     align-items: center;
-    display: flex;
-    flex: 0 1 auto;
-    height: var(--setup-header-height);
     justify-content: center;
     text-align: center;
-    margin: 1.5rem 0;
-  }
+    margin: 2rem;
 
-  .header-content {
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-
-    &__title {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 1rem;
-
-      h1 {
-        display: inline-block;
-        width: auto;
-        margin: 0;
-        font-size: 3rem;
-      }
+    &--logo {
+      width: 9rem;
     }
 
-    &__logo {
-      width: 10rem;
-      margin-right: 1.5rem;
-    }
-  }
-
-  &__link {
-    border-bottom: .25rem solid transparent;
-    cursor: pointer;
-    margin: 0 1rem;
-    padding-bottom: .5rem;
-    transition: border-color var(--animation-duration-fast) var(--animation-easing);
-
-    &--active {
-      border-color: var(--active-border-color);
-      font-weight: 600;
+    &--title {
+      margin: 0;
+      font-size: 3rem;
     }
   }
 
   &__main {
     flex: 1 1 auto;
-    height: calc(100% - var(--setup-header-height));
     display: flex;
     align-items: center;
+    margin-bottom: 25vh;
 
     .scrollable {
       height: 100%; // TODO: should this be on component?
@@ -105,25 +79,19 @@
     }
 
     .swiper-button-prev {
-      left: 8rem;
+      left: 22rem;
     }
 
     .swiper-button-next {
-      right: 8rem;
+      right: 22rem;
     }
 
     .swiper-button-next,
     .swiper-button-prev {
-      width: 2rem;
-      height: 4rem;
-      margin-top: -8rem;
-      background-size: 2rem 4rem;
-    }
-
-    .swiper-container-horizontal>.swiper-pagination-bullets,
-    .swiper-pagination-custom,
-    .swiper-pagination-fraction {
-      bottom: 5rem;
+      width: 3rem;
+      height: 5rem;
+      background-size: 3rem 5rem;
+      filter: drop-shadow( 0 0 .5rem #000 );
     }
 
     .swiper-container-horizontal>.swiper-pagination-bullets {
@@ -134,34 +102,55 @@
 
 
     .swiper-pagination-bullet {
-      width: .7rem;
-      height: .7rem;
+      width: .75rem;
+      height: .75rem;
+      border: .07rem solid var(--color-white);
+      background: transparent;
+      opacity: 1;
+      transition: background var(--animation-duration-fast) var(--animation-easing);
     }
 
     .swiper-pagination-bullet-active {
-      background: var(--light-background);
+      background: var(--color-platinum);
     }
 
   }
 
-  &__start {
+  &__footer {
+    background: url('../images/bottom-curve.svg');
+    width: 100%;
+    height: 45vh;
+    position: absolute;
+    bottom: 0;
+    background-position: bottom;
+    background-repeat: no-repeat;
+    background-size: 100%;
     display: flex;
-    flex-direction: row;
+    align-items: center;
     justify-content: center;
-    margin-top: 3rem;
+    z-index: var(--z-panel);
+
+    &--link {
+      align-self: flex-end;
+      font-weight: bold;
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+    }
   }
 
-  &__factory-protocol {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 0;
-    justify-content: center;
-  }
 
   &__server-button {
     @include floating-action-button;
+    z-index: unset;
     width: 10rem;
     height: 10rem;
+  }
+
+  .project-logo {
+    width: 10rem;
+    position: absolute;
+    bottom: 1.7rem;
+    left: 1.7rem;
   }
 
 }

@@ -4,7 +4,8 @@ import { get } from 'lodash';
 import { Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
-import logo from '../../images/NC-Round.svg';
+import networkCanvasLogo from '../../images/NC-Round.svg';
+import projectLogo from '../../images/NC-Mark.svg';
 import { Icon } from '../../ui/components';
 import { ProtocolList, ProtocolImportOverlay, ResumeSession, ImportProgressOverlay } from '.';
 
@@ -38,12 +39,6 @@ class Setup extends Component {
       return (<Redirect to={{ pathname: `${pathname}` }} />);
     }
 
-    let currentTab = <ProtocolList />;
-
-    if (this.isShowSessions()) {
-      currentTab = <ResumeSession />;
-    }
-
     return (
       <React.Fragment>
         <div className="bg bg-1" />
@@ -58,36 +53,26 @@ class Setup extends Component {
             progress={this.props.importProtocolProgress}
           />
           <div className="setup__header">
-            <div className="header-content">
-              <div className="header-content__title">
-                <img src={logo} className="logo header-content__logo" alt="Network Canvas" />
-                <div className="header-content__title-text">
-                  <h1 className="type--title-1">Network Canvas</h1>
-                  <h4>Alpha 12 - No Coffee</h4>
-                </div>
-              </div>
-              <div className="header-content__nav">
-                <nav>
-                  <span className={`setup__link ${this.isShowProtocols() ? 'setup__link--active' : ''}`} role="button" tabIndex="0" onClick={() => this.setOptions('protocol')}>
-                    Start new interview
-                  </span>
-                  <span className={`setup__link ${this.isShowSessions() ? 'setup__link--active' : ''}`} role="button" tabIndex="0" onClick={() => this.setOptions('session')}>
-                    Resume interview
-                  </span>
-                </nav>
-              </div>
-            </div>
+            <img src={networkCanvasLogo} className="logo setup__header--logo" alt="Network Canvas" />
+            <h1 className="type--title-1 setup__header--title">Network Canvas</h1>
           </div>
           <main className="setup__main">
-            {currentTab}
+            <ProtocolList />
+            {/* <ResumeSession /> */}
           </main>
-          { this.isShowProtocols() &&
-            <Icon
-              name="add-a-protocol"
-              className="setup__server-button"
-              onClick={() => this.setState({ showImportProtocolOverlay: true })}
-            />
-          }
+          <div className="setup__footer">
+            <img src={projectLogo} className="project-logo" alt="Network Canvas" />
+            <div className={`setup__footer--link ${this.isShowSessions() ? 'setup__link--active' : ''}`} role="button" tabIndex="0" onClick={() => this.setOptions('session')}>
+              { this.isShowProtocols() ? ('Resume interview') : ('Start interview') }
+            </div>
+            { this.isShowProtocols() &&
+              <Icon
+                name="add-a-protocol"
+                className="setup__server-button"
+                onClick={() => this.setState({ showImportProtocolOverlay: true })}
+              />
+            }
+          </div>
         </div>
       </React.Fragment>
     );

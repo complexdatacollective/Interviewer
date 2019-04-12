@@ -76,7 +76,6 @@ class ProtocolList extends Component {
             { map(installedProtocols, (protocol, uid) => (
               <div key={uid}>
                 <ProtocolCard
-                  size="large"
                   protocol={protocol}
                   selectProtocol={() => this.onClickProtocolCard(uid)}
                 />

@@ -6,20 +6,20 @@
     align-items: center;
     justify-content: center;
     align-self: flex-start;
-    margin-top: 3rem;
-    width: 50%;
+    margin: 4rem;
+    width: 40%;
     transition: opacity var(--animation-duration-slow) var(--animation-easing);
 
     &:not(.swiper-slide-active) {
       pointer-events: none;
-      opacity: .3;
+      // opacity: .3;
     }
   }
 
   &.swiper-container {
     width: 100%; // ensure Swiper plugin initializes layout correctly
     //sass-lint:disable no-color-keywords, no-color-literals
-    mask-image: linear-gradient(90deg, transparent, black 10rem, black calc(100% - 10rem), transparent 100%);
+    mask-image: linear-gradient(90deg, transparent, black 20vw, black calc(100% - 20vw), transparent 100%);
   }
 
   &--empty {

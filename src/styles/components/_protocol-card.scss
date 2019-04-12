@@ -2,41 +2,26 @@ $component: 'protocol-card';
 
 .#{$component} {
   align-items: center;
-  background-color: var(--background);
+  background-color: var(--color-platinum);
   border-radius: var(--border-radius);
   cursor: pointer;
   display: flex;
-  flex-direction: row;
-  padding: spacing(medium);
-
-  &__icon-wrapper {
-    margin-right: 1rem;
-  }
+  flex-direction: column;
+  padding: unit(4);
+  width: 20rem;
+  height: 18rem;
+  border-bottom: .5rem solid var(--color-platinum--dark);
+  color: var(--color-navy-taupe);
+  box-shadow: 0 0 5rem var(--transparent-dark);
+  justify-content: center;
 
   &__icon {
-    height: 5rem;
-    width: 5rem;
+    height: 8rem;
+    width: 8rem;
+    text-align: center;
   }
 
   &__name {
-    &--large {
-      text-align: center;
-    }
+    text-align: center;
   }
-
-  // Large variant displayed on the startup screen
-  &--large {
-    background-color: var(--light-background);
-    flex-direction: column;
-    width: 25vw;
-    height: 25vh;
-    margin: 0 auto;
-    padding: spacing(huge);
-
-    .#{$component}__icon {
-      height: 7rem;
-      width: 7rem;
-    }
-  }
-
 }
