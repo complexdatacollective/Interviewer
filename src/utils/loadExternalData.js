@@ -65,7 +65,7 @@ const fetchNetwork = inEnvironment(
       return (url, fileType) => readFile(url)
         .then((response) => {
           if (fileType === 'csv') {
-            return CSVToJSONNetworkFormat(response);
+            return CSVToJSONNetworkFormat(response.toString('utf8'));
           }
           return JSON.parse(response);
         })
