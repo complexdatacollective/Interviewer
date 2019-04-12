@@ -35,7 +35,6 @@ const mapStateToProps = (state) => {
   };
 };
 
-
 /**
  * Utility function that can be used to help with translating external data
  * variable labels to UUIDs, if a match is possible.

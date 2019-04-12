@@ -1,12 +1,12 @@
 /* eslint-disable quotes, quote-props, comma-dangle */
 import objectHash from 'object-hash';
-import * as csv from 'csvtojson';
-import { get, omit } from 'lodash';
+import { get } from 'lodash';
 import environments from './environments';
 import inEnvironment from './Environment';
 import { readFile } from './filesystem';
-import { entityPrimaryKeyProperty, entityAttributesProperty } from '../ducks/modules/network';
+import { entityPrimaryKeyProperty } from '../ducks/modules/network';
 import getAssetUrl from './protocol/getAssetUrl';
+import Worker from './utils/csvDecover.worker.js';
 
 const withKeys = data =>
   data.map((node) => {
@@ -18,30 +18,6 @@ const withKeys = data =>
     };
   });
 
-/**
- * Converts a CSV file into a Network Canvas node list JSON
- *
- * @param {string} data - the contents of a CSV file
- *
- * See: https://github.com/Keyang/node-csvtojson We may want to introduce buffering
- * to this function to increase performance particularly on cordova.
- *
- */
-const CSVToJSONNetworkFormat = (data) => {
-  const withTypeAndAttributes = node => ({
-    type: node.type,
-    [entityAttributesProperty]: {
-      ...omit(node, 'type'),
-    }
-  });
-
-  return csv().fromString(data)
-    .then((json) => {
-      const nodeList = json.map(entry => withTypeAndAttributes(entry));
-      return { nodes: nodeList };
-    });
-};
-
 const fetchNetwork = inEnvironment(
   (environment) => {
     if (environment === environments.ELECTRON || environment === environments.WEB) {
@@ -50,9 +26,16 @@ const fetchNetwork = inEnvironment(
           .then((response) => {
             if (fileType === 'csv') {
               return response.text().then(
-                data => CSVToJSONNetworkFormat(data)
+                (data) => {
+                  const worker = new Worker();
+                  // Send the worker the node model properties along with the network
+                  worker.postMessage(data);
+
+                  worker.onmessage(decodedData => decodedData.data);
+                }
               );
             }
+
             return response.json();
           })
           .then((json) => {
@@ -65,7 +48,12 @@ const fetchNetwork = inEnvironment(
       return (url, fileType) => readFile(url)
         .then((response) => {
           if (fileType === 'csv') {
-            return CSVToJSONNetworkFormat(response.toString('utf8'));
+            const webWorker = new WorkerAgent('something');
+            // Send the worker the node model properties along with the network
+            const msgPromise = webWorker.sendMessageAsync(response.toString('utf8'));
+
+            return msgPromise
+              .then(decodedData => decodedData).catch(workerError => workerError);
           }
           return JSON.parse(response);
         })
