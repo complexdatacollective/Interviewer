@@ -18,6 +18,29 @@ const withKeys = data =>
     };
   });
 
+
+/**
+ * Converting data from CSV to our network JSON format is expensive, and so happens
+ * inside of a worker to keep the app as responsive as possible.
+ *
+ * This function takes the result of the platform-specific file load operation,
+ * and then initialises the conversion worker, before sending it the file contents
+ * to decode.
+ */
+const convertCSVToJsonWithWorker = response => response.text()
+  .then(
+    data => new Promise((resolve, reject) => {
+      const worker = new Worker();
+      worker.postMessage(data);
+      worker.onerror = (event) => {
+        reject(event);
+      };
+      worker.onmessage = (event) => {
+        resolve(event.data);
+      };
+    })
+  );
+
 const fetchNetwork = inEnvironment(
   (environment) => {
     if (environment === environments.ELECTRON || environment === environments.WEB) {
@@ -25,19 +48,7 @@ const fetchNetwork = inEnvironment(
         fetch(url)
           .then((response) => {
             if (fileType === 'csv') {
-              const worker = new Worker();
-              return response.text()
-                .then(
-                  data => new Promise((resolve, reject) => {
-                    worker.postMessage(data);
-                    worker.onerror = (event) => {
-                      reject(event);
-                    };
-                    worker.onmessage = (event) => {
-                      resolve(event.data);
-                    };
-                  })
-                );
+              return convertCSVToJsonWithWorker(response);
             }
 
             return response.json();
@@ -52,17 +63,7 @@ const fetchNetwork = inEnvironment(
       return (url, fileType) => readFile(url)
         .then((response) => {
           if (fileType === 'csv') {
-            const worker = new Worker();
-
-            return new Promise((resolve, reject) => {
-              worker.postMessage(response.toString('utf8'));
-              worker.onerror = (event) => {
-                reject(event);
-              };
-              worker.onmessage = (event) => {
-                resolve(event.data);
-              };
-            });
+            return convertCSVToJsonWithWorker(response.toString('utf8'));
           }
           return JSON.parse(response);
         })
