@@ -1,4 +1,3 @@
-import * as csv from 'csvtojson';
 import { omit } from 'lodash';
 import { entityAttributesProperty } from '../ducks/modules/network';
 
@@ -11,6 +10,8 @@ import { entityAttributesProperty } from '../ducks/modules/network';
  * to this function to increase performance particularly on cordova.
  *
  */
+
+const csv = require('../../node_modules/csvtojson/browser/browser.js');
 
 const CSVToJSONNetworkFormat = (data) => {
   const withTypeAndAttributes = node => ({
