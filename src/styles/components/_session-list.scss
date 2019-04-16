@@ -3,8 +3,9 @@
   padding-bottom: 10em;
   padding-top: calc(#{$scroller-top-padding});
   display: grid;
-  grid-template-columns: 1fr;
-  grid-gap: 2rem;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 2rem 3rem;
+
 
   @media screen and (min-aspect-ratio: 4 / 3) {
     grid-template-columns: 1fr 1fr;
@@ -18,33 +19,83 @@
     grid-template-columns: 1fr 1fr 1fr 1fr;
   }
 
-  &__content {
-    position: relative;
-  }
+}
 
-  &--single {
-    .card {
-      background: var(--background);
+.session-card {
+  align-items: center;
+  background-color: var(--color-platinum);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  padding: unit(4) unit(2);
+  height: 20rem;
+  border-bottom: 0.5rem solid var(--color-platinum--dark);
+  color: var(--color-navy-taupe);
+  justify-content: center;
+  min-width: 20rem;
+
+  .progress-wrapper {
+    height: 100%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    .progress-bar {
+      height: 100%;
+      background-color: var(--color-platinum--dark);
+
+      .progress-bar__filler {
+        background-color: var(--color-slate-blue);
+      }
+
+      &--complete {
+        .progress-bar__filler {
+          background-color: var(--primary);
+        }
+      }
+    }
+
+    h6 {
+      margin-bottom: 0;
+      margin-top: 0.5rem;
     }
   }
 
-  &__delete-button {
-    --button-size: 1rem;
-    --button-padding: #{unit(2)};
+  .card__attributes {
+    width: 80%;
+    align-self: flex-start;
 
-    cursor: pointer;
-    position: absolute;
-    right: var(--button-padding);
-    top: var(--button-padding);
-    padding: var(--button-padding);
+    .card__label {
+      word-break: break-all;
+    }
+  }
+}
 
-    &[name='close'] {
-      height: calc(var(--button-size) + 2 * var(--button-padding));
-      width: calc(var(--button-size) + 2 * var(--button-padding));
+.session-list-container {
+  height: 100%;
+  width: 100%;
 
-      .cls-1 {
-        fill: var(--transparent-light);
-      }
+  &__wrapper {
+    width: 100%;
+    height: calc(100vh - 10rem);
+    padding: 0 unit(4) unit(4);
+  }
+
+  &--empty {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 70%;
+    align-items: center;
+
+    .getting-started {
+      padding: unit(6);
+      background: var(--light-background);
+      flex-direction: column;
+      width: 60vw;
+      border-radius: var(--border-radius);
     }
   }
 }

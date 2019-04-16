@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Link } from 'react-router-dom';
 import { isEmpty } from 'lodash';
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
@@ -10,18 +9,19 @@ import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { FilterableListWrapper, SessionList, NodeBin } from '../../components';
 import { entityAttributesProperty } from '../../ducks/modules/network';
 
-const displayDate = timestamp => timestamp && new Date(timestamp).toLocaleString(undefined, { year: 'numeric', month: 'numeric', day: 'numeric' });
+const displayDate = timestamp => timestamp && new Date(timestamp).toLocaleString(undefined, { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' });
 
 const oneBasedIndex = i => parseInt(i || 0, 10) + 1;
 
 const emptyView = (
-  <div className="session-list--empty">
-    <h1 className="session-list__header">No previous interviews found</h1>
-    <p>
-      To begin one, select a protocol from <Link to="/">Start new interview</Link>,
-      or import a protocol from Network Canvas Server by using the
-      button in the lower-right corner of this screen.
-    </p>
+  <div className="session-list-container--empty">
+    <div className="getting-started">
+      <h1 className="getting-started__header">No previous interviews found</h1>
+      <p>
+        You have no in-progress interview sessions available to resume.
+        To begin a new session, select a protocol from the main start screen.
+      </p>
+    </div>
   </div>
 );
 
@@ -58,14 +58,19 @@ class SessionListContainer extends Component {
     }
 
     return (
-      <div className="session-list__wrapper">
+      <div className="session-list-container__wrapper">
         <FilterableListWrapper
           ListComponent={SessionList}
           listComponentProps={{
-            id: 'session-list',
+            id: 'session-list-container',
             label: sessionInfo => sessionInfo[entityAttributesProperty].caseId,
             onItemClick: this.onClickLoadSession,
             getKey: sessionInfo => sessionInfo.uuid,
+            progress: (sessionInfo) => {
+              const session = sessionInfo[entityAttributesProperty];
+              const protocolStages = installedProtocols[session.protocolUID].stages.length;
+              return Math.round((oneBasedIndex(session.stageIndex) / (protocolStages + 1)) * 100);
+            },
             details: (sessionInfo) => {
               const session = sessionInfo[entityAttributesProperty];
               const exportedAt = session.lastExportedAt;
@@ -75,7 +80,6 @@ class SessionListContainer extends Component {
               return [
                 { 'Last Changed': displayDate(session.updatedAt) },
                 { Protocol: protocolLabel },
-                { Stage: oneBasedIndex(session.stageIndex) },
                 { Exported: exportedDisplay },
               ];
             },

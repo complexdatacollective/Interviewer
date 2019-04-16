@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import { ProgressBar } from '../components';
 
 /**
   * Renders a card with details.
@@ -9,6 +10,7 @@ class SessionCard extends PureComponent {
   render() {
     const {
       details,
+      progress,
       label,
       selected,
     } = this.props;
@@ -31,13 +33,15 @@ class SessionCard extends PureComponent {
 
     return (
       <div className={classes}>
-        <div>
+        <div className="progress-wrapper">
+          <ProgressBar percentProgress={progress} />
+          <h6>{progress}%</h6>
+        </div>
+        <div className="card__attributes">
           <h1 className="card__label">
             { label }
           </h1>
-          <div className="card__attributes">
-            { attributes }
-          </div>
+          { attributes }
         </div>
       </div>
     );
@@ -46,12 +50,14 @@ class SessionCard extends PureComponent {
 
 SessionCard.propTypes = {
   details: PropTypes.array,
+  progress: PropTypes.number,
   label: PropTypes.string,
   selected: PropTypes.bool,
 };
 
 SessionCard.defaultProps = {
   details: [],
+  progress: 0,
   label: '',
   selected: false,
 };

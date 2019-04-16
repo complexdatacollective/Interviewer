@@ -19,6 +19,7 @@ const SessionList = (props) => {
   const {
     className,
     details,
+    progress,
     label,
     items,
     onItemClick,
@@ -32,18 +33,18 @@ const SessionList = (props) => {
   return (
     <div className={classNames}>
       {
-        items.map(node => (
-          <span className="session-list__content" key={getKey(node)}>
-            <EnhancedSessionCard
-              {...this.props}
-              label={label(node)}
-              selected={isItemSelected(node)}
-              details={details(node)}
-              meta={() => ({ uuid: node.uuid })}
-              onSelected={() => onItemClick(node)}
-              onDeleteCard={() => onDeleteCard(node)}
-            />
-          </span>
+        items.map(session => (
+          <EnhancedSessionCard
+            key={getKey(session)}
+            {...this.props}
+            label={label(session)}
+            selected={isItemSelected(session)}
+            progress={progress(session)}
+            details={details(session)}
+            meta={() => ({ uuid: session.uuid })}
+            onSelected={() => onItemClick(session)}
+            onDeleteCard={() => onDeleteCard(session)}
+          />
         ))
       }
     </div>
@@ -53,6 +54,7 @@ const SessionList = (props) => {
 SessionList.propTypes = {
   className: PropTypes.string,
   details: PropTypes.func,
+  progress: PropTypes.func,
   label: PropTypes.func,
   items: PropTypes.array.isRequired,
   onItemClick: PropTypes.func,
@@ -64,6 +66,7 @@ SessionList.propTypes = {
 SessionList.defaultProps = {
   className: '',
   details: () => (''),
+  progress: () => (''),
   label: () => (''),
   items: [],
   onItemClick: () => {},
