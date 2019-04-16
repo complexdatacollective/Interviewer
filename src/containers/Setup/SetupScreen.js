@@ -61,14 +61,6 @@ class Setup extends Component {
           </div>
           <main className="setup__main">
             <ProtocolList />
-            <div className="project-logo" >
-              <img src={projectLogo} alt="Network Canvas" />
-            </div>
-            <Icon
-              name="add-a-protocol"
-              className="setup__server-button"
-              onClick={() => this.setState({ showImportProtocolOverlay: true })}
-            />
           </main>
         </div>
         <div className={resumeOverlayClassnames}>
@@ -83,6 +75,12 @@ class Setup extends Component {
           </div>
           <SessionListContainer />
         </div>
+        <img className="setup__project-logo" src={projectLogo} alt="Network Canvas" />
+        <Icon
+          name="add-a-protocol"
+          className="setup__server-button"
+          onClick={() => this.setState({ showImportProtocolOverlay: true })}
+        />
       </React.Fragment>
     );
   }

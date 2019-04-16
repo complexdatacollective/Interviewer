@@ -79,7 +79,7 @@
     flex: 1 1 auto;
     display: flex;
     align-items: center;
-    height: calc(100vh - 30vh - 10rem);
+    height: calc(100% - 30vh - 10rem);
     @include transition-properties((opacity), var(--animation-easing), var(--animation-duration-fast));
     transition-delay: var(--animation-duration-fast);
 
@@ -149,16 +149,17 @@
 
   &__server-button {
     @include floating-action-button;
-    z-index: unset;
     width: 10rem;
     height: 10rem;
   }
 
-  .project-logo {
-    width: 10rem;
+  &__project-logo {
     position: absolute;
-    bottom: 1.7rem;
-    left: 1.7rem;
+    bottom: 1.8rem;
+    left: 1.8rem;
+    width: 10rem;
+    height: 10rem;
+    z-index: var(--z-default);
   }
 
 }
@@ -228,9 +229,9 @@
 .resume-session-panel {
   transition: transform var(--animation-duration-slow) var(--animation-easing);
   width: 100%;
-  height: 100vh;
+  height: 100%;
   position: absolute;
-  top: calc(100vh - 10rem);
+  top: calc(100% - 10rem);
   z-index: var(--z-panel);
 
   &--toggle {
@@ -249,7 +250,7 @@
   }
 
   &--open {
-    transform: translateY(calc(-100vh + 10rem));
+    transform: translateY(calc(-100% + 10rem));
 
     .toggle-image {
       transform: rotate(180deg);
