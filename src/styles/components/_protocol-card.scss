@@ -8,11 +8,10 @@ $component: 'protocol-card';
   display: flex;
   flex-direction: column;
   padding: unit(4);
-  width: 20rem;
-  height: 18rem;
+  width: 25rem;
+  height: 20rem;
   border-bottom: .5rem solid var(--color-platinum--dark);
   color: var(--color-navy-taupe);
-  box-shadow: 0 0 5rem var(--transparent-dark);
   justify-content: center;
 
   &__icon {

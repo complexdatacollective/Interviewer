@@ -1,21 +1,28 @@
 @keyframes move-bg-1 {
-  0% { transform: scale(1.5) rotate(0deg) translateX(-1.1rem) rotate(0deg); }
-  100%   { transform: scale(1.2) rotate(360deg) translateX(-0.8rem) rotate(-360deg); }
+  0% {
+    transform: scale(1.25) rotate(0deg) translateX(-1rem) rotate(0deg);
+    filter: hue-rotate(15deg);
+  }
+
+  100%   {
+    transform: scale(1.1) rotate(360deg) translateX(-1.2rem) rotate(-360deg);
+    filter: hue-rotate(0deg);
+  }
 }
 
 @keyframes move-bg-2 {
-  0% { transform: scale(1.7) rotate(0deg) translateX(-1rem) rotate(0deg); }
-  100%   { transform: scale(1) rotate(360deg) translateX(-1rem) rotate(-360deg); }
+  0% { transform: scale(1.2);  }
+  100%   { transform: scale(1.1); }
 }
 
 .bg {
-  position: absolute;
+  position: fixed;
   left: 0;
   right: 0;
   top: 0;
   bottom: 0;
   mix-blend-mode: screen;
-  background-size: contain;
+  background-size: cover;
   background-repeat: no-repeat;
   height: 100%;
   width: 100%;
@@ -27,7 +34,7 @@
   animation-duration: 50s;
   animation-name: move-bg-1;
   animation-direction: alternate-reverse;
-  animation-timing-function: ease-in-out;
+  animation-timing-function: linear;
   animation-iteration-count: infinite;
 }
 
@@ -37,22 +44,29 @@
   animation-duration: 50s;
   animation-name: move-bg-2;
   animation-direction: alternate;
-  animation-timing-function: ease-in-out;
+  animation-timing-function: linear;
   animation-iteration-count: infinite;
 }
 
 .setup {
-  display: flex;
-  flex-direction: column;
   height: 100%;
   width: 100%;
   z-index: var(--z-default);
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+  position: absolute;
+  top: 0;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
 
   &__header {
     align-items: center;
     justify-content: center;
-    text-align: center;
-    margin: 2rem;
+    height: 30vh;
+    display: flex;
+    flex-direction: column;
 
     &--logo {
       width: 9rem;
@@ -68,30 +82,46 @@
     flex: 1 1 auto;
     display: flex;
     align-items: center;
-    margin-bottom: 25vh;
+    height: calc(100vh - 30vh - 10rem);
 
     .scrollable {
       height: 100%; // TODO: should this be on component?
     }
 
-    .swiper-wrapper {
-      height: auto;
+    .swiper-slide {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      align-self: flex-start;
+      width: 100%;
+
+      &:not(.swiper-slide-active) {
+        pointer-events: none;
+      }
+    }
+
+    &.swiper-container {
+      width: 100%; // ensure Swiper plugin initializes layout correctly
     }
 
     .swiper-button-prev {
-      left: 22rem;
+      left: 0;
     }
 
     .swiper-button-next {
-      right: 22rem;
+      right: 0;
     }
 
-    .swiper-button-next,
-    .swiper-button-prev {
-      width: 3rem;
-      height: 5rem;
-      background-size: 3rem 5rem;
-      filter: drop-shadow( 0 0 .5rem #000 );
+    .icon.swiper-button-next,
+    .icon.swiper-button-prev {
+      width: 6rem;
+      margin-top: -3rem;
+      height: auto;
+      background: none;
+
+      .cls-2 {
+        fill: var(--color-cyber-grape);
+      }
     }
 
     .swiper-container-horizontal>.swiper-pagination-bullets {
@@ -117,24 +147,27 @@
   }
 
   &__footer {
-    background: url('../images/bottom-curve.svg');
     width: 100%;
-    height: 45vh;
-    position: absolute;
-    bottom: 0;
-    background-position: bottom;
-    background-repeat: no-repeat;
-    background-size: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
-    z-index: var(--z-panel);
+    background: linear-gradient(transparent, var(--background) 10rem);
+    flex-direction: column;
+    align-content: center;
+    height: calc(100vh + 10rem);
 
     &--link {
-      align-self: flex-end;
-      font-weight: bold;
-      font-size: 1.3rem;
+      height: 10rem;
       margin-bottom: 1rem;
+      display: flex;
+      flex-direction: column;
+
+      h4 {
+        margin-bottom: 1rem;
+      }
+
+      img {
+        height: 2rem;
+      }
     }
   }
 
@@ -179,4 +212,15 @@
       }
     }
   }
+}
+
+.resume-session-panel {
+  background: var(--color-cerulean-blue);
+  transition: transform var(--animation-duration-slow) var(--animation-easing);
+  width: 100%;
+  height: 100vh;
+
+  &--open {
+  }
+
 }

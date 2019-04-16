@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Swiper from 'react-id-swiper';
 import { size, map } from 'lodash';
+import { Icon } from '../../ui/components';
 import { NewSessionOverlay, ProtocolCard } from '../../components/Setup';
 import { actionCreators as sessionActions } from '../../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
@@ -32,33 +33,30 @@ class ProtocolList extends Component {
   handleCreateSession = (caseId) => {
     this.props.addSession(caseId, this.state.selectedProtocol);
     this.handleCloseOverlay();
-
-    // this.props.loadSession(protocol.path);
   }
 
   handleCloseOverlay = () => {
     this.setState({ showNewSessionOverlay: false, selectedProtocol: null });
   }
 
+  handleSwipe = (event) => {
+    console.log('event', event);
+  }
+
   render() {
     const {
       installedProtocols,
-      // importProtocolStatus: {
-      //   status,
-      // },
     } = this.props;
 
     const params = {
       containerClass: 'protocol-list swiper-container',
-      pagination: {
-        el: '.swiper-pagination.protocol-list__pagination',
-        type: 'bullets',
-        clickable: true,
-      },
+      pagination: {},
       navigation: {
-        nextEl: '.swiper-button-next.swiper-button-white',
-        prevEl: '.swiper-button-prev.swiper-button-white',
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
       },
+      renderPrevButton: () => <Icon className="swiper-button-prev" name="form-arrow-left" />,
+      renderNextButton: () => <Icon className="swiper-button-next" name="form-arrow-right" />,
       on: {
         slideChange: this.handleSwipe,
       },
@@ -117,6 +115,7 @@ function mapStateToProps(state) {
   return {
     installedProtocols: state.installedProtocols,
     importProtocolStatus: state.importProtocol,
+    currentPrototolIndex: state.deviceSettings.currentPrototolIndex,
   };
 }
 

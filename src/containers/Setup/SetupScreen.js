@@ -6,6 +6,7 @@ import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import networkCanvasLogo from '../../images/NC-Round.svg';
 import projectLogo from '../../images/NC-Mark.svg';
+import downArrow from '../../images/down-arrow.svg';
 import { Icon } from '../../ui/components';
 import { ProtocolList, ProtocolImportOverlay, ResumeSession, ImportProgressOverlay } from '.';
 
@@ -58,12 +59,14 @@ class Setup extends Component {
           </div>
           <main className="setup__main">
             <ProtocolList />
-            {/* <ResumeSession /> */}
           </main>
           <div className="setup__footer">
-            <img src={projectLogo} className="project-logo" alt="Network Canvas" />
+            <div className="project-logo" >
+              <img src={projectLogo} alt="Network Canvas" />
+            </div>
             <div className={`setup__footer--link ${this.isShowSessions() ? 'setup__link--active' : ''}`} role="button" tabIndex="0" onClick={() => this.setOptions('session')}>
-              { this.isShowProtocols() ? ('Resume interview') : ('Start interview') }
+              <h4>Resume interview</h4>
+              <img src={downArrow} alt="Resume interview" />
             </div>
             { this.isShowProtocols() &&
               <Icon
@@ -72,6 +75,9 @@ class Setup extends Component {
                 onClick={() => this.setState({ showImportProtocolOverlay: true })}
               />
             }
+            <div className="resume-session-panel resume-session-panel--open">
+              <ResumeSession />
+            </div>
           </div>
         </div>
       </React.Fragment>
