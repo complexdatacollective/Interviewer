@@ -2,7 +2,7 @@
 
   &__wrapper {
     width: 100%;
-    height: 100%;
+    height: calc(100vh - 10rem);
     padding: unit(4);
   }
 
@@ -18,4 +18,18 @@
       text-align: center;
     }
   }
+
+}
+
+.session-card {
+  align-items: center;
+  background-color: var(--color-platinum);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  padding: 2.4rem;
+  border-bottom: 0.5rem solid var(--color-platinum--dark);
+  color: var(--color-navy-taupe);
+  justify-content: center;
 }

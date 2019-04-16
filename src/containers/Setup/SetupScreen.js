@@ -4,11 +4,12 @@ import { get } from 'lodash';
 import { Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
+import cx from 'classnames';
 import networkCanvasLogo from '../../images/NC-Round.svg';
 import projectLogo from '../../images/NC-Mark.svg';
 import downArrow from '../../images/down-arrow.svg';
 import { Icon } from '../../ui/components';
-import { ProtocolList, ProtocolImportOverlay, ResumeSession, ImportProgressOverlay } from '.';
+import { ProtocolList, ProtocolImportOverlay, SessionListContainer, ImportProgressOverlay } from '.';
 
 /**
   * Setup screen
@@ -18,20 +19,10 @@ class Setup extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showOptions: 'protocol',
+      showSessionOverlay: false,
       showImportProtocolOverlay: false,
     };
   }
-
-  setOptions = (option) => {
-    this.setState({
-      showOptions: option,
-    });
-  }
-
-  isShowProtocols = () => this.state.showOptions === 'protocol';
-
-  isShowSessions = () => this.state.showOptions === 'session';
 
   render() {
     if (this.props.isSessionActive) {
@@ -40,45 +31,57 @@ class Setup extends Component {
       return (<Redirect to={{ pathname: `${pathname}` }} />);
     }
 
+    const resumeOverlayClassnames = cx(
+      'resume-session-panel',
+      { 'resume-session-panel--open': this.state.showSessionOverlay },
+    );
+
+    const setupClassnames = cx(
+      'setup',
+      { 'setup--showSessions': this.state.showSessionOverlay },
+      { 'setup--showProtocols': !this.state.showSessionOverlay },
+    );
+
     return (
       <React.Fragment>
         <div className="bg bg-1" />
         <div className="bg bg-2" />
-        <div className="setup">
-          <ProtocolImportOverlay
-            show={this.state.showImportProtocolOverlay}
-            onClose={() => this.setState({ showImportProtocolOverlay: false })}
-          />
-          <ImportProgressOverlay
-            show={this.props.importProtocolProgress && this.props.importProtocolProgress.step > 0}
-            progress={this.props.importProtocolProgress}
-          />
+        <ProtocolImportOverlay
+          show={this.state.showImportProtocolOverlay}
+          onClose={() => this.setState({ showImportProtocolOverlay: false })}
+        />
+        <ImportProgressOverlay
+          show={this.props.importProtocolProgress && this.props.importProtocolProgress.step > 0}
+          progress={this.props.importProtocolProgress}
+        />
+        <div className={setupClassnames}>
           <div className="setup__header">
             <img src={networkCanvasLogo} className="logo setup__header--logo" alt="Network Canvas" />
             <h1 className="type--title-1 setup__header--title">Network Canvas</h1>
           </div>
           <main className="setup__main">
             <ProtocolList />
-          </main>
-          <div className="setup__footer">
             <div className="project-logo" >
               <img src={projectLogo} alt="Network Canvas" />
             </div>
-            <div className={`setup__footer--link ${this.isShowSessions() ? 'setup__link--active' : ''}`} role="button" tabIndex="0" onClick={() => this.setOptions('session')}>
-              <h4>Resume interview</h4>
-              <img src={downArrow} alt="Resume interview" />
-            </div>
-            { this.isShowProtocols() &&
-              <Icon
-                name="add-a-protocol"
-                className="setup__server-button"
-                onClick={() => this.setState({ showImportProtocolOverlay: true })}
-              />
-            }
-            <div className="resume-session-panel resume-session-panel--open">
-              <ResumeSession />
-            </div>
+            <Icon
+              name="add-a-protocol"
+              className="setup__server-button"
+              onClick={() => this.setState({ showImportProtocolOverlay: true })}
+            />
+          </main>
+        </div>
+        <div className={resumeOverlayClassnames}>
+          <div className="resume-session-panel--toggle" role="button" tabIndex="0" onClick={() => this.setState({ showSessionOverlay: !this.state.showSessionOverlay })}>
+            <img className="toggle-image" src={downArrow} alt="Resume interview" />
+            <h4>
+              { !this.state.showSessionOverlay ?
+                ('Resume session') :
+                ('Start new interview')
+              }
+            </h4>
           </div>
+          <SessionListContainer />
         </div>
       </React.Fragment>
     );

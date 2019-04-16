@@ -52,14 +52,9 @@
   height: 100%;
   width: 100%;
   z-index: var(--z-default);
-  overflow-y: scroll;
-  scroll-behavior: smooth;
   position: absolute;
   top: 0;
-
-  ::-webkit-scrollbar {
-    display: none;
-  }
+  background-image: linear-gradient(to top, var(--background), transparent 10rem);
 
   &__header {
     align-items: center;
@@ -67,6 +62,8 @@
     height: 30vh;
     display: flex;
     flex-direction: column;
+    @include transition-properties((opacity transform), var(--animation-easing), var(--animation-duration-fast));
+    transition-delay: var(--animation-duration-fast);
 
     &--logo {
       width: 9rem;
@@ -83,6 +80,8 @@
     display: flex;
     align-items: center;
     height: calc(100vh - 30vh - 10rem);
+    @include transition-properties((opacity), var(--animation-easing), var(--animation-duration-fast));
+    transition-delay: var(--animation-duration-fast);
 
     .scrollable {
       height: 100%; // TODO: should this be on component?
@@ -118,6 +117,8 @@
       margin-top: -3rem;
       height: auto;
       background: none;
+      @include transition-properties((transform), var(--animation-easing), var(--animation-duration-fast));
+      transition-delay: var(--animation-duration-fast);
 
       .cls-2 {
         fill: var(--color-cyber-grape);
@@ -146,32 +147,6 @@
 
   }
 
-  &__footer {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    background: linear-gradient(transparent, var(--background) 10rem);
-    flex-direction: column;
-    align-content: center;
-    height: calc(100vh + 10rem);
-
-    &--link {
-      height: 10rem;
-      margin-bottom: 1rem;
-      display: flex;
-      flex-direction: column;
-
-      h4 {
-        margin-bottom: 1rem;
-      }
-
-      img {
-        height: 2rem;
-      }
-    }
-  }
-
-
   &__server-button {
     @include floating-action-button;
     z-index: unset;
@@ -188,7 +163,43 @@
 
 }
 
+.setup {
+  &--showProtocols {
+
+  }
+
+  &--showSessions {
+    .setup__header {
+      opacity: 0;
+      transform: scale(0.2);
+      transition-delay: unset;
+    }
+
+    .setup__header {
+      opacity: 0;
+      transform: scale(0.2);
+      transition-delay: unset;
+    }
+
+    .setup__main {
+      opacity: 0;
+      transition-delay: unset;
+
+      .swiper-button-next {
+        transform: translateX(6rem);
+        transition-delay: unset;
+      }
+
+      .swiper-button-prev {
+        transform: translateX(-6rem);
+        transition-delay: unset;
+      }
+    }
+  }
+}
+
 .import-protocol-overlay {
+
   .import-protocol-overlay__content {
     display: flex;
     flex-direction: column;
@@ -215,12 +226,35 @@
 }
 
 .resume-session-panel {
-  background: var(--color-cerulean-blue);
   transition: transform var(--animation-duration-slow) var(--animation-easing);
   width: 100%;
   height: 100vh;
+  position: absolute;
+  top: calc(100vh - 10rem);
+  z-index: var(--z-panel);
+
+  &--toggle {
+    height: 10rem;
+    padding-top: 3rem;
+    text-align: center;
+
+    h4 {
+      padding-bottom: 1rem;
+    }
+
+    .toggle-image {
+      height: 2rem;
+      transition: transform var(--animation-duration-fast) var(--animation-easing);
+    }
+  }
 
   &--open {
+    transform: translateY(calc(-100vh + 10rem));
+
+    .toggle-image {
+      transform: rotate(180deg);
+    }
+
   }
 
 }

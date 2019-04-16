@@ -28,7 +28,7 @@ const emptyView = (
 /**
   * Display stored sessions
   */
-class ResumeSession extends Component {
+class SessionListContainer extends Component {
   onClickLoadSession = (session) => {
     this.props.setSession(session.uuid);
   }
@@ -110,7 +110,7 @@ class ResumeSession extends Component {
   }
 }
 
-ResumeSession.propTypes = {
+SessionListContainer.propTypes = {
   installedProtocols: PropTypes.object.isRequired,
   removeSession: PropTypes.func.isRequired,
   sessions: PropTypes.object.isRequired,
@@ -133,4 +133,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ResumeSession);
+export default connect(mapStateToProps, mapDispatchToProps)(SessionListContainer);
