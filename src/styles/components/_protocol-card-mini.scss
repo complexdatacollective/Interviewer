@@ -1,0 +1,31 @@
+$component: 'protocol-card-mini';
+
+.#{$component} {
+  align-items: center;
+  background-color: var(--color-platinum);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  padding: unit(4);
+  width: 100%;
+  border-bottom: .5rem solid var(--color-platinum--dark);
+  color: var(--color-navy-taupe);
+  margin-bottom: unit(2);
+
+  &__icon-wrapper {
+    flex-basis: 25%;
+  }
+
+  &__content {
+    flex-basis: 75%;
+    flex-shrink: 1;
+  }
+
+  &__icon {
+    height: 5rem;
+    width: 5rem;
+    text-align: center;
+  }
+
+}

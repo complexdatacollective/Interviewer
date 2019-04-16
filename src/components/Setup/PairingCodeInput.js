@@ -55,6 +55,7 @@ class PairingCodeInput extends Component {
   }
 
   render() {
+    console.log(this.props);
     const { disabled } = this.props;
     return (
       <div onKeyUp={onKeyUp} className="pairing-code-input">

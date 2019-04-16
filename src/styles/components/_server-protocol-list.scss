@@ -14,37 +14,4 @@
     position: relative;
   }
 
-  &__card {
-    display: flex;
-    flex-direction: row;
-    margin-bottom: unit(2);
-    flex: auto;
-    background: var(--light-background);
-    padding: unit(2);
-  }
-
-  .protocol-card {
-    align-items: center;
-    background-color: var(--platinum);
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    display: flex;
-    flex-direction: row;
-    padding: spacing(medium);
-
-    &__icon-wrapper {
-      margin-right: 1rem;
-    }
-
-    &__icon {
-      height: 5rem;
-      width: 5rem;
-    }
-
-    &__name {
-      &--large {
-        text-align: center;
-      }
-    }
-  }
 }
