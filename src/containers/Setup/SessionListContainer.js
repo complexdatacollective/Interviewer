@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { isEmpty } from 'lodash';
-import { actionCreators as sessionActions } from '../../ducks/modules/session';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { FilterableListWrapper, SessionList, NodeBin } from '../../components';
@@ -29,8 +28,24 @@ const emptyView = (
   * Display stored sessions
   */
 class SessionListContainer extends Component {
-  onClickLoadSession = (session) => {
-    this.props.setSession(session.uuid);
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      selectedSessions: [],
+    };
+  }
+
+  onSelectSession = (session) => {
+    if (this.isSelected(session.uuid)) {
+      this.setState({
+        selectedSessions: this.state.selectedSessions.filter(item => item !== session.uuid),
+      });
+    } else {
+      this.setState({
+        selectedSessions: [...this.state.selectedSessions, session.uuid],
+      });
+    }
   }
 
   onDeleteCard = (uuid) => {
@@ -46,6 +61,8 @@ class SessionListContainer extends Component {
       ),
     });
   };
+
+  isSelected = uuid => this.state.selectedSessions.includes(uuid);
 
   render() {
     const { installedProtocols, sessions } = this.props;
@@ -64,7 +81,8 @@ class SessionListContainer extends Component {
           listComponentProps={{
             id: 'session-list-container',
             label: sessionInfo => sessionInfo[entityAttributesProperty].caseId,
-            onItemClick: this.onClickLoadSession,
+            onItemSelect: this.onSelectSession,
+            isItemSelected: item => this.isSelected(item.uuid),
             getKey: sessionInfo => sessionInfo.uuid,
             progress: (sessionInfo) => {
               const session = sessionInfo[entityAttributesProperty];
@@ -118,7 +136,6 @@ SessionListContainer.propTypes = {
   installedProtocols: PropTypes.object.isRequired,
   removeSession: PropTypes.func.isRequired,
   sessions: PropTypes.object.isRequired,
-  setSession: PropTypes.func.isRequired,
   openDialog: PropTypes.func.isRequired,
 };
 
@@ -132,7 +149,6 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     removeSession: bindActionCreators(sessionsActions.removeSession, dispatch),
-    setSession: bindActionCreators(sessionActions.setSession, dispatch),
     openDialog: bindActionCreators(dialogActions.openDialog, dispatch),
   };
 }

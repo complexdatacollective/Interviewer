@@ -27,50 +27,64 @@
   border-radius: var(--border-radius);
   cursor: pointer;
   display: flex;
-  flex-direction: row;
-  padding: unit(4) unit(2);
-  height: 20rem;
+  flex-direction: column;
+  padding: unit(2);
+  height: 100%;
   border-bottom: 0.5rem solid var(--color-platinum--dark);
   color: var(--color-navy-taupe);
   justify-content: center;
   min-width: 20rem;
 
-  .progress-wrapper {
-    height: 100%;
-    margin: 0 auto;
+  &--selected {
+    background-color: var(--color-platinum--dark);
+    border: .25rem solid var(--color-mustard);
+    border-radius: 1rem;
+  }
+
+  &__content {
     display: flex;
     align-items: center;
-    flex-direction: column;
+    width: 100%;
 
-    .progress-bar {
-      height: 100%;
-      background-color: var(--color-platinum--dark);
+    .progress-wrapper {
+      height: 8rem;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      flex-basis: 30%;
 
-      .progress-bar__filler {
-        background-color: var(--color-slate-blue);
-      }
+      .progress-bar {
+        height: 100%;
+        background-color: var(--color-platinum--dark);
 
-      &--complete {
         .progress-bar__filler {
-          background-color: var(--primary);
+          background-color: var(--color-slate-blue);
+        }
+
+        &--complete {
+          .progress-bar__filler {
+            background-color: var(--primary);
+          }
         }
       }
+
+      h6 {
+        margin-bottom: 0;
+        margin-top: 0.5rem;
+      }
     }
 
-    h6 {
-      margin-bottom: 0;
-      margin-top: 0.5rem;
+    .card__attributes {
+      width: 80%;
+      align-self: flex-start;
+
+      .card__label {
+        word-break: break-all;
+      }
     }
   }
 
-  .card__attributes {
-    width: 80%;
-    align-self: flex-start;
-
-    .card__label {
-      word-break: break-all;
-    }
-  }
 }
 
 .session-list-container {

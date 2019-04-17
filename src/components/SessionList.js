@@ -22,7 +22,7 @@ const SessionList = (props) => {
     progress,
     label,
     items,
-    onItemClick,
+    onItemSelect,
     onDeleteCard,
     isItemSelected,
     getKey,
@@ -38,11 +38,12 @@ const SessionList = (props) => {
             key={getKey(session)}
             {...this.props}
             label={label(session)}
+            sessionUUID={getKey(session)}
             selected={isItemSelected(session)}
             progress={progress(session)}
             details={details(session)}
             meta={() => ({ uuid: session.uuid })}
-            onSelected={() => onItemClick(session)}
+            onSelected={() => onItemSelect(session)}
             onDeleteCard={() => onDeleteCard(session)}
           />
         ))
@@ -57,7 +58,7 @@ SessionList.propTypes = {
   progress: PropTypes.func,
   label: PropTypes.func,
   items: PropTypes.array.isRequired,
-  onItemClick: PropTypes.func,
+  onItemSelect: PropTypes.func,
   onDeleteCard: PropTypes.func,
   isItemSelected: PropTypes.func,
   getKey: PropTypes.func,
@@ -69,7 +70,7 @@ SessionList.defaultProps = {
   progress: () => (''),
   label: () => (''),
   items: [],
-  onItemClick: () => {},
+  onItemSelect: () => {},
   onDeleteCard: () => {},
   isItemSelected: () => false,
   itemType: 'SESSION',
