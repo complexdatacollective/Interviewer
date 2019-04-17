@@ -5,12 +5,25 @@ import { mount } from 'enzyme';
 import { last } from 'lodash';
 import withExternalData from '../withExternalData';
 import loadExternalData from '../../utils/loadExternalData';
+import { entityAttributesProperty } from '../../ducks/modules/network';
 
 jest.mock('../../utils/loadExternalData');
 
 const mockReducer = () => ({
   installedProtocols: {
-    mockProtocol: {},
+    mockProtocol: {
+      codebook: {
+        node: {},
+        edge: {},
+      },
+      assetManifest: {
+        bar: {
+          name: 'bar',
+          source: 'file.json',
+          type: 'network',
+        },
+      },
+    },
   },
   activeSessionId: 'foo',
   sessions: {
@@ -21,7 +34,14 @@ const mockReducer = () => ({
 });
 
 const mockResult = {
-  bar: 'bazz',
+  nodes: [
+    {
+      type: 'person',
+      [entityAttributesProperty]: {
+        fun: true,
+      },
+    },
+  ],
 };
 
 const mockSource = 'bar';

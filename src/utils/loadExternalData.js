@@ -6,7 +6,7 @@ import inEnvironment from './Environment';
 import { readFile } from './filesystem';
 import { entityPrimaryKeyProperty } from '../ducks/modules/network';
 import getAssetUrl from './protocol/getAssetUrl';
-import getFactoryProtocolPath from './protocol/factoryProtocolPath';
+import Worker from './csvDecoder.worker';
 
 const withKeys = data =>
   data.map((node) => {
@@ -18,12 +18,41 @@ const withKeys = data =>
     };
   });
 
+
+/**
+ * Converting data from CSV to our network JSON format is expensive, and so happens
+ * inside of a worker to keep the app as responsive as possible.
+ *
+ * This function takes the result of the platform-specific file load operation,
+ * and then initialises the conversion worker, before sending it the file contents
+ * to decode.
+ */
+const convertCSVToJsonWithWorker = response => response.text()
+  .then(
+    data => new Promise((resolve, reject) => {
+      const worker = new Worker();
+      worker.postMessage(data);
+      worker.onerror = (event) => {
+        reject(event);
+      };
+      worker.onmessage = (event) => {
+        resolve(event.data);
+      };
+    })
+  );
+
 const fetchNetwork = inEnvironment(
   (environment) => {
     if (environment === environments.ELECTRON || environment === environments.WEB) {
-      return url =>
+      return (url, fileType) =>
         fetch(url)
-          .then(response => response.json())
+          .then((response) => {
+            if (fileType === 'csv') {
+              return convertCSVToJsonWithWorker(response);
+            }
+
+            return response.json();
+          })
           .then((json) => {
             const nodes = get(json, 'nodes', []);
             return ({ nodes: withKeys(nodes) });
@@ -31,30 +60,24 @@ const fetchNetwork = inEnvironment(
     }
 
     if (environment === environments.CORDOVA) {
-      return (url, { fileName, protocolType, protocolUID }) => {
-        if (protocolType === 'factory') {
-          return readFile(
-            getFactoryProtocolPath(protocolUID, `assets/${fileName}`)
-          )
-            .then(data => JSON.parse(data))
-            .then((json) => {
-              const nodes = get(json, 'nodes', []);
-              return ({ nodes: withKeys(nodes) });
-            });
-        }
-
-        return readFile(url)
-          .then(response => JSON.parse(response))
-          .then((json) => {
-            const nodes = get(json, 'nodes', []);
-            return ({ nodes: withKeys(nodes) });
-          });
-      };
+      return (url, fileType) => readFile(url)
+        .then((response) => {
+          if (fileType === 'csv') {
+            return convertCSVToJsonWithWorker(response.toString('utf8'));
+          }
+          return JSON.parse(response);
+        })
+        .then((json) => {
+          const nodes = get(json, 'nodes', []);
+          return ({ nodes: withKeys(nodes) });
+        });
     }
 
     return Promise.reject('Environment not supported');
   },
 );
+
+const fileExtension = fileName => fileName.split('.').pop();
 
 /**
  * Loads network data from assets and appends objectHash uids.
@@ -64,8 +87,16 @@ const fetchNetwork = inEnvironment(
  * @returns {object} Network object in format { nodes, edges }
  *
  */
-const loadExternalData = (protocolUID, fileName, protocolType) =>
-  getAssetUrl(protocolUID, fileName, protocolType)
-    .then(url => fetchNetwork(url, { fileName, protocolType, protocolUID }));
+const loadExternalData = (protocolUID, fileName, type) => {
+  const fileType = fileExtension(fileName) === 'csv' ? 'csv' : 'json';
+
+  switch (type) {
+    case 'network':
+      return getAssetUrl(protocolUID, fileName)
+        .then(url => fetchNetwork(url, fileType));
+    default:
+      return new Error('You must specify an external data type.');
+  }
+};
 
 export default loadExternalData;
