@@ -124,7 +124,7 @@ class ProtocolImportOverlay extends PureComponent {
         </div>
         <div
           className="tab"
-          onClick={() => importLocalProtocol('heh')}
+          onClick={() => importLocalProtocol()}
         >
           Local file
         </div>

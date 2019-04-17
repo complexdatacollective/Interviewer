@@ -6,7 +6,10 @@ import { isEmpty } from 'lodash';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { FilterableListWrapper, SessionList, NodeBin } from '../../components';
+import { Button } from '../../ui/components';
+import { Toggle } from '../../ui/components/Fields';
 import { entityAttributesProperty } from '../../ducks/modules/network';
+import { ExportSessionsOverlay } from '.';
 
 const displayDate = timestamp => timestamp && new Date(timestamp).toLocaleString(undefined, { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' });
 
@@ -32,6 +35,7 @@ class SessionListContainer extends Component {
     super(props);
 
     this.state = {
+      showExportSessionsOverlay: false,
       selectedSessions: [],
     };
   }
@@ -75,64 +79,95 @@ class SessionListContainer extends Component {
     }
 
     return (
-      <div className="session-list-container__wrapper">
-        <FilterableListWrapper
-          ListComponent={SessionList}
-          listComponentProps={{
-            id: 'session-list-container',
-            label: sessionInfo => sessionInfo[entityAttributesProperty].caseId,
-            onItemSelect: this.onSelectSession,
-            isItemSelected: item => this.isSelected(item.uuid),
-            getKey: sessionInfo => sessionInfo.uuid,
-            progress: (sessionInfo) => {
-              const session = sessionInfo[entityAttributesProperty];
-              const protocolStages = installedProtocols[session.protocolUID].stages.length;
-              return Math.round((oneBasedIndex(session.stageIndex) / (protocolStages + 1)) * 100);
-            },
-            details: (sessionInfo) => {
-              const session = sessionInfo[entityAttributesProperty];
-              const exportedAt = session.lastExportedAt;
-              const exportedDisplay = exportedAt ? new Date(exportedAt).toLocaleString() : 'never';
-              const protocol = installedProtocols[session.protocolUID] || {};
-              const protocolLabel = protocol.name || '[version out of date]';
-              return [
-                { 'Last Changed': displayDate(session.updatedAt) },
-                { Protocol: protocolLabel },
-                { Exported: exportedDisplay },
-              ];
-            },
-          }}
-          items={sessionList}
-          initialSortOrder={[{
-            property: 'updatedAt',
-            direction: 'desc',
-          }]}
-          sortFields={[
-            {
-              label: 'Last Changed',
-              variable: 'updatedAt',
-            },
-            {
-              label: 'Case ID',
-              variable: 'caseId',
-            },
-            {
-              label: 'Progress',
-              variable: 'stageIndex',
-            },
-          ]}
+      <React.Fragment>
+        <ExportSessionsOverlay
+          show={this.state.showExportSessionsOverlay}
+          onClose={() => this.setState({ showExportSessionsOverlay: false })}
+          sessionsToExport={this.state.selectedSessions}
         />
-        { this.state.selectedSessions.length > 0 &&
-        <div className="session-list-container__selected">
-          <h1>{this.state.selectedSessions.length} Selected</h1>
+        <div className="session-list-container__wrapper">
+          <FilterableListWrapper
+            ListComponent={SessionList}
+            listComponentProps={{
+              id: 'session-list-container',
+              label: sessionInfo => sessionInfo[entityAttributesProperty].caseId,
+              onItemSelect: this.onSelectSession,
+              isItemSelected: item => this.isSelected(item.uuid),
+              getKey: sessionInfo => sessionInfo.uuid,
+              progress: (sessionInfo) => {
+                const session = sessionInfo[entityAttributesProperty];
+                const protocolStages = installedProtocols[session.protocolUID].stages.length;
+                return Math.round((oneBasedIndex(session.stageIndex) / (protocolStages + 1)) * 100);
+              },
+              details: (sessionInfo) => {
+                const session = sessionInfo[entityAttributesProperty];
+                const exportedAt = session.lastExportedAt;
+                const exportedDisplay = exportedAt ? displayDate(exportedAt) : 'never';
+                const protocol = installedProtocols[session.protocolUID] || {};
+                const protocolLabel = protocol.name || '[version out of date]';
+                return [
+                  { 'Last Changed': displayDate(session.updatedAt) },
+                  { Protocol: protocolLabel },
+                  { Exported: exportedDisplay },
+                ];
+              },
+            }}
+            items={sessionList}
+            initialSortOrder={[{
+              property: 'updatedAt',
+              direction: 'desc',
+            }]}
+            sortFields={[
+              {
+                label: 'Last Changed',
+                variable: 'updatedAt',
+              },
+              {
+                label: 'Case ID',
+                variable: 'caseId',
+              },
+              {
+                label: 'Progress',
+                variable: 'stageIndex',
+              },
+            ]}
+          />
+          { this.state.selectedSessions.length > 0 &&
+          <div className="session-list-container__selected">
+            <div className="selected__info">
+              <h1>{this.state.selectedSessions.length} Selected</h1>
+              <Toggle
+                input={{
+                  value: this.state.selectedSessions.length === sessionList.length,
+                  onChange: () => {
+                    if (this.state.selectedSessions.length === sessionList.length) {
+                      this.setState({
+                        selectedSessions: [],
+                      });
+                    } else {
+                      this.setState({
+                        selectedSessions: sessionList.map(session => session.uuid),
+                      });
+                    }
+                  },
+                }}
+                label="Select all"
+              />
+            </div>
+            <Button
+              onClick={() => this.setState({ showExportSessionsOverlay: true })}
+            >
+              Export Selected
+            </Button>
+          </div>
+          }
+          <NodeBin
+            accepts={() => true}
+            dropHandler={meta => this.onDeleteCard(meta.uuid)}
+            id="NODE_BIN"
+          />
         </div>
-        }
-        <NodeBin
-          accepts={() => true}
-          dropHandler={meta => this.onDeleteCard(meta.uuid)}
-          id="NODE_BIN"
-        />
-      </div>
+      </React.Fragment>
     );
   }
 }

@@ -335,20 +335,51 @@ const sessionExportFailed = error => ({
 });
 
 // sessionData should already be in an exportable format (e.g., IDs transposed to names)
-const exportSession = (remoteProtocolId, sessionUuid, sessionData) => ({
+const exportSession = (remoteProtocolId, sessionUUID, sessionData) => ({
   type: EXPORT_SESSION,
   remoteProtocolId,
-  sessionUuid,
+  sessionUUID,
   sessionData,
 });
 
 const sessionExportPromise = (pairedServer, action) => {
-  const { remoteProtocolId, sessionUuid, sessionData } = action;
+  const { remoteProtocolId, sessionUUID, sessionData } = action;
   if (pairedServer) {
     const client = new ApiClient(pairedServer);
     return client.addTrustedCert().then(() =>
-      client.exportSession(remoteProtocolId, sessionUuid, sessionData));
+      client.exportSession(remoteProtocolId, sessionUUID, sessionData));
   }
+  return Promise.reject(new Error('No paired server available'));
+};
+
+const sessionExport = ({
+  remoteProtocolId,
+  sessionUUID,
+  sessionData,
+}, client) => client.exportSession(remoteProtocolId, sessionUUID, sessionData).catch(
+  (error) => {
+    console.log('export', error);
+  },
+);
+
+const catchError = error => Promise.reject(error);
+
+const bulkExportSessions = sessionList => (dispatch, getState) => {
+  const pairedServer = getState().pairedServer;
+
+  if (pairedServer) {
+    const client = new ApiClient(pairedServer);
+
+    // Use reduce to create a promise sequence.
+    return client.addTrustedCert().then(() => sessionList.reduce(
+      (previousPromise, nextSessionPromise) =>
+        previousPromise
+          .then(() => sessionExport(nextSessionPromise, client), catchError),
+      Promise.resolve()),
+    catchError,
+    );
+  }
+
   return Promise.reject(new Error('No paired server available'));
 };
 
@@ -358,7 +389,7 @@ const exportSessionEpic = (action$, store) => (
       const pairedServer = store.getState().pairedServer;
       return Observable
         .fromPromise(sessionExportPromise(pairedServer, action))
-        .mapTo(sessionExportSucceeded(action.sessionUuid))
+        .mapTo(sessionExportSucceeded(action.sessionUUID))
         .catch(error => Observable.of(sessionExportFailed(error)));
     })
 );
@@ -382,6 +413,7 @@ const actionCreators = {
   removeSession,
   exportSession,
   sessionExportFailed,
+  bulkExportSessions,
 };
 
 const actionTypes = {

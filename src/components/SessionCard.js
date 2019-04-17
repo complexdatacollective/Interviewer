@@ -53,7 +53,10 @@ class SessionCard extends PureComponent {
             { attributes }
           </div>
         </div>
-        <Button onClick={this.onClickLoadSession}>Resume</Button>
+        <Button
+          color="neon-coral"
+          onClick={this.onClickLoadSession}
+        >Resume</Button>
       </div>
     );
   }
