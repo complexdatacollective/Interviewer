@@ -80,7 +80,13 @@
   &__wrapper {
     width: 100%;
     height: calc(100vh - 10rem);
-    padding: 0 unit(4) unit(4);
+    padding: 0 unit(8) unit(4);
+
+    .list-select {
+      padding: unit(4);
+      background: var(--light-background);
+      border-radius: var(--border-radius);
+    }
   }
 
   &--empty {
