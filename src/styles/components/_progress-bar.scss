@@ -29,6 +29,12 @@
     position: absolute;
     border-radius: inherit;
   }
+
+  &--complete {
+    .progress-bar__filler {
+      background-color: var(--primary);
+    }
+  }
 }
 
 
