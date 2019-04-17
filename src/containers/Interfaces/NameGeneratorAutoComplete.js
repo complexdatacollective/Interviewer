@@ -77,7 +77,8 @@ class NameGeneratorAutoComplete extends Component {
 
         <div className={`${baseClass}__nodes`}>
           <NodeList
-            id={`${stage.id}_${prompt.id}_${ListId}`}
+            id={ListId}
+            listId={`${stage.id}_${prompt.id}_${ListId}`}
             items={nodesForPrompt}
             itemType="EXISTING_NODE"
           />
@@ -103,7 +104,6 @@ class NameGeneratorAutoComplete extends Component {
         />
 
         <div className="name-generator-auto-complete-interface__node-bin">
-          <NodeBin id="NODE_BIN" />
           <NodeBin
             accepts={meta => meta.itemType === 'EXISTING_NODE'}
             dropHandler={meta => this.props.removeNode(meta[entityPrimaryKeyProperty])}

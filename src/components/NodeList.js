@@ -50,7 +50,7 @@ class NodeList extends Component {
     const sortedNodes = sorter(newProps.items);
 
     // if we provided the same id, then just update normally
-    if (newProps.id === this.props.id) {
+    if (newProps.listId === this.props.listId) {
       this.setState({ exit: false }, () => {
         this.setState({ items: sortedNodes, stagger: false });
       });
@@ -153,6 +153,7 @@ NodeList.propTypes = {
   willAccept: PropTypes.bool,
   meta: PropTypes.object,
   id: PropTypes.string.isRequired,
+  listId: PropTypes.string.isRequired,
   sortOrder: PropTypes.array,
 };
 

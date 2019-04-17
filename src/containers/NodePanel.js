@@ -54,6 +54,7 @@ class NodePanel extends PureComponent {
       highlight,
       dataSource,
       id,
+      listId,
       minimise,
       onDrop,
       nodes,
@@ -68,6 +69,7 @@ class NodePanel extends PureComponent {
         <NodeList
           {...nodeListProps}
           items={nodes}
+          listId={listId}
           id={id}
           itemType="NEW_NODE"
           onDrop={this.handleDrop}

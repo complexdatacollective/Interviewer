@@ -81,7 +81,7 @@ class OrdinalBins extends PureComponent {
           <NodeList
             listId={`ORDBIN_NODE_LIST_${this.props.stage.id}_${this.props.prompt.id}_${index}`}
             id={`ORDBIN_NODE_LIST_${index}`}
-            nodes={bin.nodes}
+            items={bin.nodes}
             itemType="NEW_NODE"
             onDrop={item => onDrop(item)}
             accepts={() => true}

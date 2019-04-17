@@ -16,7 +16,7 @@ import {
   makeGetPromptNodeModelData,
 } from '../../selectors/name-generator';
 import { PromptSwiper } from '../../containers';
-import { FilterableListWrapper, NodeList } from '../../components';
+import { FilterableListWrapper, CardList } from '../../components';
 import withExternalData from '../../containers/withExternalData';
 
 /**
@@ -107,8 +107,10 @@ class NameGeneratorList extends Component {
           initialSortOrder={initialSortOrder}
           sortFields={sortFields}
           items={nodesForList}
-          ListComponent={NodeList}
+          ListComponent={CardList}
           listComponentProps={{
+            id: `select-${prompt.id}`,
+            listId: `select-${prompt.id}`,
             details: this.details,
             title: prompt.text,
             label: this.label,

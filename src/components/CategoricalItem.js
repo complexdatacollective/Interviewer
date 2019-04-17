@@ -48,7 +48,7 @@ const CategoricalItem = ({
               <NodeList
                 listId={`CATBIN_NODE_LIST_${label}`}
                 id={`CATBIN_NODE_LIST_${label}`}
-                nodes={nodes}
+                items={nodes}
                 sortOrder={sortOrder}
               />
             </div>
