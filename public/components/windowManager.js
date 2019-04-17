@@ -32,7 +32,6 @@ function createWindow() {
       center: true,
       fullscreen: true,
       title: 'Network Canvas',
-
     }, titlebarParameters);
 
     const mainWindow = new BrowserWindow(windowParameters);
