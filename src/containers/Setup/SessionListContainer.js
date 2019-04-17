@@ -122,6 +122,11 @@ class SessionListContainer extends Component {
             },
           ]}
         />
+        { this.state.selectedSessions.length > 0 &&
+        <div className="session-list-container__selected">
+          <h1>{this.state.selectedSessions.length} Selected</h1>
+        </div>
+        }
         <NodeBin
           accepts={() => true}
           dropHandler={meta => this.onDeleteCard(meta.uuid)}

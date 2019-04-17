@@ -39,7 +39,6 @@ class SessionCard extends PureComponent {
       'session-card': true,
       'session-card--selected': selected,
     });
-    console.log(this.props);
     return (
       <div className={classes}>
         <div className="session-card__content">

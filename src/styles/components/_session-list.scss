@@ -1,11 +1,9 @@
 .session-list {
   flex-wrap: wrap;
-  padding-bottom: 10em;
-  padding-top: calc(#{$scroller-top-padding});
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 2rem 3rem;
-
+  padding: unit(4);
 
   @media screen and (min-aspect-ratio: 4 / 3) {
     grid-template-columns: 1fr 1fr;
@@ -34,11 +32,20 @@
   color: var(--color-navy-taupe);
   justify-content: center;
   min-width: 20rem;
+  transition: all var(--animation-duration-standard) var(--animation-easing);
 
   &--selected {
     background-color: var(--color-platinum--dark);
-    border: .25rem solid var(--color-mustard);
-    border-radius: 1rem;
+    border-bottom-color: var(--color-mustard);
+    transform: scale(1.05);
+
+    .session-card__content {
+      .progress-wrapper {
+        .progress-bar {
+          background-color: var(--color-white);
+        }
+      }
+    }
   }
 
   &__content {
@@ -92,15 +99,26 @@
   width: 100%;
 
   &__wrapper {
-    width: 100%;
-    height: calc(100vh - 10rem);
-    padding: 0 unit(8) unit(4);
+    width: 90vw;
+    height: calc(80vh);
+    margin: 0 auto;
+    background: var(--light-background);
+    border-radius: var(--border-radius);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 
     .list-select {
-      padding: unit(4);
-      background: var(--light-background);
-      border-radius: var(--border-radius);
+      .list-select__sort {
+        padding: unit(2) unit(2) 0;
+      }
     }
+
+  }
+
+  &__selected {
+    background: var(--color-slate-blue);
+    padding: unit(2) unit(4);
   }
 
   &--empty {
