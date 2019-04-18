@@ -60,6 +60,7 @@ class NodePanel extends PureComponent {
       nodes,
       ...nodeListProps
     } = this.props;
+
     return (
       <Panel
         title={title}

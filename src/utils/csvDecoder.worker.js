@@ -1,6 +1,3 @@
-import { omit } from 'lodash';
-import { entityAttributesProperty } from '../ducks/modules/network';
-
 /**
  * Converts a CSV file into a Network Canvas node list JSON
  *
@@ -14,18 +11,8 @@ import { entityAttributesProperty } from '../ducks/modules/network';
 const csv = require('../../node_modules/csvtojson/browser/browser.js');
 
 const CSVToJSONNetworkFormat = (data) => {
-  const withTypeAndAttributes = node => ({
-    type: node.type,
-    [entityAttributesProperty]: {
-      ...omit(node, 'type'),
-    },
-  });
-
   csv().fromString(data)
-    .then((json) => {
-      const nodeList = json.map(entry => withTypeAndAttributes(entry));
-      self.postMessage({ nodes: nodeList });
-    });
+    .then(json => self.postMessage({ nodes: json }));
 };
 
 // Respond to message from parent thread

@@ -1,23 +1,10 @@
 /* eslint-disable quotes, quote-props, comma-dangle */
-import objectHash from 'object-hash';
 import { get } from 'lodash';
 import environments from './environments';
 import inEnvironment from './Environment';
 import { readFile } from './filesystem';
-import { entityPrimaryKeyProperty } from '../ducks/modules/network';
 import getAssetUrl from './protocol/getAssetUrl';
 import Worker from './csvDecoder.worker';
-
-const withKeys = data =>
-  data.map((node) => {
-    const uid = objectHash(node);
-
-    return {
-      ...node,
-      [entityPrimaryKeyProperty]: uid,
-    };
-  });
-
 
 /**
  * Converting data from CSV to our network JSON format is expensive, and so happens
@@ -55,7 +42,7 @@ const fetchNetwork = inEnvironment(
           })
           .then((json) => {
             const nodes = get(json, 'nodes', []);
-            return ({ nodes: withKeys(nodes) });
+            return ({ nodes });
           });
     }
 
@@ -69,7 +56,7 @@ const fetchNetwork = inEnvironment(
         })
         .then((json) => {
           const nodes = get(json, 'nodes', []);
-          return ({ nodes: withKeys(nodes) });
+          return ({ nodes });
         });
     }
 

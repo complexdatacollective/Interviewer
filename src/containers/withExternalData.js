@@ -1,5 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { connect } from 'react-redux';
+import objectHash from 'object-hash';
 import {
   compose,
   withState,
@@ -15,7 +16,8 @@ import {
   isEmpty,
 } from 'lodash';
 import loadExternalData from '../utils/loadExternalData';
-import { entityAttributesProperty } from '../ducks/modules/network';
+import { entityAttributesProperty, entityPrimaryKeyProperty } from '../ducks/modules/network';
+
 
 const mapStateToProps = (state) => {
   const session = state.sessions[state.activeSessionId];
@@ -50,7 +52,7 @@ const mapStateToProps = (state) => {
  *
  * Finally, if neither approach finds a UUID, {toFind} is returned.
  */
-const getObjectUUIDByValue = (object, toFind) => {
+const getVariableUUIDByValue = (object, toFind) => {
   if (isEmpty(object) || object[toFind]) {
     return toFind;
   }
@@ -61,19 +63,24 @@ const getObjectUUIDByValue = (object, toFind) => {
   return foundKey || toFind;
 };
 
-const withUUIDReplacement = (nodeList, codebook) => nodeList.map(
-  (node) => {
-    const nodeTypeUUID = getObjectUUIDByValue(codebook.node, node.type);
-    const codebookDefinition = codebook.node[nodeTypeUUID] || {};
+const withUUID = node => objectHash(node);
 
-    const attributes = mapKeys(node[entityAttributesProperty],
+// Replace string keys with UUIDs in codebook, according to stage subject.
+const withVariableUUIDReplacement = (nodeList, protocolCodebook, stageSubject) => nodeList.map(
+  (node) => {
+    const stageNodeType = stageSubject.type;
+    const codebookDefinition = protocolCodebook.node[stageNodeType] || {};
+
+    const uuid = withUUID(node);
+
+    const attributes = mapKeys(node,
       (attributeValue, attributeKey) =>
-        getObjectUUIDByValue(codebookDefinition.variables, attributeKey),
+        getVariableUUIDByValue(codebookDefinition.variables, attributeKey),
     );
 
     return {
-      ...node,
-      type: nodeTypeUUID,
+      type: stageNodeType,
+      [entityPrimaryKeyProperty]: uuid,
       [entityAttributesProperty]: attributes,
     };
   },
@@ -118,7 +125,7 @@ const withExternalData = (sourceProperty, dataProperty) =>
         assetManifest,
         protocolCodebook,
       }) =>
-        (sourceId) => {
+        (sourceId, stageSubject) => {
           if (!sourceId) { return; }
           // This is where we could set the loading state for URL assets
           setExternalData(null);
@@ -129,7 +136,8 @@ const withExternalData = (sourceProperty, dataProperty) =>
           loadExternalData(protocolUID, sourceFile, type)
             .then(externalData =>
               setExternalData({
-                nodes: withUUIDReplacement(externalData.nodes, protocolCodebook),
+                nodes:
+                  withVariableUUIDReplacement(externalData.nodes, protocolCodebook, stageSubject),
               }));
         },
     }),
@@ -139,13 +147,14 @@ const withExternalData = (sourceProperty, dataProperty) =>
         const currentSource = get(this.props, sourceProperty);
 
         if (nextSource !== currentSource) {
-          this.props.loadExternalData(nextSource);
+          this.props.loadExternalData(nextSource, this.props.stage.subject);
         }
       },
       componentDidMount() {
         const source = get(this.props, sourceProperty);
+
         if (!source) { return; }
-        this.props.loadExternalData(source);
+        this.props.loadExternalData(source, this.props.stage.subject);
       },
     }),
     mapProps(
