@@ -1,4 +1,3 @@
-/* eslint-disable: no-underscore-dangle */
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
@@ -7,9 +6,11 @@ import {
   makeNetworkNodesForPrompt as makeGetNodesForPrompt,
   makeNetworkNodesForOtherPrompts as makeGetNodesForOtherPrompts,
 } from '../selectors/interface';
+import { getNetworkEdges, getNetworkEgo } from '../selectors/network';
 import { Panel, NodeList } from '../components/';
 import withExternalData from './withExternalData';
 import { entityPrimaryKeyProperty } from '../ducks/modules/network';
+import customFilter from '../utils/networkQuery/filter';
 
 class NodePanel extends PureComponent {
   componentDidMount() {
@@ -121,6 +122,16 @@ const makeMapStateToProps = () => {
 
   return (state, props) => {
     const nodes = getNodes(state, props);
+
+    const nodeFilter = props.filter;
+    if (typeof nodeFilter !== 'function') {
+      const filterFunction = customFilter(nodeFilter);
+      return filterFunction({
+        nodes,
+        edges: getNetworkEdges(state, props),
+        ego: getNetworkEgo(state, props),
+      });
+    }
 
     return {
       nodes,
