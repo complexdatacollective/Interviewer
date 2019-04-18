@@ -356,32 +356,70 @@ const sessionExport = ({
   remoteProtocolId,
   sessionUUID,
   sessionData,
-}, client) => client.exportSession(remoteProtocolId, sessionUUID, sessionData).catch(
-  (error) => {
-    console.log('export', error);
-  },
-);
-
-const catchError = error => Promise.reject(error);
+}, client) =>
+  client.exportSession(remoteProtocolId, sessionUUID, sessionData);
 
 const bulkExportSessions = sessionList => (dispatch, getState) => {
   const pairedServer = getState().pairedServer;
-
+  console.log(pairedServer);
   if (pairedServer) {
     const client = new ApiClient(pairedServer);
+    let results = [];
 
     // Use reduce to create a promise sequence.
-    return client.addTrustedCert().then(() => sessionList.reduce(
-      (previousPromise, nextSessionPromise) =>
-        previousPromise
-          .then(() => sessionExport(nextSessionPromise, client), catchError),
-      Promise.resolve()),
-    catchError,
-    );
+    return client.addTrustedCert().then(() => {
+      return sessionList.reduce(
+        (previousPromise, nextSessionPromise) => {
+          return previousPromise
+            .then(() => {
+              return sessionExport(nextSessionPromise, client).then((data) => {
+                console.log('return of session export', data);
+                results = [...results, data];
+              });
+            });
+        }, Promise.resolve(),
+      );
+    }).then(() => {
+      console.log('results:', results);
+      return results;
+    });
   }
-
   return Promise.reject(new Error('No paired server available'));
 };
+
+// const asyncExportSessions = async sessionList => (dispatch, getState) => {
+//   const pairedServer = getState().pairedServer;
+
+//   if (pairedServer) {
+//     const client = new ApiClient(pairedServer);
+//     const output = [];
+
+//     for (const session of sessionList) {
+//       const exportResult = await sessionExport(session, client);
+//       dispatch(sessionExportSucceeded(session.sessionUUID));
+//       console.log(exportResult);
+//       output = [
+//         ...output,
+//         exportResult,
+//       ];
+//     }
+
+//     return output;
+
+//   }
+
+// }
+
+// const sequentialPromiseRunner = tasks => tasks.reduce((promiseChain, currentTask) =>
+//   promiseChain.then(chainResults =>
+//     currentTask.then(currentResult =>
+//       [...chainResults, currentResult],
+//     ),
+//   Promise.resolve([])).then((arrayOfResults) => {
+//     // Do something with all results
+//     console.log(arrayOfResults);
+//     return arrayOfResults;
+//   }));
 
 const exportSessionEpic = (action$, store) => (
   action$.ofType(EXPORT_SESSION)
