@@ -128,7 +128,7 @@ export const makeGetNodeAttributeLabel = () => createDeepEqualSelector(
   (codebook, nodeType, variableId) => {
     const nodeInfo = codebook.node;
     const variables = (nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].variables) || {};
-    return (variables && variables[variableId] && variables[variableId].name) || [];
+    return (variables && variables[variableId] && variables[variableId].name) || variableId;
   },
 );
 
