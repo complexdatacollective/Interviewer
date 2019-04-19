@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { differenceBy, omit, get, isEmpty, findKey } from 'lodash';
+import { differenceBy, omit, get } from 'lodash';
 import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { entityPrimaryKeyProperty, getEntityAttributes, entityAttributesProperty } from '../../ducks/modules/network';
@@ -18,18 +18,7 @@ import {
 import { PromptSwiper } from '../../containers';
 import { FilterableListWrapper, CardList } from '../../components';
 import withExternalData from '../../containers/withExternalData';
-
-
-const getVariableUUIDByValue = (object, toFind) => {
-  if (isEmpty(object) || object[toFind]) {
-    return toFind;
-  }
-
-  // Iterate object keys and return the key (itself )
-  const foundKey = findKey(object, objectItem => objectItem.name === toFind);
-
-  return foundKey || toFind;
-};
+import getParentKeyByNameValue from '../../utils/getParentKeyByNameValue';
 
 /**
   * Name Generator List Interface
@@ -66,7 +55,7 @@ class NameGeneratorList extends Component {
   label = (node) => {
     const attrs = getEntityAttributes(node);
     const nodeTypeVariables = this.props.nodeTypeDefinition.variables;
-    const labelKey = getVariableUUIDByValue(nodeTypeVariables, this.props.labelKey);
+    const labelKey = getParentKeyByNameValue(nodeTypeVariables, this.props.labelKey);
     return attrs[labelKey];
   };
 
@@ -94,7 +83,7 @@ class NameGeneratorList extends Component {
     const fields = this.props.visibleSupplementaryFields;
     const withUUIDReplacement = fields.map(field => ({
       ...field,
-      variable: getVariableUUIDByValue(nodeTypeVariables, field.variable),
+      variable: getParentKeyByNameValue(nodeTypeVariables, field.variable),
     }));
 
     return withUUIDReplacement.map(field => ({ [field.label]: attrs[field.variable] }));

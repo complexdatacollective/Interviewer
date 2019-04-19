@@ -9,9 +9,10 @@ import SearchTransition from '../../components/Transition/Search';
 import SearchResults from './SearchResults';
 import AddCountButton from '../../components/AddCountButton';
 import { actionCreators as searchActions } from '../../ducks/modules/search';
-import { getEntityAttributes, entityPrimaryKeyProperty } from '../../ducks/modules/network';
+import { getEntityAttributes, entityPrimaryKeyProperty, entityAttributesProperty } from '../../ducks/modules/network';
 import { makeGetFuse } from '../../selectors/search';
 import withExternalData from '../withExternalData';
+import getParentKeyByNameValue from '../../utils/getParentKeyByNameValue';
 
 /**
  * Fuse.js: approximate string matching.
@@ -50,7 +51,7 @@ const InitialState = {
   * prop that uniquely identifies the source data.
   *
   * @param {string} primaryDisplayField The attribute to use for rendering a result
-  * @param props.additionalAttributes {array} - An array of objects shaped
+  * @param props.details {array} - An array of objects shaped
   *     `{label: '', variable: ''}` in each search set object.
   * @param props.options {object}
   * @param props.options.matchProperties {array} - one or more key names to search
@@ -127,7 +128,7 @@ class Search extends Component {
 
   render() {
     const {
-      additionalAttributes,
+      details,
       className,
       collapsed,
       nodeColor,
@@ -161,11 +162,19 @@ class Search extends Component {
 
 
     // Result formatters:
-    const toDetail = (node, field) =>
-      ({ [field.label]: getEntityAttributes(node)[field.variable] });
-    const getLabel = node => getEntityAttributes(node)[primaryDisplayField];
+    const toDetail = (node, field) => {
+      const nodeTypeVariables = this.props.nodeTypeDefinition.variables;
+      const labelKey = getParentKeyByNameValue(nodeTypeVariables, field.variable);
+      return { [field.label]: getEntityAttributes(node)[labelKey] };
+    };
+
+    const getLabel = (node) => {
+      const nodeTypeVariables = this.props.nodeTypeDefinition.variables;
+      const labelKey = getParentKeyByNameValue(nodeTypeVariables, primaryDisplayField);
+      return node[entityAttributesProperty][labelKey];
+    };
     const getSelected = node => this.state.selectedResults.indexOf(node) > -1;
-    const getDetails = node => additionalAttributes.map(attr => toDetail(node, attr));
+    const getDetails = node => details.map(attr => toDetail(node, attr));
 
     return (
       <SearchTransition
@@ -209,7 +218,7 @@ class Search extends Component {
 }
 
 Search.defaultProps = {
-  additionalAttributes: [],
+  details: [],
   className: '',
   clearResultsOnClose: true,
   nodeColor: '',
@@ -217,7 +226,7 @@ Search.defaultProps = {
 };
 
 Search.propTypes = {
-  additionalAttributes: PropTypes.array,
+  details: PropTypes.array,
   className: PropTypes.string,
   clearResultsOnClose: PropTypes.bool,
   closeSearch: PropTypes.func.isRequired,
@@ -227,7 +236,7 @@ Search.propTypes = {
   fuse: PropTypes.object.isRequired,
   onComplete: PropTypes.func.isRequired,
   nodeColor: PropTypes.string,
-
+  nodeTypeDefinition: PropTypes.object.isRequired,
   /* eslint-disable react/no-unused-prop-types */
   // These props are required by the fuse selector
   dataSourceKey: PropTypes.string.isRequired,
