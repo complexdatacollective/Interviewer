@@ -73,7 +73,7 @@ const withVariableUUIDReplacement = (nodeList, protocolCodebook, stageSubject) =
 
     const uuid = withUUID(node);
 
-    const attributes = mapKeys(node,
+    const attributes = mapKeys(node.attributes,
       (attributeValue, attributeKey) =>
         getVariableUUIDByValue(codebookDefinition.variables, attributeKey),
     );

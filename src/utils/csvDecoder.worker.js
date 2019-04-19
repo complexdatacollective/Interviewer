@@ -1,7 +1,9 @@
+
+import { entityAttributesProperty } from '../ducks/modules/network';
 /**
  * Converts a CSV file into a Network Canvas node list JSON
  *
- * @param {string} data - the contents of a CSV file
+ *  @param {string} data - the contents of a CSV file
  *
  * See: https://github.com/Keyang/node-csvtojson We may want to introduce buffering
  * to this function to increase performance particularly on cordova.
@@ -11,8 +13,17 @@
 const csv = require('../../node_modules/csvtojson/browser/browser.js');
 
 const CSVToJSONNetworkFormat = (data) => {
+  const withTypeAndAttributes = node => ({
+    [entityAttributesProperty]: {
+      ...node,
+    },
+  });
+
   csv().fromString(data)
-    .then(json => self.postMessage({ nodes: json }));
+    .then((json) => {
+      const nodes = json.map(entry => withTypeAndAttributes(entry));
+      return self.postMessage({ nodes });
+    });
 };
 
 // Respond to message from parent thread

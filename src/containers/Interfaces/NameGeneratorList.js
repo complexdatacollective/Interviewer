@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { differenceBy, omit, get } from 'lodash';
+import { differenceBy, omit, get, isEmpty, findKey } from 'lodash';
 import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { entityPrimaryKeyProperty, getEntityAttributes, entityAttributesProperty } from '../../ducks/modules/network';
 import { makeNetworkNodesForOtherPrompts, makeGetAdditionalAttributes } from '../../selectors/interface';
-import { getNetworkNodes } from '../../selectors/network';
+import { getNetworkNodes, makeGetNodeTypeDefinition } from '../../selectors/network';
 import {
   getCardDisplayLabel,
   getCardAdditionalProperties,
@@ -18,6 +18,18 @@ import {
 import { PromptSwiper } from '../../containers';
 import { FilterableListWrapper, CardList } from '../../components';
 import withExternalData from '../../containers/withExternalData';
+
+
+const getVariableUUIDByValue = (object, toFind) => {
+  if (isEmpty(object) || object[toFind]) {
+    return toFind;
+  }
+
+  // Iterate object keys and return the key (itself )
+  const foundKey = findKey(object, objectItem => objectItem.name === toFind);
+
+  return foundKey || toFind;
+};
 
 /**
   * Name Generator List Interface
@@ -51,7 +63,12 @@ class NameGeneratorList extends Component {
     this.props.removeNode(node[entityPrimaryKeyProperty]);
   }
 
-  label = node => getEntityAttributes(node)[this.props.labelKey];
+  label = (node) => {
+    const attrs = getEntityAttributes(node);
+    const nodeTypeVariables = this.props.nodeTypeDefinition.variables;
+    const labelKey = getVariableUUIDByValue(nodeTypeVariables, this.props.labelKey);
+    return attrs[labelKey];
+  };
 
 
   isNodeSelected = node =>
@@ -72,9 +89,15 @@ class NameGeneratorList extends Component {
   };
 
   details = (node) => {
+    const nodeTypeVariables = this.props.nodeTypeDefinition.variables;
     const attrs = getEntityAttributes(node);
     const fields = this.props.visibleSupplementaryFields;
-    return fields.map(field => ({ [field.label]: attrs[field.variable] }));
+    const withUUIDReplacement = fields.map(field => ({
+      ...field,
+      variable: getVariableUUIDByValue(nodeTypeVariables, field.variable),
+    }));
+
+    return withUUIDReplacement.map(field => ({ [field.label]: attrs[field.variable] }));
   }
 
   render() {
@@ -135,6 +158,7 @@ NameGeneratorList.propTypes = {
   prompt: PropTypes.object.isRequired,
   promptForward: PropTypes.func.isRequired,
   promptBackward: PropTypes.func.isRequired,
+  nodeTypeDefinition: PropTypes.object.isRequired,
   removeNode: PropTypes.func.isRequired,
   sortFields: PropTypes.array.isRequired,
   stage: PropTypes.object.isRequired,
@@ -167,12 +191,14 @@ function makeMapStateToProps() {
   const getPromptNodeAttributes = makeGetAdditionalAttributes();
   const getPromptNodeModelData = makeGetPromptNodeModelData();
   const getNodesForList = makeGetNodesForList();
+  const getNodeTypeDefinition = makeGetNodeTypeDefinition();
 
   return function mapStateToProps(state, props) {
     const nodesForList = getNodesForList(state, props);
 
     return {
       labelKey: getCardDisplayLabel(state, props),
+      nodeTypeDefinition: getNodeTypeDefinition(state, { type: props.stage.subject.type }),
       newNodeAttributes: getPromptNodeAttributes(state, props),
       newNodeModelData: getPromptNodeModelData(state, props),
       nodesForList,
