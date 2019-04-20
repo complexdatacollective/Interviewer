@@ -1,26 +1,13 @@
 import { createSelector } from 'reselect';
 
-import * as query from '../utils/networkQuery/query';
+import filter from '../utils/networkQuery/filter';
 import predicate from '../utils/networkQuery/predicate';
 import { getProtocolStages } from './protocol';
 import { getNetwork } from './network';
-import { FilterJoin, RuleType, SkipLogicAction, SkipLogicOperator } from '../protocol-consts';
+import { SkipLogicAction, SkipLogicOperator } from '../protocol-consts';
 
 const rotateIndex = (max, nextIndex) => (nextIndex + max) % max;
 const maxLength = state => getProtocolStages(state).length;
-
-const mapRuleType = (type) => {
-  switch (type) {
-    case RuleType.alter:
-      return query.alterRule;
-    case RuleType.ego:
-      return query.egoRule;
-    case RuleType.edge:
-      return query.edgeRule;
-    default:
-      return () => {};
-  }
-};
 
 export const getNextIndex = index => createSelector(
   maxLength,
@@ -32,38 +19,31 @@ const getSkipLogic = index => createSelector(
   stages => stages && stages[index] && stages[index].skipLogic,
 );
 
-const getFilter = index => createSelector(
+const getFilterOptions = index => createSelector(
   getSkipLogic(index),
   logic => logic && logic.filter,
 );
 
 const getJoinType = index => createSelector(
-  getFilter(index),
-  filter => ((filter && filter.join === FilterJoin.OR) ? query.or : query.and),
+  getFilterOptions(index),
+  filterOptions => filterOptions && filterOptions.join,
 );
 
 const getRules = index => createSelector(
-  getFilter(index),
-  filter => (filter && filter.rules) || [],
-);
-
-const convertRules = index => createSelector(
-  getRules(index),
-  rules => rules.filter(rule => rule.type && rule.options).map(
-    rule => mapRuleType(rule.type)(rule.options),
-  ),
+  getFilterOptions(index),
+  filterOptions => (filterOptions && filterOptions.rules) || [],
 );
 
 const getFilterFunction = index => createSelector(
   getJoinType(index),
-  convertRules(index),
-  (join, rules) => join(rules),
+  getRules(index),
+  (join, rules) => filter({ rules, join }),
 );
 
 const filterNetwork = index => createSelector(
   getFilterFunction(index),
   getNetwork,
-  (filter, network) => filter(network),
+  (filterFunction, network) => filterFunction(network),
 );
 
 const isSkipAction = index => createSelector(
@@ -88,6 +68,8 @@ export const isStageSkipped = index => createSelector(
   getSkipValue(index),
   filterNetwork(index),
   (logic, action, operator, comparisonValue, results) => {
+    if (!logic) return false;
+
     let outerQuery = false;
     switch (operator) {
       case SkipLogicOperator.NONE:

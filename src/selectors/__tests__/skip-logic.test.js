@@ -15,9 +15,9 @@ const mockState = {
         ],
         ego: {},
         nodes: [
-          { id: 1, type: 'person', name: 'soAndSo' },
-          { id: 2, type: 'person', name: 'whoDunnit' },
-          { id: 3, type: 'person', name: 'whatsErName' },
+          { type: 'person', attributes: { id: 1, name: 'soAndSo' } },
+          { type: 'person', attributes: { id: 2, name: 'whoDunnit' } },
+          { type: 'person', attributes: { id: 3, name: 'whatsErName' } },
         ],
       },
     },
