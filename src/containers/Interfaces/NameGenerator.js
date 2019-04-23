@@ -169,7 +169,8 @@ class NameGenerator extends Component {
 
         { quickAdd &&
           <QuickNodeForm
-            stage={this.props.stage}
+            stageSubject={this.props.stage.subject}
+            targetVariable={this.props.quickAdd}
             addNode={this.props.addNode}
             nodeIconName={nodeIconName}
             newNodeAttributes={newNodeAttributes}
@@ -189,13 +190,13 @@ class NameGenerator extends Component {
 NameGenerator.defaultProps = {
   activePromptAttributes: {},
   form: null,
-  quickAdd: false,
+  quickAdd: null,
 };
 
 NameGenerator.propTypes = {
   addNode: PropTypes.func.isRequired,
   form: PropTypes.object,
-  quickAdd: PropTypes.bool,
+  quickAdd: PropTypes.string,
   newNodeAttributes: PropTypes.object.isRequired,
   newNodeModelData: PropTypes.object.isRequired,
   nodesForPrompt: PropTypes.array.isRequired,

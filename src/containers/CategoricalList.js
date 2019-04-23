@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { Flipper } from 'react-flip-toolkit';
 import cx from 'classnames';
 import { makeNetworkNodesForType, makeGetVariableOptions, makeGetPromptVariable } from '../selectors/interface';
-import { getLabelVariableForStageSubject } from '../selectors/network';
+import { makeGetNodeLabel } from '../selectors/network';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { CategoricalItem } from '../components/';
 import { MonitorDragSource } from '../behaviours/DragAndDrop';
@@ -91,9 +91,8 @@ class CategoricalList extends Component {
     }
 
     // todo: the following should be updated to reflect the sort order of the bins
-    const name = nodes[0][entityAttributesProperty] && this.props.displayVariable &&
-      nodes[0][entityAttributesProperty][this.props.displayVariable];
-
+    const name = this.props.getLabel(nodes[0]);
+    console.log(name, nodes[0]);
     if (nodes.length > 0) {
       return `${name}${nodes.length > 1 ? ` and ${nodes.length - 1} other${nodes.length > 2 ? 's' : ''}` : ''}`;
     }
@@ -220,7 +219,7 @@ class CategoricalList extends Component {
 CategoricalList.propTypes = {
   activePromptVariable: PropTypes.string.isRequired,
   bins: PropTypes.array.isRequired,
-  displayVariable: PropTypes.string.isRequired,
+  getLabel: PropTypes.func.isRequired,
   prompt: PropTypes.object.isRequired,
   stage: PropTypes.object.isRequired,
   updateNode: PropTypes.func.isRequired,
@@ -240,7 +239,7 @@ function makeMapStateToProps() {
   return function mapStateToProps(state, props) {
     const stageNodes = getStageNodes(state, props);
     const activePromptVariable = getPromptVariable(state, props);
-    const labelVariable = getLabelVariableForStageSubject();
+    const getNodeLabel = makeGetNodeLabel();
 
     return {
       activePromptVariable,
@@ -257,7 +256,7 @@ function makeMapStateToProps() {
             nodes,
           };
         }),
-      displayVariable: labelVariable(state, props)[0],
+      getLabel: getNodeLabel(state, props),
     };
   };
 }

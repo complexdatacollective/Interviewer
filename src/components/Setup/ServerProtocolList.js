@@ -14,7 +14,6 @@ const ServerProtocolList = ({ protocols, selectProtocol }) => {
   if (!protocols.length) {
     return EmptyProtocolList;
   }
-  console.log('serverprotocollist', protocols, selectProtocol);
 
   return (
     <div className="server-protocol-list">
