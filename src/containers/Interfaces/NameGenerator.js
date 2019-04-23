@@ -169,8 +169,8 @@ class NameGenerator extends Component {
 
         { quickAdd &&
           <QuickNodeForm
-            stageSubject={this.props.stage.subject}
-            targetVariable={this.props.quickAdd}
+            stage={this.props.stage}
+            targetVariable={quickAdd}
             addNode={this.props.addNode}
             nodeIconName={nodeIconName}
             newNodeAttributes={newNodeAttributes}

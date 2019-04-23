@@ -12,7 +12,7 @@ class QuickNodeForm extends PureComponent {
     addNode: PropTypes.func.isRequired,
     newNodeAttributes: PropTypes.object.isRequired,
     newNodeModelData: PropTypes.object.isRequired,
-    stageSubject: PropTypes.object.isRequired,
+    stage: PropTypes.object.isRequired,
     targetVariable: PropTypes.string.isRequired,
     nodeIconName: PropTypes.string.isRequired,
   };
@@ -32,6 +32,7 @@ class QuickNodeForm extends PureComponent {
   }
 
   handleOpenForm = () => {
+    console.log('open');
     this.setState({
       show: true,
     });
@@ -69,7 +70,7 @@ class QuickNodeForm extends PureComponent {
     const {
       nodeIconName,
       targetVariable,
-      stageSubject,
+      stage,
     } = this.props;
 
     const {
@@ -102,7 +103,7 @@ class QuickNodeForm extends PureComponent {
             </div>
             <div className="flip-button-back">
               <Node
-                type={stageSubject.type}
+                type={stage.subject.type}
                 {...{ [entityAttributesProperty]: {
                   [targetVariable]: this.state.nodeLabel,
                 } }}
