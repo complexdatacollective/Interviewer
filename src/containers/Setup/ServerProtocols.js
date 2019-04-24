@@ -3,9 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import ApiClient from '../../utils/ApiClient';
-import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { actionCreators as protocolActions } from '../../ducks/modules/importProtocol';
-import { actionCreators as serverActions } from '../../ducks/modules/pairedServer';
 import { ServerProtocolList, ServerSetup, ServerUnavailable } from '../../components/Setup';
 
 /**
@@ -49,22 +47,6 @@ class ServerProtocols extends Component {
       .then(() => importProtocolFromURI(protocol.downloadPath, true));
   }
 
-  handleUnpairRequest = () => {
-    this.props.openDialog({
-      type: 'Warning',
-      title: 'Unpair this Server?',
-      confirmLabel: 'Unpair Server',
-      onConfirm: this.props.unpairServer,
-      message: (
-        <p>
-          This will remove this Server from the app.
-          You will have to re-pair to import protocols or export data.
-          Are you sure you want to continue?
-        </p>
-      ),
-    });
-  }
-
   handleCloseOverlay = () => {
     this.setState({ showNewSessionOverlay: false });
   }
@@ -106,12 +88,10 @@ ServerProtocols.defaultProps = {
 
 ServerProtocols.propTypes = {
   importProtocolFromURI: PropTypes.func.isRequired,
-  openDialog: PropTypes.func.isRequired,
   pairedServer: PropTypes.object.isRequired,
   server: PropTypes.shape({
     pairingServiceUrl: PropTypes.string.isRequired,
   }).isRequired,
-  unpairServer: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -125,8 +105,6 @@ function mapDispatchToProps(dispatch) {
   return {
     importProtocolFromURI:
     bindActionCreators(protocolActions.importProtocolFromURI, dispatch),
-    openDialog: bindActionCreators(dialogActions.openDialog, dispatch),
-    unpairServer: bindActionCreators(serverActions.unpairServer, dispatch),
   };
 }
 

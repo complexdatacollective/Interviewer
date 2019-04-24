@@ -1,0 +1,115 @@
+.session-export-overlay {
+  max-width: 65rem;
+  max-height: none;
+  width: 80vw;
+
+  &__tabs {
+    background: var(--background);
+    border-radius: var(--border-radius);
+    display: flex;
+    overflow: hidden;
+
+    .tab {
+      @include vcjc; // vertical center, justify center
+      display: flex;
+      flex-grow: 1;
+      padding: unit(2);
+      font-weight: 700;
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      text-align: center;
+
+      &--selected {
+        background: var(--primary);
+      }
+    }
+  }
+
+  .dialog__additional-box {
+    height: auto;
+  }
+
+  .dialog__main-content {
+    flex-grow: unset;
+  }
+}
+
+
+.session-export {
+  &__content {
+    background: var(--background);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    margin-top: 1rem;
+
+    code {
+      background: var(--color-slate-blue);
+      padding: 0.45rem;
+      border-radius: var(--border-radius);
+    }
+  }
+
+  &--footer {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+    align-items: baseline;
+  }
+
+  &__buttons {
+    .button {
+      margin-left: spacing(small);
+    }
+  }
+}
+
+.session-export-content {
+
+  &__container {
+    display: flex;
+  }
+
+  &__footer {
+    flex-basis: 100%;
+  }
+}
+
+.session-export-status-list {
+  height: 25rem;
+
+  .session-export-item {
+    display: flex;
+    align-items: center;
+
+    &__icon {
+      flex-basis: 5rem;
+      padding: 1.5rem;
+
+      svg {
+        height: 100%;
+        width: 100%;
+      }
+
+      .spinner {
+        --circle-size: 0.5rem;
+      }
+    }
+
+    &__content {
+      h4 {
+        // margin: 0;
+      }
+
+      .error-box {
+        font-size: 0.9rem;
+        background: var(--error);
+        color: var(--text-light);
+        padding: 0.5rem;
+        border-radius: var(--border-radius);
+      }
+    }
+  }
+}
+

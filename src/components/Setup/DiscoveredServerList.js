@@ -97,6 +97,7 @@ class DiscoveredServerList extends Component {
                 key={server.pairingServiceUrl}
                 data={server}
                 selectServer={selectServer}
+                isPaired={false}
               />
             ))
           }

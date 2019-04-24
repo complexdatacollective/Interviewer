@@ -82,7 +82,14 @@ class SessionListContainer extends Component {
       <React.Fragment>
         <ExportSessionsOverlay
           show={this.state.showExportSessionsOverlay}
-          onClose={() => this.setState({ showExportSessionsOverlay: false })}
+          onClose={() => {
+            this.setState({
+              showExportSessionsOverlay: false,
+              selectedSessions: [],
+            });
+
+            this.props.resetSessionExport();
+          }}
           sessionsToExport={this.state.selectedSessions}
         />
         <div className="session-list-container__wrapper">
@@ -106,7 +113,7 @@ class SessionListContainer extends Component {
                 const protocol = installedProtocols[session.protocolUID] || {};
                 const protocolLabel = protocol.name || '[version out of date]';
                 return [
-                  { 'Last Changed': displayDate(session.updatedAt) },
+                  { Modified: displayDate(session.updatedAt) },
                   { Protocol: protocolLabel },
                   { Exported: exportedDisplay },
                 ];
@@ -177,6 +184,7 @@ SessionListContainer.propTypes = {
   removeSession: PropTypes.func.isRequired,
   sessions: PropTypes.object.isRequired,
   openDialog: PropTypes.func.isRequired,
+  resetSessionExport: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -189,6 +197,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     removeSession: bindActionCreators(sessionsActions.removeSession, dispatch),
+    resetSessionExport: bindActionCreators(sessionsActions.sessionExportReset, dispatch),
     openDialog: bindActionCreators(dialogActions.openDialog, dispatch),
   };
 }

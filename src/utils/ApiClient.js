@@ -23,9 +23,10 @@ const apiError = (respJson) => {
   // Provide a friendly message, if available.
   if (respJson.message) {
     error.friendlyMessage = respJson.message;
+    error.code = respJson.code;
     error.stack = null;
   }
-  return error;
+  throw error;
 };
 
 const handleError = (err) => {
