@@ -2,10 +2,8 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { compose } from 'redux';
-import { connect } from 'react-redux';
 import withPrompt from '../behaviours/withPrompt';
 import { entityAttributesProperty } from '../ducks/modules/network';
-import { getLabelVariableForStageSubject } from '../selectors/network';
 import { Icon } from '../ui/components/';
 import { Node } from './';
 
@@ -15,7 +13,7 @@ class QuickNodeForm extends PureComponent {
     newNodeAttributes: PropTypes.object.isRequired,
     newNodeModelData: PropTypes.object.isRequired,
     stage: PropTypes.object.isRequired,
-    displayVariable: PropTypes.string.isRequired,
+    targetVariable: PropTypes.string.isRequired,
     nodeIconName: PropTypes.string.isRequired,
   };
 
@@ -34,6 +32,7 @@ class QuickNodeForm extends PureComponent {
   }
 
   handleOpenForm = () => {
+    console.log('open');
     this.setState({
       show: true,
     });
@@ -58,7 +57,7 @@ class QuickNodeForm extends PureComponent {
       this.props.newNodeModelData,
       {
         ...this.props.newNodeAttributes,
-        [this.props.displayVariable]: this.state.nodeLabel,
+        [this.props.targetVariable]: this.state.nodeLabel,
       },
     );
 
@@ -70,7 +69,7 @@ class QuickNodeForm extends PureComponent {
   render() {
     const {
       nodeIconName,
-      displayVariable,
+      targetVariable,
       stage,
     } = this.props;
 
@@ -106,7 +105,7 @@ class QuickNodeForm extends PureComponent {
               <Node
                 type={stage.subject.type}
                 {...{ [entityAttributesProperty]: {
-                  [displayVariable]: this.state.nodeLabel,
+                  [targetVariable]: this.state.nodeLabel,
                 } }}
               />
             </div>
@@ -117,16 +116,8 @@ class QuickNodeForm extends PureComponent {
   }
 }
 
-const mapStateToProps = (state, props) => {
-  const getLabel = getLabelVariableForStageSubject();
-  return {
-    displayVariable: getLabel(state, props)[0],
-  };
-};
-
 export { QuickNodeForm };
 
 export default compose(
   withPrompt,
-  connect(mapStateToProps, null),
 )(QuickNodeForm);
