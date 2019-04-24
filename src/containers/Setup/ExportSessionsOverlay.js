@@ -143,6 +143,7 @@ class ExportSessionsOverlay extends PureComponent {
 
   export(sessionList) {
     this.setState({ showExportProgress: true, exportFinished: false });
+
     this.props.bulkExportSessions(sessionList.map((sessionId) => {
       const session = this.props.sessions[sessionId];
       const sessionProtocolUID = session.protocolUID;
@@ -158,8 +159,7 @@ class ExportSessionsOverlay extends PureComponent {
 
       return { remoteProtocolId, sessionUUID: sessionId, sessionData };
     }))
-      .then(() => { this.setState({ exportFinished: true }); })
-      .catch(error => console.log('error', error));
+      .then(() => { this.setState({ exportFinished: true }); });
   }
 
   pairWithServer = (server) => {

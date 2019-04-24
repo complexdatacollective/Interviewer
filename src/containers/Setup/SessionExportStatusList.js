@@ -20,7 +20,6 @@ class SessionExportStatusList extends PureComponent {
 
   render() {
     const { sessions, sessionsToExport, deleteWhenFinished } = this.props;
-    console.log(sessionsToExport);
     const activeSessions = pick(sessions, sessionsToExport);
 
     return (
@@ -87,7 +86,4 @@ const mapStateToProps = state => ({
   sessions: state.sessions,
 });
 
-const mapDispatchToProps = dispatch => ({
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(SessionExportStatusList);
+export default connect(mapStateToProps, null)(SessionExportStatusList);

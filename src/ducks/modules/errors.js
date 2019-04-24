@@ -15,13 +15,10 @@ const errorActions = [
 ];
 
 
-const errorsEpic = (action$) => {
-  console.log(action$);
-  return action$.pipe(
-    filter(action => errorActions.includes(action.type)),
-    mapTo(action => dialogActions.openDialog({ type: 'Error', error: action.error })),
-  );
-};
+const errorsEpic = action$ => action$.pipe(
+  filter(action => errorActions.includes(action.type)),
+  mapTo(action => dialogActions.openDialog({ type: 'Error', error: action.error })),
+);
 
 const epics = combineEpics(
   errorsEpic,

@@ -9,6 +9,9 @@
   &__frame {
     width: 80%;
     max-width: 50rem;
+    padding: unit(4);
+    background: var(--light-background);
+    border-radius: var(--border-radius);
   }
 
   &__title {
@@ -24,6 +27,10 @@
     &--download {
       display: flex;
       justify-content: space-between;
+      align-items: center;
+      background: var(--background);
+      padding: 2.4rem;
+      border-radius: var(--border-radius);
     }
 
     &--buttons {

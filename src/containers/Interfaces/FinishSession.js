@@ -82,7 +82,7 @@ class FinishSession extends Component {
       codebook,
       { _caseID: currentSession.caseId },
     );
-    this.props.exportSession(remoteProtocolId, sessionId, sessionData);
+    this.props.bulkExportSessions([{ remoteProtocolId, sessionId, sessionData }]);
   }
 
   handleExportError = (additionalInformation) => {
@@ -146,7 +146,7 @@ FinishSession.propTypes = {
   currentSession: PropTypes.object.isRequired,
   defaultServer: PropTypes.object,
   endSession: PropTypes.func.isRequired,
-  exportSession: PropTypes.func.isRequired,
+  bulkExportSessions: PropTypes.func.isRequired,
   openDialog: PropTypes.func.isRequired,
   remoteProtocolId: PropTypes.string,
   sessionId: PropTypes.string.isRequired,
@@ -177,7 +177,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    exportSession: bindActionCreators(sessionsActions.exportSession, dispatch),
+    bulkExportSessions: bindActionCreators(sessionsActions.bulkExportSessions, dispatch),
     endSession: () => {
       dispatch(sessionActions.endSession());
       dispatch(push('/'));

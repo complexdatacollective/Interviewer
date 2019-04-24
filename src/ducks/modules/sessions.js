@@ -90,7 +90,7 @@ export default function reducer(state = initialState, action = {}) {
       const newObj = {
         ...state,
       };
-      console.log(newObj);
+
       map(state, (session, sessionUUID) => {
         newObj[sessionUUID].exportStatus = null;
         newObj[sessionUUID].exportError = null;
@@ -383,7 +383,7 @@ const sessionExportFailed = (id, error) => ({
 
 const bulkExportSessions = sessionList => (dispatch, getState) => {
   const pairedServer = getState().pairedServer;
-  console.log(pairedServer);
+
   if (pairedServer) {
     const client = new ApiClient(pairedServer);
     let results = [];
@@ -392,15 +392,15 @@ const bulkExportSessions = sessionList => (dispatch, getState) => {
     return client.addTrustedCert().then(() => {
       dispatch(sessionExportStart(sessionList));
       return sessionList.reduce(
-        (previousSession, nextSession) => {
-          return previousSession
-            .then(() => {
-              return client.exportSession(
+        (previousSession, nextSession) =>
+          previousSession
+            .then(
+              () => client.exportSession(
                 nextSession.remoteProtocolId,
                 nextSession.sessionUUID,
                 nextSession.sessionData,
               ).then((data) => {
-                console.log('return of session export', data, nextSession);
+                // return of session export
                 dispatch(sessionExportSucceeded(nextSession.sessionUUID));
 
                 results = [...results, {
@@ -408,34 +408,19 @@ const bulkExportSessions = sessionList => (dispatch, getState) => {
                   response: data,
                 }];
               }).catch((error) => {
-                console.log('session export failed...', error);
+                // session export failed...
                 dispatch(sessionExportFailed(nextSession.sessionUUID, error));
                 results = [...results, {
                   sessionUUID: nextSession.sessionUUID,
                   response: error,
                 }];
-              });
-            });
-        }, Promise.resolve(),
+              }),
+            ), Promise.resolve(),
       );
-    }).then(() => {
-      console.log('results:', results);
-      return results;
-    });
+    }).then(() => results);
   }
   return Promise.reject(new Error('No paired server available'));
 };
-
-// const exportSessionEpic = (action$, store) => (
-//   action$.ofType(EXPORT_SESSION)
-//     .exhaustMap((action) => {
-//       const pairedServer = store.getState().pairedServer;
-//       return Observable
-//         .fromPromise(sessionExportPromise(pairedServer, action))
-//         .mapTo(sessionExportSucceeded(action.sessionUUID))
-//         .catch(error => Observable.of(sessionExportFailed(error)));
-//     })
-// );
 
 const actionCreators = {
   addNode,

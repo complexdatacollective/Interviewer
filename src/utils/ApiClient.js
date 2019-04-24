@@ -19,7 +19,6 @@ const defaultHeaders = {
 const apiError = (respJson) => {
   const error = new Error('API error');
 
-  console.log(respJson);
   // Provide a friendly message, if available.
   if (respJson.message) {
     error.friendlyMessage = respJson.message;
