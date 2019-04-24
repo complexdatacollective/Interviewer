@@ -1,11 +1,60 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { isCordova, isElectron } from '../../utils/Environment';
 import { Icon, Button } from '../../ui/components';
 import Scroller from '../Scroller';
 import { Toggle, Text } from '../../ui/components/Fields';
 import MenuPanel from './MenuPanel';
 
 class SettingsMenu extends PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.electronWindow = this.getElectronWindow();
+
+    this.state = {
+      fullScreenApp: this.electronWindow && this.electronWindow.isFullScreen(),
+    };
+  }
+
+  getElectronWindow = () => {
+    if (isElectron()) {
+      const electron = window.require('electron');
+      return electron.remote.getCurrentWindow();
+    }
+    return false;
+  }
+
+  showExitButton = () => !isCordova() || (navigator.app && navigator.app.exitApp);
+
+  handleExitApp = () => {
+    if (isCordova()) {
+      // Android supports exiting
+      if (navigator.app && navigator.app.exitApp) {
+        navigator.app.exitApp();
+      }
+    } else {
+      // note: this will only close windows opened by the app, not a new tab the user opened
+      window.close();
+    }
+  }
+
+  handleToggleUseFullScreenApp = () => {
+    if (this.electronWindow) {
+      if (this.electronWindow.isFullScreen()) {
+        this.electronWindow.setFullScreen(false);
+        this.setState({
+          fullScreenApp: false,
+        });
+      } else {
+        this.electronWindow.setFullScreen(true);
+        this.setState({
+          fullScreenApp: true,
+        });
+      }
+    }
+  }
+
   render() {
     const {
       active,
@@ -23,6 +72,7 @@ class SettingsMenu extends PureComponent {
       setInterfaceScale,
       interfaceScale,
     } = this.props;
+
     return (
       <MenuPanel
         active={active}
@@ -88,6 +138,17 @@ class SettingsMenu extends PureComponent {
                     Import development protocol
                   </Button>
                 </section>
+                {this.showExitButton() && <section>
+                  <p>
+                    The button below will exit Network Canvas.
+                  </p>
+                  <Button
+                    color="mustard"
+                    onClick={this.handleExitApp}
+                  >
+                    Exit
+                  </Button>
+                </section>}
               </fieldset>
               <fieldset>
                 <legend>Display Settings</legend>
@@ -123,6 +184,20 @@ class SettingsMenu extends PureComponent {
                     fieldLabel=" "
                   />
                 </section>
+                {isElectron() && <section>
+                  <p>
+                    The full screen application fills all available screen space.
+                  </p>
+                  <Toggle
+                    input={{
+                      checked: true,
+                      value: this.state.fullScreenApp,
+                      onChange: this.handleToggleUseFullScreenApp,
+                    }}
+                    label="Use full screen application?"
+                    fieldLabel=" "
+                  />
+                </section>}
                 <section>
                   <p>
                     The full screen node form is optimized for smaller devices, or devices with
