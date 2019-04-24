@@ -72,16 +72,32 @@
   }
 
   &__footer {
-    flex-basis: 100%;
+
+    .form-field-container {
+      margin-bottom: 0;
+    }
+
+    &--actions {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: space-between;
+    }
   }
 }
 
 .session-export-status-list {
-  height: 25rem;
+  max-height: 22rem;
+  padding: 2rem 0;
 
   .session-export-item {
     display: flex;
     align-items: center;
+    margin-bottom: 1rem;
+
+    &--to-delete {
+      text-decoration: line-through;
+      filter: grayscale(100%);
+    }
 
     &__icon {
       flex-basis: 5rem;
@@ -99,7 +115,11 @@
 
     &__content {
       h4 {
-        // margin: 0;
+        margin: .5rem 0;
+      }
+
+      .info-box {
+        font-size: 0.9rem;
       }
 
       .error-box {

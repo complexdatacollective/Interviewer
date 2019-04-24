@@ -381,7 +381,7 @@ const sessionExportFailed = (id, error) => ({
   sessionId: id,
 });
 
-const bulkExportSessions = (sessionList, deleteAfterExport) => (dispatch, getState) => {
+const bulkExportSessions = sessionList => (dispatch, getState) => {
   const pairedServer = getState().pairedServer;
   console.log(pairedServer);
   if (pairedServer) {
@@ -402,11 +402,6 @@ const bulkExportSessions = (sessionList, deleteAfterExport) => (dispatch, getSta
               ).then((data) => {
                 console.log('return of session export', data, nextSession);
                 dispatch(sessionExportSucceeded(nextSession.sessionUUID));
-
-                if (deleteAfterExport) {
-                  console.log('also removing session...');
-                  dispatch(removeSession(nextSession.sessionUUID));
-                }
 
                 results = [...results, {
                   sessionUUID: nextSession.sessionUUID,

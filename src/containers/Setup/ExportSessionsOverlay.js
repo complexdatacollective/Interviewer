@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import crypto from 'crypto';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import { forEach } from 'lodash';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import ProtocolUrlForm from './ProtocolUrlForm';
@@ -30,7 +31,7 @@ class ExportSessionsOverlay extends PureComponent {
       selectedServer: null, // set when user selects/enters a server to pair with
       previousSelectedServer: null, // selectedServer clone to populate manual inputs
       exportMode: 'server', // used to switch between tabbed views
-      deleteAfterExport: false, // Toggle switch state -> determines if successfully uploaded sessions should be removed.
+      deleteAfterExport: false, //  determines if successfully uploaded sessions should be removed.
       showExportProgress: false, // Weather to show the SessioNexportStatusList
       exportFinished: false,
     };
@@ -59,16 +60,55 @@ class ExportSessionsOverlay extends PureComponent {
   get exportSection() {
     if (this.sessionsAreExportable) {
       if (this.state.showExportProgress) {
+        // const exportErrors = pick(this.props.sessions, this.props.sessionsToExport);
+
         return (
           <div className="session-export-content">
             <div className="session-export-content__container">
-              <SessionExportStatusList sessionsToExport={this.props.sessionsToExport} />
+              <SessionExportStatusList
+                sessionsToExport={this.props.sessionsToExport}
+                deleteWhenFinished={this.state.deleteAfterExport}
+              />
             </div>
             { this.state.exportFinished &&
             <div className="session-export-content__footer">
-              <Button onClick={() => this.setState({ showExportProgress: false, exportFinished: false })}>
-                Finished
-              </Button>
+              <Toggle
+                input={{
+                  value: this.state.deleteAfterExport,
+                  onChange: () => {
+                    this.setState({ deleteAfterExport: !this.state.deleteAfterExport });
+                  },
+                }}
+                label="Delete successfully exported sessions?"
+                fieldLabel=" "
+              />
+              <div className="session-export-content__footer--actions">
+                <Button
+                  onClick={() => {
+                    if (this.state.deleteAfterExport) {
+                      forEach(this.props.sessionsToExport, (sessionId) => {
+                        const session = this.props.sessions[sessionId];
+
+                        if (session.exportStatus === 'finished') {
+                          this.props.removeSession(sessionId);
+                        }
+                      });
+                    }
+
+                    this.setState({
+                      showExportProgress: false,
+                      exportFinished: false,
+                      deleteAfterExport: false,
+                    });
+                    this.props.onClose();
+                  }}
+                >
+                  Finished
+                </Button>
+                <p>
+                  Export finished. Review the output above before continuing.
+                </p>
+              </div>
             </div>
             }
           </div>
@@ -81,24 +121,18 @@ class ExportSessionsOverlay extends PureComponent {
             <div>
               <h2>Ready to export</h2>
               <p>
-                Ready to export {this.props.sessionsToExport.length} session{this.props.sessionsToExport.length > 1 && ('s')}.
+                Ready to export {this.props.sessionsToExport.length} session{this.props.sessionsToExport.length > 1 && ('s')} to {this.props.pairedServer.name}.
+                Ensure this is the correct destination before continuing.
               </p>
-              <Toggle
-                input={{
-                  value: this.state.deleteAfterExport,
-                  onChange: () => {
-                    this.setState({ deleteAfterExport: !this.state.deleteAfterExport });
-                  },
-                }}
-                label="Delete sessions after successful export?"
-                fieldLabel=" "
-              />
+
             </div>
           </div>
           <div className="session-export-content__footer">
-            <Button onClick={() => this.export(this.props.sessionsToExport)}>
-              Export
-            </Button>
+            <div className="session-export-content__footer--actions">
+              <Button onClick={() => this.export(this.props.sessionsToExport)}>
+                Export
+              </Button>
+            </div>
           </div>
         </div>
       );
@@ -123,9 +157,8 @@ class ExportSessionsOverlay extends PureComponent {
       );
 
       return { remoteProtocolId, sessionUUID: sessionId, sessionData };
-    }),
-    this.state.deleteAfterExport,
-    ).then(() => { this.setState({ exportFinished: true }); })
+    }))
+      .then(() => { this.setState({ exportFinished: true }); })
       .catch(error => console.log('error', error));
   }
 
@@ -253,11 +286,13 @@ ExportSessionsOverlay.propTypes = {
   sessions: PropTypes.object.isRequired,
   installedProtocols: PropTypes.object.isRequired,
   onClose: PropTypes.func.isRequired,
+  removeSession: PropTypes.func.isRequired,
   sessionsToExport: PropTypes.array.isRequired,
   openDialog: PropTypes.func.isRequired,
   bulkExportSessions: PropTypes.func.isRequired,
   pairedServer: PropTypes.shape({
     pairingServiceUrl: PropTypes.string.isRequired,
+    name: PropTypes.string,
   }),
 };
 
@@ -269,6 +304,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   bulkExportSessions: bindActionCreators(sessionsActions.bulkExportSessions, dispatch),
+  removeSession: bindActionCreators(sessionsActions.removeSession, dispatch),
   openDialog: bindActionCreators(dialogActions.openDialog, dispatch),
 });
 

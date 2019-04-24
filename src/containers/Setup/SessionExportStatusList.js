@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { map, pick } from 'lodash';
+import cx from 'classnames';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Scroller from '../../components/Scroller';
@@ -12,8 +13,13 @@ class SessionExportStatusList extends PureComponent {
     };
   }
 
+  componentDidMount() {
+    const sessionsCopy = Object.assign({}, this.props.sessions);
+    this.sessionsCopy = sessionsCopy;
+  }
+
   render() {
-    const { sessions, sessionsToExport } = this.props;
+    const { sessions, sessionsToExport, deleteWhenFinished } = this.props;
     console.log(sessionsToExport);
     const activeSessions = pick(sessions, sessionsToExport);
 
@@ -50,12 +56,13 @@ class SessionExportStatusList extends PureComponent {
 
           return (
             <div
-              className="session-export-item"
+              className={cx('session-export-item', { 'session-export-item--to-delete': isFinished && deleteWhenFinished })}
               key={sessionUUID}
             >
               <div className="session-export-item__icon">{icon()}</div>
               <div className="session-export-item__content">
                 <h4>{session.caseId}</h4>
+                { isFinished && <div className="info-box">Successfully exported.</div>}
                 { isError && <div className="error-box">{errorDetail(session.exportError)}</div> }
               </div>
             </div>
@@ -69,6 +76,11 @@ class SessionExportStatusList extends PureComponent {
 SessionExportStatusList.propTypes = {
   sessions: PropTypes.object.isRequired,
   sessionsToExport: PropTypes.array.isRequired,
+  deleteWhenFinished: PropTypes.bool,
+};
+
+SessionExportStatusList.defaultProps = {
+  deleteWhenFinished: false,
 };
 
 const mapStateToProps = state => ({
