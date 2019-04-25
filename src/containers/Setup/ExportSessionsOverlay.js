@@ -72,16 +72,18 @@ class ExportSessionsOverlay extends PureComponent {
             </div>
             { this.state.exportFinished &&
             <div className="session-export-content__footer">
-              <Toggle
-                input={{
-                  value: this.state.deleteAfterExport,
-                  onChange: () => {
-                    this.setState({ deleteAfterExport: !this.state.deleteAfterExport });
-                  },
-                }}
-                label="Delete successfully exported sessions?"
-                fieldLabel=" "
-              />
+              { !this.props.activeSession &&
+                <Toggle
+                  input={{
+                    value: this.state.deleteAfterExport,
+                    onChange: () => {
+                      this.setState({ deleteAfterExport: !this.state.deleteAfterExport });
+                    },
+                  }}
+                  label="Delete successfully exported sessions?"
+                  fieldLabel=" "
+                />
+              }
               <div className="session-export-content__footer--actions">
                 <Button
                   onClick={() => {
@@ -290,6 +292,7 @@ ExportSessionsOverlay.propTypes = {
   sessionsToExport: PropTypes.array.isRequired,
   openDialog: PropTypes.func.isRequired,
   bulkExportSessions: PropTypes.func.isRequired,
+  activeSession: PropTypes.string.isRequired,
   pairedServer: PropTypes.shape({
     pairingServiceUrl: PropTypes.string.isRequired,
     name: PropTypes.string,
@@ -300,6 +303,7 @@ const mapStateToProps = state => ({
   pairedServer: state.pairedServer,
   sessions: state.sessions,
   installedProtocols: state.installedProtocols,
+  activeSession: state.activeSessionId,
 });
 
 const mapDispatchToProps = dispatch => ({

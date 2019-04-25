@@ -32,7 +32,6 @@ class QuickNodeForm extends PureComponent {
   }
 
   handleOpenForm = () => {
-    console.log('open');
     this.setState({
       show: true,
     });

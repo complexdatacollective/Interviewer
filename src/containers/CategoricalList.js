@@ -92,7 +92,7 @@ class CategoricalList extends Component {
 
     // todo: the following should be updated to reflect the sort order of the bins
     const name = this.props.getLabel(nodes[0]);
-    console.log(name, nodes[0]);
+
     if (nodes.length > 0) {
       return `${name}${nodes.length > 1 ? ` and ${nodes.length - 1} other${nodes.length > 2 ? 's' : ''}` : ''}`;
     }
