@@ -12,9 +12,12 @@ const mockStage = {
   label: 'Welcome',
   type: 'Information',
   title: 'Title for the screen',
-  additionalAttributes: {
-    close_friend: true,
-  },
+  additionalAttributes: [
+    {
+      variable: 'b6f2c4b9-e42f-459b-8f59-a11a685f460d',
+      value: 2,
+    },
+  ],
   subject: {
     entity: 'node',
     type: 'person',
@@ -137,7 +140,7 @@ describe('interface selector', () => {
 
     it('makeGetAdditionalAttributes()', () => {
       const selected = Interface.makeGetAdditionalAttributes();
-      expect(selected(mockState, mockProps)).toEqual(mockStage.additionalAttributes);
+      expect(selected(mockState, mockProps)).toEqual({ 'b6f2c4b9-e42f-459b-8f59-a11a685f460d': 2 });
       expect(selected(null, emptyProps)).toEqual({});
     });
 
