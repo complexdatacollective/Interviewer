@@ -1,13 +1,18 @@
-import { has } from 'lodash';
+import { get } from 'lodash';
 
-export const getSubject = (stage, prompt) => {
-  if (has(stage, 'subject')) { return stage.subject; }
-  return prompt.subject;
-};
+export const getSubject = (stage, prompt) =>
+  get(stage, 'subject', prompt.subject);
+
+const asKeyValue = (acc, { variable, value }) => ({
+  ...acc,
+  [variable]: value,
+});
 
 export const getAdditionalAttributes = (stage, prompt) => {
-  const stageAttributes = (has(stage, 'additionalAttributes') ? stage.additionalAttributes : {});
-  const promptAttributes = (has(prompt, 'additionalAttributes') ? prompt.additionalAttributes : {});
+  const stageAttributes = get(stage, 'additionalAttributes', [])
+    .reduce(asKeyValue, {});
+  const promptAttributes = get(prompt, 'additionalAttributes', [])
+    .reduce(asKeyValue, {});
 
   return {
     ...stageAttributes,

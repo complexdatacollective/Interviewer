@@ -129,6 +129,7 @@ class NodePanels extends PureComponent {
     const {
       highlight,
       dataSource,
+      filter,
       ...nodeListProps
     } = panel;
 
@@ -139,6 +140,7 @@ class NodePanels extends PureComponent {
         prompt={prompt}
         stage={stage}
         dataSource={dataSource}
+        filter={filter}
         accepts={() => this.isPanelCompatible(index)}
         externalDataSource={dataSource !== 'existing' && dataSource}
         highlight={this.getHighlight(index)}
