@@ -82,7 +82,7 @@ class SessionListContainer extends Component {
       <React.Fragment>
         <ExportSessionsOverlay
           show={this.state.showExportSessionsOverlay}
-          key={this.state.selectedSessions}
+          key={this.state.showExportSessionsOverlay}
           onClose={() => {
             this.setState({
               showExportSessionsOverlay: false,

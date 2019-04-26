@@ -32,7 +32,7 @@ class ExportSessionsOverlay extends PureComponent {
       previousSelectedServer: null, // selectedServer clone to populate manual inputs
       exportMode: 'server', // used to switch between tabbed views
       deleteAfterExport: false, //  determines if successfully uploaded sessions should be removed.
-      showExportProgress: false, // Weather to show the SessioNexportStatusList
+      showExportProgress: false, // Weather to show the SessionExportStatusList
       exportFinished: false,
     };
   }
@@ -60,8 +60,6 @@ class ExportSessionsOverlay extends PureComponent {
   get exportSection() {
     if (this.sessionsAreExportable) {
       if (this.state.showExportProgress) {
-        // const exportErrors = pick(this.props.sessions, this.props.sessionsToExport);
-
         return (
           <div className="session-export-content">
             <div className="session-export-content__container">
@@ -97,11 +95,6 @@ class ExportSessionsOverlay extends PureComponent {
                       });
                     }
 
-                    this.setState({
-                      showExportProgress: false,
-                      exportFinished: false,
-                      deleteAfterExport: false,
-                    });
                     this.props.onClose();
                   }}
                 >

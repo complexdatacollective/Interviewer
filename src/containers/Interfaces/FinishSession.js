@@ -19,10 +19,15 @@ const ExportSection = ({ defaultServer, children }) => (
   <div className="finish-session-interface__section finish-session-interface__section--export">
     <div>
       <h2>Data Export</h2>
-      <p>
-        Export this interview to {defaultServer.name} <br />
-        <small>{defaultServer.secureServiceUrl}</small>
-      </p>
+      { defaultServer ?
+        (<p>
+          Export this interview to {defaultServer.name} <br />
+          <small>{defaultServer.secureServiceUrl}</small>
+        </p>) :
+        (<p>
+          Click export to pair with a computer running Server, and remotely upload this interview.
+        </p>)
+      }
     </div>
     <div className="finish-session-interface__section--buttons">
       { children }
@@ -41,34 +46,18 @@ class FinishSession extends Component {
 
   get exportSection() {
     const { defaultServer } = this.props;
-
-    if (this.currentSessionisExportable) {
-      return (
-        <ExportSection defaultServer={defaultServer}>
-          <Button onClick={() => this.setState({ showExportSessionOverlay: true })}>
-            Export
-          </Button>
-        </ExportSection>
-      );
-    } else if (this.currentSessionBelongsToProtocol) {
-      // This is a rare case...
-      return <p>This session is not exportable: there is no paired Server.</p>;
-    }
-
-    return <p>This session is not exportable: it is not associated with any Server.</p>;
+    return (
+      <ExportSection defaultServer={defaultServer}>
+        <Button onClick={() => this.setState({ showExportSessionOverlay: true })}>
+          Export
+        </Button>
+      </ExportSection>
+    );
   }
 
   get exportUrl() {
     const { defaultServer } = this.props;
     return defaultServer && defaultServer.secureServiceUrl;
-  }
-
-  get currentSessionBelongsToProtocol() {
-    return !!this.props.remoteProtocolId;
-  }
-
-  get currentSessionisExportable() {
-    return this.currentSessionBelongsToProtocol && this.exportUrl;
   }
 
   export(currentSession) {
@@ -97,7 +86,7 @@ class FinishSession extends Component {
       <div className="interface finish-session-interface">
         <ExportSessionsOverlay
           show={this.state.showExportSessionOverlay}
-          key={this.props.currentSession}
+          key={this.state.showExportSessionOverlay}
           onClose={() => {
             this.setState({
               showExportSessionOverlay: false,
@@ -143,7 +132,7 @@ class FinishSession extends Component {
                 this.setState({ deleteAfterExport: !this.state.deleteAfterExport });
               },
             }}
-            label="Delete successfully exported sessions?"
+            label="Delete this session after finishing?"
             fieldLabel=" "
           />
           <div className="finish-session-interface__section finish-session-interface__section--buttons">
