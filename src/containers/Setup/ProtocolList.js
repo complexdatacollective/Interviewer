@@ -85,7 +85,7 @@ class ProtocolList extends Component {
               <div key={index}>
                 <ProtocolCard
                   protocol={protocol}
-                  selectProtocol={() => this.onClickProtocolCard(protocol.uid)}
+                  selectProtocol={() => this.onClickProtocolCard(protocol.uuid)}
                 />
               </div>
             )) }
