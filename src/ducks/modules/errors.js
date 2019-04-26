@@ -1,7 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 
 import { combineEpics } from 'redux-observable';
-// import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { actionCreators as dialogActions } from './dialogs';
 import { actionTypes as importProtocolActionTypes } from './importProtocol';
