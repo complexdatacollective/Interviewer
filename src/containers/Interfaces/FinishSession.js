@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { push } from 'react-router-redux';
 import createGraphML from '../../utils/ExportData';
 import { Button } from '../../ui/components';
 import { Toggle } from '../../ui/components/Fields';
@@ -136,7 +135,7 @@ class FinishSession extends Component {
             fieldLabel=" "
           />
           <div className="finish-session-interface__section finish-session-interface__section--buttons">
-            <Button onClick={this.props.endSession}>
+            <Button onClick={() => this.props.endSession(this.state.deleteAfterExport)}>
               Finish
             </Button>
           </div>
@@ -148,7 +147,6 @@ class FinishSession extends Component {
 
 FinishSession.propTypes = {
   currentNetwork: PropTypes.object.isRequired,
-  currentSession: PropTypes.object.isRequired,
   defaultServer: PropTypes.object,
   endSession: PropTypes.func.isRequired,
   resetSessionExport: PropTypes.func.isRequired,
@@ -167,7 +165,11 @@ FinishSession.defaultProps = {
 
 ExportSection.propTypes = {
   children: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.string]).isRequired,
-  defaultServer: PropTypes.object.isRequired,
+  defaultServer: PropTypes.object,
+};
+
+ExportSection.defaultProps = {
+  defaultServer: null,
 };
 
 function mapStateToProps(state) {
@@ -185,9 +187,9 @@ function mapDispatchToProps(dispatch) {
   return {
     bulkExportSessions: bindActionCreators(sessionsActions.bulkExportSessions, dispatch),
     resetSessionExport: bindActionCreators(sessionsActions.sessionExportReset, dispatch),
-    endSession: () => {
-      dispatch(sessionActions.endSession());
-      dispatch(push('/'));
+    deleteSession: bindActionCreators(sessionsActions.removeSession, dispatch),
+    endSession: (deleteAfterExport) => {
+      dispatch(sessionActions.endSession(deleteAfterExport));
     },
     openDialog: bindActionCreators(dialogActions.openDialog, dispatch),
   };
