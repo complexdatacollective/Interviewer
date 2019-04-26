@@ -4,6 +4,7 @@
 
 const initialState = {
   isMenuOpen: false,
+  protocolIndex: 0,
 };
 
 const UPDATE = 'UI/UPDATE';

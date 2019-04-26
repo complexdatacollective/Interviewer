@@ -27,7 +27,6 @@ const resetPropertyForAllNodes = property =>
 
     nodes.forEach((node) => {
       const registryForType = nodeRegistry[node.type].variables;
-      console.log(registryForType, node.type, property);
 
       if (registryForType[property]) {
         const variableType = registryForType[property].type;
