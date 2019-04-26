@@ -2,9 +2,9 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import ServerCard from '../ServerCard';
+import PairedServerWrapper from '../PairedServerWrapper';
 
-describe('<ServerCard>', () => {
+describe('<PairedServerWrapper>', () => {
   let serverData;
   let component;
   let selectHandler;
@@ -15,7 +15,7 @@ describe('<ServerCard>', () => {
       name: 'MyInstance',
       addresses: ['10.1.x.x'],
     };
-    component = shallow(<ServerCard data={serverData} selectServer={selectHandler} />);
+    component = shallow(<PairedServerWrapper data={serverData} selectServer={selectHandler} />);
   });
 
   it('renders the server name', () => {
@@ -23,7 +23,7 @@ describe('<ServerCard>', () => {
   });
 
   it('renders address if name unavailable', () => {
-    component = shallow(<ServerCard data={{ ...serverData, name: null }} />);
+    component = shallow(<PairedServerWrapper data={{ ...serverData, name: null }} />);
     expect(component.text()).toMatch(serverData.addresses[0]);
   });
 

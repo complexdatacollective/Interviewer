@@ -7,7 +7,7 @@ $component: 'protocol-card-mini';
   cursor: pointer;
   display: flex;
   flex-direction: row;
-  padding: unit(4);
+  padding: unit(2);
   width: 100%;
   border-bottom: .5rem solid var(--color-platinum--dark);
   color: var(--color-navy-taupe);
@@ -15,6 +15,7 @@ $component: 'protocol-card-mini';
 
   &__icon-wrapper {
     flex-basis: 25%;
+    text-align: center;
   }
 
   &__content {

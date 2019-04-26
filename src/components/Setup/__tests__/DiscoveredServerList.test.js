@@ -21,12 +21,12 @@ describe('<DiscoveredServerList />', () => {
   });
 
   it('displays listening state', () => {
-    expect(component.find('ServerCard')).toHaveLength(0);
+    expect(component.find('PairedServerWrapper')).toHaveLength(0);
     expect(component.text()).toContain('Listening');
   });
 
   it('displays servers', () => {
     component.setState({ servers: [{ name: 'nc', addresses: [] }] });
-    expect(component.find('ServerCard')).toHaveLength(1);
+    expect(component.find('PairedServerWrapper')).toHaveLength(1);
   });
 });

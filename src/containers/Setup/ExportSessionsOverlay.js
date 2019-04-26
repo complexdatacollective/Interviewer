@@ -16,7 +16,7 @@ import Overlay from '../Overlay';
 import { Button } from '../../ui/components';
 import { Toggle } from '../../ui/components/Fields';
 import { asExportableNetwork } from '../../utils/networkFormat';
-import ServerCard from '../../components/Setup/ServerCard';
+import PairedServerWrapper from '../../components/Setup/PairedServerWrapper';
 
 /**
  * The remote protocol ID on any instance of Server is the hex-encoded sha256 of its [unique] name.
@@ -119,22 +119,23 @@ class ExportSessionsOverlay extends PureComponent {
       return (
         <div className="session-export-content">
           <div className="session-export-content__container">
-            <ServerCard className="server-setup__card" data={this.props.pairedServer} isPaired />
-            <div>
-              <h2>Ready to export</h2>
-              <p>
-                Ready to export {this.props.sessionsToExport.length} session{this.props.sessionsToExport.length > 1 && ('s')} to {this.props.pairedServer.name}.
-                Ensure this is the correct destination before continuing.
-              </p>
+            <PairedServerWrapper className="server-setup__card" data={this.props.pairedServer} isPaired>
+              <div>
+                <h2>Ready to export</h2>
+                <p>
+                  Ready to export {this.props.sessionsToExport.length} session{this.props.sessionsToExport.length > 1 && ('s')} to {this.props.pairedServer.name}.
+                  Ensure this is the correct destination before continuing.
+                </p>
 
-            </div>
-          </div>
-          <div className="session-export-content__footer">
-            <div className="session-export-content__footer--actions">
-              <Button onClick={() => this.export(this.props.sessionsToExport)}>
-                Export
-              </Button>
-            </div>
+              </div>
+              <div className="session-export-content__footer">
+                <div className="session-export-content__footer--actions">
+                  <Button onClick={() => this.export(this.props.sessionsToExport)}>
+                    Export
+                  </Button>
+                </div>
+              </div>
+            </PairedServerWrapper>
           </div>
         </div>
       );
@@ -281,6 +282,7 @@ class ExportSessionsOverlay extends PureComponent {
 
 ExportSessionsOverlay.defaultProps = {
   pairedServer: null,
+  activeSession: null,
 };
 
 ExportSessionsOverlay.propTypes = {
@@ -292,7 +294,7 @@ ExportSessionsOverlay.propTypes = {
   sessionsToExport: PropTypes.array.isRequired,
   openDialog: PropTypes.func.isRequired,
   bulkExportSessions: PropTypes.func.isRequired,
-  activeSession: PropTypes.string.isRequired,
+  activeSession: PropTypes.string,
   pairedServer: PropTypes.shape({
     pairingServiceUrl: PropTypes.string.isRequired,
     name: PropTypes.string,

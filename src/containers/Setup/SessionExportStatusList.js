@@ -50,7 +50,7 @@ class SessionExportStatusList extends PureComponent {
               return 'Session already exists on Server. To upload again, first remove this session from within Server.';
             }
 
-            return error.friendlyMessage;
+            return error.friendlyMessage || error.message;
           };
 
           return (

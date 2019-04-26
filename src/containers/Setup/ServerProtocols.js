@@ -4,7 +4,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import ApiClient from '../../utils/ApiClient';
 import { actionCreators as protocolActions } from '../../ducks/modules/importProtocol';
-import { ServerProtocolList, ServerSetup, ServerUnavailable } from '../../components/Setup';
+import { ServerProtocolList, ServerSetup, PairedServerWrapper, ServerUnavailable } from '../../components/Setup';
+
 
 /**
  * @class
@@ -56,14 +57,8 @@ class ServerProtocols extends Component {
     const { server } = this.props;
 
     let content = null;
-    if (error) {
-      content = (
-        <ServerUnavailable
-          errorMessage={error.friendlyMessage || error.message}
-          handleRetry={this.handleRetry}
-        />
-      );
-    } else if (protocols) {
+
+    if (protocols) {
       content = (
         <ServerProtocolList
           protocols={protocols}
@@ -73,11 +68,20 @@ class ServerProtocols extends Component {
     } // else still loading
 
     return (
-      <React.Fragment>
-        <ServerSetup server={server} handleUnpair={this.handleUnpairRequest}>
-          {content}
-        </ServerSetup>
-      </React.Fragment>
+      <PairedServerWrapper className="server-setup__card" data={server}>
+        { error ?
+          (
+            <ServerUnavailable
+              errorMessage={error.friendlyMessage || error.message}
+              handleRetry={this.handleRetry}
+            />
+          ) : (
+            <ServerSetup server={server} handleUnpair={this.handleUnpairRequest}>
+              {content}
+            </ServerSetup>
+          )
+        }
+      </PairedServerWrapper>
     );
   }
 }

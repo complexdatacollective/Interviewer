@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ServerCard } from '../../components/Setup';
 
 /**
  * Provides a wrapper for common server setup tasks, rendering a Server card.
@@ -9,7 +8,6 @@ import { ServerCard } from '../../components/Setup';
 const ServerSetup = ({ children, server }) => (
   <div className="server-setup">
     <div className="server-setup__server">
-      <ServerCard className="server-setup__card" data={server} isPaired={!!server.secureServiceUrl} />
       <div>
         {
           server.secureServiceUrl && (
