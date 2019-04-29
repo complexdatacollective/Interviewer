@@ -14,19 +14,19 @@ import Worker from './csvDecoder.worker';
  * and then initialises the conversion worker, before sending it the file contents
  * to decode.
  */
-const convertCSVToJsonWithWorker = response => response.text()
-  .then(
-    data => new Promise((resolve, reject) => {
-      const worker = new Worker();
-      worker.postMessage(data);
-      worker.onerror = (event) => {
-        reject(event);
-      };
-      worker.onmessage = (event) => {
-        resolve(event.data);
-      };
-    })
-  );
+const convertCSVToJsonWithWorker = (data) => {
+  console.log(data);
+  return new Promise((resolve, reject) => {
+    const worker = new Worker();
+    worker.postMessage(data);
+    worker.onerror = (event) => {
+      reject(event);
+    };
+    worker.onmessage = (event) => {
+      resolve(event.data);
+    };
+  });
+};
 
 const fetchNetwork = inEnvironment(
   (environment) => {
@@ -35,7 +35,7 @@ const fetchNetwork = inEnvironment(
         fetch(url)
           .then((response) => {
             if (fileType === 'csv') {
-              return convertCSVToJsonWithWorker(response);
+              return convertCSVToJsonWithWorker(response.text());
             }
 
             return response.json();
