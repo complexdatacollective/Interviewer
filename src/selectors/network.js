@@ -109,7 +109,7 @@ export const makeGetEdgeLabel = () => createDeepEqualSelector(
   (_, props) => props.type,
   (codebook, edgeType) => {
     const edgeInfo = codebook.edge;
-    return (edgeInfo && edgeInfo[edgeType] && edgeInfo[edgeType].label) || '';
+    return (edgeInfo && edgeInfo[edgeType] && edgeInfo[edgeType].name) || '';
   },
 );
 
