@@ -4,7 +4,6 @@ import { omit } from 'lodash';
 import { actionCreators as dialogActions } from '../dialogs';
 import { actionCreators as importProtocolActions } from '../importProtocol';
 import { actionCreators as serverActions } from '../pairedServer';
-import { actionCreators as sessionsActions } from '../sessions';
 import { epics as errorsEpic } from '../errors';
 
 const mockError = new Error('foo');

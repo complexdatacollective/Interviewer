@@ -20,6 +20,7 @@
 }
 
 .session-card {
+  @include transition-properties((background-color, border-bottom-color, transform, box-shadow), var(--animation-easing), var(--animation-duration-standard));
   align-items: center;
   background-color: var(--color-platinum);
   border-radius: var(--border-radius);
@@ -32,13 +33,12 @@
   color: var(--color-navy-taupe);
   justify-content: center;
   min-width: 20rem;
-  transition: all var(--animation-duration-standard) var(--animation-easing);
 
   &--selected {
     background-color: var(--color-platinum--dark);
     border-bottom-color: var(--color-mustard);
     transform: scale(1.05);
-    box-shadow: 1rem 1rem 1rem rgba(0, 0, 0, 0.2);
+    box-shadow: 1rem 1rem 1rem rgba(0, 0, 0, 0.2); // sass-lint:disable-line no-color-literals
 
     .session-card__content {
       .progress-wrapper {

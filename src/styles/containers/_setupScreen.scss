@@ -9,10 +9,10 @@
   height: 100%;
   width: 100%;
   background-position: center;
-}
 
-.bg-1 {
-  background-image: url('../images/main-background.png');
+  &.bg-1 {
+    background-image: url('../images/main-background.png');
+  }
 }
 
 .setup {
@@ -23,13 +23,36 @@
   top: 0;
   background-image: linear-gradient(to top, var(--background), transparent 10rem);
 
+  &--show-sessions {
+    .setup__header {
+      opacity: 0;
+      transform: scale(0.2);
+      transition-delay: unset;
+    }
+
+    .setup__main {
+      opacity: 0;
+      transition-delay: unset;
+
+      .swiper-button-next {
+        transform: translateX(6rem);
+        transition-delay: unset;
+      }
+
+      .swiper-button-prev {
+        transform: translateX(-6rem);
+        transition-delay: unset;
+      }
+    }
+  }
+
   &__header {
+    @include transition-properties((opacity transform), var(--animation-easing), var(--animation-duration-fast));
     align-items: center;
     justify-content: center;
     height: 30vh;
     display: flex;
     flex-direction: column;
-    @include transition-properties((opacity transform), var(--animation-easing), var(--animation-duration-fast));
     transition-delay: var(--animation-duration-fast);
 
     &--logo {
@@ -43,11 +66,11 @@
   }
 
   &__main {
+    @include transition-properties((opacity), var(--animation-easing), var(--animation-duration-fast));
     flex: 1 1 auto;
     display: flex;
     align-items: center;
     height: calc(100% - 30vh - 10rem);
-    @include transition-properties((opacity), var(--animation-easing), var(--animation-duration-fast));
     transition-delay: var(--animation-duration-fast);
 
     .scrollable {
@@ -78,17 +101,19 @@
       right: 0;
     }
 
-    .icon.swiper-button-next,
-    .icon.swiper-button-prev {
-      width: 6rem;
-      margin-top: -3rem;
-      height: auto;
-      background: none;
-      @include transition-properties((transform), var(--animation-easing), var(--animation-duration-fast));
-      transition-delay: var(--animation-duration-fast);
+    .icon {
+      &.swiper-button-next,
+      &.swiper-button-prev {
+        @include transition-properties((transform), var(--animation-easing), var(--animation-duration-fast));
+        width: 6rem;
+        margin-top: -3rem;
+        height: auto;
+        background: none;
+        transition-delay: var(--animation-duration-fast);
 
-      .cls-2 {
-        fill: var(--color-cyber-grape);
+        .cls-2 {
+          fill: var(--color-cyber-grape);
+        }
       }
     }
 
@@ -97,7 +122,6 @@
         margin: 0 .35rem;
       }
     }
-
 
     .swiper-pagination-bullet {
       width: .75rem;
@@ -129,41 +153,6 @@
     z-index: var(--z-default);
   }
 
-}
-
-.setup {
-  &--showProtocols {
-
-  }
-
-  &--showSessions {
-    .setup__header {
-      opacity: 0;
-      transform: scale(0.2);
-      transition-delay: unset;
-    }
-
-    .setup__header {
-      opacity: 0;
-      transform: scale(0.2);
-      transition-delay: unset;
-    }
-
-    .setup__main {
-      opacity: 0;
-      transition-delay: unset;
-
-      .swiper-button-next {
-        transform: translateX(6rem);
-        transition-delay: unset;
-      }
-
-      .swiper-button-prev {
-        transform: translateX(-6rem);
-        transition-delay: unset;
-      }
-    }
-  }
 }
 
 .import-protocol-overlay {

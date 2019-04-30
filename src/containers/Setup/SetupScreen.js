@@ -38,8 +38,8 @@ class Setup extends Component {
 
     const setupClassnames = cx(
       'setup',
-      { 'setup--showSessions': this.state.showSessionOverlay },
-      { 'setup--showProtocols': !this.state.showSessionOverlay },
+      { 'setup--show-sessions': this.state.showSessionOverlay },
+      { 'setup--show-protocols': !this.state.showSessionOverlay },
     );
 
     return (
