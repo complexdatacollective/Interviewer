@@ -77,64 +77,61 @@ class SettingsMenu extends PureComponent {
               <fieldset>
                 <legend>Developer Options</legend>
                 <section>
-                  <p>The device name determines how your device appears to Server.</p>
+                  <label htmlFor="deviceName">Device Name</label>
                   <Text
                     input={{
                       value: deviceDescription,
                       onChange: e => setDeviceDescription(e.target.value),
                     }}
+                    name="deviceName"
                     label="Device name"
                     fieldLabel=" "
                   />
+                  <p>The device name determines how your device appears to Server.</p>
                 </section>
                 {
                   shouldShowMocksItem &&
                   <section>
-                    <p>
-                      During an active interview session, clicking this button will create
-                      mock nodes for testing purposes.
-                    </p>
                     <Button
                       color="mustard"
                       onClick={handleAddMockNodes}
                     >
                       Add mock nodes
                     </Button>
+                    <p>
+                      During an active interview session, clicking this button will create
+                      mock nodes for testing purposes.
+                    </p>
                   </section>
                 }
                 <section>
-                  <p>
-                    Use the button below to reset all Network Canvas data. This will erase any
-                    in-progress interviews, and all application settings.
-                  </p>
                   <Button
-                    color="mustard"
+                    color="neon-coral"
                     onClick={handleResetAppData}
                   >
                     Reset Network Canvas data
                   </Button>
+                  <p>
+                    Click the button above to reset all Network Canvas data. This will erase any
+                    in-progress interviews, and all application settings.
+                  </p>
                 </section>
                 <section>
-                  <p>
-                    The button below will import the latest development protocol for this version
-                    of Network Canvas.
-                  </p>
                   <Button
                     color="mustard"
                     onClick={() => importProtocolFromURI('https://github.com/codaco/development-protocol/releases/download/20190410122751-7141c7a/development-protocol.netcanvas')}
                   >
                     Import development protocol
                   </Button>
+                  <p>
+                    Clicking this button will import the latest development protocol for this
+                    version of Network Canvas.
+                  </p>
                 </section>
               </fieldset>
               <fieldset>
                 <legend>Display Settings</legend>
                 <section>
-                  <p>
-                    This setting allows you to control the size of the Network Canvas user
-                    interface. Increasing the interface size may limit the amount of information
-                    visible on each screen.
-                  </p>
                   <label htmlFor="scaleFactor">Interface Scale</label>
                   <input
                     type="range"
@@ -145,12 +142,13 @@ class SettingsMenu extends PureComponent {
                     onChange={(e) => { setInterfaceScale(parseInt(e.target.value, 10)); }}
                     step="5"
                   />
+                  <p>
+                    This setting allows you to control the size of the Network Canvas user
+                    interface. Increasing the interface size may limit the amount of information
+                    visible on each screen.
+                  </p>
                 </section>
                 <section>
-                  <p>
-                    Dynamic scaling lets Network Canvas resize the user interface proportionally to
-                    the size of the window. Turning it off will use a fixed size.
-                  </p>
                   <Toggle
                     input={{
                       checked: true,
@@ -160,26 +158,31 @@ class SettingsMenu extends PureComponent {
                     label="Use dynamic scaling?"
                     fieldLabel=" "
                   />
+                  <p>
+                    Dynamic scaling lets Network Canvas resize the user interface proportionally to
+                    the size of the window. Turning it off will use a fixed size.
+                  </p>
                 </section>
                 {isElectron() && <section>
-                  <p>
-                    The full screen application fills all available screen space.
-                  </p>
                   <Toggle
                     input={{
                       checked: true,
                       value: this.state.fullScreenApp,
                       onChange: this.handleToggleUseFullScreenApp,
                     }}
-                    label="Use full screen application?"
+                    label="Run in full screen?"
                     fieldLabel=" "
                   />
+                  <p>
+                    Network Canvas is designed to run in full screen mode for an
+                    immersive experience. You may disable or enable this mode here.
+                  </p>
+                  <p>
+                    <em><strong>Windows users:</strong> when in full screen mode you
+                    can access the native app menu by passing the <code>alt</code> key.</em>
+                  </p>
                 </section>}
                 <section>
-                  <p>
-                    The full screen node form is optimized for smaller devices, or devices with
-                    no physical keyboard.
-                  </p>
                   <Toggle
                     input={{
                       checked: true,
@@ -189,6 +192,10 @@ class SettingsMenu extends PureComponent {
                     label="Use full screen node form?"
                     fieldLabel=" "
                   />
+                  <p>
+                    The full screen node form is optimized for smaller devices, or devices with
+                    no physical keyboard.
+                  </p>
                 </section>
               </fieldset>
             </div>

@@ -13,7 +13,7 @@
   fieldset {
     border: .1rem solid var(--color-platinum);
     border-radius: .75rem;
-    padding: 0 spacing(large) spacing(medium);
+    padding: 0 spacing(medium) spacing(small);
     margin-bottom: spacing(medium);
 
     legend {
@@ -27,8 +27,13 @@
     }
   }
 
+  section {
+    font-size: 80%;
+    padding: 1rem;
+  }
+
   &__form {
-    margin-top: 1rem;
+    margin-top: 0.5em;
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 1rem;

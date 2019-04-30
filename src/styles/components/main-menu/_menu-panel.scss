@@ -20,6 +20,14 @@
     transition-delay: var(--animation-duration-fast);
   }
 
+  .icon[name='close'] {
+    position: absolute;
+    transition: opacity var(--animation-duration-fast) var(--animation-easing);
+    transition-delay: var(--animation-duration-fast);
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+
   &__settings {
     border-color: var(--settings);
     display: flex;
@@ -78,7 +86,7 @@
 
   .icon[name='close'] {
     position: absolute;
-    top: 1rem;
-    right: 1rem;
+    top: 1.5rem;
+    right: 1.5rem;
   }
 }
