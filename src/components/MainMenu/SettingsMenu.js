@@ -132,10 +132,6 @@ class SettingsMenu extends PureComponent {
                   </p>
                 </section>
               </fieldset>
-
-
-
-
               <fieldset>
                 <legend>Display Settings</legend>
                 <section>
