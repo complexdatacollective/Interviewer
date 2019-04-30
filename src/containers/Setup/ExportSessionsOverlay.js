@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import crypto from 'crypto';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { forEach } from 'lodash';
+import { forEach, each } from 'lodash';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import ProtocolUrlForm from './ProtocolUrlForm';
@@ -11,7 +11,6 @@ import SessionExportStatusList from './SessionExportStatusList';
 import { ServerAddressForm, DiscoveredServerList } from '../../components/Setup';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
-import importLocalProtocol from '../../utils/protocol/importLocalProtocol';
 import Overlay from '../Overlay';
 import { Button } from '../../ui/components';
 import { Toggle } from '../../ui/components/Fields';
@@ -58,6 +57,16 @@ class ExportSessionsOverlay extends PureComponent {
   }
 
   get exportSection() {
+    const successfullyExportedSession = () => {
+      let foundSession = false;
+
+      each(this.props.sessions, (value) => {
+        if (value.exportStatus === 'finished') { foundSession = true; }
+      });
+
+      return foundSession;
+    };
+
     if (this.sessionsAreExportable) {
       if (this.state.showExportProgress) {
         return (
@@ -70,7 +79,7 @@ class ExportSessionsOverlay extends PureComponent {
             </div>
             { this.state.exportFinished &&
             <div className="session-export-content__footer">
-              { !this.props.activeSession &&
+              { !this.props.activeSession && successfullyExportedSession() &&
                 <Toggle
                   input={{
                     value: this.state.deleteAfterExport,
@@ -78,7 +87,7 @@ class ExportSessionsOverlay extends PureComponent {
                       this.setState({ deleteAfterExport: !this.state.deleteAfterExport });
                     },
                   }}
-                  label="Delete successfully exported sessions?"
+                  label="Delete sessions that successfully exported?"
                   fieldLabel=" "
                 />
               }
