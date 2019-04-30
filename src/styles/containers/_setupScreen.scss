@@ -1,27 +1,9 @@
-@keyframes move-bg-1 {
-  0% {
-    transform: scale(1.25) rotate(0deg) translateX(-1rem) rotate(0deg);
-    filter: hue-rotate(15deg);
-  }
-
-  100%   {
-    transform: scale(1.1) rotate(360deg) translateX(-1.2rem) rotate(-360deg);
-    filter: hue-rotate(0deg);
-  }
-}
-
-@keyframes move-bg-2 {
-  0% { transform: scale(1.2);  }
-  100%   { transform: scale(1.1); }
-}
-
 .bg {
   position: absolute;
   left: 0;
   right: 0;
   top: 0;
   bottom: 0;
-  mix-blend-mode: screen;
   background-size: cover;
   background-repeat: no-repeat;
   height: 100%;
@@ -30,22 +12,7 @@
 }
 
 .bg-1 {
-  background-image: url('../images/main-background.svg');
-  animation-duration: 50s;
-  animation-name: move-bg-1;
-  animation-direction: alternate-reverse;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-}
-
-.bg-2 {
-  background-image: url('../images/main-background.svg');
-  mix-blend-mode: screen;
-  animation-duration: 50s;
-  animation-name: move-bg-2;
-  animation-direction: alternate;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
+  background-image: url('../images/main-background.png');
 }
 
 .setup {

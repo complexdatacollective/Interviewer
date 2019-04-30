@@ -45,7 +45,6 @@ class Setup extends Component {
     return (
       <React.Fragment>
         <div className="bg bg-1" />
-        <div className="bg bg-2" />
         <ProtocolImportOverlay
           show={this.state.showImportProtocolOverlay}
           onClose={() => this.setState({ showImportProtocolOverlay: false })}
