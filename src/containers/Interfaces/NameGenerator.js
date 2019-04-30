@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { get, has, omit } from 'lodash';
+import { get, has, omit, debounce } from 'lodash';
 import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { makeNetworkNodesForPrompt, makeGetAdditionalAttributes } from '../../selectors/interface';
@@ -29,7 +29,7 @@ class NameGenerator extends Component {
   /**
    * Node Form submit handler
    */
-  handleSubmitForm = ({ form }) => {
+  handleSubmitForm = debounce(({ form }) => {
     if (form) {
       if (!this.state.selectedNode) {
         /**
@@ -49,7 +49,10 @@ class NameGenerator extends Component {
     }
 
     this.setState({ showNodeForm: false, selectedNode: null });
-  }
+  }, 1000, { // This is needed to prevent double submit.
+    leading: true,
+    trailing: false,
+  });
 
   /**
    * Drop node handler
@@ -138,13 +141,13 @@ class NameGenerator extends Component {
           </div>
           <div className="name-generator-interface__nodes">
             <NodeList
-              nodes={nodesForPrompt}
+              items={nodesForPrompt}
               listId={`${stage.id}_${prompt.id}_MAIN_NODE_LIST`}
               id={'MAIN_NODE_LIST'}
               accepts={({ meta }) => get(meta, 'itemType', null) === 'NEW_NODE'}
               itemType="EXISTING_NODE"
               onDrop={this.handleDropNode}
-              onSelect={this.handleSelectNode}
+              onItemClick={this.handleSelectNode}
             />
           </div>
         </div>
@@ -170,13 +173,18 @@ class NameGenerator extends Component {
         { quickAdd &&
           <QuickNodeForm
             stage={this.props.stage}
+            targetVariable={quickAdd}
             addNode={this.props.addNode}
             nodeIconName={nodeIconName}
             newNodeAttributes={newNodeAttributes}
             newNodeModelData={newNodeModelData}
           />
         }
-        <NodeBin id="NODE_BIN" />
+        <NodeBin
+          accepts={meta => meta.itemType === 'EXISTING_NODE'}
+          dropHandler={meta => this.props.removeNode(meta[entityPrimaryKeyProperty])}
+          id="NODE_BIN"
+        />
       </div>
     );
   }
@@ -185,13 +193,13 @@ class NameGenerator extends Component {
 NameGenerator.defaultProps = {
   activePromptAttributes: {},
   form: null,
-  quickAdd: false,
+  quickAdd: null,
 };
 
 NameGenerator.propTypes = {
   addNode: PropTypes.func.isRequired,
   form: PropTypes.object,
-  quickAdd: PropTypes.bool,
+  quickAdd: PropTypes.string,
   newNodeAttributes: PropTypes.object.isRequired,
   newNodeModelData: PropTypes.object.isRequired,
   nodesForPrompt: PropTypes.array.isRequired,
@@ -201,6 +209,7 @@ NameGenerator.propTypes = {
   promptForward: PropTypes.func.isRequired,
   stage: PropTypes.object.isRequired,
   updateNode: PropTypes.func.isRequired,
+  removeNode: PropTypes.func.isRequired,
 };
 
 function makeMapStateToProps() {
@@ -224,6 +233,7 @@ function mapDispatchToProps(dispatch) {
   return {
     addNode: bindActionCreators(sessionsActions.addNode, dispatch),
     updateNode: bindActionCreators(sessionsActions.updateNode, dispatch),
+    removeNode: bindActionCreators(sessionsActions.removeNode, dispatch),
   };
 }
 

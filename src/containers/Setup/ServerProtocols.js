@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import ApiClient from '../../utils/ApiClient';
-import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
-import { actionCreators as protocolActions } from '../../ducks/modules/importProtocol';
-import { actionCreators as serverActions } from '../../ducks/modules/pairedServer';
-import { ServerProtocolList, ServerSetup, ServerUnavailable } from '../../components/Setup';
+import { ServerProtocolList, ServerSetup, PairedServerWrapper, ServerUnavailable } from '../../components/Setup';
+
 
 /**
  * @class
@@ -15,9 +12,7 @@ import { ServerProtocolList, ServerSetup, ServerUnavailable } from '../../compon
 class ServerProtocols extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      showNewSessionOverlay: false,
-    };
+    this.state = {};
   }
 
   componentDidMount() {
@@ -43,30 +38,7 @@ class ServerProtocols extends Component {
   }
 
   handleSelectProtocol = (protocol) => {
-    const { importProtocolFromURI } = this.props;
-    this.setState({ showNewSessionOverlay: true });
-    this.apiClient.addTrustedCert()
-      .then(() => importProtocolFromURI(protocol.downloadPath, true));
-  }
-
-  handleUnpairRequest = () => {
-    this.props.openDialog({
-      type: 'Warning',
-      title: 'Unpair this Server?',
-      confirmLabel: 'Unpair Server',
-      onConfirm: this.props.unpairServer,
-      message: (
-        <p>
-          This will remove this Server from the app.
-          You will have to re-pair to import protocols or export data.
-          Are you sure you want to continue?
-        </p>
-      ),
-    });
-  }
-
-  handleCloseOverlay = () => {
-    this.setState({ showNewSessionOverlay: false });
+    this.props.importProtocolFromURI(protocol.downloadPath, true);
   }
 
   render() {
@@ -74,14 +46,8 @@ class ServerProtocols extends Component {
     const { server } = this.props;
 
     let content = null;
-    if (error) {
-      content = (
-        <ServerUnavailable
-          errorMessage={error.friendlyMessage || error.message}
-          handleRetry={this.handleRetry}
-        />
-      );
-    } else if (protocols) {
+
+    if (protocols) {
       content = (
         <ServerProtocolList
           protocols={protocols}
@@ -91,45 +57,38 @@ class ServerProtocols extends Component {
     } // else still loading
 
     return (
-      <React.Fragment>
-        <ServerSetup server={server} handleUnpair={this.handleUnpairRequest}>
-          {content}
-        </ServerSetup>
-      </React.Fragment>
+      <PairedServerWrapper className="server-setup__card" data={server}>
+        { error ?
+          (
+            <ServerUnavailable
+              errorMessage={error.friendlyMessage || error.message}
+              handleRetry={this.handleRetry}
+            />
+          ) : (
+            <ServerSetup server={server} handleUnpair={this.handleUnpairRequest}>
+              {content}
+            </ServerSetup>
+          )
+        }
+      </PairedServerWrapper>
     );
   }
 }
 
-ServerProtocols.defaultProps = {
-  protocolPath: '',
-};
-
 ServerProtocols.propTypes = {
   importProtocolFromURI: PropTypes.func.isRequired,
-  openDialog: PropTypes.func.isRequired,
   pairedServer: PropTypes.object.isRequired,
   server: PropTypes.shape({
     pairingServiceUrl: PropTypes.string.isRequired,
   }).isRequired,
-  unpairServer: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
-    protocolPath: state.importProtocol.path,
     pairedServer: state.pairedServer,
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    importProtocolFromURI:
-    bindActionCreators(protocolActions.importProtocolFromURI, dispatch),
-    openDialog: bindActionCreators(dialogActions.openDialog, dispatch),
-    unpairServer: bindActionCreators(serverActions.unpairServer, dispatch),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ServerProtocols);
+export default connect(mapStateToProps)(ServerProtocols);
 
 export { ServerProtocols as UnconnectedServerProtocols };

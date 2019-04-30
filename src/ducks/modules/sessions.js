@@ -1,6 +1,4 @@
 import { omit, each, map } from 'lodash';
-import { Observable } from 'rxjs';
-import { combineEpics } from 'redux-observable';
 import { actionCreators as SessionWorkerActions } from './sessionWorkers';
 import uuidv4 from '../../utils/uuid';
 import network, { actionTypes as networkActionTypes, entityPrimaryKeyProperty } from './network';
@@ -11,7 +9,8 @@ const LOAD_SESSION = 'LOAD_SESSION';
 const UPDATE_PROMPT = 'UPDATE_PROMPT';
 const UPDATE_STAGE = 'UPDATE_STAGE';
 const REMOVE_SESSION = 'REMOVE_SESSION';
-const EXPORT_SESSION = 'EXPORT_SESSION';
+const EXPORT_SESSIONS_START = 'EXPORT_SESSIONS_START';
+const EXPORT_SESSIONS_RESET = 'EXPORT_SESSIONS_RESET';
 const EXPORT_SESSION_FAILED = 'EXPORT_SESSION_FAILED';
 const EXPORT_SESSION_SUCCEEDED = 'EXPORT_SESSION_SUCCEEDED';
 
@@ -73,12 +72,50 @@ export default function reducer(state = initialState, action = {}) {
       };
     case REMOVE_SESSION:
       return omit(state, [action.sessionId]);
+    case EXPORT_SESSIONS_START: {
+      const newObj = {
+        ...state,
+      };
+
+      map(action.sessionIDs, (session) => {
+        newObj[session.sessionUUID].exportStatus = 'exporting';
+      });
+
+      return {
+        ...state,
+        ...newObj,
+      };
+    }
+    case EXPORT_SESSIONS_RESET: {
+      const newObj = {
+        ...state,
+      };
+
+      map(state, (session, sessionUUID) => {
+        newObj[sessionUUID].exportStatus = null;
+        newObj[sessionUUID].exportError = null;
+      });
+      return {
+        ...state,
+        ...newObj,
+      };
+    }
     case EXPORT_SESSION_SUCCEEDED:
       return {
         ...state,
         [action.sessionId]: withTimestamp({
           ...state[action.sessionId],
           lastExportedAt: Date.now(),
+          exportStatus: 'finished',
+        }),
+      };
+    case EXPORT_SESSION_FAILED:
+      return {
+        ...state,
+        [action.sessionId]: withTimestamp({
+          ...state[action.sessionId],
+          exportStatus: 'error',
+          exportError: action.error,
         }),
       };
     default:
@@ -324,44 +361,66 @@ function removeSession(id) {
   };
 }
 
+const sessionExportStart = sessionIDs => ({
+  type: EXPORT_SESSIONS_START,
+  sessionIDs,
+});
+
+const sessionExportReset = () => ({
+  type: EXPORT_SESSIONS_RESET,
+});
+
 const sessionExportSucceeded = id => ({
   type: EXPORT_SESSION_SUCCEEDED,
   sessionId: id,
 });
 
-const sessionExportFailed = error => ({
+const sessionExportFailed = (id, error) => ({
   type: EXPORT_SESSION_FAILED,
   error,
+  sessionId: id,
 });
 
-// sessionData should already be in an exportable format (e.g., IDs transposed to names)
-const exportSession = (remoteProtocolId, sessionUuid, sessionData) => ({
-  type: EXPORT_SESSION,
-  remoteProtocolId,
-  sessionUuid,
-  sessionData,
-});
+const bulkExportSessions = sessionList => (dispatch, getState) => {
+  const pairedServer = getState().pairedServer;
 
-const sessionExportPromise = (pairedServer, action) => {
-  const { remoteProtocolId, sessionUuid, sessionData } = action;
   if (pairedServer) {
     const client = new ApiClient(pairedServer);
-    return client.addTrustedCert().then(() =>
-      client.exportSession(remoteProtocolId, sessionUuid, sessionData));
+    let results = [];
+
+    // Use reduce to create a promise sequence.
+    return client.addTrustedCert().then(() => {
+      dispatch(sessionExportStart(sessionList));
+      return sessionList.reduce(
+        (previousSession, nextSession) =>
+          previousSession
+            .then(
+              () => client.exportSession(
+                nextSession.remoteProtocolId,
+                nextSession.sessionUUID,
+                nextSession.sessionData,
+              ).then((data) => {
+                // return of session export
+                dispatch(sessionExportSucceeded(nextSession.sessionUUID));
+
+                results = [...results, {
+                  sessionUUID: nextSession.sessionUUID,
+                  response: data,
+                }];
+              }).catch((error) => {
+                // session export failed...
+                dispatch(sessionExportFailed(nextSession.sessionUUID, error));
+                results = [...results, {
+                  sessionUUID: nextSession.sessionUUID,
+                  response: error,
+                }];
+              }),
+            ), Promise.resolve(),
+      );
+    }).then(() => results);
   }
   return Promise.reject(new Error('No paired server available'));
 };
-
-const exportSessionEpic = (action$, store) => (
-  action$.ofType(EXPORT_SESSION)
-    .exhaustMap((action) => {
-      const pairedServer = store.getState().pairedServer;
-      return Observable
-        .fromPromise(sessionExportPromise(pairedServer, action))
-        .mapTo(sessionExportSucceeded(action.sessionUuid))
-        .catch(error => Observable.of(sessionExportFailed(error)));
-    })
-);
 
 const actionCreators = {
   addNode,
@@ -380,8 +439,10 @@ const actionCreators = {
   updatePrompt,
   updateStage,
   removeSession,
-  exportSession,
+  sessionExportStart,
+  sessionExportReset,
   sessionExportFailed,
+  bulkExportSessions,
 };
 
 const actionTypes = {
@@ -390,16 +451,12 @@ const actionTypes = {
   UPDATE_PROMPT,
   UPDATE_STAGE,
   REMOVE_SESSION,
-  EXPORT_SESSION,
   EXPORT_SESSION_FAILED,
+  EXPORT_SESSIONS_START,
+  EXPORT_SESSIONS_RESET,
 };
-
-const epics = combineEpics(
-  exportSessionEpic,
-);
 
 export {
   actionCreators,
   actionTypes,
-  epics,
 };

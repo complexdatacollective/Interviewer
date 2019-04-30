@@ -21,7 +21,7 @@ class ImportProgressOverlay extends Component {
   }
 
   handleImportFinished() {
-    setTimeout(this.props.resetImportProtocol, 5000);
+    setTimeout(this.props.resetImportProtocol, 50000);
   }
 
   handleUpdateCaseID(value) {
@@ -36,7 +36,7 @@ class ImportProgressOverlay extends Component {
 
     return (
       <Modal show={show}>
-        <div className="overlay import-protocol-overlay">
+        <div className="import-protocol-overlay">
           <div className="overlay__content import-protocol-overlay__content" ref={this.contentRef}>
             { progress.step === 5 ? (
               <Icon name="protocol-card" />
@@ -47,7 +47,10 @@ class ImportProgressOverlay extends Component {
             { progress.step === 5 ? (
               <Button onClick={resetImportProtocol}>Continue</Button>
             ) : (
-              <ProgressBar orientation="horizontal" percentProgress={percentProgress * 100} />
+              <React.Fragment>
+                <ProgressBar orientation="horizontal" percentProgress={percentProgress * 100} />
+                <Button color="platinum" onClick={resetImportProtocol}>Cancel</Button>
+              </React.Fragment>
             )}
           </div>
         </div>

@@ -20,22 +20,11 @@ const persistConfig = {
     'search',
     'activeSessionId',
     'sessions',
+    'ui',
   ],
 };
 
 export const history = createHistory();
-
-// export const store = createStore(
-//   rootReducer,
-//   undefined,
-//   compose(
-//     autoRehydrate(),
-//     applyMiddleware(routerMiddleware(history), thunk, epics, logger),
-//     typeof window === 'object' && typeof window.devToolsExtension !== 'undefined'
-//       ? window.devToolsExtension()
-//       : f => f,
-//   ),
-// );
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

@@ -9,10 +9,6 @@
   padding: 1.5rem;
   height: 100%;
 
-  &--multiselect {
-    cursor: default;
-  }
-
   &__indicator {
     box-sizing: content-box;
     fill: transparent;
@@ -45,9 +41,5 @@
 
   &__attribute {
     font-weight: 300;
-
-    &--compact {
-      margin-bottom: .5rem;
-    }
   }
 }

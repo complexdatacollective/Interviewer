@@ -8,39 +8,45 @@ const RESET_PROPERTY_FOR_ALL_NODES = 'RESET/PROPERTY_FOR_ALL_NODES';
 
 const resetPropertyForAllNodes = property =>
   (dispatch, getState) => {
-    const { session: sessionId } = getState();
+    const { activeSessionId } = getState();
     const {
       sessions: {
-        [sessionId]: {
+        [activeSessionId]: {
           network: { nodes },
+          protocolUID,
         },
       },
-      protocol: {
-        codebook: {
-          node: nodeRegistry,
+      installedProtocols: {
+        [protocolUID]: {
+          codebook: {
+            node: nodeRegistry,
+          },
         },
       },
     } = getState();
 
     nodes.forEach((node) => {
       const registryForType = nodeRegistry[node.type].variables;
-      const variableType = registryForType[property].type;
-      dispatch(
-        sessionsActions.updateNode(
-          node[entityPrimaryKeyProperty],
-          {},
-          {
-            [property]: variableType === 'boolean' ? false : null,
-          },
-        ),
-      );
+
+      if (registryForType[property]) {
+        const variableType = registryForType[property].type;
+        dispatch(
+          sessionsActions.updateNode(
+            node[entityPrimaryKeyProperty],
+            {},
+            {
+              [property]: variableType === 'boolean' ? false : null,
+            },
+          ),
+        );
+      }
     });
   };
 
 const resetEdgesOfType = edgeType =>
   (dispatch, getState) => {
-    const { session } = getState();
-    const { sessions: { [session]: { network: { edges } } } } = getState();
+    const { activeSessionId } = getState();
+    const { sessions: { [activeSessionId]: { network: { edges } } } } = getState();
 
     edges.forEach((edge) => {
       if (edge.type !== edgeType) {

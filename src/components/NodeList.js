@@ -27,10 +27,10 @@ class NodeList extends Component {
     super(props);
 
     const sorter = sortOrder(props.sortOrder);
-    const sortedNodes = sorter(props.nodes);
+    const sortedNodes = sorter(props.items);
 
     this.state = {
-      nodes: sortedNodes,
+      items: sortedNodes,
       stagger: true,
       exit: true,
     };
@@ -41,18 +41,18 @@ class NodeList extends Component {
   componentWillReceiveProps(newProps) {
     if (this.refreshTimer) { clearTimeout(this.refreshTimer); }
 
-    // Don't update if nodes are the same
-    if (isEqual(newProps.nodes, this.props.nodes)) {
+    // Don't update if items are the same
+    if (isEqual(newProps.items, this.props.items)) {
       return;
     }
 
     const sorter = sortOrder(newProps.sortOrder);
-    const sortedNodes = sorter(newProps.nodes);
+    const sortedNodes = sorter(newProps.items);
 
     // if we provided the same id, then just update normally
     if (newProps.listId === this.props.listId) {
       this.setState({ exit: false }, () => {
-        this.setState({ nodes: sortedNodes, stagger: false });
+        this.setState({ items: sortedNodes, stagger: false });
       });
       return;
     }
@@ -60,11 +60,11 @@ class NodeList extends Component {
     // Otherwise, transition out and in again
     this.setState({ exit: true }, () => {
       this.setState(
-        { nodes: [], stagger: true },
+        { items: [], stagger: true },
         () => {
           this.refreshTimer = setTimeout(
             () => this.setState({
-              nodes: sortedNodes,
+              items: sortedNodes,
               stagger: true,
             }),
             getCSSVariableAsNumber('--animation-duration-slow-ms'),
@@ -80,10 +80,9 @@ class NodeList extends Component {
 
   render() {
     const {
-      nodeColor,
       label,
-      selected,
-      onSelect,
+      isItemSelected,
+      onItemClick,
       itemType,
       isOver,
       willAccept,
@@ -92,12 +91,12 @@ class NodeList extends Component {
 
     const {
       stagger,
-      nodes,
+      items,
       exit,
     } = this.state;
 
     const isSource = !!find(
-      nodes,
+      items,
       [entityPrimaryKeyProperty, get(meta, entityPrimaryKeyProperty, null)],
     );
 
@@ -120,17 +119,16 @@ class NodeList extends Component {
         exit={exit}
       >
         {
-          nodes.map((node, index) => (
+          items.map((node, index) => (
             <NodeTransition
               key={`${node[entityPrimaryKeyProperty]}`}
               index={index}
               stagger={stagger}
             >
               <EnhancedNode
-                color={nodeColor}
                 label={`${label(node)}`}
-                selected={selected(node)}
-                onSelected={() => onSelect(node)}
+                selected={isItemSelected(node)}
+                onSelected={() => onItemClick(node)}
                 meta={() => ({ ...node, itemType })}
                 itemType={itemType}
                 {...node}
@@ -144,28 +142,27 @@ class NodeList extends Component {
 }
 
 NodeList.propTypes = {
-  nodes: PropTypes.array.isRequired,
-  nodeColor: PropTypes.string,
+  items: PropTypes.array.isRequired,
   hoverColor: PropTypes.string,
-  onSelect: PropTypes.func,
-  id: PropTypes.string.isRequired,
+  onItemClick: PropTypes.func,
   itemType: PropTypes.string,
   label: PropTypes.func,
-  selected: PropTypes.func,
+  isItemSelected: PropTypes.func,
   isOver: PropTypes.bool,
+  isDragging: PropTypes.bool,
   willAccept: PropTypes.bool,
   meta: PropTypes.object,
+  id: PropTypes.string.isRequired,
   listId: PropTypes.string.isRequired,
   sortOrder: PropTypes.array,
 };
 
 NodeList.defaultProps = {
-  nodes: [],
-  nodeColor: '',
+  items: [],
   hoverColor: null,
   label: () => (''),
-  selected: () => false,
-  onSelect: () => {},
+  isItemSelected: () => false,
+  onItemClick: () => {},
   onDrop: () => {},
   itemType: 'NODE',
   isOver: false,

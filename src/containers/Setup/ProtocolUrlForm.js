@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
 
 import Form from '../Form';
 import { Button } from '../../ui/components';
-import { actionCreators as protocolActions } from '../../ducks/modules/importProtocol';
 
 const formConfig = {
   formName: 'setup',
@@ -60,11 +57,4 @@ ProtocolUrlForm.propTypes = {
   importProtocolFromURI: PropTypes.func.isRequired,
 };
 
-function mapDispatchToProps(dispatch) {
-  return {
-    importProtocolFromURI:
-      bindActionCreators(protocolActions.importProtocolFromURI, dispatch),
-  };
-}
-
-export default connect(null, mapDispatchToProps)(ProtocolUrlForm);
+export default ProtocolUrlForm;

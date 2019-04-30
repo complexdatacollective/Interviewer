@@ -1,7 +1,7 @@
 import { get } from 'lodash';
 
 export const getSubject = (stage, prompt) =>
-  get(stage, 'subject', prompt.subject);
+  stage.subject || prompt.subject;
 
 const asKeyValue = (acc, { variable, value }) => ({
   ...acc,

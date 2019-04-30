@@ -136,6 +136,7 @@ class NodePanels extends PureComponent {
     return (
       <NodePanel
         {...nodeListProps}
+        key={index}
         prompt={prompt}
         stage={stage}
         dataSource={dataSource}
@@ -144,9 +145,8 @@ class NodePanels extends PureComponent {
         externalDataSource={dataSource !== 'existing' && dataSource}
         highlight={this.getHighlight(index)}
         minimise={!this.isPanelOpen(index)}
-        listId={`PANEL_NODE_LIST_${stage.id}_${prompt.id}_${index}`}
         id={`PANEL_NODE_LIST_${index}`}
-        key={`PANEL_NODE_LIST_${index}`}
+        listId={`PANEL_NODE_LIST_${stage.id}_${prompt.id}_${index}`}
         itemType="NEW_NODE"
         onDrop={this.handleDrop}
         onUpdate={(nodeCount, nodeIndex) => this.handlePanelUpdate(index, nodeCount, nodeIndex)}

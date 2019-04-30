@@ -4,10 +4,12 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Swiper from 'react-id-swiper';
 import { size, map } from 'lodash';
+import { Icon } from '../../ui/components';
 import { NewSessionOverlay, ProtocolCard } from '../../components/Setup';
 import { actionCreators as sessionActions } from '../../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { actionCreators as importProtocolActions } from '../../ducks/modules/importProtocol';
+import { actionCreators as uiActions } from '../../ducks/modules/ui';
 
 /**
   * Display available protocols
@@ -19,7 +21,7 @@ class ProtocolList extends Component {
       showNewSessionOverlay: false,
       selectedProtocol: null,
     };
-
+    this.swiper = null;
     this.overlay = React.createRef();
   }
   onClickProtocolCard = (protocolUID) => {
@@ -32,53 +34,59 @@ class ProtocolList extends Component {
   handleCreateSession = (caseId) => {
     this.props.addSession(caseId, this.state.selectedProtocol);
     this.handleCloseOverlay();
-
-    // this.props.loadSession(protocol.path);
   }
 
   handleCloseOverlay = () => {
     this.setState({ showNewSessionOverlay: false, selectedProtocol: null });
   }
 
+  handleSwipe = (index) => {
+    this.props.updateProtocolIndex(index);
+  }
+
   render() {
     const {
       installedProtocols,
-      // importProtocolStatus: {
-      //   status,
-      // },
+      activeSlideKey,
     } = this.props;
 
     const params = {
       containerClass: 'protocol-list swiper-container',
-      pagination: {
-        el: '.swiper-pagination.protocol-list__pagination',
-        type: 'bullets',
-        clickable: true,
-      },
+      pagination: {},
       navigation: {
-        nextEl: '.swiper-button-next.swiper-button-white',
-        prevEl: '.swiper-button-prev.swiper-button-white',
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
       },
-      on: {
-        slideChange: this.handleSwipe,
-      },
+      renderPrevButton: () => <Icon className="swiper-button-prev" name="form-arrow-left" />,
+      renderNextButton: () => <Icon className="swiper-button-next" name="form-arrow-right" />,
       loop: false,
-      shouldSwiperUpdate: true,
-      rebuildOnUpdate: true,
       slidesPerView: 'auto',
       centeredSlides: true,
+      shouldSwiperUpdate: true,
+      initialSlide: activeSlideKey,
     };
+
+    const installedProtocolsArray =
+      Object.keys(installedProtocols).map(
+        protocol => ({ ...installedProtocols[protocol], uuid: protocol }));
 
     return (
       <React.Fragment>
         { size(installedProtocols) > 0 ?
-          <Swiper {...params} ref={(node) => { if (node) this.swiper = node.swiper; }}>
-            { map(installedProtocols, (protocol, uid) => (
-              <div key={uid}>
+          <Swiper
+            {...params}
+            ref={(node) => {
+              if (node) {
+                this.swiper = node.swiper;
+                node.swiper.on('slideChange', () => { this.handleSwipe(node.swiper.activeIndex); });
+              }
+            }}
+          >
+            { map(installedProtocolsArray, (protocol, index) => (
+              <div key={index}>
                 <ProtocolCard
-                  size="large"
                   protocol={protocol}
-                  selectProtocol={() => this.onClickProtocolCard(uid)}
+                  selectProtocol={() => this.onClickProtocolCard(protocol.uuid)}
                 />
               </div>
             )) }
@@ -118,6 +126,7 @@ function mapStateToProps(state) {
   return {
     installedProtocols: state.installedProtocols,
     importProtocolStatus: state.importProtocol,
+    activeSlideKey: state.ui.protocolIndex,
   };
 }
 
@@ -127,6 +136,11 @@ function mapDispatchToProps(dispatch) {
     loadSession: bindActionCreators(sessionActions.loadSession, dispatch),
     openDialog: bindActionCreators(dialogActions.openDialog, dispatch),
     resetImportProtocol: bindActionCreators(importProtocolActions.resetImportProtocol, dispatch),
+    updateProtocolIndex: (index) => {
+      dispatch(uiActions.update({
+        protocolIndex: index,
+      }));
+    },
   };
 }
 

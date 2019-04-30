@@ -1,95 +1,120 @@
-.setup {
-  $active-border-color: rgba(255, 255, 255, .5);
-  --active-border-color: $active-border-color;
-  --setup-header-height: 30vh;
-  display: flex;
-  flex-direction: column;
+.bg {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-size: cover;
+  background-repeat: no-repeat;
   height: 100%;
   width: 100%;
-  min-height: 15rem;
+  background-position: center;
 
-  &__header {
-    align-items: center;
-    display: flex;
-    flex: 0 1 auto;
-    height: var(--setup-header-height);
-    justify-content: center;
-    text-align: center;
-    margin: 1.5rem 0;
+  &.bg-1 {
+    background-image: url('../images/main-background.png');
   }
+}
 
-  .header-content {
-    justify-content: center;
-    align-items: center;
-    width: 100%;
+.setup {
+  height: 100%;
+  width: 100%;
+  z-index: var(--z-default);
+  position: absolute;
+  top: 0;
+  background-image: linear-gradient(to top, var(--background), transparent 10rem);
 
-    &__title {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 1rem;
+  &--show-sessions {
+    .setup__header {
+      opacity: 0;
+      transform: scale(0.2);
+      transition-delay: unset;
+    }
 
-      h1 {
-        display: inline-block;
-        width: auto;
-        margin: 0;
-        font-size: 3rem;
+    .setup__main {
+      opacity: 0;
+      transition-delay: unset;
+
+      .swiper-button-next {
+        transform: translateX(6rem);
+        transition-delay: unset;
+      }
+
+      .swiper-button-prev {
+        transform: translateX(-6rem);
+        transition-delay: unset;
       }
     }
-
-    &__logo {
-      width: 10rem;
-      margin-right: 1.5rem;
-    }
   }
 
-  &__link {
-    border-bottom: .25rem solid transparent;
-    cursor: pointer;
-    margin: 0 1rem;
-    padding-bottom: .5rem;
-    transition: border-color var(--animation-duration-fast) var(--animation-easing);
+  &__header {
+    @include transition-properties((opacity transform), var(--animation-easing), var(--animation-duration-fast));
+    align-items: center;
+    justify-content: center;
+    height: 30vh;
+    display: flex;
+    flex-direction: column;
+    transition-delay: var(--animation-duration-fast);
 
-    &--active {
-      border-color: var(--active-border-color);
-      font-weight: 600;
+    &--logo {
+      width: 9rem;
+    }
+
+    &--title {
+      margin: 0;
+      font-size: 3rem;
     }
   }
 
   &__main {
+    @include transition-properties((opacity), var(--animation-easing), var(--animation-duration-fast));
     flex: 1 1 auto;
-    height: calc(100% - var(--setup-header-height));
     display: flex;
     align-items: center;
+    height: calc(100% - 30vh - 10rem);
+    transition-delay: var(--animation-duration-fast);
 
     .scrollable {
       height: 100%; // TODO: should this be on component?
     }
 
-    .swiper-wrapper {
-      height: auto;
+    .swiper-slide {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      align-self: flex-start;
+      width: 100%;
+
+      &:not(.swiper-slide-active) {
+        pointer-events: none;
+      }
+    }
+
+    &.swiper-container {
+      width: 100%; // ensure Swiper plugin initializes layout correctly
     }
 
     .swiper-button-prev {
-      left: 8rem;
+      left: 0;
     }
 
     .swiper-button-next {
-      right: 8rem;
+      right: 0;
     }
 
-    .swiper-button-next,
-    .swiper-button-prev {
-      width: 2rem;
-      height: 4rem;
-      margin-top: -8rem;
-      background-size: 2rem 4rem;
-    }
+    .icon {
+      &.swiper-button-next,
+      &.swiper-button-prev {
+        @include transition-properties((transform), var(--animation-easing), var(--animation-duration-fast));
+        width: 6rem;
+        margin-top: -3rem;
+        height: auto;
+        background: none;
+        transition-delay: var(--animation-duration-fast);
 
-    .swiper-container-horizontal>.swiper-pagination-bullets,
-    .swiper-pagination-custom,
-    .swiper-pagination-fraction {
-      bottom: 5rem;
+        .cls-2 {
+          fill: var(--color-cyber-grape);
+        }
+      }
     }
 
     .swiper-container-horizontal>.swiper-pagination-bullets {
@@ -98,30 +123,19 @@
       }
     }
 
-
     .swiper-pagination-bullet {
-      width: .7rem;
-      height: .7rem;
+      width: .75rem;
+      height: .75rem;
+      border: .07rem solid var(--color-white);
+      background: transparent;
+      opacity: 1;
+      transition: background var(--animation-duration-fast) var(--animation-easing);
     }
 
     .swiper-pagination-bullet-active {
-      background: var(--light-background);
+      background: var(--color-platinum);
     }
 
-  }
-
-  &__start {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    margin-top: 3rem;
-  }
-
-  &__factory-protocol {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 0;
-    justify-content: center;
   }
 
   &__server-button {
@@ -130,9 +144,19 @@
     height: 10rem;
   }
 
+  &__project-logo {
+    position: absolute;
+    bottom: 1.8rem;
+    left: 1.8rem;
+    width: 10rem;
+    height: 10rem;
+    z-index: var(--z-default);
+  }
+
 }
 
 .import-protocol-overlay {
+
   .import-protocol-overlay__content {
     display: flex;
     flex-direction: column;
@@ -149,11 +173,46 @@
     .progress-bar {
       width: 20rem;
       height: 1.5rem;
-      background: var(--background);
+      background: var(--color-platinum);
+      margin-bottom: unit(1);
 
       &__filler {
         background: var(--primary);
       }
     }
   }
+}
+
+.resume-session-panel {
+  transition: transform var(--animation-duration-slow) var(--animation-easing);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: calc(100% - 10rem);
+  z-index: var(--z-panel);
+
+  &--toggle {
+    height: 10rem;
+    padding-top: 3rem;
+    text-align: center;
+
+    h4 {
+      padding-bottom: 1rem;
+    }
+
+    .toggle-image {
+      height: 2rem;
+      transition: transform var(--animation-duration-fast) var(--animation-easing);
+    }
+  }
+
+  &--open {
+    transform: translateY(calc(-100% + 10rem));
+
+    .toggle-image {
+      transform: rotate(180deg);
+    }
+
+  }
+
 }

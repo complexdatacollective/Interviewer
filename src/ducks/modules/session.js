@@ -1,4 +1,5 @@
-import { actionTypes as SessionsActionTypes } from './sessions';
+import { push } from 'react-router-redux';
+import { actionTypes as SessionsActionTypes, actionCreators as SessionsActions } from './sessions';
 import { actionCreators as SessionWorkerActions } from './sessionWorkers';
 
 const ADD_SESSION = SessionsActionTypes.ADD_SESSION;
@@ -37,10 +38,17 @@ const setSession = id => (dispatch, getState) => {
   });
 };
 
-const endSession = () => (dispatch) => {
+const endSession = alsoDelete => (dispatch, getState) => {
+  const { activeSessionId } = getState();
   dispatch({
     type: END_SESSION,
   });
+
+  dispatch(push('/'));
+
+  if (alsoDelete) {
+    dispatch(SessionsActions.removeSession(activeSessionId));
+  }
 };
 
 const actionCreators = {

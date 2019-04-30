@@ -11,9 +11,6 @@ const CharInput = ({ value, disabled, index, onChange }) => {
   }
   return (
     <React.Fragment>
-      <label className="offscreen" htmlFor={`pairing-code-character-${index}`}>
-        Pairing code character {index}
-      </label>
       <input
         autoCapitalize="off"
         autoComplete="off"

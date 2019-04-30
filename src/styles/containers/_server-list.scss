@@ -12,7 +12,14 @@
 
   &__content {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
+    max-height: 20rem;
+    padding: 2rem 0;
+    grid-gap: 3rem;
+
+    .server-card {
+      margin: 0;
+    }
   }
 
   &__placeholder {

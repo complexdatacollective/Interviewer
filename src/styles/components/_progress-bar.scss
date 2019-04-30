@@ -3,6 +3,7 @@
   flex-grow: 1;
   position: relative;
   border-radius: 4rem;
+  overflow: hidden;
 
   &--vertical {
     width: .7rem;
@@ -27,6 +28,12 @@
     background-color: var(--transparent-light);
     position: absolute;
     border-radius: inherit;
+  }
+
+  &--complete {
+    .progress-bar__filler {
+      background-color: var(--primary);
+    }
   }
 }
 

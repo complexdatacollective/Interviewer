@@ -120,7 +120,6 @@ Form.propTypes = {
   autoPopulate: PropTypes.func,
   dirty: PropTypes.bool.isRequired,
   form: PropTypes.string.isRequired,
-  subject: PropTypes.object.isRequired,
   fields: PropTypes.array.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   meta: PropTypes.object.isRequired,

@@ -9,6 +9,7 @@ const mockProps = {
   bins: [{ label: 'one', value: 1, nodes: [1, 2, 3] }, { label: 'two', value: 2, nodes: [4, 5] }],
   stage: { id: 1 },
   prompt: { id: 1 },
+  getLabel: () => 'label',
 };
 
 describe('CategoricalList component', () => {

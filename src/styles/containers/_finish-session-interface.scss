@@ -9,6 +9,9 @@
   &__frame {
     width: 80%;
     max-width: 50rem;
+    padding: unit(4);
+    background: var(--light-background);
+    border-radius: var(--border-radius);
   }
 
   &__title {
@@ -24,10 +27,23 @@
     &--download {
       display: flex;
       justify-content: space-between;
+      align-items: center;
+      background: var(--background);
+      padding: unit(2) unit(4);
+      border-radius: var(--border-radius);
     }
 
     &--buttons {
       text-align: center;
+      flex-basis: 15rem;
+    }
+  }
+
+  .form-field-container {
+    margin-bottom: 0;
+
+    .form-field {
+      margin-bottom: 0;
     }
   }
 }

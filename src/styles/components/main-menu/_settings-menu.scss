@@ -1,6 +1,10 @@
+:root {
+  --input-text: var(--text--dark); // There seems to be a bug in iOS that requires this override go here.
+}
+
 .main-menu-settings-menu {
   --input-background: var(--color-platinum);
-  --input-text: var(--text--dark);
+
   width: 100%;
   height: 100%;
   display: flex;
@@ -13,8 +17,7 @@
   fieldset {
     border: .1rem solid var(--color-platinum);
     border-radius: .75rem;
-    padding: 0 spacing(large) spacing(medium);
-    margin-bottom: spacing(medium);
+    padding: 0 spacing(medium) spacing(small);
 
     legend {
       padding: 1rem;
@@ -27,8 +30,13 @@
     }
   }
 
+  section {
+    padding: 1rem;
+  }
+
   &__form {
-    margin-top: 1rem;
+    margin-top: 0.5em;
+    margin-bottom: 1.5rem;
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 1rem;

@@ -4,9 +4,12 @@ import { get } from 'lodash';
 import { Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
-import logo from '../../images/NC-Round.svg';
+import cx from 'classnames';
+import networkCanvasLogo from '../../images/NC-Round.svg';
+import projectLogo from '../../images/NC-Mark.svg';
+import downArrow from '../../images/down-arrow.svg';
 import { Icon } from '../../ui/components';
-import { ProtocolList, ProtocolImportOverlay, SessionList, ImportProgressOverlay } from '.';
+import { ProtocolList, ProtocolImportOverlay, SessionListContainer, ImportProgressOverlay } from '.';
 
 /**
   * Setup screen
@@ -16,20 +19,10 @@ class Setup extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showOptions: 'protocol',
+      showSessionOverlay: false,
       showImportProtocolOverlay: false,
     };
   }
-
-  setOptions = (option) => {
-    this.setState({
-      showOptions: option,
-    });
-  }
-
-  isShowProtocols = () => this.state.showOptions === 'protocol';
-
-  isShowSessions = () => this.state.showOptions === 'session';
 
   render() {
     if (this.props.isSessionActive) {
@@ -38,14 +31,20 @@ class Setup extends Component {
       return (<Redirect to={{ pathname: `${pathname}` }} />);
     }
 
-    let currentTab = <ProtocolList />;
+    const resumeOverlayClassnames = cx(
+      'resume-session-panel',
+      { 'resume-session-panel--open': this.state.showSessionOverlay },
+    );
 
-    if (this.isShowSessions()) {
-      currentTab = <SessionList />;
-    }
+    const setupClassnames = cx(
+      'setup',
+      { 'setup--show-sessions': this.state.showSessionOverlay },
+      { 'setup--show-protocols': !this.state.showSessionOverlay },
+    );
 
     return (
-      <div className="setup">
+      <React.Fragment>
+        <div className="bg bg-1" />
         <ProtocolImportOverlay
           show={this.state.showImportProtocolOverlay}
           onClose={() => this.setState({ showImportProtocolOverlay: false })}
@@ -54,38 +53,37 @@ class Setup extends Component {
           show={this.props.importProtocolProgress && this.props.importProtocolProgress.step > 0}
           progress={this.props.importProtocolProgress}
         />
-        <div className="setup__header">
-          <div className="header-content">
-            <div className="header-content__title">
-              <img src={logo} className="logo header-content__logo" alt="Network Canvas" />
-              <div className="header-content__title-text">
-                <h1 className="type--title-1">Network Canvas</h1>
-                <h4>Alpha 12 - No Coffee</h4>
-              </div>
-            </div>
-            <div className="header-content__nav">
-              <nav>
-                <span className={`setup__link ${this.isShowProtocols() ? 'setup__link--active' : ''}`} role="button" tabIndex="0" onClick={() => this.setOptions('protocol')}>
-                  Start new interview
-                </span>
-                <span className={`setup__link ${this.isShowSessions() ? 'setup__link--active' : ''}`} role="button" tabIndex="0" onClick={() => this.setOptions('session')}>
-                  Resume interview
-                </span>
-              </nav>
-            </div>
+        <div className={setupClassnames}>
+          <div className="setup__header">
+            <img src={networkCanvasLogo} className="logo setup__header--logo" alt="Network Canvas" />
+            <h1 className="type--title-1 setup__header--title">Network Canvas</h1>
           </div>
+          <main className="setup__main">
+            <ProtocolList />
+          </main>
         </div>
-        <main className="setup__main">
-          {currentTab}
-        </main>
-        { this.isShowProtocols() &&
+        <div className={resumeOverlayClassnames}>
+          <div className="resume-session-panel--toggle" role="button" tabIndex="0" onClick={() => this.setState({ showSessionOverlay: !this.state.showSessionOverlay })}>
+            <img className="toggle-image" src={downArrow} alt="Resume interview" />
+            <h4>
+              { !this.state.showSessionOverlay ?
+                ('Resume session') :
+                ('Start new interview')
+              }
+            </h4>
+          </div>
+          <SessionListContainer />
+        </div>
+        { !this.state.showSessionOverlay &&
+        (<React.Fragment>
+          <img className="setup__project-logo" src={projectLogo} alt="Network Canvas" />
           <Icon
             name="add-a-protocol"
             className="setup__server-button"
             onClick={() => this.setState({ showImportProtocolOverlay: true })}
           />
-        }
-      </div>
+        </React.Fragment>)}
+      </React.Fragment>
     );
   }
 }

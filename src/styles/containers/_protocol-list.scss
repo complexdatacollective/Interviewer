@@ -1,26 +1,6 @@
 .protocol-list {
   height: 100%;
-
-  .swiper-slide {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    align-self: flex-start;
-    margin-top: 3rem;
-    width: 50%;
-    transition: opacity var(--animation-duration-slow) var(--animation-easing);
-
-    &:not(.swiper-slide-active) {
-      pointer-events: none;
-      opacity: .3;
-    }
-  }
-
-  &.swiper-container {
-    width: 100%; // ensure Swiper plugin initializes layout correctly
-    //sass-lint:disable no-color-keywords, no-color-literals
-    mask-image: linear-gradient(90deg, transparent, black 10rem, black calc(100% - 10rem), transparent 100%);
-  }
+  width: 100%;
 
   &--empty {
     display: flex;
@@ -29,13 +9,11 @@
     align-items: center;
 
     .getting-started {
-      padding: unit(4);
-      margin-bottom: unit(10);
+      padding: unit(6);
       background: var(--light-background);
       flex-direction: column;
       width: 60vw;
       border-radius: var(--border-radius);
     }
-
   }
 }

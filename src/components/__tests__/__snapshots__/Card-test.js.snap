@@ -4,7 +4,6 @@ exports[`Card component renders selected card 1`] = `
 ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <Card
-    compact={false}
     details={
       Array [
         Object {
@@ -16,7 +15,6 @@ ShallowWrapper {
       ]
     }
     label="name"
-    multiselect={true}
     selected={true}
   />,
   Symbol(enzyme.__renderer__): Object {
@@ -74,7 +72,7 @@ ShallowWrapper {
           </div>
         </div>,
       ],
-      "className": "card card--multiselect card--selected",
+      "className": "card card--selected",
     },
     "ref": null,
     "rendered": Array [
@@ -293,7 +291,7 @@ ShallowWrapper {
             </div>
           </div>,
         ],
-        "className": "card card--multiselect card--selected",
+        "className": "card card--selected",
       },
       "ref": null,
       "rendered": Array [
@@ -489,7 +487,6 @@ exports[`Card component renders unselected card 1`] = `
 ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <Card
-    compact={false}
     details={
       Array [
         Object {
@@ -498,7 +495,6 @@ ShallowWrapper {
       ]
     }
     label="name"
-    multiselect={true}
     selected={false}
   />,
   Symbol(enzyme.__renderer__): Object {
@@ -549,7 +545,7 @@ ShallowWrapper {
           </div>
         </div>,
       ],
-      "className": "card card--multiselect",
+      "className": "card",
     },
     "ref": null,
     "rendered": Array [
@@ -727,7 +723,7 @@ ShallowWrapper {
             </div>
           </div>,
         ],
-        "className": "card card--multiselect",
+        "className": "card",
       },
       "ref": null,
       "rendered": Array [

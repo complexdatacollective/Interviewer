@@ -108,7 +108,7 @@ describe('<MainMenu />', () => {
     const subject = getSubject(store);
 
     expect(isMenuOpen(subject)).toBe(true);
-    subject.find('Icon[name="close"]').simulate('click');
+    subject.find('Icon[name="close"]').at(0).simulate('click');
     expect(isMenuOpen(subject)).toBe(false);
   });
 

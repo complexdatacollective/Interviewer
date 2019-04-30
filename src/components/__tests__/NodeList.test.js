@@ -16,6 +16,7 @@ describe('NodeList component', () => {
     const component = shallow((
       <NodeList
         id="foo"
+        listId="foo_bar"
         store={mockStore}
       />
     ));

@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Overlay from '../../containers/Overlay';
 import { Button } from '../../ui/components';
-import { Text } from '../../ui/components/Fields';
+import { Form } from '../../containers';
+
 
 class NewSessionOverlay extends Component {
   constructor(props) {
@@ -15,12 +16,28 @@ class NewSessionOverlay extends Component {
     this.overlay = React.createRef();
   }
 
-  handleUpdateCaseID(value) {
-    this.setState({ caseID: value });
+  onSubmitForm = (fields) => {
+    this.props.handleSubmit(fields.case_id);
   }
 
   render() {
-    const { show, handleSubmit, onClose } = this.props;
+    const { show, onClose } = this.props;
+
+    const formConfig = {
+      formName: 'case-id-form',
+      fields: [
+        {
+          label: null,
+          name: 'case_id',
+          component: 'Text',
+          placeholder: 'Enter a unique case ID',
+          validation: {
+            required: true,
+            maxLength: 20,
+          },
+        },
+      ],
+    };
 
     return (
       <Overlay
@@ -35,18 +52,19 @@ class NewSessionOverlay extends Component {
           This will be shown on the resume interview screen to help you quickly
           identify this session.
         </p>
-        <Text
-          input={{
-            value: this.state.caseID,
-            onChange: e => this.handleUpdateCaseID(e.target.value),
-          }}
+        <Form
+          className="case-id-form"
+          form={formConfig.formName}
           autoFocus
-          label="Case ID"
-          fieldLabel=" "
-        />
-        <div className="protocol-import--footer">
-          <Button key="submit" aria-label="Submit" onClick={() => handleSubmit(this.state.caseID)}>Start Interview</Button>
-        </div>
+          onSubmit={this.onSubmitForm}
+          {...formConfig}
+        >
+          <div className="protocol-import--footer">
+            <Button aria-label="Submit" type="submit">
+              Start interview
+            </Button>
+          </div>
+        </Form>
       </Overlay>
     );
   }

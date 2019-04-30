@@ -61,6 +61,7 @@ class NodePanel extends PureComponent {
       nodes,
       ...nodeListProps
     } = this.props;
+
     return (
       <Panel
         title={title}
@@ -69,7 +70,7 @@ class NodePanel extends PureComponent {
       >
         <NodeList
           {...nodeListProps}
-          nodes={nodes}
+          items={nodes}
           listId={listId}
           id={id}
           itemType="NEW_NODE"

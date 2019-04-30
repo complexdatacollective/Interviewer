@@ -7,7 +7,7 @@ import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { entityPrimaryKeyProperty, getEntityAttributes, entityAttributesProperty } from '../../ducks/modules/network';
 import { makeNetworkNodesForOtherPrompts, makeGetAdditionalAttributes } from '../../selectors/interface';
-import { getNetworkNodes } from '../../selectors/network';
+import { getNetworkNodes, makeGetNodeTypeDefinition } from '../../selectors/network';
 import {
   getCardDisplayLabel,
   getCardAdditionalProperties,
@@ -16,8 +16,9 @@ import {
   makeGetPromptNodeModelData,
 } from '../../selectors/name-generator';
 import { PromptSwiper } from '../../containers';
-import { ListSelect } from '../../components';
+import { FilterableListWrapper, CardList } from '../../components';
 import withExternalData from '../../containers/withExternalData';
+import getParentKeyByNameValue from '../../utils/getParentKeyByNameValue';
 
 /**
   * Name Generator List Interface
@@ -51,12 +52,41 @@ class NameGeneratorList extends Component {
     this.props.removeNode(node[entityPrimaryKeyProperty]);
   }
 
-  label = node => getEntityAttributes(node)[this.props.labelKey];
+  label = (node) => {
+    const attrs = getEntityAttributes(node);
+    const nodeTypeVariables = this.props.nodeTypeDefinition.variables;
+    const labelKey = getParentKeyByNameValue(nodeTypeVariables, this.props.labelKey);
+    return attrs[labelKey];
+  };
+
+
+  isNodeSelected = node =>
+    !!this.props.selectedNodes
+      .find(current => current[entityPrimaryKeyProperty] === node[entityPrimaryKeyProperty]);
+
+  /**
+    * toggle whether the card is selected or not.
+    * @param {object} node
+    */
+  toggleCard = (node) => {
+    if (this.isNodeSelected(node)) {
+      this.onRemoveNode(node);
+      return;
+    }
+
+    this.onSubmitNewNode(node);
+  };
 
   details = (node) => {
+    const nodeTypeVariables = this.props.nodeTypeDefinition.variables;
     const attrs = getEntityAttributes(node);
     const fields = this.props.visibleSupplementaryFields;
-    return fields.map(field => ({ [field.label]: attrs[field.variable] }));
+    const withUUIDReplacement = fields.map(field => ({
+      ...field,
+      variable: getParentKeyByNameValue(nodeTypeVariables, field.variable),
+    }));
+
+    return withUUIDReplacement.map(field => ({ [field.label]: attrs[field.variable] }));
   }
 
   render() {
@@ -67,7 +97,6 @@ class NameGeneratorList extends Component {
       prompt,
       promptBackward,
       promptForward,
-      selectedNodes,
       sortFields,
     } = this.props;
 
@@ -85,18 +114,22 @@ class NameGeneratorList extends Component {
             prompts={prompts}
           />
         </div>
-        <ListSelect
+        <FilterableListWrapper
           key={`select-${prompt.id}`}
-          details={this.details}
           initialSortOrder={initialSortOrder}
-          label={this.label}
-          labelKey={labelKey}
-          nodes={nodesForList}
-          onRemoveNode={this.onRemoveNode}
-          onSubmitNode={this.onSubmitNewNode}
-          selectedNodes={selectedNodes}
           sortFields={sortFields}
-          title={prompt.text}
+          items={nodesForList}
+          ListComponent={CardList}
+          listComponentProps={{
+            id: `select-${prompt.id}`,
+            listId: `select-${prompt.id}`,
+            details: this.details,
+            title: prompt.text,
+            label: this.label,
+            labelKey,
+            onItemClick: this.toggleCard,
+            isItemSelected: this.isNodeSelected,
+          }}
         />
       </div>
     );
@@ -110,11 +143,12 @@ NameGeneratorList.propTypes = {
   newNodeAttributes: PropTypes.object.isRequired,
   newNodeModelData: PropTypes.object.isRequired,
   nodesForList: PropTypes.array.isRequired,
+  selectedNodes: PropTypes.array.isRequired,
   prompt: PropTypes.object.isRequired,
   promptForward: PropTypes.func.isRequired,
   promptBackward: PropTypes.func.isRequired,
+  nodeTypeDefinition: PropTypes.object.isRequired,
   removeNode: PropTypes.func.isRequired,
-  selectedNodes: PropTypes.array.isRequired,
   sortFields: PropTypes.array.isRequired,
   stage: PropTypes.object.isRequired,
   visibleSupplementaryFields: PropTypes.array.isRequired,
@@ -146,12 +180,14 @@ function makeMapStateToProps() {
   const getPromptNodeAttributes = makeGetAdditionalAttributes();
   const getPromptNodeModelData = makeGetPromptNodeModelData();
   const getNodesForList = makeGetNodesForList();
+  const getNodeTypeDefinition = makeGetNodeTypeDefinition();
 
   return function mapStateToProps(state, props) {
     const nodesForList = getNodesForList(state, props);
 
     return {
       labelKey: getCardDisplayLabel(state, props),
+      nodeTypeDefinition: getNodeTypeDefinition(state, { type: props.stage.subject.type }),
       newNodeAttributes: getPromptNodeAttributes(state, props),
       newNodeModelData: getPromptNodeModelData(state, props),
       nodesForList,

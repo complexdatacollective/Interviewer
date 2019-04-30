@@ -18,6 +18,14 @@
     position: absolute;
     transition: opacity var(--animation-duration-fast) var(--animation-easing);
     transition-delay: var(--animation-duration-fast);
+
+    &[name='close'] {
+      width: 1.75rem;
+      height: 1.75rem;
+      top: 1.5rem;
+      right: 1.5rem;
+      opacity: 0;
+    }
   }
 
   &__settings {
@@ -54,15 +62,20 @@
   &.main-menu-menu-panel--active {
     flex-grow: 3;
     background: var(--menu-panel--active);
+    position: relative;
 
     .icon {
       opacity: 0;
-    }
-  }
 
-  &:not(.main-menu-menu-panel--active) {
-    .icon {
-      opacity: 1;
+      &[name='close'] {
+        opacity: 1;
+      }
+    }
+
+    &:not(.main-menu-menu-panel--active) {
+      .icon {
+        opacity: 1;
+      }
     }
   }
 }

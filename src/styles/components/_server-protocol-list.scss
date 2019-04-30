@@ -14,12 +14,4 @@
     position: relative;
   }
 
-  &__card {
-    display: flex;
-    flex-direction: row;
-    margin-bottom: unit(2);
-    flex: auto;
-    background: var(--light-background);
-    padding: unit(2);
-  }
 }

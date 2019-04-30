@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import { Icon, Spinner } from '../../ui/components';
 import ServerDiscoverer from '../../utils/serverDiscoverer';
 import ServerCard from '../../components/Setup/ServerCard';
+import Scroller from '../Scroller';
 
 const loadingPlaceholder = (
   <div className="server-list__placeholder">
@@ -90,7 +91,7 @@ class DiscoveredServerList extends Component {
     return (
       <React.Fragment>
         <h4>Nearby devices running Server:</h4>
-        <div className="server-list__content">
+        <Scroller className="server-list__content">
           {
             this.state.servers.map(server => (
               <ServerCard
@@ -100,7 +101,7 @@ class DiscoveredServerList extends Component {
               />
             ))
           }
-        </div>
+        </Scroller>
       </React.Fragment>
     );
   }

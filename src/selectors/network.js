@@ -1,4 +1,4 @@
-import { findKey, compact } from 'lodash';
+import { findKey } from 'lodash';
 import { getActiveSession, getCaseId } from './session';
 import { createDeepEqualSelector } from './utils';
 import { getProtocolCodebook } from './protocol';
@@ -41,57 +41,58 @@ export const getWorkerNetwork = createDeepEqualSelector(
 // The user-defined name of a node type; e.g. `codebook.node[uuid].name == 'person'`
 export const makeGetNodeTypeDefinition = () => createDeepEqualSelector(
   (state, props) => getProtocolCodebook(state, props),
-  (state, props) => (props && props.type) || (state && state.type),
+  (state, props) =>
+    (props && props.type) ||
+    (props && props.stage && props.stage.subject && props.stage.subject.type) ||
+    (state && state.type),
   (codebook, nodeType) => {
     const nodeInfo = codebook && codebook.node;
     return nodeInfo && nodeInfo[nodeType];
   },
 );
 
-const labelLogic = (codebookForNodeType) => {
-  // Get the display variable, if explicitly set.
+// See: https://github.com/codaco/Network-Canvas/wiki/Node-Labeling
+const labelLogic = (codebookForNodeType, nodeAttributes) => {
+  // In the codebook for the stage's subject, look for the displayVariable property
+  // and try to retrieve this value as a key in the node's attributes.
   const displayVariable = codebookForNodeType && codebookForNodeType.displayVariable;
+  if (displayVariable && nodeAttributes[displayVariable]) {
+    return nodeAttributes[displayVariable];
+  }
 
-  // Get any variable with the name "label"
-  const variableCalledLabel = codebookForNodeType && codebookForNodeType.variables && findKey(codebookForNodeType.variables, ['name', 'label']);
+  // In the codebook for the stage's subject, look for a variable with a name
+  // property of "name", and try to retrieve this value by key in the node's
+  // attributes
+  const variableCalledName = codebookForNodeType && codebookForNodeType.variables && findKey(codebookForNodeType.variables, ['name', 'name']);
+  if (variableCalledName && nodeAttributes[variableCalledName]) {
+    return nodeAttributes[variableCalledName];
+  }
 
-  // Get the first variable of type 'text'
-  const firstTextVariable = codebookForNodeType && codebookForNodeType.variables && findKey(codebookForNodeType.variables, ['type', 'text']);
+  // look for a property on the node with a key of ‘displayVariable’, and try to
+  // retrieve this value as a key in the node's attributes.
+  const nodeDisplayVariable = nodeAttributes.displayVariable;
+  if (nodeDisplayVariable && nodeAttributes[nodeDisplayVariable]) {
+    return nodeAttributes[nodeDisplayVariable];
+  }
 
-  // First, try to use the displayVariable for the node type
-  // else try to use a variable named "label"
-  // else try to use the first text variable
-  // else return the string "No label"
+  // look for a property on the node with a key of ‘name’, and try to retrieve this
+  // value as a key in the node's attributes.
+  const nodeVariableCalledName = findKey(nodeAttributes, ['name', 'name']);
+  if (nodeVariableCalledName) {
+    return nodeAttributes[nodeVariableCalledName];
+  }
 
-  // Check if the variable actually exists before making it available to return.
-  return compact([displayVariable, variableCalledLabel, firstTextVariable]);
+  return 'No label';
 };
 
-
-export const getLabelVariableForNodeType = () => createDeepEqualSelector(
+// Gets the node label variable and returns its value, or "No label".
+// See: https://github.com/codaco/Network-Canvas/wiki/Node-Labeling
+export const makeGetNodeLabel = () => createDeepEqualSelector(
   (state, props) => {
     const getNodeTypeDefinition = makeGetNodeTypeDefinition(state, props);
     return getNodeTypeDefinition(state, props);
   },
-  nodeTypeDefinition => labelLogic(nodeTypeDefinition),
-);
-
-export const getLabelVariableForStageSubject = () => createDeepEqualSelector(
-  (state, props) => {
-    const getNodeTypeDefinition = makeGetNodeTypeDefinition(state, props.stage.subject);
-    return getNodeTypeDefinition(state, props.stage.subject);
-  },
-  nodeTypeDefinition => labelLogic(nodeTypeDefinition),
-);
-
-// Gets the node label variable and returns its value, or "No label".
-export const makeGetNodeLabel = () => createDeepEqualSelector(
-  getLabelVariableForNodeType(),
-  nodeLabelVariable => (node) => {
-    const nodeDataModelProps = getEntityAttributes(node);
-    return (nodeLabelVariable[0] && nodeDataModelProps[nodeLabelVariable[0]]) ||
-      'No label';
-  },
+  nodeTypeDefinition => node => labelLogic(nodeTypeDefinition, getEntityAttributes(node)),
 );
 
 export const makeGetNodeColor = () => createDeepEqualSelector(
@@ -108,7 +109,7 @@ export const makeGetEdgeLabel = () => createDeepEqualSelector(
   (_, props) => props.type,
   (codebook, edgeType) => {
     const edgeInfo = codebook.edge;
-    return (edgeInfo && edgeInfo[edgeType] && edgeInfo[edgeType].label) || '';
+    return (edgeInfo && edgeInfo[edgeType] && edgeInfo[edgeType].name) || '';
   },
 );
 

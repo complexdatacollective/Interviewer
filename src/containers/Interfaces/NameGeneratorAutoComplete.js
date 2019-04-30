@@ -9,12 +9,14 @@ import withPrompt from '../../behaviours/withPrompt';
 import Search from '../../containers/Search';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as searchActions } from '../../ducks/modules/search';
-import { entityAttributesProperty } from '../../ducks/modules/network';
+import { entityAttributesProperty, entityPrimaryKeyProperty } from '../../ducks/modules/network';
 import { makeGetSubjectType, makeNetworkNodesForPrompt, makeGetAdditionalAttributes } from '../../selectors/interface';
-import { getNetworkNodes, makeGetNodeLabel } from '../../selectors/network';
+import { getNetworkNodes, makeGetNodeTypeDefinition } from '../../selectors/network';
 import { getCardDisplayLabel, getCardAdditionalProperties, makeGetNodeIconName, makeGetPromptNodeModelData } from '../../selectors/name-generator';
 import { PromptSwiper } from '../';
 import { NodeBin, NodeList } from '../../components/';
+import getParentKeyByNameValue from '../../utils/getParentKeyByNameValue';
+
 
 /**
   * NameGeneratorAutoComplete Interface
@@ -35,7 +37,6 @@ class NameGeneratorAutoComplete extends Component {
     const {
       closeSearch,
       excludedNodes,
-      getLabel,
       labelKey,
       nodeIconName,
       nodesForPrompt,
@@ -46,7 +47,7 @@ class NameGeneratorAutoComplete extends Component {
       searchIsOpen,
       stage,
       toggleSearch,
-      visibleSupplementaryFields,
+      details,
     } = this.props;
 
     const baseClass = 'name-generator-auto-complete-interface';
@@ -61,8 +62,14 @@ class NameGeneratorAutoComplete extends Component {
     const ListId = 'AUTOCOMPLETE_NODE_LIST';
 
     const searchOptions = { matchProperties: [], ...prompt.searchOptions };
-    searchOptions.matchProperties = searchOptions.matchProperties.map(prop => (
-      `${entityAttributesProperty}.${prop}`));
+
+    // Map the matchproperties to add the entity attributes object, and replace names with
+    // uuids, where possible.
+    searchOptions.matchProperties = searchOptions.matchProperties.map((prop) => {
+      const nodeTypeVariables = this.props.nodeTypeDefinition.variables;
+      const replacedProp = getParentKeyByNameValue(nodeTypeVariables, prop);
+      return (`${entityAttributesProperty}.${replacedProp}`);
+    });
 
     return (
       <div className={baseClass}>
@@ -78,9 +85,8 @@ class NameGeneratorAutoComplete extends Component {
         <div className={`${baseClass}__nodes`}>
           <NodeList
             id={ListId}
-            label={getLabel}
             listId={`${stage.id}_${prompt.id}_${ListId}`}
-            nodes={nodesForPrompt}
+            items={nodesForPrompt}
             itemType="EXISTING_NODE"
           />
         </div>
@@ -96,16 +102,22 @@ class NameGeneratorAutoComplete extends Component {
           key={prompt.id}
           dataSourceKey={prompt.dataSource}
           primaryDisplayField={labelKey}
-          additionalAttributes={visibleSupplementaryFields}
+          details={details}
           excludedNodes={excludedNodes}
           nodeType={nodeType}
           onClick={closeSearch}
           onComplete={selectedResults => this.onSearchComplete(selectedResults)}
           options={searchOptions}
+          stage={this.props.stage}
+          nodeTypeDefinition={this.props.nodeTypeDefinition}
         />
 
         <div className="name-generator-auto-complete-interface__node-bin">
-          <NodeBin id="NODE_BIN" />
+          <NodeBin
+            accepts={meta => meta.itemType === 'EXISTING_NODE'}
+            dropHandler={meta => this.props.removeNode(meta[entityPrimaryKeyProperty])}
+            id="NODE_BIN"
+          />
         </div>
 
       </div>
@@ -115,12 +127,13 @@ class NameGeneratorAutoComplete extends Component {
 
 NameGeneratorAutoComplete.propTypes = {
   batchAddNodes: PropTypes.func.isRequired,
+  removeNode: PropTypes.func.isRequired,
   closeSearch: PropTypes.func.isRequired,
   excludedNodes: PropTypes.array.isRequired,
-  getLabel: PropTypes.func.isRequired,
   labelKey: PropTypes.string.isRequired,
   newNodeAttributes: PropTypes.object.isRequired,
   newNodeModelData: PropTypes.object.isRequired,
+  nodeTypeDefinition: PropTypes.object.isRequired,
   nodesForPrompt: PropTypes.array.isRequired,
   nodeIconName: PropTypes.string.isRequired,
   nodeType: PropTypes.string.isRequired,
@@ -130,7 +143,7 @@ NameGeneratorAutoComplete.propTypes = {
   searchIsOpen: PropTypes.bool.isRequired,
   stage: PropTypes.object.isRequired,
   toggleSearch: PropTypes.func.isRequired,
-  visibleSupplementaryFields: PropTypes.array.isRequired,
+  details: PropTypes.array.isRequired,
 };
 
 function mapDispatchToProps(dispatch) {
@@ -138,6 +151,7 @@ function mapDispatchToProps(dispatch) {
     batchAddNodes: bindActionCreators(sessionsActions.batchAddNodes, dispatch),
     closeSearch: bindActionCreators(searchActions.closeSearch, dispatch),
     toggleSearch: bindActionCreators(searchActions.toggleSearch, dispatch),
+    removeNode: bindActionCreators(sessionsActions.removeNode, dispatch),
   };
 }
 
@@ -147,19 +161,20 @@ function makeMapStateToProps() {
   const getPromptNodeModelData = makeGetPromptNodeModelData();
   const getNodeType = makeGetSubjectType();
   const getNodeIconName = makeGetNodeIconName();
+  const getNodeTypeDefinition = makeGetNodeTypeDefinition();
 
   return function mapStateToProps(state, props) {
     return {
       excludedNodes: getNetworkNodes(state, props),
-      getLabel: makeGetNodeLabel(state),
       labelKey: getCardDisplayLabel(state, props),
       newNodeAttributes: getPromptNodeAttributes(state, props),
       newNodeModelData: getPromptNodeModelData(state, props),
+      nodeTypeDefinition: getNodeTypeDefinition(state, { type: props.stage.subject.type }),
       nodeIconName: getNodeIconName(state, props),
       nodesForPrompt: networkNodesForPrompt(state, props),
       nodeType: getNodeType(state, props),
       searchIsOpen: !state.search.collapsed,
-      visibleSupplementaryFields: getCardAdditionalProperties(state, props),
+      details: getCardAdditionalProperties(state, props),
     };
   };
 }

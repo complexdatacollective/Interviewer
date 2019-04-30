@@ -18,22 +18,27 @@ const defaultHeaders = {
 // A throwable 'friendly' error containing message from server
 const apiError = (respJson) => {
   const error = new Error('API error');
+
+  // Provide a friendly message, if available.
   if (respJson.message) {
     error.friendlyMessage = respJson.message;
+    error.code = respJson.code;
     error.stack = null;
   }
-  return error;
+  throw error;
 };
 
 const handleError = (err) => {
   if (axios.isCancel(err)) {
-    return;
+    return false;
   }
+  // Handle errors from the response
   if (err.response) {
     if (err.response.data.status === ApiErrorStatus) {
-      throw apiError(err.response.data);
+      return apiError({ ...err.response.data, code: err.response.status });
     }
   }
+  // Handle errors with the request
   if (err.request) {
     throw new Error(NoResponseMessage);
   }

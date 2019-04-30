@@ -1,14 +1,40 @@
 .server-card {
   margin: unit(2);
   width: 8rem;
+  text-align: center;
+
+  img {
+    width: 6rem;
+  }
+
+  button {
+    margin-top: 1rem;
+  }
 
   &__label {
     text-align: center;
     margin: 0;
+    margin-top: .5rem;
     overflow-wrap: break-word;
   }
 
   &--clickable {
     cursor: pointer;
   }
+
+  &--error {
+    .server-card__icon {
+      filter: grayscale(100%);
+    }
+  }
+}
+
+.server-card-wrapper {
+  display: flex;
+
+  .server-card {
+    width: 10rem;
+    margin: 0 unit(2) 0 0;
+  }
+
 }

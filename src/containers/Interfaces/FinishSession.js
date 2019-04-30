@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { push } from 'react-router-redux';
-
 import createGraphML from '../../utils/ExportData';
 import { Button } from '../../ui/components';
+import { Toggle } from '../../ui/components/Fields';
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
@@ -13,17 +12,23 @@ import { getNetwork } from '../../selectors/network';
 import { getActiveSession } from '../../selectors/session';
 import { getProtocolCodebook, getRemoteProtocolId } from '../../selectors/protocol';
 import { asExportableNetwork } from '../../utils/networkFormat';
+import { ExportSessionsOverlay } from '../Setup';
 
 const ExportSection = ({ defaultServer, children }) => (
   <div className="finish-session-interface__section finish-session-interface__section--export">
     <div>
       <h2>Data Export</h2>
-      <p>
-        Export this interview to {defaultServer.name} <br />
-        <small>{defaultServer.secureServiceUrl}</small>
-      </p>
+      { defaultServer ?
+        (<p>
+          Export this interview to {defaultServer.name} <br />
+          <small>{defaultServer.secureServiceUrl}</small>
+        </p>) :
+        (<p>
+          Click export to pair with a computer running Server, and remotely upload this interview.
+        </p>)
+      }
     </div>
-    <div>
+    <div className="finish-session-interface__section--buttons">
       { children }
     </div>
   </div>
@@ -34,45 +39,24 @@ class FinishSession extends Component {
     super();
     this.state = {
       downloadDataAdditionalInfo: '',
+      showExportSessionOverlay: false,
     };
   }
 
   get exportSection() {
-    const { currentSession, defaultServer } = this.props;
-    if (currentSession.lastExportedAt) {
-      return (
-        <ExportSection defaultServer={defaultServer}>
-          <p>Export Successful</p>
-          <p><small>{new Date(currentSession.lastExportedAt).toLocaleString()}</small></p>
-        </ExportSection>
-      );
-    } else if (this.currentSessionisExportable) {
-      return (
-        <ExportSection defaultServer={defaultServer}>
-          <Button onClick={() => this.export(currentSession)}>
-            Export
-          </Button>
-        </ExportSection>
-      );
-    } else if (this.currentSessionBelongsToProtocol) {
-      // This is a rare case...
-      return <p>This session is not exportable: there is no paired Server.</p>;
-    }
-
-    return <p>This session is not exportable: it is not associated with any Server.</p>;
+    const { defaultServer } = this.props;
+    return (
+      <ExportSection defaultServer={defaultServer}>
+        <Button onClick={() => this.setState({ showExportSessionOverlay: true })}>
+          Export
+        </Button>
+      </ExportSection>
+    );
   }
 
   get exportUrl() {
     const { defaultServer } = this.props;
     return defaultServer && defaultServer.secureServiceUrl;
-  }
-
-  get currentSessionBelongsToProtocol() {
-    return !!this.props.remoteProtocolId;
-  }
-
-  get currentSessionisExportable() {
-    return this.currentSessionBelongsToProtocol && this.exportUrl;
   }
 
   export(currentSession) {
@@ -82,7 +66,7 @@ class FinishSession extends Component {
       codebook,
       { _caseID: currentSession.caseId },
     );
-    this.props.exportSession(remoteProtocolId, sessionId, sessionData);
+    this.props.bulkExportSessions([{ remoteProtocolId, sessionUUID: sessionId, sessionData }]);
   }
 
   handleExportError = (additionalInformation) => {
@@ -99,6 +83,17 @@ class FinishSession extends Component {
   render() {
     return (
       <div className="interface finish-session-interface">
+        <ExportSessionsOverlay
+          show={this.state.showExportSessionOverlay}
+          key={this.state.showExportSessionOverlay}
+          onClose={() => {
+            this.setState({
+              showExportSessionOverlay: false,
+            });
+            this.props.resetSessionExport();
+          }}
+          sessionsToExport={[this.props.sessionId]}
+        />
         <div className="finish-session-interface__frame">
           <h1 className="finish-session-interface__title type--title-1">
             Finish Interview
@@ -129,9 +124,18 @@ class FinishSession extends Component {
               </Button>
             </div>
           </div>
-
+          <Toggle
+            input={{
+              value: this.state.deleteAfterExport,
+              onChange: () => {
+                this.setState({ deleteAfterExport: !this.state.deleteAfterExport });
+              },
+            }}
+            label="Delete this session after finishing?"
+            fieldLabel=" "
+          />
           <div className="finish-session-interface__section finish-session-interface__section--buttons">
-            <Button onClick={this.props.endSession}>
+            <Button onClick={() => this.props.endSession(this.state.deleteAfterExport)}>
               Finish
             </Button>
           </div>
@@ -143,10 +147,10 @@ class FinishSession extends Component {
 
 FinishSession.propTypes = {
   currentNetwork: PropTypes.object.isRequired,
-  currentSession: PropTypes.object.isRequired,
   defaultServer: PropTypes.object,
   endSession: PropTypes.func.isRequired,
-  exportSession: PropTypes.func.isRequired,
+  resetSessionExport: PropTypes.func.isRequired,
+  bulkExportSessions: PropTypes.func.isRequired,
   openDialog: PropTypes.func.isRequired,
   remoteProtocolId: PropTypes.string,
   sessionId: PropTypes.string.isRequired,
@@ -161,7 +165,11 @@ FinishSession.defaultProps = {
 
 ExportSection.propTypes = {
   children: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.string]).isRequired,
-  defaultServer: PropTypes.object.isRequired,
+  defaultServer: PropTypes.object,
+};
+
+ExportSection.defaultProps = {
+  defaultServer: null,
 };
 
 function mapStateToProps(state) {
@@ -177,10 +185,11 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    exportSession: bindActionCreators(sessionsActions.exportSession, dispatch),
-    endSession: () => {
-      dispatch(sessionActions.endSession());
-      dispatch(push('/'));
+    bulkExportSessions: bindActionCreators(sessionsActions.bulkExportSessions, dispatch),
+    resetSessionExport: bindActionCreators(sessionsActions.sessionExportReset, dispatch),
+    deleteSession: bindActionCreators(sessionsActions.removeSession, dispatch),
+    endSession: (deleteAfterExport) => {
+      dispatch(sessionActions.endSession(deleteAfterExport));
     },
     openDialog: bindActionCreators(dialogActions.openDialog, dispatch),
   };

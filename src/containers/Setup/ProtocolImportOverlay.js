@@ -2,11 +2,13 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import ProtocolUrlForm from './ProtocolUrlForm';
 import ServerPairing from './ServerPairing';
 import ServerProtocols from './ServerProtocols';
 import { ServerAddressForm, DiscoveredServerList } from '../../components/Setup';
 import importLocalProtocol from '../../utils/protocol/importLocalProtocol';
+import { actionCreators as protocolActions } from '../../ducks/modules/importProtocol';
 import Overlay from '../Overlay';
 import { Button } from '../../ui/components';
 
@@ -43,6 +45,11 @@ class ProtocolImportOverlay extends PureComponent {
     });
   }
 
+  onImportProtocol = (url, usePairedServer) => {
+    this.props.importProtocolFromURI(url, usePairedServer);
+    this.props.onClose();
+  }
+
   pairWithServer = (server) => {
     this.setState({ selectedServer: server });
   }
@@ -61,13 +68,16 @@ class ProtocolImportOverlay extends PureComponent {
 
     let content;
 
+    // Show the URL form
     if (importMode === 'url') {
       content = (
-        <ProtocolUrlForm />
+        <ProtocolUrlForm importProtocolFromURI={this.onImportProtocol} />
       );
+
     // If we are paired, show the server list.
     } else if (pairedServer) {
-      content = <ServerProtocols server={pairedServer} />;
+      content =
+        <ServerProtocols server={pairedServer} importProtocolFromURI={this.onImportProtocol} />;
 
     // If user has requested manual entry show the form
     } else if (manualEntry) {
@@ -124,7 +134,7 @@ class ProtocolImportOverlay extends PureComponent {
         </div>
         <div
           className="tab"
-          onClick={() => importLocalProtocol('heh')}
+          onClick={() => importLocalProtocol()}
         >
           Local file
         </div>
@@ -161,13 +171,21 @@ ProtocolImportOverlay.propTypes = {
   pairedServer: PropTypes.object,
   show: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  importProtocolFromURI: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
   pairedServer: state.pairedServer,
 });
 
-export default connect(mapStateToProps)(ProtocolImportOverlay);
+function mapDispatchToProps(dispatch) {
+  return {
+    importProtocolFromURI:
+      bindActionCreators(protocolActions.importProtocolFromURI, dispatch),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProtocolImportOverlay);
 
 export {
   ProtocolImportOverlay as UnconnectedProtocolImportOverlay,
