@@ -62,6 +62,7 @@ class ProtocolList extends Component {
       loop: false,
       slidesPerView: 'auto',
       centeredSlides: true,
+      shouldSwiperUpdate: true,
       initialSlide: activeSlideKey,
     };
 
