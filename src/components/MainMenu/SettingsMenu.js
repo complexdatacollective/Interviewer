@@ -75,7 +75,7 @@ class SettingsMenu extends PureComponent {
           <Scroller>
             <div className="main-menu-settings-menu__form">
               <fieldset>
-                <legend>Developer Options</legend>
+                <legend>Device Options</legend>
                 <section>
                   <label htmlFor="deviceName">Device Name</label>
                   <Text
@@ -89,6 +89,21 @@ class SettingsMenu extends PureComponent {
                   />
                   <p>The device name determines how your device appears to Server.</p>
                 </section>
+                <section>
+                  <Button
+                    color="neon-coral"
+                    onClick={handleResetAppData}
+                  >
+                    Reset Network Canvas data
+                  </Button>
+                  <p>
+                    Click the button above to reset all Network Canvas data. This will erase any
+                    in-progress interviews, and all application settings.
+                  </p>
+                </section>
+              </fieldset>
+              <fieldset>
+                <legend>Developer Options</legend>
                 {
                   shouldShowMocksItem &&
                   <section>
@@ -106,18 +121,6 @@ class SettingsMenu extends PureComponent {
                 }
                 <section>
                   <Button
-                    color="neon-coral"
-                    onClick={handleResetAppData}
-                  >
-                    Reset Network Canvas data
-                  </Button>
-                  <p>
-                    Click the button above to reset all Network Canvas data. This will erase any
-                    in-progress interviews, and all application settings.
-                  </p>
-                </section>
-                <section>
-                  <Button
                     color="mustard"
                     onClick={() => importProtocolFromURI('https://github.com/codaco/development-protocol/releases/download/20190410122751-7141c7a/development-protocol.netcanvas')}
                   >
@@ -129,6 +132,10 @@ class SettingsMenu extends PureComponent {
                   </p>
                 </section>
               </fieldset>
+
+
+
+
               <fieldset>
                 <legend>Display Settings</legend>
                 <section>
