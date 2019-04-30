@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import ApiClient from '../../utils/ApiClient';
-import { actionCreators as protocolActions } from '../../ducks/modules/importProtocol';
 import { ServerProtocolList, ServerSetup, PairedServerWrapper, ServerUnavailable } from '../../components/Setup';
 
 
@@ -14,9 +12,7 @@ import { ServerProtocolList, ServerSetup, PairedServerWrapper, ServerUnavailable
 class ServerProtocols extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      showNewSessionOverlay: false,
-    };
+    this.state = {};
   }
 
   componentDidMount() {
@@ -42,14 +38,7 @@ class ServerProtocols extends Component {
   }
 
   handleSelectProtocol = (protocol) => {
-    const { importProtocolFromURI } = this.props;
-    this.setState({ showNewSessionOverlay: true });
-    this.apiClient.addTrustedCert()
-      .then(() => importProtocolFromURI(protocol.downloadPath, true));
-  }
-
-  handleCloseOverlay = () => {
-    this.setState({ showNewSessionOverlay: false });
+    this.props.importProtocolFromURI(protocol.downloadPath, true);
   }
 
   render() {
@@ -86,10 +75,6 @@ class ServerProtocols extends Component {
   }
 }
 
-ServerProtocols.defaultProps = {
-  protocolPath: '',
-};
-
 ServerProtocols.propTypes = {
   importProtocolFromURI: PropTypes.func.isRequired,
   pairedServer: PropTypes.object.isRequired,
@@ -100,18 +85,10 @@ ServerProtocols.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    protocolPath: state.importProtocol.path,
     pairedServer: state.pairedServer,
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    importProtocolFromURI:
-    bindActionCreators(protocolActions.importProtocolFromURI, dispatch),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ServerProtocols);
+export default connect(mapStateToProps)(ServerProtocols);
 
 export { ServerProtocols as UnconnectedServerProtocols };
