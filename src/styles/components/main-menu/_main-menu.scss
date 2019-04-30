@@ -20,9 +20,28 @@
     flex-direction: row;
   }
 
-  &__return-button {
+  &__return-button,
+  &__exit-button {
+    display: flex;
+    align-items: center;
     font-weight: 700;
     font-size: 1.5rem;
+  }
+
+  &__exit-button .icon {
+    margin-left: 1rem;
+    
+    .cls-1 {
+      fill: var(--color-platinum--dark);
+    }
+    
+    .cls-2 {
+      fill: var(--color-platinum);
+    }
+    
+    .cls-3 {
+      fill: var(--color-white);
+    }
   }
 
   &__panels {

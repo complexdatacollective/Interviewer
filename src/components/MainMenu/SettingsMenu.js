@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { isCordova, isElectron } from '../../utils/Environment';
+import { isElectron } from '../../utils/Environment';
 import { Icon, Button } from '../../ui/components';
 import Scroller from '../Scroller';
 import { Toggle, Text } from '../../ui/components/Fields';
@@ -23,20 +23,6 @@ class SettingsMenu extends PureComponent {
       return electron.remote.getCurrentWindow();
     }
     return false;
-  }
-
-  showExitButton = () => !isCordova() || (navigator.app && navigator.app.exitApp);
-
-  handleExitApp = () => {
-    if (isCordova()) {
-      // Android supports exiting
-      if (navigator.app && navigator.app.exitApp) {
-        navigator.app.exitApp();
-      }
-    } else {
-      // note: this will only close windows opened by the app, not a new tab the user opened
-      window.close();
-    }
   }
 
   handleToggleUseFullScreenApp = () => {
@@ -71,6 +57,7 @@ class SettingsMenu extends PureComponent {
       deviceDescription,
       setInterfaceScale,
       interfaceScale,
+      onCloseMenu,
     } = this.props;
 
     return (
@@ -78,6 +65,7 @@ class SettingsMenu extends PureComponent {
         active={active}
         panel="settings"
         onClickInactive={onClickInactive}
+        onCloseMenu={onCloseMenu}
       >
         <Icon name="settings" />
         <div className="main-menu-settings-menu">
@@ -138,17 +126,6 @@ class SettingsMenu extends PureComponent {
                     Import development protocol
                   </Button>
                 </section>
-                {this.showExitButton() && <section>
-                  <p>
-                    The button below will exit Network Canvas.
-                  </p>
-                  <Button
-                    color="mustard"
-                    onClick={this.handleExitApp}
-                  >
-                    Exit
-                  </Button>
-                </section>}
               </fieldset>
               <fieldset>
                 <legend>Display Settings</legend>
@@ -237,6 +214,7 @@ SettingsMenu.propTypes = {
   deviceDescription: PropTypes.string.isRequired,
   setInterfaceScale: PropTypes.func.isRequired,
   interfaceScale: PropTypes.number.isRequired,
+  onCloseMenu: PropTypes.func.isRequired,
 };
 
 SettingsMenu.defaultProps = {

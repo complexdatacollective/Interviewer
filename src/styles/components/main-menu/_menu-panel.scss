@@ -54,9 +54,14 @@
   &.main-menu-menu-panel--active {
     flex-grow: 3;
     background: var(--menu-panel--active);
+    position: relative;
 
     .icon {
       opacity: 0;
+    }
+
+    .icon[name='close'] {
+      opacity: 1;
     }
   }
 
@@ -64,5 +69,16 @@
     .icon {
       opacity: 1;
     }
+
+    .icon[name='close'] {
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
+
+  .icon[name='close'] {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
   }
 }
