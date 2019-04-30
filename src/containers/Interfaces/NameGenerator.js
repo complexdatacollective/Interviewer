@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { get, has, omit } from 'lodash';
+import { get, has, omit, debounce } from 'lodash';
 import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { makeNetworkNodesForPrompt, makeGetAdditionalAttributes } from '../../selectors/interface';
@@ -29,7 +29,7 @@ class NameGenerator extends Component {
   /**
    * Node Form submit handler
    */
-  handleSubmitForm = ({ form }) => {
+  handleSubmitForm = debounce(({ form }) => {
     if (form) {
       if (!this.state.selectedNode) {
         /**
@@ -49,7 +49,10 @@ class NameGenerator extends Component {
     }
 
     this.setState({ showNodeForm: false, selectedNode: null });
-  }
+  }, 1000, { // This is needed to prevent double submit.
+    leading: true,
+    trailing: false,
+  });
 
   /**
    * Drop node handler
