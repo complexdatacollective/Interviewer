@@ -39,10 +39,5 @@ describe('errors', () => {
       'pairingFailed',
       () => expectDialogErrorAction(serverActions.pairingFailed, mockError),
     );
-
-    it(
-      'sessionExportFailed',
-      () => expectDialogErrorAction(sessionsActions.sessionExportFailed, mockError),
-    );
   });
 });

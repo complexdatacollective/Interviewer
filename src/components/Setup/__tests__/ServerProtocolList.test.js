@@ -18,6 +18,6 @@ describe('<ServerProtocolList>', () => {
   });
 
   it('renders a card for each protocol', () => {
-    expect(component.find('ProtocolCard')).toHaveLength(mockProtocols.length);
+    expect(component.find('ProtocolCardMini')).toHaveLength(mockProtocols.length);
   });
 });

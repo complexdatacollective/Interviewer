@@ -66,6 +66,7 @@ describe('withExternalDataLoader', () => {
       <EnhancedComponent
         store={createStore(mockReducer)}
         source={mockSource}
+        stage={{ subject: { entity: 'node', type: 'person' } }}
       />
     ));
 

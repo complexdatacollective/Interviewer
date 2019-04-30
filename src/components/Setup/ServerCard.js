@@ -87,4 +87,6 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
+export { ServerCard as UnconnectedServerCard };
+
 export default connect(null, mapDispatchToProps)(ServerCard);

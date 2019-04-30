@@ -29,7 +29,7 @@ ShallowWrapper {
           }
         }
       />,
-      "className": "progress-bar progress-bar--vertical",
+      "className": "progress-bar progress-bar progress-bar--vertical",
       "onClick": [Function],
     },
     "ref": null,
@@ -63,7 +63,7 @@ ShallowWrapper {
             }
           }
         />,
-        "className": "progress-bar progress-bar--vertical",
+        "className": "progress-bar progress-bar progress-bar--vertical",
         "onClick": [Function],
       },
       "ref": null,

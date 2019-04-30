@@ -6,7 +6,7 @@ import { Search } from '../Search';
 import SearchResults from '../SearchResults';
 import Card from '../../../components/Card';
 
-const mockSearchResult = [{ name: 'foo' }];
+const mockSearchResult = [{ attributes: { name: 'foo' } }];
 
 jest.mock('../../../ui/utils/CSSVariables');
 
@@ -17,6 +17,9 @@ const mockProps = {
   excludedNodes: [],
   options: {},
   onComplete: () => {},
+  nodeTypeDefinition: {
+    variables: {},
+  },
   fuse: {
     search: () => mockSearchResult,
   },

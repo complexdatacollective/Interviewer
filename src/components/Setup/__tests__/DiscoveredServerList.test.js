@@ -1,5 +1,7 @@
 /* eslint-env jest */
 import React from 'react';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 import { mount } from 'enzyme';
 
 import DiscoveredServerList from '../DiscoveredServerList';
@@ -14,19 +16,27 @@ jest.mock('../../../utils/Environment', () => ({
   isElectron: () => true,
 }));
 
+const mockStore = () =>
+  createStore(
+    () => (
+      {
+        installedProtocols: {
+          config: {
+            registry: {},
+          },
+        },
+      }
+    ),
+  );
+
 describe('<DiscoveredServerList />', () => {
   let component;
   beforeEach(() => {
-    component = mount(<DiscoveredServerList />);
+    component = mount(<Provider store={mockStore()} ><DiscoveredServerList /></Provider>);
   });
 
   it('displays listening state', () => {
-    expect(component.find('PairedServerWrapper')).toHaveLength(0);
+    expect(component.find('ServerCard')).toHaveLength(0);
     expect(component.text()).toContain('Listening');
-  });
-
-  it('displays servers', () => {
-    component.setState({ servers: [{ name: 'nc', addresses: [] }] });
-    expect(component.find('PairedServerWrapper')).toHaveLength(1);
   });
 });
