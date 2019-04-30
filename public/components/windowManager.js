@@ -3,6 +3,7 @@ const mainMenu = require('./mainMenu');
 const appUrl = require('./appURL');
 
 const isMacOS = () => process.platform === 'darwin';
+const isWin = () => process.platform === 'win32';
 
 const titlebarParameters = isMacOS() ? { titleBarStyle: 'hidden', frame: false } : { autoHideMenuBar: true };
 
@@ -30,7 +31,7 @@ function createWindow() {
       minWidth: 1280,
       minHeight: 800,
       center: true,
-      fullscreen: true,
+      fullscreen: !isWin(),
       title: 'Network Canvas',
     }, titlebarParameters);
 

@@ -24,12 +24,14 @@ class StagesMenu extends PureComponent {
     const {
       active,
       onClickInactive,
+      onCloseMenu,
     } = this.props;
     return (
       <MenuPanel
         active={active}
         panel="stages"
         onClickInactive={onClickInactive}
+        onCloseMenu={onCloseMenu}
       >
         <Icon name="menu-default-interface" />
         <div className="main-menu-stages-menu" >
@@ -55,6 +57,7 @@ StagesMenu.propTypes = {
   currentStages: PropTypes.array.isRequired,
   active: PropTypes.bool,
   onClickInactive: PropTypes.func,
+  onCloseMenu: PropTypes.func.isRequired,
 };
 
 StagesMenu.defaultProps = {
