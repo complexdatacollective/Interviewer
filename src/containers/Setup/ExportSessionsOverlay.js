@@ -244,7 +244,13 @@ class ExportSessionsOverlay extends PureComponent {
         </div>
         <div
           className="tab"
-          onClick={() => importLocalProtocol()}
+          onClick={() => {
+            this.props.openDialog({
+              type: 'Notice',
+              title: 'Not yet available',
+              message: "This feature is not yet available. If you need to export an interview as a file, please use the 'finish session' screen from within the interview.",
+            });
+          }}
         >
           To file
         </div>
