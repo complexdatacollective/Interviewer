@@ -52,6 +52,11 @@ class QuickNodeForm extends PureComponent {
 
   handleSubmitForm = (e) => {
     e.preventDefault();
+
+    if (this.state.nodeLabel.length === 0) {
+      return;
+    }
+
     this.props.addNode(
       this.props.newNodeModelData,
       {
