@@ -316,14 +316,15 @@ const removeEdge = edge => (dispatch, getState) => {
 const addSession = (caseId, protocolUID) => (dispatch) => {
   const id = uuidv4();
 
-  dispatch(SessionWorkerActions.initializeSessionWorkersThunk(protocolUID));
-
   dispatch({
     type: ADD_SESSION,
     sessionId: id,
     caseId,
     protocolUID,
   });
+
+  return dispatch(SessionWorkerActions.initializeSessionWorkersThunk(protocolUID))
+    .then(() => id);
 };
 
 const loadSession = () => (dispatch) => {
