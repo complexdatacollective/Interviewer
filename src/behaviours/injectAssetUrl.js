@@ -1,16 +1,23 @@
 import { connect } from 'react-redux';
 import { compose, lifecycle, withState, setPropTypes, mapProps } from 'recompose';
 import PropTypes from 'prop-types';
+import { get } from 'lodash';
 import getMediaAssetUrl from '../utils/protocol/getMediaAssetUrl';
+import { getAssetManifest } from '../selectors/protocol';
+
 
 // curry asset fetcher with protocol path from state
 const mapStateToProps = state => ({
-  getAssetUrl: (url) => {
+  getAssetUrl: (asset) => {
     const protocolUID = state.sessions[state.activeSessionId].protocolUID;
+    const assetManifest = getAssetManifest(state);
+    const assetSource = get(assetManifest, [asset, 'source']);
+
+    if (!assetSource) { return null; }
 
     return getMediaAssetUrl(
       protocolUID,
-      url,
+      assetSource,
     );
   },
 });
@@ -18,16 +25,19 @@ const mapStateToProps = state => ({
 const injectAssetUrl = compose(
   connect(mapStateToProps),
   setPropTypes({
-    url: PropTypes.string.isRequired,
+    asset: PropTypes.string.isRequired,
   }),
-  withState('assetUrl', 'setAssetUrl', ''),
+  withState('url', 'setUrl', ''),
   lifecycle({
     componentDidMount() {
-      const { getAssetUrl, url, setAssetUrl } = this.props;
-      getAssetUrl(url).then(setAssetUrl);
+      const { getAssetUrl, asset, setUrl } = this.props;
+
+      if (!asset) { return; }
+
+      getAssetUrl(asset).then(setUrl);
     },
   }),
-  mapProps(({ dispatch, getAssetUrl, setAssetUrl, assetUrl: url, ...rest }) => ({ ...rest, url })),
+  mapProps(({ dispatch, getAssetUrl, setUrl, url, ...rest }) => ({ ...rest, url })),
 );
 
 export default injectAssetUrl;

@@ -4,7 +4,8 @@ import cx from 'classnames';
 import ReactMarkdown from 'react-markdown';
 import { Audio, BackgroundImage, Video } from '../../components';
 import defaultMarkdownRenderers from '../../utils/markdownRenderers';
-import { InformationContentType } from '../../protocol-consts';
+import { InformationContentType, AssetType } from '../../protocol-consts';
+import AssetMetaProvider from '../../behaviours/AssetMetaProvider';
 
 const TAGS = [
   'break',
@@ -18,6 +19,24 @@ const TAGS = [
   'thematicBreak',
 ];
 
+const getAssetComponent = (asset) => {
+  switch (asset.type) {
+    case AssetType.image:
+      return (
+        <BackgroundImage
+          asset={asset.content}
+          className="information-interface__background-image"
+        />
+      );
+    case AssetType.audio:
+      return <Audio asset={asset.content} controls autoPlay />;
+    case AssetType.video:
+      return <Video asset={asset.content} loop={asset.loop} autoPlay />;
+    default:
+      return null;
+  }
+};
+
 const getItemComponent = (item) => {
   switch (item.type) {
     case InformationContentType.text:
@@ -28,17 +47,13 @@ const getItemComponent = (item) => {
           renderers={defaultMarkdownRenderers}
         />
       );
-    case InformationContentType.image:
+    case InformationContentType.asset:
       return (
-        <BackgroundImage
-          url={item.content}
-          className="information-interface__background-image"
-        />
+        <AssetMetaProvider asset={item.content}>
+          {assetMeta => getAssetComponent({ ...item, ...assetMeta })}
+        </AssetMetaProvider>
       );
-    case InformationContentType.audio:
-      return <Audio url={item.content} controls autoPlay />;
-    case InformationContentType.video:
-      return <Video url={item.content} loop={item.loop} autoPlay />;
+
     default:
       return null;
   }

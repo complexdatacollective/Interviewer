@@ -43,9 +43,13 @@ const FormComponent = Object.freeze({
 // Docs: https://github.com/codaco/Network-Canvas/wiki/Information-Interface#content-types
 const InformationContentType = Object.freeze({
   text: 'text',
+  asset: 'asset',
+});
+
+const AssetType = Object.freeze({
   image: 'image',
-  audio: 'audio',
   video: 'video',
+  audio: 'audio',
 });
 
 // Docs: https://github.com/codaco/Network-Canvas/wiki/Skip-Logic#skip-logic-api
@@ -106,6 +110,7 @@ const enumValueMaps = Object.freeze({
   FilterOptionsOperator,
   FormComponent,
   InformationContentType,
+  AssetType,
   RuleType,
   SkipLogicAction,
   SkipLogicOperator,
