@@ -122,7 +122,7 @@ class SettingsMenu extends PureComponent {
                 <section>
                   <Button
                     color="mustard"
-                    onClick={() => importProtocolFromURI('https://github.com/codaco/development-protocol/releases/download/20190426123851-3dad01f/development-protocol.netcanvas')}
+                    onClick={() => importProtocolFromURI('https://github.com/codaco/development-protocol/releases/download/20190508100622-1e156f7/development-protocol.netcanvas')}
                   >
                     Import development protocol
                   </Button>
