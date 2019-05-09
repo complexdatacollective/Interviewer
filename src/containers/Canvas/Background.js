@@ -21,7 +21,7 @@ class Background extends PureComponent {
     const { concentricCircles, skewedTowardCenter, image } = this.props;
     let background;
     if (image) {
-      background = <BackgroundImage className="canvas-background__image" url={image} />;
+      background = <BackgroundImage className="canvas-background__image" asset={image} />;
     } else {
       background = <Radar n={concentricCircles} skewed={skewedTowardCenter} />;
     }
