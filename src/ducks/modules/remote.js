@@ -23,9 +23,6 @@ const previewStage = (protocol = {}, stageIndex = 0) =>
     const caseId = 'PREVIEW';
     const protocolUID = protocol.uid;
 
-    // eslint-disable-next-line
-    console.log('previewStage', { protocol: protocol, stageIndex });
-
     // Reset app
     dispatch(resetActions.resetAppState());
 

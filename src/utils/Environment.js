@@ -2,6 +2,8 @@ import environments from './environments';
 
 export const isElectron = () => !!window.require;
 
+export const isPreview = () =>
+  isElectron() && window.require('electron').remote.getGlobal('NETWORK_CANVAS_PREVIEW');
 
 export const isMacOS = () => isElectron() && window.require('os').platform() === 'darwin';
 
