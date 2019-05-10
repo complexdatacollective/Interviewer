@@ -17,8 +17,6 @@ const init = inEnvironment((environment) => {
       ipcRenderer.on('remote:reset', () => {
         store.dispatch(remoteActions.reset());
       });
-
-      setInterval(() => { remoteActions.reset(); }, 1);
     };
   }
 
