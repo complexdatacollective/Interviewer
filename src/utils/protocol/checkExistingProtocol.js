@@ -23,7 +23,8 @@ const checkExistingSession = (dispatch, state, protocolContent) => {
   const unExportedSession = findKey(state.sessions,
     session => session.protocolUID === existingIndex && !session.lastExportedAt);
   if (unExportedSession) {
-    return Promise.reject(new Error('This protocol is already installed. In progress sessions for a previous version of this protocol have not yet been exported. Please export them before attempting to overwrite the protocol.'));
+    const message = 'This protocol is already installed. In progress sessions for a previous version of this protocol have not yet been exported. Please export them before attempting to overwrite the protocol.';
+    return Promise.reject(new Error(message));
   }
 
   const existingSession = findKey(state.sessions,
@@ -42,6 +43,12 @@ const checkExistingSession = (dispatch, state, protocolContent) => {
     })));
   }
   
+  if (existingIndex) {
+    // clean up protocol even if no sessions exist
+    return renameProtocol(existingIndex, protocolContent.uid)
+      .then(() => Promise.resolve(protocolContent));
+  }
+
   return Promise.resolve(protocolContent);
 }
 
