@@ -15,7 +15,7 @@ class ImportProgressOverlay extends Component {
   }
 
   componentWillUpdate(newProps) {
-    if (newProps.progress.step === 5) {
+    if (newProps.progress.step === 6) {
       this.handleImportFinished();
     }
   }
@@ -32,19 +32,19 @@ class ImportProgressOverlay extends Component {
   render() {
     const { show, progress, resetImportProtocol } = this.props;
 
-    const percentProgress = progress.step / 5;
+    const percentProgress = progress.step / 6;
 
     return (
       <Modal show={show}>
         <div className="import-protocol-overlay">
           <div className="overlay__content import-protocol-overlay__content" ref={this.contentRef}>
-            { progress.step === 5 ? (
+            { progress.step === 6 ? (
               <Icon name="protocol-card" />
             ) : (
               <Spinner large />
             )}
             <h4>{progress.statusText}</h4>
-            { progress.step === 5 ? (
+            { progress.step === 6 ? (
               <Button onClick={resetImportProtocol}>Continue</Button>
             ) : (
               <React.Fragment>

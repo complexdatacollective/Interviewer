@@ -9,6 +9,14 @@ const Buffer = require('buffer/').Buffer;
 
 const trimPath = trimChars('/ ');
 
+const resolveOrRejectWith = (resolve, reject) => (err, ...args) => {
+  if (err) {
+    reject(err);
+  } else {
+    resolve(...args);
+  }
+};
+
 const splitUrl = (targetPath) => {
   const pathParts = trimPath(targetPath).split('/');
   const baseDirectory = `${pathParts.slice(0, -1).join('/')}/`;
@@ -218,6 +226,29 @@ const createDirectory = inEnvironment((environment) => {
   }
 
   throw new Error(`createDirectory() not available on platform ${environment}`);
+});
+
+const rename = inEnvironment((environment) => {
+  if (environment === environments.ELECTRON) {
+    return (oldPath, newPath) => (new Promise((resolve, reject) => {
+      try {
+        const fs = require('fs');
+        fs.rename(oldPath, newPath, resolveOrRejectWith(resolve, reject));
+      } catch (err) { reject(err); }
+    }));
+  }
+
+  if (environment === environments.CORDOVA) {
+    return (oldPath, newPath) =>
+      new Promise(async (resolve, reject) => {
+        const [parent, name] = splitUrl(newPath);
+        const toDirectory = await resolveFileSystemUrl(parent);
+        const fromDirectory = await resolveFileSystemUrl(oldPath);
+        return fromDirectory.moveTo(toDirectory, name, resolve, reject);
+      });
+  }
+
+  throw new Error(`rename() not available on platform ${environment}`);
 });
 
 const removeDirectory = inEnvironment((environment) => {
@@ -483,6 +514,7 @@ export {
   getNestedPaths,
   ensurePathExists,
   makeTmpDirCopy,
+  rename,
   removeDirectory,
   readFile,
   readFileAsDataUrl,
