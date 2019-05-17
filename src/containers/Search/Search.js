@@ -9,7 +9,7 @@ import SearchTransition from '../../components/Transition/Search';
 import SearchResults from './SearchResults';
 import AddCountButton from '../../components/AddCountButton';
 import { actionCreators as searchActions } from '../../ducks/modules/search';
-import { getEntityAttributes, entityPrimaryKeyProperty, entityAttributesProperty } from '../../ducks/modules/network';
+import { getEntityAttributes, entityPrimaryKeyProperty } from '../../ducks/modules/network';
 import { makeGetFuse } from '../../selectors/search';
 import withExternalData from '../withExternalData';
 import getParentKeyByNameValue from '../../utils/getParentKeyByNameValue';
@@ -168,13 +168,8 @@ class Search extends Component {
       return { [field.label]: getEntityAttributes(node)[labelKey] };
     };
 
-    const getLabel = (node) => {
-      return getCardTitle(node);
-    };
-
     const getSelected = node => this.state.selectedResults.indexOf(node) > -1;
     const getDetails = node => details.map(attr => toDetail(node, attr));
-
     return (
       <SearchTransition
         className={searchClasses}
@@ -188,7 +183,7 @@ class Search extends Component {
           <SearchResults
             hasInput={hasInput}
             results={this.state.searchResults}
-            label={getLabel}
+            label={getCardTitle}
             details={getDetails}
             isItemSelected={getSelected}
             onItemClick={item => this.toggleSelectedResult(item)}

@@ -4,7 +4,7 @@ import { get } from 'lodash';
 import { createSelector } from 'reselect';
 
 const getSearchOpts = (_, props) => props.options;
-const getSearchData = stage => get(stage.externalData, 'nodes', []);
+const getSearchData = (_, props) => get(props.externalData, 'nodes', []);
 
 /**
  * Fuse.js is an interface for (optionally) fuzzy searching

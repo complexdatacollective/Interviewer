@@ -61,7 +61,7 @@ class NameGeneratorAutoComplete extends Component {
 
     const ListId = 'AUTOCOMPLETE_NODE_LIST';
 
-    const searchOptions = { matchProperties: [], ...prompt.searchOptions };
+    const searchOptions = { matchProperties: [], ...stage.searchOptions };
 
     // Map the matchproperties to add the entity attributes object, and replace names with
     // uuids, where possible.
@@ -100,7 +100,7 @@ class NameGeneratorAutoComplete extends Component {
         <Search
           className={`${baseClass}__search`}
           key={prompt.id}
-          dataSourceKey={prompt.dataSource}
+          dataSourceKey={this.props.stage.dataSource}
           getCardTitle={getCardTitle}
           details={details}
           excludedNodes={excludedNodes}
@@ -130,7 +130,7 @@ NameGeneratorAutoComplete.propTypes = {
   removeNode: PropTypes.func.isRequired,
   closeSearch: PropTypes.func.isRequired,
   excludedNodes: PropTypes.array.isRequired,
-  getCardTitle: PropTypes.string.isRequired,
+  getCardTitle: PropTypes.func.isRequired,
   newNodeAttributes: PropTypes.object.isRequired,
   newNodeModelData: PropTypes.object.isRequired,
   nodeTypeDefinition: PropTypes.object.isRequired,
