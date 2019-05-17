@@ -1,5 +1,6 @@
 import CategoricalBin from './stage--CategoricalBin.png';
 import NameGenerator from './stage--NameGenerator.png';
+import NameGeneratorQuickAdd from './stage--NameGeneratorQuickAdd.png';
 import NameGeneratorList from './stage--NameGeneratorList.png';
 import NameGeneratorAutoComplete from './stage--NameGeneratorAutoComplete.png';
 import OrdinalBin from './stage--OrdinalBin.png';
@@ -14,6 +15,7 @@ import Default from './stage--Default.png';
 export default {
   CategoricalBin,
   NameGenerator,
+  NameGeneratorQuickAdd,
   NameGeneratorList,
   NameGeneratorAutoComplete,
   Narrative,

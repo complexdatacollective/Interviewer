@@ -7,9 +7,8 @@ import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { makeNetworkNodesForPrompt, makeGetAdditionalAttributes } from '../../selectors/interface';
 import { makeGetPromptNodeModelData, makeGetNodeIconName } from '../../selectors/name-generator';
-import { PromptSwiper, NodePanels, NodeForm } from '../';
+import { PromptSwiper, NodePanels, QuickNodeForm } from '../';
 import { NodeList, NodeBin } from '../../components/';
-import { Icon } from '../../ui/components';
 import { entityAttributesProperty, entityPrimaryKeyProperty } from '../../ducks/modules/network';
 
 /**
@@ -79,35 +78,11 @@ class NameGenerator extends Component {
     }
   }
 
-  /**
-   * Click node handler
-   * Triggers the edit node form.
-   * @param {object} node - key/value object containing node object from the network store
-   */
-  handleSelectNode = (node) => {
-    this.setState({
-      selectedNode: node,
-      showNodeForm: true,
-    });
-  }
-
-  handleClickAddNode = () => {
-    this.setState({
-      selectedNode: null,
-      showNodeForm: !this.state.showNodeForm,
-    });
-  }
-
-  handleCloseForm = () => {
-    this.setState({
-      selectedNode: null,
-      showNodeForm: false,
-    });
-  }
-
   render() {
     const {
       nodesForPrompt,
+      newNodeAttributes,
+      newNodeModelData,
       nodeIconName,
       prompt,
       promptBackward,
@@ -117,7 +92,7 @@ class NameGenerator extends Component {
 
     const {
       prompts,
-      form,
+      quickAdd,
     } = this.props.stage;
 
     return (
@@ -147,23 +122,15 @@ class NameGenerator extends Component {
           </div>
         </div>
 
-        { form &&
-          <Icon
-            name={nodeIconName}
-            onClick={this.handleClickAddNode}
-            className="name-generator-interface__add-node"
-          />
-        }
+        <QuickNodeForm
+          stage={this.props.stage}
+          targetVariable={quickAdd}
+          addNode={this.props.addNode}
+          nodeIconName={nodeIconName}
+          newNodeAttributes={newNodeAttributes}
+          newNodeModelData={newNodeModelData}
+        />
 
-        { form &&
-          <NodeForm
-            node={this.state.selectedNode}
-            stage={this.props.stage}
-            onSubmit={this.handleSubmitForm}
-            onClose={this.handleCloseForm}
-            show={this.state.showNodeForm}
-          />
-        }
         <NodeBin
           accepts={meta => meta.itemType === 'EXISTING_NODE'}
           dropHandler={meta => this.props.removeNode(meta[entityPrimaryKeyProperty])}
@@ -176,12 +143,12 @@ class NameGenerator extends Component {
 
 NameGenerator.defaultProps = {
   activePromptAttributes: {},
-  form: null,
+  quickAdd: null,
 };
 
 NameGenerator.propTypes = {
   addNode: PropTypes.func.isRequired,
-  form: PropTypes.object,
+  quickAdd: PropTypes.string,
   newNodeAttributes: PropTypes.object.isRequired,
   newNodeModelData: PropTypes.object.isRequired,
   nodesForPrompt: PropTypes.array.isRequired,
