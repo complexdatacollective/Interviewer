@@ -21,11 +21,11 @@ const defaultPanelConfiguration = {
 
 // MemoedSelectors
 
-const propCardOptions = (_, props) => props.prompt.cardOptions;
-const propSortOptions = (_, props) => props.prompt.sortOptions;
+const stageCardOptions = (_, props) => props.stage.cardOptions;
+const stageSortOptions = (_, props) => props.stage.sortOptions;
 const propPanels = (_, props) => props.stage.panels;
 
-// blah!
+
 export const makeGetPromptNodeModelData = () => {
   const getSubject = makeGetSubject();
   const getIds = makeGetIds();
@@ -40,28 +40,22 @@ export const makeGetPromptNodeModelData = () => {
   );
 };
 
-// Returns the displayLabel property of the card options configuration API
-export const getCardDisplayLabel = createSelector(
-  propCardOptions,
-  cardOptions => cardOptions.displayLabel,
-);
-
 // Returns any additional properties to be displayed on cards.
 // Returns an empty array if no additional properties are specified in the protocol.
 export const getCardAdditionalProperties = createSelector(
-  propCardOptions,
+  stageCardOptions,
   cardOptions => (has(cardOptions, 'additionalProperties') ? cardOptions.additionalProperties : []),
 );
 
 // Returns the properties that are specified as sortable in sortOptions
 export const getSortableFields = createSelector(
-  propSortOptions,
+  stageSortOptions,
   sortOptions => (has(sortOptions, 'sortableProperties') ? sortOptions.sortableProperties : []),
 );
 
 
 export const getInitialSortOrder = createSelector(
-  propSortOptions,
+  stageSortOptions,
   sortOptions => (has(sortOptions, 'sortOrder') ? sortOptions.sortOrder : []),
 );
 

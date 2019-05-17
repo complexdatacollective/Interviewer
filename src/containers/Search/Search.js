@@ -50,7 +50,7 @@ const InitialState = {
   * Note: to ensure that search state is tied to a source data set, set a `key`
   * prop that uniquely identifies the source data.
   *
-  * @param {string} primaryDisplayField The attribute to use for rendering a result
+  * @param {string} getCardTitle The attribute to use for rendering a result
   * @param props.details {array} - An array of objects shaped
   *     `{label: '', variable: ''}` in each search set object.
   * @param props.options {object}
@@ -132,7 +132,7 @@ class Search extends Component {
       className,
       collapsed,
       nodeColor,
-      primaryDisplayField,
+      getCardTitle,
     } = this.props;
 
     const hasInput = this.state.hasInput;
@@ -169,10 +169,9 @@ class Search extends Component {
     };
 
     const getLabel = (node) => {
-      const nodeTypeVariables = this.props.nodeTypeDefinition.variables;
-      const labelKey = getParentKeyByNameValue(nodeTypeVariables, primaryDisplayField);
-      return node[entityAttributesProperty][labelKey];
+      return getCardTitle(node);
     };
+
     const getSelected = node => this.state.selectedResults.indexOf(node) > -1;
     const getDetails = node => details.map(attr => toDetail(node, attr));
 
@@ -231,7 +230,7 @@ Search.propTypes = {
   clearResultsOnClose: PropTypes.bool,
   closeSearch: PropTypes.func.isRequired,
   collapsed: PropTypes.bool.isRequired,
-  primaryDisplayField: PropTypes.string.isRequired,
+  getCardTitle: PropTypes.func.isRequired,
   excludedNodes: PropTypes.array.isRequired,
   fuse: PropTypes.object.isRequired,
   onComplete: PropTypes.func.isRequired,
