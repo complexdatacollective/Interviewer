@@ -13,7 +13,7 @@ const mapStateToProps = state => ({
     const assetManifest = getAssetManifest(state);
     const assetSource = get(assetManifest, [asset, 'source']);
 
-    if (!assetSource) { return null; }
+    if (!assetSource) { return Promise.resolve(null); }
 
     return getMediaAssetUrl(
       protocolUID,
