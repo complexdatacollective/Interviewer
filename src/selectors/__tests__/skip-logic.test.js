@@ -30,8 +30,6 @@ const mockState = {
           id: 2,
           skipLogic: {
             action: 'SHOW',
-            operator: 'LESS_THAN_OR_EQUAL',
-            value: 3,
             filter: {
               rules: [
                 {
@@ -51,8 +49,6 @@ const mockState = {
           id: 3,
           skipLogic: {
             action: 'SHOW',
-            operator: 'EXACTLY',
-            value: 1,
             filter: {
               rules: [
                 {
@@ -71,8 +67,6 @@ const mockState = {
           id: 4,
           skipLogic: {
             action: 'SKIP',
-            operator: 'GREATER_THAN',
-            value: 2,
             filter: {
               rules: [
                 {
@@ -92,8 +86,6 @@ const mockState = {
           id: 5,
           skipLogic: {
             action: 'SKIP',
-            operator: 'NOT',
-            value: 1,
             filter: {
               rules: [
                 {
@@ -102,7 +94,7 @@ const mockState = {
                     type: 'person',
                     attribute: 'name',
                     operator: 'EXACTLY',
-                    value: 'soAndSo',
+                    value: 'somePerson',
                   },
                 },
               ],
@@ -113,8 +105,6 @@ const mockState = {
           id: 6,
           skipLogic: {
             action: 'SKIP',
-            operator: 'GREATER_THAN',
-            value: 1,
             filter: {
               join: 'AND',
               rules: [
@@ -144,8 +134,6 @@ const mockState = {
           id: 7,
           skipLogic: {
             action: 'SKIP',
-            operator: 'GREATER_THAN',
-            value: 1,
             filter: {
               join: 'OR',
               rules: [
