@@ -1,10 +1,9 @@
 import { createSelector } from 'reselect';
 
 import filter from '../utils/networkQuery/filter';
-import predicate from '../utils/networkQuery/predicate';
 import { getProtocolStages } from './protocol';
 import { getNetwork } from './network';
-import { SkipLogicAction, SkipLogicOperator } from '../protocol-consts';
+import { SkipLogicAction } from '../protocol-consts';
 
 const rotateIndex = (max, nextIndex) => (nextIndex + max) % max;
 const maxLength = state => getProtocolStages(state).length;
@@ -51,38 +50,14 @@ const isSkipAction = index => createSelector(
   logic => logic && logic.action === SkipLogicAction.SKIP,
 );
 
-const getSkipValue = index => createSelector(
-  getSkipLogic(index),
-  logic => logic && logic.value && Math.trunc(logic.value),
-);
-
-const getSkipOperator = index => createSelector(
-  getSkipLogic(index),
-  logic => logic && logic.operator,
-);
-
 export const isStageSkipped = index => createSelector(
   getSkipLogic(index),
   isSkipAction(index),
-  getSkipOperator(index),
-  getSkipValue(index),
   filterNetwork(index),
-  (logic, action, operator, comparisonValue, results) => {
+  (logic, action, results) => {
     if (!logic) return false;
 
-    let outerQuery = false;
-    switch (operator) {
-      case SkipLogicOperator.NONE:
-        outerQuery = !results.nodes.length;
-        break;
-      case SkipLogicOperator.ANY:
-        outerQuery = results.nodes.length > 0;
-        break;
-      default:
-        outerQuery = predicate(operator)(
-          { value: results.nodes.length, other: comparisonValue });
-    }
-
+    const outerQuery = results.nodes.length > 0;
     return !!logic && ((action && outerQuery) || (!action && !outerQuery));
   },
 );
