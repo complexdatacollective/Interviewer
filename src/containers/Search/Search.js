@@ -9,7 +9,7 @@ import SearchTransition from '../../components/Transition/Search';
 import SearchResults from './SearchResults';
 import AddCountButton from '../../components/AddCountButton';
 import { actionCreators as searchActions } from '../../ducks/modules/search';
-import { getEntityAttributes, entityPrimaryKeyProperty, entityAttributesProperty } from '../../ducks/modules/network';
+import { getEntityAttributes, entityPrimaryKeyProperty } from '../../ducks/modules/network';
 import { makeGetFuse } from '../../selectors/search';
 import withExternalData from '../withExternalData';
 import getParentKeyByNameValue from '../../utils/getParentKeyByNameValue';
@@ -50,7 +50,7 @@ const InitialState = {
   * Note: to ensure that search state is tied to a source data set, set a `key`
   * prop that uniquely identifies the source data.
   *
-  * @param {string} primaryDisplayField The attribute to use for rendering a result
+  * @param {string} getCardTitle The attribute to use for rendering a result
   * @param props.details {array} - An array of objects shaped
   *     `{label: '', variable: ''}` in each search set object.
   * @param props.options {object}
@@ -132,7 +132,7 @@ class Search extends Component {
       className,
       collapsed,
       nodeColor,
-      primaryDisplayField,
+      getCardTitle,
     } = this.props;
 
     const hasInput = this.state.hasInput;
@@ -168,14 +168,8 @@ class Search extends Component {
       return { [field.label]: getEntityAttributes(node)[labelKey] };
     };
 
-    const getLabel = (node) => {
-      const nodeTypeVariables = this.props.nodeTypeDefinition.variables;
-      const labelKey = getParentKeyByNameValue(nodeTypeVariables, primaryDisplayField);
-      return node[entityAttributesProperty][labelKey];
-    };
     const getSelected = node => this.state.selectedResults.indexOf(node) > -1;
     const getDetails = node => details.map(attr => toDetail(node, attr));
-
     return (
       <SearchTransition
         className={searchClasses}
@@ -189,7 +183,7 @@ class Search extends Component {
           <SearchResults
             hasInput={hasInput}
             results={this.state.searchResults}
-            label={getLabel}
+            label={getCardTitle}
             details={getDetails}
             isItemSelected={getSelected}
             onItemClick={item => this.toggleSelectedResult(item)}
@@ -231,7 +225,7 @@ Search.propTypes = {
   clearResultsOnClose: PropTypes.bool,
   closeSearch: PropTypes.func.isRequired,
   collapsed: PropTypes.bool.isRequired,
-  primaryDisplayField: PropTypes.string.isRequired,
+  getCardTitle: PropTypes.func.isRequired,
   excludedNodes: PropTypes.array.isRequired,
   fuse: PropTypes.object.isRequired,
   onComplete: PropTypes.func.isRequired,

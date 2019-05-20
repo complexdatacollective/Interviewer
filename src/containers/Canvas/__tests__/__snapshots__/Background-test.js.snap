@@ -32,8 +32,8 @@ ShallowWrapper {
     "nodeType": "host",
     "props": Object {
       "children": <Connect(withState(lifecycle(mapProps(BackgroundImage))))
+        asset="map.png"
         className="canvas-background__image"
-        url="map.png"
       />,
       "className": "canvas-background",
     },
@@ -43,8 +43,8 @@ ShallowWrapper {
       "key": undefined,
       "nodeType": "class",
       "props": Object {
+        "asset": "map.png",
         "className": "canvas-background__image",
-        "url": "map.png",
       },
       "ref": null,
       "rendered": null,
@@ -59,8 +59,8 @@ ShallowWrapper {
       "nodeType": "host",
       "props": Object {
         "children": <Connect(withState(lifecycle(mapProps(BackgroundImage))))
+          asset="map.png"
           className="canvas-background__image"
-          url="map.png"
         />,
         "className": "canvas-background",
       },
@@ -70,8 +70,8 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "class",
         "props": Object {
+          "asset": "map.png",
           "className": "canvas-background__image",
-          "url": "map.png",
         },
         "ref": null,
         "rendered": null,

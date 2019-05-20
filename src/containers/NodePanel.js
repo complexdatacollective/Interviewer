@@ -125,7 +125,7 @@ const makeMapStateToProps = () => {
     const nodes = getNodes(state, props);
 
     const nodeFilter = props.filter;
-    if (typeof nodeFilter !== 'function') {
+    if (nodeFilter && typeof nodeFilter !== 'function') {
       const filterFunction = customFilter(nodeFilter);
       return filterFunction({
         nodes,

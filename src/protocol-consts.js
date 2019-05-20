@@ -80,6 +80,7 @@ const SkipLogicOperator = Object.freeze({
 // Docs: https://github.com/codaco/Network-Canvas/wiki#interfaces
 const StageType = Object.freeze({
   NameGenerator: 'NameGenerator',
+  NameGeneratorQuickAdd: 'NameGeneratorQuickAdd',
   NameGeneratorList: 'NameGeneratorList',
   NameGeneratorAutoComplete: 'NameGeneratorAutoComplete',
   Sociogram: 'Sociogram',

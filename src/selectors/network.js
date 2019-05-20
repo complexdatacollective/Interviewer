@@ -53,26 +53,12 @@ export const makeGetNodeTypeDefinition = () => createDeepEqualSelector(
 
 // See: https://github.com/codaco/Network-Canvas/wiki/Node-Labeling
 const labelLogic = (codebookForNodeType, nodeAttributes) => {
-  // In the codebook for the stage's subject, look for the displayVariable property
-  // and try to retrieve this value as a key in the node's attributes.
-  const displayVariable = codebookForNodeType && codebookForNodeType.displayVariable;
-  if (displayVariable && nodeAttributes[displayVariable]) {
-    return nodeAttributes[displayVariable];
-  }
-
   // In the codebook for the stage's subject, look for a variable with a name
   // property of "name", and try to retrieve this value by key in the node's
   // attributes
   const variableCalledName = codebookForNodeType && codebookForNodeType.variables && findKey(codebookForNodeType.variables, ['name', 'name']);
   if (variableCalledName && nodeAttributes[variableCalledName]) {
     return nodeAttributes[variableCalledName];
-  }
-
-  // look for a property on the node with a key of ‘displayVariable’, and try to
-  // retrieve this value as a key in the node's attributes.
-  const nodeDisplayVariable = nodeAttributes.displayVariable;
-  if (nodeDisplayVariable && nodeAttributes[nodeDisplayVariable]) {
-    return nodeAttributes[nodeDisplayVariable];
   }
 
   // look for a property on the node with a key of ‘name’, and try to retrieve this
@@ -82,7 +68,14 @@ const labelLogic = (codebookForNodeType, nodeAttributes) => {
     return nodeAttributes[nodeVariableCalledName];
   }
 
-  return 'No label';
+  // First available string variable with a value
+  const fallbackVariable = Object.keys(nodeAttributes).filter(attribute => typeof nodeAttributes[attribute] === 'string');
+  if (fallbackVariable) {
+    return nodeAttributes[fallbackVariable[0]];
+  }
+
+  // Last resort!
+  return 'No label available';
 };
 
 // Gets the node label variable and returns its value, or "No label".

@@ -3,6 +3,7 @@ import React from 'react';
 import { has } from 'lodash';
 import { Icon } from '../../ui/components';
 import NameGenerator from './NameGenerator';
+import NameGeneratorQuickAdd from './NameGeneratorQuickAdd';
 import NameGeneratorAutoComplete from './NameGeneratorAutoComplete';
 import OrdinalBin from './OrdinalBin';
 import NameGeneratorList from './NameGeneratorList';
@@ -19,6 +20,7 @@ import { StageType } from '../../protocol-consts';
 
 const interfaces = {
   [StageType.NameGenerator]: NameGenerator,
+  [StageType.NameGeneratorQuickAdd]: NameGeneratorQuickAdd,
   [StageType.NameGeneratorAutoComplete]: NameGeneratorAutoComplete,
   [StageType.NameGeneratorList]: NameGeneratorList,
   [StageType.Sociogram]: Sociogram,
@@ -46,6 +48,7 @@ const getInterface = (interfaceConfig) => {
 
 export {
   NameGenerator,
+  NameGeneratorQuickAdd,
   NameGeneratorAutoComplete,
   NameGeneratorList,
   Sociogram,

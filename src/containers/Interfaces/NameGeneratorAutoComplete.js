@@ -11,8 +11,8 @@ import { actionCreators as sessionsActions } from '../../ducks/modules/sessions'
 import { actionCreators as searchActions } from '../../ducks/modules/search';
 import { entityAttributesProperty, entityPrimaryKeyProperty } from '../../ducks/modules/network';
 import { makeGetSubjectType, makeNetworkNodesForPrompt, makeGetAdditionalAttributes } from '../../selectors/interface';
-import { getNetworkNodes, makeGetNodeTypeDefinition } from '../../selectors/network';
-import { getCardDisplayLabel, getCardAdditionalProperties, makeGetNodeIconName, makeGetPromptNodeModelData } from '../../selectors/name-generator';
+import { getNetworkNodes, makeGetNodeTypeDefinition, makeGetNodeLabel } from '../../selectors/network';
+import { getCardAdditionalProperties, makeGetNodeIconName, makeGetPromptNodeModelData } from '../../selectors/name-generator';
 import { PromptSwiper } from '../';
 import { NodeBin, NodeList } from '../../components/';
 import getParentKeyByNameValue from '../../utils/getParentKeyByNameValue';
@@ -37,7 +37,7 @@ class NameGeneratorAutoComplete extends Component {
     const {
       closeSearch,
       excludedNodes,
-      labelKey,
+      getCardTitle,
       nodeIconName,
       nodesForPrompt,
       nodeType,
@@ -61,7 +61,7 @@ class NameGeneratorAutoComplete extends Component {
 
     const ListId = 'AUTOCOMPLETE_NODE_LIST';
 
-    const searchOptions = { matchProperties: [], ...prompt.searchOptions };
+    const searchOptions = { matchProperties: [], ...stage.searchOptions };
 
     // Map the matchproperties to add the entity attributes object, and replace names with
     // uuids, where possible.
@@ -100,8 +100,8 @@ class NameGeneratorAutoComplete extends Component {
         <Search
           className={`${baseClass}__search`}
           key={prompt.id}
-          dataSourceKey={prompt.dataSource}
-          primaryDisplayField={labelKey}
+          dataSourceKey={this.props.stage.dataSource}
+          getCardTitle={getCardTitle}
           details={details}
           excludedNodes={excludedNodes}
           nodeType={nodeType}
@@ -130,7 +130,7 @@ NameGeneratorAutoComplete.propTypes = {
   removeNode: PropTypes.func.isRequired,
   closeSearch: PropTypes.func.isRequired,
   excludedNodes: PropTypes.array.isRequired,
-  labelKey: PropTypes.string.isRequired,
+  getCardTitle: PropTypes.func.isRequired,
   newNodeAttributes: PropTypes.object.isRequired,
   newNodeModelData: PropTypes.object.isRequired,
   nodeTypeDefinition: PropTypes.object.isRequired,
@@ -162,11 +162,12 @@ function makeMapStateToProps() {
   const getNodeType = makeGetSubjectType();
   const getNodeIconName = makeGetNodeIconName();
   const getNodeTypeDefinition = makeGetNodeTypeDefinition();
+  const getNodeLabel = makeGetNodeLabel();
 
   return function mapStateToProps(state, props) {
     return {
       excludedNodes: getNetworkNodes(state, props),
-      labelKey: getCardDisplayLabel(state, props),
+      getCardTitle: getNodeLabel(state, props),
       newNodeAttributes: getPromptNodeAttributes(state, props),
       newNodeModelData: getPromptNodeModelData(state, props),
       nodeTypeDefinition: getNodeTypeDefinition(state, { type: props.stage.subject.type }),

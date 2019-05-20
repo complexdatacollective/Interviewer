@@ -5,18 +5,6 @@ import * as NameGen from '../name-generator';
 const mockPrompt = {
   id: 'promptId123',
   text: 'sample protocol',
-  cardOptions: {
-    displayLabel: 'card label',
-    additionalProperties: ['blue'],
-  },
-  sortOptions: {
-    sortableProperties: ['age'],
-    sortOrder: [{
-      property: 'name',
-      direction: 'asc',
-    }],
-  },
-  dataSource: 'schoolPupils',
 };
 
 const mockStage = {
@@ -34,6 +22,18 @@ const mockStage = {
   panels: [
     { foo: 'bar' },
   ],
+  cardOptions: {
+    displayLabel: 'card label',
+    additionalProperties: ['blue'],
+  },
+  sortOptions: {
+    sortableProperties: ['age'],
+    sortOrder: [{
+      property: 'name',
+      direction: 'asc',
+    }],
+  },
+  dataSource: 'schoolPupils',
 };
 
 const mockProtocol = {
@@ -52,11 +52,11 @@ const mockProps = {
 };
 
 const emptyProps = {
-  prompt: {
+  prompt: {},
+  stage: {
     cardOptions: {},
     externalData: {},
   },
-  stage: {},
 };
 
 const personNode = { uid: 1, attributes: { name: 'foo', type: 'person' } };
@@ -108,11 +108,6 @@ describe('name generator selector', () => {
     });
   });
   describe('memoed selectors', () => {
-    it('should get card display label', () => {
-      expect(NameGen.getCardDisplayLabel(mockState, mockProps)).toEqual('card label');
-      expect(NameGen.getCardDisplayLabel(null, emptyProps)).toEqual(undefined);
-    });
-
     it('should get card additional properties', () => {
       expect(NameGen.getCardAdditionalProperties(mockState, mockProps)).toEqual(['blue']);
       expect(NameGen.getCardAdditionalProperties(null, emptyProps)).toEqual([]);

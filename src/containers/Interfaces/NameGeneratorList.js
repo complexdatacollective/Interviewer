@@ -7,9 +7,8 @@ import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { entityPrimaryKeyProperty, getEntityAttributes, entityAttributesProperty } from '../../ducks/modules/network';
 import { makeNetworkNodesForOtherPrompts, makeGetAdditionalAttributes } from '../../selectors/interface';
-import { getNetworkNodes, makeGetNodeTypeDefinition } from '../../selectors/network';
+import { getNetworkNodes, makeGetNodeTypeDefinition, makeGetNodeLabel } from '../../selectors/network';
 import {
-  getCardDisplayLabel,
   getCardAdditionalProperties,
   getSortableFields,
   getInitialSortOrder,
@@ -52,14 +51,6 @@ class NameGeneratorList extends Component {
     this.props.removeNode(node[entityPrimaryKeyProperty]);
   }
 
-  label = (node) => {
-    const attrs = getEntityAttributes(node);
-    const nodeTypeVariables = this.props.nodeTypeDefinition.variables;
-    const labelKey = getParentKeyByNameValue(nodeTypeVariables, this.props.labelKey);
-    return attrs[labelKey];
-  };
-
-
   isNodeSelected = node =>
     !!this.props.selectedNodes
       .find(current => current[entityPrimaryKeyProperty] === node[entityPrimaryKeyProperty]);
@@ -77,7 +68,7 @@ class NameGeneratorList extends Component {
     this.onSubmitNewNode(node);
   };
 
-  details = (node) => {
+  detailsWithVariableUUIDs = (node) => {
     const nodeTypeVariables = this.props.nodeTypeDefinition.variables;
     const attrs = getEntityAttributes(node);
     const fields = this.props.visibleSupplementaryFields;
@@ -89,10 +80,26 @@ class NameGeneratorList extends Component {
     return withUUIDReplacement.map(field => ({ [field.label]: attrs[field.variable] }));
   }
 
+  sortableFieldsWithVariableUUIDs = (sortFields) => {
+    const nodeTypeVariables = this.props.nodeTypeDefinition.variables;
+    return sortFields.map(field => ({
+      ...field,
+      variable: getParentKeyByNameValue(nodeTypeVariables, field.variable),
+    }));
+  }
+
+  initialSortWithVariableUUIDs = (initialSortOrder) => {
+    const nodeTypeVariables = this.props.nodeTypeDefinition.variables;
+    return initialSortOrder.map(rule => ({
+      ...rule,
+      property: getParentKeyByNameValue(nodeTypeVariables, rule.property),
+    }));
+  }
+
   render() {
     const {
       initialSortOrder,
-      labelKey,
+      getCardTitle,
       nodesForList,
       prompt,
       promptBackward,
@@ -116,17 +123,17 @@ class NameGeneratorList extends Component {
         </div>
         <FilterableListWrapper
           key={`select-${prompt.id}`}
-          initialSortOrder={initialSortOrder}
-          sortFields={sortFields}
+          initialSortOrder={this.initialSortWithVariableUUIDs(initialSortOrder)}
+          sortFields={this.sortableFieldsWithVariableUUIDs(sortFields)}
           items={nodesForList}
           ListComponent={CardList}
           listComponentProps={{
             id: `select-${prompt.id}`,
             listId: `select-${prompt.id}`,
-            details: this.details,
+            details: this.detailsWithVariableUUIDs,
             title: prompt.text,
-            label: this.label,
-            labelKey,
+            label: this.props.getCardTitle,
+            getCardTitle,
             onItemClick: this.toggleCard,
             isItemSelected: this.isNodeSelected,
           }}
@@ -139,7 +146,7 @@ class NameGeneratorList extends Component {
 NameGeneratorList.propTypes = {
   addNode: PropTypes.func.isRequired,
   initialSortOrder: PropTypes.array.isRequired,
-  labelKey: PropTypes.string.isRequired,
+  getCardTitle: PropTypes.func.isRequired,
   newNodeAttributes: PropTypes.object.isRequired,
   newNodeModelData: PropTypes.object.isRequired,
   nodesForList: PropTypes.array.isRequired,
@@ -164,15 +171,12 @@ const makeGetNodesForList = () => {
   return (state, props) => {
     const externalNodes = get(props, 'externalData.nodes', []);
 
-    if (!props.stage.showExistingNodes) {
-      return differenceBy(
-        externalNodes,
-        networkNodesForOtherPrompts(state, props),
-        entityPrimaryKeyProperty,
-      );
-    }
-
-    return externalNodes;
+    // Remove nodes nominated elsewhere (previously a prop called 'showExistingNodes')
+    return differenceBy(
+      externalNodes,
+      networkNodesForOtherPrompts(state, props),
+      entityPrimaryKeyProperty,
+    );
   };
 };
 
@@ -181,12 +185,13 @@ function makeMapStateToProps() {
   const getPromptNodeModelData = makeGetPromptNodeModelData();
   const getNodesForList = makeGetNodesForList();
   const getNodeTypeDefinition = makeGetNodeTypeDefinition();
+  const getNodeLabel = makeGetNodeLabel();
 
   return function mapStateToProps(state, props) {
     const nodesForList = getNodesForList(state, props);
 
     return {
-      labelKey: getCardDisplayLabel(state, props),
+      getCardTitle: getNodeLabel(state, props),
       nodeTypeDefinition: getNodeTypeDefinition(state, { type: props.stage.subject.type }),
       newNodeAttributes: getPromptNodeAttributes(state, props),
       newNodeModelData: getPromptNodeModelData(state, props),
@@ -208,6 +213,6 @@ function mapDispatchToProps(dispatch) {
 
 export default compose(
   withPrompt,
-  withExternalData('prompt.dataSource', 'externalData'),
+  withExternalData('stage.dataSource', 'externalData'),
   connect(makeMapStateToProps, mapDispatchToProps),
 )(NameGeneratorList);
