@@ -192,7 +192,7 @@
     },
     "win": {
       "target": "nsis",
-      "certificateSubjectName": "Complex Data Collective"
+      "certificateSha1": "512E5573B1961B0ADCAFB21288935F8A3E6E656F"
     },
     "publish": [
       {
