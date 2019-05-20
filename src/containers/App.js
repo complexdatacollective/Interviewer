@@ -6,7 +6,7 @@ import { withRouter } from 'react-router';
 import cx from 'classnames';
 
 import '../styles/main.scss';
-import { isElectron, isWindows, isMacOS, isLinux } from '../utils/Environment';
+import { isElectron, isWindows, isMacOS, isLinux, isPreview } from '../utils/Environment';
 import DialogManager from '../components/DialogManager';
 
 import MainMenu from '../containers/MainMenu';
@@ -42,6 +42,7 @@ class App extends PureComponent {
         'app--windows': isWindows(),
         'app--macos': isMacOS(),
         'app--linux': isLinux(),
+        'app--preview': isPreview(),
       })}
       >
         <MainMenu />

@@ -1,6 +1,7 @@
 import crypto from 'crypto';
 import { createSelector } from 'reselect';
 import { createDeepEqualSelector } from './utils';
+import { isPreview } from '../utils/Environment';
 import { getActiveSession } from './session';
 import uuidv4 from '../utils/uuid';
 
@@ -47,7 +48,12 @@ export const getRemoteProtocolId = createDeepEqualSelector(
   protocol => nameDigest(protocol.name) || null,
 );
 
-const withFinishStage = stages => (stages && stages.length ? [...stages, DefaultFinishStage] : []);
+const withFinishStage = (stages = []) => {
+  if (!stages) { return []; }
+  if (isPreview()) { return stages; }
+
+  return [...stages, DefaultFinishStage];
+};
 
 export const getProtocolStages = createSelector(
   getActiveProtocol,

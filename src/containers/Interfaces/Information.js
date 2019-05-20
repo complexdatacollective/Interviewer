@@ -73,9 +73,7 @@ const renderItem = (item, index) => {
   );
 };
 
-const renderItems = items => (
-  items ? items.map(renderItem) : null
-);
+const renderItems = items => (items ? items.map(renderItem) : null);
 
 /**
  * Information Interface

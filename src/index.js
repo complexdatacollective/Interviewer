@@ -13,6 +13,7 @@ import { Spinner } from './ui/components';
 import App from './containers/App';
 import { isCordova, isElectron } from './utils/Environment';
 import AppRouter from './routes';
+import remote from './utils/remote';
 
 // This prevents user from being able to drop a file anywhere on the app
 document.addEventListener('drop', (e) => {
@@ -45,6 +46,7 @@ if (isElectron()) {
   const { webFrame } = require('electron'); // eslint-disable-line global-require
   webFrame.setVisualZoomLevelLimits(1, 1); // Prevents pinch-to-zoom
   webFrame.registerURLSchemeAsPrivileged('asset');
+  remote.init();
 }
 
 secureCommsReady.then(() => {

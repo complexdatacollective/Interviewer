@@ -50,4 +50,18 @@
     display: flex;
     position: relative; // do not remove this!
   }
+
+  &--preview {
+    .app-settings {
+      pointer-events: none;
+    }
+
+    .protocol {
+      .timeline {
+        .progress-bar {
+          pointer-events: none;
+        }
+      }
+    }
+  }
 }
