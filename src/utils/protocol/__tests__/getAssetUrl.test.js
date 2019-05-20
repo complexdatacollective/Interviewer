@@ -25,7 +25,9 @@ describe('assetUrl', () => {
     });
 
     it('Generates an asset URL for the protocol', async () => {
-      await expect(assetUrl('foo.canvas', 'bar.mp3')).resolves.toEqual('asset://foo.canvas/assets/bar.mp3');
+      const encodedPath = encodeURIComponent('foo.canvas/assets/bar.mp3');
+      const expectedResult = `asset://${encodedPath}`;
+      await expect(assetUrl('foo.canvas', 'bar.mp3')).resolves.toEqual(expectedResult);
     });
 
     describe('with missing parameters', () => {

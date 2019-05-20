@@ -9,8 +9,9 @@ const appPath = (electron.app || electron.remote.app).getAppPath();
 const registerProtocol = () =>
   electron.protocol.registerFileProtocol('asset', (request, callback) => {
     const file = request.url.substr(8);
-    const appFilePath = path.normalize(path.join(appPath, 'protocols', file));
-    const userDataFilePath = path.normalize(path.join(userDataPath, 'protocols', file));
+    const decodedPath = decodeURIComponent(file);
+    const appFilePath = path.normalize(path.join(appPath, 'protocols', decodedPath));
+    const userDataFilePath = path.normalize(path.join(userDataPath, 'protocols', decodedPath));
 
     // eslint-disable-next-line
     fs.access(appFilePath, fs.constants.R_OK, (err) => {
