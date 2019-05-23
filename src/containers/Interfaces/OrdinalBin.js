@@ -2,6 +2,8 @@ import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { isNil } from 'lodash';
+
 import withPrompt from '../../behaviours/withPrompt';
 import { PromptSwiper, OrdinalBins } from '../';
 import { makeGetPromptVariable, makeNetworkNodesForType } from '../../selectors/interface';
@@ -65,7 +67,7 @@ function makeMapStateToProps() {
 
     return {
       nodesForPrompt: stageNodes.filter(
-        node => !node[entityAttributesProperty][activePromptVariable],
+        node => isNil(node[entityAttributesProperty][activePromptVariable]),
       ),
     };
   };

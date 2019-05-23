@@ -98,7 +98,7 @@ class Narrative extends Component {
     const presets = stage.presets;
     const currentPreset = presets[this.state.presetIndex];
     const layoutVariable = currentPreset.layoutVariable;
-    const highlight = currentPreset.highlight;
+    const highlight = currentPreset.highlight || [];
     const displayEdges = (currentPreset.edges && currentPreset.edges.display) || [];
     const convexHulls = currentPreset.groupVariable;
 
@@ -143,7 +143,7 @@ class Narrative extends Component {
             updatePreset={this.updatePreset}
             presetIndex={this.state.presetIndex}
             subject={subject}
-            highlights={currentPreset.highlight}
+            highlights={highlight}
             highlightIndex={this.state.highlightIndex}
             toggleHighlightIndex={this.toggleHighlightIndex}
             toggleHighlights={this.toggleHighlights}
