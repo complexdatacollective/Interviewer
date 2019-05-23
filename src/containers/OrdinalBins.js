@@ -2,7 +2,9 @@ import React, { PureComponent } from 'react';
 import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { isNil } from 'lodash';
 import color from 'color';
+
 import { makeNetworkNodesForType, makeGetVariableOptions, makeGetPromptVariable } from '../selectors/interface';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { NodeList } from '../components/';
@@ -115,7 +117,7 @@ function makeMapStateToProps() {
         .map((bin) => {
           const nodes = stageNodes.filter(
             node =>
-              node[entityAttributesProperty][activePromptVariable] &&
+              !isNil(node[entityAttributesProperty][activePromptVariable]) &&
               node[entityAttributesProperty][activePromptVariable] === bin.value,
           );
 
