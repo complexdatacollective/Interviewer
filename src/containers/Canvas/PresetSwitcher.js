@@ -33,6 +33,7 @@ class PresetSwitcher extends PureComponent {
       toggleConvex,
       toggleEdges,
       highlightIndex,
+      highlights,
       toggleHighlights,
       toggleHighlightIndex,
       showResetButton,
@@ -40,8 +41,6 @@ class PresetSwitcher extends PureComponent {
       resetInteractions,
       toggleFreeze,
     } = this.props;
-
-    const currentPreset = presets[presetIndex];
 
     const navigationClasses = cx(
       'preset-switcher__navigation ',
@@ -57,7 +56,7 @@ class PresetSwitcher extends PureComponent {
       <div className="preset-switcher">
         <PresetSwitcherKey
           subject={subject}
-          highlights={currentPreset.highlight}
+          highlights={highlights}
           highlightIndex={highlightIndex}
           toggleHighlights={toggleHighlights}
           toggleHighlightIndex={toggleHighlightIndex}
@@ -112,6 +111,7 @@ PresetSwitcher.propTypes = {
   toggleConvex: PropTypes.func.isRequired,
   toggleEdges: PropTypes.func.isRequired,
   highlightIndex: PropTypes.number.isRequired,
+  highlights: PropTypes.array,
   toggleHighlights: PropTypes.func.isRequired,
   toggleHighlightIndex: PropTypes.func.isRequired,
   showResetButton: PropTypes.bool.isRequired,
@@ -123,6 +123,7 @@ PresetSwitcher.propTypes = {
 PresetSwitcher.defaultProps = {
   displayEdges: null,
   convexHulls: null,
+  highlights: [],
   isFreeze: false,
   showFreezeButton: true,
   toggleFreeze: () => {},
