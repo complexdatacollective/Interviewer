@@ -22,24 +22,18 @@ const validateProtocol = (protocol) => {
   return Promise.resolve(protocol);
 };
 
-const parseProtocol = (environment) => {
-  if (environment !== environments.WEB) {
-    // store.dispatch(importActions.parseProtocol());
-    return protocolUID =>
-      readFile(protocolPath(protocolUID, 'protocol.json'))
-        .then(json => JSON.parse(json))
-        .then(data => validateProtocol(data)).catch(validationError)
-        .then((protocol) => {
-          const withUID = {
-            ...protocol,
-            uid: protocolUID,
-          };
-          return withUID;
-        })
-        .catch(openError);
-  }
+const parseProtocol = (protocolUID, name) =>
+  readFile(protocolPath(protocolUID, 'protocol.json'))
+    .then(json => JSON.parse(json))
+    .then(data => validateProtocol(data)).catch(validationError)
+    .then((protocol) => {
+      const withFilename = {
+        ...protocol,
+        name,
+        uid: protocolUID,
+      };
+      return withFilename;
+    })
+    .catch(openError);
 
-  return () => Promise.reject(new Error('parseProtocol() not supported on this platform'));
-};
-
-export default inEnvironment(parseProtocol);
+export default parseProtocol;

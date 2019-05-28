@@ -121,11 +121,22 @@ const cleanUpProtocol = (uid) => {
 
 const cancelledImport = () => Promise.reject(new CancellationError('Import cancelled.'));
 
+const filenameFromURI = uri => uri.split('/').pop().split('#')[0].split('?')[0];
+
+const filenameFromPath = path => path.split(/.*[/|\\]/)[1];
+
+const protocolNameFromFilename = (filename) => {
+  const PROTOCOL_EXTENSION = '.netcanvas';
+  return filename.slice(0, -PROTOCOL_EXTENSION.length);
+};
+
 const catchError = error => Promise.reject(error);
 
 const importProtocolFromURI = (uri, usePairedServer) => (dispatch, getState) => {
   let pairedServer;
   let protocolUid;
+  const filename = filenameFromURI(uri);
+  const protocolName = protocolNameFromFilename(filename);
 
   if (usePairedServer) {
     pairedServer = getState().pairedServer;
@@ -143,7 +154,7 @@ const importProtocolFromURI = (uri, usePairedServer) => (dispatch, getState) => 
       protocolUid = protocolLocation;
       if (getState().importProtocol.step === 0) return cancelledImport();
       dispatch(parseProtocolAction());
-      return parseProtocol(protocolLocation);
+      return parseProtocol(protocolLocation, protocolName);
     }, catchError)
     .then((protocolContent) => {
       if (getState().importProtocol.step === 0) return cancelledImport();
@@ -167,13 +178,16 @@ const importProtocolFromURI = (uri, usePairedServer) => (dispatch, getState) => 
 };
 
 const importProtocolFromFile = filePath => (dispatch, getState) => {
+  const filename = filenameFromPath(filePath);
+  const protocolName = protocolNameFromFilename(filename);
+
   dispatch(importProtocolStartAction());
   dispatch(extractProtocolAction());
   return extractProtocol(filePath)
     .then((protocolLocation) => {
       if (getState().importProtocol.step === 0) return cancelledImport(protocolLocation);
       dispatch(parseProtocolAction());
-      return parseProtocol(protocolLocation);
+      return parseProtocol(protocolLocation, protocolName);
     }, catchError)
     .then((protocolContent) => {
       if (getState().importProtocol.step === 0) return cancelledImport(protocolContent.uid);
