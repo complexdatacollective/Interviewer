@@ -92,7 +92,7 @@
     position: absolute;
     z-index: var(--z-panel);
     left: 50%;
-    transform: translate(-50%, 5rem);
+    transform: translateX(-50%);
     opacity: 0;
     text-align: center;
     display: flex;
@@ -105,7 +105,6 @@
 
     &--show {
       opacity: 1;
-      transform: translate(-50%, 0);
     }
 
     .progress {
@@ -114,6 +113,8 @@
     }
 
   }
+
+
 
 }
 
