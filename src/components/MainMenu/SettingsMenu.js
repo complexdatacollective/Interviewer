@@ -5,6 +5,7 @@ import { Icon, Button } from '../../ui/components';
 import Scroller from '../Scroller';
 import { Toggle, Text } from '../../ui/components/Fields';
 import MenuPanel from './MenuPanel';
+import { isCordova } from '../../utils/protocol/protocol-validation/utils/Environment';
 
 class SettingsMenu extends PureComponent {
   constructor(props) {
@@ -151,7 +152,7 @@ class SettingsMenu extends PureComponent {
                     visible on each screen.
                   </p>
                 </section>
-                <section>
+                {!isCordova() && <section>
                   <Toggle
                     input={{
                       checked: true,
@@ -166,6 +167,7 @@ class SettingsMenu extends PureComponent {
                     the size of the window. Turning it off will use a fixed size.
                   </p>
                 </section>
+                }
                 {isElectron() && <section>
                   <Toggle
                     input={{

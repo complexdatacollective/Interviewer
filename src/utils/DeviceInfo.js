@@ -72,7 +72,7 @@ const deviceDescription = () => {
 };
 
 // Disable dynamic scaling on android because vmin is resized by software keyboard
-const shouldUseDynamicScaling = () => !(isCordova() && device.platform === 'Android');
+const shouldUseDynamicScaling = () => !(isCordova());
 
 export default deviceDescription;
 
