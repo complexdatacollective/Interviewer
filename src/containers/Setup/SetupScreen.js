@@ -67,8 +67,8 @@ class Setup extends Component {
             <img className="toggle-image" src={downArrow} alt="Resume interview" />
             <h4>
               { !this.state.showSessionOverlay ?
-                ('Resume session') :
-                ('Start new interview')
+                ('Manage Interview Sessions') :
+                ('Start New Session')
               }
             </h4>
           </div>
