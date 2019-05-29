@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import { clamp } from 'lodash';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import { isValid, isSubmitting, submit } from 'redux-form';
 import ReactMarkdown from 'react-markdown';
-
+import { isIOS } from '../../utils/Environment';
 import { ProgressBar, Scroller } from '../../components';
 import { Form } from '../../containers';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
@@ -60,7 +61,12 @@ class EgoForm extends Component {
   }
 
   handleScroll = (scrollTop, scrollProgress) => {
-    this.setState({ scrollProgress });
+    // iOS inertial scrolling takes values out of range
+    const clampedScrollProgress = clamp(scrollProgress, 0, 1);
+
+    if (this.state.scrollProgress !== clampedScrollProgress) {
+      this.setState({ scrollProgress: clampedScrollProgress });
+    }
   }
 
   render() {
@@ -73,7 +79,7 @@ class EgoForm extends Component {
     const progressClasses = cx(
       'progress-container',
       {
-        'progress-container--show': this.state.scrollProgress > 0,
+        'progress-container--show': isIOS() || this.state.scrollProgress > 0,
       },
     );
 
@@ -99,7 +105,7 @@ class EgoForm extends Component {
           </Scroller>
         </div>
         <div className={progressClasses}>
-          { this.state.scrollProgress === 1 && (<span className="progress-container__status-text">Click next to continue</span>)}
+          { (!isIOS() && this.state.scrollProgress === 1) && (<span className="progress-container__status-text">Click next to continue</span>)}
           <ProgressBar
             orientation="horizontal"
             percentProgress={this.state.scrollProgress * 100}
