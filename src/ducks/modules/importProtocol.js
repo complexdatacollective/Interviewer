@@ -167,7 +167,7 @@ const importProtocolFromURI = (uri, usePairedServer) => (dispatch, getState) => 
     }, catchError)
     .catch(
       (error) => {
-        cleanUpProtocol(protocolUid); // attempt to clean up files
+        if (protocolUid) cleanUpProtocol(protocolUid); // attempt to clean up files
         if (error instanceof CancellationError) {
           dispatch(resetImportAction());
         } else {
@@ -178,6 +178,7 @@ const importProtocolFromURI = (uri, usePairedServer) => (dispatch, getState) => 
 };
 
 const importProtocolFromFile = filePath => (dispatch, getState) => {
+  let protocolUid;
   const filename = filenameFromPath(filePath);
   const protocolName = protocolNameFromFilename(filename);
 
@@ -185,6 +186,7 @@ const importProtocolFromFile = filePath => (dispatch, getState) => {
   dispatch(extractProtocolAction());
   return extractProtocol(filePath)
     .then((protocolLocation) => {
+      protocolUid = protocolLocation;
       if (getState().importProtocol.step === 0) return cancelledImport(protocolLocation);
       dispatch(parseProtocolAction());
       return parseProtocol(protocolLocation, protocolName);
@@ -200,6 +202,7 @@ const importProtocolFromFile = filePath => (dispatch, getState) => {
     }, catchError)
     .catch(
       (error) => {
+        if (protocolUid) cleanUpProtocol(protocolUid); // attempt to clean up files
         if (error instanceof CancellationError) {
           dispatch(resetImportAction());
         } else {
