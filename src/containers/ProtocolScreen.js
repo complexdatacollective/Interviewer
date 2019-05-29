@@ -171,7 +171,6 @@ Protocol.defaultProps = {
 };
 
 function mapStateToProps(state, ownProps) {
-  const rotateIndex = (max, nextIndex) => (nextIndex + max) % max;
   const maxLength = getProtocolStages(state).length;
   const sessionId = state.activeSessionId;
   const stage = getProtocolStages(state)[ownProps.stageIndex] || {};
@@ -180,13 +179,16 @@ function mapStateToProps(state, ownProps) {
   const stageProgress = stageIndex / (maxLength - 1);
   const promptProgress = stage.prompts ? (promptId / stage.prompts.length) : 0;
 
+  const isLastStage = () => stageIndex + 1 === maxLength;
+  const isFirstStage = () => stageIndex === 0;
+
   return {
     isSessionLoaded: !!state.activeSessionId,
-    nextIndex: rotateIndex(maxLength, stageIndex + 1),
     pathPrefix: `/session/${sessionId}`,
     isSkipped: index => isStageSkipped(index)(state),
     percentProgress: (stageProgress + (promptProgress / (maxLength - 1))) * 100,
-    previousIndex: rotateIndex(maxLength, stageIndex - 1),
+    nextIndex: isLastStage() ? stageIndex : stageIndex + 1,
+    previousIndex: isFirstStage() ? 0 : stageIndex - 1,
     promptId,
     stage,
     stageIndex,
