@@ -99,6 +99,7 @@
     "http-proxy-middleware": "0.17.3",
     "i": "^0.3.6",
     "icon-gen": "^1.2.3",
+    "ios-deploy": "^1.9.4",
     "ios-sim": "^8.0.1",
     "jest": "^22.4.4",
     "jsdoc": "^3.4.3",
