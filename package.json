@@ -99,8 +99,6 @@
     "http-proxy-middleware": "0.17.3",
     "i": "^0.3.6",
     "icon-gen": "^1.2.3",
-    "ios-deploy": "^1.9.4",
-    "ios-sim": "^8.0.1",
     "jest": "^22.4.4",
     "jsdoc": "^3.4.3",
     "jsdoc-babel": "^0.3.0",
@@ -158,6 +156,10 @@
     "whatwg-fetch": "2.0.3",
     "worker-loader": "^2.0.0",
     "xss": "^0.3.4"
+  },
+  "optionalDependencies": {
+    "ios-deploy": "^1.9.4",
+    "ios-sim": "^8.0.1"
   },
   "dependencies": {
     "cordova-android": "^8.0.0",
