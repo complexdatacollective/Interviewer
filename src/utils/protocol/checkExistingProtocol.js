@@ -17,9 +17,9 @@ const renameProtocol = (previousUuid, currentUuid) => {
   .then(() => rename(currentDir, previousDir));
 }
 
-const checkExistingSession = (dispatch, state, protocolContent) => {
+const checkExistingSession = (dispatch, state, currentName) => {
   const existingIndex = findKey(state.installedProtocols,
-    protocol => protocol.name === protocolContent.name);
+    protocol => protocol.name === currentName);
   const unExportedSession = findKey(state.sessions,
     session => session.protocolUID === existingIndex && !session.lastExportedAt);
   if (unExportedSession) {
@@ -34,22 +34,18 @@ const checkExistingSession = (dispatch, state, protocolContent) => {
       type: 'Warning',
       title: 'Overwrite existing protocol?',
       confirmLabel: 'Overwrite protocol',
-      onConfirm: () => {
-        renameProtocol(existingIndex, protocolContent.uid)
-        .then(() => resolve(protocolContent));
-      },
+      onConfirm: () => resolve(existingIndex),
       onCancel: () => reject(new CancellationError('Installation of this protocol cancelled.')),
       message: 'This protocol is already installed. Overwriting the previous installation of this protocol may prevent you from modifying previously created sessions.',
     })));
   }
 
-  if (existingIndex) {
-    // clean up protocol even if no sessions exist
-    return renameProtocol(existingIndex, protocolContent.uid)
-      .then(() => Promise.resolve(protocolContent));
-  }
+  return Promise.resolve(existingIndex);
+}
 
-  return Promise.resolve(protocolContent);
+export const moveToExistingProtocol = (existingIndex, protocolContent) => {
+  return renameProtocol(existingIndex, protocolContent.uid)
+    .then(() => protocolContent);
 }
 
 export default checkExistingSession;

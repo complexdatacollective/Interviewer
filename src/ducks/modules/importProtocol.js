@@ -4,7 +4,7 @@ import { removeDirectory } from '../../utils/filesystem';
 import downloadProtocol from '../../utils/protocol/downloadProtocol';
 import extractProtocol from '../../utils/protocol/extractProtocol';
 import parseProtocol from '../../utils/protocol/parseProtocol';
-import checkExistingProtocol from '../../utils/protocol/checkExistingProtocol';
+import checkExistingProtocol, { moveToExistingProtocol } from '../../utils/protocol/checkExistingProtocol';
 import protocolPath from '../../utils/protocol/protocolPath';
 
 const DOWNLOAD_PROTOCOL = 'DOWNLOAD_PROTOCOL';
@@ -26,29 +26,29 @@ export default function reducer(state = initialState, action = {}) {
     case IMPORT_PROTOCOL_FAILED:
     case RESET_IMPORT:
       return initialState;
+    case CHECK_EXISTING_PROTOCOL:
+      return {
+        statusText: 'Checking for previous installation...',
+        step: 1,
+      };
     case IMPORT_PROTOCOL_START:
       return {
         statusText: 'Initializing protocol import...',
-        step: 1,
+        step: 2,
       };
     case DOWNLOAD_PROTOCOL:
       return {
         statusText: 'Downloading protocol...',
-        step: 2,
+        step: 3,
       };
     case EXTRACT_PROTOCOL:
       return {
         statusText: 'Extracting protocol to temporary storage...',
-        step: 3,
+        step: 4,
       };
     case PARSE_PROTOCOL:
       return {
         statusText: 'Parsing and validating protocol...',
-        step: 4,
-      };
-    case CHECK_EXISTING_PROTOCOL:
-      return {
-        statusText: 'Checking for previous installation...',
         step: 5,
       };
     case IMPORT_PROTOCOL_COMPLETE:
@@ -135,6 +135,7 @@ const catchError = error => Promise.reject(error);
 const importProtocolFromURI = (uri, usePairedServer) => (dispatch, getState) => {
   let pairedServer;
   let protocolUid;
+  let previousUid;
   const filename = filenameFromURI(uri);
   const protocolName = protocolNameFromFilename(filename);
 
@@ -142,9 +143,14 @@ const importProtocolFromURI = (uri, usePairedServer) => (dispatch, getState) => 
     pairedServer = getState().pairedServer;
   }
 
-  dispatch(importProtocolStartAction());
-  dispatch(downloadProtocolAction());
-  return downloadProtocol(uri, pairedServer)
+  dispatch(checkExistingProtocolAction());
+  return checkExistingProtocol(dispatch, getState(), protocolName)
+    .then((existingUid) => {
+      previousUid = existingUid;
+      dispatch(importProtocolStartAction());
+      dispatch(downloadProtocolAction());
+      return downloadProtocol(uri, pairedServer);
+    })
     .then((tempLocation) => {
       if (getState().importProtocol.step === 0) return cancelledImport();
       dispatch(extractProtocolAction());
@@ -158,8 +164,10 @@ const importProtocolFromURI = (uri, usePairedServer) => (dispatch, getState) => 
     }, catchError)
     .then((protocolContent) => {
       if (getState().importProtocol.step === 0) return cancelledImport();
-      dispatch(checkExistingProtocolAction());
-      return checkExistingProtocol(dispatch, getState(), protocolContent);
+      if (previousUid) {
+        return moveToExistingProtocol(previousUid, protocolContent);
+      }
+      return protocolContent;
     })
     .then((protocolContent) => {
       if (getState().importProtocol.step === 0) return cancelledImport();
@@ -179,12 +187,18 @@ const importProtocolFromURI = (uri, usePairedServer) => (dispatch, getState) => 
 
 const importProtocolFromFile = filePath => (dispatch, getState) => {
   let protocolUid;
+  let previousUid;
   const filename = filenameFromPath(filePath);
   const protocolName = protocolNameFromFilename(filename);
 
-  dispatch(importProtocolStartAction());
-  dispatch(extractProtocolAction());
-  return extractProtocol(filePath)
+  dispatch(checkExistingProtocolAction());
+  return checkExistingProtocol(dispatch, getState(), protocolName)
+    .then((existingUid) => {
+      previousUid = existingUid;
+      dispatch(importProtocolStartAction());
+      dispatch(extractProtocolAction());
+      return extractProtocol(filePath);
+    })
     .then((protocolLocation) => {
       protocolUid = protocolLocation;
       if (getState().importProtocol.step === 0) return cancelledImport(protocolLocation);
@@ -193,8 +207,10 @@ const importProtocolFromFile = filePath => (dispatch, getState) => {
     }, catchError)
     .then((protocolContent) => {
       if (getState().importProtocol.step === 0) return cancelledImport(protocolContent.uid);
-      dispatch(checkExistingProtocolAction());
-      return checkExistingProtocol(dispatch, getState(), protocolContent);
+      if (previousUid) {
+        return moveToExistingProtocol(previousUid, protocolContent);
+      }
+      return protocolContent;
     })
     .then((protocolContent) => {
       if (getState().importProtocol.step === 0) return cancelledImport(protocolContent.uid);
