@@ -11,6 +11,7 @@ import DialogManager from '../components/DialogManager';
 
 import MainMenu from '../containers/MainMenu';
 import SettingsMenuButton from '../components/MainMenu/SettingsMenuButton';
+import { isCordova } from '../utils/protocol/protocol-validation/utils/Environment';
 
 /**
   * Main app container.
@@ -19,6 +20,11 @@ import SettingsMenuButton from '../components/MainMenu/SettingsMenuButton';
 class App extends PureComponent {
   componentDidMount() {
     this.setFontSize();
+
+    if (isCordova()) {
+      // Enable viewport shrinking on iOS to mirror behaviour on android.
+      window.Keyboard.shrinkView(true);
+    }
   }
 
   componentDidUpdate() {
@@ -28,8 +34,8 @@ class App extends PureComponent {
   setFontSize = () => {
     const root = document.documentElement;
     const newFontSize = this.props.useDynamicScaling ?
-      `${(1.75 * this.props.interfaceScale) / 100}vmin` :
-      `${(18 * this.props.interfaceScale) / 100}px`;
+      `${(1.65 * this.props.interfaceScale) / 100}vmin` :
+      `${(16 * this.props.interfaceScale) / 100}px`;
 
     root.style.setProperty('--base-font-size', newFontSize);
   }

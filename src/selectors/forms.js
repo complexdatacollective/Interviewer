@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import { get } from 'lodash';
 import { getProtocolCodebook } from './protocol';
 
 // Prop selectors
@@ -11,28 +12,16 @@ const propStageSubject = (_, props) => props.subject || { entity: 'ego' };
 export const rehydrateField = ({ codebook, entity, type, field }) => {
   if (!field.variable) { return field; }
 
-  let entityVars;
+  const entityPath = entity === 'ego' ? [entity] : [entity, type];
 
-  if (entity === 'ego') {
-    entityVars = codebook[entity] ?
-      codebook[entity].variables[field.variable] :
-      {};
-  } else {
-    entityVars = codebook[entity][type] ?
-      codebook[entity][type].variables[field.variable] :
-      {};
-  }
+  const entityProperties = get(codebook, [...entityPath, 'variables', field.variable], {});
 
-  const returnObject = {
-    ...entityVars,
+  return {
+    ...entityProperties,
     name: field.variable,
-    component: field.component,
     fieldLabel: field.prompt,
     value: field.value,
-    validation: field.validation,
   };
-
-  return returnObject;
 };
 
 export const makeRehydrateFields = () =>

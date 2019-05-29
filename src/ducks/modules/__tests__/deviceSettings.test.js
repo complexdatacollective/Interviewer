@@ -32,7 +32,7 @@ describe('deviceSettings reducer', () => {
       global.device = { platform: 'iOS', isVirtual: true };
       const newState = reducer(initialState, { type: actionTypes.DEVICE_READY });
       expect(newState.description).toMatch('iOS');
-      expect(newState.useDynamicScaling).toBe(true);
+      expect(newState.useDynamicScaling).toBe(false);
     });
   });
 

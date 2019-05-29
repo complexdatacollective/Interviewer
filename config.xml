@@ -72,4 +72,5 @@
     <plugin name="cordova-plugin-zeroconf" spec="^1.4.0" />
     <engine name="ios" spec="^5.0.0" />
     <engine name="android" spec="^8.0.0" />
+    <plugin name="cordova-plugin-keyboard" spec="^1.2.0" />
 </widget>
