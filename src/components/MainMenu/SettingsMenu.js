@@ -141,7 +141,7 @@ class SettingsMenu extends PureComponent {
                     type="range"
                     name="scaleFactor"
                     min="80"
-                    max="120"
+                    max="160"
                     value={interfaceScale}
                     onChange={(e) => { setInterfaceScale(parseInt(e.target.value, 10)); }}
                     step="5"
