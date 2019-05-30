@@ -165,7 +165,7 @@ class SessionListContainer extends Component {
             <Button
               onClick={() => this.setState({ showExportSessionsOverlay: true })}
             >
-              Export Selected
+              Upload or Export Selected
             </Button>
           </div>
           }

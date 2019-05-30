@@ -249,7 +249,7 @@ class ExportSessionsOverlay extends PureComponent {
           className={cx('tab', { 'tab--selected': this.state.exportMode === 'server' })}
           onClick={() => this.setState({ exportMode: 'server' })}
         >
-          To Server
+          Upload to Server
         </div>
         <div
           className="tab"
@@ -261,7 +261,7 @@ class ExportSessionsOverlay extends PureComponent {
             });
           }}
         >
-          To file
+          Export to File
         </div>
       </div>
     );
@@ -274,7 +274,7 @@ class ExportSessionsOverlay extends PureComponent {
     return (
       <Overlay
         show={this.props.show}
-        title="Export interview data"
+        title="Upload or Export Interview Data"
         classNames="session-export-overlay"
         onClose={this.props.onClose}
         forceDisableFullScreen
