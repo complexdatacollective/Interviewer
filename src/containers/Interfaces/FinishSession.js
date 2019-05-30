@@ -17,14 +17,14 @@ import { ExportSessionsOverlay } from '../Setup';
 const ExportSection = ({ defaultServer, children }) => (
   <div className="finish-session-interface__section finish-session-interface__section--export">
     <div>
-      <h2>Data Export</h2>
+      <h2>Data Upload</h2>
       { defaultServer ?
         (<p>
-          Export this interview to {defaultServer.name} <br />
+          Upload this interview to {defaultServer.name} <br />
           <small>{defaultServer.secureServiceUrl}</small>
         </p>) :
         (<p>
-          Click export to pair with a computer running Server, and remotely upload this interview.
+          Click upload to pair with a computer running Server, and transfer this interview.
         </p>)
       }
     </div>
@@ -48,7 +48,7 @@ class FinishSession extends Component {
     return (
       <ExportSection defaultServer={defaultServer}>
         <Button onClick={() => this.setState({ showExportSessionOverlay: true })}>
-          Export
+          Upload
         </Button>
       </ExportSection>
     );
@@ -110,8 +110,8 @@ class FinishSession extends Component {
 
           <div className="finish-session-interface__section finish-session-interface__section--download">
             <div>
-              <h2>Data Download</h2>
-              <p>Download network as a <code>.graphml</code> file</p>
+              <h2>Data Export</h2>
+              <p>Export this network as a <code>.graphml</code> file</p>
             </div>
             <div>
               <Button
@@ -120,7 +120,7 @@ class FinishSession extends Component {
                   this.props.codebook, this.handleExportError)
                 }
               >
-                Download
+                Export
               </Button>
             </div>
           </div>

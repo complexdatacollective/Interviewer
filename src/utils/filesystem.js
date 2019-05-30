@@ -61,9 +61,7 @@ const appPath = inEnvironment((environment) => {
 const resolveFileSystemUrl = inEnvironment((environment) => {
   if (environment === environments.CORDOVA) {
     return path =>
-      new Promise((resolve, reject) => {
-        window.resolveLocalFileSystemURL(path, resolve, reject);
-      });
+      new Promise((resolve, reject) => window.resolveLocalFileSystemURL(path, resolve, reject));
   }
 
   throw new Error(`resolveFileSystemUrl() not available on platform ${environment}`);

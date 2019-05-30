@@ -1,6 +1,5 @@
 import { readFile } from '../filesystem';
-import environments from '../environments';
-import inEnvironment from '../Environment';
+import { isCordova } from '../Environment';
 import protocolPath from './protocolPath';
 import { urlForWorkerSource, supportedWorkers } from '../WorkerAgent';
 
@@ -66,32 +65,28 @@ const compileWorker = (src, funcName) => {
  * @description Read custom worker scripts from the protocol package, if any.
  * By preloading any existing, we can bootstrap before protocol.json is parsed.
  */
-const preloadWorkers = environment =>
-  (protocolUID) => {
-    if (environment === environments.WEB) {
-      return Promise.reject(new Error('preloadWorkers() not supported on this platform'));
+const preloadWorkers = (protocolUID) => {
+  return Promise.all(supportedWorkers.map((workerName) => {
+    let workerFile;
+
+    if (isCordova()) {
+      workerFile = `${protocolPath(protocolUID)}${workerName}.js`;
+    } else {
+      workerFile = path.join(protocolPath(protocolUID), `${workerName}.js`);
     }
 
-    return Promise.all(supportedWorkers.map((workerName) => {
-      let workerFile;
-      let promise;
-      if (environment === environments.WEB) {
-        workerFile = `/protocols/${protocolUID}/${workerName}.js`;
-        promise = fetch(workerFile).then(resp => resp.arrayBuffer());
-      } else {
-        workerFile = path.join(protocolPath(protocolUID), `${workerName}.js`);
-        promise = readFile(workerFile);
-      }
-      return promise
-        /**
-         * Load from blob so that script inherits CSP
-         */
-        .then(buf => new TextDecoder().decode(buf))
-        .then(str => compileWorker(str, workerName))
-        .then(source => new Blob([source], { type: 'text/plain' }))
-        .then(blob => urlForWorkerSource(blob))
-        .catch(() => null);
-    }));
-  };
+    const promise = readFile(workerFile);
 
-export default inEnvironment(preloadWorkers);
+    return promise
+      /**
+       * Load from blob so that script inherits CSP
+       */
+      .then(buf => new TextDecoder().decode(buf))
+      .then(str => compileWorker(str, workerName))
+      .then(source => new Blob([source], { type: 'text/plain' }))
+      .then(blob => urlForWorkerSource(blob))
+      .catch(() => null);
+  }));
+};
+
+export default preloadWorkers;
