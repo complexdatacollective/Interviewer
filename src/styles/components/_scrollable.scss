@@ -13,7 +13,7 @@
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
 
-  $scrollbar-height: 1.5rem;
+  $scrollbar-height: 1.25rem;
   $scrollbar-padding: 1rem;
 
   &::-webkit-scrollbar {
@@ -28,12 +28,12 @@
   }
 
   &::-webkit-scrollbar-track {
-    background-color: var(--light-background);
+    background-color: rgba(0, 0, 0, 0.1);
     border-radius: 5rem;
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: var(--transparent-light);
+    background-color: var(--color-cyber-grape);
     border-radius: 5rem;
     min-height: 10rem;
   }
