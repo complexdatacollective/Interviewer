@@ -1,11 +1,10 @@
 /* eslint-env jest */
 const Updater = require('../Updater');
-const dialog = require('../dialog');
+const { dialog } = require('electron');
 
 jest.mock('electron');
 jest.mock('electron-updater');
 jest.mock('electron-log');
-jest.mock('../dialog');
 
 let updater;
 
@@ -33,6 +32,6 @@ describe('updater', () => {
 
   it('shows errors to the user', () => {
     updater.simulate('error', new Error());
-    expect(dialog.showErrorBox).toHaveBeenCalled();
+    expect(dialog.showMessageBox).toHaveBeenCalled();
   });
 });
