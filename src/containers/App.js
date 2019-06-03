@@ -29,7 +29,7 @@ class App extends PureComponent {
     // Spy on window fullscreen status
     if (isElectron()) {
       const win = this.getElectronWindow();
-      win.setFullScreen(this.props.startFullScreen);
+      win.setFullScreen(!!this.props.startFullScreen);
 
       win.on('enter-full-screen', () => {
         this.props.setStartFullScreen(true);
