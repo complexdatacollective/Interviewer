@@ -6,6 +6,7 @@ const initialState = {
   useFullScreenForms: true,
   useDynamicScaling: undefined,
   interfaceScale: 100,
+  showScrollbars: false,
 };
 const mockDescription = 'My Android Tablet';
 const mockSettingToToggle = 'useDynamicScaling';

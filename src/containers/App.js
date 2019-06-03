@@ -39,6 +39,7 @@ class App extends PureComponent {
 
     root.style.setProperty('--base-font-size', newFontSize);
   }
+
   render() {
     const { children } = this.props;
     return (

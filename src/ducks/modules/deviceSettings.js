@@ -13,6 +13,7 @@ const initialState = {
   // useFullScrenForms should be false for most larger devices, and true for most tablets
   useFullScreenForms: !(window.matchMedia('screen and (min-device-aspect-ratio: 8/5), (min-device-height: 1800px)').matches),
   interfaceScale: 100,
+  showScrollbars: false,
 };
 
 // This provides additional default state based on information unavailable before 'deviceready'.
@@ -30,6 +31,7 @@ const getDeviceReadyState = (state) => {
     ...state,
     description,
     useDynamicScaling,
+    showScrollbars: state.showScrollbars,
   };
 };
 

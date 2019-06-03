@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 
@@ -23,11 +24,12 @@ class Scroller extends Component {
     const {
       className,
       children,
+      showScrollbars,
     } = this.props;
 
     return (
       <div
-        className={cx('scrollable', className)}
+        className={cx('scrollable', { 'scrollable--show-scrollbars': showScrollbars }, className)}
         onScroll={this.handleScroll}
         ref={this.scrollable}
       >
@@ -46,6 +48,13 @@ Scroller.propTypes = {
   children: PropTypes.any.isRequired,
   className: PropTypes.string,
   onScroll: PropTypes.func,
+  showScrollbars: PropTypes.bool.isRequired,
 };
 
-export default Scroller;
+function mapStateToProps(state) {
+  return {
+    showScrollbars: state.deviceSettings.showScrollbars,
+  };
+}
+
+export default connect(mapStateToProps)(Scroller);

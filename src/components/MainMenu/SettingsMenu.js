@@ -1,11 +1,10 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { isElectron } from '../../utils/Environment';
+import { isElectron, isCordova, isIOS } from '../../utils/Environment';
 import { Icon, Button } from '../../ui/components';
 import Scroller from '../Scroller';
 import { Toggle, Text } from '../../ui/components/Fields';
 import MenuPanel from './MenuPanel';
-import { isCordova } from '../../utils/protocol/protocol-validation/utils/Environment';
 
 class SettingsMenu extends PureComponent {
   constructor(props) {
@@ -55,6 +54,8 @@ class SettingsMenu extends PureComponent {
       toggleUseDynamicScaling,
       useDynamicScaling,
       setDeviceDescription,
+      showScrollbars,
+      toggleShowScrollbars,
       deviceDescription,
       setInterfaceScale,
       interfaceScale,
@@ -76,6 +77,94 @@ class SettingsMenu extends PureComponent {
           <Scroller>
             <div className="main-menu-settings-menu__form">
               <fieldset>
+                <legend>Display Settings</legend>
+                <section className="full-width">
+                  <label htmlFor="scaleFactor">Interface Scale</label>
+                  <input
+                    type="range"
+                    name="scaleFactor"
+                    min="80"
+                    max="160"
+                    value={interfaceScale}
+                    onChange={(e) => { setInterfaceScale(parseInt(e.target.value, 10)); }}
+                    step="5"
+                  />
+                  <p>
+                    This setting allows you to control the size of the Network Canvas user
+                    interface. Increasing the interface size may limit the amount of information
+                    visible on each screen.
+                  </p>
+                </section>
+                {!isCordova() && <section>
+                  <Toggle
+                    input={{
+                      checked: true,
+                      value: useDynamicScaling,
+                      onChange: toggleUseDynamicScaling,
+                    }}
+                    label="Use dynamic scaling?"
+                    fieldLabel=" "
+                  />
+                  <p>
+                    Dynamic scaling lets Network Canvas resize the user interface proportionally to
+                    the size of the window. Turning it off will use a fixed size.
+                  </p>
+                </section>
+                }
+                {!isIOS() && <section>
+                  <Toggle
+                    input={{
+                      checked: false,
+                      value: showScrollbars,
+                      onChange: toggleShowScrollbars,
+                    }}
+                    label="Show scrollbars on scrollable elements?"
+                    fieldLabel=" "
+                  />
+                  <p>
+                    By default, Network Canvas does not show scrollbars in order to provide
+                    a more streamlined visual experience. If you encounter difficulties with
+                    discoverability or with scrolling behavior, you may enable showing scrollbars
+                    here.
+                  </p>
+                </section>
+                }
+                {isElectron() && <section>
+                  <Toggle
+                    input={{
+                      checked: true,
+                      value: this.state.fullScreenApp,
+                      onChange: this.handleToggleUseFullScreenApp,
+                    }}
+                    label="Run in full screen mode?"
+                    fieldLabel=" "
+                  />
+                  <p>
+                    Network Canvas is designed to run in full screen mode for an
+                    immersive experience. You may disable or enable this mode here.
+                  </p>
+                  <p>
+                    <em><strong>Windows users:</strong> when in full screen mode you
+                    can access the native app menu by passing the <code>alt</code> key.</em>
+                  </p>
+                </section>}
+                <section>
+                  <Toggle
+                    input={{
+                      checked: true,
+                      value: useFullScreenForms,
+                      onChange: toggleUseFullScreenForms,
+                    }}
+                    label="Use full screen node form?"
+                    fieldLabel=" "
+                  />
+                  <p>
+                    The full screen node form is optimized for smaller devices, or devices with
+                    no physical keyboard.
+                  </p>
+                </section>
+              </fieldset>
+              <fieldset>
                 <legend>Device Options</legend>
                 <section>
                   <label htmlFor="deviceName">Device Name</label>
@@ -88,14 +177,14 @@ class SettingsMenu extends PureComponent {
                     label="Device name"
                     fieldLabel=" "
                   />
-                  <p>The device name determines how your device appears to Server.</p>
+                  <p>This is the name that your device will appear as when paring with Server.</p>
                 </section>
                 <section>
                   <Button
                     color="neon-coral"
                     onClick={handleResetAppData}
                   >
-                    Reset Network Canvas data
+                    Reset all Network Canvas data
                   </Button>
                   <p>
                     Click the button above to reset all Network Canvas data. This will erase any
@@ -133,76 +222,6 @@ class SettingsMenu extends PureComponent {
                   </p>
                 </section>
               </fieldset>
-              <fieldset>
-                <legend>Display Settings</legend>
-                <section>
-                  <label htmlFor="scaleFactor">Interface Scale</label>
-                  <input
-                    type="range"
-                    name="scaleFactor"
-                    min="80"
-                    max="160"
-                    value={interfaceScale}
-                    onChange={(e) => { setInterfaceScale(parseInt(e.target.value, 10)); }}
-                    step="5"
-                  />
-                  <p>
-                    This setting allows you to control the size of the Network Canvas user
-                    interface. Increasing the interface size may limit the amount of information
-                    visible on each screen.
-                  </p>
-                </section>
-                {!isCordova() && <section>
-                  <Toggle
-                    input={{
-                      checked: true,
-                      value: useDynamicScaling,
-                      onChange: toggleUseDynamicScaling,
-                    }}
-                    label="Use dynamic scaling?"
-                    fieldLabel=" "
-                  />
-                  <p>
-                    Dynamic scaling lets Network Canvas resize the user interface proportionally to
-                    the size of the window. Turning it off will use a fixed size.
-                  </p>
-                </section>
-                }
-                {isElectron() && <section>
-                  <Toggle
-                    input={{
-                      checked: true,
-                      value: this.state.fullScreenApp,
-                      onChange: this.handleToggleUseFullScreenApp,
-                    }}
-                    label="Run in full screen?"
-                    fieldLabel=" "
-                  />
-                  <p>
-                    Network Canvas is designed to run in full screen mode for an
-                    immersive experience. You may disable or enable this mode here.
-                  </p>
-                  <p>
-                    <em><strong>Windows users:</strong> when in full screen mode you
-                    can access the native app menu by passing the <code>alt</code> key.</em>
-                  </p>
-                </section>}
-                <section>
-                  <Toggle
-                    input={{
-                      checked: true,
-                      value: useFullScreenForms,
-                      onChange: toggleUseFullScreenForms,
-                    }}
-                    label="Use full screen node form?"
-                    fieldLabel=" "
-                  />
-                  <p>
-                    The full screen node form is optimized for smaller devices, or devices with
-                    no physical keyboard.
-                  </p>
-                </section>
-              </fieldset>
             </div>
           </Scroller>
         </div>
@@ -219,9 +238,11 @@ SettingsMenu.propTypes = {
   handleAddMockNodes: PropTypes.func.isRequired,
   shouldShowMocksItem: PropTypes.bool,
   toggleUseFullScreenForms: PropTypes.func.isRequired,
+  toggleShowScrollbars: PropTypes.func.isRequired,
   useFullScreenForms: PropTypes.bool.isRequired,
   toggleUseDynamicScaling: PropTypes.func.isRequired,
   useDynamicScaling: PropTypes.bool.isRequired,
+  showScrollbars: PropTypes.bool.isRequired,
   setDeviceDescription: PropTypes.func.isRequired,
   deviceDescription: PropTypes.string.isRequired,
   setInterfaceScale: PropTypes.func.isRequired,
