@@ -6,12 +6,10 @@ import { withRouter } from 'react-router';
 import cx from 'classnames';
 import { actionCreators as deviceSettingsActions } from '../ducks/modules/deviceSettings';
 import '../styles/main.scss';
-import { isElectron, isWindows, isMacOS, isLinux, isPreview } from '../utils/Environment';
+import { isElectron, isCordova, isWindows, isMacOS, isLinux, isPreview } from '../utils/Environment';
 import DialogManager from '../components/DialogManager';
-
 import MainMenu from '../containers/MainMenu';
 import SettingsMenuButton from '../components/MainMenu/SettingsMenuButton';
-import { isCordova } from '../utils/protocol/protocol-validation/utils/Environment';
 
 /**
   * Main app container.
@@ -27,7 +25,7 @@ class App extends PureComponent {
     }
 
     // Spy on window fullscreen status
-    if (isElectron()) {
+    if (isElectron() && !isPreview()) {
       const win = this.getElectronWindow();
       win.setFullScreen(!!this.props.startFullScreen);
 
