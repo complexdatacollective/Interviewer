@@ -77,66 +77,8 @@ class SettingsMenu extends PureComponent {
           <Scroller>
             <div className="main-menu-settings-menu__form">
               <fieldset>
-                <legend>Device Options</legend>
-                <section>
-                  <label htmlFor="deviceName">Device Name</label>
-                  <Text
-                    input={{
-                      value: deviceDescription,
-                      onChange: e => setDeviceDescription(e.target.value),
-                    }}
-                    name="deviceName"
-                    label="Device name"
-                    fieldLabel=" "
-                  />
-                  <p>The device name determines how your device appears to Server.</p>
-                </section>
-                <section>
-                  <Button
-                    color="neon-coral"
-                    onClick={handleResetAppData}
-                  >
-                    Reset Network Canvas data
-                  </Button>
-                  <p>
-                    Click the button above to reset all Network Canvas data. This will erase any
-                    in-progress interviews, and all application settings.
-                  </p>
-                </section>
-              </fieldset>
-              <fieldset>
-                <legend>Developer Options</legend>
-                {
-                  shouldShowMocksItem &&
-                  <section>
-                    <Button
-                      color="mustard"
-                      onClick={handleAddMockNodes}
-                    >
-                      Add mock nodes
-                    </Button>
-                    <p>
-                      During an active interview session, clicking this button will create
-                      mock nodes for testing purposes.
-                    </p>
-                  </section>
-                }
-                <section>
-                  <Button
-                    color="mustard"
-                    onClick={() => importProtocolFromURI('https://github.com/codaco/development-protocol/releases/download/20190529123247-7c1e58a/development-protocol.netcanvas')}
-                  >
-                    Import development protocol
-                  </Button>
-                  <p>
-                    Clicking this button will import the latest development protocol for this
-                    version of Network Canvas.
-                  </p>
-                </section>
-              </fieldset>
-              <fieldset>
                 <legend>Display Settings</legend>
-                <section>
+                <section className="full-width">
                   <label htmlFor="scaleFactor">Interface Scale</label>
                   <input
                     type="range"
@@ -219,6 +161,64 @@ class SettingsMenu extends PureComponent {
                   <p>
                     The full screen node form is optimized for smaller devices, or devices with
                     no physical keyboard.
+                  </p>
+                </section>
+              </fieldset>
+              <fieldset>
+                <legend>Device Options</legend>
+                <section>
+                  <label htmlFor="deviceName">Device Name</label>
+                  <Text
+                    input={{
+                      value: deviceDescription,
+                      onChange: e => setDeviceDescription(e.target.value),
+                    }}
+                    name="deviceName"
+                    label="Device name"
+                    fieldLabel=" "
+                  />
+                  <p>This is the name that your device will appear as when paring with Server.</p>
+                </section>
+                <section>
+                  <Button
+                    color="neon-coral"
+                    onClick={handleResetAppData}
+                  >
+                    Reset all Network Canvas data
+                  </Button>
+                  <p>
+                    Click the button above to reset all Network Canvas data. This will erase any
+                    in-progress interviews, and all application settings.
+                  </p>
+                </section>
+              </fieldset>
+              <fieldset>
+                <legend>Developer Options</legend>
+                {
+                  shouldShowMocksItem &&
+                  <section>
+                    <Button
+                      color="mustard"
+                      onClick={handleAddMockNodes}
+                    >
+                      Add mock nodes
+                    </Button>
+                    <p>
+                      During an active interview session, clicking this button will create
+                      mock nodes for testing purposes.
+                    </p>
+                  </section>
+                }
+                <section>
+                  <Button
+                    color="mustard"
+                    onClick={() => importProtocolFromURI('https://github.com/codaco/development-protocol/releases/download/20190529123247-7c1e58a/development-protocol.netcanvas')}
+                  >
+                    Import development protocol
+                  </Button>
+                  <p>
+                    Clicking this button will import the latest development protocol for this
+                    version of Network Canvas.
                   </p>
                 </section>
               </fieldset>

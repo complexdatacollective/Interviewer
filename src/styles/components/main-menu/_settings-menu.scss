@@ -17,7 +17,8 @@
   fieldset {
     border: .1rem solid var(--color-platinum);
     border-radius: .75rem;
-    padding: 0 spacing(medium) spacing(small);
+    padding: spacing(medium);
+    margin: spacing(medium);
 
     legend {
       padding: 1rem;
@@ -31,14 +32,19 @@
   }
 
   section {
-    padding: 1rem;
+    padding: 0 1rem;
+    width: 50%;
+    float: left;
+
+    &.full-width {
+      width: 100%;
+    }
   }
 
   &__form {
     margin-top: 0.5em;
     margin-bottom: 1.5rem;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 1rem;
+    display: flex;
+    flex-direction: column;
   }
 }
