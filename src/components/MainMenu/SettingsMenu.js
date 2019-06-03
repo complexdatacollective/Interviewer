@@ -11,10 +11,6 @@ class SettingsMenu extends PureComponent {
     super(props);
 
     this.electronWindow = this.getElectronWindow();
-
-    this.state = {
-      fullScreenApp: this.electronWindow && this.electronWindow.isFullScreen(),
-    };
   }
 
   getElectronWindow = () => {
@@ -29,16 +25,12 @@ class SettingsMenu extends PureComponent {
     if (this.electronWindow) {
       if (this.electronWindow.isFullScreen()) {
         this.electronWindow.setFullScreen(false);
-        this.setState({
-          fullScreenApp: false,
-        });
       } else {
         this.electronWindow.setFullScreen(true);
-        this.setState({
-          fullScreenApp: true,
-        });
       }
     }
+
+    this.props.toggleStartFullScreen();
   }
 
   render() {
@@ -56,6 +48,7 @@ class SettingsMenu extends PureComponent {
       setDeviceDescription,
       showScrollbars,
       toggleShowScrollbars,
+      startFullScreen,
       deviceDescription,
       setInterfaceScale,
       interfaceScale,
@@ -132,8 +125,8 @@ class SettingsMenu extends PureComponent {
                 {isElectron() && <section>
                   <Toggle
                     input={{
-                      checked: true,
-                      value: this.state.fullScreenApp,
+                      checked: !!startFullScreen,
+                      value: startFullScreen,
                       onChange: this.handleToggleUseFullScreenApp,
                     }}
                     label="Run in full screen mode?"
@@ -239,9 +232,11 @@ SettingsMenu.propTypes = {
   shouldShowMocksItem: PropTypes.bool,
   toggleUseFullScreenForms: PropTypes.func.isRequired,
   toggleShowScrollbars: PropTypes.func.isRequired,
+  toggleStartFullScreen: PropTypes.func.isRequired,
   useFullScreenForms: PropTypes.bool.isRequired,
   toggleUseDynamicScaling: PropTypes.func.isRequired,
   useDynamicScaling: PropTypes.bool.isRequired,
+  startFullScreen: PropTypes.bool.isRequired,
   showScrollbars: PropTypes.bool.isRequired,
   setDeviceDescription: PropTypes.func.isRequired,
   deviceDescription: PropTypes.string.isRequired,

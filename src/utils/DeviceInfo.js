@@ -1,5 +1,5 @@
 /* globals device */
-import { isCordova, isElectron } from './Environment';
+import { isCordova, isElectron, isWindows } from './Environment';
 
 const versioned = name => `${name} - ${device.version || '?'}`;
 
@@ -52,6 +52,9 @@ const iosDescription = () => {
     case (/iPad7,(1|2)/.test(model)): return versioned('iPad Pro (12.9", 2nd gen)');
     case (/iPad7,(3|4)/.test(model)): return versioned('iPad Pro (10.5")');
     case (/iPad7,(7|5)/.test(model)): return versioned('iPad Pro (6th gen)');
+    case (/iPad8,(1|2|3|4)/.test(model)): return versioned('iPad Pro (11")');
+    case (/iPad8,(5|6|7|8)/.test(model)): return versioned('iPad Pro (12.9", 3rd gen)');
+    case (/iPad11,(3|4)/.test(model)): return versioned('iPad Air (3rd gen)');
     case (/iPad/.test(model)): return versioned('iPad');
     case (/iPhone/.test(model)): return versioned('iPhone');
     default: return versioned('iOS device');
@@ -74,9 +77,14 @@ const deviceDescription = () => {
 // Disable dynamic scaling on android because vmin is resized by software keyboard
 const shouldUseDynamicScaling = () => !isCordova();
 
+// Everything apart from Windows should start fullscreen. Windows full screen UI
+// is too confusing for users.
+const shouldStartFullScreen = () => !isWindows();
+
 export default deviceDescription;
 
 export {
   deviceDescription,
   shouldUseDynamicScaling,
+  shouldStartFullScreen,
 };
