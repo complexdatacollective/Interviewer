@@ -80,6 +80,29 @@ class FinishSession extends Component {
     });
   }
 
+  handleFinishSession = () => {
+    if (this.state.deleteAfterExport) {
+      this.props.openDialog({
+        type: 'Warning',
+        title: 'Finish and delete?',
+        confirmLabel: 'Finish and delete',
+        onConfirm: () => this.props.endSession(this.state.deleteAfterExport),
+        message: (
+          <React.Fragment>
+            <p>
+              You have the &quot;Delete this session after finishing&quot; option enabled.
+              Continuing will delete this interview session, regardless of if you have uploaded or
+              exported it.
+            </p>
+            <p>Are you sure you want to continue?</p>
+          </React.Fragment>
+        ),
+      });
+    } else {
+      this.props.endSession(this.state.deleteAfterExport);
+    }
+  };
+
   render() {
     return (
       <div className="interface finish-session-interface">
@@ -135,7 +158,7 @@ class FinishSession extends Component {
             fieldLabel=" "
           />
           <div className="finish-session-interface__section finish-session-interface__section--buttons">
-            <Button onClick={() => this.props.endSession(this.state.deleteAfterExport)}>
+            <Button onClick={this.handleFinishSession}>
               Finish
             </Button>
           </div>
