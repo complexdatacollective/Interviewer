@@ -162,9 +162,14 @@
     .getting-started {
       padding: unit(6);
       background: var(--light-background);
+      display: flex;
       flex-direction: column;
       width: 60vw;
       border-radius: var(--border-radius);
+
+      &__header {
+        text-align: center;
+      }
     }
   }
 }

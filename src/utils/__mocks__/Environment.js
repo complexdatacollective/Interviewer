@@ -10,6 +10,8 @@ export const isIOS = () => isCordova() && (/iOS/i).test(window.device.platform);
 
 export const isAndroid = () => isCordova() && (/Android/i).test(window.device.platform);
 
+export const isWindows = () => false;
+
 export const isPreview = () => false;
 
 export const isWeb = () => (!isCordova() && !isElectron());

@@ -1,8 +1,9 @@
-import { deviceDescription, shouldUseDynamicScaling } from '../../utils/DeviceInfo';
+import { deviceDescription, shouldUseDynamicScaling, shouldStartFullScreen } from '../../utils/DeviceInfo';
 
 const SET_DESCRIPTION = 'SETTINGS/SET_DESCRIPTION';
 const SET_INTERFACE_SCALE = 'SETTINGS/SET_INTERFACE_SCALE';
 const TOGGLE_SETTING = 'SETTINGS/TOGGLE_SETTING';
+const SET_SETTING = 'SETTINGS/SET_SETTING';
 const DEVICE_READY = 'DEVICE_READY';
 
 // getDeviceReadyState() may provide better defaults once more is known about the device.
@@ -14,6 +15,7 @@ const initialState = {
   useFullScreenForms: !(window.matchMedia('screen and (min-device-aspect-ratio: 8/5), (min-device-height: 1800px)').matches),
   interfaceScale: 100,
   showScrollbars: false,
+  startFullScreen: shouldStartFullScreen(),
 };
 
 // This provides additional default state based on information unavailable before 'deviceready'.
@@ -27,11 +29,13 @@ const getDeviceReadyState = (state) => {
   if (useDynamicScaling === initialState.useDynamicScaling) {
     useDynamicScaling = shouldUseDynamicScaling();
   }
+
   return {
     ...state,
     description,
     useDynamicScaling,
     showScrollbars: state.showScrollbars,
+
   };
 };
 
@@ -53,6 +57,11 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         [action.item]: !state[action.item],
+      };
+    case SET_SETTING:
+      return {
+        ...state,
+        [action.setting]: action.value,
       };
     default:
       return state;
@@ -78,11 +87,18 @@ const toggleSetting = item => ({
   item,
 });
 
+const setSetting = (setting, value) => ({
+  type: SET_SETTING,
+  setting,
+  value,
+});
+
 const actionCreators = {
   deviceReady,
   setDescription,
   setInterfaceScale,
   toggleSetting,
+  setSetting,
 };
 
 const actionTypes = {
@@ -90,6 +106,7 @@ const actionTypes = {
   SET_DESCRIPTION,
   SET_INTERFACE_SCALE,
   TOGGLE_SETTING,
+  SET_SETTING,
 };
 
 export {

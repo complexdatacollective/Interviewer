@@ -4,7 +4,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import cx from 'classnames';
-
+import { actionCreators as deviceSettingsActions } from '../ducks/modules/deviceSettings';
 import '../styles/main.scss';
 import { isElectron, isWindows, isMacOS, isLinux, isPreview } from '../utils/Environment';
 import DialogManager from '../components/DialogManager';
@@ -25,6 +25,20 @@ class App extends PureComponent {
       // Enable viewport shrinking on iOS to mirror behaviour on android.
       window.Keyboard.shrinkView(true);
     }
+
+    // Spy on window fullscreen status
+    if (isElectron()) {
+      const win = this.getElectronWindow();
+      win.setFullScreen(this.props.startFullScreen);
+
+      win.on('enter-full-screen', () => {
+        this.props.setStartFullScreen(true);
+      });
+
+      win.on('leave-full-screen', () => {
+        this.props.setStartFullScreen(false);
+      });
+    }
   }
 
   componentDidUpdate() {
@@ -38,6 +52,14 @@ class App extends PureComponent {
       `${(16 * this.props.interfaceScale) / 100}px`;
 
     root.style.setProperty('--base-font-size', newFontSize);
+  }
+
+  getElectronWindow = () => {
+    if (isElectron()) {
+      const electron = window.require('electron');
+      return electron.remote.getCurrentWindow();
+    }
+    return false;
   }
 
   render() {
@@ -73,20 +95,27 @@ App.propTypes = {
   children: PropTypes.any,
   interfaceScale: PropTypes.number.isRequired,
   useDynamicScaling: PropTypes.bool.isRequired,
+  startFullScreen: PropTypes.bool.isRequired,
+  setStartFullScreen: PropTypes.func.isRequired,
 };
 
 App.defaultProps = {
   children: null,
 };
 
+const mapDispatchToProps = dispatch => ({
+  setStartFullScreen: value => dispatch(deviceSettingsActions.setSetting('startFullScreen', value)),
+});
+
 function mapStateToProps(state) {
   return {
     interfaceScale: state.deviceSettings.interfaceScale,
     useDynamicScaling: state.deviceSettings.useDynamicScaling,
+    startFullScreen: state.deviceSettings.startFullScreen,
   };
 }
 
 export default compose(
   withRouter,
-  connect(mapStateToProps),
+  connect(mapStateToProps, mapDispatchToProps),
 )(App);

@@ -45,6 +45,7 @@ const mapDispatchToProps = dispatch => ({
   toggleUseFullScreenForms: () => dispatch(deviceSettingsActions.toggleSetting('useFullScreenForms')),
   toggleUseDynamicScaling: () => dispatch(deviceSettingsActions.toggleSetting('useDynamicScaling')),
   toggleShowScrollbars: () => dispatch(deviceSettingsActions.toggleSetting('showScrollbars')),
+  toggleStartFullScreen: () => dispatch(deviceSettingsActions.toggleSetting('startFullScreen')),
   setInterfaceScale: scale => dispatch(deviceSettingsActions.setInterfaceScale(scale)),
 });
 
@@ -56,6 +57,7 @@ const mapStateToProps = state => ({
   useFullScreenForms: state.deviceSettings.useFullScreenForms,
   useDynamicScaling: state.deviceSettings.useDynamicScaling,
   showScrollbars: state.deviceSettings.showScrollbars,
+  startFullScreen: state.deviceSettings.startFullScreen,
   deviceDescription: state.deviceSettings.description,
   interfaceScale: state.deviceSettings.interfaceScale,
 });
