@@ -44,6 +44,7 @@ const mapDispatchToProps = dispatch => ({
   setDeviceDescription: name => dispatch(deviceSettingsActions.setDescription(name)),
   toggleUseFullScreenForms: () => dispatch(deviceSettingsActions.toggleSetting('useFullScreenForms')),
   toggleUseDynamicScaling: () => dispatch(deviceSettingsActions.toggleSetting('useDynamicScaling')),
+  toggleShowScrollbars: () => dispatch(deviceSettingsActions.toggleSetting('showScrollbars')),
   setInterfaceScale: scale => dispatch(deviceSettingsActions.setInterfaceScale(scale)),
 });
 
@@ -54,6 +55,7 @@ const mapStateToProps = state => ({
   additionalMockAttributes: getAdditionalAttributesForCurrentPrompt(state),
   useFullScreenForms: state.deviceSettings.useFullScreenForms,
   useDynamicScaling: state.deviceSettings.useDynamicScaling,
+  showScrollbars: state.deviceSettings.showScrollbars,
   deviceDescription: state.deviceSettings.description,
   interfaceScale: state.deviceSettings.interfaceScale,
 });

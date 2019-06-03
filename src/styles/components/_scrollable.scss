@@ -1,7 +1,7 @@
 @mixin scroller-mask($top-height: $scroller-top-padding) {
-  $bottom-height: 1rem;
+  $bottom-height: 2rem;
   $opaque: rgba(0, 0, 0, 1);
-  mask-image: linear-gradient(180deg, transparent, $opaque $bottom-height, $opaque calc(100% - #{$bottom-height}), transparent 100%);
+  mask-image: linear-gradient(180deg, transparent, $opaque $top-height, $opaque calc(100% - #{$bottom-height}), transparent 100%);
 }
 
 .scrollable {
@@ -13,33 +13,40 @@
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
 
-  $scrollbar-height: 1.25rem;
-  $scrollbar-padding: 1rem;
-
   &::-webkit-scrollbar {
-    width: (($scrollbar-padding * 2) + $scrollbar-height);
-    background-color: rgba(255,255,255,0);
-  }
-
-  &::-webkit-scrollbar-track,
-  &::-webkit-scrollbar-thumb {
-    border: $scrollbar-padding solid rgba(255,255,255,0);
-    background-clip: padding-box;
-  }
-
-  &::-webkit-scrollbar-track {
-    background-color: rgba(0, 0, 0, 0.1);
-    border-radius: 5rem;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: var(--color-cyber-grape);
-    border-radius: 5rem;
-    min-height: 10rem;
-  }
-
-
-  &::-webkit-scrollbar-button {
     display: none;
   }
+
+  &--show-scrollbars {
+    $scrollbar-height: 1.25rem;
+    $scrollbar-padding: 1rem;
+
+    &::-webkit-scrollbar {
+      display: block;
+      width: (($scrollbar-padding * 2) + $scrollbar-height);
+      background-color: rgba(255, 255, 255, 0); //sass-lint:disable-line no-color-literals
+    }
+
+    &::-webkit-scrollbar-track,
+    &::-webkit-scrollbar-thumb {
+      border: $scrollbar-padding solid rgba(255, 255, 255, 0); //sass-lint:disable-line no-color-literals
+      background-clip: padding-box;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: rgba(0, 0, 0, 0.1); //sass-lint:disable-line no-color-literals
+      border-radius: 5rem;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--color-cyber-grape);
+      border-radius: 5rem;
+      min-height: 10rem;
+    }
+
+    &::-webkit-scrollbar-button {
+      display: none;
+    }
+  }
+
 }

@@ -41,10 +41,7 @@ ShallowWrapper {
         <div
           className="alter-form__form-container"
         >
-          <Scroller
-            className=""
-            onScroll={[Function]}
-          >
+          <Connect(Scroller)>
             <Connect(AutoInitialisedForm)
               autoFocus={false}
               className="alter-form__form"
@@ -56,7 +53,7 @@ ShallowWrapper {
               title="alpha"
               type="person"
             />
-          </Scroller>
+          </Connect(Scroller)>
         </div>
       </div>,
       "className": "swiper-slide",
@@ -74,10 +71,7 @@ ShallowWrapper {
           <div
             className="alter-form__form-container"
           >
-            <Scroller
-              className=""
-              onScroll={[Function]}
-            >
+            <Connect(Scroller)>
               <Connect(AutoInitialisedForm)
                 autoFocus={false}
                 className="alter-form__form"
@@ -89,7 +83,7 @@ ShallowWrapper {
                 title="alpha"
                 type="person"
               />
-            </Scroller>
+            </Connect(Scroller)>
           </div>,
         ],
         "className": "slide-content",
@@ -112,10 +106,7 @@ ShallowWrapper {
           "key": undefined,
           "nodeType": "host",
           "props": Object {
-            "children": <Scroller
-              className=""
-              onScroll={[Function]}
-            >
+            "children": <Connect(Scroller)>
               <Connect(AutoInitialisedForm)
                 autoFocus={false}
                 className="alter-form__form"
@@ -127,7 +118,7 @@ ShallowWrapper {
                 title="alpha"
                 type="person"
               />
-            </Scroller>,
+            </Connect(Scroller)>,
             "className": "alter-form__form-container",
           },
           "ref": null,
@@ -147,8 +138,6 @@ ShallowWrapper {
                 title="alpha"
                 type="person"
               />,
-              "className": "",
-              "onScroll": [Function],
             },
             "ref": null,
             "rendered": Object {
@@ -194,10 +183,7 @@ ShallowWrapper {
           <div
             className="alter-form__form-container"
           >
-            <Scroller
-              className=""
-              onScroll={[Function]}
-            >
+            <Connect(Scroller)>
               <Connect(AutoInitialisedForm)
                 autoFocus={false}
                 className="alter-form__form"
@@ -209,7 +195,7 @@ ShallowWrapper {
                 title="alpha"
                 type="person"
               />
-            </Scroller>
+            </Connect(Scroller)>
           </div>
         </div>,
         "className": "swiper-slide",
@@ -227,10 +213,7 @@ ShallowWrapper {
             <div
               className="alter-form__form-container"
             >
-              <Scroller
-                className=""
-                onScroll={[Function]}
-              >
+              <Connect(Scroller)>
                 <Connect(AutoInitialisedForm)
                   autoFocus={false}
                   className="alter-form__form"
@@ -242,7 +225,7 @@ ShallowWrapper {
                   title="alpha"
                   type="person"
                 />
-              </Scroller>
+              </Connect(Scroller)>
             </div>,
           ],
           "className": "slide-content",
@@ -265,10 +248,7 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "host",
             "props": Object {
-              "children": <Scroller
-                className=""
-                onScroll={[Function]}
-              >
+              "children": <Connect(Scroller)>
                 <Connect(AutoInitialisedForm)
                   autoFocus={false}
                   className="alter-form__form"
@@ -280,7 +260,7 @@ ShallowWrapper {
                   title="alpha"
                   type="person"
                 />
-              </Scroller>,
+              </Connect(Scroller)>,
               "className": "alter-form__form-container",
             },
             "ref": null,
@@ -300,8 +280,6 @@ ShallowWrapper {
                   title="alpha"
                   type="person"
                 />,
-                "className": "",
-                "onScroll": [Function],
               },
               "ref": null,
               "rendered": Object {

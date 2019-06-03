@@ -1,11 +1,10 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { isElectron } from '../../utils/Environment';
+import { isElectron, isCordova, isIOS } from '../../utils/Environment';
 import { Icon, Button } from '../../ui/components';
 import Scroller from '../Scroller';
 import { Toggle, Text } from '../../ui/components/Fields';
 import MenuPanel from './MenuPanel';
-import { isCordova } from '../../utils/protocol/protocol-validation/utils/Environment';
 
 class SettingsMenu extends PureComponent {
   constructor(props) {
@@ -55,6 +54,8 @@ class SettingsMenu extends PureComponent {
       toggleUseDynamicScaling,
       useDynamicScaling,
       setDeviceDescription,
+      showScrollbars,
+      toggleShowScrollbars,
       deviceDescription,
       setInterfaceScale,
       interfaceScale,
@@ -168,6 +169,24 @@ class SettingsMenu extends PureComponent {
                   </p>
                 </section>
                 }
+                {!isIOS() && <section>
+                  <Toggle
+                    input={{
+                      checked: false,
+                      value: showScrollbars,
+                      onChange: toggleShowScrollbars,
+                    }}
+                    label="Show scrollbars on scrollable elements?"
+                    fieldLabel=" "
+                  />
+                  <p>
+                    By default, Network Canvas does not show scrollbars in order to provide
+                    a more streamlined visual experience. If you encounter difficulties with
+                    discoverability or with scrolling behavior, you may enable showing scrollbars
+                    here.
+                  </p>
+                </section>
+                }
                 {isElectron() && <section>
                   <Toggle
                     input={{
@@ -175,7 +194,7 @@ class SettingsMenu extends PureComponent {
                       value: this.state.fullScreenApp,
                       onChange: this.handleToggleUseFullScreenApp,
                     }}
-                    label="Run in full screen?"
+                    label="Run in full screen mode?"
                     fieldLabel=" "
                   />
                   <p>
@@ -219,9 +238,11 @@ SettingsMenu.propTypes = {
   handleAddMockNodes: PropTypes.func.isRequired,
   shouldShowMocksItem: PropTypes.bool,
   toggleUseFullScreenForms: PropTypes.func.isRequired,
+  toggleShowScrollbars: PropTypes.func.isRequired,
   useFullScreenForms: PropTypes.bool.isRequired,
   toggleUseDynamicScaling: PropTypes.func.isRequired,
   useDynamicScaling: PropTypes.bool.isRequired,
+  showScrollbars: PropTypes.bool.isRequired,
   setDeviceDescription: PropTypes.func.isRequired,
   deviceDescription: PropTypes.string.isRequired,
   setInterfaceScale: PropTypes.func.isRequired,
