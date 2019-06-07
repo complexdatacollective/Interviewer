@@ -45,6 +45,9 @@ class Protocol extends Component {
       while (this.props.isSkipped(skipToIndex)) {
         skipToIndex += 1;
       }
+      if (skipToIndex > this.props.maxLength - 1) {
+        skipToIndex = this.props.stageIndex;
+      }
 
       this.props.changeStage(`${this.props.pathPrefix}/${skipToIndex}`);
     } else {
@@ -67,6 +70,10 @@ class Protocol extends Component {
       while (this.props.isSkipped(skipToIndex)) {
         skipToIndex -= 1;
       }
+      if (skipToIndex < 0) {
+        skipToIndex = this.props.stageIndex;
+      }
+
       this.props.changeStage(`${this.props.pathPrefix}/${skipToIndex}`);
     } else {
       this.props.promptBackward();
@@ -150,6 +157,7 @@ Protocol.propTypes = {
   isLastPrompt: PropTypes.func.isRequired,
   isSkipped: PropTypes.func.isRequired,
   isSessionLoaded: PropTypes.bool.isRequired,
+  maxLength: PropTypes.number,
   nextIndex: PropTypes.number.isRequired,
   pathPrefix: PropTypes.string,
   percentProgress: PropTypes.number,
@@ -168,6 +176,7 @@ Protocol.defaultProps = {
   promptId: 0,
   stageBackward: false,
   stageIndex: 0,
+  maxLength: 1,
 };
 
 function mapStateToProps(state, ownProps) {
@@ -192,6 +201,7 @@ function mapStateToProps(state, ownProps) {
     promptId,
     stage,
     stageIndex,
+    maxLength,
   };
 }
 
