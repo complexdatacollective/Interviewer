@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { isEmpty } from 'lodash';
+import { isEmpty, get } from 'lodash';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { FilterableListWrapper, SessionList, NodeBin } from '../../components';
@@ -104,8 +104,12 @@ class SessionListContainer extends Component {
               getKey: sessionInfo => sessionInfo.uuid,
               progress: (sessionInfo) => {
                 const session = sessionInfo[entityAttributesProperty];
-                const protocolStages = installedProtocols[session.protocolUID].stages.length;
-                return Math.round((oneBasedIndex(session.stageIndex) / (protocolStages + 1)) * 100);
+                const protocolStages = get(installedProtocols, [session.protocolUID, 'stages'], []);
+                const numberOfProtocolStages = oneBasedIndex(protocolStages.length);
+
+                return Math.round(
+                  (oneBasedIndex(session.stageIndex) / numberOfProtocolStages) * 100,
+                );
               },
               details: (sessionInfo) => {
                 const session = sessionInfo[entityAttributesProperty];
