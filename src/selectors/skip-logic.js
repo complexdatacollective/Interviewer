@@ -57,6 +57,16 @@ export const isStageSkipped = index => createSelector(
   (logic, action, results) => {
     if (!logic) return false;
 
+    // Handle skipLogic with no rules defined differently depending on action.
+    // skipLogic.action === SHOW <- always show the stage
+    // skipLogic.action === SKIP <- always skip the stage
+    // Allows for a quick way to disable a stage by setting SKIP if, and then
+    // not defining rules.
+    // Should be changed with https://github.com/codaco/Architect/issues/517
+    if (!logic.filter.rules || !logic.filter.rules.length === 0) {
+      console.warn('Encountered skip logic with no rules defined at index', index); // eslint-disable-line no-console
+      return !!action;
+    }
     const outerQuery = results.nodes.length > 0;
     return !!logic && ((action && outerQuery) || (!action && !outerQuery));
   },
