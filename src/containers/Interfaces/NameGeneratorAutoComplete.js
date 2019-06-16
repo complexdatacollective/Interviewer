@@ -29,7 +29,12 @@ class NameGeneratorAutoComplete extends Component {
       ...result,
     }));
 
-    this.props.batchAddNodes(withNewModelData, this.props.newNodeAttributes);
+    this.props.batchAddNodes(
+      withNewModelData,
+      this.props.newNodeAttributes,
+      this.props.stage.subject.type,
+    );
+
     this.props.closeSearch();
   }
 

@@ -69,6 +69,8 @@ class Updater {
 
   checkForUpdates(notifyOnNoUpdates = true) {
     this.notifyOnNoUpdates = !!notifyOnNoUpdates;
+
+    // TOTO: If we are offline, don't try to check for updates.
     autoUpdater.checkForUpdates();
   }
 }

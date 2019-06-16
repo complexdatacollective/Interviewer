@@ -132,7 +132,6 @@ export default function reducer(state = initialState, action = {}) {
           state.nodes.concat(action.nodeList.map(node => nodeWithModelandAttributeData(
             node,
             action.attributeData,
-            action.registryForTypes[node.type],
           )))
         )(),
       };
