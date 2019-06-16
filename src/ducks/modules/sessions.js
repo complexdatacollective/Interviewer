@@ -1,4 +1,4 @@
-import { omit, each, map } from 'lodash';
+import { omit, map } from 'lodash';
 import { actionCreators as SessionWorkerActions } from './sessionWorkers';
 import uuidv4 from '../../utils/uuid';
 import network, { actionTypes as networkActionTypes, entityPrimaryKeyProperty } from './network';
@@ -124,35 +124,6 @@ export default function reducer(state = initialState, action = {}) {
 }
 
 /**
- * Add a batch of nodes to the state.
- *
- * @param {Collection} [nodeList] An array of objects representing nodes to add.
- * @param {Object} [attributeData] Attribute data that will be merged with each node
- *
- * @memberof! NetworkActionCreators
- */
-const batchAddNodes = (nodeList, attributeData) => (dispatch, getState) => {
-  const { activeSessionId, sessions, installedProtocols } = getState();
-
-  const activeProtocol = installedProtocols[sessions[activeSessionId].protocolUID];
-  const nodeRegistry = activeProtocol.codebook.node;
-  const nodeTypes = map(nodeList, 'type');
-
-  const registryForTypes = {};
-  each(nodeTypes, (nodeType) => {
-    registryForTypes[nodeType] = nodeRegistry[nodeType].variables;
-  });
-
-  dispatch({
-    type: networkActionTypes.BATCH_ADD_NODES,
-    sessionId: activeSessionId,
-    nodeList,
-    attributeData,
-    registryForTypes,
-  });
-};
-
-/**
  * This function generates default values for all variables in the variable registry for this node
  * type.
  *
@@ -169,6 +140,34 @@ const getDefaultAttributesForEntityType = (registryForType = {}) => {
   });
 
   return defaultAttributesObject;
+};
+
+/**
+ * Add a batch of nodes to the state.
+ *
+ * @param {Collection} [nodeList] An array of objects representing nodes to add.
+ * @param {Object} [attributeData] Attribute data that will be merged with each node
+ * @param {String} [type] A node type ID
+ *
+ * @memberof! NetworkActionCreators
+ */
+const batchAddNodes = (nodeList, attributeData, type) => (dispatch, getState) => {
+  const { activeSessionId, sessions, installedProtocols } = getState();
+
+  const activeProtocol = installedProtocols[sessions[activeSessionId].protocolUID];
+  const nodeRegistry = activeProtocol.codebook.node;
+
+  const registryForType = nodeRegistry[type].variables;
+
+  dispatch({
+    type: networkActionTypes.BATCH_ADD_NODES,
+    sessionId: activeSessionId,
+    nodeList,
+    attributeData: {
+      ...getDefaultAttributesForEntityType(registryForType),
+      ...attributeData,
+    },
+  });
 };
 
 const addNode = (modelData, attributeData = {}) => (dispatch, getState) => {
