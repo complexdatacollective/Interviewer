@@ -1,6 +1,6 @@
 {
   "name": "network-canvas",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "productName": "Network Canvas",
   "description": "Simplifying complex network data collection.",
   "author": "Complex Data Collective",
@@ -67,7 +67,7 @@
     "css-loader": "0.28.4",
     "csvtojson": "^2.0.8",
     "detect-port": "1.1.0",
-    "dotenv": "4.0.0",
+    "dotenv": "4.0.1",
     "electron": "^2.0.18",
     "electron-builder": "^20.34.0",
     "electron-installer-dmg": "^2.0.0",
