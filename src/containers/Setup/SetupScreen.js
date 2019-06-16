@@ -5,8 +5,9 @@ import { Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import cx from 'classnames';
-import networkCanvasLogo from '../../images/NC-Round.svg';
-import projectLogo from '../../images/NC-Mark.svg';
+import { isIOS } from '../../utils/Environment';
+import projectLogo from '../../images/project-logo.svg';
+import betaProjectLogo from '../../images/project-logo-beta.svg';
 import downArrow from '../../images/down-arrow.svg';
 import { Icon } from '../../ui/components';
 import { ProtocolList, ProtocolImportOverlay, SessionListContainer, ImportProgressOverlay } from '.';
@@ -55,8 +56,7 @@ class Setup extends Component {
         />
         <div className={setupClassnames}>
           <div className="setup__header">
-            <img src={networkCanvasLogo} className="logo setup__header--logo" alt="Network Canvas" />
-            <h1 className="type--title-1 setup__header--title">Network Canvas</h1>
+            <img src={isIOS() ? projectLogo : betaProjectLogo} className="logo setup__header--logo" alt="Network Canvas" />
           </div>
           <main className="setup__main">
             <ProtocolList />
@@ -76,7 +76,6 @@ class Setup extends Component {
         </div>
         { !this.state.showSessionOverlay &&
         (<React.Fragment>
-          <img className="setup__project-logo" src={projectLogo} alt="Network Canvas" />
           <Icon
             name="add-a-protocol"
             className="setup__server-button"
