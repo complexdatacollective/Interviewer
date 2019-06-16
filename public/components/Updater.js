@@ -53,14 +53,18 @@ class Updater {
   }
 
   onError(error) {
-    const detail = error ? (error.stack || error).toString() : 'An unknown error occurred';
-    log.error(detail);
-    dialog.showMessageBox({
-      title: 'Error',
-      message: 'Download Complete',
-      detail: 'There was an error checking for updates. You may need to update this app manually.',
-      buttons: ['Okay'],
-    });
+    if (this.notifyOnNoUpdates) {
+      const detail = error ? (error.stack || error).toString() : 'An unknown error occurred';
+      log.error(detail);
+      dialog.showMessageBox({
+        title: 'Error',
+        message: 'Download Complete',
+        detail: 'There was an error checking for updates. You may need to update this app manually.',
+        buttons: ['Okay'],
+      });
+    } else {
+      log.error('There was an error checking for updates (did not notify user).');
+    }
   }
 
   simulate(event, handler) {
