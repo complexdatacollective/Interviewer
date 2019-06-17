@@ -1,12 +1,11 @@
 /* eslint-env jest */
 
-const mockHandlers = {};
+const EventEmitter = require('events').EventEmitter;
 
-const autoUpdater = {
-  simulate: (name, ...args) => mockHandlers[name] && mockHandlers[name](...args),
-  checkForUpdatesAndNotify: jest.fn(),
-  checkForUpdates: jest.fn().mockResolvedValue({}),
-  on: jest.fn((name, cb) => { mockHandlers[name] = cb; }),
-};
+const autoUpdater = new EventEmitter();
+autoUpdater.autoDownload = true;
+autoUpdater.checkForUpdates = jest.fn();
+autoUpdater.downloadUpdate = jest.fn();
+autoUpdater.quitAndInstall = jest.fn();
 
 module.exports = { autoUpdater };

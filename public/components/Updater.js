@@ -3,7 +3,6 @@
 const { autoUpdater } = require('electron-updater');
 const { dialog } = require('electron');
 const log = require('./log');
-const EventEmitter = require('events').EventEmitter;
 
 global.silentUpdates = false;
 
@@ -11,7 +10,10 @@ const releasesUrl = 'https://github.com/codaco/Network-Canvas/releases';
 
 class Updater {
   constructor() {
-    this.events = new EventEmitter();
+    this.setup();
+  }
+
+  setup() {
     autoUpdater.autoDownload = false;
     autoUpdater.on('error', this.onError);
     autoUpdater.on('update-available', this.onUpdateAvailable);
@@ -62,7 +64,7 @@ class Updater {
     log.error(detail);
 
     if (global.silentUpdates) {
-      log.info('Did not notify user');
+      log.info('Update Error (Did not notify user)');
       return;
     }
 
@@ -74,10 +76,6 @@ class Updater {
     });
   }
 
-  simulate(event, handler) {
-    autoUpdater.simulate(event, handler);
-  }
-
   checkForUpdates(silent = false) {
     global.silentUpdates = !!silent;
 
@@ -85,5 +83,13 @@ class Updater {
   }
 }
 
-module.exports = Updater;
+const getUpdater = () => {
+  if (!global.updater) {
+    global.updater = new Updater();
+  }
+
+  return global.updater;
+};
+
+module.exports = getUpdater;
 
