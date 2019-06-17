@@ -3,17 +3,22 @@
 const { autoUpdater } = require('electron-updater');
 const { dialog } = require('electron');
 const log = require('./log');
-const EventEmitter = require('events').EventEmitter;
+
+global.silentUpdates = false;
+
+const releasesUrl = 'https://github.com/codaco/Network-Canvas/releases';
 
 class Updater {
   constructor() {
-    this.releasesUrl = 'https://github.com/codaco/Network-Canvas/releases';
-    this.events = new EventEmitter();
+    this.setup();
+  }
+
+  setup() {
     autoUpdater.autoDownload = false;
     autoUpdater.on('error', this.onError);
-    autoUpdater.on('update-available', this.onUpdateAvailable.bind(this));
+    autoUpdater.on('update-available', this.onUpdateAvailable);
     autoUpdater.on('update-downloaded', this.onUpdateDownloaded);
-    autoUpdater.on('update-not-available', this.onUpdateNotAvailable.bind(this));
+    autoUpdater.on('update-not-available', this.onUpdateNotAvailable);
   }
 
   onUpdateAvailable(updateInfo) {
@@ -21,7 +26,7 @@ class Updater {
       type: 'question',
       title: 'Update Available',
       message: 'Do you want update now?',
-      detail: `Version ${updateInfo.releaseName} is available.\n\nRelease notes are available at:\n${this.releasesUrl}\n\nClick 'Download and Restart' to fetch this update and install it. Ensure you have exported or backed up any important data before continuing.`,
+      detail: `Version ${updateInfo.releaseName} is available.\n\nRelease notes are available at:\n${releasesUrl}\n\nClick 'Download and Restart' to fetch this update and install it. Ensure you have exported or backed up any important data before continuing.`,
       buttons: ['Download and Restart', 'Cancel'],
     },
     (buttonIndex) => {
@@ -32,14 +37,15 @@ class Updater {
   }
 
   onUpdateNotAvailable() {
-    if (this.notifyOnNoUpdates) {
-      dialog.showMessageBox({
-        title: 'No Updates Available',
-        message: 'Network Canvas is up-to-date.',
-      });
-    } else {
+    if (global.silentUpdates) {
       log.info('No updates available (did not notify user).');
+      return;
     }
+
+    dialog.showMessageBox({
+      title: 'No Updates Available',
+      message: 'Network Canvas is up-to-date.',
+    });
   }
 
   onUpdateDownloaded() {
@@ -54,7 +60,14 @@ class Updater {
 
   onError(error) {
     const detail = error ? (error.stack || error).toString() : 'An unknown error occurred';
+
     log.error(detail);
+
+    if (global.silentUpdates) {
+      log.info('Update Error (Did not notify user)');
+      return;
+    }
+
     dialog.showMessageBox({
       title: 'Error',
       message: 'Download Complete',
@@ -63,17 +76,20 @@ class Updater {
     });
   }
 
-  simulate(event, handler) {
-    autoUpdater.simulate(event, handler);
-  }
+  checkForUpdates(silent = false) {
+    global.silentUpdates = !!silent;
 
-  checkForUpdates(notifyOnNoUpdates = true) {
-    this.notifyOnNoUpdates = !!notifyOnNoUpdates;
-
-    // TOTO: If we are offline, don't try to check for updates.
     autoUpdater.checkForUpdates();
   }
 }
 
-module.exports = Updater;
+const getUpdater = () => {
+  if (!global.updater) {
+    global.updater = new Updater();
+  }
+
+  return global.updater;
+};
+
+module.exports = getUpdater;
 

@@ -10,11 +10,11 @@ const openFile = window =>
       .catch(err => console.log(err));
 
 
-const updater = new Updater();
+const updater = Updater();
 
 // Check for updates once, when the mainMenu is initialized.
 // Don't notify the user if there aren't updates.
-updater.checkForUpdates(false);
+updater.checkForUpdates(true);
 
 const MenuTemplate = (window) => {
   const menu = [
