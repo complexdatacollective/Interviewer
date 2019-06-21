@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
+import { get } from 'lodash';
 import PropTypes from 'prop-types';
 
 import { getProtocolStages } from '../../selectors/protocol';
@@ -106,7 +107,7 @@ class Narrative extends Component {
     const concentricCircles = stage.background && stage.background.concentricCircles;
     const skewedTowardCenter = stage.background && stage.background.skewedTowardCenter;
     const allowRepositioning = stage.behaviours && stage.behaviours.allowRepositioning;
-    const freeDraw = stage.behaviours && stage.behaviours.freeDraw;
+    const freeDraw = get(stage, 'behaviours.freeDraw', false);
 
     const showResetButton = this.state.activeAnnotations || this.state.activeFocusNodes;
 
