@@ -106,7 +106,7 @@ class Narrative extends Component {
     const backgroundImage = stage.background && stage.background.image;
     const concentricCircles = stage.background && stage.background.concentricCircles;
     const skewedTowardCenter = stage.background && stage.background.skewedTowardCenter;
-    const allowRepositioning = stage.behaviours && stage.behaviours.allowRepositioning;
+    const allowRepositioning = get(stage, 'behaviours.allowRepositioning', false);
     const freeDraw = get(stage, 'behaviours.freeDraw', false);
 
     const showResetButton = this.state.activeAnnotations || this.state.activeFocusNodes;
