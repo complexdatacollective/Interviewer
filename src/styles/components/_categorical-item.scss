@@ -1,4 +1,10 @@
+@mixin clip {
+  border-radius: 50%;
+  overflow: hidden;
+}
+
 .categorical-item {
+  @include clip;
   --categorical-item-color: var(--primary);
   display: flex;
   width: 100%;
@@ -6,11 +12,11 @@
   position: relative;
 
   .categorical-item__disk {
+    @include clip;
     @include transition-properties((background-color transform), var(--animation-easing), var(--animation-duration-standard));
     transform-origin: center;
     background-color: var(--background);
     border: solid .3rem var(--categorical-item-color);
-    border-radius: 50%;
     position: absolute;
     top: 0;
     left: 0;
@@ -19,6 +25,7 @@
   }
 
   .categorical-item__inner {
+    @include clip;
     position: absolute;
     top: 0;
     left: 0;
@@ -47,6 +54,7 @@
   }
 
   &__title {
+    @include clip;
     align-items: center;
     display: flex;
     flex: 1;

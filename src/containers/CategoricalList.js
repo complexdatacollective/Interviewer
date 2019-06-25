@@ -127,8 +127,9 @@ class CategoricalList extends Component {
     return null;
   };
 
-  handleExpandBin = (e, binValue) => {
+  handleExpandBin = (e, binValue = '') => {
     if (e) e.stopPropagation();
+
     this.setState({
       expandedBinValue: binValue,
     });
@@ -158,6 +159,7 @@ class CategoricalList extends Component {
         className="categorical-list__item"
         style={itemSize}
         key={bin.value}
+        onClick={this.handleExpandBin}
       >
         <CategoricalItem
           id={`CATBIN_ITEM_${this.props.stage.id}_${this.props.prompt.id}_${bin.value}`}
@@ -202,7 +204,7 @@ class CategoricalList extends Component {
       <div
         className={listClasses}
         ref={this.categoricalListElement}
-        onClick={e => this.handleExpandBin(e, '')}
+        onClick={this.handleExpandBin}
       >
         <Flipper
           flipKey={this.state.expandedBinValue}
@@ -234,7 +236,6 @@ function makeMapStateToProps() {
   const getCategoricalValues = makeGetVariableOptions();
   const getPromptVariable = makeGetPromptVariable();
   const getStageNodes = makeNetworkNodesForType();
-
 
   return function mapStateToProps(state, props) {
     const stageNodes = getStageNodes(state, props);
