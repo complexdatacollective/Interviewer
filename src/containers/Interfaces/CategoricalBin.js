@@ -1,12 +1,23 @@
 import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { withStateHandlers } from 'recompose';
 import PropTypes from 'prop-types';
 import withPrompt from '../../behaviours/withPrompt';
 import { PromptSwiper, CategoricalList } from '../';
 import { makeGetPromptVariable, makeNetworkNodesForType } from '../../selectors/interface';
 import { MultiNodeBucket } from '../../components';
 import { entityAttributesProperty } from '../../ducks/modules/network';
+
+const categoricalBinStateHandler = withStateHandlers(
+  {
+    expandedBinValue: '',
+  },
+  {
+    handleExpandBin: () =>
+      (expandedBinValue = '') => ({ expandedBinValue }),
+  },
+);
 
 /**
   * CategoricalBin Interface
@@ -16,6 +27,8 @@ const CategoricalBin = ({
   promptBackward,
   prompt,
   nodesForPrompt,
+  expandedBinValue,
+  handleExpandBin,
   stage,
 }) => {
   const {
@@ -31,7 +44,7 @@ const CategoricalBin = ({
           prompts={prompts}
         />
       </div>
-      <div className="categorical-bin-interface__bucket">
+      <div className="categorical-bin-interface__bucket" onClick={() => handleExpandBin()}>
         <MultiNodeBucket
           nodes={nodesForPrompt}
           listId={`${stage.id}_${prompt.id}_CAT_BUCKET`}
@@ -39,7 +52,13 @@ const CategoricalBin = ({
         />
       </div>
       <hr />
-      <CategoricalList key={prompt.id} stage={stage} prompt={prompt} />
+      <CategoricalList
+        key={prompt.id}
+        stage={stage}
+        prompt={prompt}
+        expandedBinValue={expandedBinValue}
+        onExpandBin={handleExpandBin}
+      />
     </div>
   );
 };
@@ -74,4 +93,5 @@ export { CategoricalBin as UnconnectedCategoricalBin };
 export default compose(
   withPrompt,
   connect(makeMapStateToProps),
+  categoricalBinStateHandler,
 )(CategoricalBin);
