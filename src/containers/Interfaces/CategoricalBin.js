@@ -69,6 +69,8 @@ CategoricalBin.propTypes = {
   promptForward: PropTypes.func.isRequired,
   promptBackward: PropTypes.func.isRequired,
   nodesForPrompt: PropTypes.array.isRequired,
+  expandedBinValue: PropTypes.string.isRequired,
+  handleExpandBin: PropTypes.func.isRequired,
 };
 
 function makeMapStateToProps() {

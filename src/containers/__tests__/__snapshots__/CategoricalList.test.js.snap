@@ -25,6 +25,7 @@ ShallowWrapper {
         },
       ]
     }
+    expandedBinValue=""
     getLabel={[Function]}
     isDragging={false}
     meta={Object {}}

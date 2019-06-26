@@ -220,6 +220,8 @@ CategoricalList.propTypes = {
   prompt: PropTypes.object.isRequired,
   stage: PropTypes.object.isRequired,
   updateNode: PropTypes.func.isRequired,
+  expandedBinValue: PropTypes.string.isRequired,
+  onExpandBin: PropTypes.func.isRequired,
 };
 
 CategoricalList.defaultProps = {
