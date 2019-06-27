@@ -25,6 +25,7 @@ ShallowWrapper {
         },
       ]
     }
+    expandedBinValue=""
     getLabel={[Function]}
     isDragging={false}
     meta={Object {}}
@@ -60,6 +61,7 @@ ShallowWrapper {
       >
         <div
           className="categorical-list__item"
+          onClick={[Function]}
           style={
             Object {
               "height": "undefinedpx",
@@ -87,6 +89,7 @@ ShallowWrapper {
         </div>
         <div
           className="categorical-list__item"
+          onClick={[Function]}
           style={
             Object {
               "height": "undefinedpx",
@@ -129,6 +132,7 @@ ShallowWrapper {
           Array [
             <div
               className="categorical-list__item"
+              onClick={[Function]}
               style={
                 Object {
                   "height": "undefinedpx",
@@ -156,6 +160,7 @@ ShallowWrapper {
             </div>,
             <div
               className="categorical-list__item"
+              onClick={[Function]}
               style={
                 Object {
                   "height": "undefinedpx",
@@ -211,6 +216,7 @@ ShallowWrapper {
               sortOrder={undefined}
             />,
             "className": "categorical-list__item",
+            "onClick": [Function],
             "style": Object {
               "height": "undefinedpx",
               "width": "undefinedpx",
@@ -264,6 +270,7 @@ ShallowWrapper {
               sortOrder={undefined}
             />,
             "className": "categorical-list__item",
+            "onClick": [Function],
             "style": Object {
               "height": "undefinedpx",
               "width": "undefinedpx",
@@ -313,6 +320,7 @@ ShallowWrapper {
         >
           <div
             className="categorical-list__item"
+            onClick={[Function]}
             style={
               Object {
                 "height": "undefinedpx",
@@ -340,6 +348,7 @@ ShallowWrapper {
           </div>
           <div
             className="categorical-list__item"
+            onClick={[Function]}
             style={
               Object {
                 "height": "undefinedpx",
@@ -382,6 +391,7 @@ ShallowWrapper {
             Array [
               <div
                 className="categorical-list__item"
+                onClick={[Function]}
                 style={
                   Object {
                     "height": "undefinedpx",
@@ -409,6 +419,7 @@ ShallowWrapper {
               </div>,
               <div
                 className="categorical-list__item"
+                onClick={[Function]}
                 style={
                   Object {
                     "height": "undefinedpx",
@@ -464,6 +475,7 @@ ShallowWrapper {
                 sortOrder={undefined}
               />,
               "className": "categorical-list__item",
+              "onClick": [Function],
               "style": Object {
                 "height": "undefinedpx",
                 "width": "undefinedpx",
@@ -517,6 +529,7 @@ ShallowWrapper {
                 sortOrder={undefined}
               />,
               "className": "categorical-list__item",
+              "onClick": [Function],
               "style": Object {
                 "height": "undefinedpx",
                 "width": "undefinedpx",

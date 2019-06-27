@@ -52,9 +52,6 @@ class CategoricalList extends Component {
   constructor(props) {
     super(props);
     this.categoricalListElement = React.createRef();
-    this.state = {
-      expandedBinValue: '',
-    };
   }
 
   componentWillMount() {
@@ -113,7 +110,7 @@ class CategoricalList extends Component {
     const itemSize = getItemSize(
       bounds,
       this.props.bins.length,
-      !!this.state.expandedBinValue,
+      !!this.props.expandedBinValue,
     );
 
     return {
@@ -129,9 +126,8 @@ class CategoricalList extends Component {
 
   handleExpandBin = (e, binValue) => {
     if (e) e.stopPropagation();
-    this.setState({
-      expandedBinValue: binValue,
-    });
+
+    this.props.onExpandBin(binValue);
   }
 
   handleDrop = ({ meta }, binValue) => {
@@ -149,7 +145,7 @@ class CategoricalList extends Component {
   renderCategoricalBin = (bin, index, sizes) => {
     const binDetails = this.getDetails(bin.nodes);
 
-    const itemSize = bin.value === this.state.expandedBinValue ?
+    const itemSize = bin.value === this.props.expandedBinValue ?
       { width: `${sizes.expandedSize}px`, height: `${sizes.expandedSize}px` } :
       { width: `${sizes.itemSize}px`, height: `${sizes.itemSize}px` };
 
@@ -158,6 +154,7 @@ class CategoricalList extends Component {
         className="categorical-list__item"
         style={itemSize}
         key={bin.value}
+        onClick={this.handleExpandBin}
       >
         <CategoricalItem
           id={`CATBIN_ITEM_${this.props.stage.id}_${this.props.prompt.id}_${bin.value}`}
@@ -167,7 +164,7 @@ class CategoricalList extends Component {
           onDrop={item => this.handleDrop(item, bin.value)}
           onClick={e => this.handleExpandBin(e, bin.value)}
           details={binDetails}
-          isExpanded={this.state.expandedBinValue === bin.value}
+          isExpanded={this.props.expandedBinValue === bin.value}
           nodes={bin.nodes}
           sortOrder={this.props.prompt.binSortOrder}
         />
@@ -179,7 +176,7 @@ class CategoricalList extends Component {
     const listClasses = cx(
       'categorical-list',
       `categorical-list--items--${this.props.bins.length}`,
-      { 'categorical-list--expanded': this.state.expandedBinValue },
+      { 'categorical-list--expanded': this.props.expandedBinValue },
     );
 
     const sizes = this.getSizes();
@@ -190,22 +187,22 @@ class CategoricalList extends Component {
 
     const expandedBin = categoricalBins
       .filter((bin, index) =>
-        this.props.bins[index].value === this.state.expandedBinValue,
+        this.props.bins[index].value === this.props.expandedBinValue,
       );
 
     const otherBins = categoricalBins
       .filter((bin, index) =>
-        this.props.bins[index].value !== this.state.expandedBinValue,
+        this.props.bins[index].value !== this.props.expandedBinValue,
       );
 
     return (
       <div
         className={listClasses}
         ref={this.categoricalListElement}
-        onClick={e => this.handleExpandBin(e, '')}
+        onClick={this.handleExpandBin}
       >
         <Flipper
-          flipKey={this.state.expandedBinValue}
+          flipKey={this.props.expandedBinValue}
           className="categorical-list__items"
         >
           {expandedBin}
@@ -223,6 +220,8 @@ CategoricalList.propTypes = {
   prompt: PropTypes.object.isRequired,
   stage: PropTypes.object.isRequired,
   updateNode: PropTypes.func.isRequired,
+  expandedBinValue: PropTypes.string.isRequired,
+  onExpandBin: PropTypes.func.isRequired,
 };
 
 CategoricalList.defaultProps = {
@@ -234,7 +233,6 @@ function makeMapStateToProps() {
   const getCategoricalValues = makeGetVariableOptions();
   const getPromptVariable = makeGetPromptVariable();
   const getStageNodes = makeNetworkNodesForType();
-
 
   return function mapStateToProps(state, props) {
     const stageNodes = getStageNodes(state, props);

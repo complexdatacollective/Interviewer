@@ -10,6 +10,7 @@ const mockProps = {
   stage: { id: 1 },
   prompt: { id: 1 },
   getLabel: () => 'label',
+  expandedBinValue: '',
 };
 
 describe('CategoricalList component', () => {

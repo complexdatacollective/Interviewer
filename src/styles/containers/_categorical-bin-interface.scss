@@ -22,6 +22,7 @@
   &__bucket {
     display: flex;
     flex: 0 0 var(--categorical-bucket-basis);
+    justify-content: center;
 
     .node {
       font-size: calc(var(--base-node-size) * .66);
@@ -29,6 +30,7 @@
 
     .node-list {
       padding: 0;
+      width: auto;
     }
   }
 }
