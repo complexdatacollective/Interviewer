@@ -1,6 +1,5 @@
 const { dialog } = require('electron');
 const Updater = require('./Updater');
-const appUrl = require('./appURL');
 const { openDialog } = require('./dialogs');
 
 const openFile = window =>
@@ -34,9 +33,7 @@ const MenuTemplate = (window) => {
               buttons: ['Reset Data', 'Cancel'],
             }, (response) => {
               if (response === 0) {
-                window.webContents.session.clearStorageData({}, () => {
-                  window.loadURL(appUrl);
-                });
+                window.webContents.send('RESET_STATE');
               }
             });
           },
