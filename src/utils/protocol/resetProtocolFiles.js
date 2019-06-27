@@ -8,7 +8,7 @@ const resetProtocolFiles = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
     const path = require('path');
 
-    return (protocolUID, filePath = '') => {
+    return () => {
       const protocolsPath = path.join(userDataPath(), 'protocols');
       return removeDirectory(protocolsPath);
     };
