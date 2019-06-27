@@ -1,6 +1,6 @@
 /* eslint-disable global-require */
 
-import { isArray } from 'lodash';
+import { isArray, isString } from 'lodash';
 import environments from '../environments';
 import inEnvironment from '../Environment';
 import { userDataPath, appPath } from '../filesystem';

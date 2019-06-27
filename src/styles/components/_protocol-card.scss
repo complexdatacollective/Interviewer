@@ -1,6 +1,7 @@
 $component: 'protocol-card';
 
 .#{$component} {
+  position: relative;
   align-items: center;
   background-color: var(--color-platinum);
   border-radius: var(--border-radius);
@@ -22,5 +23,20 @@ $component: 'protocol-card';
 
   &__name {
     text-align: center;
+  }
+
+  &__delete {
+    position: absolute;
+    top: unit(1.5);
+    right: unit(1.5);
+    padding: unit(.5);
+
+    .icon {
+      height: unit(1.5);
+
+      .cls-1 {
+        fill: var(--link);
+      }
+    }
   }
 }

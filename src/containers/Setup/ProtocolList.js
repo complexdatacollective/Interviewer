@@ -9,6 +9,7 @@ import { NewSessionOverlay, ProtocolCard } from '../../components/Setup';
 import { actionCreators as sessionActions } from '../../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { actionCreators as importProtocolActions } from '../../ducks/modules/importProtocol';
+import { actionCreators as installedProtocolsActions } from '../../ducks/modules/installedProtocols';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
 
 /**
@@ -42,6 +43,10 @@ class ProtocolList extends Component {
 
   handleSwipe = (index) => {
     this.props.updateProtocolIndex(index);
+  }
+
+  handleDeleteProtocol = (protocolUID) => {
+    this.props.deleteProtocol(protocolUID);
   }
 
   render() {
@@ -87,6 +92,7 @@ class ProtocolList extends Component {
                 <ProtocolCard
                   protocol={protocol}
                   selectProtocol={() => this.onClickProtocolCard(protocol.uuid)}
+                  onDelete={() => this.handleDeleteProtocol(protocol.uuid)}
                 />
               </div>
             )) }
@@ -136,6 +142,7 @@ function mapDispatchToProps(dispatch) {
     loadSession: bindActionCreators(sessionActions.loadSession, dispatch),
     openDialog: bindActionCreators(dialogActions.openDialog, dispatch),
     resetImportProtocol: bindActionCreators(importProtocolActions.resetImportProtocol, dispatch),
+    deleteProtocol: bindActionCreators(installedProtocolsActions.deleteProtocol, dispatch),
     updateProtocolIndex: (index) => {
       dispatch(uiActions.update({
         protocolIndex: index,
