@@ -40,11 +40,28 @@ const initialState = {
 };
 
 const openDialog = dialog =>
-  ({
-    id: uuid(),
-    type: OPEN_DIALOG,
-    dialog,
-  });
+  dispatch =>
+    new Promise((resolve) => {
+      const onConfirm = () => {
+        if (dialog.onConfirm) { dialog.onConfirm(); }
+        resolve(true);
+      };
+
+      const onCancel = () => {
+        if (dialog.onConfirm) { dialog.onCancel(); }
+        resolve(false);
+      };
+
+      dispatch({
+        id: uuid(),
+        type: OPEN_DIALOG,
+        dialog: {
+          ...dialog,
+          onConfirm,
+          onCancel,
+        },
+      });
+    });
 
 const closeDialog = id =>
   ({

@@ -8,46 +8,49 @@ const DELETE_PROTOCOL = 'INSTALLED_PROTOCOLS/DELETE_PROTOCOL';
 
 const initialState = {};
 
-const checkSessions = (state, protocolUID) =>
-  new Promise((resolve, reject) => {
+const protocolHasSessions = (state, protocolUID) =>
+  new Promise((resolve) => {
     const nonExportedSession = findKey(
       state.sessions,
       session => session.protocolUID === protocolUID && !session.lastExportedAt,
     );
 
     if (nonExportedSession) {
-      const message = 'This protocol has in-progress sessions that have not yet been exported. Please export or delete these sessions before attempting to delete the protocol.';
-      reject(message);
+      resolve(true);
     }
 
-    resolve(protocolUID);
+    resolve(false);
   });
 
+const confirmDeleteDialog = {
+  type: 'Warning',
+  title: 'Are you sure?',
+  message: 'Are you sure you want to delete this protocol?',
+  confirmLabel: 'Delete protocol',
+};
+
+const hasSessionsDialog = {
+  type: 'Warning',
+  title: 'Existing sessions',
+  message: 'This protocol has in-progress sessions that have not yet been exported. Please export or delete these sessions before attempting to delete the protocol.',
+  canCancel: false,
+};
+
 const deleteProtocolAction = protocolUID =>
-  (dispatch, getState) => {
-    checkSessions(getState(), protocolUID)
-      .then(
-        () =>
-          dispatch(dialogActions.openDialog({
-            type: 'Warning',
-            title: 'Are you sure?',
-            message: 'Are you sure you want to delete this protocol?',
-            confirmLabel: 'Delete protocol',
-            onConfirm: () => {
-              dispatch({ type: DELETE_PROTOCOL, protocolUID });
-              deleteProtocol(protocolUID);
-            },
-          })),
-      )
-      .catch((message) => {
-        dispatch(dialogActions.openDialog({
-          type: 'Warning',
-          title: 'Existing sessions',
-          message,
-          canCancel: false,
-        }));
+  (dispatch, getState) =>
+    protocolHasSessions(getState(), protocolUID)
+      .then((hasSessions) => {
+        if (hasSessions) {
+          return dispatch(dialogActions.openDialog(hasSessionsDialog));
+        }
+
+        return dispatch(dialogActions.openDialog(confirmDeleteDialog))
+          .then((confirmed) => {
+            if (!confirmed) { return; }
+            dispatch({ type: DELETE_PROTOCOL, protocolUID });
+            deleteProtocol(protocolUID);
+          });
       });
-  };
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
