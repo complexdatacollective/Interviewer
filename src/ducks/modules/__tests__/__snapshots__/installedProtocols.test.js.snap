@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`protocols reducer DELETE_PROTOCOL Has existing sessions warns user about existing sessions 1`] = `
+Array [
+  Array [
+    Object {
+      "canCancel": false,
+      "message": "This protocol has in-progress sessions that have not yet been exported. Please export or delete these sessions before attempting to delete the protocol.",
+      "title": "Existing sessions",
+      "type": "Warning",
+    },
+  ],
+]
+`;
+
+exports[`protocols reducer DELETE_PROTOCOL confirms and then deletes protocol 1`] = `
+Array [
+  Array [
+    Object {
+      "protocolUID": "1234",
+      "type": "INSTALLED_PROTOCOLS/DELETE_PROTOCOL",
+    },
+  ],
+]
+`;
+
+exports[`protocols reducer DELETE_PROTOCOL does not confirm and does not delete protocol 1`] = `Array []`;
