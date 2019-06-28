@@ -96,5 +96,4 @@ describe('protocols reducer', () => {
       });
     });
   });
-
 });

@@ -1,9 +1,8 @@
 /* eslint-env jest */
-import { ActionsObservable, createEpicMiddleware } from 'redux-observable';
-import { omit } from 'lodash';
+import { createEpicMiddleware } from 'redux-observable';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import { actionCreators as dialogActions, actionTypes as dialogActionTypes } from '../dialogs';
+import { actionTypes as dialogActionTypes } from '../dialogs';
 import { actionCreators as importProtocolActions } from '../importProtocol';
 import { actionCreators as serverActions } from '../pairedServer';
 import { epics as errorsEpic } from '../errors';
