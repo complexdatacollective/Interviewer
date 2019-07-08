@@ -1,9 +1,9 @@
 import { push } from 'react-router-redux';
 import { actionTypes as SessionsActionTypes, actionCreators as SessionsActions } from './sessions';
 import { actionCreators as SessionWorkerActions } from './sessionWorkers';
+import { actionTypes as installedProtocolsActionTypes } from './installedProtocols';
 
 const ADD_SESSION = SessionsActionTypes.ADD_SESSION;
-
 const SET_SESSION = 'SET_SESSION';
 const END_SESSION = 'END_SESSION';
 
@@ -15,6 +15,7 @@ export default function reducer(state = initialState, action = {}) {
     case ADD_SESSION:
       return action.sessionId;
     case END_SESSION:
+    case installedProtocolsActionTypes.DELETE_PROTOCOL:
       return initialState;
     default:
       return state;

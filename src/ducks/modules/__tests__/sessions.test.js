@@ -2,8 +2,10 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
-import reducer, { actionCreators, actionTypes } from '../sessions';
 import uuidv4 from '../../../utils/uuid';
+
+import reducer, { actionCreators, actionTypes } from '../sessions';
+import { actionTypes as installedProtocolsActionTypes } from '../installedProtocols';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -20,6 +22,15 @@ const mockStateWithSession = {
   [mockSessionId]: {
     caseID: undefined,
     protocolUID: undefined,
+    network: { ego: {}, nodes: [], edges: [] },
+  },
+};
+
+const mockStateWithProtocol = {
+  ...mockState,
+  [mockSessionId]: {
+    caseID: undefined,
+    protocolUID: '1234',
     network: { ego: {}, nodes: [], edges: [] },
   },
 };
@@ -69,6 +80,17 @@ describe('sessions reducer', () => {
       network: { edges: [], ego: {}, nodes: [] },
       protocolUID: undefined,
     }));
+  });
+
+  it('should handle DELETE_PROTOCOL', () => {
+    const newState = reducer(mockStateWithProtocol,
+      {
+        type: installedProtocolsActionTypes.DELETE_PROTOCOL,
+        protocolUID: '1234',
+      },
+    );
+
+    expect(newState).toEqual([]);
   });
 
 

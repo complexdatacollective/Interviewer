@@ -3,7 +3,7 @@
 import { createStore, applyMiddleware } from 'redux';
 import thunks from 'redux-thunk';
 
-import reducer, { actionCreators } from '../installedProtocols';
+import reducer, { actionCreators, actionTypes } from '../installedProtocols';
 import deleteProtocol from '../../../utils/protocol/deleteProtocol';
 import { actionCreators as dialogsActions } from '../dialogs';
 
@@ -29,6 +29,24 @@ describe('protocols reducer', () => {
   });
 
   describe('DELETE_PROTOCOL', () => {
+    const protocolUID = '1234';
+
+    const action = {
+      type: actionTypes.DELETE_PROTOCOL,
+      protocolUID,
+    };
+
+    const result = reducer(
+      {
+        [protocolUID]: { uid: protocolUID },
+      },
+      action,
+    );
+
+    expect(result).toEqual({});
+  });
+
+  describe('deleteProtocol()', () => {
     const protocolUID = '1234';
 
     beforeEach(() => {
@@ -78,7 +96,52 @@ describe('protocols reducer', () => {
 
         dialogsActions.openDialog.mockImplementationOnce(
           () =>
+            () => Promise.resolve(false),
+        );
+
+        const store = getStore(actionListener, {
+          sessions: [
+            { protocolUID, lastExportedAt: Date.now() },
+          ],
+        });
+        store.dispatch(actionCreators.deleteProtocol(protocolUID));
+
+        setImmediate(() => {
+          expect(dialogsActions.openDialog.mock.calls).toMatchSnapshot();
+          expect(deleteProtocol.mock.calls.length).toBe(0);
+          done();
+        });
+      });
+
+      it('warns user about existing sessions, but allows deletion on confirm', (done) => {
+        const actionListener = jest.fn();
+
+        dialogsActions.openDialog.mockImplementationOnce(
+          () =>
             () => Promise.resolve(true),
+        );
+
+        const store = getStore(actionListener, {
+          sessions: [
+            { protocolUID, lastExportedAt: Date.now() },
+          ],
+        });
+        store.dispatch(actionCreators.deleteProtocol(protocolUID));
+
+        setImmediate(() => {
+          expect(deleteProtocol.mock.calls.length).toBe(1);
+          done();
+        });
+      });
+    });
+
+    describe('Has non-exported existing sessions', () => {
+      it('warns user about existing sessions', (done) => {
+        const actionListener = jest.fn();
+
+        dialogsActions.openDialog.mockImplementationOnce(
+          () =>
+            () => Promise.resolve(false),
         );
 
         const store = getStore(actionListener, {
@@ -91,6 +154,27 @@ describe('protocols reducer', () => {
         setImmediate(() => {
           expect(dialogsActions.openDialog.mock.calls).toMatchSnapshot();
           expect(deleteProtocol.mock.calls.length).toBe(0);
+          done();
+        });
+      });
+
+      it('warns user about existing sessions, but allows deletion on confirm', (done) => {
+        const actionListener = jest.fn();
+
+        dialogsActions.openDialog.mockImplementationOnce(
+          () =>
+            () => Promise.resolve(true),
+        );
+
+        const store = getStore(actionListener, {
+          sessions: [
+            { protocolUID },
+          ],
+        });
+        store.dispatch(actionCreators.deleteProtocol(protocolUID));
+
+        setImmediate(() => {
+          expect(deleteProtocol.mock.calls.length).toBe(1);
           done();
         });
       });

@@ -1,3 +1,4 @@
+import React, { Fragment } from 'react';
 import { omit, findKey } from 'lodash';
 import { actionTypes as importProtocolActions } from './importProtocol';
 import { actionCreators as dialogActions } from './dialogs';
@@ -10,46 +11,71 @@ const initialState = {};
 
 const protocolHasSessions = (state, protocolUID) =>
   new Promise((resolve) => {
-    const nonExportedSession = findKey(
+    const hasNotExportedSession = !!findKey(
       state.sessions,
       session => session.protocolUID === protocolUID && !session.lastExportedAt,
     );
 
-    if (nonExportedSession) {
-      resolve(true);
-    }
+    const hasSession = !!findKey(
+      state.sessions,
+      session => session.protocolUID === protocolUID,
+    );
 
-    resolve(false);
+    resolve({ hasSession, hasNotExportedSession });
   });
 
 const confirmDeleteDialog = {
-  type: 'Warning',
+  type: 'Confirm',
   title: 'Are you sure?',
   message: 'Are you sure you want to delete this protocol?',
   confirmLabel: 'Delete protocol',
 };
 
-const hasSessionsDialog = {
+const hasNonExportedSessionDialog = {
   type: 'Warning',
-  title: 'Existing sessions',
-  message: 'This protocol has in-progress sessions that have not yet been exported. Please export or delete these sessions before attempting to delete the protocol.',
-  canCancel: false,
+  title: 'Non-exported session(s) using protocol',
+  message: (
+    <Fragment>
+      There are sessions that use this protocol which have not yet been exported.
+      <br /><br />
+      <strong>Deleting this protocol will also delete associated sessions.</strong>
+    </Fragment>
+  ),
+  confirmLabel: 'Delete protocol and sessions',
+};
+
+const hasSessionDialog = {
+  type: 'Confirm',
+  title: 'Session(s) using protocol',
+  message: (
+    <Fragment>
+      There are sessions that use this protocol.
+      <br /><br />
+      <strong>Deleting this protocol will also delete associated sessions.</strong>
+    </Fragment>
+  ),
+  confirmLabel: 'Delete protocol and sessions',
 };
 
 const deleteProtocolAction = protocolUID =>
   (dispatch, getState) =>
     protocolHasSessions(getState(), protocolUID)
-      .then((hasSessions) => {
-        if (hasSessions) {
-          return dispatch(dialogActions.openDialog(hasSessionsDialog));
+      .then(({ hasSession, hasNotExportedSession }) => {
+        if (hasNotExportedSession) {
+          return dispatch(dialogActions.openDialog(hasNonExportedSessionDialog));
         }
 
-        return dispatch(dialogActions.openDialog(confirmDeleteDialog))
-          .then((confirmed) => {
-            if (!confirmed) { return; }
-            dispatch({ type: DELETE_PROTOCOL, protocolUID });
-            deleteProtocol(protocolUID);
-          });
+        if (hasSession) {
+          return dispatch(dialogActions.openDialog(hasSessionDialog));
+        }
+
+        return dispatch(dialogActions.openDialog(confirmDeleteDialog));
+      })
+      .then((confirmed) => {
+        if (!confirmed) { return; }
+
+        dispatch({ type: DELETE_PROTOCOL, protocolUID });
+        deleteProtocol(protocolUID);
       });
 
 export default function reducer(state = initialState, action = {}) {
@@ -81,6 +107,7 @@ export default function reducer(state = initialState, action = {}) {
 
 const actionTypes = {
   DELETE_PROTOCOL,
+  IMPORT_PROTOCOL_COMPLETE,
 };
 
 const actionCreators = {

@@ -1,8 +1,9 @@
-import { omit, map } from 'lodash';
-import { actionCreators as SessionWorkerActions } from './sessionWorkers';
+import { omit, map, filter } from 'lodash';
 import uuidv4 from '../../utils/uuid';
-import network, { actionTypes as networkActionTypes, entityPrimaryKeyProperty } from './network';
 import ApiClient from '../../utils/ApiClient';
+import { actionCreators as SessionWorkerActions } from './sessionWorkers';
+import { actionTypes as installedProtocolsActionTypes } from './installedProtocols';
+import network, { actionTypes as networkActionTypes, entityPrimaryKeyProperty } from './network';
 
 const ADD_SESSION = 'ADD_SESSION';
 const LOAD_SESSION = 'LOAD_SESSION';
@@ -23,6 +24,11 @@ const withTimestamp = session => ({
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
+    case installedProtocolsActionTypes.DELETE_PROTOCOL:
+      return filter(
+        state,
+        session => session.protocolUID !== action.protocolUID,
+      );
     case networkActionTypes.ADD_NODE:
     case networkActionTypes.BATCH_ADD_NODES:
     case networkActionTypes.REMOVE_NODE:
