@@ -1,6 +1,7 @@
 import { actionCreators as sessionsActions } from './sessions';
 import { entityPrimaryKeyProperty } from './network';
 import { actionCreators as deviceActions } from './deviceSettings';
+import resetProtocolFiles from '../../utils/protocol/resetProtocolFiles';
 
 const RESET_STATE = 'RESET_STATE';
 const RESET_EDGES_OF_TYPE = 'RESET/EDGES_OF_TYPE';
@@ -57,6 +58,7 @@ const resetEdgesOfType = edgeType =>
 
 const resetAppState = () => (dispatch) => {
   dispatch({ type: RESET_STATE });
+  resetProtocolFiles();
   // Dispatch deviceReady to re-populate any device defaults.
   // On Cordova, reset is guaranteed to happen after 'deviceready';
   // on other platforms, it's safe to call at any time (even after page load).

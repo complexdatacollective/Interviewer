@@ -1,42 +1,69 @@
 /* eslint-env jest */
-import { ActionsObservable } from 'redux-observable';
-import { omit } from 'lodash';
-import { actionCreators as dialogActions } from '../dialogs';
+import { createEpicMiddleware } from 'redux-observable';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
+import { actionTypes as dialogActionTypes } from '../dialogs';
 import { actionCreators as importProtocolActions } from '../importProtocol';
 import { actionCreators as serverActions } from '../pairedServer';
 import { epics as errorsEpic } from '../errors';
 
 const mockError = new Error('foo');
 
-const errorDialogActionWithoutId = error =>
-  omit(
-    dialogActions.openDialog({ error, type: 'Error' }),
-    'id',
-  );
+const testMiddleware = actionListener =>
+  () =>
+    next =>
+      (action) => {
+        actionListener(action);
+        return next(action);
+      };
 
-const expectDialogErrorAction = (action, error) => {
-  const action$ = ActionsObservable.of(
-    action(error),
+const getStore = actionListener =>
+  createStore(
+    () => {},
+    undefined,
+    applyMiddleware(
+      thunk,
+      createEpicMiddleware(errorsEpic),
+      testMiddleware(actionListener),
+    ),
   );
-
-  const expectedAction = errorDialogActionWithoutId(error);
-
-  return errorsEpic(action$).toPromise().then(
-    result =>
-      expect(result).toMatchObject(expectedAction),
-  );
-};
 
 describe('errors', () => {
   describe('epics', () => {
-    it(
-      'importProtocolFailed',
-      () => expectDialogErrorAction(importProtocolActions.importProtocolFailed, mockError),
-    );
+    it('importProtocolFailed', () => {
+      const actionListener = jest.fn();
+      const store = getStore(actionListener);
 
-    it(
-      'pairingFailed',
-      () => expectDialogErrorAction(serverActions.pairingFailed, mockError),
-    );
+      store.dispatch(importProtocolActions.importProtocolFailed(mockError));
+
+      setImmediate(() => {
+        expect(actionListener).lastCalledWith(
+          expect.objectContaining({
+            type: dialogActionTypes.OPEN_DIALOG,
+            dialog: expect.objectContaining({
+              error: mockError,
+            }),
+          }),
+        );
+      });
+    });
+
+    it('pairingFailed', () => {
+      const actionListener = jest.fn();
+      const store = getStore(actionListener);
+
+      store.dispatch(serverActions.pairingFailed(mockError));
+
+      setImmediate(() => {
+        expect(actionListener).lastCalledWith(
+          expect.objectContaining({
+            type: dialogActionTypes.OPEN_DIALOG,
+            dialog: expect.objectContaining({
+              error: mockError,
+            }),
+          }),
+        );
+      });
+    });
   });
 });

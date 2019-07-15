@@ -1,6 +1,7 @@
 /* eslint-env jest */
 
-import { compose } from 'recompose';
+import { createStore, applyMiddleware } from 'redux';
+import thunks from 'redux-thunk';
 import reducer, { actionCreators } from '../dialogs';
 
 describe('dialogs', () => {
@@ -12,30 +13,35 @@ describe('dialogs', () => {
     });
   });
 
-  it('OPEN_DIALOG', () => {
-    const dialog = { foo: 'bar' };
-    const openAction = actionCreators.openDialog(dialog);
+  describe('async actions', () => {
+    let store;
 
-    expect(
-      reducer(undefined, openAction),
-    ).toEqual({
-      dialogs: [
-        { ...dialog, id: openAction.id },
-      ],
+    beforeEach(() => {
+      store = createStore(reducer, undefined, applyMiddleware(thunks));
     });
-  });
 
-  it('CLOSE_DIALOG', () => {
-    const openAction = actionCreators.openDialog({ foo: 'bar' });
-    const closeAction = actionCreators.closeDialog(openAction.id);
+    it('OPEN and CLOSE_DIALOG', () => {
+      const dialog = { foo: 'bar' };
 
-    expect(
-      compose(
-        state => reducer(state, closeAction),
-        state => reducer(state, openAction),
-      )(reducer()),
-    ).toEqual({
-      dialogs: [],
+      store.dispatch(actionCreators.openDialog(dialog));
+
+      const state = store.getState();
+
+      expect(
+        store.getState(),
+      ).toMatchObject({
+        dialogs: [
+          { ...dialog },
+        ],
+      });
+
+      store.dispatch(actionCreators.closeDialog(state.dialogs[0].id));
+
+      expect(
+        store.getState(),
+      ).toMatchObject({
+        dialogs: [],
+      });
     });
   });
 });

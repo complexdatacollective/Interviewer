@@ -5,10 +5,10 @@ import ReactDOM from 'react-dom';
 import { PersistGate } from 'redux-persist/integration/react';
 import { ready as secureCommsReady } from 'secure-comms-api/cipher';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'react-router-redux';
+import { ConnectedRouter, push } from 'react-router-redux';
 import initFileOpener from './utils/initFileOpener';
 import { history, store, persistor } from './ducks/store';
-import { actionCreators } from './ducks/modules/deviceSettings';
+import { actionCreators as deviceActions } from './ducks/modules/deviceSettings';
 import { Spinner } from './ui/components';
 import App from './containers/App';
 import { isCordova, isElectron } from './utils/Environment';
@@ -26,7 +26,7 @@ document.addEventListener('dragover', (e) => {
 });
 
 const startApp = () => {
-  store.dispatch(actionCreators.deviceReady());
+  store.dispatch(deviceActions.deviceReady());
 
   ReactDOM.render(
     <Provider store={store}>
@@ -43,10 +43,14 @@ const startApp = () => {
 };
 
 if (isElectron()) {
-  const { webFrame } = require('electron'); // eslint-disable-line global-require
+  const { webFrame, ipcRenderer } = require('electron'); // eslint-disable-line global-require
   webFrame.setVisualZoomLevelLimits(1, 1); // Prevents pinch-to-zoom
   webFrame.registerURLSchemeAsPrivileged('asset');
   remote.init();
+
+  ipcRenderer.on('RESET_STATE', () => {
+    store.dispatch(push('/reset'));
+  });
 }
 
 secureCommsReady.then(() => {

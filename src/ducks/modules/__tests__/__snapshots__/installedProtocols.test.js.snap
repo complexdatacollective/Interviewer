@@ -1,0 +1,54 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`protocols reducer deleteProtocol() Has existing sessions warns user about existing sessions 1`] = `
+Array [
+  Array [
+    Object {
+      "confirmLabel": "Delete protocol and sessions",
+      "message": <UNDEFINED>
+        There are sessions that use this protocol.
+        <br />
+        <br />
+        <strong>
+          Deleting this protocol will also delete associated sessions.
+        </strong>
+      </UNDEFINED>,
+      "title": "Session(s) using protocol",
+      "type": "Confirm",
+    },
+  ],
+]
+`;
+
+exports[`protocols reducer deleteProtocol() Has non-exported existing sessions warns user about existing sessions 1`] = `
+Array [
+  Array [
+    Object {
+      "confirmLabel": "Delete protocol and sessions",
+      "message": <UNDEFINED>
+        There are sessions that use this protocol which have not yet been exported.
+        <br />
+        <br />
+        <strong>
+          Deleting this protocol will also delete associated sessions.
+        </strong>
+      </UNDEFINED>,
+      "title": "Non-exported session(s) using protocol",
+      "type": "Warning",
+    },
+  ],
+]
+`;
+
+exports[`protocols reducer deleteProtocol() confirms and then deletes protocol 1`] = `
+Array [
+  Array [
+    Object {
+      "protocolUID": "1234",
+      "type": "INSTALLED_PROTOCOLS/DELETE_PROTOCOL",
+    },
+  ],
+]
+`;
+
+exports[`protocols reducer deleteProtocol() does not confirm and does not delete protocol 1`] = `Array []`;

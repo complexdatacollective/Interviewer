@@ -1,14 +1,14 @@
 /* eslint-disable global-require */
 
-import { isString } from 'lodash';
+import { isArray, isString } from 'lodash';
 import environments from '../environments';
 import inEnvironment from '../Environment';
 import { userDataPath, appPath } from '../filesystem';
 
-
 const isValidProtocolUID = protocolUID => (isString(protocolUID) && protocolUID.length > 0);
-const ensureArray = (filePath) => {
-  if (isString(filePath)) {
+
+const ensureArray = (filePath = []) => {
+  if (!isArray(filePath)) {
     return [filePath];
   }
 
