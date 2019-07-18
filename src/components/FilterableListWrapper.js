@@ -98,7 +98,9 @@ class FilterableListWrapper extends Component {
     } = this.props;
 
     const sorter = sortOrder([this.state.activeSortOrder]);
-    const sortedNodes = this.getFilteredList(sorter(items));
+    const sortedNodes = this.getFilteredList(sorter(items))
+      .slice(0, 20); // TODO: until results list can render long lists
+
     return (
       <div className="list-select">
         <div className="list-select__sort">

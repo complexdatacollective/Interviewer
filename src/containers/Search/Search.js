@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import { debounce } from 'lodash';
 import { Icon } from '../../ui/components';
 import SearchTransition from '../../components/Transition/Search';
 import SearchResults from './SearchResults';
@@ -71,23 +72,6 @@ class Search extends Component {
     this.state = InitialState;
   }
 
-  onInputChange(newValue) {
-    let searchResults;
-    const hasInput = newValue && newValue.length > 0;
-
-    if (hasInput) {
-      searchResults = this.props.fuse.search(newValue);
-      searchResults = searchResults.filter(r => this.isAllowedResult(r));
-    } else {
-      searchResults = [];
-    }
-    this.setState({
-      searchResults,
-      searchTerm: newValue,
-      hasInput: hasInput || false,
-    });
-  }
-
   onClose() {
     if (this.props.clearResultsOnClose) {
       this.setState(InitialState);
@@ -99,6 +83,33 @@ class Search extends Component {
     this.props.onComplete(this.state.selectedResults);
     this.setState(InitialState);
   }
+
+  search(query) {
+    if (query.length === 0) {
+      return [];
+    }
+
+    const searchResults = this.props.fuse.search(query);
+    return searchResults.filter(r => this.isAllowedResult(r))
+      .slice(0, 10); // TODO: until results list can render long lists
+  }
+
+  updateResults = debounce((query) => {
+    this.setState({
+      searchResults: this.search(query),
+    });
+  }, 500); // assume most people are slow at typing
+
+  handleQueryChange = (e) => {
+    const query = e.target.value;
+
+    this.setState({
+      searchTerm: query,
+      hasInput: query.length !== 0,
+    });
+
+    this.updateResults(query);
+  };
 
   toggleSelectedResult(result) {
     this.setState((previousState) => {
@@ -200,7 +211,7 @@ class Search extends Component {
 
           <input
             className="search__input"
-            onChange={evt => this.onInputChange(evt.target.value)}
+            onChange={this.handleQueryChange}
             name="searchTerm"
             value={this.state.searchTerm}
             type="search"
