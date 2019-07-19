@@ -100,7 +100,7 @@ class ProtocolList extends Component {
           :
           <div className="protocol-list protocol-list--empty">
             <div className="protocol-list--empty getting-started">
-              <h1>No interview protocols installed</h1>
+              <h1>No interview protocols installed (DEV)</h1>
               <p>
                 To get started, install an interview protocol on this device. To do this,
                 click the button in the bottom right to pair with an instance of Server,

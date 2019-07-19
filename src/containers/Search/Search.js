@@ -90,8 +90,8 @@ class Search extends Component {
     }
 
     const searchResults = this.props.fuse.search(query);
-    return searchResults.filter(r => this.isAllowedResult(r))
-      .slice(0, 10); // TODO: until results list can render long lists
+    return searchResults.filter(r => this.isAllowedResult(r));
+      // .slice(0, 10); // TODO: until results list can render long lists
   }
 
   updateResults = debounce((query) => {
