@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import { chunk } from 'lodash';
 import { List, AutoSizer } from 'react-virtualized';
 import { scrollable, selectable } from '../behaviours';
 import { Card } from '.';
@@ -17,6 +18,14 @@ class CardList extends Component {
     super(props);
 
     this.listRef = React.createRef();
+  }
+
+  getCols = () => {
+    return 3;
+  }
+
+  getRows = () => {
+    return Math.ceil(this.props.items.length / this.getCols());
   }
 
   rowRenderer = ({
@@ -36,26 +45,34 @@ class CardList extends Component {
       getKey,
     } = this.props;
 
-    const node = items[index];
+    const cols = this.getCols();
 
-    const handleSelected = () => {
-      onItemClick(node);
-      if (this.listRef.current) { this.listRef.current.forceUpdate(); }
-    };
+    const offset = index * cols;
+
+    const nodes = items.slice(offset, offset + cols);
+
+    const handleSelected = node =>
+      () => {
+        onItemClick(node);
+        if (this.listRef.current) { this.listRef.current.forceUpdate(); }
+      };
 
     return (
-      <span
-        className="card-list__content"
-        key={getKey(node)}
-        style={style}
-      >
-        <EnhancedCard
-          label={label(node)}
-          selected={isItemSelected(node)}
-          details={details(node)}
-          onSelected={handleSelected}
-        />
-      </span>
+      <div style={{ ...style, display: 'flex' }} key={index}>
+        {nodes.map(node => (
+          <span
+            className="card-list__content"
+            key={getKey(node)}
+          >
+            <EnhancedCard
+              label={label(node)}
+              selected={isItemSelected(node)}
+              details={details(node)}
+              onSelected={handleSelected(node)}
+            />
+          </span>
+        ))}
+      </div>
     );
   }
 
@@ -65,29 +82,19 @@ class CardList extends Component {
       items,
     } = this.props;
 
+    console.log({ items: items.length, rows: this.getRows() });
+
     const classNames = cx('card-list', className);
 
     return (
       <div className={classNames}>
-        {/* {
-          items.map(node => (
-            <span className="card-list__content" key={getKey(node)}>
-              <EnhancedCard
-                label={label(node)}
-                selected={isItemSelected(node)}
-                details={details(node)}
-                onSelected={() => onItemClick(node)}
-              />
-            </span>
-          ))
-        } */}
         <AutoSizer>
           {({ height, width }) => (
             <List
               width={width}
               height={height}
-              rowCount={items.length}
-              rowHeight={150}
+              rowCount={this.getRows()}
+              rowHeight={120}
               rowRenderer={this.rowRenderer}
               ref={this.listRef}
             />
