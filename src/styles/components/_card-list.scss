@@ -17,12 +17,7 @@
   &__content {
     position: relative;
     flex: 1;
-    margin: 0 unit(1) 0 0;
-
-    // &:first-child,
-    // &:last-child {
-    //   margin: 0;
-    // }
+    padding: 0 unit(1) 0 0;
   }
 
   &--single {
