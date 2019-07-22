@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { chunk } from 'lodash';
 import { List, AutoSizer } from 'react-virtualized';
-import { scrollable, selectable } from '../behaviours';
+import { selectable } from '../behaviours';
 import { Card } from '.';
 import { entityPrimaryKeyProperty } from '../ducks/modules/network';
+import { getCSSVariableAsNumber } from '../ui/utils/CSSVariables';
 
 const EnhancedCard = selectable(Card);
 
@@ -20,12 +19,8 @@ class CardList extends Component {
     this.listRef = React.createRef();
   }
 
-  getCols = () => {
-    return 3;
-  }
-
   getRows = () => {
-    return Math.ceil(this.props.items.length / this.getCols());
+    return Math.ceil(this.props.items.length / this.props.columns);
   }
 
   rowRenderer = ({
@@ -36,29 +31,34 @@ class CardList extends Component {
     style        // Style object to be applied to row (to position it)
   }) => {
     const {
-      className,
       details,
       label,
       items,
       onItemClick,
       isItemSelected,
       getKey,
+      columns,
     } = this.props;
 
-    const cols = this.getCols();
+    const offset = index * columns;
 
-    const offset = index * cols;
-
-    const nodes = items.slice(offset, offset + cols);
+    const nodes = items.slice(offset, offset + columns);
 
     const handleSelected = node =>
       () => {
         onItemClick(node);
-        if (this.listRef.current) { this.listRef.current.forceUpdate(); }
+        if (this.listRef.current) {
+          // Ensure item changes are shown
+          this.listRef.current.forceUpdateGrid();
+        }
       };
 
     return (
-      <div style={{ ...style, display: 'flex' }} key={index}>
+      <div
+        className="card-list__row"
+        style={{ ...style, display: 'flex' }}
+        key={key}
+      >
         {nodes.map(node => (
           <span
             className="card-list__content"
@@ -79,12 +79,10 @@ class CardList extends Component {
   render() {
     const {
       className,
-      items,
     } = this.props;
 
-    console.log({ items: items.length, rows: this.getRows() });
-
     const classNames = cx('card-list', className);
+    const rowHeight = getCSSVariableAsNumber('--card-list-row-height');
 
     return (
       <div className={classNames}>
@@ -94,7 +92,7 @@ class CardList extends Component {
               width={width}
               height={height}
               rowCount={this.getRows()}
-              rowHeight={120}
+              rowHeight={rowHeight}
               rowRenderer={this.rowRenderer}
               ref={this.listRef}
             />
@@ -120,6 +118,7 @@ CardList.defaultProps = {
   details: () => (''),
   label: () => (''),
   items: [],
+  columns: 3,
   onItemClick: () => {},
   isItemSelected: () => false,
   getKey: node => node[entityPrimaryKeyProperty],

@@ -91,12 +91,12 @@ class Search extends Component {
 
     const searchResults = this.props.fuse.search(query);
     return searchResults.filter(r => this.isAllowedResult(r));
-      // .slice(0, 10); // TODO: until results list can render long lists
   }
 
   updateResults = debounce((query) => {
     this.setState({
       searchResults: this.search(query),
+      awaitingResults: false,
     });
   }, 500); // assume most people are slow at typing
 
@@ -106,6 +106,8 @@ class Search extends Component {
     this.setState({
       searchTerm: query,
       hasInput: query.length !== 0,
+      searchResults: [],
+      awaitingResults: true,
     });
 
     this.updateResults(query);
@@ -193,6 +195,7 @@ class Search extends Component {
 
           <SearchResults
             hasInput={hasInput}
+            awaitingResults={this.state.awaitingResults}
             results={this.state.searchResults}
             label={getCardTitle}
             details={getDetails}
