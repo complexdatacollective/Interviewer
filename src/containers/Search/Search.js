@@ -72,6 +72,10 @@ class Search extends Component {
     this.state = InitialState;
   }
 
+  onComponentWillUnmount() {
+    this.updateResults.cancel();
+  }
+
   onClose() {
     if (this.props.clearResultsOnClose) {
       this.setState(InitialState);
@@ -98,7 +102,7 @@ class Search extends Component {
       searchResults: this.search(query),
       awaitingResults: false,
     });
-  }, 500); // assume most people are slow at typing
+  }, 2000); // 'simulate' deeper search for better ux?
 
   handleQueryChange = (e) => {
     const query = e.target.value;
