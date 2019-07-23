@@ -19,16 +19,15 @@ class CardList extends Component {
     this.listRef = React.createRef();
   }
 
-  getRows = () => {
-    return Math.ceil(this.props.items.length / this.props.columns);
-  }
+  getRows = () =>
+    Math.ceil(this.props.items.length / this.props.columns);
 
   rowRenderer = ({
-    key,         // Unique key within array of rows
-    index,       // Index of row within collection
-    isScrolling, // The List is currently being scrolled
-    isVisible,   // This row is visible within the List (eg it is not an overscanned row)
-    style        // Style object to be applied to row (to position it)
+    key, // Unique key within array of rows
+    index, // Index of row within collection
+    // isScrolling, // The List is currently being scrolled
+    // isVisible, // This row is visible within the List (eg it is not an overscanned row)
+    style, // Style object to be applied to row (to position it)
   }) => {
     const {
       details,
@@ -108,6 +107,7 @@ CardList.propTypes = {
   details: PropTypes.func,
   label: PropTypes.func,
   items: PropTypes.array.isRequired,
+  columns: PropTypes.number,
   onItemClick: PropTypes.func,
   isItemSelected: PropTypes.func,
   getKey: PropTypes.func,

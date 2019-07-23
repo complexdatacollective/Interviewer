@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import Loading from '../../components/Loading';
 import CardList from '../../components/CardList';
 
 // This provides a workaround for visibility when a softkeyboard scrolls the viewport
@@ -37,7 +38,7 @@ class SearchResults extends Component {
     } = this.props;
 
     if (awaitingResults) {
-      return (<p>Performing search...</p>);
+      return <Loading message="Performing search..." />;
     }
 
     if (results.length) {

@@ -102,7 +102,7 @@ class Search extends Component {
       searchResults: this.search(query),
       awaitingResults: false,
     });
-  }, 2000); // 'simulate' deeper search for better ux?
+  }, 1500); // 'simulate' deeper search for better ux?
 
   handleQueryChange = (e) => {
     const query = e.target.value;
