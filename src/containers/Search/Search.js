@@ -81,11 +81,13 @@ class Search extends Component {
     if (this.props.clearResultsOnClose) {
       this.setState(InitialState);
     }
+
     this.props.closeSearch();
   }
 
   onCommit() {
     this.props.onComplete(this.state.selectedResults);
+    this.props.closeSearch();
     this.setState(InitialState);
   }
 
@@ -103,7 +105,7 @@ class Search extends Component {
       searchResults: this.search(query),
       awaitingResults: false,
     });
-  }, 1500); // 'simulate' deeper search for better ux?
+  }, 500); // simulate 'deeper' search for better ux?
 
   handleQueryChange = (e) => {
     const query = e.target.value;
@@ -118,7 +120,11 @@ class Search extends Component {
     this.updateResults(query);
   };
 
-  toggleSelectedResult(result) {
+  handleToggleSearch = () => {
+    this.props.toggleSearch();
+  }
+
+  toggleSelectedResult = (result) => {
     this.setState((previousState) => {
       let newResults;
       const existingIndex = previousState.selectedResults.indexOf(result);
@@ -151,11 +157,12 @@ class Search extends Component {
       collapsed,
       nodeColor,
       getCardTitle,
-      externalData__isLoading,
+      nodeIconName,
+      externalData__isLoading, // eslint-disable-line
     } = this.props;
 
-    if (externalData__isLoading) {
-      return <Loading message="Loading roster data..." />;
+    if (externalData__isLoading) { // eslint-disable-line
+      return <Loading className="search__loading" message="Loading roster data..." />;
     }
 
     const hasInput = this.state.hasInput;
@@ -164,6 +171,13 @@ class Search extends Component {
       'search',
       {
         'search--hasInput': hasInput,
+      },
+    );
+
+    const searchBtnClasses = cx(
+      'search__search-button',
+      {
+        'search__search-button--hidden': !collapsed,
       },
     );
 
@@ -193,44 +207,53 @@ class Search extends Component {
 
     const getSelected = node => this.state.selectedResults.indexOf(node) > -1;
     const getDetails = node => details.map(attr => toDetail(node, attr));
+
     return (
-      <SearchTransition
-        className={searchClasses}
-        in={!collapsed}
-      >
-        <form onSubmit={(e) => { e.preventDefault(); }}>
-          <Icon name="close" className="menu__cross search__close-button" onClick={evt => this.onClose(evt)} />
+      <React.Fragment>
+        <Icon
+          name={nodeIconName}
+          onClick={this.handleToggleSearch}
+          className={searchBtnClasses}
+        />
 
-          {Headers}
+        <SearchTransition
+          className={searchClasses}
+          in={!collapsed}
+        >
+          <form onSubmit={(e) => { e.preventDefault(); }}>
+            <Icon name="close" className="menu__cross search__close-button" onClick={evt => this.onClose(evt)} />
 
-          <SearchResults
-            hasInput={hasInput}
-            awaitingResults={this.state.awaitingResults}
-            results={this.state.searchResults}
-            label={getCardTitle}
-            details={getDetails}
-            isItemSelected={getSelected}
-            onItemClick={item => this.toggleSelectedResult(item)}
-          />
+            {Headers}
 
-          {
-            this.state.selectedResults.length > 0 &&
-            <AddCountButton
-              count={this.state.selectedResults.length}
-              colorName={nodeColor}
-              onClick={() => this.onCommit()}
+            <SearchResults
+              hasInput={hasInput}
+              awaitingResults={this.state.awaitingResults}
+              results={this.state.searchResults}
+              label={getCardTitle}
+              details={getDetails}
+              isItemSelected={getSelected}
+              onItemClick={this.toggleSelectedResult}
             />
-          }
 
-          <input
-            className="search__input"
-            onChange={this.handleQueryChange}
-            name="searchTerm"
-            value={this.state.searchTerm}
-            type="search"
-          />
-        </form>
-      </SearchTransition>
+            {
+              this.state.selectedResults.length > 0 &&
+              <AddCountButton
+                count={this.state.selectedResults.length}
+                colorName={nodeColor}
+                onClick={() => this.onCommit()}
+              />
+            }
+
+            <input
+              className="search__input"
+              onChange={this.handleQueryChange}
+              name="searchTerm"
+              value={this.state.searchTerm}
+              type="search"
+            />
+          </form>
+        </SearchTransition>
+      </React.Fragment>
     );
   }
 }
@@ -247,7 +270,6 @@ Search.propTypes = {
   details: PropTypes.array,
   className: PropTypes.string,
   clearResultsOnClose: PropTypes.bool,
-  closeSearch: PropTypes.func.isRequired,
   collapsed: PropTypes.bool.isRequired,
   getCardTitle: PropTypes.func.isRequired,
   excludedNodes: PropTypes.array.isRequired,
@@ -255,6 +277,9 @@ Search.propTypes = {
   onComplete: PropTypes.func.isRequired,
   nodeColor: PropTypes.string,
   nodeTypeDefinition: PropTypes.object.isRequired,
+  nodeIconName: PropTypes.string.isRequired,
+  toggleSearch: PropTypes.func.isRequired,
+  closeSearch: PropTypes.func.isRequired,
   /* eslint-disable react/no-unused-prop-types */
   // These props are required by the fuse selector
   dataSourceKey: PropTypes.string.isRequired,
@@ -263,7 +288,9 @@ Search.propTypes = {
 
 function mapDispatchToProps(dispatch) {
   return {
+    openSearch: bindActionCreators(searchActions.openSearch, dispatch),
     closeSearch: bindActionCreators(searchActions.closeSearch, dispatch),
+    toggleSearch: bindActionCreators(searchActions.toggleSearch, dispatch),
   };
 }
 

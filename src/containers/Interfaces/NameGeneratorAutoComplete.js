@@ -3,12 +3,9 @@ import { map } from 'lodash';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import cx from 'classnames';
-import { Icon } from '../../ui/components';
 import withPrompt from '../../behaviours/withPrompt';
 import Search from '../../containers/Search';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
-import { actionCreators as searchActions } from '../../ducks/modules/search';
 import { entityAttributesProperty, entityPrimaryKeyProperty } from '../../ducks/modules/network';
 import { makeGetSubjectType, makeNetworkNodesForPrompt, makeGetAdditionalAttributes } from '../../selectors/interface';
 import { getNetworkNodes, makeGetNodeTypeDefinition, makeGetNodeLabel } from '../../selectors/network';
@@ -17,13 +14,12 @@ import { PromptSwiper } from '../';
 import { NodeBin, NodeList } from '../../components/';
 import getParentKeyByNameValue from '../../utils/getParentKeyByNameValue';
 
-
 /**
   * NameGeneratorAutoComplete Interface
   * @extends Component
   */
 class NameGeneratorAutoComplete extends Component {
-  onSearchComplete(selectedResults) {
+  onSearchComplete = (selectedResults) => {
     const withNewModelData = map(selectedResults, result => ({
       ...this.props.newNodeModelData,
       ...result,
@@ -34,13 +30,10 @@ class NameGeneratorAutoComplete extends Component {
       this.props.newNodeAttributes,
       this.props.stage.subject.type,
     );
-
-    this.props.closeSearch();
   }
 
   render() {
     const {
-      closeSearch,
       excludedNodes,
       getCardTitle,
       nodeIconName,
@@ -49,20 +42,11 @@ class NameGeneratorAutoComplete extends Component {
       prompt,
       promptBackward,
       promptForward,
-      searchIsOpen,
       stage,
-      toggleSearch,
       details,
     } = this.props;
 
     const baseClass = 'name-generator-auto-complete-interface';
-
-    const searchBtnClasses = cx(
-      `${baseClass}__search-button`,
-      {
-        [`${baseClass}__search-button--hidden`]: searchIsOpen,
-      },
-    );
 
     const ListId = 'AUTOCOMPLETE_NODE_LIST';
 
@@ -96,26 +80,21 @@ class NameGeneratorAutoComplete extends Component {
           />
         </div>
 
-        <Icon
-          name={nodeIconName}
-          onClick={toggleSearch}
-          className={searchBtnClasses}
-        />
-
-        <Search
-          className={`${baseClass}__search`}
-          key={prompt.id}
-          dataSourceKey={this.props.stage.dataSource}
-          getCardTitle={getCardTitle}
-          details={details}
-          excludedNodes={excludedNodes}
-          nodeType={nodeType}
-          onClick={closeSearch}
-          onComplete={selectedResults => this.onSearchComplete(selectedResults)}
-          options={searchOptions}
-          stage={this.props.stage}
-          nodeTypeDefinition={this.props.nodeTypeDefinition}
-        />
+        <div className={`${baseClass}__search`}>
+          <Search
+            key={prompt.id}
+            nodeIconName={nodeIconName}
+            dataSourceKey={this.props.stage.dataSource}
+            getCardTitle={getCardTitle}
+            details={details}
+            excludedNodes={excludedNodes}
+            nodeType={nodeType}
+            onComplete={this.onSearchComplete}
+            options={searchOptions}
+            stage={this.props.stage}
+            nodeTypeDefinition={this.props.nodeTypeDefinition}
+          />
+        </div>
 
         <div className="name-generator-auto-complete-interface__node-bin">
           <NodeBin
@@ -133,7 +112,6 @@ class NameGeneratorAutoComplete extends Component {
 NameGeneratorAutoComplete.propTypes = {
   batchAddNodes: PropTypes.func.isRequired,
   removeNode: PropTypes.func.isRequired,
-  closeSearch: PropTypes.func.isRequired,
   excludedNodes: PropTypes.array.isRequired,
   getCardTitle: PropTypes.func.isRequired,
   newNodeAttributes: PropTypes.object.isRequired,
@@ -145,17 +123,13 @@ NameGeneratorAutoComplete.propTypes = {
   prompt: PropTypes.object.isRequired,
   promptBackward: PropTypes.func.isRequired,
   promptForward: PropTypes.func.isRequired,
-  searchIsOpen: PropTypes.bool.isRequired,
   stage: PropTypes.object.isRequired,
-  toggleSearch: PropTypes.func.isRequired,
   details: PropTypes.array.isRequired,
 };
 
 function mapDispatchToProps(dispatch) {
   return {
     batchAddNodes: bindActionCreators(sessionsActions.batchAddNodes, dispatch),
-    closeSearch: bindActionCreators(searchActions.closeSearch, dispatch),
-    toggleSearch: bindActionCreators(searchActions.toggleSearch, dispatch),
     removeNode: bindActionCreators(sessionsActions.removeNode, dispatch),
   };
 }
@@ -179,7 +153,6 @@ function makeMapStateToProps() {
       nodeIconName: getNodeIconName(state, props),
       nodesForPrompt: networkNodesForPrompt(state, props),
       nodeType: getNodeType(state, props),
-      searchIsOpen: !state.search.collapsed,
       details: getCardAdditionalProperties(state, props),
     };
   };

@@ -15,34 +15,16 @@ $search-z-index: var(--z-global-ui);
   }
 
   &__search {
-    --right-collapsed-js: 3rem; // align with 'core' of button
-    --right-offset: var(--timeline-width); // margin equal to left menu width
+    .search {
+      --right-collapsed-js: 3rem; // align with 'core' of button
+      --right-offset: var(--timeline-width); // margin equal to left menu width
 
-    // Position collapsed search element around the 'core' of the icon
-    bottom: $search-icon-offset-y;
-    right: var(--right-offset);
-    width: calc(100% - calc(var(--right-offset)*1.2) - var(--timeline-width));
-    z-index: $search-z-index;
-  }
-
-  &__search-button {
-    cursor: pointer;
-    transition: opacity var(--animation-duration-standard) var(--animation-easing);
-    z-index: $search-z-index + 1;
-
-    &.icon {
-      position: absolute;
-      bottom: 1.8rem;
-      right: 1.8rem;
-      width: 7rem;
-      height: 7rem;
+      // Position collapsed search element around the 'core' of the icon
+      bottom: $search-icon-offset-y;
+      right: var(--right-offset);
+      width: calc(100% - calc(var(--right-offset)*1.2) - var(--timeline-width));
+      z-index: $search-z-index;
     }
-
-    &--hidden {
-      opacity: 0;
-      z-index: -1;
-    }
-
   }
 
   &__nodes {

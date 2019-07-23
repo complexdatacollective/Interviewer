@@ -15,6 +15,34 @@ $results-height: calc(100vh - 23rem);
   position: absolute;
   transform-origin: right bottom;
 
+  &__loading {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background: var(--background);
+    overflow: hidden;
+  }
+
+  &__search-button {
+    cursor: pointer;
+    transition: opacity var(--animation-duration-standard) var(--animation-easing);
+    // z-index: $search-z-index + 1;
+
+    &.icon {
+      position: absolute;
+      bottom: 1.8rem;
+      right: 1.8rem;
+      width: 7rem;
+      height: 7rem;
+    }
+
+    &--hidden {
+      opacity: 0;
+      z-index: -1;
+    }
+
+  }
+
   &__header {
     padding: 1rem 0;
     margin: 0;
