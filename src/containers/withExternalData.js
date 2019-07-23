@@ -90,9 +90,15 @@ const withExternalData = (sourceProperty, dataProperty) =>
       'setExternalData', // State updater name
       null, // initialState
     ),
+    withState(
+      `${dataProperty}__isLoading`, // State name
+      'setExternalDataIsLoading', // State updater name
+      false, // initialState
+    ),
     withHandlers({
       loadExternalData: ({
         setExternalData,
+        setExternalDataIsLoading,
         protocolUID,
         assetFiles,
         assetManifest,
@@ -102,16 +108,19 @@ const withExternalData = (sourceProperty, dataProperty) =>
           if (!sourceId) { return; }
           // This is where we could set the loading state for URL assets
           setExternalData(null);
+          setExternalDataIsLoading(true);
 
           const sourceFile = assetFiles[sourceId];
           const type = assetManifest[sourceId].type;
 
           loadExternalData(protocolUID, sourceFile, type)
-            .then(externalData =>
+            .then((externalData) => {
+              setExternalDataIsLoading(false);
               setExternalData({
                 nodes:
                   withVariableUUIDReplacement(externalData.nodes, protocolCodebook, stageSubject),
-              }));
+              });
+            });
         },
     }),
     lifecycle({

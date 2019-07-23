@@ -12,6 +12,7 @@ import AddCountButton from '../../components/AddCountButton';
 import { actionCreators as searchActions } from '../../ducks/modules/search';
 import { getEntityAttributes, entityPrimaryKeyProperty } from '../../ducks/modules/network';
 import { makeGetFuse } from '../../selectors/search';
+import Loading from '../../components/Loading';
 import withExternalData from '../withExternalData';
 import getParentKeyByNameValue from '../../utils/getParentKeyByNameValue';
 
@@ -150,7 +151,12 @@ class Search extends Component {
       collapsed,
       nodeColor,
       getCardTitle,
+      externalData__isLoading,
     } = this.props;
+
+    if (externalData__isLoading) {
+      return <Loading message="Loading roster data..." />;
+    }
 
     const hasInput = this.state.hasInput;
     const searchClasses = cx(
