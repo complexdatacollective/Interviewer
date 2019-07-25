@@ -9,8 +9,10 @@ import Search from '../../components/Search/Search';
 import withExternalData from '../withExternalData';
 import withSearch from './withSearch';
 
-const mapStateToProps = ({ search }) => ({
+// eslint-disable-next-line
+const mapStateToProps = ({ search }, { externalData__isLoading }) => ({
   isOpen: !search.collapsed,
+  isLoading: externalData__isLoading,
 });
 
 const mapDispatchToProps = {
@@ -21,7 +23,7 @@ const mapDispatchToProps = {
 const withReduxState = connect(mapStateToProps, mapDispatchToProps);
 
 const initialState = {
-  hasInput: false,
+  hasSearchTerm: false,
   searchResults: [],
   searchTerm: '',
   selectedResults: [],
@@ -35,7 +37,7 @@ const withSearchState = withStateHandlers(
     setQuery: () =>
       query => ({
         searchTerm: query,
-        hasInput: query.length !== 0,
+        hasSearchTerm: query.length !== 0,
         searchResults: [],
         awaitingResults: true,
       }),

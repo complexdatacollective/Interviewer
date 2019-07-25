@@ -17,8 +17,8 @@ const Search = ({
   nodeColor,
   getCardTitle,
   nodeIconName,
-  externalData__isLoading,
-  hasInput,
+  isLoading,
+  hasSearchTerm,
   awaitingResults,
   searchResults,
   searchTerm,
@@ -31,11 +31,11 @@ const Search = ({
   onSelectResult,
   selectedResults,
 }) => {
-  if (externalData__isLoading) {
+  if (isLoading) {
     return <Loading className="search__loading" message="Loading roster data..." />;
   }
 
-  const searchClasses = cx('search', { 'search--hasInput': hasInput });
+  const searchClasses = cx('search', { 'search--hasInput': hasSearchTerm });
 
   const SearchPrompt = 'Type in the box below to Search';
   const SelectPrompt = 'Tap an item to select it';
@@ -45,8 +45,8 @@ const Search = ({
   const headers = [SearchPrompt, SelectPrompt]
     .map((prompt, i) => {
       let hiddenClass = '';
-      if ((prompt === SearchPrompt && hasInput) ||
-        (prompt === SelectPrompt && !hasInput)) {
+      if ((prompt === SearchPrompt && hasSearchTerm) ||
+        (prompt === SelectPrompt && !hasSearchTerm)) {
         hiddenClass = `${HeaderClass}--hidden`;
       }
       return (<h2 className={`${HeaderClass} ${hiddenClass}`} key={`${HeaderClass}${i}`}>
@@ -72,7 +72,7 @@ const Search = ({
           {headers}
 
           <SearchResults
-            hasInput={hasInput}
+            hasInput={hasSearchTerm}
             awaitingResults={awaitingResults}
             results={searchResults}
             label={getCardTitle}
@@ -101,12 +101,29 @@ const Search = ({
       </SearchTransition>
     </React.Fragment>
   );
-}
+};
 
 Search.defaultProps = {
 };
 
 Search.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  nodeColor: PropTypes.string.isRequired,
+  nodeIconName: PropTypes.string.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  hasSearchTerm: PropTypes.bool.isRequired,
+  awaitingResults: PropTypes.bool.isRequired,
+  searchTerm: PropTypes.string.isRequired,
+  searchResults: PropTypes.array.isRequired,
+  selectedResults: PropTypes.array.isRequired,
+  getCardTitle: PropTypes.func.isRequired,
+  getDetails: PropTypes.func.isRequired,
+  getIsSelected: PropTypes.func.isRequired,
+  onToggleSearch: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onCommit: PropTypes.func.isRequired,
+  onQueryChange: PropTypes.func.isRequired,
+  onSelectResult: PropTypes.func.isRequired,
 };
 
 export default Search;

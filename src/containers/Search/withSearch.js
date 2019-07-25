@@ -54,7 +54,7 @@ const withSearch = withHandlers({
 
 const withLifecycle = lifecycle({
   onComponentWillUnmount: ({ search }) => () =>
-    search.cancel(),
+    search.cancel(), // cancel debounce when unmounting
 });
 
 export default compose(
@@ -63,6 +63,7 @@ export default compose(
   withPropsOnChange(
     ['search'],
     ({ search }) => ({
+      // TODO: Could use items length to determine debounce (e.g. loading) time
       search: debounce(search, 500), // simulate 'deeper' search for better ux?
     }),
   ),
