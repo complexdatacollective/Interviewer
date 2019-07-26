@@ -26,7 +26,7 @@ const TAGS = [
   'thematicBreak',
 ];
 
-const FORM_NAME = 'EGO_FORM';
+const getFormName = index => `EGO_FORM_${index}`;
 
 class EgoForm extends Component {
   constructor(props) {
@@ -37,22 +37,22 @@ class EgoForm extends Component {
   }
 
   formSubmitAllowed = () => (
-    this.props.formEnabled(this.props.form)
+    this.props.formEnabled(getFormName(this.props.stageIndex))
   );
 
   isStageBeginning = () => (
     this.state.scrollProgress === 0
   );
 
-  isStageEnding = () => this.props.formEnabled();
+  isStageEnding = () => this.props.formEnabled(getFormName(this.props.stageIndex));
 
   clickNext = () => {
-    this.props.submitForm();
+    this.props.submitForm(this.props.stageIndex);
   };
 
   clickPrevious = () => {
     if (this.formSubmitAllowed()) {
-      this.props.submitForm();
+      this.props.submitForm(this.props.stageIndex);
     }
   };
 
@@ -98,7 +98,7 @@ class EgoForm extends Component {
             <Form
               {...form}
               initialValues={ego[entityAttributesProperty]}
-              form={FORM_NAME}
+              form={getFormName(this.props.stageIndex)}
               subject={{ entity: 'ego' }}
               onSubmit={this.handleSubmitForm}
             />
@@ -121,6 +121,7 @@ EgoForm.propTypes = {
   introductionPanel: PropTypes.object.isRequired,
   ego: PropTypes.object,
   formEnabled: PropTypes.func.isRequired,
+  stageIndex: PropTypes.number.isRequired,
   submitForm: PropTypes.func.isRequired,
   updateEgo: PropTypes.func.isRequired,
 };
@@ -135,13 +136,13 @@ function mapStateToProps(state, props) {
     form: props.stage.form,
     introductionPanel: props.stage.introductionPanel,
     ego,
-    formEnabled: () => isValid(FORM_NAME)(state) && !isSubmitting(FORM_NAME)(state),
+    formEnabled: formName => isValid(formName)(state) && !isSubmitting(formName)(state),
   };
 }
 
 const mapDispatchToProps = dispatch => ({
   updateEgo: bindActionCreators(sessionsActions.updateEgo, dispatch),
-  submitForm: bindActionCreators(() => submit(FORM_NAME), dispatch),
+  submitForm: bindActionCreators(index => submit(getFormName(index)), dispatch),
 });
 
 export { EgoForm };
