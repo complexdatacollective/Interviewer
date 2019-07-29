@@ -245,7 +245,7 @@ const updateEgo = (modelData = {}, attributeData = {}) => (dispatch, getState) =
   const { activeSessionId, sessions, installedProtocols } = getState();
 
   const activeProtocol = installedProtocols[sessions[activeSessionId].protocolUID];
-  const egoRegistry = activeProtocol.codebook.node;
+  const egoRegistry = activeProtocol.codebook.ego;
 
   dispatch({
     type: networkActionTypes.UPDATE_EGO,

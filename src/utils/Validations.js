@@ -1,4 +1,4 @@
-import { keys, pickBy } from 'lodash';
+import { isNil, keys, pickBy } from 'lodash';
 
 const coerceArray = (value) => {
   if (value instanceof Object) {
@@ -12,7 +12,7 @@ const coerceArray = (value) => {
 
 export const required = () =>
   value =>
-    (value ? undefined : 'You must answer this question before continuing.');
+    (isNil(value) ? 'You must answer this question before continuing.' : undefined);
 export const maxLength = max =>
   value =>
     (value && value.length > max ? `Your answer must be ${max} characters or less` : undefined);

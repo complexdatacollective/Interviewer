@@ -155,6 +155,7 @@ export default compose(
   connect(makeMapStateToProps),
   autoInitialisedForm,
   reduxForm({
+    enableReinitialize: true, // form could have ego out of sync because submit is in progress
     touchOnChange: true,
     touchOnBlur: false,
     onSubmitFail: scrollToFirstError,
