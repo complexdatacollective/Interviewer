@@ -7,8 +7,8 @@ import { userDataPath, appPath } from '../filesystem';
 
 const isValidProtocolUID = protocolUID => (isString(protocolUID) && protocolUID.length > 0);
 
-const ensureArray = (filePath = []) => {
-  if (!isArray(filePath)) {
+const ensureArray = (filePath) => {
+  if (isString(filePath)) {
     return [filePath];
   }
 
