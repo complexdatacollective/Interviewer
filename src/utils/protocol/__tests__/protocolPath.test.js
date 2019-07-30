@@ -27,4 +27,24 @@ describe('protocolPath', () => {
       expect(() => protocolPath()).toThrow();
     });
   });
+
+  describe('Cordova', () => {
+    beforeAll(() => {
+      getEnvironment.mockReturnValue(environments.CORDOVA);
+    });
+
+    it('Generates an asset path for the file', () => {
+      expect(
+        protocolPath('foo.canvas', 'protocol.json'),
+      ).toEqual('tmp/mock/user/path/protocols/foo.canvas/protocol.json');
+
+      expect(
+        protocolPath('foo.canvas'),
+      ).toEqual('tmp/mock/user/path/protocols/foo.canvas/');
+    });
+
+    it('Thows an error if the protocol is not specified', () => {
+      expect(() => protocolPath()).toThrow();
+    });
+  });
 });
