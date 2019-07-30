@@ -26,7 +26,7 @@
     "build-docs": "cross-env NODE_ENV=production jsdoc src -r -d docs-build -c ./jsdoc.conf.json --verbose",
     "electron": "electron ./www",
     "electron:dev": "cross-env NODE_ENV=development NC_DEVSERVER_FILE=\".devserver\" electron public/",
-    "ios:dev": "node scripts/check-dev-server.js && cross-env LIVE_RELOAD=1 cordova run ios --buildFlag='-UseModernBuildSystem=0' --developmentTeam=85EZ69PQHJ --target='iPad-Pro, 12.2' --",
+    "ios:dev": "node scripts/check-dev-server.js && cross-env LIVE_RELOAD=1 cordova run ios --buildFlag='-UseModernBuildSystem=0' --developmentTeam=85EZ69PQHJ --",
     "android:dev": "node scripts/check-dev-server.js && cross-env LIVE_RELOAD=1 cordova run android",
     "generate-icons": "node scripts/generate-app-icons.js",
     "dist:android": "npm run build:android && cordova build android --release",
