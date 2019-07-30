@@ -7,8 +7,8 @@ import { userDataPath, appPath } from '../filesystem';
 
 const isValidProtocolUID = protocolUID => (isString(protocolUID) && protocolUID.length > 0);
 
-const ensureArray = (filePath) => {
-  if (isString(filePath)) {
+const ensureArray = (filePath = []) => {
+  if (!isArray(filePath)) {
     return [filePath];
   }
 
@@ -49,6 +49,11 @@ const protocolPath = (environment) => {
   if (environment === environments.CORDOVA) {
     return (protocolUID, filePath) => {
       if (!isValidProtocolUID(protocolUID)) throw Error('Protocol name is not valid');
+
+      if (!filePath) {
+        // Cordova expects a trailing slash:
+        return [userDataPath(), 'protocols', protocolUID, undefined].join('/');
+      }
 
       return [userDataPath(), 'protocols', protocolUID].concat(ensureArray(filePath)).join('/');
     };
