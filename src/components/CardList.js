@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { List, AutoSizer } from 'react-virtualized';
+import { List, AutoSizer, CellMeasurer, CellMeasurerCache } from 'react-virtualized';
 import { selectable } from '../behaviours';
 import { Card } from '.';
 import { entityPrimaryKeyProperty } from '../ducks/modules/network';
@@ -17,12 +17,18 @@ class CardList extends Component {
     super(props);
 
     this.listRef = React.createRef();
+
+    this.cellCache = new CellMeasurerCache({
+      fixedWidth: true,
+      minHeight: 50,
+    });
   }
 
   getRows = () =>
     Math.ceil(this.props.items.length / this.props.columns);
 
   rowRenderer = ({
+    parent,
     key, // Unique key within array of rows
     index, // Index of row within collection
     // isScrolling, // The List is currently being scrolled
@@ -53,25 +59,32 @@ class CardList extends Component {
       };
 
     return (
-      <div
-        className="card-list__row"
-        style={{ ...style, display: 'flex' }}
+      <CellMeasurer
+        cache={this.cellCache}
+        // columnIndex={0}
         key={key}
+        rowIndex={index}
+        parent={parent}
       >
-        {nodes.map(node => (
-          <span
-            className="card-list__content"
-            key={getKey(node)}
-          >
-            <EnhancedCard
-              label={label(node)}
-              selected={isItemSelected(node)}
-              details={details(node)}
-              onSelected={handleSelected(node)}
-            />
-          </span>
-        ))}
-      </div>
+        <div
+          className="card-list__row"
+          style={{ ...style, display: 'flex' }}
+        >
+          {nodes.map(node => (
+            <span
+              className="card-list__content"
+              key={getKey(node)}
+            >
+              <EnhancedCard
+                label={label(node)}
+                selected={isItemSelected(node)}
+                details={details(node)}
+                onSelected={handleSelected(node)}
+              />
+            </span>
+          ))}
+        </div>
+      </CellMeasurer>
     );
   }
 
@@ -81,7 +94,7 @@ class CardList extends Component {
     } = this.props;
 
     const classNames = cx('card-list', className);
-    const rowHeight = getCSSVariableAsNumber('--card-list-row-height');
+    // const rowHeight = getCSSVariableAsNumber('--card-list-row-height');
 
     return (
       <div className={classNames}>
@@ -91,7 +104,8 @@ class CardList extends Component {
               width={width}
               height={height}
               rowCount={this.getRows()}
-              rowHeight={rowHeight}
+              deferredMeasurementCache={this.cellCache}
+              rowHeight={this.cellCache.rowHeight}
               rowRenderer={this.rowRenderer}
               ref={this.listRef}
             />
