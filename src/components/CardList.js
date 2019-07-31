@@ -5,7 +5,16 @@ import { List, AutoSizer, CellMeasurer, CellMeasurerCache } from 'react-virtuali
 import { selectable } from '../behaviours';
 import { Card } from '.';
 import { entityPrimaryKeyProperty } from '../ducks/modules/network';
-import { getCSSVariableAsNumber } from '../ui/utils/CSSVariables';
+
+/* eslint-disable */
+// [ ratio, columns ]
+// First match (windowRatio > ratio) sets columns
+const ratios = [
+  [ 16/ 9, 4 ],
+  [ 16/10, 3 ],
+  [  4/ 3, 2 ],
+];
+/* eslint-enable */
 
 const EnhancedCard = selectable(Card);
 
@@ -17,6 +26,7 @@ class CardList extends Component {
     super(props);
 
     this.listRef = React.createRef();
+    this.columns = 1;
 
     this.cellCache = new CellMeasurerCache({
       fixedWidth: true,
@@ -24,15 +34,24 @@ class CardList extends Component {
     });
   }
 
+  componentWillMount() {
+    const windowRatio = window.innerWidth / window.innerHeight;
+
+    const [, columns] = ratios.find(([ratio]) => windowRatio > ratio);
+
+    this.columns = columns;
+  }
+
+  getColumns = () =>
+    this.columns;
+
   getRows = () =>
-    Math.ceil(this.props.items.length / this.props.columns);
+    Math.ceil(this.props.items.length / this.getColumns());
 
   rowRenderer = ({
     parent,
     key, // Unique key within array of rows
     index, // Index of row within collection
-    // isScrolling, // The List is currently being scrolled
-    // isVisible, // This row is visible within the List (eg it is not an overscanned row)
     style, // Style object to be applied to row (to position it)
   }) => {
     const {
@@ -42,12 +61,11 @@ class CardList extends Component {
       onItemClick,
       isItemSelected,
       getKey,
-      columns,
     } = this.props;
 
-    const offset = index * columns;
+    const offset = index * this.getColumns();
 
-    const nodes = items.slice(offset, offset + columns);
+    const nodes = items.slice(offset, offset + this.getColumns());
 
     const handleSelected = node =>
       () => {
@@ -61,7 +79,6 @@ class CardList extends Component {
     return (
       <CellMeasurer
         cache={this.cellCache}
-        // columnIndex={0}
         key={key}
         rowIndex={index}
         parent={parent}
@@ -121,7 +138,6 @@ CardList.propTypes = {
   details: PropTypes.func,
   label: PropTypes.func,
   items: PropTypes.array.isRequired,
-  columns: PropTypes.number,
   onItemClick: PropTypes.func,
   isItemSelected: PropTypes.func,
   getKey: PropTypes.func,
@@ -132,7 +148,6 @@ CardList.defaultProps = {
   details: () => (''),
   label: () => (''),
   items: [],
-  columns: 3,
   onItemClick: () => {},
   isItemSelected: () => false,
   getKey: node => node[entityPrimaryKeyProperty],
