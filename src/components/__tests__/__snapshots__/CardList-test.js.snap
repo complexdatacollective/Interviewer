@@ -14,8 +14,12 @@ ShallowWrapper {
       }
     }
   >
-    <Connect(Scrollable)
+    <CardList
+      className=""
       details={[Function]}
+      getKey={[Function]}
+      isItemSelected={[Function]}
+      items={Array []}
       label={[Function]}
       nodes={
         Array [
@@ -36,6 +40,7 @@ ShallowWrapper {
           },
         ]
       }
+      onItemClick={[Function]}
       onToggleCard={[Function]}
       selected={[Function]}
     />
@@ -53,7 +58,11 @@ ShallowWrapper {
     "key": undefined,
     "nodeType": "class",
     "props": Object {
+      "className": "",
       "details": [Function],
+      "getKey": [Function],
+      "isItemSelected": [Function],
+      "items": Array [],
       "label": [Function],
       "nodes": Array [
         Object {
@@ -72,6 +81,7 @@ ShallowWrapper {
           "uid": "c",
         },
       ],
+      "onItemClick": [Function],
       "onToggleCard": [Function],
       "selected": [Function],
     },
@@ -85,7 +95,11 @@ ShallowWrapper {
       "key": undefined,
       "nodeType": "class",
       "props": Object {
+        "className": "",
         "details": [Function],
+        "getKey": [Function],
+        "isItemSelected": [Function],
+        "items": Array [],
         "label": [Function],
         "nodes": Array [
           Object {
@@ -104,6 +118,7 @@ ShallowWrapper {
             "uid": "c",
           },
         ],
+        "onItemClick": [Function],
         "onToggleCard": [Function],
         "selected": [Function],
       },
