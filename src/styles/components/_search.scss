@@ -17,16 +17,15 @@ $results-height: calc(100vh - 23rem);
 
   &__loading {
     position: absolute;
+    width: calc(100% - var(--timeline-width) - var(--interface-right-margin)) !important; // sass-lint:disable-line no-important
     bottom: 0;
-    left: 0;
-    background: var(--background);
+    left: var(--timeline-width);
     overflow: hidden;
   }
 
   &__search-button {
     cursor: pointer;
     transition: opacity var(--animation-duration-standard) var(--animation-easing);
-    // z-index: $search-z-index + 1;
 
     &.icon {
       position: absolute;

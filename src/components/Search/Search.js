@@ -96,6 +96,7 @@ const Search = ({
             name="searchTerm"
             value={searchTerm}
             type="search"
+            disabled={isLoading}
           />
         </form>
       </SearchTransition>
