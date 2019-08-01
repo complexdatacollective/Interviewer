@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import { connect } from 'react-redux';
 import { List, AutoSizer, CellMeasurer, CellMeasurerCache } from 'react-virtualized';
 import { selectable } from '../behaviours';
 import { Card } from '.';
@@ -108,13 +109,17 @@ class CardList extends Component {
   render() {
     const {
       className,
+      showScollbars,
     } = this.props;
 
-    const classNames = cx('card-list', className);
-    // const rowHeight = getCSSVariableAsNumber('--card-list-row-height');
+    const cardlistClasses = cx('card-list', className);
+    const scrollableClasses = cx(
+      'scrollable',
+      { 'scrollable--show-scrollbars': showScollbars },
+    );
 
     return (
-      <div className={classNames}>
+      <div className={cardlistClasses}>
         <AutoSizer>
           {({ height, width }) => (
             <List
@@ -125,6 +130,7 @@ class CardList extends Component {
               rowHeight={this.cellCache.rowHeight}
               rowRenderer={this.rowRenderer}
               ref={this.listRef}
+              className={scrollableClasses}
             />
           )}
         </AutoSizer>
@@ -138,6 +144,7 @@ CardList.propTypes = {
   details: PropTypes.func,
   label: PropTypes.func,
   items: PropTypes.array.isRequired,
+  showScollbars: PropTypes.bool,
   onItemClick: PropTypes.func,
   isItemSelected: PropTypes.func,
   getKey: PropTypes.func,
@@ -145,6 +152,7 @@ CardList.propTypes = {
 
 CardList.defaultProps = {
   className: '',
+  showScollbars: false,
   details: () => (''),
   label: () => (''),
   items: [],
@@ -153,4 +161,8 @@ CardList.defaultProps = {
   getKey: node => node[entityPrimaryKeyProperty],
 };
 
-export default CardList;
+const mapStateToProps = state => ({
+  showScollbars: state.deviceSettings.showScrollbars,
+});
+
+export default connect(mapStateToProps)(CardList);
