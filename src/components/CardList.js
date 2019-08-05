@@ -50,6 +50,18 @@ class CardList extends Component {
   getRows = () =>
     Math.ceil(this.props.items.length / this.getColumns());
 
+  getRow = (index) => {
+    const items = this.props.items;
+    const columns = this.getColumns();
+
+    const offset = index * columns;
+
+    const nodes = items.slice(offset, offset + columns);
+    const spaces = times(columns - nodes.length, () => null);
+
+    return [...nodes, ...spaces];
+  };
+
   rowRenderer = ({
     parent,
     key, // Unique key within array of rows
@@ -59,17 +71,12 @@ class CardList extends Component {
     const {
       details,
       label,
-      items,
       onItemClick,
       isItemSelected,
       getKey,
     } = this.props;
 
-    const columns = this.getColumns();
-
-    const offset = index * columns;
-
-    const nodes = items.slice(offset, offset + columns);
+    const nodes = this.getRow(index);
 
     const handleSelected = node =>
       () => {
@@ -91,22 +98,23 @@ class CardList extends Component {
           className="card-list__row"
           style={{ ...style, display: 'flex' }}
         >
-          {nodes.map(node => (
-            <span
-              className="card-list__content"
-              key={getKey(node)}
-            >
-              <EnhancedCard
-                label={label(node)}
-                selected={isItemSelected(node)}
-                details={details(node)}
-                onSelected={handleSelected(node)}
-              />
-            </span>
-          ))}
-          {times(columns - nodes.length, i => (
-            <span className="card-list__content" key={`space-${i}`} />
-          ))}
+          {nodes.map((node, column) => {
+            if (!node) { return <span className="card-list__content" key={`column-space-${column}`} />; }
+
+            return (
+              <span
+                className="card-list__content"
+                key={getKey(node)}
+              >
+                <EnhancedCard
+                  label={label(node)}
+                  selected={isItemSelected(node)}
+                  details={details(node)}
+                  onSelected={handleSelected(node)}
+                />
+              </span>
+            );
+          })}
         </div>
       </CellMeasurer>
     );
@@ -116,6 +124,16 @@ class CardList extends Component {
     const {
       className,
       showScollbars,
+      items,
+      // we don't want the following props polluting `rest` which is used to indicate
+      // prop changes like `sortBy`
+      dispatch,
+      details,
+      label,
+      onItemClick,
+      isItemSelected,
+      getKey,
+      ...rest
     } = this.props;
 
     const cardlistClasses = cx('card-list', className);
@@ -137,6 +155,7 @@ class CardList extends Component {
               rowRenderer={this.rowRenderer}
               ref={this.listRef}
               className={scrollableClasses}
+              {...rest}
             />
           )}
         </AutoSizer>
