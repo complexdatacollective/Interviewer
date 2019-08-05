@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { connect } from 'react-redux';
+import { times } from 'lodash';
 import { List, AutoSizer, CellMeasurer, CellMeasurerCache } from 'react-virtualized';
 import { selectable } from '../behaviours';
 import { Card } from '.';
@@ -64,9 +65,11 @@ class CardList extends Component {
       getKey,
     } = this.props;
 
-    const offset = index * this.getColumns();
+    const columns = this.getColumns();
 
-    const nodes = items.slice(offset, offset + this.getColumns());
+    const offset = index * columns;
+
+    const nodes = items.slice(offset, offset + columns);
 
     const handleSelected = node =>
       () => {
@@ -100,6 +103,9 @@ class CardList extends Component {
                 onSelected={handleSelected(node)}
               />
             </span>
+          ))}
+          {times(columns - nodes.length, i => (
+            <span className="card-list__content" key={`space-${i}`} />
           ))}
         </div>
       </CellMeasurer>
