@@ -122,6 +122,9 @@ class FilterableListWrapper extends Component {
         </div>
         <ListComponent
           {...listComponentProps}
+          sortDirection={this.state.activeSortOrder.direction}
+          sortProperty={this.state.activeSortOrder.property}
+          filter={this.state.filterValue}
           items={sortedNodes}
         />
       </div>
