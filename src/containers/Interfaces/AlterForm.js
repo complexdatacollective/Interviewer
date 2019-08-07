@@ -36,7 +36,7 @@ class AlterForm extends Component {
     };
   }
 
-  getNodeFormName = activeIndex => `NODE_FORM_${activeIndex}`;
+  getNodeFormName = activeIndex => `NODE_FORM_${this.props.stageIndex}_${activeIndex}`;
 
   formSubmitAllowed = index => (
     this.props.formEnabled(this.getNodeFormName(index))
@@ -84,6 +84,7 @@ class AlterForm extends Component {
       form,
       stage,
       stageNodes,
+      stageIndex,
     } = this.props;
 
     const swiperParams = {
@@ -126,6 +127,7 @@ class AlterForm extends Component {
               subject={stage.subject}
               node={node}
               index={index}
+              stageIndex={stageIndex}
               onUpdate={this.handleUpdate}
               form={form}
             />
@@ -147,6 +149,7 @@ AlterForm.propTypes = {
   formEnabled: PropTypes.func.isRequired,
   stage: PropTypes.object.isRequired,
   stageNodes: PropTypes.array,
+  stageIndex: PropTypes.number.isRequired,
   submitForm: PropTypes.func.isRequired,
   updateNode: PropTypes.func.isRequired,
 };

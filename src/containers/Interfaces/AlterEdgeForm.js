@@ -34,7 +34,7 @@ class AlterEdgeForm extends Component {
     };
   }
 
-  getEdgeFormName = activeIndex => `EDGE_FORM_${activeIndex}`;
+  getEdgeFormName = activeIndex => `EDGE_FORM_${this.props.stageIndex}_${activeIndex}`;
 
   formSubmitAllowed = index => (
     this.props.formEnabled(this.getEdgeFormName(index))
@@ -79,6 +79,7 @@ class AlterEdgeForm extends Component {
       form,
       stage,
       stageEdges,
+      stageIndex,
       updateEdge,
     } = this.props;
 
@@ -122,6 +123,7 @@ class AlterEdgeForm extends Component {
               subject={stage.subject}
               edge={edge}
               index={index}
+              stageIndex={stageIndex}
               updateEdge={updateEdge}
               form={form}
             />
@@ -143,6 +145,7 @@ AlterEdgeForm.propTypes = {
   formEnabled: PropTypes.func.isRequired,
   stage: PropTypes.object.isRequired,
   stageEdges: PropTypes.array,
+  stageIndex: PropTypes.number.isRequired,
   submitForm: PropTypes.func.isRequired,
   updateEdge: PropTypes.func.isRequired,
 };
