@@ -25,12 +25,8 @@ const validateProtocol = (protocol) => {
 
 const parseProtocol = (protocolUID, name) =>
   readFile(protocolPath(protocolUID, 'protocol.json'))
-    .then(json => {
-      console.log('json', json);
-      return json;
-    })
     .then(json => JSON.parse(json))
-    // .then(data => validateProtocol(data)).catch(validationError)
+    .then(data => validateProtocol(data)).catch(validationError)
     .then((protocol) => {
       const withFilename = {
         ...protocol,
@@ -39,6 +35,6 @@ const parseProtocol = (protocolUID, name) =>
       };
       return withFilename;
     })
-    // .catch(openError);
+    .catch(openError);
 
 export default parseProtocol;
