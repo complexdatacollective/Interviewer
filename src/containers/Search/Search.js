@@ -27,6 +27,7 @@ const initialState = {
   searchResults: [],
   searchTerm: '',
   selectedResults: [],
+  awaitingResults: false,
 };
 
 const withSearchState = withStateHandlers(
