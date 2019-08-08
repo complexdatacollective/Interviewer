@@ -121,12 +121,12 @@ class AlterForm extends Component {
             </div>
           </div>
 
-          {stageNodes.map((node, index) => (
+          {stageNodes.map((node, nodeIndex) => (
             <SlideFormNode
-              key={index}
+              key={nodeIndex}
               subject={stage.subject}
               node={node}
-              index={index}
+              nodeIndex={nodeIndex}
               stageIndex={stageIndex}
               onUpdate={this.handleUpdate}
               form={form}

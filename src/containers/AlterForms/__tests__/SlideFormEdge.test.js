@@ -20,7 +20,7 @@ const mockProps = {
     entity: 'edge',
     type: 'friend',
   },
-  index: 1,
+  edgeIndex: 1,
   stageIndex: 1,
 };
 

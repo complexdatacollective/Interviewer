@@ -11,6 +11,7 @@ ShallowWrapper {
       }
     }
     edgeColor="blue"
+    edgeIndex={1}
     form={
       Object {
         "entity": "edge",
@@ -18,7 +19,6 @@ ShallowWrapper {
         "type": "friend",
       }
     }
-    index={1}
     nodes={
       Object {
         "1": Object {

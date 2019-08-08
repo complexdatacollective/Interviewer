@@ -117,12 +117,12 @@ class AlterEdgeForm extends Component {
             </div>
           </div>
 
-          {stageEdges.map((edge, index) => (
+          {stageEdges.map((edge, edgeIndex) => (
             <SlideFormEdge
-              key={index}
+              key={edgeIndex}
               subject={stage.subject}
               edge={edge}
-              index={index}
+              edgeIndex={edgeIndex}
               stageIndex={stageIndex}
               updateEdge={updateEdge}
               form={form}

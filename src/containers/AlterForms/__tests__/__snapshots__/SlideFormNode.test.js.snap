@@ -11,12 +11,12 @@ ShallowWrapper {
         "type": "person",
       }
     }
-    index={1}
     node={
       Object {
         "name": "Bob",
       }
     }
+    nodeIndex={1}
     onUpdate={[Function]}
     stageIndex={1}
   />,
