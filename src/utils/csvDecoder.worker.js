@@ -19,12 +19,20 @@ const CSVToJSONNetworkFormat = (data) => {
     },
   });
 
-  csv().fromString(data)
+  return csv().fromString(data)
     .then((json) => {
       const nodes = json.map(entry => withTypeAndAttributes(entry));
-      return self.postMessage({ nodes });
+      return { nodes };
     });
 };
 
 // Respond to message from parent thread
-self.addEventListener('message', event => CSVToJSONNetworkFormat(event.data));
+self.addEventListener(
+  'message',
+  (event) => {
+    CSVToJSONNetworkFormat(event.data)
+      .then((network) => {
+        self.postMessage(network);
+      });
+  },
+);

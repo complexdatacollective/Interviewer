@@ -4,7 +4,7 @@ import environments from './environments';
 import inEnvironment from './Environment';
 import { readFile } from './filesystem';
 import getAssetUrl from './protocol/getAssetUrl';
-import Worker from './csvDecoder.worker';
+import CSVWorker from './csvDecoder.worker';
 
 /**
  * Converting data from CSV to our network JSON format is expensive, and so happens
@@ -14,19 +14,17 @@ import Worker from './csvDecoder.worker';
  * and then initialises the conversion worker, before sending it the file contents
  * to decode.
  */
-const convertCSVToJsonWithWorker = response => Promise.resolve(response)
-  .then(
-    data => new Promise((resolve, reject) => {
-      const worker = new Worker();
-      worker.postMessage(data);
-      worker.onerror = (event) => {
-        reject(event);
-      };
-      worker.onmessage = (event) => {
-        resolve(event.data);
-      };
-    })
-  );
+const convertCSVToJsonWithWorker = data =>
+  new Promise((resolve, reject) => {
+    const worker = new CSVWorker();
+    worker.postMessage(data);
+    worker.onerror = (event) => {
+      reject(event);
+    };
+    worker.onmessage = (event) => {
+      resolve(event.data);
+    };
+  });
 
 const fetchNetwork = inEnvironment(
   (environment) => {
@@ -35,7 +33,8 @@ const fetchNetwork = inEnvironment(
         fetch(url)
           .then((response) => {
             if (fileType === 'csv') {
-              return convertCSVToJsonWithWorker(response.text());
+              return response.text()
+                .then(convertCSVToJsonWithWorker);
             }
 
             return response.json();

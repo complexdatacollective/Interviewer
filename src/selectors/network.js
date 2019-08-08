@@ -35,7 +35,8 @@ export const getExportableNetwork = createDeepEqualSelector(
 export const getWorkerNetwork = createDeepEqualSelector(
   getNetwork,
   (state, props) => getProtocolCodebook(state, props),
-  (network, registry) => asWorkerAgentNetwork(network, registry),
+  (network, registry) =>
+    asWorkerAgentNetwork(network, registry),
 );
 
 // The user-defined name of a node type; e.g. `codebook.node[uuid].name == 'person'`
