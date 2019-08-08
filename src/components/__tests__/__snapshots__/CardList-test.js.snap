@@ -14,7 +14,7 @@ ShallowWrapper {
       }
     }
   >
-    <Connect(Scrollable)
+    <Connect(CardList)
       details={[Function]}
       label={[Function]}
       nodes={

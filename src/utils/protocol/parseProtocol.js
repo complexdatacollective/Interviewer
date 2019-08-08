@@ -12,6 +12,7 @@ const validationError = friendlyErrorMessage('Your protocol file failed validati
 // Basic validation on protocol format;
 // any error will halt loading and display a message to the user.
 const validateProtocol = (protocol) => {
+
   const schemaErrors = validateSchema(protocol);
   const logicErrors = validateLogic(protocol);
 

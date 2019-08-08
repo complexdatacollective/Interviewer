@@ -1,44 +1,123 @@
-import React, { Component } from 'react';
-import { compose } from 'recompose';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import PropTypes from 'prop-types';
-import cx from 'classnames';
-import { Icon } from '../../ui/components';
-import SearchTransition from '../../components/Transition/Search';
-import SearchResults from './SearchResults';
-import AddCountButton from '../../components/AddCountButton';
-import { actionCreators as searchActions } from '../../ducks/modules/search';
-import { getEntityAttributes, entityPrimaryKeyProperty } from '../../ducks/modules/network';
-import { makeGetFuse } from '../../selectors/search';
-import withExternalData from '../withExternalData';
-import getParentKeyByNameValue from '../../utils/getParentKeyByNameValue';
+/* eslint-disable react/sort-comp */
 
-/**
- * Fuse.js: approximate string matching.
- * See makeGetFuse() in the search selectors.
- */
-const DefaultFuseOpts = {
-  threshold: 0.5,
-  minMatchCharLength: 1,
-  shouldSort: true,
+import { compose, withStateHandlers, withHandlers, defaultProps } from 'recompose';
+import { connect } from 'react-redux';
+import { actionCreators as searchActions } from '../../ducks/modules/search';
+import { getEntityAttributes } from '../../ducks/modules/network';
+import getParentKeyByNameValue from '../../utils/getParentKeyByNameValue';
+import Search from '../../components/Search/Search';
+import withExternalData from '../withExternalData';
+import withSearch from './withSearch';
+
+// eslint-disable-next-line
+const mapStateToProps = ({ search }, { externalData__isLoading }) => ({
+  isOpen: !search.collapsed,
+  isLoading: externalData__isLoading,
+});
+
+const mapDispatchToProps = {
+  toggleSearch: searchActions.toggleSearch,
+  closeSearch: searchActions.closeSearch,
 };
 
-/**
- * The `reselect` selector which provides a Fuse instance for searching.
- */
-const FuseSelector = makeGetFuse(DefaultFuseOpts);
+const withReduxState = connect(mapStateToProps, mapDispatchToProps);
 
-const InitialState = {
-  hasInput: false,
+const initialState = {
+  hasSearchTerm: false,
   searchResults: [],
   searchTerm: '',
   selectedResults: [],
+  awaitingResults: false,
 };
+
+const withSearchState = withStateHandlers(
+  () => ({ ...initialState }),
+  {
+    resetState: () =>
+      () => ({ ...initialState }),
+    setQuery: () =>
+      query => ({
+        searchTerm: query,
+        hasSearchTerm: query.length !== 0,
+        searchResults: [],
+        awaitingResults: true,
+      }),
+    setResults: () =>
+      results => ({
+        searchResults: results,
+        awaitingResults: false,
+      }),
+    setSelected: previousState =>
+      (result) => {
+        let newResults;
+        const existingIndex = previousState.selectedResults.indexOf(result);
+        if (existingIndex > -1) {
+          newResults = previousState.selectedResults.slice();
+          newResults.splice(existingIndex, 1);
+        } else {
+          newResults = [...previousState.selectedResults, result];
+        }
+        return {
+          selectedResults: newResults,
+        };
+      },
+  },
+);
+
+const withSearchHandlers = withHandlers({
+  onToggleSearch: ({ toggleSearch }) =>
+    () => toggleSearch(),
+
+  onClose: ({ clearResultsOnClose, closeSearch, resetState }) =>
+    () => {
+      if (clearResultsOnClose) {
+        resetState();
+      }
+
+      closeSearch();
+    },
+
+  onCommit: ({ onComplete, selectedResults, closeSearch, resetState }) => () => {
+    onComplete(selectedResults);
+    closeSearch();
+    resetState();
+  },
+
+  onQueryChange: ({ setQuery, search }) => (e) => {
+    const query = e.target.value;
+
+    setQuery(query);
+
+    search(query);
+  },
+
+  onSelectResult: ({ setSelected }) =>
+    result => setSelected(result),
+
+  getIsSelected: ({ selectedResults }) =>
+    node => selectedResults.indexOf(node) > -1,
+
+  getDetails: ({ details, nodeTypeDefinition }) => {
+    const toDetail = (node, field) => {
+      const nodeTypeVariables = nodeTypeDefinition.variables;
+      const labelKey = getParentKeyByNameValue(nodeTypeVariables, field.variable);
+      return { [field.label]: getEntityAttributes(node)[labelKey] };
+    };
+
+    return node => details.map(attr => toDetail(node, attr));
+  },
+});
+
+const withDefaultProps = defaultProps({
+  details: [],
+  className: '',
+  clearResultsOnClose: true,
+  nodeColor: '',
+  options: {},
+});
 
 /**
   * @class Search
-  * @extends Component
   *
   * @description
   * Renders a plaintext node search interface in a semi-modal display,
@@ -65,194 +144,11 @@ const InitialState = {
   *     with smaller values (e.g., 0.2).
   *
   */
-class Search extends Component {
-  constructor(props) {
-    super(props);
-    this.state = InitialState;
-  }
-
-  onInputChange(newValue) {
-    let searchResults;
-    const hasInput = newValue && newValue.length > 0;
-
-    if (hasInput) {
-      searchResults = this.props.fuse.search(newValue);
-      searchResults = searchResults.filter(r => this.isAllowedResult(r));
-    } else {
-      searchResults = [];
-    }
-    this.setState({
-      searchResults,
-      searchTerm: newValue,
-      hasInput: hasInput || false,
-    });
-  }
-
-  onClose() {
-    if (this.props.clearResultsOnClose) {
-      this.setState(InitialState);
-    }
-    this.props.closeSearch();
-  }
-
-  onCommit() {
-    this.props.onComplete(this.state.selectedResults);
-    this.setState(InitialState);
-  }
-
-  toggleSelectedResult(result) {
-    this.setState((previousState) => {
-      let newResults;
-      const existingIndex = previousState.selectedResults.indexOf(result);
-      if (existingIndex > -1) {
-        newResults = previousState.selectedResults.slice();
-        newResults.splice(existingIndex, 1);
-      } else {
-        newResults = [...previousState.selectedResults, result];
-      }
-      return {
-        selectedResults: newResults,
-      };
-    });
-  }
-
-  // If false, suppress candidate from appearing in search results —
-  // for example, if the node has already been selected.
-  // Assumption:
-  //   `excludedNodes` size is small, but search set may be large,
-  //   and so preferable to filter found results dynamically.
-  isAllowedResult(candidate) {
-    return this.props.excludedNodes.every(excluded =>
-      excluded[entityPrimaryKeyProperty] !== candidate[entityPrimaryKeyProperty]);
-  }
-
-  render() {
-    const {
-      details,
-      className,
-      collapsed,
-      nodeColor,
-      getCardTitle,
-    } = this.props;
-
-    const hasInput = this.state.hasInput;
-    const searchClasses = cx(
-      className,
-      'search',
-      {
-        'search--hasInput': hasInput,
-      },
-    );
-
-    const SearchPrompt = 'Type in the box below to Search';
-    const SelectPrompt = 'Tap an item to select it';
-
-    // Render both headers to allow transitions between them
-    const HeaderClass = 'search__header';
-    const Headers = [SearchPrompt, SelectPrompt].map((prompt, i) => {
-      let hiddenClass = '';
-      if ((prompt === SearchPrompt && hasInput) ||
-        (prompt === SelectPrompt && !hasInput)) {
-        hiddenClass = `${HeaderClass}--hidden`;
-      }
-      return (<h2 className={`${HeaderClass} ${hiddenClass}`} key={`${HeaderClass}${i}`}>
-        {prompt}
-      </h2>);
-    });
-
-
-    // Result formatters:
-    const toDetail = (node, field) => {
-      const nodeTypeVariables = this.props.nodeTypeDefinition.variables;
-      const labelKey = getParentKeyByNameValue(nodeTypeVariables, field.variable);
-      return { [field.label]: getEntityAttributes(node)[labelKey] };
-    };
-
-    const getSelected = node => this.state.selectedResults.indexOf(node) > -1;
-    const getDetails = node => details.map(attr => toDetail(node, attr));
-    return (
-      <SearchTransition
-        className={searchClasses}
-        in={!collapsed}
-      >
-        <form onSubmit={(e) => { e.preventDefault(); }}>
-          <Icon name="close" className="menu__cross search__close-button" onClick={evt => this.onClose(evt)} />
-
-          {Headers}
-
-          <SearchResults
-            hasInput={hasInput}
-            results={this.state.searchResults}
-            label={getCardTitle}
-            details={getDetails}
-            isItemSelected={getSelected}
-            onItemClick={item => this.toggleSelectedResult(item)}
-          />
-
-          {
-            this.state.selectedResults.length > 0 &&
-            <AddCountButton
-              count={this.state.selectedResults.length}
-              colorName={nodeColor}
-              onClick={() => this.onCommit()}
-            />
-          }
-
-          <input
-            className="search__input"
-            onChange={evt => this.onInputChange(evt.target.value)}
-            name="searchTerm"
-            value={this.state.searchTerm}
-            type="search"
-          />
-        </form>
-      </SearchTransition>
-    );
-  }
-}
-
-Search.defaultProps = {
-  details: [],
-  className: '',
-  clearResultsOnClose: true,
-  nodeColor: '',
-  options: {},
-};
-
-Search.propTypes = {
-  details: PropTypes.array,
-  className: PropTypes.string,
-  clearResultsOnClose: PropTypes.bool,
-  closeSearch: PropTypes.func.isRequired,
-  collapsed: PropTypes.bool.isRequired,
-  getCardTitle: PropTypes.func.isRequired,
-  excludedNodes: PropTypes.array.isRequired,
-  fuse: PropTypes.object.isRequired,
-  onComplete: PropTypes.func.isRequired,
-  nodeColor: PropTypes.string,
-  nodeTypeDefinition: PropTypes.object.isRequired,
-  /* eslint-disable react/no-unused-prop-types */
-  // These props are required by the fuse selector
-  dataSourceKey: PropTypes.string.isRequired,
-  options: PropTypes.object,
-};
-
-function mapDispatchToProps(dispatch) {
-  return {
-    closeSearch: bindActionCreators(searchActions.closeSearch, dispatch),
-  };
-}
-
-function mapStateToProps(state, props) {
-  return {
-    collapsed: state.search.collapsed,
-    fuse: FuseSelector(state, props),
-  };
-}
-
-export { Search };
-
 export default compose(
+  withDefaultProps,
   withExternalData('dataSourceKey', 'externalData'),
-  connect(mapStateToProps, mapDispatchToProps),
+  withReduxState,
+  withSearchState,
+  withSearch,
+  withSearchHandlers,
 )(Search);
