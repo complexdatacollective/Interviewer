@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import Loading from '../../components/Loading';
 import CardList from '../../components/CardList';
 
 // This provides a workaround for visibility when a softkeyboard scrolls the viewport
@@ -27,39 +28,55 @@ function styleForSoftKeyboard() {
  * @param props.hasInput {boolean} true if there is user input to the search component
  * @param props.results {array} the search results to render. See CardList for formatters.
  */
-const SearchResults = (props) => {
-  const {
-    hasInput,
-    results,
-    ...rest
-  } = props;
+class SearchResults extends Component {
+  getResults() {
+    const {
+      hasInput,
+      awaitingResults,
+      results,
+      ...rest
+    } = this.props;
 
-  const style = styleForSoftKeyboard();
+    if (awaitingResults) {
+      return <Loading message="Performing search..." />;
+    }
 
-  const classNames = cx(
-    'search__results',
-    { 'search__results--collapsed': !hasInput },
-  );
+    if (results.length) {
+      return (
+        <CardList
+          className="card-list--single"
+          items={results}
+          {...rest}
+        />
+      );
+    }
 
-  let content = '';
-  if (results.length) {
-    content = (
-      <CardList
-        className="card-list--single"
-        items={results}
-        {...rest}
-      />
-    );
-  } else if (hasInput) {
-    content = (<p>Nothing matching that search</p>);
+    if (hasInput) {
+      return (<p>Nothing matching that search</p>);
+    }
+
+    return null;
   }
 
-  return (
-    <div className={classNames} style={style}>
-      {content}
-    </div>
-  );
-};
+  render() {
+    const {
+      hasInput,
+    } = this.props;
+
+    const style = styleForSoftKeyboard();
+
+    const classNames = cx(
+      'search__results',
+      { 'search__results--collapsed': !hasInput },
+    );
+
+    return (
+      <div className={classNames} style={style}>
+        {this.getResults()}
+      </div>
+    );
+  }
+}
 
 SearchResults.propTypes = {
   hasInput: PropTypes.bool.isRequired,

@@ -1,25 +1,19 @@
 .card-list {
-  flex-wrap: wrap;
   padding-bottom: 2rem;
   padding-top: calc(#{$scroller-top-padding});
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-gap: 2rem;
+  width: 100%;
+  height: 100%;
 
-  @media screen and (min-aspect-ratio: 4 / 3) {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  @media screen and (min-aspect-ratio: 16 / 10) {
-    grid-template-columns: 1fr 1fr 1fr;
-  }
-
-  @media screen and (min-aspect-ratio: 16 / 9) {
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+  &__row {
+    display: flex;
+    width: 100%;
+    padding-bottom: unit(1);
   }
 
   &__content {
     position: relative;
+    flex: 1;
+    padding: 0 unit(1) 0 0;
   }
 
   &--single {
