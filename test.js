@@ -1,0 +1,1 @@
+const spectron = require('spectron');
