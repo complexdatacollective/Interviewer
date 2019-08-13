@@ -1,7 +1,7 @@
 module.exports = {
   rootDir: 'test',
   setupFiles: [
-    '<rootDir>/../test/helpers.js',
+    '<rootDir>/helpers.js',
   ],
-  setupTestFrameworkScriptFile: '<rootDir>/../config/setup.js',
+  setupTestFrameworkScriptFile: '<rootDir>/setup.js',
 };
