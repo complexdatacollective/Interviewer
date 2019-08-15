@@ -45,3 +45,19 @@ export const resetApp = async (app) => {
 };
 
 export const resetApps = pluralize(resetApp);
+
+/**
+ * Clicks on element using dom apis.
+ *
+ * Useful when websocketio refuses to click on an element
+ * that it considers 'unclickable'.
+ *
+ * @param {object} _app Spectron app object
+ * @param {string} _selector querySelector
+ */
+export const forceClick = async (_app, _selector) => {
+  await _app.client.waitForVisible(_selector);
+  await _app.client.execute((selector) => {
+    window.document.querySelector(selector).click();
+  }, _selector);
+};

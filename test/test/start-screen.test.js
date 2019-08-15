@@ -2,19 +2,12 @@
 
 import path from 'path';
 import fakeDialog from 'spectron-fake-dialog';
-import { makeTestingApp, startApps, stopApps, resetApps } from './helpers';
+import { makeTestingApp, startApps, stopApps, resetApps, forceClick } from './helpers';
 import { dataDir } from '../paths';
 
 let app;
 
-const longPause = 750;
 const mediumPause = 500;
-
-const clickAnyway = async (_app, _selector) => {
-  await _app.client.execute((selector) => {
-    window.document.querySelector(selector).click();
-  }, _selector);
-};
 
 const setup = async () => {
   app = makeTestingApp('Network-Canvas');
@@ -57,7 +50,7 @@ describe('Start screen', () => {
 
     await app.client.waitForVisible('#reset-all-nc-data');
     await app.client.moveToObject('#reset-all-nc-data'); // for added realism, as we click using dom
-    await clickAnyway(app, '#reset-all-nc-data');
+    await forceClick(app, '#reset-all-nc-data');
     await app.client.pause(mediumPause);
     await app.client.click('button=Continue');
   });
