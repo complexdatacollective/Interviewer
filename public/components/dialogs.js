@@ -10,9 +10,10 @@ const openDialogOptions = {
 
 const openDialog = () =>
   new Promise((resolve, reject) => {
-    dialog.showOpenDialog(openDialogOptions, (filename) => {
-      if (!filename) { reject('Import protocol dialog cancelled.'); return; }
-      resolve(filename[0]);
+    dialog.showOpenDialog(openDialogOptions, (filenames) => {
+      if (!filenames) { reject('Import protocol dialog cancelled.'); return; }
+      if (!filenames.length || filenames.length !== 1) { reject('Only a single protocol may be imported at a time.'); return; }
+      resolve(filenames[0]);
     });
   });
 

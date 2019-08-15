@@ -2,12 +2,16 @@ import path from 'path';
 import { Application } from 'spectron';
 import electron from 'electron';
 
+const pluralize = f => (...apps) => Promise.all(apps.map(app => f(app)));
+
 export const makeTestingApp = () => {
+  // const electronPath = getElectronBinaryPath(appName);
   const appBuild = path.join(__dirname, '../', '../', 'public');
   const appConfig = {
     path: electron,
     env: {
-      NODE_ENV: 'test',
+      // NODE_ENV: 'test',
+      TEST: 'test',
       NC_DEVSERVER_FILE: '.devserver',
     },
     args: [appBuild],
@@ -21,7 +25,7 @@ export const startApp = async (app) => {
   return app;
 };
 
-export const startApps = (...apps) => Promise.all(apps.map(app => startApp(app)));
+export const startApps = pluralize(startApp);
 
 export const stopApp = async (app) => {
   if (app && app.isRunning()) {
@@ -30,4 +34,14 @@ export const stopApp = async (app) => {
   return Promise.resolve();
 };
 
-export const stopApps = (...apps) => Promise.all(apps.map(app => stopApp(app)));
+export const stopApps = pluralize(stopApp);
+
+export const resetApp = async (app) => {
+  await app.client.execute(() => {
+    window.localStorage.clear();
+  });
+  await app.webContents.reload();
+  await app.client.waitUntilWindowLoaded();
+};
+
+export const resetApps = pluralize(resetApp);
