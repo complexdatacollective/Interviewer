@@ -13,7 +13,7 @@ const mockStore = configureMockStore(middlewares);
 const mockState = {};
 
 const now = Date.now();
-Date.now = jest.genMockFunction().mockReturnValue(now);
+Date.now = jest.fn().mockReturnValue(now);
 
 const mockSessionId = 'session-1';
 

@@ -224,7 +224,7 @@
       "<rootDir>/config/jest/matchMedia.js"
     ],
     "testPathIgnorePatterns": [
-      "<rootDir>[/\\\\](www|docs|node_modules|scripts)[/\\\\]",
+      "<rootDir>[/\\\\](www|docs|node_modules|scripts|test)[/\\\\]",
       "<rootDir>/src/utils/networkQuery"
     ],
     "testEnvironment": "node",

@@ -66,9 +66,7 @@ ShallowWrapper {
               className="alter-form__form"
               entity="edge"
               form="EDGE_FORM_1_2"
-              initialValues={undefined}
               onSubmit={[Function]}
-              subject={undefined}
               title="alpha"
               type="friend"
             />
@@ -103,9 +101,7 @@ ShallowWrapper {
                 className="alter-form__form"
                 entity="edge"
                 form="EDGE_FORM_1_2"
-                initialValues={undefined}
                 onSubmit={[Function]}
-                subject={undefined}
                 title="alpha"
                 type="friend"
               />
@@ -159,9 +155,7 @@ ShallowWrapper {
                 className="alter-form__form"
                 entity="edge"
                 form="EDGE_FORM_1_2"
-                initialValues={undefined}
                 onSubmit={[Function]}
-                subject={undefined}
                 title="alpha"
                 type="friend"
               />
@@ -179,9 +173,7 @@ ShallowWrapper {
                 className="alter-form__form"
                 entity="edge"
                 form="EDGE_FORM_1_2"
-                initialValues={undefined}
                 onSubmit={[Function]}
-                subject={undefined}
                 title="alpha"
                 type="friend"
               />,
@@ -243,9 +235,7 @@ ShallowWrapper {
                 className="alter-form__form"
                 entity="edge"
                 form="EDGE_FORM_1_2"
-                initialValues={undefined}
                 onSubmit={[Function]}
-                subject={undefined}
                 title="alpha"
                 type="friend"
               />
@@ -280,9 +270,7 @@ ShallowWrapper {
                   className="alter-form__form"
                   entity="edge"
                   form="EDGE_FORM_1_2"
-                  initialValues={undefined}
                   onSubmit={[Function]}
-                  subject={undefined}
                   title="alpha"
                   type="friend"
                 />
@@ -336,9 +324,7 @@ ShallowWrapper {
                   className="alter-form__form"
                   entity="edge"
                   form="EDGE_FORM_1_2"
-                  initialValues={undefined}
                   onSubmit={[Function]}
-                  subject={undefined}
                   title="alpha"
                   type="friend"
                 />
@@ -356,9 +342,7 @@ ShallowWrapper {
                   className="alter-form__form"
                   entity="edge"
                   form="EDGE_FORM_1_2"
-                  initialValues={undefined}
                   onSubmit={[Function]}
-                  subject={undefined}
                   title="alpha"
                   type="friend"
                 />,
