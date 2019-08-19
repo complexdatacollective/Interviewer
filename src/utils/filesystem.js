@@ -32,7 +32,7 @@ const inSequence = (items, apply) =>
 
 const userDataPath = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const electron = require('electron');
+    const electron = window.require('electron');
 
     return () => (electron.app || electron.remote.app).getPath('userData');
   }

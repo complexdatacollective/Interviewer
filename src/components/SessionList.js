@@ -36,7 +36,7 @@ const SessionList = (props) => {
         items.map(session => (
           <EnhancedSessionCard
             key={getKey(session)}
-            {...this.props}
+            {...props}
             label={label(session)}
             sessionUUID={getKey(session)}
             selected={isItemSelected(session)}
