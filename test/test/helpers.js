@@ -4,6 +4,12 @@ import electron from 'electron';
 
 const pluralize = f => (...apps) => Promise.all(apps.map(app => f(app)));
 
+// in ms
+export const timing = {
+  medium: 500,
+  short: 250,
+};
+
 export const makeTestingApp = () => {
   // const electronPath = getElectronBinaryPath(appName);
   const appBuild = path.join(__dirname, '../', '../', 'public');
@@ -42,6 +48,7 @@ export const resetApp = async (app) => {
   });
   await app.webContents.reload();
   await app.client.waitUntilWindowLoaded();
+  await app.client.pause(500);
 };
 
 export const resetApps = pluralize(resetApp);
