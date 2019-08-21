@@ -1,3 +1,5 @@
+/* eslint-env jest */
+
 import path from 'path';
 import { Application } from 'spectron';
 import electron from 'electron';
@@ -11,12 +13,13 @@ export const timing = {
 };
 
 export const makeTestingApp = () => {
-  // const electronPath = getElectronBinaryPath(appName);
   const appBuild = path.join(__dirname, '../', '../', 'public');
   const appConfig = {
     path: electron,
+    webdriverOptions: {
+      baseUrl: 'http://10.10.100.197:3000', // TODO: Read from .devserver
+    },
     env: {
-      // NODE_ENV: 'test',
       TEST: 'test',
       NC_DEVSERVER_FILE: '.devserver',
     },
@@ -28,7 +31,7 @@ export const makeTestingApp = () => {
 export const startApp = async (app) => {
   await app.start();
   await app.client.waitUntilWindowLoaded();
-  return app;
+  await app.client.pause(timing.medium);
 };
 
 export const startApps = pluralize(startApp);
@@ -48,7 +51,7 @@ export const resetApp = async (app) => {
   });
   await app.webContents.reload();
   await app.client.waitUntilWindowLoaded();
-  await app.client.pause(500);
+  await app.client.pause(timing.medium);
 };
 
 export const resetApps = pluralize(resetApp);

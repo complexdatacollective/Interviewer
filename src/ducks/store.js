@@ -4,7 +4,7 @@ import storage from 'redux-persist/lib/storage';
 import thunk from 'redux-thunk';
 import { routerMiddleware } from 'react-router-redux';
 import createHistory from 'history/createHashHistory';
-
+import { getEnv } from '../utils/Environment';
 import logger from './middleware/logger';
 import epics from './middleware/epics';
 import rootReducer from './modules/rootReducer';
@@ -24,12 +24,20 @@ const persistConfig = {
   ],
 };
 
+const env = getEnv();
+
 export const history = createHistory();
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+const getReducer = () => {
+  if (env.REACT_APP_NO_PERSIST) {
+    return rootReducer;
+  }
+
+  return persistReducer(persistConfig, rootReducer);
+};
 
 export const store = createStore(
-  persistedReducer,
+  getReducer(),
   undefined,
   compose(
     applyMiddleware(routerMiddleware(history), thunk, epics, logger),

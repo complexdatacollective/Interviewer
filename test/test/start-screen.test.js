@@ -2,7 +2,7 @@
 
 import path from 'path';
 import fakeDialog from 'spectron-fake-dialog';
-import { makeTestingApp, startApps, stopApps, resetApps, forceClick, timing } from './helpers';
+import { makeTestingApp, startApps, stopApps, forceClick, timing } from './helpers';
 import { dataDir } from '../paths';
 
 let app;
@@ -11,26 +11,28 @@ const setup = async () => {
   app = makeTestingApp('Network-Canvas');
   await fakeDialog.apply(app);
   await startApps(app);
-  await resetApps(app);
 };
 
 const teardown = async () => {
+  // Uncomment to investigate inspector
+  // await app.debug();
   await stopApps(app);
+};
+
+const reset = async () => {
+  await app.client.url('#/reset');
 };
 
 describe('Start screen', () => {
   beforeAll(setup);
   afterAll(teardown);
+  beforeEach(reset);
 
   it('on first load it shows no protocols installed', async () => {
     await app.client.waitForVisible('h1=No interview protocols installed');
 
-    await app.browserWindow.capturePage()
-      .then(snapshot =>
-        expect(snapshot).toMatchImageSnapshot(),
-      );
-
-    await app.client.pause(timing.short);
+    await app.client.pause(timing.medium);
+    await expect(app.browserWindow.capturePage()).resolves.toMatchImageSnapshot();
   });
 
   it('can load a protocol from disk', async () => {
