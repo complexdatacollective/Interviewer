@@ -11,6 +11,8 @@ const mockProps = {
     entity: 'node',
     type: 'person',
   },
+  nodeIndex: 1,
+  stageIndex: 1,
 };
 
 describe('<SlideFormNode />', () => {

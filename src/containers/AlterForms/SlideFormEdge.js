@@ -21,8 +21,9 @@ class SlideFormEdge extends PureComponent {
       edge,
       edgeColor,
       nodes,
-      index,
+      edgeIndex,
       subject,
+      stageIndex,
     } = this.props;
 
     const fromNode = find(nodes, [entityPrimaryKeyProperty, edge.from]);
@@ -42,7 +43,7 @@ class SlideFormEdge extends PureComponent {
                 initialValues={edge[entityAttributesProperty]}
                 autoFocus={false}
                 subject={subject}
-                form={`EDGE_FORM_${index + 1}`}
+                form={`EDGE_FORM_${stageIndex}_${edgeIndex + 1}`}
                 onSubmit={this.handleSubmit}
               />
             </Scroller>
@@ -66,7 +67,8 @@ SlideFormEdge.propTypes = {
   updateEdge: PropTypes.func.isRequired,
   subject: PropTypes.object.isRequired,
   edge: PropTypes.object.isRequired,
-  index: PropTypes.number.isRequired,
+  edgeIndex: PropTypes.number.isRequired,
+  stageIndex: PropTypes.number.isRequired,
 };
 
 export { SlideFormEdge };

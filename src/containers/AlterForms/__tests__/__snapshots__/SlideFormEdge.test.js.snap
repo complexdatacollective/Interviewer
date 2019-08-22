@@ -11,6 +11,7 @@ ShallowWrapper {
       }
     }
     edgeColor="blue"
+    edgeIndex={1}
     form={
       Object {
         "entity": "edge",
@@ -28,6 +29,7 @@ ShallowWrapper {
         },
       }
     }
+    stageIndex={1}
   />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
@@ -63,7 +65,7 @@ ShallowWrapper {
               autoFocus={false}
               className="alter-form__form"
               entity="edge"
-              form="EDGE_FORM_NaN"
+              form="EDGE_FORM_1_2"
               initialValues={undefined}
               onSubmit={[Function]}
               subject={undefined}
@@ -100,7 +102,7 @@ ShallowWrapper {
                 autoFocus={false}
                 className="alter-form__form"
                 entity="edge"
-                form="EDGE_FORM_NaN"
+                form="EDGE_FORM_1_2"
                 initialValues={undefined}
                 onSubmit={[Function]}
                 subject={undefined}
@@ -156,7 +158,7 @@ ShallowWrapper {
                 autoFocus={false}
                 className="alter-form__form"
                 entity="edge"
-                form="EDGE_FORM_NaN"
+                form="EDGE_FORM_1_2"
                 initialValues={undefined}
                 onSubmit={[Function]}
                 subject={undefined}
@@ -176,7 +178,7 @@ ShallowWrapper {
                 autoFocus={false}
                 className="alter-form__form"
                 entity="edge"
-                form="EDGE_FORM_NaN"
+                form="EDGE_FORM_1_2"
                 initialValues={undefined}
                 onSubmit={[Function]}
                 subject={undefined}
@@ -193,7 +195,7 @@ ShallowWrapper {
                 "autoFocus": false,
                 "className": "alter-form__form",
                 "entity": "edge",
-                "form": "EDGE_FORM_NaN",
+                "form": "EDGE_FORM_1_2",
                 "initialValues": undefined,
                 "onSubmit": [Function],
                 "subject": undefined,
@@ -240,7 +242,7 @@ ShallowWrapper {
                 autoFocus={false}
                 className="alter-form__form"
                 entity="edge"
-                form="EDGE_FORM_NaN"
+                form="EDGE_FORM_1_2"
                 initialValues={undefined}
                 onSubmit={[Function]}
                 subject={undefined}
@@ -277,7 +279,7 @@ ShallowWrapper {
                   autoFocus={false}
                   className="alter-form__form"
                   entity="edge"
-                  form="EDGE_FORM_NaN"
+                  form="EDGE_FORM_1_2"
                   initialValues={undefined}
                   onSubmit={[Function]}
                   subject={undefined}
@@ -333,7 +335,7 @@ ShallowWrapper {
                   autoFocus={false}
                   className="alter-form__form"
                   entity="edge"
-                  form="EDGE_FORM_NaN"
+                  form="EDGE_FORM_1_2"
                   initialValues={undefined}
                   onSubmit={[Function]}
                   subject={undefined}
@@ -353,7 +355,7 @@ ShallowWrapper {
                   autoFocus={false}
                   className="alter-form__form"
                   entity="edge"
-                  form="EDGE_FORM_NaN"
+                  form="EDGE_FORM_1_2"
                   initialValues={undefined}
                   onSubmit={[Function]}
                   subject={undefined}
@@ -370,7 +372,7 @@ ShallowWrapper {
                   "autoFocus": false,
                   "className": "alter-form__form",
                   "entity": "edge",
-                  "form": "EDGE_FORM_NaN",
+                  "form": "EDGE_FORM_1_2",
                   "initialValues": undefined,
                   "onSubmit": [Function],
                   "subject": undefined,
