@@ -11,13 +11,14 @@ ShallowWrapper {
         "type": "person",
       }
     }
-    index={0}
     node={
       Object {
         "name": "Bob",
       }
     }
+    nodeIndex={1}
     onUpdate={[Function]}
+    stageIndex={1}
   />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
@@ -46,7 +47,7 @@ ShallowWrapper {
               autoFocus={false}
               className="alter-form__form"
               entity="node"
-              form="NODE_FORM_1"
+              form="NODE_FORM_1_2"
               initialValues={undefined}
               onSubmit={[Function]}
               subject={undefined}
@@ -76,7 +77,7 @@ ShallowWrapper {
                 autoFocus={false}
                 className="alter-form__form"
                 entity="node"
-                form="NODE_FORM_1"
+                form="NODE_FORM_1_2"
                 initialValues={undefined}
                 onSubmit={[Function]}
                 subject={undefined}
@@ -111,7 +112,7 @@ ShallowWrapper {
                 autoFocus={false}
                 className="alter-form__form"
                 entity="node"
-                form="NODE_FORM_1"
+                form="NODE_FORM_1_2"
                 initialValues={undefined}
                 onSubmit={[Function]}
                 subject={undefined}
@@ -131,7 +132,7 @@ ShallowWrapper {
                 autoFocus={false}
                 className="alter-form__form"
                 entity="node"
-                form="NODE_FORM_1"
+                form="NODE_FORM_1_2"
                 initialValues={undefined}
                 onSubmit={[Function]}
                 subject={undefined}
@@ -148,7 +149,7 @@ ShallowWrapper {
                 "autoFocus": false,
                 "className": "alter-form__form",
                 "entity": "node",
-                "form": "NODE_FORM_1",
+                "form": "NODE_FORM_1_2",
                 "initialValues": undefined,
                 "onSubmit": [Function],
                 "subject": undefined,
@@ -188,7 +189,7 @@ ShallowWrapper {
                 autoFocus={false}
                 className="alter-form__form"
                 entity="node"
-                form="NODE_FORM_1"
+                form="NODE_FORM_1_2"
                 initialValues={undefined}
                 onSubmit={[Function]}
                 subject={undefined}
@@ -218,7 +219,7 @@ ShallowWrapper {
                   autoFocus={false}
                   className="alter-form__form"
                   entity="node"
-                  form="NODE_FORM_1"
+                  form="NODE_FORM_1_2"
                   initialValues={undefined}
                   onSubmit={[Function]}
                   subject={undefined}
@@ -253,7 +254,7 @@ ShallowWrapper {
                   autoFocus={false}
                   className="alter-form__form"
                   entity="node"
-                  form="NODE_FORM_1"
+                  form="NODE_FORM_1_2"
                   initialValues={undefined}
                   onSubmit={[Function]}
                   subject={undefined}
@@ -273,7 +274,7 @@ ShallowWrapper {
                   autoFocus={false}
                   className="alter-form__form"
                   entity="node"
-                  form="NODE_FORM_1"
+                  form="NODE_FORM_1_2"
                   initialValues={undefined}
                   onSubmit={[Function]}
                   subject={undefined}
@@ -290,7 +291,7 @@ ShallowWrapper {
                   "autoFocus": false,
                   "className": "alter-form__form",
                   "entity": "node",
-                  "form": "NODE_FORM_1",
+                  "form": "NODE_FORM_1_2",
                   "initialValues": undefined,
                   "onSubmit": [Function],
                   "subject": undefined,

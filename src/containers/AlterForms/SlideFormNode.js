@@ -16,8 +16,9 @@ class SlideForm extends PureComponent {
     const {
       form,
       node,
-      index,
+      nodeIndex,
       subject,
+      stageIndex,
     } = this.props;
 
     return (
@@ -32,7 +33,7 @@ class SlideForm extends PureComponent {
                 initialValues={node[entityAttributesProperty]}
                 autoFocus={false}
                 subject={subject}
-                form={`NODE_FORM_${index + 1}`}
+                form={`NODE_FORM_${stageIndex}_${nodeIndex + 1}`}
                 onSubmit={this.handleSubmit}
               />
             </Scroller>
@@ -48,12 +49,13 @@ SlideForm.propTypes = {
   subject: PropTypes.object.isRequired,
   node: PropTypes.object,
   onUpdate: PropTypes.func,
-  index: PropTypes.number,
+  nodeIndex: PropTypes.number,
+  stageIndex: PropTypes.number.isRequired,
 };
 
 SlideForm.defaultProps = {
   form: {},
-  index: 0,
+  nodeIndex: 0,
   node: {},
   onUpdate: () => {},
 };

@@ -20,6 +20,8 @@ const mockProps = {
     entity: 'edge',
     type: 'friend',
   },
+  edgeIndex: 1,
+  stageIndex: 1,
 };
 
 describe('<SlideFormEdge />', () => {
