@@ -44,4 +44,53 @@ describe('dialogs', () => {
       });
     });
   });
+
+  describe('openDialog', () => {
+    let store;
+    const getDialog = () => ({
+      foo: 'bar',
+      onCancel: jest.fn(),
+      onConfirm: jest.fn(),
+    });
+
+    beforeEach(() => {
+      store = createStore(reducer, undefined, applyMiddleware(thunks));
+    });
+
+    it('Returns a promise', () => {
+      const dialog = getDialog();
+
+      expect.assertions(1);
+
+      expect(store.dispatch(actionCreators.openDialog(dialog))).toBeInstanceOf(Promise);
+    });
+
+    it('Promise resolves to `false` when onCancel is called', () => {
+      const dialog = getDialog();
+
+      expect.assertions(1);
+
+      const subject = expect(store.dispatch(actionCreators.openDialog(dialog)))
+        .resolves.toBe(false);
+
+      const state = store.getState();
+      state.dialogs[0].onCancel();
+
+      return subject;
+    });
+
+    it('Promise resolves to `true` when onConfirm is called', () => {
+      const dialog = getDialog();
+
+      expect.assertions(1);
+
+      const subject = expect(store.dispatch(actionCreators.openDialog(dialog)))
+        .resolves.toBe(true);
+
+      const state = store.getState();
+      state.dialogs[0].onConfirm();
+
+      return subject;
+    });
+  });
 });
