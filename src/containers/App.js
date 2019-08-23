@@ -6,7 +6,7 @@ import { withRouter } from 'react-router';
 import cx from 'classnames';
 import { actionCreators as deviceSettingsActions } from '../ducks/modules/deviceSettings';
 import '../styles/main.scss';
-import { isElectron, isCordova, isWindows, isMacOS, isLinux, isPreview } from '../utils/Environment';
+import { isElectron, isCordova, isWindows, isMacOS, isLinux, isPreview, getEnv } from '../utils/Environment';
 import DialogManager from '../components/DialogManager';
 import MainMenu from '../containers/MainMenu';
 import SettingsMenuButton from '../components/MainMenu/SettingsMenuButton';
@@ -24,18 +24,22 @@ class App extends PureComponent {
       window.Keyboard.shrinkView(true);
     }
 
-    // Spy on window fullscreen status
-    if (isElectron() && !isPreview()) {
-      const win = this.getElectronWindow();
-      win.setFullScreen(!!this.props.startFullScreen);
+    const env = getEnv();
 
-      win.on('enter-full-screen', () => {
-        this.props.setStartFullScreen(true);
-      });
+    if (!env.REACT_APP_TEST) {
+      // Spy on window fullscreen status
+      if (isElectron() && !isPreview()) {
+        const win = this.getElectronWindow();
+        win.setFullScreen(!!this.props.startFullScreen);
 
-      win.on('leave-full-screen', () => {
-        this.props.setStartFullScreen(false);
-      });
+        win.on('enter-full-screen', () => {
+          this.props.setStartFullScreen(true);
+        });
+
+        win.on('leave-full-screen', () => {
+          this.props.setStartFullScreen(false);
+        });
+      }
     }
   }
 
