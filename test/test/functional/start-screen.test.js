@@ -2,8 +2,8 @@
 
 import path from 'path';
 import fakeDialog from 'spectron-fake-dialog';
-import { makeTestingApp, startApps, stopApps, forceClick, timing } from './helpers';
-import { dataDir } from '../paths';
+import { makeTestingApp, startApps, stopApps, forceClick, timing } from '../helpers';
+import { dataDir } from '../../paths';
 
 let app;
 
@@ -30,13 +30,6 @@ describe('Start screen', () => {
   beforeAll(setup);
   afterAll(teardown);
   beforeEach(reset);
-
-  it('on first load it shows no protocols installed', async () => {
-    await app.client.waitForVisible('h1=No interview protocols installed');
-
-    await app.client.pause(timing.medium);
-    await expect(app.browserWindow.capturePage()).resolves.toMatchImageSnapshot();
-  });
 
   it('can load a protocol from disk', async () => {
     const mockProtocolPath = path.join(dataDir, 'mock.netcanvas');
