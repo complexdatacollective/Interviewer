@@ -14,7 +14,7 @@
     "start": "node scripts/start.js",
     "start:android": "cross-env NC_TARGET_PLATFORM=android npm start",
     "start:electron": "cross-env NC_TARGET_PLATFORM=electron npm start",
-    "start:test": "cross-env NC_TARGET_PLATFORM=electron REACT_APP_NO_PERSIST=true npm start",
+    "start:test": "cross-env NC_TARGET_PLATFORM=electron REACT_APP_TEST=true REACT_APP_NO_PERSIST=true npm start",
     "start:ios": "cross-env NC_TARGET_PLATFORM=ios npm start",
     "build": "node scripts/build.js",
     "build:android": "cross-env NC_TARGET_PLATFORM=android npm run build && cordova prepare android",
