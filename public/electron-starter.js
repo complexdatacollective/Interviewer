@@ -29,7 +29,6 @@ app.on('second-instance', argv => appManager.openFileFromArgs(argv));
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   appManager.start();
-  protocol.isProtocolHandled('asset', handled => log.info(handled));
   appManager.loadDevTools();
 });
 
