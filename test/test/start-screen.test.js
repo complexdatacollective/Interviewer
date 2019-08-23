@@ -12,10 +12,7 @@ const setup = async () => {
   await fakeDialog.apply(app);
   await startApps(app);
   await app.client.pause(timing.medium);
-  // TODO: enforce window size once API is high enough to support it
-  // It should already work with v4 (albeit with a different syntax to below) but doesn't seem to
-  // be supported
-  // await app.client.setWindowSize(1280, 800);
+  await app.browserWindow.setSize(1280, 800);
 };
 
 const teardown = async () => {
