@@ -3,8 +3,8 @@
 import path from 'path';
 import { Application } from 'spectron';
 import electron from 'electron';
-
-const pluralize = f => (...apps) => Promise.all(apps.map(app => f(app)));
+import fs from 'fs-extra';
+import paths from '../../config/paths';
 
 // in ms
 export const timing = {
@@ -12,12 +12,17 @@ export const timing = {
   short: 250,
 };
 
-export const makeTestingApp = () => {
+const devServerURI = fs.readFileSync(paths.dotdevserver, 'utf-8');
+
+const pluralize = f => (...apps) => Promise.all(apps.map(app => f(app)));
+
+const getAppConfiguration = () => {
   const appBuild = path.join(__dirname, '../', '../', 'public');
-  const appConfig = {
+
+  const appConfiguration = {
     path: electron,
     webdriverOptions: {
-      baseUrl: 'http://10.10.100.197:3000', // TODO: Read from .devserver
+      baseUrl: devServerURI,
     },
     env: {
       TEST: 'test',
@@ -25,7 +30,13 @@ export const makeTestingApp = () => {
     },
     args: [appBuild],
   };
-  return new Application(appConfig);
+
+  return appConfiguration;
+};
+
+export const makeTestingApp = () => {
+  const appConfiguration = getAppConfiguration();
+  return new Application(appConfiguration);
 };
 
 export const startApp = async (app) => {
