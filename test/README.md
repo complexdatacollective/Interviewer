@@ -27,3 +27,9 @@ These tests create `__image_snapshots__/` files which should be added to version
 
 If snapshots don't match, diff files are created here `__image_snapshots__/__diff_output__`, these
 should not be added to version control, but can be used to debug the issue.
+
+### Updating snapshots
+
+Update snapshots with the `-u` flag:
+
+`npm run test:e2e -- -u`
