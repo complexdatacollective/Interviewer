@@ -10,6 +10,6 @@ http://v4.webdriver.io/api.html
 # Run tests:
 
 ```
-$ npm run start:electron
-$ npm run test:e2e
+$ npm run start:test # to start serving react in electron/test mode
+$ npm run test:e2e # to run tests
 ```
