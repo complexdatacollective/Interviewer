@@ -7,7 +7,7 @@
   "private": true,
   "engines": {
     "node": "12.8.0",
-    "npm": "6.10.3"
+    "npm": "6.10.2"
   },
   "scripts": {
     "pack": "electron-builder --dir",
