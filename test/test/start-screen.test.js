@@ -11,11 +11,17 @@ const setup = async () => {
   app = makeTestingApp('Network-Canvas');
   await fakeDialog.apply(app);
   await startApps(app);
+  await app.client.pause(timing.medium);
+  // TODO: enforce window size once API is high enough to support it
+  // It should already work with v4 (albeit with a different syntax to below) but doesn't seem to
+  // be supported
+  // await app.client.setWindowSize(1280, 800);
 };
 
 const teardown = async () => {
   // Uncomment to investigate inspector
-  // await app.debug();
+  // await app.client.debug();
+
   await stopApps(app);
 };
 
@@ -48,7 +54,7 @@ describe('Start screen', () => {
     await app.client.click('button=Continue');
     await app.client.pause(timing.medium);
     await app.client.click('button.overlay__close');
-    await app.client.pause(timing.medium);
+    await app.client.waitForExist('.modal', timing.long, true); // wait for not exist
   });
 
   it('can reset state', async () => {
@@ -60,5 +66,6 @@ describe('Start screen', () => {
     await forceClick(app, '#reset-all-nc-data');
     await app.client.pause(timing.medium);
     await app.client.click('button=Continue');
+    await app.client.waitForExist('.modal', timing.long, true); // wait for not exist
   });
 });

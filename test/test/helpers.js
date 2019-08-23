@@ -8,6 +8,7 @@ import paths from '../../config/paths';
 
 // in ms
 export const timing = {
+  long: 1000,
   medium: 500,
   short: 250,
 };
