@@ -7,9 +7,23 @@ version 4 of webdriver, docs which can be found here:
 
 http://v4.webdriver.io/api.html
 
-# Run tests:
+## Run tests:
 
 ```
 $ npm run start:test # to start serving react in electron/test mode
 $ npm run test:e2e # to run tests
 ```
+
+## Regression tests
+
+Screenshots of the app in various states can be captured to help spot regressions.
+
+```
+await app.client.pause(timing.medium); // You may need to pause to allow fonts/assets to load
+await expect(app.browserWindow.capturePage()).resolves.toMatchImageSnapshot(); // Snapshot test
+```
+
+These tests create `__image_snapshots__/` files which should be added to version control.
+
+If snapshots don't match, diff files are created here `__image_snapshots__/__diff_output__`, these
+should not be added to version control, but can be used to debug the issue.
