@@ -26,6 +26,5 @@ jobs:
               npm run sass-lint -- --max-warnings 0 &&
               npm run test &&
               npm run build
-    - stage: regression
       script: npm run build:ci &&
               npm run test:e2e:ci
