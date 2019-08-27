@@ -1,23 +1,20 @@
+dist: xenial
 language: node_js
 branches:
   only:
     - master
 node_js:
   - "8.11"
-
 addons:
   apt:
     packages:
-      - xvfb
+      - libavahi-compat-libdnssd-dev xvfb libxtst6 libxss1 libgtk2.0-0 libnss3 libasound2 libgconf-2-4
+services:
+  - xvfb
 cache:
   directories:
     - node_modules # NPM packages
-before_install:
-  - sudo apt-get update -q
-  - sudo apt-get install libavahi-compat-libdnssd-dev -y
 install:
-  - export DISPLAY=':99.0'
-  - Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
   - npm install
 jobs:
   include:
@@ -27,4 +24,6 @@ jobs:
               npm run test &&
               npm run build
       script: npm run build:ci &&
-              npm run test:e2e:ci
+              xvfb-run --server-args="-screen 0 1440x900x24" -a npm run test:e2e:ci
+
+

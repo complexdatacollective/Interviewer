@@ -51,7 +51,7 @@ function createWindow() {
       evt.preventDefault();
     });
 
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === 'development' && !process.env.TEST) {
       mainWindow.openDevTools();
     }
 
