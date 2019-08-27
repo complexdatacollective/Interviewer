@@ -26,7 +26,7 @@ class App extends PureComponent {
 
     const env = getEnv();
 
-    if (!env.REACT_APP_TEST) {
+    if (!env.REACT_APP_NO_FULLSCREEN) {
       // Spy on window fullscreen status
       if (isElectron() && !isPreview()) {
         const win = this.getElectronWindow();

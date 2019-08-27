@@ -19,7 +19,7 @@ const getAppConfiguration = () => {
   let appBuild;
   let devServerURI;
 
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.TEST_ENV === 'development') {
     appBuild = path.join(__dirname, '../', '../', 'public');
     devServerURI = fs.readFileSync(paths.dotdevserver, 'utf-8');
 

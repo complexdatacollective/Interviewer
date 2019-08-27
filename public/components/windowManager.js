@@ -3,6 +3,7 @@ const mainMenu = require('./mainMenu');
 const appUrl = require('./appURL');
 
 const isMacOS = () => process.platform === 'darwin';
+const isTest = () => !!process.env.TEST;
 
 const titlebarParameters = isMacOS() ? { titleBarStyle: 'hidden', frame: false } : { autoHideMenuBar: true };
 
@@ -23,15 +24,18 @@ function createWindow() {
   if (window) { return Promise.resolve(window); }
 
   return new Promise((resolve) => {
+    // TODO: custom env var? NO_CONSTRAIN?
+    const minDimensions = isTest() ?
+      {} :
+      { minWidth: 1280, minHeight: 800 };
+
     // Create the browser window.
     const windowParameters = Object.assign({
       width: 1440,
       height: 900,
-      minWidth: 1280,
-      minHeight: 800,
       center: true,
       title: 'Network Canvas',
-    }, titlebarParameters);
+    }, minDimensions, titlebarParameters);
 
     const mainWindow = new BrowserWindow(windowParameters);
 
