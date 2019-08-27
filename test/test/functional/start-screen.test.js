@@ -2,13 +2,12 @@
 
 import path from 'path';
 import fakeDialog from 'spectron-fake-dialog';
-import { makeTestingApp, startApps, stopApps, forceClick, timing } from '../helpers';
+import { makeTestingApp, startApps, stopApps, forceClick, timing, loadDevelopmentProtocol } from '../helpers';
 import { dataDir } from '../../paths';
 
-let app;
+const app = makeTestingApp('Network-Canvas');
 
 const setup = async () => {
-  app = makeTestingApp('Network-Canvas');
   await fakeDialog.apply(app);
   await startApps(app);
   await app.client.pause(timing.medium);
@@ -45,6 +44,10 @@ describe('Start screen', () => {
     await app.client.pause(timing.medium);
     await app.client.click('button.overlay__close');
     await app.client.waitForExist('.modal', timing.long, true); // wait for not exist
+  });
+
+  it('can load a protocol from url', async () => {
+    await loadDevelopmentProtocol(app);
   });
 
   it('can reset state', async () => {

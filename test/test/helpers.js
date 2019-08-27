@@ -13,6 +13,9 @@ export const timing = {
   short: 250,
 };
 
+export const developmentProtocol = process.env.DEVELOPMENT_PROTOCOL ||
+  'https://github.com/codaco/development-protocol/releases/download/20190529123247-7c1e58a/development-protocol.netcanvas';
+
 const pluralize = f => (...apps) => Promise.all(apps.map(app => f(app)));
 
 const getAppConfiguration = () => {
@@ -83,6 +86,21 @@ export const resetApp = async (app) => {
 };
 
 export const resetApps = pluralize(resetApp);
+
+/**
+ * For reuse when testing interfaces
+ */
+export const loadDevelopmentProtocol = async (app) => {
+  await app.client.isVisible('.getting-started');
+  await app.client.click('[name=add-a-protocol]');
+  await app.client.waitForVisible('.protocol-import-dialog__tabs');
+  await app.client.click('.tab=From URL');
+  await app.client.$('input[name=protocol_url]').setValue(developmentProtocol);
+  await app.client.click('button=Import');
+  await app.client.waitForVisible('h4=Protocol imported successfully!', 600000); // 10mins
+  await app.client.click('button=Continue');
+  await app.client.waitForExist('.modal', timing.long, true); // wait for not exist
+};
 
 export const resizeApp = (_app, width, height) =>
   async () => {
