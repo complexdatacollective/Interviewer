@@ -20,11 +20,19 @@ This can test interactions with various elements of the app.
 
 They are found in `test/functional`
 
+```
+$ npm run test:e2e -- functional # to run functional tests
+```
+
 ### Regression tests
 
 Screenshots of the app in various states can be captured to help spot regressions.
 
 These are found in `test/regression/`
+
+```
+$ npm run test:e2e -- functional # to run regression tests
+```
 
 ```
 await app.client.pause(timing.medium); // You may need to pause to allow fonts/assets to load
@@ -41,3 +49,11 @@ should not be added to version control, but can be used to debug the issue.
 Update snapshots with the `-u` flag:
 
 `npm run test:e2e -- -u`
+
+
+### CI
+
+```
+$ npm run build:ci # to build app (electron)
+$ npm run test:e2e:ci # to run tests
+```
