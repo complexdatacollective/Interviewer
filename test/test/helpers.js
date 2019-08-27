@@ -68,6 +68,13 @@ export const resetApp = async (app) => {
 
 export const resetApps = pluralize(resetApp);
 
+export const resizeApp = (_app, width, height) =>
+  async () => {
+    await _app.browserWindow.setSize(width, height);
+    await _app.client.url('#/reset');
+    await _app.client.pause(timing.medium); // wait for assets/fonts to load
+  };
+
 /**
  * Clicks on element using dom apis.
  *
