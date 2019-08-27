@@ -48,7 +48,7 @@ const openDialog = dialog =>
       };
 
       const onCancel = () => {
-        if (dialog.onConfirm) { dialog.onCancel(); }
+        if (dialog.onCancel) { dialog.onCancel(); }
         resolve(false);
       };
 

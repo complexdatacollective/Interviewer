@@ -90,7 +90,7 @@ describe('sessions reducer', () => {
       },
     );
 
-    expect(newState).toEqual([]);
+    expect(newState).toEqual(mockState);
   });
 
 

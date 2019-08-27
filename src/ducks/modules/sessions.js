@@ -1,4 +1,4 @@
-import { omit, map, filter } from 'lodash';
+import { omit, map, reduce } from 'lodash';
 import uuidv4 from '../../utils/uuid';
 import ApiClient from '../../utils/ApiClient';
 import { actionCreators as SessionWorkerActions } from './sessionWorkers';
@@ -25,10 +25,12 @@ const withTimestamp = session => ({
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case installedProtocolsActionTypes.DELETE_PROTOCOL:
-      return filter(
-        state,
-        session => session.protocolUID !== action.protocolUID,
-      );
+      return reduce(state, (result, sessionData, sessionId) => {
+        if (sessionData.protocolUID !== action.protocolUID) {
+          return { ...result, [sessionId]: sessionData };
+        }
+        return result;
+      }, {});
     case networkActionTypes.ADD_NODE:
     case networkActionTypes.BATCH_ADD_NODES:
     case networkActionTypes.REMOVE_NODE:
