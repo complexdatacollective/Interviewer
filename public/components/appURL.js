@@ -4,7 +4,7 @@ const log = require('./log');
 
 const appUrl = (function getAppUrl() {
   if (
-    (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') && process.env.NC_DEVSERVER_FILE
+    (process.env.NODE_ENV === 'development') && process.env.NC_DEVSERVER_FILE
   ) {
     // This method is more robust than Architect & Server to support multiple platforms & devices
     // NC_DEVSERVER_FILE contains the URL of a running webpack-dev-server, relative to app root

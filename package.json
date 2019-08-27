@@ -23,6 +23,7 @@
     "lint": "eslint src && eslint public",
     "sass-lint": "sass-lint -vc .sass-lint.yml",
     "test": "node scripts/test.js --env=jsdom",
+    "test:e2e:dev": "cross-env NODE_ENV=development jest --runInBand --config=test/jest.config.js",
     "test:e2e": "jest --runInBand --config=test/jest.config.js",
     "test-update-snapshots": "node scripts/test.js --env=jsdom --updateSnapshot",
     "build-docs": "cross-env NODE_ENV=production jsdoc src -r -d docs-build -c ./jsdoc.conf.json --verbose",

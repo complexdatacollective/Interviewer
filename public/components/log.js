@@ -1,6 +1,6 @@
 const log = require('electron-log');
 
-if (process.env.NODE_ENV !== 'development' || process.env.NODE_ENV !== 'test') {
+if (process.env.NODE_ENV !== 'development' || process.env.TEST) {
   log.transports.console.level = false;
 }
 log.transports.file.level = 'log';

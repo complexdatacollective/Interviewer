@@ -13,26 +13,42 @@ export const timing = {
   short: 250,
 };
 
-const devServerURI = fs.readFileSync(paths.dotdevserver, 'utf-8');
-
 const pluralize = f => (...apps) => Promise.all(apps.map(app => f(app)));
 
 const getAppConfiguration = () => {
-  const appBuild = path.join(__dirname, '../', '../', 'public');
+  let appBuild;
+  let devServerURI;
 
-  const appConfiguration = {
+  if (process.env.NODE_ENV === 'development') {
+    appBuild = path.join(__dirname, '../', '../', 'public');
+    devServerURI = fs.readFileSync(paths.dotdevserver, 'utf-8');
+
+    return {
+      path: electron,
+      webdriverOptions: {
+        baseUrl: devServerURI,
+      },
+      env: {
+        TEST: 'test',
+        NC_DEVSERVER_FILE: '.devserver',
+      },
+      args: [appBuild],
+    };
+  }
+
+  appBuild = path.join(__dirname, '..', '..', 'www');
+  devServerURI = `file:///${path.join(appBuild, 'index.html')}`;
+
+  return {
     path: electron,
     webdriverOptions: {
       baseUrl: devServerURI,
     },
     env: {
       TEST: 'test',
-      NC_DEVSERVER_FILE: '.devserver',
     },
     args: [appBuild],
   };
-
-  return appConfiguration;
 };
 
 export const makeTestingApp = () => {
