@@ -4,6 +4,11 @@ branches:
     - master
 node_js:
   - "8.11"
+
+addons:
+  apt:
+    packages:
+      - xvfb
 cache:
   directories:
     - node_modules # NPM packages
@@ -11,6 +16,8 @@ before_install:
   - sudo apt-get update -q
   - sudo apt-get install libavahi-compat-libdnssd-dev -y
 install:
+  - export DISPLAY=':99.0'
+  - Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
   - npm install
 jobs:
   include:
