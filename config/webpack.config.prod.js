@@ -317,4 +317,8 @@ module.exports = {
     tls: 'empty',
     child_process: 'empty',
   },
+  performance: {
+    maxAssetSize: 6000000,
+    maxEntrypointSize: 6000000,
+  },
 };
