@@ -2,7 +2,8 @@
 
 import path from 'path';
 import fakeDialog from 'spectron-fake-dialog';
-import { makeTestingApp, startApps, stopApps, forceClick, timing, loadDevelopmentProtocol } from '../helpers';
+import { makeTestingApp, startApps, stopApps, forceClick, loadDevelopmentProtocol } from '../helpers';
+import { timing } from '../../config';
 import { dataDir } from '../../paths';
 
 const app = makeTestingApp('Network-Canvas');

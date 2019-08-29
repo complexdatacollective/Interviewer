@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
 import fakeDialog from 'spectron-fake-dialog';
-import { makeTestingApp, startApps, stopApps, resizeApp } from '../helpers';
+import { makeTestingApp, startApps, stopApps, resizeApp, matchImageSnapshot } from '../helpers';
 
 const app = makeTestingApp('Network-Canvas');
 
@@ -29,7 +29,8 @@ describe('Start screen', () => {
 
       it('on first load it shows no protocols installed', async () => {
         await app.client.waitForVisible('h1=No interview protocols installed');
-        await expect(app.browserWindow.capturePage()).resolves.toMatchImageSnapshot();
+        await matchImageSnapshot(app);
+        // expect(app.browserWindow.capturePage()).resolves.toMatchImageSnapshot();
       });
     });
   });

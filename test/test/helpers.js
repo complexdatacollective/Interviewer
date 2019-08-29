@@ -1,58 +1,11 @@
 /* eslint-env jest */
 
-import path from 'path';
 import { Application } from 'spectron';
-import electron from 'electron';
-import fs from 'fs-extra';
-import paths from '../../config/paths';
-
-// in ms
-export const timing = {
-  long: 1000,
-  medium: 500,
-  short: 250,
-};
-
-export const developmentProtocol = process.env.DEVELOPMENT_PROTOCOL ||
-  'https://github.com/codaco/development-protocol/releases/download/20190529123247-7c1e58a/development-protocol.netcanvas';
+import path from 'path';
+import { kebabCase } from 'lodash';
+import { timing, developmentProtocol, getAppConfiguration, defaultImageSnaphotConfig } from '../config';
 
 const pluralize = f => (...apps) => Promise.all(apps.map(app => f(app)));
-
-const getAppConfiguration = () => {
-  let appBuild;
-  let devServerURI;
-
-  if (process.env.TEST_ENV === 'development') {
-    appBuild = path.join(__dirname, '../', '../', 'public');
-    devServerURI = fs.readFileSync(paths.dotdevserver, 'utf-8');
-
-    return {
-      path: electron,
-      webdriverOptions: {
-        baseUrl: devServerURI,
-      },
-      env: {
-        TEST: 'test',
-        NC_DEVSERVER_FILE: '.devserver',
-      },
-      args: [appBuild],
-    };
-  }
-
-  appBuild = path.join(__dirname, '..', '..', 'www');
-  devServerURI = `file:///${path.join(appBuild, 'index.html')}`;
-
-  return {
-    path: electron,
-    webdriverOptions: {
-      baseUrl: devServerURI,
-    },
-    env: {
-      TEST: 'test',
-    },
-    args: [appBuild],
-  };
-};
 
 export const makeTestingApp = () => {
   const appConfiguration = getAppConfiguration();
@@ -123,4 +76,21 @@ export const forceClick = async (_app, _selector) => {
   await _app.client.execute((selector) => {
     window.document.querySelector(selector).click();
   }, _selector);
+};
+
+const getImageSnaphotConfig = async app =>
+  app.client.execute(() => window.devicePixelRatio)
+    .then(({ value: devicePixelRatio }) => ({
+      ...defaultImageSnaphotConfig,
+      customSnapshotIdentifier: ({ testPath, currentTestName, counter }) =>
+        `${devicePixelRatio}x-`
+          .concat(kebabCase(`${path.basename(testPath)}-${currentTestName}-${counter}`)),
+    }));
+
+export const matchImageSnapshot = async (app) => {
+  await getImageSnaphotConfig(app)
+    .then(imageSnaphotConfig =>
+      expect(app.browserWindow.capturePage())
+        .resolves.toMatchImageSnapshot(imageSnaphotConfig),
+    );
 };
