@@ -61,7 +61,7 @@ function makeMapStateToProps() {
   const getStageNodes = makeNetworkNodesForType();
   const getPromptVariable = makeGetPromptVariable();
 
-  return function mapStateToProps(state, props) {
+  return (state, props) => {
     const stageNodes = getStageNodes(state, props);
     const activePromptVariable = getPromptVariable(state, props);
 

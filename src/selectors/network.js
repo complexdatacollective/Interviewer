@@ -4,14 +4,32 @@ import { createDeepEqualSelector } from './utils';
 import { getProtocolCodebook } from './protocol';
 import { asExportableNetwork, asWorkerAgentNetwork } from '../utils/networkFormat';
 import { getEntityAttributes } from '../ducks/modules/network';
+import customFilter from '../utils/networkQuery/filter';
 
 export const getNetwork = createDeepEqualSelector(
   (state, props) => getActiveSession(state, props),
-  session => (session && session.network) || { nodes: [], edges: [] },
+  session => (session && session.network) || { nodes: [], edges: [], ego: {} },
+);
+
+
+// Filtered network
+export const getFilteredNetwork = createDeepEqualSelector(
+  getNetwork,
+  (_, props) => props && props.stage && props.stage.filter,
+  (network, nodeFilter) => {
+    console.log('get filtered network', network, nodeFilter);
+    if (nodeFilter && typeof nodeFilter !== 'function') {
+      console.log('custom filtering.');
+      const filterFunction = customFilter(nodeFilter);
+      return filterFunction(network);
+    }
+    console.log('no custom filtering.');
+    return network;
+  },
 );
 
 export const getNetworkNodes = createDeepEqualSelector(
-  getNetwork,
+  getFilteredNetwork,
   network => network.nodes,
 );
 
