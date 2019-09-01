@@ -166,13 +166,14 @@ const batchAddNodes = (nodeList, attributeData, type) => (dispatch, getState) =>
   const nodeRegistry = activeProtocol.codebook.node;
 
   const registryForType = nodeRegistry[type].variables;
-
   dispatch({
     type: networkActionTypes.BATCH_ADD_NODES,
     sessionId: activeSessionId,
     nodeList,
-    attributeData: {
+    defaultAttribtutesForType: {
       ...getDefaultAttributesForEntityType(registryForType),
+    },
+    attributeData: {
       ...attributeData,
     },
   });
