@@ -24,7 +24,5 @@ jobs:
               npm run test &&
               npm run build
       script: npm run build:ci &&
-              xvfb-run --server-args="-screen 0 1440x900x24" -a npm run test:e2e:ci
-      after_script: echo "mkdir -p /travis/$TRAVIS_BUILD_ID" | lftp -u $FTP_USER,$FTP_PASSWORD $FTP_HOST &&
-                    find ./test -wholename "**/__diff_output__/*.png" -print | awk -v build_id="$TRAVIS_BUILD_ID" '{ print "put -O /travis/" build_id " " $0 }' | lftp -u $FTP_USER,$FTP_PASSWORD $FTP_HOST
+              xvfb-run --server-args="-screen 0 1440x900x24" -a npm run test:integration:ci
 

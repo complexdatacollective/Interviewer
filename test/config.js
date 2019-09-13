@@ -33,6 +33,7 @@ export const getAppConfiguration = () => {
       webdriverOptions: {
         baseUrl: devServerURI,
       },
+      chromeDriverLogPath: path.join(__dirname, '..', 'chromedriver.log'),
       env: {
         TEST: 'test',
         NC_DEVSERVER_FILE: '.devserver',

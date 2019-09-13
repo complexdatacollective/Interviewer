@@ -10,8 +10,8 @@ http://v4.webdriver.io/api.html (Select 'Latest')
 ## Run tests:
 
 ```
-$ npm run start:test # to start serving react in electron/test mode
-$ npm run test:e2e # to run tests
+$ npm run start:integration # to start serving react in electron/test mode
+$ npm run test:integration # to run tests
 ```
 
 ### Functional tests
@@ -21,7 +21,7 @@ This can test interactions with various elements of the app.
 They are found in `test/functional`
 
 ```
-$ npm run test:e2e -- functional # to run functional tests
+$ npm run test:integration -- functional # to run functional tests
 ```
 
 ### Regression tests
@@ -31,7 +31,7 @@ Screenshots of the app in various states can be captured to help spot regression
 These are found in `test/regression/`
 
 ```
-$ npm run test:e2e -- functional # to run regression tests
+$ npm run test:integration -- functional # to run regression tests
 ```
 
 ```
@@ -48,12 +48,34 @@ should not be added to version control, but can be used to debug the issue.
 
 Update snapshots with the `-u` flag:
 
-`npm run test:e2e -- -u`
+`npm run test:integration -- --update-snapshots`
 
 
 ### CI
 
 ```
 $ npm run build:ci # to build app (electron)
-$ npm run test:e2e:ci # to run tests
+$ npm run test:integration:ci # to run tests
+```
+
+#### Run CI locally (docker)
+
+In order to generate new/updated snapshots for CI, these tests will need to be run locally.
+This can be done using docker with the following commands.
+__requires: `docker` and `docker-compose`__
+
+This command only runs regression tests for speed. See `/docker-compose.yml` if you need
+to run all tests.
+
+```
+$ npm run test:integration:docker
+```
+
+##### Wrangling docker
+
+Rebuild image (fresh npm install)
+
+```
+docker-compose build --pull
+docker-compose up --force-recreate
 ```

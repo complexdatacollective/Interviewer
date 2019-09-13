@@ -8,6 +8,7 @@
 /.idea
 /docs-build
 /plugins
+/.git
 
 npm-debug.log*
 yarn-debug.log*
@@ -21,11 +22,7 @@ Icon^M^M
 
 .devserver
 config.xml.original
-chromedriver.log
 
 # Xcode (Cordova plugin)
 xcuserdata/
 IDEWorkspaceChecks.plist
-
-# Ignore protocol template used for schema generation
-src/schemas/abstract-protocol.json

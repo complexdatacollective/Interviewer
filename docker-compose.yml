@@ -1,0 +1,18 @@
+version: '3'
+services:
+  test:
+    build: .
+    shm_size: '512m'
+    volumes:
+      - ./scripts:/app/scripts
+      - ./config:/app/config
+      - ./public:/app/public
+      - ./src:/app/src
+      - ./test:/app/test
+    command: bash -c "npm run build:ci && xvfb-run -a npm run test:integration:ci -- regression"
+      - ./scripts:/app/scripts
+      - ./config:/app/config
+      - ./public:/app/public
+      - ./src:/app/src
+      - ./test:/app/test
+    command: bash -c "npm run build:ci && xvfb-run -a npm run test:integration:ci -- regression --updateSnapshot"
