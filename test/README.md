@@ -51,14 +51,14 @@ Update snapshots with the `-u` flag:
 `npm run test:integration -- --update-snapshots`
 
 
-### CI
+## CI
 
 ```
 $ npm run build:ci # to build app (electron)
 $ npm run test:integration:ci # to run tests
 ```
 
-#### Run CI locally (docker)
+### Run CI locally (docker)
 
 In order to generate new/updated snapshots for CI, these tests will need to be run locally.
 This can be done using docker with the following commands.
@@ -71,7 +71,13 @@ to run all tests.
 $ npm run test:integration:docker
 ```
 
-##### Wrangling docker
+Update snapshots:
+
+```
+$ npm run test:integration:update-snapshots
+```
+
+#### Wrangling docker
 
 Rebuild image (fresh npm install)
 

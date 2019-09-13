@@ -10,6 +10,10 @@ services:
       - ./src:/app/src
       - ./test:/app/test
     command: bash -c "npm run build:ci && xvfb-run -a npm run test:integration:ci -- regression"
+  update_snapshot:
+    build: .
+    shm_size: '512m'
+    volumes:
       - ./scripts:/app/scripts
       - ./config:/app/config
       - ./public:/app/public
