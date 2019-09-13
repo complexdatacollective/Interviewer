@@ -9,6 +9,8 @@ const titlebarParameters = isMacOS() ? { titleBarStyle: 'hidden', frame: false }
 let window;
 
 function setApplicationMenu(appWindow) {
+  console.log('SETTING MENU');
+  console.log(mainMenu(appWindow));
   const appMenu = Menu.buildFromTemplate(mainMenu(appWindow));
   Menu.setApplicationMenu(appMenu);
 }

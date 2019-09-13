@@ -90,6 +90,7 @@ const MenuTemplate = (window) => {
   } else {
     // Use "App" menu for OS X
     menu.unshift({
+      label: 'App',
       submenu: appMenu,
     });
   }

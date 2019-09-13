@@ -43,7 +43,12 @@ const cleanDevUrlFile = () => {
 // Adds a dotfile to identify the local development server (see `devUrlFile` above)
 const makeDevUrlFile = (serverUrl) => {
   try {
-    fs.writeFileSync(devUrlFile, chalk.stripColor(serverUrl));
+    if (serverUrl) {
+      fs.writeFileSync(devUrlFile, chalk.stripColor(serverUrl));
+    } else {
+      console.warn(chalk.red('Could not get this machine\'s IP address. Using localhost instead.'));
+      fs.writeFileSync(devUrlFile, 'http://localhost:3000');
+    }
   } catch (err) {
     console.warn(chalk.yellow(`Could not write ${devUrlFile}. Live Mobile dev will be unavailable.`));
   }
