@@ -18,7 +18,7 @@ $ npm run test:integration # to run tests
 
 This can test interactions with various elements of the app.
 
-They are found in `test/functional`
+They are found in `__tests__/functional`
 
 ```
 $ npm run test:integration -- functional # to run functional tests
@@ -28,7 +28,7 @@ $ npm run test:integration -- functional # to run functional tests
 
 Screenshots of the app in various states can be captured to help spot regressions.
 
-These are found in `test/regression/`
+These are found in `__tests__/regression/`
 
 ```
 $ npm run test:integration -- functional # to run regression tests
