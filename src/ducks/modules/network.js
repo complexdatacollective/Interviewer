@@ -131,7 +131,11 @@ export default function reducer(state = initialState, action = {}) {
         nodes: (() =>
           state.nodes.concat(action.nodeList.map(node => nodeWithModelandAttributeData(
             node,
-            action.attributeData,
+            {
+              ...action.defaultAttributesForType,
+              ...node[entityAttributesProperty],
+              ...action.attributeData,
+            },
           )))
         )(),
       };
