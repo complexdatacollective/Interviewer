@@ -70,7 +70,7 @@ const labelLogic = (codebookForNodeType, nodeAttributes) => {
   }
 
   // First available string variable with a value
-  const fallbackVariable = Object.keys(nodeAttributes).filter(attribute => typeof nodeAttributes[attribute] === 'string');
+  const fallbackVariable = Object.keys(nodeAttributes).filter(attribute => typeof nodeAttributes[attribute] === 'string').sort();
   if (fallbackVariable) {
     return nodeAttributes[fallbackVariable[0]];
   }
