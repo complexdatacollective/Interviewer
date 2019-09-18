@@ -69,14 +69,8 @@ const labelLogic = (codebookForNodeType, nodeAttributes) => {
     return nodeAttributes[nodeVariableCalledName];
   }
 
-  // First available string variable with a value
-  const fallbackVariable = Object.keys(nodeAttributes).filter(attribute => typeof nodeAttributes[attribute] === 'string').sort();
-  if (fallbackVariable) {
-    return nodeAttributes[fallbackVariable[0]];
-  }
-
   // Last resort!
-  return 'No label available';
+  return 'No \'name\' variable!';
 };
 
 // Gets the node label variable and returns its value, or "No label".
