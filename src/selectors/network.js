@@ -17,13 +17,10 @@ export const getFilteredNetwork = createDeepEqualSelector(
   getNetwork,
   (_, props) => props && props.stage && props.stage.filter,
   (network, nodeFilter) => {
-    console.log('get filtered network', network, nodeFilter);
     if (nodeFilter && typeof nodeFilter !== 'function') {
-      console.log('custom filtering.');
       const filterFunction = customFilter(nodeFilter);
       return filterFunction(network);
     }
-    console.log('no custom filtering.');
     return network;
   },
 );
