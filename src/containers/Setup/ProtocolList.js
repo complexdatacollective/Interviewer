@@ -106,6 +106,7 @@ class ProtocolList extends Component {
                 click the button in the bottom right to pair with an instance of Server,
                 import a protocol from a URL, or add a local .netcanvas file.
               </p>
+              <p>Alternatively, click <a onClick={() => this.props.importProtocolFromURI('https://documentation.networkcanvas.com/protocols/Public%20Health%20Protocol.netcanvas')}>here</a> to download and install a sample public health protocol (requires network access).</p>
             </div>
           </div>
         }
@@ -141,6 +142,8 @@ function mapDispatchToProps(dispatch) {
     addSession: bindActionCreators(sessionActions.addSession, dispatch),
     loadSession: bindActionCreators(sessionActions.loadSession, dispatch),
     openDialog: bindActionCreators(dialogActions.openDialog, dispatch),
+    importProtocolFromURI:
+      bindActionCreators(importProtocolActions.importProtocolFromURI, dispatch),
     resetImportProtocol: bindActionCreators(importProtocolActions.resetImportProtocol, dispatch),
     deleteProtocol: bindActionCreators(installedProtocolsActions.deleteProtocol, dispatch),
     updateProtocolIndex: (index) => {
