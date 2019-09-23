@@ -43,7 +43,6 @@ ShallowWrapper {
           className="categorical-item__inner"
         >
           <FlippedWithContext
-            inverseFlipId={undefined}
             scale={true}
           >
             <div
@@ -75,7 +74,6 @@ ShallowWrapper {
             className="categorical-item__inner"
           >
             <FlippedWithContext
-              inverseFlipId={undefined}
               scale={true}
             >
               <div
@@ -117,7 +115,6 @@ ShallowWrapper {
           "props": Object {
             "children": Array [
               <FlippedWithContext
-                inverseFlipId={undefined}
                 scale={true}
               >
                 <div
@@ -231,7 +228,6 @@ ShallowWrapper {
             className="categorical-item__inner"
           >
             <FlippedWithContext
-              inverseFlipId={undefined}
               scale={true}
             >
               <div
@@ -263,7 +259,6 @@ ShallowWrapper {
               className="categorical-item__inner"
             >
               <FlippedWithContext
-                inverseFlipId={undefined}
                 scale={true}
               >
                 <div
@@ -305,7 +300,6 @@ ShallowWrapper {
             "props": Object {
               "children": Array [
                 <FlippedWithContext
-                  inverseFlipId={undefined}
                   scale={true}
                 >
                   <div

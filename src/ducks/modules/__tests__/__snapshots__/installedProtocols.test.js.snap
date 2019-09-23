@@ -5,14 +5,14 @@ Array [
   Array [
     Object {
       "confirmLabel": "Delete protocol and sessions",
-      "message": <UNDEFINED>
+      "message": <React.Fragment>
         There are sessions that use this protocol.
         <br />
         <br />
         <strong>
           Deleting this protocol will also delete associated sessions.
         </strong>
-      </UNDEFINED>,
+      </React.Fragment>,
       "title": "Session(s) using protocol",
       "type": "Confirm",
     },
@@ -25,14 +25,14 @@ Array [
   Array [
     Object {
       "confirmLabel": "Delete protocol and sessions",
-      "message": <UNDEFINED>
+      "message": <React.Fragment>
         There are sessions that use this protocol which have not yet been exported.
         <br />
         <br />
         <strong>
           Deleting this protocol will also delete associated sessions.
         </strong>
-      </UNDEFINED>,
+      </React.Fragment>,
       "title": "Non-exported session(s) using protocol",
       "type": "Warning",
     },

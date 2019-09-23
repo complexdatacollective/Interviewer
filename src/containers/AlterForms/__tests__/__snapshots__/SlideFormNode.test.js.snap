@@ -48,9 +48,7 @@ ShallowWrapper {
               className="alter-form__form"
               entity="node"
               form="NODE_FORM_1_2"
-              initialValues={undefined}
               onSubmit={[Function]}
-              subject={undefined}
               title="alpha"
               type="person"
             />
@@ -78,9 +76,7 @@ ShallowWrapper {
                 className="alter-form__form"
                 entity="node"
                 form="NODE_FORM_1_2"
-                initialValues={undefined}
                 onSubmit={[Function]}
-                subject={undefined}
                 title="alpha"
                 type="person"
               />
@@ -113,9 +109,7 @@ ShallowWrapper {
                 className="alter-form__form"
                 entity="node"
                 form="NODE_FORM_1_2"
-                initialValues={undefined}
                 onSubmit={[Function]}
-                subject={undefined}
                 title="alpha"
                 type="person"
               />
@@ -133,9 +127,7 @@ ShallowWrapper {
                 className="alter-form__form"
                 entity="node"
                 form="NODE_FORM_1_2"
-                initialValues={undefined}
                 onSubmit={[Function]}
-                subject={undefined}
                 title="alpha"
                 type="person"
               />,
@@ -190,9 +182,7 @@ ShallowWrapper {
                 className="alter-form__form"
                 entity="node"
                 form="NODE_FORM_1_2"
-                initialValues={undefined}
                 onSubmit={[Function]}
-                subject={undefined}
                 title="alpha"
                 type="person"
               />
@@ -220,9 +210,7 @@ ShallowWrapper {
                   className="alter-form__form"
                   entity="node"
                   form="NODE_FORM_1_2"
-                  initialValues={undefined}
                   onSubmit={[Function]}
-                  subject={undefined}
                   title="alpha"
                   type="person"
                 />
@@ -255,9 +243,7 @@ ShallowWrapper {
                   className="alter-form__form"
                   entity="node"
                   form="NODE_FORM_1_2"
-                  initialValues={undefined}
                   onSubmit={[Function]}
-                  subject={undefined}
                   title="alpha"
                   type="person"
                 />
@@ -275,9 +261,7 @@ ShallowWrapper {
                   className="alter-form__form"
                   entity="node"
                   form="NODE_FORM_1_2"
-                  initialValues={undefined}
                   onSubmit={[Function]}
-                  subject={undefined}
                   title="alpha"
                   type="person"
                 />,

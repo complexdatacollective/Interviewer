@@ -13,7 +13,9 @@ const updater = Updater();
 
 // Check for updates once, when the mainMenu is initialized.
 // Don't notify the user if there aren't updates.
-updater.checkForUpdates(true);
+if (!process.env.TEST) {
+  updater.checkForUpdates(true);
+}
 
 const MenuTemplate = (window) => {
   const menu = [

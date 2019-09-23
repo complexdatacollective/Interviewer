@@ -84,7 +84,6 @@ ShallowWrapper {
             }
             onClick={[Function]}
             onDrop={[Function]}
-            sortOrder={undefined}
           />
         </div>
         <div
@@ -111,7 +110,6 @@ ShallowWrapper {
             }
             onClick={[Function]}
             onDrop={[Function]}
-            sortOrder={undefined}
           />
         </div>
       </Flipper>,
@@ -155,7 +153,6 @@ ShallowWrapper {
                 }
                 onClick={[Function]}
                 onDrop={[Function]}
-                sortOrder={undefined}
               />
             </div>,
             <div
@@ -182,7 +179,6 @@ ShallowWrapper {
                 }
                 onClick={[Function]}
                 onDrop={[Function]}
-                sortOrder={undefined}
               />
             </div>,
           ],
@@ -213,7 +209,6 @@ ShallowWrapper {
               }
               onClick={[Function]}
               onDrop={[Function]}
-              sortOrder={undefined}
             />,
             "className": "categorical-list__item",
             "onClick": [Function],
@@ -267,7 +262,6 @@ ShallowWrapper {
               }
               onClick={[Function]}
               onDrop={[Function]}
-              sortOrder={undefined}
             />,
             "className": "categorical-list__item",
             "onClick": [Function],
@@ -343,7 +337,6 @@ ShallowWrapper {
               }
               onClick={[Function]}
               onDrop={[Function]}
-              sortOrder={undefined}
             />
           </div>
           <div
@@ -370,7 +363,6 @@ ShallowWrapper {
               }
               onClick={[Function]}
               onDrop={[Function]}
-              sortOrder={undefined}
             />
           </div>
         </Flipper>,
@@ -414,7 +406,6 @@ ShallowWrapper {
                   }
                   onClick={[Function]}
                   onDrop={[Function]}
-                  sortOrder={undefined}
                 />
               </div>,
               <div
@@ -441,7 +432,6 @@ ShallowWrapper {
                   }
                   onClick={[Function]}
                   onDrop={[Function]}
-                  sortOrder={undefined}
                 />
               </div>,
             ],
@@ -472,7 +462,6 @@ ShallowWrapper {
                 }
                 onClick={[Function]}
                 onDrop={[Function]}
-                sortOrder={undefined}
               />,
               "className": "categorical-list__item",
               "onClick": [Function],
@@ -526,7 +515,6 @@ ShallowWrapper {
                 }
                 onClick={[Function]}
                 onDrop={[Function]}
-                sortOrder={undefined}
               />,
               "className": "categorical-list__item",
               "onClick": [Function],
