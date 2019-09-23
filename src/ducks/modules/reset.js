@@ -51,7 +51,7 @@ const resetEdgesOfType = edgeType =>
 
     edges.forEach((edge) => {
       if (edge.type !== edgeType) {
-        dispatch(sessionsActions.removeEdge(edge));
+        dispatch(sessionsActions.removeEdge(edge[entityPrimaryKeyProperty]));
       }
     });
   };
