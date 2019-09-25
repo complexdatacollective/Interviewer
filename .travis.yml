@@ -1,15 +1,19 @@
+dist: xenial
 language: node_js
 branches:
   only:
     - master
 node_js:
   - "8.11"
+addons:
+  apt:
+    packages:
+      - libavahi-compat-libdnssd-dev xvfb libxtst6 libxss1 libgtk2.0-0 libnss3 libasound2 libgconf-2-4 lftp
+services:
+  - xvfb
 cache:
   directories:
     - node_modules # NPM packages
-before_install:
-  - sudo apt-get update -q
-  - sudo apt-get install libavahi-compat-libdnssd-dev -y
 install:
   - npm install
 jobs:
@@ -19,3 +23,6 @@ jobs:
               npm run sass-lint -- --max-warnings 0 &&
               npm run test &&
               npm run build
+      script: npm run build:ci &&
+              xvfb-run --server-args="-screen 0 1441x901x24" -a npm run test:integration:ci
+

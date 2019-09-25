@@ -11,7 +11,7 @@ import { history, store, persistor } from './ducks/store';
 import { actionCreators as deviceActions } from './ducks/modules/deviceSettings';
 import { Spinner } from './ui/components';
 import App from './containers/App';
-import { isCordova, isElectron } from './utils/Environment';
+import { isCordova, isElectron, getEnv } from './utils/Environment';
 import AppRouter from './routes';
 import remote from './utils/remote';
 
@@ -25,18 +25,32 @@ document.addEventListener('dragover', (e) => {
   e.stopPropagation();
 });
 
+const env = getEnv();
+
+const Persist = ({ persistor, children }) => {
+  if (env.REACT_APP_NO_PERSIST) {
+    return children;
+  }
+
+  return (
+    <PersistGate loading={<Spinner />} persistor={persistor}>
+      {children}
+    </PersistGate>
+  );
+};
+
 const startApp = () => {
   store.dispatch(deviceActions.deviceReady());
 
   ReactDOM.render(
     <Provider store={store}>
-      <PersistGate loading={<Spinner />} persistor={persistor}>
+      <Persist persistor={persistor}>
         <ConnectedRouter history={history}>
           <App>
             <AppRouter />
           </App>
         </ConnectedRouter>
-      </PersistGate>
+      </Persist>
     </Provider>,
     document.getElementById('root'),
   );

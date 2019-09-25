@@ -79,5 +79,5 @@ describe('<Form />', () => {
 
     expect(subject.find(Field).length).toBe(2);
   });
-  it('Calls autoPopulate on Field blur');
+  it('Calls autoPopulate on Field blur', () => {});
 });

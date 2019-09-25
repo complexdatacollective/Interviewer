@@ -189,8 +189,10 @@ const importProtocolFromURI = (uri, usePairedServer) => (dispatch, getState) => 
 const importProtocolFromFile = filePath => (dispatch, getState) => {
   let protocolUid;
   let previousUid;
+
   const filename = filenameFromPath(filePath);
   const protocolName = protocolNameFromFilename(filename);
+
 
   dispatch(checkExistingProtocolAction());
   return checkExistingProtocol(dispatch, getState(), protocolName)

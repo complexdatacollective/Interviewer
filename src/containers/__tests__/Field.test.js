@@ -54,5 +54,5 @@ describe('<Field />', () => {
     expect(validate.length).toBe(2);
   });
 
-  it('Loads options with optionsSelector');
+  it('Loads options with optionsSelector', () => {});
 });

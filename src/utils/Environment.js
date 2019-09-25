@@ -5,6 +5,10 @@ export const isElectron = () => !!window.require;
 export const isPreview = () =>
   isElectron() && window.require('electron').remote.getGlobal('NETWORK_CANVAS_PREVIEW');
 
+// Not supported on Cordova
+export const getEnv = () =>
+  (isElectron() ? process.env : {});
+
 export const isMacOS = () => isElectron() && window.require('os').platform() === 'darwin';
 
 export const isWindows = () => isElectron() && window.require('os').platform() === 'win32';
