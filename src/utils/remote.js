@@ -7,7 +7,7 @@ import { actionCreators as remoteActions } from '../ducks/modules/remote';
 
 const init = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const { ipcRenderer } = window.require('electron');
+    const { ipcRenderer } = window.electron;
 
     return () => {
       ipcRenderer.on('remote:preview', (event, protocol, stageId) => {

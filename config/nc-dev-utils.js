@@ -74,9 +74,6 @@ const devServerContentBase = () => {
   return cordovaBase;
 };
 
-// Webpack default is 'web'. To get electron working with dev server, use 'electron-renderer'.
-const reactBundleTarget = () => (isTargetingElectron ? 'electron-renderer' : 'web');
-
 module.exports = {
   cleanDevUrlFile,
   devServerContentBase,
@@ -84,5 +81,4 @@ module.exports = {
   isTargetingElectron,
   logPlatformInfo,
   makeDevUrlFile,
-  reactBundleTarget,
 };

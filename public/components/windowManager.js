@@ -1,5 +1,6 @@
 const { BrowserWindow, Menu, shell } = require('electron');
 const mainMenu = require('./mainMenu');
+const path = require('path');
 const appUrl = require('./appURL');
 
 const isMacOS = () => process.platform === 'darwin';
@@ -9,8 +10,6 @@ const titlebarParameters = isMacOS() ? { titleBarStyle: 'hidden', frame: false }
 let window;
 
 function setApplicationMenu(appWindow) {
-  console.log('SETTING MENU');
-  console.log(mainMenu(appWindow));
   const appMenu = Menu.buildFromTemplate(mainMenu(appWindow));
   Menu.setApplicationMenu(appMenu);
 }
@@ -34,7 +33,7 @@ function createWindow() {
       center: true,
       title: 'Network Canvas',
       webPreferences: {
-        nodeIntegration: true,
+        preload: path.join(__dirname, 'preload.js'),
       },
     }, titlebarParameters);
 

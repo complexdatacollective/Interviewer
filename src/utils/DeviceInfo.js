@@ -12,7 +12,7 @@ const electronDescription = () => {
     Windows_NT: 'Windows',
   };
 
-  const os = window.require('os');
+  const os = window.os;
   const osType = os.type();
   const osName = osTypeMap[osType] || esc(osType) || '?';
   // Strip '.local', etc. from hostname

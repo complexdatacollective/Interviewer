@@ -54,7 +54,7 @@ class App extends PureComponent {
 
   getElectronWindow = () => {
     if (isElectron()) {
-      const electron = window.require('electron');
+      const electron = window.electron;
       return electron.remote.getCurrentWindow();
     }
     return false;

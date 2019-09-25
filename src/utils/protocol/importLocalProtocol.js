@@ -4,7 +4,7 @@ import { actionCreators as protocolActions } from '../../ducks/modules/importPro
 
 const importLocalProtocol = () => {
   if (isElectron()) {
-    const ipcRenderer = window.require('electron').ipcRenderer;
+    const ipcRenderer = window.electron.ipcRenderer;
     ipcRenderer.send('OPEN_DIALOG');
   }
 

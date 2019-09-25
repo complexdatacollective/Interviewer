@@ -3,11 +3,10 @@ import { isElectron, isCordova } from './Environment';
 const saveFile = (data, openErrorDialog, filterName, extensions, defaultFileName, fileType,
   shareOptions) => {
   if (isElectron()) { // electron save dialog
-    const fs = window.require('fs');
-    const { dialog } = window.require('electron').remote;
+    const { dialog } = window.electron.remote;
     dialog.showSaveDialog({ filters: [{ name: filterName, extensions }] }, (filename) => {
       if (filename === undefined) return;
-      fs.writeFile(filename, data, (err) => {
+      window.fs.writeFile(filename, data, (err) => {
         if (err) {
           dialog.showErrorBox('Error Saving File.', err.message);
         }

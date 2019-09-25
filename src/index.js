@@ -43,7 +43,7 @@ const startApp = () => {
 };
 
 if (isElectron()) {
-  const { webFrame, ipcRenderer } = window.require('electron'); // eslint-disable-line global-require
+  const { webFrame, ipcRenderer } = window.electron;
   webFrame.setVisualZoomLevelLimits(1, 1); // Prevents pinch-to-zoom
   remote.init();
 

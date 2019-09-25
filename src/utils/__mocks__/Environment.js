@@ -2,7 +2,7 @@
 
 import environments from '../environments';
 
-export const isElectron = () => !!window.require;
+export const isElectron = () => !!window.electron;
 
 export const isCordova = () => !!window.cordova;
 

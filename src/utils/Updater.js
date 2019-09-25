@@ -4,8 +4,8 @@ let EventEmitter;
 let ipcRenderer;
 
 if (isElectron()) {
-  EventEmitter = window.require('events').EventEmitter;
-  ipcRenderer = window.require('electron').ipcRenderer;
+  EventEmitter = window.events.EventEmitter;
+  ipcRenderer = window.electron.ipcRenderer;
 }
 
 class Updater {
