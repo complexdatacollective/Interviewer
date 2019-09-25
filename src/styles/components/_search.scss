@@ -103,8 +103,14 @@ $results-height: calc(100vh - 23rem);
     overflow: hidden;
     transition: height var(--animation-duration-fast) var(--animation-easing);
 
+    .card-list {
+      padding: 0;
+    }
+
     .scrollable {
       height: 100%;
+      padding-top: 2rem;
+      padding-bottom: 2rem;
     }
 
     &--collapsed {
