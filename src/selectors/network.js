@@ -1,17 +1,32 @@
-import { findKey } from 'lodash';
+import { findKey, get } from 'lodash';
 import { getActiveSession, getCaseId } from './session';
 import { createDeepEqualSelector } from './utils';
 import { getProtocolCodebook } from './protocol';
 import { asExportableNetwork, asWorkerAgentNetwork } from '../utils/networkFormat';
 import { getEntityAttributes } from '../ducks/modules/network';
+import customFilter from '../utils/networkQuery/filter';
 
 export const getNetwork = createDeepEqualSelector(
   (state, props) => getActiveSession(state, props),
-  session => (session && session.network) || { nodes: [], edges: [] },
+  session => (session && session.network) || { nodes: [], edges: [], ego: {} },
+);
+
+
+// Filtered network
+export const getFilteredNetwork = createDeepEqualSelector(
+  getNetwork,
+  (_, props) => props && props.stage && props.stage.filter,
+  (network, nodeFilter) => {
+    if (nodeFilter && typeof nodeFilter !== 'function') {
+      const filterFunction = customFilter(nodeFilter);
+      return filterFunction(network);
+    }
+    return network;
+  },
 );
 
 export const getNetworkNodes = createDeepEqualSelector(
-  getNetwork,
+  getFilteredNetwork,
   network => network.nodes,
 );
 
@@ -64,9 +79,9 @@ const labelLogic = (codebookForNodeType, nodeAttributes) => {
 
   // look for a property on the node with a key of ‘name’, and try to retrieve this
   // value as a key in the node's attributes.
-  const nodeVariableCalledName = findKey(nodeAttributes, ['name', 'name']);
+  const nodeVariableCalledName = get(nodeAttributes, 'name');
   if (nodeVariableCalledName) {
-    return nodeAttributes[nodeVariableCalledName];
+    return nodeVariableCalledName;
   }
 
   // Last resort!
