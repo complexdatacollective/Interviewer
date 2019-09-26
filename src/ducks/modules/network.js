@@ -1,6 +1,9 @@
 import { reject, find, isMatch, omit, keys, get } from 'lodash';
-
 import uuidv4 from '../../utils/uuid';
+
+/*
+ * For actionCreators see `src/ducks/modules/sessions`
+ */
 
 // Property name for the primary key for nodes or edged
 export const entityPrimaryKeyProperty = '_uid';
@@ -266,11 +269,6 @@ export default function reducer(state = initialState, action = {}) {
   }
 }
 
-/**
- * @namespace NetworkActionCreators
- */
-const actionCreators = {};
-
 const actionTypes = {
   ADD_NODE,
   BATCH_ADD_NODES,
@@ -283,11 +281,9 @@ const actionTypes = {
   TOGGLE_EDGE,
   REMOVE_EDGE,
   UPDATE_EGO,
-
-
 };
 
 export {
-  actionCreators,
   actionTypes,
+  // For actionCreators see `src/ducks/modules/sessions`
 };
