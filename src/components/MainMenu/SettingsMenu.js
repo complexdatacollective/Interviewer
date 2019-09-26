@@ -174,6 +174,7 @@ class SettingsMenu extends PureComponent {
                 </section>
                 <section>
                   <Button
+                    id="reset-all-nc-data"
                     color="neon-coral"
                     onClick={handleResetAppData}
                   >
