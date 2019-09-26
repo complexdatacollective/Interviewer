@@ -68,7 +68,7 @@ export const makeGetNodeTypeDefinition = () => createDeepEqualSelector(
 );
 
 // See: https://github.com/codaco/Network-Canvas/wiki/Node-Labeling
-const labelLogic = (codebookForNodeType, nodeAttributes) => {
+export const labelLogic = (codebookForNodeType, nodeAttributes) => {
   // In the codebook for the stage's subject, look for a variable with a name
   // property of "name", and try to retrieve this value by key in the node's
   // attributes
