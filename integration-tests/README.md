@@ -2,8 +2,8 @@
 
 Uses spectron to run app in development mode.
 
-Because of older version of Electron, version 4.0.0 is used, which correlates to
-version 4 of webdriver, docs which can be found here:
+To match version 5.x of Electron, version 7.0.0 is used, which correlates to
+version 4.13 of webdriver, docs which can be found here:
 
 http://v4.webdriver.io/api.html (Select 'Latest')
 
@@ -31,7 +31,7 @@ Screenshots of the app in various states can be captured to help spot regression
 These are found in `__tests__/regression/`
 
 ```
-$ npm run test:integration -- functional # to run regression tests
+$ npm run test:integration -- regression # to run regression tests
 ```
 
 ```

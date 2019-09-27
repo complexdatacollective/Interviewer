@@ -30,6 +30,7 @@ export const getAppConfiguration = () => {
 
     return {
       path: electron,
+      requireName: 'electronRequire',
       webdriverOptions: {
         baseUrl: devServerURI,
       },
@@ -47,6 +48,7 @@ export const getAppConfiguration = () => {
 
   return {
     path: electron,
+    requireName: 'electronRequire',
     webdriverOptions: {
       baseUrl: devServerURI,
     },
