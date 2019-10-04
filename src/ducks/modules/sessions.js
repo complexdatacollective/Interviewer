@@ -311,13 +311,13 @@ const toggleEdge = (modelData, attributeData = {}) => (dispatch, getState) => {
   });
 };
 
-const removeEdge = edge => (dispatch, getState) => {
+const removeEdge = edgeId => (dispatch, getState) => {
   const { activeSessionId } = getState();
 
   dispatch({
     type: networkActionTypes.REMOVE_EDGE,
     sessionId: activeSessionId,
-    edge,
+    edgeId,
   });
 };
 
