@@ -37,7 +37,7 @@ function createWindow() {
       center: true,
       title: 'Network Canvas',
       webPreferences: {
-        preload: path.join(__dirname, 'preload.js'),
+        nodeIntegration: true,
       },
     }, minDimensions, titlebarParameters);
 

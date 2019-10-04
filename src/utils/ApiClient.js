@@ -136,7 +136,7 @@ class ApiClient {
           reject(new Error('No trusted Server cert available'));
           return;
         }
-        const { ipcRenderer } = window.electron;
+        const { ipcRenderer } = require('electron'); // eslint-disable-line global-require
         ipcRenderer.once('add-cert-complete', resolve);
         ipcRenderer.send('add-cert', this.pairedServer.sslCertificate);
       });

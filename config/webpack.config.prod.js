@@ -11,6 +11,7 @@ const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
+const { reactBundleTarget } = require('./nc-dev-utils');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
@@ -86,7 +87,7 @@ const getStyleLoaders = (preProcessor) => {
 // The development configuration is different and lives in a separate file.
 module.exports = {
   mode: 'production',
-  target: 'web',
+  target: reactBundleTarget(),
   // Don't attempt to continue if there are any errors.
   bail: true,
   // We generate sourcemaps in production. This is slow but gives good results.

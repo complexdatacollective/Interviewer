@@ -32,7 +32,7 @@ const inSequence = (items, apply) =>
 
 const userDataPath = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const electron = window.electron;
+    const electron = window.require('electron');
 
     return () => (electron.app || electron.remote.app).getPath('userData');
   }
@@ -46,7 +46,7 @@ const userDataPath = inEnvironment((environment) => {
 
 const appPath = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const electron = window.electron;
+    const electron = require('electron');
 
     return () => (electron.app || electron.remote.app).getAppPath();
   }
@@ -69,9 +69,11 @@ const resolveFileSystemUrl = inEnvironment((environment) => {
 
 const readFile = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
+    const fs = require('fs');
+
     return filename =>
       new Promise((resolve, reject) => {
-        window.fs.readFile(filename, null, (err, data) => {
+        fs.readFile(filename, null, (err, data) => {
           if (err) { reject(err); }
           resolve(data);
         });
@@ -171,9 +173,11 @@ const writeFile = inEnvironment((environment) => {
   }
 
   if (environment === environments.ELECTRON) {
+    const fs = require('fs');
+
     return (filePath, data) =>
       new Promise((resolve, reject) => {
-        window.fs.writeFile(filePath, data, (error) => {
+        fs.writeFile(filePath, data, (error) => {
           if (error) { reject(error); }
           resolve(filePath);
         });
@@ -185,10 +189,12 @@ const writeFile = inEnvironment((environment) => {
 
 const createDirectory = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
+    const fs = require('fs');
+
     return targetPath =>
       new Promise((resolve, reject) => {
         try {
-          window.fs.mkdir(targetPath, () => {
+          fs.mkdir(targetPath, () => {
             resolve(targetPath);
           });
         } catch (error) {
@@ -222,9 +228,11 @@ const createDirectory = inEnvironment((environment) => {
 
 const rename = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
+    const fs = require('fs');
+
     return (oldPath, newPath) => (new Promise((resolve, reject) => {
       try {
-        window.fs.rename(oldPath, newPath, resolveOrRejectWith(resolve, reject));
+        fs.rename(oldPath, newPath, resolveOrRejectWith(resolve, reject));
       } catch (err) { reject(err); }
     }));
   }
@@ -244,11 +252,13 @@ const rename = inEnvironment((environment) => {
 
 const removeDirectory = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
+    const rimraf = require('rimraf');
+
     return targetPath =>
       new Promise((resolve, reject) => {
         try {
           if (!targetPath.includes(userDataPath())) { reject('Path not in userDataPath'); return; }
-          window.rimraf(targetPath, resolve);
+          rimraf(targetPath, resolve);
         } catch (error) {
           if (error.code !== 'EEXISTS') { reject(error); }
           throw error;
@@ -280,7 +290,7 @@ const removeDirectory = inEnvironment((environment) => {
 
 const getNestedPaths = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const path = window.path;
+    const path = require('path');
 
     return targetPath =>
       targetPath
@@ -322,11 +332,13 @@ const getNestedPaths = inEnvironment((environment) => {
 
 const writeStream = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
+    const fs = require('fs');
+
     return (destination, stream) =>
       new Promise((resolve, reject) => {
         try {
           stream
-            .pipe(window.fs.createWriteStream(destination))
+            .pipe(fs.createWriteStream(destination))
             .on('error', reject)
             .on('finish', () => {
               resolve(destination);
@@ -440,7 +452,7 @@ const writeStream = inEnvironment((environment) => {
 //        doesn't already exist, this will error on both platforms
 const ensurePathExists = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const path = window.path;
+    const path = require('path');
 
     return (targetPath) => {
       const relativePath = path.relative(userDataPath(), targetPath);

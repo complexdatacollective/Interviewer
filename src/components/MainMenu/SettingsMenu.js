@@ -15,7 +15,7 @@ class SettingsMenu extends PureComponent {
 
   getElectronWindow = () => {
     if (isElectron()) {
-      const electron = window.electron;
+      const electron = window.require('electron');
       return electron.remote.getCurrentWindow();
     }
     return false;

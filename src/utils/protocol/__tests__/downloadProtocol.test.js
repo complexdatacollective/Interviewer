@@ -1,20 +1,14 @@
 /* eslint-env jest */
 
 import electron from 'electron';
-import requestPromiseNative from 'request-promise-native';
 import path from 'path';
 import environments from '../../environments';
 import { getEnvironment } from '../../Environment';
 import downloadProtocol from '../downloadProtocol';
 
 jest.mock('electron');
-jest.mock('request');
 jest.mock('request-promise-native');
 jest.mock('../../filesystem');
-
-window.electron = electron;
-window.path = path;
-window.requestPromiseNative = requestPromiseNative;
 
 describe('downloadProtocol', () => {
   describe('Electron', () => {

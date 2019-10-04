@@ -58,7 +58,7 @@ class App extends PureComponent {
 
   getElectronWindow = () => {
     if (isElectron()) {
-      const electron = window.electron;
+      const electron = window.require('electron'); // eslint-disable-line global-require
       return electron.remote.getCurrentWindow();
     }
     return false;

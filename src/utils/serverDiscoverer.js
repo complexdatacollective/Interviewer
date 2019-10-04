@@ -50,7 +50,7 @@ class ServerDiscoverer {
 
     if (isElectron()) {
       try {
-        const mdns = window.mdns;
+        const mdns = window.require('mdns');
 
         // Pick the properties we want from the service object
         // and provide a valid URL for the API if one is available

@@ -7,7 +7,7 @@ import { actionCreators as dialogActions } from '../ducks/modules/dialogs';
 let ipcRenderer;
 
 if (isElectron()) {
-  ipcRenderer = window.electron.ipcRenderer;
+  ipcRenderer = window.require('electron').ipcRenderer;
 }
 
 const initFileOpener = () => {
