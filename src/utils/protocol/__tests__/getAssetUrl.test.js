@@ -16,7 +16,7 @@ describe('assetUrl', () => {
       await expect(assetUrl('foo.canvas', 'bar.mp3', 'factory')).resolves.toEqual('tmp/mock/user/path/protocols/foo.canvas/assets/bar.mp3');
     });
 
-    it.skip('Generates a usable URL for a downloaded protocol'); // TBD how to handle [#681]
+    it('Generates a usable URL for a downloaded protocol', () => {}); // TBD how to handle [#681]
   });
 
   describe('Electron', () => {

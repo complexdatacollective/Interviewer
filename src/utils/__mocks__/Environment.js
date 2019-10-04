@@ -4,6 +4,8 @@ import environments from '../environments';
 
 export const isElectron = () => !!window.require;
 
+export const getEnv = () => ({});
+
 export const isCordova = () => !!window.cordova;
 
 export const isIOS = () => isCordova() && (/iOS/i).test(window.device.platform);

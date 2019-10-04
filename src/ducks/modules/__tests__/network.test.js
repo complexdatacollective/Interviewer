@@ -225,7 +225,8 @@ describe('network reducer', () => {
     const edgeB = { [PK]: 1234, from: 'asdf', to: 'qwerty', type: 'friend', attributes: {} };
     expect(reducer(
       { ...mockState, edges: [edgeA, edgeB] },
-      { type: actionTypes.REMOVE_EDGE, edgeId: 123 })).toEqual(
+      { type: actionTypes.REMOVE_EDGE, edgeId: 123 },
+    )).toEqual(
       {
         ...mockState,
         edges: [edgeB],

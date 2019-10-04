@@ -11,7 +11,7 @@ describe('importer', () => {
       getEnvironment.mockReturnValue(environments.ELECTRON);
     });
 
-    it('copies the protocol files to the user data directory');
+    it('copies the protocol files to the user data directory', () => {});
   });
 
   describe('Cordova', () => {
@@ -19,6 +19,6 @@ describe('importer', () => {
       getEnvironment.mockReturnValue(environments.CORDOVA);
     });
 
-    it('copies the protocol files to the user data directory');
+    it('copies the protocol files to the user data directory', () => {});
   });
 });

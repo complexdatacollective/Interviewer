@@ -41,7 +41,7 @@ const appManager = {
   },
   loadDevTools: () => {
     const extensions = process.env.NC_DEVTOOLS_EXTENSION_PATH;
-    if (process.env.NODE_ENV !== 'development' || !extensions) { return; }
+    if (process.env.NODE_ENV !== 'development' || process.env.TEST || !extensions) { return; }
     try {
       console.log(extensions);
       extensions.split(';').forEach(
