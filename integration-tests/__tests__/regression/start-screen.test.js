@@ -2,6 +2,7 @@
 
 import fakeDialog from 'spectron-fake-dialog';
 import { makeTestingApp, startApps, stopApps, resizeApp, matchImageSnapshot } from '../helpers';
+import { timing } from '../../config';
 
 const app = makeTestingApp('Network-Canvas');
 
@@ -29,8 +30,8 @@ describe('Start screen', () => {
 
       it('on first load it shows no protocols installed', async () => {
         await app.client.waitForVisible('h1=No interview protocols installed');
+        await app.client.pause(timing.medium);
         await matchImageSnapshot(app);
-        // expect(app.browserWindow.capturePage()).resolves.toMatchImageSnapshot();
       });
     });
   });
