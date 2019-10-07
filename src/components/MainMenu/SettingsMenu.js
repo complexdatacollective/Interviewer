@@ -5,6 +5,7 @@ import { Icon, Button } from '../../ui/components';
 import Scroller from '../Scroller';
 import { Toggle, Text } from '../../ui/components/Fields';
 import MenuPanel from './MenuPanel';
+import { DEVELOPMENT_PROTOCOL_URL } from '../../config';
 
 class SettingsMenu extends PureComponent {
   constructor(props) {
@@ -206,7 +207,7 @@ class SettingsMenu extends PureComponent {
                 <section>
                   <Button
                     color="mustard"
-                    onClick={() => importProtocolFromURI('https://github.com/codaco/development-protocol/releases/download/20190918120503-bd775c6/development-protocol.netcanvas')}
+                    onClick={() => importProtocolFromURI(DEVELOPMENT_PROTOCOL_URL)}
                   >
                     Import development protocol
                   </Button>
