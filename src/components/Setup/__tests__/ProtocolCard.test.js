@@ -2,7 +2,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import ProtocolCard from '../ProtocolCard';
+import { UnconnectedProtocolCard as ProtocolCard } from '../ProtocolCard';
 
 describe('<ProtocolCard>', () => {
   let component;
