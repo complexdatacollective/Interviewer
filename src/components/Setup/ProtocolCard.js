@@ -142,12 +142,10 @@ ProtocolCard.propTypes = {
   }).isRequired,
 };
 
-function mapDispatchToProps(dispatch) {
-  return {
-    openDialog: bindActionCreators(dialogActions.openDialog, dispatch),
-    deleteProtocol: bindActionCreators(installedProtocolsActions.deleteProtocol, dispatch),
-  };
-}
+const mapDispatchToProps = {
+  openDialog: dialogActions.openDialog,
+  deleteProtocol: installedProtocolsActions.deleteProtocol,
+};
 
 export { ProtocolCard as UnconnectedProtocolCard };
 
