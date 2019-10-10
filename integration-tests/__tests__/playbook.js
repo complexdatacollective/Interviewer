@@ -1,0 +1,59 @@
+/* eslint-env jest */
+
+import path from 'path';
+import fakeDialog from 'spectron-fake-dialog';
+import { dataDir } from '../paths';
+import { timing, developmentProtocol } from '../config';
+
+export const loadEmptyProtocol = async (app) => {
+  const mockProtocolPath = path.join(dataDir, 'mock.netcanvas');
+  const mockFilenames = [mockProtocolPath];
+
+  await fakeDialog.mock([{ method: 'showOpenDialog', value: mockFilenames }]);
+  await app.client.isVisible('.getting-started');
+  await app.client.click('[name=add-a-protocol]');
+  await app.client.waitForVisible('.protocol-import-dialog__tabs');
+  await app.client.click('.tab=Local file');
+  await app.client.waitForVisible('h4=Protocol imported successfully!');
+  await app.client.click('button=Continue');
+  await app.client.pause(timing.medium);
+  await app.client.click('button.overlay__close');
+  await app.client.waitForExist('.modal', timing.long, true);
+};
+
+
+/**
+ * For reuse when testing interfaces
+ */
+export const loadDevelopmentProtocol = async (app) => {
+  await app.client.isVisible('.getting-started');
+  await app.client.click('[name=add-a-protocol]');
+  await app.client.waitForVisible('.protocol-import-dialog__tabs');
+  await app.client.click('.tab=From URL');
+  await app.client.pause(timing.medium);
+  await app.client.setValue('input[name=protocol_url]', developmentProtocol);
+  await app.client.click('button=Import');
+  await app.client.waitForVisible('h4=Protocol imported successfully!', 600000); // 10mins
+  await app.client.click('button=Continue');
+  await app.client.waitForExist('.modal', timing.long, true); // wait for not exist
+};
+
+export const startInterview = async (app, caseId = 'test') => {
+  await app.client.click('.protocol-card');
+  await app.client.setValue('input[name=case_id]', caseId);
+  await app.client.click('button=Start interview');
+  await app.client.waitForVisible('.protocol');
+};
+
+export const goToStage = async (app, stageId) => {
+  if (!stageId) { throw Error('goToStage() requires a stageId'); }
+  await app.client.click('.progress-bar');
+  await app.client.waitForVisible('.main-menu-stages-menu');
+  await app.client.click(`[data-stage-id=${stageId}]`);
+  await app.client.pause(timing.long);
+};
+
+export const debug = async (app) => {
+  await app.browserWindow.openDevTools({ mode: 'detach' });
+  await app.client.debug();
+};

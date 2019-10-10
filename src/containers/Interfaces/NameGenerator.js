@@ -27,34 +27,6 @@ class NameGenerator extends Component {
   }
 
   /**
-   * Node Form submit handler
-   */
-  handleSubmitForm = debounce(({ form }) => {
-    if (form) {
-      if (!this.state.selectedNode) {
-        /**
-         *  addNode(modelData, attributeData);
-        */
-        this.props.addNode(
-          this.props.newNodeModelData,
-          { ...this.props.newNodeAttributes, ...form },
-        );
-      } else {
-        /**
-         * updateNode(nodeId, newModelData, newAttributeData)
-         */
-        const selectedUID = this.state.selectedNode[entityPrimaryKeyProperty];
-        this.props.updateNode(selectedUID, {}, form);
-      }
-    }
-
-    this.setState({ showNodeForm: false, selectedNode: null });
-  }, 1000, { // This is needed to prevent double submit.
-    leading: true,
-    trailing: false,
-  });
-
-  /**
    * Drop node handler
    * Adds prompt attributes to existing nodes, or adds new nodes to the network.
    * @param {object} item - key/value object containing node object from the network store
@@ -77,6 +49,33 @@ class NameGenerator extends Component {
         { ...droppedAttributeData, ...this.props.newNodeAttributes },
       );
     }
+  }
+
+
+
+  /**
+  * Node Form submit handler
+  */
+  handleSubmitForm = ({ form }) => {
+    if (form) {
+      if (!this.state.selectedNode) {
+        /**
+        *  addNode(modelData, attributeData);
+        */
+        this.props.addNode(
+          this.props.newNodeModelData,
+          { ...this.props.newNodeAttributes, ...form },
+        );
+      } else {
+        /**
+        * updateNode(nodeId, newModelData, newAttributeData)
+        */
+        const selectedUID = this.state.selectedNode[entityPrimaryKeyProperty];
+        this.props.updateNode(selectedUID, {}, form);
+      }
+    }
+
+    this.setState({ showNodeForm: false, selectedNode: null });
   }
 
   /**
@@ -148,11 +147,13 @@ class NameGenerator extends Component {
         </div>
 
         { form &&
-          <Icon
-            name={nodeIconName}
+          <div
             onClick={this.handleClickAddNode}
             className="name-generator-interface__add-node"
-          />
+            data-clickable="open-add-node"
+          >
+            <Icon name={nodeIconName} />
+          </div>
         }
 
         { form &&

@@ -35,7 +35,7 @@
   }
 
   &__add-node {
-    &.icon {
+    .icon {
       @include floating-action-button;
     }
   }

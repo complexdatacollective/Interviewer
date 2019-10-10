@@ -34,7 +34,7 @@ export const getAppConfiguration = () => {
       webdriverOptions: {
         baseUrl: devServerURI,
       },
-      chromeDriverArgs: ['no-sandbox', 'headless', 'disable-dev-shm-usage'],
+      chromeDriverArgs: ['no-sandbox'],
       chromeDriverLogPath: path.join(__dirname, '..', 'chromedriver.log'),
       env: {
         TEST: 'test',
@@ -49,7 +49,7 @@ export const getAppConfiguration = () => {
 
   return {
     path: electron,
-    chromeDriverArgs: ['no-sandbox', 'headless', 'disable-dev-shm-usage'],
+    chromeDriverArgs: ['no-sandbox'],
     webdriverOptions: {
       baseUrl: devServerURI,
     },
