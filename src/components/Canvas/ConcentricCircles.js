@@ -24,6 +24,7 @@ const ConcentricCircles = ({
   connectFrom,
   updateLinkFrom,
   className,
+  stage,
 }) => (
   <Canvas className={cx('concentric-circles', className)} id="concentric-circles">
     <Background
@@ -57,18 +58,21 @@ const ConcentricCircles = ({
       subject={subject}
       connectFrom={connectFrom}
       updateLinkFrom={updateLinkFrom}
+      stage={stage}
     />
     <NodeBucket
       id="NODE_BUCKET"
       layoutVariable={layoutVariable}
       subject={subject}
       sortOrder={sortOrder}
+      stage={stage}
     />
   </Canvas>
 );
 
 ConcentricCircles.propTypes = {
   subject: PropTypes.object.isRequired,
+  stage: PropTypes.object.isRequired,
   layoutVariable: PropTypes.string.isRequired,
   highlightAttribute: PropTypes.string,
   allowHighlighting: PropTypes.bool,

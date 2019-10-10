@@ -31,12 +31,12 @@ export const getNetworkNodes = createDeepEqualSelector(
 );
 
 export const getNetworkEgo = createDeepEqualSelector(
-  getNetwork,
+  getFilteredNetwork,
   network => network.ego,
 );
 
 export const getNetworkEdges = createDeepEqualSelector(
-  getNetwork,
+  getFilteredNetwork,
   network => network.edges,
 );
 

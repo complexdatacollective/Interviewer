@@ -18,7 +18,7 @@ const getDisplayEdges = (_, props) => props.displayEdges;
  * Selector for next unplaced node.
  *
  * requires:
- * { layout, subject, sortOrder } props
+ * { layout, subject, sortOrder, stage } props
  */
 export const makeGetNextUnplacedNode = () =>
   createDeepEqualSelector(
