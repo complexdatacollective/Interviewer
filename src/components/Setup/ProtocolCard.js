@@ -7,19 +7,19 @@ import { actionCreators as installedProtocolsActions } from '../../ducks/modules
 import { Icon } from '../../ui/components';
 import { APP_SUPPORTED_SCHEMA_VERSIONS, APP_SCHEMA_VERSION } from '../../config';
 
-const ProtocolCard = ({ protocol, openDialog, deleteProtocol, selectProtocol }) => {
-  const isOutdatedProtocol = () =>
-    protocol.schemaVersion !== APP_SCHEMA_VERSION &&
-    APP_SUPPORTED_SCHEMA_VERSIONS.includes(protocol.schemaVersion);
+class ProtocolCard extends React.Component {
+  isOutdatedProtocol = () =>
+    this.props.protocol.schemaVersion !== APP_SCHEMA_VERSION &&
+    APP_SUPPORTED_SCHEMA_VERSIONS.includes(this.props.protocol.schemaVersion);
 
-  const isObsoleteProtocol = () => false; // To be implemented in future, as needed.
+  isObsoleteProtocol = () => false; // To be implemented in future, as needed.
 
-  const handleDeleteProtocol = () => {
-    deleteProtocol(protocol.uuid);
+  handleDeleteProtocol = () => {
+    this.props.deleteProtocol(this.props.protocol.uuid);
   };
 
-  const handleSchemaOutdatedInfo = () => {
-    openDialog({
+  handleSchemaOutdatedInfo = () => {
+    this.props.openDialog({
       type: 'Warning',
       title: 'Out of Date Schema',
       canCancel: false,
@@ -48,8 +48,8 @@ const ProtocolCard = ({ protocol, openDialog, deleteProtocol, selectProtocol }) 
     });
   };
 
-  const handleSchemaObsoleteInfo = () => {
-    openDialog({
+  handleSchemaObsoleteInfo = () => {
+    this.props.openDialog({
       type: 'Error',
       title: 'Obsolete Protocol Schema',
       canCancel: false,
@@ -77,52 +77,60 @@ const ProtocolCard = ({ protocol, openDialog, deleteProtocol, selectProtocol }) 
     });
   };
 
-  const modifierClasses = cx(
+  modifierClasses = cx(
     'protocol-card',
-    { 'protocol-card--warning': !isObsoleteProtocol() && isOutdatedProtocol() },
-    { 'protocol-card--error': isObsoleteProtocol() },
+    { 'protocol-card--warning': !this.isObsoleteProtocol() && this.isOutdatedProtocol() },
+    { 'protocol-card--error': this.isObsoleteProtocol() },
   );
 
-  const renderCardIcon = () => {
-    const iconMarkup = isOutdatedProtocol() ?
-      (
-        <div className="protocol-card__warning" onClick={handleSchemaOutdatedInfo}>
+  startButtonClasses = this.isObsoleteProtocol() ? ('start-button start-button--disabled') : ('start-button');
+
+  renderCardIcon() {
+    if (this.isOutdatedProtocol()) {
+      return (
+        <div className="protocol-card__warning" onClick={this.handleSchemaOutdatedInfo}>
           <Icon name="warning" />
-        </div>) :
-      (
-        <div className="protocol-card__error" onClick={handleSchemaObsoleteInfo}>
+        </div>
+      );
+    }
+
+    if (this.isObsoleteProtocol()) {
+      return (
+        <div className="protocol-card__error" onClick={this.handleSchemaObsoleteInfo}>
           <Icon name="error" />
         </div>
       );
+    }
 
-    return iconMarkup;
-  };
+    return ('');
+  }
 
-  return (
-    <div className={modifierClasses}>
-      <div className="protocol-card__delete" onClick={handleDeleteProtocol}>
-        <Icon name="delete" />
+  render() {
+    const { protocol, selectProtocol } = this.props;
+
+    return (
+      <div className={this.modifierClasses}>
+        <div className="protocol-card__delete" onClick={this.handleDeleteProtocol}>
+          <Icon name="delete" />
+        </div>
+        {this.renderCardIcon()}
+        <h2 className="protocol-card__name">{protocol.name}</h2>
+        <p className="protocol-card__description">
+          { protocol.description ?
+            protocol.description : (<em>No protocol description.</em>)}
+        </p>
+        <div
+          className={this.startButtonClasses}
+          onClick={() => selectProtocol(protocol)}
+        >
+          <Icon className="start-button__protocol-icon" name="protocol-card" />
+          <div className="start-button__text">Start new interview</div>
+          <Icon className="start-button__arrow" name="chevron-right" />
+        </div>
       </div>
-      {
-        isOutdatedProtocol() || isObsoleteProtocol() ?
-          renderCardIcon() : ''
-      }
-      <h2 className="protocol-card__name">{protocol.name}</h2>
-      <p className="protocol-card__description">
-        { protocol.description ?
-          protocol.description : (<em>No protocol description.</em>)}
-      </p>
-      <div
-        className={isObsoleteProtocol() ? ('start-button start-button--disabled') : ('start-button')}
-        onClick={() => selectProtocol(protocol)}
-      >
-        <Icon className="start-button__protocol-icon" name="protocol-card" />
-        <div className="start-button__text">Start new interview</div>
-        <Icon className="start-button__arrow" name="chevron-right" />
-      </div>
-    </div>
-  );
-};
+    );
+  }
+}
 
 ProtocolCard.defaultProps = {
   className: '',
@@ -138,6 +146,7 @@ ProtocolCard.propTypes = {
     uuid: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     description: PropTypes.string,
+    schemaVersion: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   }).isRequired,
 };
 

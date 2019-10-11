@@ -19,7 +19,6 @@ export const getFilteredNetwork = createDeepEqualSelector(
   (network, nodeFilter) => {
     if (nodeFilter && typeof nodeFilter !== 'function') {
       const filterFunction = customFilter(nodeFilter);
-      console.log('filtering', nodeFilter, network, filterFunction(network));
       return filterFunction(network);
     }
     return network;
