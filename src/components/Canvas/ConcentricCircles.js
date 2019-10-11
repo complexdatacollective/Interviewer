@@ -46,6 +46,7 @@ const ConcentricCircles = ({
         displayEdges={displayEdges}
         subject={subject}
         layoutVariable={layoutVariable}
+        stage={stage}
       />
     }
     <NodeLayout
