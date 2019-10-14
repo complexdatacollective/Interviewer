@@ -8,19 +8,13 @@ import {
   forceClick,
 } from '../helpers';
 import {
-  loadEmptyProtocol,
   loadDevelopmentProtocol,
   startInterview,
   goToStage,
   debug,
 } from '../playbook';
-import { timing } from '../../config';
 
 const app = makeTestingApp('Network-Canvas');
-
-// export const navigateToNameGenerator = async () => {
-//   app.client
-// };
 
 const setupApp = async () => {
   await fakeDialog.apply(app);
@@ -68,13 +62,34 @@ describe('Name generator', () => {
 
   it('Can edit a node', async () => {
     // open node for editing
-    await app.client.$('.node*=bar').click('.node');
+    await app.client.click('(//div[@class="node"])[2]');
 
     // edit node
-    await app.client.setValue('input[name="0e75ec18-2cb1-4606-9f18-034d28b07c19"]', 'buzz');    
+    await app.client.setValue('input[name="0e75ec18-2cb1-4606-9f18-034d28b07c19"]', 'buzz');
     await app.client.click('button=Finished');
-    
+
     // check change is visible
     await app.client.waitForVisible('.node*=buzz');
+  });
+
+  it('Can delete a node', async () => {
+    await app.client.moveToObject('//div[@class="name-generator-interface__nodes"]//div[@class="node"]');
+    await app.client.buttonDown(0);
+    await app.client.pause(100); // wait for bin to appear
+    await app.client.moveToObject('//div[@class="node-bin"]');
+    await app.client.buttonUp(0);
+
+    // check no nodes in main nodes list
+    await app.client.waitForExist('//div[@class="name-generator-interface__nodes"]//div[@class="node"]', 500, true);
+  });
+
+  it('Can use a node from the panel', async () => {
+    await app.client.moveToObject('//div[@class="name-generator-interface__panels"]//div[@class="node"]');
+    await app.client.buttonDown(0);
+    await app.client.moveToObject('//div[@class="name-generator-interface__nodes"]');
+    await app.client.buttonUp(0);
+
+    // check for a node in the main nodes list
+    await app.client.waitForExist('//div[@class="name-generator-interface__nodes"]//div[@class="node"]');
   });
 });

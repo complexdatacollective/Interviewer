@@ -158,6 +158,7 @@ class NameGenerator extends Component {
 
         { form &&
           <NodeForm
+            key={this.state.selectedNode}
             node={this.state.selectedNode}
             stage={this.props.stage}
             onSubmit={this.handleSubmitForm}
