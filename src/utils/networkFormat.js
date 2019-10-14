@@ -135,7 +135,7 @@ export const asWorkerAgentEdge = (edge, edgeTypeDefinition) => ({
  * @return {Object} workerNetwork
  */
 export const asWorkerAgentNetwork = (network = {}, registry = {}) => {
-  const { nodes = [], edges = [], ego } = network;
+  const { nodes = [], edges = [], ego = {} } = network;
   const { node: nodeRegistry = {}, edge: edgeRegistry = {}, ego: egoRegistry = {} } = registry;
   return ({
     nodes: nodes.map(node => asWorkerAgentEntity(node, nodeRegistry[node.type])),

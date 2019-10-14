@@ -113,12 +113,12 @@ function makeMapStateToProps() {
 
   return function mapStateToProps(
     state,
-    { createEdge, allowHighlighting, subject, layoutVariable },
+    { createEdge, allowHighlighting, subject, layoutVariable, stage },
   ) {
     const allowSelect = !!(createEdge || allowHighlighting);
 
     return {
-      nodes: getPlacedNodes(state, { subject, layoutVariable }),
+      nodes: getPlacedNodes(state, { subject, layoutVariable, stage }),
       allowSelect,
     };
   };
