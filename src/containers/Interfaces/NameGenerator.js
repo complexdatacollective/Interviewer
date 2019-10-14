@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { get, has, omit, debounce } from 'lodash';
+import { get, has, omit } from 'lodash';
 import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { makeNetworkNodesForPrompt, makeGetAdditionalAttributes } from '../../selectors/interface';
@@ -50,8 +50,6 @@ class NameGenerator extends Component {
       );
     }
   }
-
-
 
   /**
   * Node Form submit handler

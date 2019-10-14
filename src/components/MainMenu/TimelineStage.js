@@ -7,7 +7,11 @@ import timelineImages from '../../images/timeline';
 const getTimelineImage = type =>
   get(timelineImages, type, timelineImages.Default);
 
-const TimelineStage = ({ item: { type, label, index, id }, handleOpenStage, currentStageIndex }) => {
+const TimelineStage = ({
+  item: { type, label, index, id },
+  handleOpenStage,
+  currentStageIndex,
+}) => {
   const classes = cx({
     'main-menu-timeline-stage': true,
     'main-menu-timeline-stage--current': currentStageIndex === index,
@@ -15,7 +19,7 @@ const TimelineStage = ({ item: { type, label, index, id }, handleOpenStage, curr
   });
 
   return (
-    <div 
+    <div
       onClick={handleOpenStage}
       className={classes}
       data-stage-id={id}
