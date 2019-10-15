@@ -18,6 +18,123 @@ const mockState = {
 };
 
 describe('network reducer', () => {
+  it('should handle BATCH_ADD_NODE', () => {
+    const mockNodeList = [
+      {
+        type: 'ffcd1f42-3c9e-4e51-9a0e-305194a3e601',
+        stageId: '0036b700-9050-11e9-8c88-ff1bcaf707d9',
+        promptId: 'ebf658e7-e969-45c4-8a74-af3a2d653e55',
+        _uid: 'b868f61155ce8b570ae5f40337a6f64f5a72f199',
+        attributes: {
+          name: 'Jacqueline',
+        },
+      },
+      {
+        type: 'ffcd1f42-3c9e-4e51-9a0e-305194a3e601',
+        stageId: '0036b700-9050-11e9-8c88-ff1bcaf707d9',
+        promptId: 'ebf658e7-e969-45c4-8a74-af3a2d653e55',
+        _uid: '369927e6e432e609ffe921d8bca8d153cb9ba030',
+        attributes: {
+          name: 'Anthony',
+        },
+      },
+      {
+        type: 'ffcd1f42-3c9e-4e51-9a0e-305194a3e601',
+        stageId: '0036b700-9050-11e9-8c88-ff1bcaf707d9',
+        promptId: 'ebf658e7-e969-45c4-8a74-af3a2d653e55',
+        _uid: '55cc9b1e72354d1d762003535a231e7b573a0360',
+        attributes: {
+          name: 'Benjamin',
+        },
+      },
+      {
+        type: 'ffcd1f42-3c9e-4e51-9a0e-305194a3e601',
+        stageId: '0036b700-9050-11e9-8c88-ff1bcaf707d9',
+        promptId: 'ebf658e7-e969-45c4-8a74-af3a2d653e55',
+        _uid: '2fc08cfdd0a6a769b542af289acce07231464910',
+        attributes: {
+          name: 'Jerreed',
+        },
+      },
+      {
+        type: 'ffcd1f42-3c9e-4e51-9a0e-305194a3e601',
+        stageId: '0036b700-9050-11e9-8c88-ff1bcaf707d9',
+        promptId: 'ebf658e7-e969-45c4-8a74-af3a2d653e55',
+        _uid: '5027f94a028494f8ac6e33f0b5cbc909a94a13f9',
+        attributes: {
+          name: 'John',
+        },
+      },
+      {
+        type: 'ffcd1f42-3c9e-4e51-9a0e-305194a3e601',
+        stageId: '0036b700-9050-11e9-8c88-ff1bcaf707d9',
+        promptId: 'ebf658e7-e969-45c4-8a74-af3a2d653e55',
+        _uid: '2fc265eb45462d153cbf5401fa1783636ab1a8aa',
+        attributes: {
+          name: 'José Luis',
+        },
+      },
+      {
+        type: 'ffcd1f42-3c9e-4e51-9a0e-305194a3e601',
+        stageId: '0036b700-9050-11e9-8c88-ff1bcaf707d9',
+        promptId: 'ebf658e7-e969-45c4-8a74-af3a2d653e55',
+        _uid: '8b40666afa3ff97ea2f593d9cbea3094450d837e',
+        attributes: {
+          name: 'Laura',
+        },
+      },
+      {
+        type: 'ffcd1f42-3c9e-4e51-9a0e-305194a3e601',
+        stageId: '0036b700-9050-11e9-8c88-ff1bcaf707d9',
+        promptId: 'ebf658e7-e969-45c4-8a74-af3a2d653e55',
+        _uid: '43d93f49167ebc142efa0aef127152ddad614c74',
+        attributes: {
+          name: 'John',
+        },
+      },
+    ];
+
+    const mockProtocolAttributes = {
+      protocolAttribute: 33,
+    };
+
+    const mockStageAttributes = {
+      myStageAttribute: 45,
+    };
+
+    const newState = reducer(
+      {
+        ...mockState,
+      },
+      {
+        type: actionTypes.BATCH_ADD_NODES,
+        nodeList: mockNodeList,
+        defaultAttributesForType: mockProtocolAttributes,
+        attributeData: mockStageAttributes,
+      },
+    );
+
+    expect(newState.nodes.length).toBe(8);
+
+    // Contains stage attributes and default code attributes
+    const newNode = newState.nodes[0];
+    expect(newNode).toEqual(
+      {
+        type: 'ffcd1f42-3c9e-4e51-9a0e-305194a3e601',
+        stageId: '0036b700-9050-11e9-8c88-ff1bcaf707d9',
+        promptIDs: ['ebf658e7-e969-45c4-8a74-af3a2d653e55'],
+        itemType: undefined,
+        _uid: 'b868f61155ce8b570ae5f40337a6f64f5a72f199',
+        attributes: {
+          myStageAttribute: 45,
+          protocolAttribute: 33,
+          name: 'Jacqueline',
+        },
+      },
+    );
+  });
+
+
   it('should handle ADD_NODE', () => {
     const newState = reducer(
       {

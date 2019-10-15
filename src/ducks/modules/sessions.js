@@ -170,7 +170,7 @@ const batchAddNodes = (nodeList, attributeData, type) => (dispatch, getState) =>
     type: networkActionTypes.BATCH_ADD_NODES,
     sessionId: activeSessionId,
     nodeList,
-    defaultAttribtutesForType: {
+    defaultAttributesForType: {
       ...getDefaultAttributesForEntityType(registryForType),
     },
     attributeData: {

@@ -35,7 +35,6 @@ export const makeGetNextUnplacedNode = () =>
           (has(attributes, layoutVariable) && isNil(attributes[layoutVariable]))
         );
       });
-
       const sorter = sortOrder(sortOptions);
       return first(sorter(unplacedNodes));
     },
