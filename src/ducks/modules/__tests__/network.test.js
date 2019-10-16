@@ -28,6 +28,8 @@ describe('network reducer', () => {
         _uid: 'b868f61155ce8b570ae5f40337a6f64f5a72f199',
         attributes: {
           name: 'Jacqueline',
+          overwriteInNode: 15,
+          overwriteInStage: 57,
         },
       },
       {
@@ -97,10 +99,13 @@ describe('network reducer', () => {
 
     const mockProtocolAttributes = {
       protocolAttribute: 33,
+      overwriteInNode: 10,
+      overwriteInStage: 50,
     };
 
     const mockStageAttributes = {
       myStageAttribute: 45,
+      overwriteInStage: 55,
     };
 
     const action = actionCreators.batchAddNodes(
@@ -116,7 +121,7 @@ describe('network reducer', () => {
       action,
     );
 
-    expect(newState.nodes.length).toBe(8);
+    expect(newState.nodes).toHaveLength(8);
 
     // Contains stage attributes and default code attributes
     const newNode = newState.nodes[0];
@@ -130,6 +135,8 @@ describe('network reducer', () => {
         attributes: {
           myStageAttribute: 45,
           protocolAttribute: 33,
+          overwriteInNode: 15,
+          overwriteInStage: 55,
           name: 'Jacqueline',
         },
       },
