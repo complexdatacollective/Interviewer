@@ -2,6 +2,7 @@
 
 import reducer,
 { actionTypes,
+  actionCreators,
   entityPrimaryKeyProperty as PK,
   entityAttributesProperty,
 } from '../network';
@@ -102,16 +103,17 @@ describe('network reducer', () => {
       myStageAttribute: 45,
     };
 
+    const action = actionCreators.batchAddNodes(
+      mockNodeList,
+      mockStageAttributes,
+      mockProtocolAttributes,
+    );
+
     const newState = reducer(
       {
         ...mockState,
       },
-      {
-        type: actionTypes.BATCH_ADD_NODES,
-        nodeList: mockNodeList,
-        defaultAttributesForType: mockProtocolAttributes,
-        attributeData: mockStageAttributes,
-      },
+      action,
     );
 
     expect(newState.nodes.length).toBe(8);

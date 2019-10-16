@@ -3,7 +3,7 @@ import uuidv4 from '../../utils/uuid';
 import ApiClient from '../../utils/ApiClient';
 import { actionCreators as SessionWorkerActions } from './sessionWorkers';
 import { actionTypes as installedProtocolsActionTypes } from './installedProtocols';
-import network, { actionTypes as networkActionTypes, entityPrimaryKeyProperty } from './network';
+import network, { actionTypes as networkActionTypes, actionCreators as networkActions, entityPrimaryKeyProperty } from './network';
 
 const ADD_SESSION = 'ADD_SESSION';
 const LOAD_SESSION = 'LOAD_SESSION';
@@ -151,6 +151,21 @@ const getDefaultAttributesForEntityType = (registryForType = {}) => {
 };
 
 /**
+ * Take a action (probably a network action, and append the active sessionId
+ * to it.
+ * @param {object} action redux action object
+ */
+const withActiveSessionId = action =>
+  (dispatch, getState) => {
+    const { activeSessionId: sessionId } = getState();
+
+    dispatch({
+      ...action,
+      sessionId,
+    });
+  };
+
+/**
  * Add a batch of nodes to the state.
  *
  * @param {Collection} [nodeList] An array of objects representing nodes to add.
@@ -158,30 +173,31 @@ const getDefaultAttributesForEntityType = (registryForType = {}) => {
  * @param {String} [type] A node type ID
  *
  * @memberof! NetworkActionCreators
+ * TODO: is `type` superfluous as contained by nodes in nodeList?
  */
-const batchAddNodes = (nodeList, attributeData, type) => (dispatch, getState) => {
-  const { activeSessionId, sessions, installedProtocols } = getState();
+const batchAddNodes = (nodeList, attributeData, type) =>
+  (dispatch, getState) => {
+    const { activeSessionId, sessions, installedProtocols } = getState();
 
-  const activeProtocol = installedProtocols[sessions[activeSessionId].protocolUID];
-  const nodeRegistry = activeProtocol.codebook.node;
+    const session = sessions[activeSessionId];
+    const activeProtocol = installedProtocols[session.protocolUID];
+    const nodeRegistry = activeProtocol.codebook.node;
+    const registryForType = nodeRegistry[type].variables;
+    const defaultAttributes = getDefaultAttributesForEntityType(registryForType);
 
-  const registryForType = nodeRegistry[type].variables;
-  dispatch({
-    type: networkActionTypes.BATCH_ADD_NODES,
-    sessionId: activeSessionId,
-    nodeList,
-    defaultAttributesForType: {
-      ...getDefaultAttributesForEntityType(registryForType),
-    },
-    attributeData: {
-      ...attributeData,
-    },
-  });
-};
+    dispatch(
+      withActiveSessionId(
+        networkActions.batchAddNodes(
+          nodeList,
+          attributeData,
+          defaultAttributes,
+        ),
+      ),
+    );
+  };
 
 const addNode = (modelData, attributeData = {}) => (dispatch, getState) => {
   const { activeSessionId, sessions, installedProtocols } = getState();
-
 
   const activeProtocol = installedProtocols[sessions[activeSessionId].protocolUID];
   const nodeRegistry = activeProtocol.codebook.node;
