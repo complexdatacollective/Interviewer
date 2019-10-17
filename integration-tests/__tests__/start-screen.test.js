@@ -1,51 +1,44 @@
 /* eslint-env jest */
 
 import fakeDialog from 'spectron-fake-dialog';
-import { timing } from '../../config';
+import { timing } from '../config';
 import {
   makeTestingApp,
   startApps,
   stopApps,
   forceClick,
-} from '../helpers';
-import { loadEmptyProtocol, loadDevelopmentProtocol } from '../playbook';
+  matchImageSnapshot,
+} from './helpers';
+import { loadProtocolFromFile, loadProtocolFromNetwork } from './playbook';
 
 const app = makeTestingApp('Network-Canvas');
 
 const setup = async () => {
   await fakeDialog.apply(app);
   await startApps(app);
-  await app.client.pause(timing.medium);
-  await app.browserWindow.setSize(1280, 800);
 };
 
 const teardown = async () => {
-  // Uncomment to investigate inspector
-  // await app.client.debug();
-
   await stopApps(app);
-};
-
-const reset = async () => {
-  await app.client.url('#/reset');
-  await app.client.pause(timing.medium);
 };
 
 describe('Start screen', () => {
   beforeAll(setup);
   afterAll(teardown);
-  beforeEach(reset);
 
   it('on first load it shows no protocols installed', async () => {
     await app.client.waitForVisible('h1=No interview protocols installed');
+    await app.client.pause(timing.medium);
+    await matchImageSnapshot(app);
   });
 
   it('loads a protocol from disk', async () => {
-    await loadEmptyProtocol(app);
+    await loadProtocolFromFile(app);
+    await matchImageSnapshot(app);
   });
 
   it('lists loaded protocols, and allows delete', async () => {
-    await loadEmptyProtocol(app);
+    await loadProtocolFromFile(app);
     await app.client.waitForVisible('h2=mock');
     await app.client.click('.protocol-card__delete');
     await app.client.pause(timing.medium);
@@ -54,11 +47,10 @@ describe('Start screen', () => {
   });
 
   it('can load a protocol from url', async () => {
-    await loadDevelopmentProtocol(app);
+    await loadProtocolFromNetwork(app);
   });
 
   it('can reset state', async () => {
-    await loadEmptyProtocol(app);
     await app.client.click('svg[name=settings]');
     await app.client.pause(timing.medium);
     await app.client.waitForVisible('#reset-all-nc-data');

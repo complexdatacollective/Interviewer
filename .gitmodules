@@ -7,3 +7,6 @@
 [submodule "src/utils/protocol/protocol-validation"]
 	path = src/utils/protocol/protocol-validation
 	url = https://github.com/codaco/protocol-validation.git
+[submodule "development-protocol"]
+	path = development-protocol
+	url = https://github.com/codaco/development-protocol.git

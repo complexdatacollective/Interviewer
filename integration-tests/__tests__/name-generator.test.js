@@ -6,27 +6,23 @@ import {
   startApps,
   stopApps,
   forceClick,
-} from '../helpers';
+  pause,
+  matchImageSnapshot,
+} from './helpers';
 import {
   loadDevelopmentProtocol,
   startInterview,
   goToStage,
-  debug,
-} from '../playbook';
+} from './playbook';
 
 const app = makeTestingApp('Network-Canvas');
 
 const setupApp = async () => {
   await fakeDialog.apply(app);
   await startApps(app);
-  await app.browserWindow.setSize(1280, 800);
-  await app.browserWindow.openDevTools({ mode: 'detach' });
 };
 
 const teardownApp = async () => {
-  // Uncomment to investigate inspector
-  // await debug(app);
-
   await stopApps(app);
 };
 
@@ -45,6 +41,9 @@ describe('Name generator', () => {
 
   it('Can create a node', async () => {
     await forceClick(app, '[data-clickable="open-add-node"]');
+    await pause(app, 'medium');
+
+    await matchImageSnapshot(app);
     // name
     await app.client.setValue('input[name="6be95f85-c2d9-4daf-9de1-3939418af888"]', 'foo');
     // nickname
@@ -55,7 +54,16 @@ describe('Name generator', () => {
     await app.client
       .$('[name="e343a91f-628d-4175-870c-957beffa0154"]')
       .click('label*=Four');
+
+    await pause(app, 'medium');
+
+    await matchImageSnapshot(app);
+
     await app.client.click('button=Finished');
+
+    await pause(app, 'medium');
+
+    await matchImageSnapshot(app);
 
     await app.client.waitForVisible('.node*=bar');
   });

@@ -9,7 +9,7 @@ services:
       - ./public:/app/public
       - ./src:/app/src
       - ./integration-tests:/app/integration-tests
-    command: bash -c "npm run build:ci && xvfb-run -a npm run test:integration:ci -- regression"
+    command: bash -c "npm run build:ci && xvfb-run -a npm run test:integration:ci"
   update_snapshots:
     build: .
     shm_size: '512m'
@@ -19,4 +19,4 @@ services:
       - ./public:/app/public
       - ./src:/app/src
       - ./integration-tests:/app/integration-tests
-    command: bash -c "npm run build:ci && xvfb-run -a npm run test:integration:ci -- regression --updateSnapshot"
+    command: bash -c "npm run build:ci && xvfb-run -a npm run test:integration:ci --updateSnapshot"
