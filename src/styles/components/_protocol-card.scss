@@ -13,6 +13,10 @@ $component: 'protocol-card';
     border-bottom-color: var(--warning);
   }
 
+  &--info {
+    border-bottom-color: var(--info);
+  }
+
   &--error {
     border-bottom-color: var(--error);
   }
@@ -88,20 +92,34 @@ $component: 'protocol-card';
     }
   }
 
+  &__info,
   &__warning,
   &__error {
     position: absolute;
     top: unit(-2);
     left: unit(-2);
-    padding: 1.5rem;
-    background: var(--warning);
+    height: unit(8);
+    width: unit(8);
     border-radius: 50%;
     cursor: pointer;
 
     .icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       height: unit(4);
       width: unit(4);
     }
+  }
+
+  &__info {
+    background: var(--info);
+  }
+
+  &__warning,
+  &__error {
+    background: var(--warning);
   }
 
   &__error {

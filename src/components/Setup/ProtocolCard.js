@@ -20,8 +20,8 @@ class ProtocolCard extends React.Component {
 
   handleSchemaOutdatedInfo = () => {
     this.props.openDialog({
-      type: 'Warning',
-      title: 'Out of Date Schema',
+      type: 'Notice',
+      title: 'Schema can be updated',
       canCancel: false,
       message: (
         <React.Fragment>
@@ -79,7 +79,7 @@ class ProtocolCard extends React.Component {
 
   modifierClasses = cx(
     'protocol-card',
-    { 'protocol-card--warning': !this.isObsoleteProtocol() && this.isOutdatedProtocol() },
+    { 'protocol-card--info': !this.isObsoleteProtocol() && this.isOutdatedProtocol() },
     { 'protocol-card--error': this.isObsoleteProtocol() },
   );
 
@@ -88,8 +88,8 @@ class ProtocolCard extends React.Component {
   renderCardIcon() {
     if (this.isOutdatedProtocol()) {
       return (
-        <div className="protocol-card__warning" onClick={this.handleSchemaOutdatedInfo}>
-          <Icon name="warning" />
+        <div className="protocol-card__info" onClick={this.handleSchemaOutdatedInfo}>
+          <Icon name="info" />
         </div>
       );
     }
