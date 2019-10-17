@@ -1,3 +1,18 @@
+:root {
+
+  --manage-interview-panel-height: 7rem;
+  --header-height: 25vh;
+
+}
+
+@media (max-height: 799px) {
+  :root {
+    --header-height: 20vh;
+    --manage-interview-panel-height: 7rem;
+  }
+}
+
+
 .bg {
   position: absolute;
   left: 0;
@@ -50,22 +65,24 @@
     @include transition-properties((opacity transform), var(--animation-easing), var(--animation-duration-fast));
     align-items: center;
     justify-content: center;
-    height: 25vh;
+    height: var(--header-height);
     display: flex;
     flex-direction: column;
     transition-delay: var(--animation-duration-fast);
 
     &--logo {
-      width: 27rem;
+      height: 100%;
     }
   }
+
+
 
   &__main {
     @include transition-properties((opacity), var(--animation-easing), var(--animation-duration-fast));
     flex: 1 1 auto;
     display: flex;
     align-items: center;
-    height: calc(100% - 25vh - 10rem);
+    height: calc(100% - var(--header-height) - var(--manage-interview-panel-height));
     transition-delay: var(--animation-duration-fast);
 
     .scrollable {
@@ -185,12 +202,12 @@
   width: 100%;
   height: 100%;
   position: absolute;
-  top: calc(100% - 10rem);
+  top: calc(100% - var(--manage-interview-panel-height));
   z-index: var(--z-panel);
 
   &--toggle {
-    height: 10rem;
-    padding-top: 3rem;
+    height: var(--manage-interview-panel-height);
+    padding-top: 1rem;
     text-align: center;
 
     h4 {
@@ -204,7 +221,7 @@
   }
 
   &--open {
-    transform: translateY(calc(-100% + 10rem));
+    transform: translateY(calc(-100% + var(--manage-interview-panel-height)));
 
     .toggle-image {
       transform: rotate(180deg);

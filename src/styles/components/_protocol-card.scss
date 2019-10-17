@@ -8,6 +8,8 @@ $component: 'protocol-card';
   width: 20rem;
   border-bottom: .75rem solid var(--color-platinum--dark);
   color: var(--color-charcoal);
+  height: 40vh;
+  max-height: 22rem;
 
   &--warning {
     border-bottom-color: var(--warning);
@@ -35,8 +37,8 @@ $component: 'protocol-card';
   }
 
   &__description {
-    height: unit(16);
-    margin: unit(2) 0;
+    height: calc(100% - 10rem);
+    // margin: unit(2) 0;
     overflow-y: auto;
     font-weight: normal;
   }
@@ -63,8 +65,8 @@ $component: 'protocol-card';
     display: flex;
     cursor: pointer;
     align-items: center;
-    width: 100%;
     box-shadow: 0 0.15rem rgba(0, 0, 0, 0.25); //sass-lint:disable-line no-color-literals
+    height: 5rem;
 
     &--disabled {
       opacity: 0.5;
