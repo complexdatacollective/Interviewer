@@ -2,7 +2,11 @@
 
 import uuidv4 from '../../../utils/uuid';
 
-const { actionTypes, entityPrimaryKeyProperty } = jest.requireActual('../network');
+const {
+  actionTypes,
+  actionCreators: networkActionCreators,
+  entityPrimaryKeyProperty,
+} = jest.requireActual('../network');
 
 const reducer = jest.fn(() => ({
   nodes: [],
@@ -12,8 +16,14 @@ const reducer = jest.fn(() => ({
   },
 }));
 
+const actionCreators = {
+  ...networkActionCreators,
+  batchAddNodes: jest.fn(networkActionCreators.batchAddNodes),
+};
+
 export default reducer;
 
 export {
   actionTypes,
+  actionCreators,
 };
