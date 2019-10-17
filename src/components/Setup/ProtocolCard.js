@@ -29,12 +29,11 @@ class ProtocolCard extends React.Component {
             This protocol uses an older version of the protocol file format, or &quot;schema&quot;.
           </p>
           <p>
-            Newer schema versions support additional features in Network Canvas, and may be
-            required in order to use this protocol in the future. To avoid losing the ability
-            to conduct interviews, you are strongly advised to migrate this protocol to the
-            latest schema version. To do this, open the protocol file it in the latest version
-            of Architect, and follow the migration instructions. Once migrated, install the
-            new version of the protocol on this device.
+            Newer schema versions support additional features in Network Canvas. During the beta
+            phase, we kindly request that you update your protocols to the latest version, and
+            evaluate the newest features as we implement them. To do this, open the original
+            protocol file it in the latest version of Architect, and follow the migration
+            instructions. Once migrated, install the new version of the protocol on this device.
           </p>
           <p>
             For documentation on this issue, please see our documentation site.
