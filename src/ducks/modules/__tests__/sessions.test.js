@@ -129,7 +129,7 @@ describe('sessions', () => {
     });
 
     it('network actions defer to network reducer', () => {
-      const networkActions = [
+      const networkActionList = [
         networkActionTypes.ADD_NODE,
         networkActionTypes.BATCH_ADD_NODES,
         networkActionTypes.REMOVE_NODE,
@@ -143,7 +143,7 @@ describe('sessions', () => {
         networkActionTypes.UPDATE_EGO,
       ];
 
-      networkActions.forEach((actionType) => {
+      networkActionList.forEach((actionType) => {
         reducer({ a: { network: {} } }, { type: actionType, sessionId: 'a' });
       });
 

@@ -231,7 +231,8 @@
     ],
     "testPathIgnorePatterns": [
       "<rootDir>[/\\\\](www|docs|node_modules|scripts|test)[/\\\\]",
-      "<rootDir>/src/utils/networkQuery"
+      "<rootDir>/src/utils/networkQuery",
+      "<rootDir>/integration-tests"
     ],
     "testEnvironment": "node",
     "testURL": "http://localhost",
