@@ -7,14 +7,29 @@ import { getAppConfiguration, defaultImageSnaphotConfig, timing, testSizes } fro
 
 const pluralize = f => (...apps) => Promise.all(apps.map(app => f(app)));
 
-export const resizeApp = async (app, size = 'default') => {
+let appSize = 'not-set';
+
+export const resizeApp = async (app, size = 'wide') => {
   const dimensions = get(testSizes, size);
-  console.info('resize to:', dimensions);
   if (!dimensions) { return; }
+  console.info(`resize to: ${dimensions[0]}x${dimensions[1]}`);
+  appSize = `${dimensions[0]}x${dimensions[1]}`;
   await app.browserWindow.setSize(dimensions[0], dimensions[1]);
   await app.client.url('#/reset');
   await app.client.pause(timing.medium);
 };
+
+// const forEachSize = (app, sizes, tests) => {
+//   sizes.forEach((size) => {
+//     const [width, height] = get(testSizes, size);
+
+//     describe(`${width}x${height}`, () => {
+//       beforeAll(resizeApp(app, size));
+
+//       tests();
+//     });
+//   });
+// };
 
 export const makeTestingApp = () => {
   const appConfiguration = getAppConfiguration();
@@ -71,12 +86,13 @@ const getImageSnaphotConfig = async (app, options = {}) =>
     .then(({ value: devicePixelRatio }) => ({
       ...defaultImageSnaphotConfig,
       customSnapshotIdentifier: ({ testPath, currentTestName, counter }) =>
-        `${devicePixelRatio}x-`
+        `${devicePixelRatio}x-${appSize}-`
           .concat(kebabCase(`${path.basename(testPath)}-${currentTestName}-${counter}`)),
       ...options,
     }));
 
 export const matchImageSnapshot = async (app, options = {}) => {
+  await app.client.pause(timing.long);
   await getImageSnaphotConfig(app, options)
     .then(imageSnaphotConfig =>
       expect(app.browserWindow.capturePage())

@@ -27,6 +27,8 @@ const defaultImageSnaphotConfig = {
   // { testPath, currentTestName, counter, defaultIdentifier }
   customSnapshotIdentifier: ({ testPath, currentTestName, counter }) =>
     kebabCase(`${path.basename(testPath)}-${currentTestName}-${counter}`),
+  customDiffConfig: { threshold: 0.1 },
+  blur: 1,
 };
 
 const getAppConfiguration = () => {
@@ -41,6 +43,7 @@ const getAppConfiguration = () => {
       path: electron,
       webdriverOptions: {
         baseUrl: devServerURI,
+        deprecationWarnings: false,
       },
       chromeDriverArgs: ['no-sandbox'],
       chromeDriverLogPath: path.join(__dirname, '..', 'chromedriver.log'),
@@ -57,7 +60,7 @@ const getAppConfiguration = () => {
 
   return {
     path: electron,
-    chromeDriverArgs: ['no-sandbox'],
+    chromeDriverArgs: ['no-sandbox', 'headless', 'disable-dev-shm-usage'],
     webdriverOptions: {
       baseUrl: devServerURI,
       deprecationWarnings: false,

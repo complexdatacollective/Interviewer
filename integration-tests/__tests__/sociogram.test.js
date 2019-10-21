@@ -8,6 +8,7 @@ import {
   forceClick,
   matchImageSnapshot,
   pause,
+  debug,
 } from './helpers';
 import {
   loadDevelopmentProtocol,
@@ -131,15 +132,11 @@ describe('Sociogram', () => {
       center.y - 100,
     );
     await app.client.buttonPress(0);
-    await pause(app, 'medium');
 
-    // WARN: this may have problems since the highlight is animated.
-    // increased threshold to help
-    await matchImageSnapshot(
-      app,
-      { customDiffConfig: { threshold: 0.05 } },
-    );
+    // use class selector, as visuals are animated
+    await app.client.waitForExist('.node.node--linking');
 
+    // de-select
     await app.client.buttonPress(0);
   });
 
@@ -173,8 +170,6 @@ describe('Sociogram', () => {
       center.y - 100,
     );
     await app.client.buttonPress(0);
-
-    await pause(app, 'medium');
 
     await matchImageSnapshot(app);
   });

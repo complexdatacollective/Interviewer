@@ -19,4 +19,14 @@ services:
       - ./public:/app/public
       - ./src:/app/src
       - ./integration-tests:/app/integration-tests
-    command: bash -c "npm run build:ci && xvfb-run -a npm run test:integration:ci --updateSnapshot"
+    command: bash -c "npm run build:ci && xvfb-run -a npm run test:integration:ci -- --updateSnapshot"
+  debug:
+    build: .
+    shm_size: '512m'
+    volumes:
+      - ./scripts:/app/scripts
+      - ./config:/app/config
+      - ./www:/app/www
+      - ./src:/app/src
+      - ./integration-tests:/app/integration-tests
+    command: /usr/bin/env bash

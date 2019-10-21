@@ -22,7 +22,7 @@ export const loadProtocolFromFile = async (app, filename = 'mock.netcanvas') => 
   await app.client.waitForExist('.modal', timing.long, true);
 };
 
-export const loadProtocolFromNetwork = async (app, url = developmentProtocol) => {
+export const loadProtocolFromNetwork = async (app, url = 'https://documentation.networkcanvas.com/protocols/mock.netcanvas') => {
   await app.client.isVisible('.getting-started');
   await app.client.click('[name=add-a-protocol]');
   await app.client.waitForVisible('.protocol-import-dialog__tabs');

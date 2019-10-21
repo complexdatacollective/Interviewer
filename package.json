@@ -24,7 +24,6 @@
     "lint": "eslint src && eslint public",
     "sass-lint": "sass-lint -vc .sass-lint.yml",
     "test": "node scripts/test.js --env=jsdom",
-    "test:integration:get-development-protocol": "cross-env node integration-tests/scripts/get-development-protocol.js",
     "test:integration": "cross-env TEST_ENV=development jest --runInBand --config=integration-tests/jest.config.js",
     "test:integration:ci": "jest --runInBand --config=integration-tests/jest.config.js",
     "test:integration:docker": "docker-compose run integration_tests",

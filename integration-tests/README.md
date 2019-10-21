@@ -14,67 +14,43 @@ $ npm run start:integration # to start serving react in electron/test mode
 $ npm run test:integration # to run tests
 ```
 
-### Functional tests
-
-This can test interactions with various elements of the app.
-
-They are found in `__tests__/functional`
-
-```
-$ npm run test:integration -- functional # to run functional tests
-```
-
-### Regression tests
-
-Screenshots of the app in various states can be captured to help spot regressions.
-
-These are found in `__tests__/regression/`
-
-```
-$ npm run test:integration -- regression # to run regression tests
-```
+Screenshots of the app in various states can be captured to help spot regressions:
 
 ```
 await app.client.pause(timing.medium); // You may need to pause to allow fonts/assets to load
-await expect(app.browserWindow.capturePage()).resolves.toMatchImageSnapshot(); // Snapshot test
+await matchImageSnapshot(app) // Use helper to run image snapshot test
 ```
 
-These tests create `**/__image_snapshots__/` files which should be added to version control.
+#### Creating/updating snapshots
 
-If snapshots don't match, diff files are created here `**/__image_snapshots__/__diff_output__`, these
-should not be added to version control, but can be used to debug the issue.
+__requires: `docker` and `docker-compose`__
 
-#### Updating snapshots
+New/changed snapshots need to be created and verified locally, before they
+can be run on the CI service.
 
-Update snapshots with the `-u` flag:
+Snapshots are created in `**/__image_snapshots__/` and should be added to version control.
 
-`npm run test:integration -- --update-snapshots`
+If snapshots don't match, diff files are created here `**/__image_snapshots__/__diff_output__`, these should not be added to version control, but can be used to debug the issue.
 
+You can run an update in docker using the following command:
+
+`npm run test:integration:update-snapshots`
 
 ## CI
+
+Can be run locally, but intended to be run on travis or other CI service.
 
 ```
 $ npm run build:ci # to build app (electron)
 $ npm run test:integration:ci # to run tests
 ```
 
-### Run CI locally (docker)
+### Run CI-like environment locally (docker)
 
-In order to generate new/updated snapshots for CI, these tests will need to be run locally.
-This can be done using docker with the following commands.
 __requires: `docker` and `docker-compose`__
-
-This command only runs regression tests for speed. See `/docker-compose.yml` if you need
-to run all tests.
 
 ```
 $ npm run test:integration:docker
-```
-
-Update snapshots:
-
-```
-$ npm run test:integration:update-snapshots
 ```
 
 #### Wrangling docker
@@ -83,5 +59,14 @@ Rebuild image (fresh npm install)
 
 ```
 docker-compose build --pull
-docker-compose up --force-recreate
+```
+
+#### Debugging docker
+
+This will spin up a machine for running tests from the local build (/www).
+
+```
+$ docker-compose run debug
+// in the container shell you can now run:
+# xvfb-run -a npm run test:integration:ci
 ```
