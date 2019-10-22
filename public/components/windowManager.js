@@ -1,6 +1,5 @@
 const { BrowserWindow, Menu, shell } = require('electron');
 const mainMenu = require('./mainMenu');
-const path = require('path');
 const appUrl = require('./appURL');
 
 const isMacOS = () => process.platform === 'darwin';
