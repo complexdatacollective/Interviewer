@@ -3,6 +3,7 @@ import electron from 'electron';
 import fs from 'fs-extra';
 import { kebabCase } from 'lodash';
 import paths from '../config/paths';
+import { DEVELOPMENT_PROTOCOL_URL } from '../src/config';
 
 // in ms
 export const timing = {
@@ -12,7 +13,7 @@ export const timing = {
 };
 
 export const developmentProtocol = process.env.DEVELOPMENT_PROTOCOL ||
-  'https://github.com/codaco/development-protocol/releases/download/20190529123247-7c1e58a/development-protocol.netcanvas';
+  DEVELOPMENT_PROTOCOL_URL;
 
 export const defaultImageSnaphotConfig = {
   // { testPath, currentTestName, counter, defaultIdentifier }

@@ -47,8 +47,8 @@ class NodeBucket extends PureComponent {
 const makeMapStateToProps = () => {
   const getNextUnplacedNode = makeGetNextUnplacedNode();
 
-  const mapStateToProps = (state, { layoutVariable, subject, sortOrder }) => {
-    const node = getNextUnplacedNode(state, { layoutVariable, subject, sortOrder });
+  const mapStateToProps = (state, { layoutVariable, subject, sortOrder, stage }) => {
+    const node = getNextUnplacedNode(state, { layoutVariable, subject, sortOrder, stage });
 
     return {
       node,

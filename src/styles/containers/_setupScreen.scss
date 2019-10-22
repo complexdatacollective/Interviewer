@@ -50,7 +50,7 @@
     @include transition-properties((opacity transform), var(--animation-easing), var(--animation-duration-fast));
     align-items: center;
     justify-content: center;
-    height: 30vh;
+    height: 25vh;
     display: flex;
     flex-direction: column;
     transition-delay: var(--animation-duration-fast);
@@ -65,7 +65,7 @@
     flex: 1 1 auto;
     display: flex;
     align-items: center;
-    height: calc(100% - 30vh - 10rem);
+    height: calc(100% - 25vh - 10rem);
     transition-delay: var(--animation-duration-fast);
 
     .scrollable {
@@ -163,6 +163,8 @@
 
     .icon {
       height: 8rem;
+      background: var(--color-platinum);
+      border-radius: 50%;
     }
 
     .progress-bar {
