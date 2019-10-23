@@ -39,7 +39,7 @@ export const loadProtocolFromNetwork = async (app, url = 'https://documentation.
 };
 
 export const startInterview = async (app, caseId = 'test') => {
-  await app.client.click('.protocol-card');
+  await app.client.click('[data-clickable="start-interview"]');
   await app.client.setValue('input[name=case_id]', caseId);
   await app.client.click('button=Start interview');
   await app.client.waitForVisible('.protocol');
