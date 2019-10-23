@@ -2,9 +2,12 @@
 
 import path from 'path';
 import fakeDialog from 'spectron-fake-dialog';
-import { timing, developmentProtocol, paths } from '../config';
-import getData from '../getData';
+import { timing, paths } from '../config';
 import { forceClick } from './helpers';
+
+/**
+ * common tasks for using protocols
+ */
 
 export const loadProtocolFromFile = async (app, filename = 'mock.netcanvas') => {
   const mockProtocolPath = path.join(paths.dataDir, filename);
@@ -33,17 +36,6 @@ export const loadProtocolFromNetwork = async (app, url = 'https://documentation.
   await app.client.waitForVisible('h4=Protocol imported successfully!', 600000); // 10mins
   await app.client.click('button=Continue');
   await app.client.waitForExist('.modal', timing.long, true); // wait for not exist
-};
-
-/**
- * For reuse when testing interfaces
- */
-export const loadDevelopmentProtocol = async (app) => {
-  await getData(developmentProtocol)
-    .then(([, filename]) => {
-      console.info(`loading protocol at "${filename}".`);
-      return loadProtocolFromFile(app, filename);
-    });
 };
 
 export const startInterview = async (app, caseId = 'test') => {

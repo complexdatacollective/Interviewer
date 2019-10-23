@@ -10,10 +10,12 @@ import {
   matchImageSnapshot,
 } from './helpers';
 import {
-  loadDevelopmentProtocol,
   startInterview,
   goToStage,
 } from './playbook';
+import {
+  loadDevelopmentProtocol,
+} from './playbook-development-protocol';
 
 const app = makeTestingApp('Network-Canvas');
 
