@@ -19,10 +19,12 @@ install:
 jobs:
   include:
     - stage: test
-      script: npm run lint -- --max-warnings 0 &&
-              npm run sass-lint -- --max-warnings 0 &&
-              npm run test &&
-              npm run build
-      script: npm run build:ci &&
-              xvfb-run --server-args="-screen 0 1441x901x24" -a npm run test:integration:ci
+      before_script: node integration-tests/scripts/get-development-protocol.js
+      script:
+      - npm run lint -- --max-warnings 0 &&
+        npm run sass-lint -- --max-warnings 0 &&
+        npm run test &&
+        npm run build
+      - npm run build:ci &&
+        xvfb-run --server-args="-screen 0 1441x901x24" -a npm run test:integration:ci
 
