@@ -18,13 +18,13 @@ install:
   - npm install
 jobs:
   include:
+    - stage: prepare cache
+      script: node integration-tests/scripts/get-development-protocol.js
     - stage: test
-      before_script: node integration-tests/scripts/get-development-protocol.js
-      script:
-      - npm run lint -- --max-warnings 0 &&
+      script: npm run lint -- --max-warnings 0 &&
         npm run sass-lint -- --max-warnings 0 &&
         npm run test &&
         npm run build
-      - npm run build:ci &&
+      script: npm run build:ci &&
         xvfb-run --server-args="-screen 0 1441x901x24" -a npm run test:integration:ci
 
