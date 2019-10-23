@@ -9,7 +9,7 @@ import {
   forceClick,
   matchImageSnapshot,
 } from './helpers';
-import { loadProtocolFromFile, loadProtocolFromNetwork } from './playbook';
+import { loadProtocolFromNetwork, loadMockProtocolAsFile } from './playbook';
 
 const app = makeTestingApp('Network-Canvas');
 
@@ -33,13 +33,13 @@ describe('Start screen', () => {
   });
 
   it('loads a protocol from disk', async () => {
-    await loadProtocolFromFile(app);
+    await loadMockProtocolAsFile(app);
     await matchImageSnapshot(app);
   });
 
   it('lists loaded protocols, and allows delete', async () => {
-    await loadProtocolFromFile(app);
-    await app.client.waitForVisible('h2=mock');
+    await loadMockProtocolAsFile(app);
+    await app.client.waitForVisible('[data-clickable="start-interview"]');
     await app.client.click('.protocol-card__delete');
     await app.client.pause(timing.medium);
     await app.client.click('button=Delete protocol');

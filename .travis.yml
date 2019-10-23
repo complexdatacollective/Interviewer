@@ -14,6 +14,8 @@ services:
 cache:
   directories:
     - node_modules # NPM packages
+    - integration-tests/.data # integration test downloads
+
 install:
   - npm install
 jobs:

@@ -18,10 +18,12 @@ const testSizes = {
 };
 
 const paths = {
-  dataDir: path.join(__dirname, 'data'),
+  dataDir: path.join(__dirname, '.data'),
 };
 
 const developmentProtocol = process.env.DEVELOPMENT_PROTOCOL_URL || DEVELOPMENT_PROTOCOL_URL;
+
+const mockProtocol = 'https://documentation.networkcanvas.com/protocols/mock.netcanvas';
 
 const defaultImageSnaphotConfig = {
   // { testPath, currentTestName, counter, defaultIdentifier }
@@ -76,6 +78,7 @@ module.exports = {
   timing,
   testSizes,
   developmentProtocol,
+  mockProtocol,
   defaultImageSnaphotConfig,
   getAppConfiguration,
   paths,

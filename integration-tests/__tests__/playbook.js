@@ -2,14 +2,15 @@
 
 import path from 'path';
 import fakeDialog from 'spectron-fake-dialog';
-import { timing, paths } from '../config';
+import { timing, paths, mockProtocol } from '../config';
+import getData from '../getData';
 import { forceClick } from './helpers';
 
 /**
  * common tasks for using protocols
  */
 
-export const loadProtocolFromFile = async (app, filename = 'mock.netcanvas') => {
+export const loadProtocolFromFile = async (app, filename) => {
   const mockProtocolPath = path.join(paths.dataDir, filename);
   const mockFilenames = [mockProtocolPath];
 
@@ -25,7 +26,18 @@ export const loadProtocolFromFile = async (app, filename = 'mock.netcanvas') => 
   await app.client.waitForExist('.modal', timing.long, true);
 };
 
-export const loadProtocolFromNetwork = async (app, url = 'https://documentation.networkcanvas.com/protocols/mock.netcanvas') => {
+/**
+ * For reuse when testing interfaces
+ */
+export const loadMockProtocolAsFile = async (app) => {
+  await getData(mockProtocol)
+    .then(([, filename]) => {
+      console.info(`loading protocol at "${filename}".`);
+      return loadProtocolFromFile(app, filename);
+    });
+};
+
+export const loadProtocolFromNetwork = async (app, url = mockProtocol) => {
   await app.client.isVisible('.getting-started');
   await app.client.click('[name=add-a-protocol]');
   await app.client.waitForVisible('.protocol-import-dialog__tabs');
