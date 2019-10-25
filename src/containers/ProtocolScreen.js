@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { TransitionGroup } from 'react-transition-group';
-import { push } from 'react-router-redux';
-import { isStageSkipped } from '../selectors/skip-logic';
 import withPrompt from '../behaviours/withPrompt';
 import { Timeline } from '../components';
 import { Stage as StageTransition } from '../components/Transition';
@@ -13,6 +11,7 @@ import Stage from './Stage';
 import { getPromptIndexForCurrentSession } from '../selectors/session';
 import { getProtocolStages } from '../selectors/protocol';
 import { getCSSVariableAsNumber } from '../ui/utils/CSSVariables';
+import { actionCreators as navigateActions } from '../ducks/modules/navigate';
 
 /**
   * Check protocol is loaded, and render the stage
@@ -40,16 +39,7 @@ class Protocol extends Component {
         interfaceRefInstance.clickNext();
       }
 
-      let skipToIndex = this.props.nextIndex;
-
-      while (this.props.isSkipped(skipToIndex)) {
-        skipToIndex += 1;
-      }
-      if (skipToIndex > this.props.maxLength - 1) {
-        skipToIndex = this.props.stageIndex;
-      }
-
-      this.props.changeStage(`${this.props.pathPrefix}/${skipToIndex}`);
+      this.props.goToNextStage();
     } else {
       this.props.promptForward();
     }
@@ -65,16 +55,7 @@ class Protocol extends Component {
         interfaceRefInstance.clickPrevious();
       }
 
-      let skipToIndex = this.props.previousIndex;
-
-      while (this.props.isSkipped(skipToIndex)) {
-        skipToIndex -= 1;
-      }
-      if (skipToIndex < 0) {
-        skipToIndex = this.props.stageIndex;
-      }
-
-      this.props.changeStage(`${this.props.pathPrefix}/${skipToIndex}`);
+      this.props.goToNextStage(-1);
     } else {
       this.props.promptBackward();
     }
@@ -152,16 +133,11 @@ class Protocol extends Component {
 }
 
 Protocol.propTypes = {
-  changeStage: PropTypes.func.isRequired,
   isFirstPrompt: PropTypes.func.isRequired,
   isLastPrompt: PropTypes.func.isRequired,
-  isSkipped: PropTypes.func.isRequired,
   isSessionLoaded: PropTypes.bool.isRequired,
-  maxLength: PropTypes.number,
-  nextIndex: PropTypes.number.isRequired,
   pathPrefix: PropTypes.string,
   percentProgress: PropTypes.number,
-  previousIndex: PropTypes.number.isRequired,
   promptBackward: PropTypes.func.isRequired,
   promptForward: PropTypes.func.isRequired,
   promptId: PropTypes.number,
@@ -188,28 +164,19 @@ function mapStateToProps(state, ownProps) {
   const stageProgress = stageIndex / (maxLength - 1);
   const promptProgress = stage.prompts ? (promptId / stage.prompts.length) : 0;
 
-  const isLastStage = () => stageIndex + 1 === maxLength;
-  const isFirstStage = () => stageIndex === 0;
-
   return {
     isSessionLoaded: !!state.activeSessionId,
     pathPrefix: `/session/${sessionId}`,
-    isSkipped: index => isStageSkipped(index)(state),
     percentProgress: (stageProgress + (promptProgress / (maxLength - 1))) * 100,
-    nextIndex: isLastStage() ? stageIndex : stageIndex + 1,
-    previousIndex: isFirstStage() ? 0 : stageIndex - 1,
     promptId,
     stage,
     stageIndex,
-    maxLength,
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    changeStage: path => dispatch(push(path)),
-  };
-}
+const mapDispatchToProps = {
+  goToNextStage: navigateActions.goToNextStage,
+};
 
 export default compose(
   withPrompt,

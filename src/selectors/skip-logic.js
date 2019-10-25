@@ -56,8 +56,6 @@ export const isStageSkipped = index => createSelector(
     const result = getQuery(queryParameters)(network);
     const isSkipped = ((skipOnMatch && result) || (!skipOnMatch && !result));
 
-    debugger;
-
     return isSkipped;
   },
 );
