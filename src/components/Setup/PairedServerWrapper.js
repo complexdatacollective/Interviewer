@@ -40,7 +40,7 @@ class PairedServerWrapper extends Component {
   }
 
   testServerConnection = () => {
-    // TODO: replace this with a decicated heartbeat endpoint on Server
+    // TODO: replace this with a dedicated heartbeat endpoint on Server
     this.apiClient
       .addTrustedCert()
       .then(() => this.apiClient.getProtocols())

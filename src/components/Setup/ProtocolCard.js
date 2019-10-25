@@ -120,6 +120,7 @@ class ProtocolCard extends React.Component {
         </p>
         <div
           className={this.startButtonClasses}
+          data-clickable="start-interview"
           onClick={() => selectProtocol(protocol)}
         >
           <Icon className="start-button__protocol-icon" name="protocol-card" />

@@ -12,7 +12,7 @@ const initialState = {
   description: 'Unknown device',
   useDynamicScaling: undefined,
   // useFullScrenForms should be false for most larger devices, and true for most tablets
-  useFullScreenForms: !(window.matchMedia('screen and (min-device-aspect-ratio: 8/5), (min-device-height: 1800px)').matches),
+  useFullScreenForms: false,
   interfaceScale: 100,
   showScrollbars: false,
   startFullScreen: shouldStartFullScreen(),

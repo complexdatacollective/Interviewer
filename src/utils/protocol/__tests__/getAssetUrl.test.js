@@ -3,6 +3,7 @@
 import environments from '../../environments';
 import { getEnvironment } from '../../Environment';
 import assetUrl from '../getAssetUrl';
+const path = require('path');
 
 jest.mock('../../filesystem');
 
@@ -25,7 +26,7 @@ describe('assetUrl', () => {
     });
 
     it('Generates an asset URL for the protocol', async () => {
-      const encodedPath = encodeURIComponent('foo.canvas/assets/bar.mp3');
+      const encodedPath = encodeURIComponent(path.join('foo.canvas', 'assets', 'bar.mp3'));
       const expectedResult = `asset://${encodedPath}`;
       await expect(assetUrl('foo.canvas', 'bar.mp3')).resolves.toEqual(expectedResult);
     });

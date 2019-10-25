@@ -35,6 +35,9 @@ function createWindow() {
       height: 900,
       center: true,
       title: 'Network Canvas',
+      webPreferences: {
+        nodeIntegration: true,
+      },
     }, minDimensions, titlebarParameters);
 
     const mainWindow = new BrowserWindow(windowParameters);

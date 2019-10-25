@@ -57,9 +57,8 @@ const startApp = () => {
 };
 
 if (isElectron()) {
-  const { webFrame, ipcRenderer } = require('electron'); // eslint-disable-line global-require
+  const { webFrame, ipcRenderer } = window.require('electron'); // eslint-disable-line global-require
   webFrame.setVisualZoomLevelLimits(1, 1); // Prevents pinch-to-zoom
-  webFrame.registerURLSchemeAsPrivileged('asset');
   remote.init();
 
   ipcRenderer.on('RESET_STATE', () => {

@@ -5,7 +5,7 @@ FROM ubuntu:16.04 as base
 # Install Node.js
 RUN apt-get update
 RUN apt-get install -y curl
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
 RUN apt-get update
 # Things we want
 RUN apt-get install -y nodejs build-essential git xvfb

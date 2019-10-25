@@ -32,7 +32,7 @@ const inSequence = (items, apply) =>
 
 const userDataPath = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const electron = require('electron');
+    const electron = window.require('electron');
 
     return () => (electron.app || electron.remote.app).getPath('userData');
   }
@@ -228,9 +228,10 @@ const createDirectory = inEnvironment((environment) => {
 
 const rename = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
+    const fs = require('fs');
+
     return (oldPath, newPath) => (new Promise((resolve, reject) => {
       try {
-        const fs = require('fs');
         fs.rename(oldPath, newPath, resolveOrRejectWith(resolve, reject));
       } catch (err) { reject(err); }
     }));
@@ -252,6 +253,7 @@ const rename = inEnvironment((environment) => {
 const removeDirectory = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
     const rimraf = require('rimraf');
+
     return targetPath =>
       new Promise((resolve, reject) => {
         try {

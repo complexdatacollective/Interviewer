@@ -4,7 +4,7 @@ branches:
   only:
     - master
 node_js:
-  - "8.11"
+  - "12.8.0"
 addons:
   apt:
     packages:
@@ -14,15 +14,19 @@ services:
 cache:
   directories:
     - node_modules # NPM packages
+    - integration-tests/.data # integration test downloads
+
 install:
   - npm install
 jobs:
   include:
+    - stage: prepare cache
+      script: node integration-tests/scripts/get-development-protocol.js
     - stage: test
       script: npm run lint -- --max-warnings 0 &&
-              npm run sass-lint -- --max-warnings 0 &&
-              npm run test &&
-              npm run build
+        npm run sass-lint -- --max-warnings 0 &&
+        npm run test &&
+        npm run build
       script: npm run build:ci &&
-              xvfb-run --server-args="-screen 0 1441x901x24" -a npm run test:integration:ci
+        xvfb-run --server-args="-screen 0 1441x901x24" -a npm run test:integration:ci
 

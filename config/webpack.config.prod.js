@@ -3,23 +3,19 @@ const autoprefixer = require('autoprefixer');
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 
 const paths = require('./paths');
-const browsers = require('./browsers');
 const getClientEnvironment = require('./env');
 const { reactBundleTarget } = require('./nc-dev-utils');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
 const publicPath = paths.servedPath;
-// Some apps do not use client-side routing with pushState.
-// For these, "homepage" can be set to "." to enable relative asset paths.
-const shouldUseRelativeAssetPaths = publicPath === './';
 // `publicUrl` is just like `publicPath`, but we will provide it to our app
 // as %PUBLIC_URL% in `index.html` and `process.env.PUBLIC_URL` in JavaScript.
 // Omit trailing slash as %PUBLIC_URL%/xyz looks better than %PUBLIC_URL%xyz.
@@ -33,22 +29,64 @@ if (env.stringified['process.env'].NODE_ENV !== '"production"') {
   throw new Error('Production builds must have NODE_ENV=production.');
 }
 
-// Note: defined here because it will be used more than once.
-const cssFilename = 'static/css/[name].[contenthash:8].css';
+const isProduction = env.stringified['process.env'].NODE_ENV === '"production"';
+const shouldUseSourceMap = isProduction && (process.env.GENERATE_SOURCEMAP !== 'false');
 
-// ExtractTextPlugin expects the build output to be flat.
-// (See https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/27)
-// However, our output is structured with css, js and media folders.
-// To have this structure working with relative paths, we have to use custom options.
-const extractTextPluginOptions = shouldUseRelativeAssetPaths
-  ? // Making sure that the publicPath goes back to to build folder.
-  { publicPath: Array(cssFilename.split('/').length).join('../') }
-  : {};
+const cssFilenameTemplate = 'static/css/[name].[contenthash:8].css';
+
+// common function to get style loaders
+const getStyleLoaders = (preProcessor) => {
+  // importLoaders: See https://webpack.js.org/loaders/css-loader/#importloaders
+  let importLoaders = 1; // for postcss-loader
+  if (preProcessor) {
+    importLoaders += 1; // for preProcessor
+  }
+
+  let inlineStyleLoader = require.resolve('style-loader');
+  if (isProduction) {
+    // Output CSS files, and rewrite paths relative from CSS dir
+    const cssRelativePath = Array(cssFilenameTemplate.split('/').length).join('../');
+    inlineStyleLoader = {
+      loader: MiniCssExtractPlugin.loader,
+      options: { publicPath: cssRelativePath },
+    };
+  }
+
+  const loaders = [
+    inlineStyleLoader,
+    {
+      loader: require.resolve('css-loader'),
+      options: { importLoaders },
+    },
+    {
+      // Options for PostCSS as we reference these options twice
+      // Adds vendor prefixing based on your specified browser support in
+      // package.json
+      loader: require.resolve('postcss-loader'),
+      options: {
+        // Necessary for external CSS imports to work
+        // https://github.com/facebook/create-react-app/issues/2677
+        ident: 'postcss',
+        plugins: () => [
+          autoprefixer({
+            flexbox: 'no-2009',
+          }),
+        ],
+        sourceMap: shouldUseSourceMap,
+      },
+    },
+  ];
+  if (preProcessor) {
+    loaders.push(require.resolve(preProcessor));
+  }
+  return loaders;
+};
 
 // This is the production configuration.
 // It compiles slowly and is focused on producing a fast and minimal bundle.
 // The development configuration is different and lives in a separate file.
 module.exports = {
+  mode: 'production',
   target: reactBundleTarget(),
   // Don't attempt to continue if there are any errors.
   bail: true,
@@ -66,6 +104,7 @@ module.exports = {
     filename: 'static/js/[name].[chunkhash:8].js',
     // We inferred the "public path" (such as / or /my-project) from homepage.
     publicPath,
+    globalObject: 'this',
   },
   resolve: {
     // This allows you to set a fallback for where Webpack should look for modules.
@@ -182,48 +221,7 @@ module.exports = {
           },
           {
             test: /\.scss$/,
-            loader: ExtractTextPlugin.extract(
-              Object.assign(
-                {
-                  fallback: require.resolve('style-loader'),
-                  use: [
-                    {
-                      loader: require.resolve('css-loader'),
-                      options: {
-                        importLoaders: 1,
-                        minimize: false,
-                        sourceMap: false,
-                      },
-                    },
-                    {
-                      loader: require.resolve('postcss-loader'),
-                      options: {
-                        // Necessary for external CSS imports to work
-                        // https://github.com/facebookincubator/create-react-app/issues/2677
-                        ident: 'postcss',
-                        plugins: () => [
-                          require('postcss-flexbugs-fixes'),
-                          autoprefixer({
-                            browsers,
-                            flexbox: 'no-2009',
-                          }),
-                        ],
-                      },
-                    },
-                    {
-                      loader: require.resolve('sass-loader'),
-                      options: {
-                        includePaths: [
-                          path.resolve('./node_modules/network-canvas-ui/lib/styles/'),
-                        ],
-                      },
-                    },
-                  ],
-                },
-                extractTextPluginOptions,
-              ),
-            ),
-            // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
+            use: getStyleLoaders('sass-loader'),
           },
           // The notation here is somewhat confusing.
           // "postcss" loader applies autoprefixer to our CSS.
@@ -239,40 +237,7 @@ module.exports = {
           // in the main CSS file.
           {
             test: /\.css$/,
-            loader: ExtractTextPlugin.extract(
-              Object.assign(
-                {
-                  fallback: require.resolve('style-loader'),
-                  use: [
-                    {
-                      loader: require.resolve('css-loader'),
-                      options: {
-                        importLoaders: 1,
-                        minimize: false,
-                        sourceMap: false,
-                      },
-                    },
-                    {
-                      loader: require.resolve('postcss-loader'),
-                      options: {
-                        // Necessary for external CSS imports to work
-                        // https://github.com/facebookincubator/create-react-app/issues/2677
-                        ident: 'postcss',
-                        plugins: () => [
-                          require('postcss-flexbugs-fixes'),
-                          autoprefixer({
-                            browsers,
-                            flexbox: 'no-2009',
-                          }),
-                        ],
-                      },
-                    },
-                  ],
-                },
-                extractTextPluginOptions,
-              ),
-            ),
-            // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
+            use: getStyleLoaders(),
           },
           // "file" loader makes sure assets end up in the `build` folder.
           // When you `import` an asset, you get its filename.
@@ -301,7 +266,7 @@ module.exports = {
     // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
     // In production, it will be an empty string unless you specify "homepage"
     // in `package.json`, in which case it will be the pathname of that URL.
-    new InterpolateHtmlPlugin(env.raw),
+    new InterpolateHtmlPlugin(HtmlWebpackPlugin, env.raw),
     // Generates an `index.html` file with the <script> injected.
     new HtmlWebpackPlugin({
       inject: true,
@@ -326,8 +291,9 @@ module.exports = {
     new webpack.DefinePlugin(env.stringified),
     // Minify the code.
     // Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
-    new ExtractTextPlugin({
-      filename: cssFilename,
+    new MiniCssExtractPlugin({
+      filename: cssFilenameTemplate,
+      chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
     }),
     // Generate a manifest file which contains a mapping of all asset filenames
     // to their corresponding output file so that tools can pick it up without
@@ -350,5 +316,9 @@ module.exports = {
     net: 'empty',
     tls: 'empty',
     child_process: 'empty',
+  },
+  performance: {
+    maxAssetSize: 6000000,
+    maxEntrypointSize: 6000000,
   },
 };

@@ -1,20 +1,28 @@
-const { app, ipcMain } = require('electron');
+const { app, ipcMain, protocol } = require('electron');
 const log = require('./components/log');
 
 const appManager = require('./components/appManager');
 const { commonName } = require('secure-comms-api/sslConfig.js');
 
+protocol.registerSchemesAsPrivileged([{
+  scheme: 'asset',
+  privileges: {
+    secure: true,
+    supportFetchAPI: true,
+    bypassCSP: true,
+    corsEnabled: true,
+  },
+}]);
+
 log.info('App starting...');
 appManager.init();
 
-const shouldQuit = app.makeSingleInstance((argv) => {
-  appManager.openFileFromArgs(argv);
-});
-
-if (shouldQuit) {
+const gotTheLock = app.requestSingleInstanceLock();
+if (!gotTheLock) {
   app.quit();
   return;
 }
+app.on('second-instance', argv => appManager.openFileFromArgs(argv));
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
