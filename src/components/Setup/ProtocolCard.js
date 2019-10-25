@@ -20,8 +20,8 @@ class ProtocolCard extends React.Component {
 
   handleSchemaOutdatedInfo = () => {
     this.props.openDialog({
-      type: 'Warning',
-      title: 'Out of Date Schema',
+      type: 'Notice',
+      title: 'Schema can be updated',
       canCancel: false,
       message: (
         <React.Fragment>
@@ -29,12 +29,11 @@ class ProtocolCard extends React.Component {
             This protocol uses an older version of the protocol file format, or &quot;schema&quot;.
           </p>
           <p>
-            Newer schema versions support additional features in Network Canvas, and may be
-            required in order to use this protocol in the future. To avoid losing the ability
-            to conduct interviews, you are strongly advised to migrate this protocol to the
-            latest schema version. To do this, open the protocol file it in the latest version
-            of Architect, and follow the migration instructions. Once migrated, install the
-            new version of the protocol on this device.
+            Newer schema versions support additional features in Network Canvas. During the beta
+            phase, we kindly request that you update your protocols to the latest version, and
+            evaluate the newest features as we implement them. To do this, open the original
+            protocol file it in the latest version of Architect, and follow the migration
+            instructions. Once migrated, install the new version of the protocol on this device.
           </p>
           <p>
             For documentation on this issue, please see our documentation site.
@@ -79,7 +78,7 @@ class ProtocolCard extends React.Component {
 
   modifierClasses = cx(
     'protocol-card',
-    { 'protocol-card--warning': !this.isObsoleteProtocol() && this.isOutdatedProtocol() },
+    { 'protocol-card--info': !this.isObsoleteProtocol() && this.isOutdatedProtocol() },
     { 'protocol-card--error': this.isObsoleteProtocol() },
   );
 
@@ -88,8 +87,8 @@ class ProtocolCard extends React.Component {
   renderCardIcon() {
     if (this.isOutdatedProtocol()) {
       return (
-        <div className="protocol-card__warning" onClick={this.handleSchemaOutdatedInfo}>
-          <Icon name="warning" />
+        <div className="protocol-card__info" onClick={this.handleSchemaOutdatedInfo}>
+          <Icon name="info" />
         </div>
       );
     }
