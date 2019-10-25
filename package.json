@@ -1,6 +1,6 @@
 {
   "name": "network-canvas",
-  "version": "4.0.7",
+  "version": "4.2.0",
   "productName": "Network Canvas",
   "description": "Simplifying complex network data collection.",
   "author": "Complex Data Collective",
@@ -231,7 +231,8 @@
     ],
     "testPathIgnorePatterns": [
       "<rootDir>[/\\\\](www|docs|node_modules|scripts|test)[/\\\\]",
-      "<rootDir>/src/utils/networkQuery"
+      "<rootDir>/src/utils/networkQuery",
+      "<rootDir>/integration-tests"
     ],
     "testEnvironment": "node",
     "testURL": "http://localhost",

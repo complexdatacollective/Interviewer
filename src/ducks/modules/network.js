@@ -37,6 +37,24 @@ const initialState = {
   edges: [],
 };
 
+// action creators
+
+/**
+ * Action creator to add a list of nodes
+ * @param nodeList If nodes have attributes they are applied before attributeData
+ * and after defaultAttributes
+ * @param attributeData Takes precidence over other attributes
+ * @param defaultAttributes Is added before other attributes
+ */
+const batchAddNodes = (nodeList, attributeData = {}, defaultAttributes = {}) => ({
+  type: BATCH_ADD_NODES,
+  nodeList,
+  defaultAttributes,
+  attributeData,
+});
+
+// reducer helpers:
+
 function flipEdge(edge) {
   return { from: edge.to, to: edge.from, type: edge.type };
 }
@@ -55,10 +73,14 @@ function edgeExists(edges, from, to, type) {
 
 export const getEntityAttributes = node => node[entityAttributesProperty] || {};
 
-const nodeWithModelandAttributeData = (modelData, attributeData) => ({
+/**
+ * Correctly construct the node object based on a
+ * node-like object, and an key-value attributes object
+ */
+const formatNodeAttributes = (modelData, attributeData) => ({
   ...omit(modelData, 'promptId'),
   [entityPrimaryKeyProperty]:
-    modelData[entityPrimaryKeyProperty] ? modelData[entityPrimaryKeyProperty] : uuidv4(),
+    modelData[entityPrimaryKeyProperty] || uuidv4(),
   [entityAttributesProperty]: {
     ...modelData[entityAttributesProperty],
     ...attributeData,
@@ -69,10 +91,14 @@ const nodeWithModelandAttributeData = (modelData, attributeData) => ({
   itemType: modelData.itemType,
 });
 
-const edgeWithModelandAttributeData = (modelData, attributeData) => ({
+/**
+ * Correctly construct the edge object based on a
+ * edge-like object, and an key-value attributes object
+ */
+const formatEdgeAttributes = (modelData, attributeData) => ({
   ...modelData,
   [entityPrimaryKeyProperty]:
-    modelData[entityPrimaryKeyProperty] ? modelData[entityPrimaryKeyProperty] : uuidv4(),
+    modelData[entityPrimaryKeyProperty] || uuidv4(),
   [entityAttributesProperty]: {
     ...modelData[entityAttributesProperty],
     ...attributeData,
@@ -85,7 +111,7 @@ const addEdge = (state, action) => ({
   ...state,
   edges: (
     () => state.edges.concat(
-      edgeWithModelandAttributeData(
+      formatEdgeAttributes(
         action.modelData,
         action.attributeData,
       ),
@@ -107,7 +133,7 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         nodes: (
           () => state.nodes.concat(
-            nodeWithModelandAttributeData(
+            formatNodeAttributes(
               action.modelData,
               action.attributeData,
             ),
@@ -129,18 +155,22 @@ export default function reducer(state = initialState, action = {}) {
       };
     }
     case BATCH_ADD_NODES: {
+      // TODO: This mutation should happen in the action creator
+      // or potentially be moved to the action caller
       return {
         ...state,
-        nodes: (() =>
-          state.nodes.concat(action.nodeList.map(node => nodeWithModelandAttributeData(
-            node,
-            {
-              ...action.defaultAttributesForType,
+        nodes: [
+          ...state.nodes,
+          ...action.nodeList.map((node) => {
+            const attributes = {
+              ...action.defaultAttributes,
               ...node[entityAttributesProperty],
               ...action.attributeData,
-            },
-          )))
-        )(),
+            };
+
+            return formatNodeAttributes(node, attributes);
+          }),
+        ],
       };
     }
     case TOGGLE_NODE_ATTRIBUTES: {
@@ -283,7 +313,12 @@ const actionTypes = {
   UPDATE_EGO,
 };
 
+const actionCreators = {
+  batchAddNodes,
+};
+
 export {
   actionTypes,
+  actionCreators,
   // For actionCreators see `src/ducks/modules/sessions`
 };

@@ -3,7 +3,7 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import uuidv4 from '../../../utils/uuid';
 import reducer, { actionCreators, actionTypes } from '../sessions';
-import networkReducer, { actionTypes as networkActionTypes } from '../network';
+import networkReducer, { actionTypes as networkActionTypes, actionCreators as networkActions } from '../network';
 import { actionTypes as installedProtocolsActionTypes } from '../installedProtocols';
 
 jest.mock('../network');
@@ -129,7 +129,7 @@ describe('sessions', () => {
     });
 
     it('network actions defer to network reducer', () => {
-      const networkActions = [
+      const networkActionList = [
         networkActionTypes.ADD_NODE,
         networkActionTypes.BATCH_ADD_NODES,
         networkActionTypes.REMOVE_NODE,
@@ -143,7 +143,7 @@ describe('sessions', () => {
         networkActionTypes.UPDATE_EGO,
       ];
 
-      networkActions.forEach((actionType) => {
+      networkActionList.forEach((actionType) => {
         reducer({ a: { network: {} } }, { type: actionType, sessionId: 'a' });
       });
 
@@ -152,6 +152,53 @@ describe('sessions', () => {
   });
 
   describe('actions', () => {
+    it('batchAddNodes should dispatch network.batchAddNodes action with sessionId', () => {
+      const nodeList = [{ bazz: 'buzz' }];
+      const attributeData = { foo: 'bar' };
+      const type = 'mockType';
+      const defaultProperties = {
+        a: null,
+        b: false,
+        c: null,
+      };
+
+      const store = mockStore({
+        activeSessionId: 'mockSession',
+        sessions: {
+          mockSession: {
+            protocolUID: 'mockProtocol',
+          },
+        },
+        installedProtocols: {
+          mockProtocol: {
+            codebook: {
+              node: {
+                mockType: {
+                  variables: {
+                    a: { type: 'string' },
+                    b: { type: 'boolean' },
+                    c: { type: 'categorical' },
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
+
+      store.dispatch(actionCreators.batchAddNodes(nodeList, attributeData, type));
+
+      expect(networkActions.batchAddNodes.mock.calls).toEqual([[
+        nodeList,
+        attributeData,
+        defaultProperties,
+      ]]);
+
+      const dispatchedActions = store.getActions();
+      expect(dispatchedActions).toHaveLength(1);
+      expect(dispatchedActions[0]).toMatchObject({ sessionId: 'mockSession' });
+    });
+
     it('should add an UPDATE_PROMPT action', () => {
       const store = mockStore({ activeSessionId: 'a', sessions: { a: {} } });
 
