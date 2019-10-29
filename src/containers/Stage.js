@@ -8,7 +8,7 @@ import StageErrorBoundary from '../components/StageErrorBoundary';
   * Render a protocol interface based on protocol info and id
   * @extends Component
   */
-const Stage = React.forwardRef(({ stage, promptId, stageIndex }, ref) => {
+const Stage = React.forwardRef(({ stage, promptId, stageIndex, onComplete }, ref) => {
   const CurrentInterface = getInterface(stage.type);
 
   let interfaceRef = ref;
@@ -27,6 +27,7 @@ const Stage = React.forwardRef(({ stage, promptId, stageIndex }, ref) => {
               stageIndex={stageIndex}
               promptId={promptId}
               ref={interfaceRef}
+              onComplete={onComplete}
             />
           }
         </StageErrorBoundary>

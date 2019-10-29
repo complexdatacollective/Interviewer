@@ -36,28 +36,23 @@ class EgoForm extends Component {
     };
   }
 
-  formSubmitAllowed = () => (
-    this.props.formEnabled(getFormName(this.props.stageIndex))
-  );
+  isStageBeginning = () =>
+    this.state.scrollProgress === 0;
 
-  isStageBeginning = () => (
-    this.state.scrollProgress === 0
-  );
+  isStageEnding = () =>
+    this.props.canSubmitForm;
 
-  isStageEnding = () => this.props.formEnabled(getFormName(this.props.stageIndex));
-
-  clickNext = () => {
-    this.props.submitForm(this.props.stageIndex);
-  };
-
-  clickPrevious = () => {
-    if (this.formSubmitAllowed()) {
+  // Called by ProtocolScreen
+  beforeNext = () => {
+    if (this.props.canSubmitForm) {
       this.props.submitForm(this.props.stageIndex);
     }
   };
 
   handleSubmitForm = (formData) => {
-    this.props.updateEgo({}, formData);
+    const { updateEgo, onComplete } = this.props;
+    updateEgo({}, formData);
+    onComplete(); // report back to ProtocolScreen
   }
 
   handleScroll = (scrollTop, scrollProgress) => {
@@ -132,11 +127,15 @@ EgoForm.defaultProps = {
 
 function mapStateToProps(state, props) {
   const ego = getNetworkEgo(state);
+  const formName = getFormName(props.stageIndex);
+  const isFormValid = isValid(formName)(state);
+  const isFormSubmitting = isSubmitting(formName)(state);
+
   return {
     form: props.stage.form,
     introductionPanel: props.stage.introductionPanel,
     ego,
-    formEnabled: formName => isValid(formName)(state) && !isSubmitting(formName)(state),
+    canSubmitForm: isFormValid && !isFormSubmitting,
   };
 }
 

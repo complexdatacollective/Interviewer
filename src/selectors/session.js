@@ -1,10 +1,11 @@
 /* eslint-disable no-shadow */
 import { createSelector } from 'reselect';
+import { get } from 'lodash';
 import { currentStageIndex } from '../utils/matchSessionPath';
 import { getAdditionalAttributes, getSubject } from '../utils/protocol/accessors';
 import { createDeepEqualSelector } from './utils';
 import { initialState } from '../ducks/modules/session';
-import { getProtocolCodebook, getProtocolStages } from './protocol';
+import { getProtocolCodebook, getProtocolStages, getActiveProtocol } from './protocol';
 
 const currentPathname = router => router && router.location && router.location.pathname;
 const stageIndexForCurrentSession = state => currentStageIndex(currentPathname(state.router));
@@ -16,6 +17,41 @@ export const getCaseId = createDeepEqualSelector(
   getActiveSession,
   session => (session && session.caseId),
 );
+
+export const getSessionPath = (state, stageIndex) => {
+  const sessionId = state.activeSessionId;
+  const sessionPath = `/session/${sessionId}`;
+
+  if (!stageIndex) { return sessionPath; }
+
+  return `${sessionPath}/${stageIndex}`;
+};
+
+export const getSessionProgress = (state) => {
+  const session = getActiveSession(state);
+  const protocol = getActiveProtocol(state);
+  const currentPrompt = session.promptIndex;
+  const currentStage = session.stageIndex;
+  const stageCount = protocol.stages.length;
+  const promptCount = get(protocol, ['stages', currentStage, 'prompts', 'length'], 0);
+  const stageProgress = currentStage / (stageCount - 1);
+  const promptProgress = promptCount ? currentPrompt / (promptCount - 1) : 0;
+  const totalProgress = (stageProgress + (promptProgress / (stageCount - 1))) * 100;
+  const isFirstPrompt = promptCount > 0 && currentPrompt === 0;
+  const isLastPrompt = promptCount > 0 && currentPrompt === promptCount - 1;
+
+  return {
+    currentStage,
+    stageCount,
+    currentPrompt,
+    promptCount,
+    isFirstPrompt,
+    isLastPrompt,
+    stageProgress,
+    promptProgress,
+    totalProgress,
+  };
+};
 
 export const anySessionIsActive =
   state => state.activeSessionId && state.activeSessionId !== initialState;
