@@ -23,9 +23,7 @@ const goToStage = index =>
 
     const sessionPath = getSessionPath(state, index);
 
-    debugger;
-
-    dispatch(push(sessionPath));
+    return dispatch(push(sessionPath));
   };
 
 /**
@@ -45,20 +43,21 @@ const goToNextStage = (direction = 1) =>
 
     // starting point
     let nextIndex = currentStage + step;
-
-    debugger;
+    let cancel = false;
 
     // iterate past any skipped steps
     while (isStageSkipped(nextIndex)(state)) {
       nextIndex += step;
-      if (nextIndex > stageCount - 1 || nextIndex < 0) {
+      if (nextIndex > stageCount || nextIndex < 0) {
         // If we're at either end of the inteview, abort
-        nextIndex = currentStage;
+        cancel = true;
         break;
       }
     }
 
-    dispatch(goToStage(nextIndex));
+    if (cancel) { return null; }
+
+    return dispatch(goToStage(nextIndex));
   };
 
 /**
@@ -76,7 +75,7 @@ const goToNextPrompt = (direction = 1) =>
     const step = getStep(direction);
     const nextPrompt = (promptCount + currentPrompt + step) % promptCount;
 
-    dispatch(sessionsActions.updatePrompt(nextPrompt));
+    return dispatch(sessionsActions.updatePrompt(nextPrompt));
   };
 
 /**
@@ -90,7 +89,14 @@ const goToNext = (direction = 1) =>
       promptCount,
       isFirstPrompt,
       isLastPrompt,
+      isFirstStage,
+      isFinish,
     } = getSessionProgress(state);
+
+    if ((direction < 0 && isFirstStage) || (direction > 0 && isFinish)) {
+      // TODO: handle finish stage & start stage
+      return null;
+    }
 
     if (!promptCount) {
       return dispatch(goToNextStage(direction));

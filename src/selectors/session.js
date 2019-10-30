@@ -39,6 +39,10 @@ export const getSessionProgress = (state) => {
   const totalProgress = (stageProgress + (promptProgress / (stageCount - 1))) * 100;
   const isFirstPrompt = promptCount > 0 && currentPrompt === 0;
   const isLastPrompt = promptCount > 0 && currentPrompt === promptCount - 1;
+  const isFirstStage = currentStage === 0;
+  const isLastStage = currentStage === stageCount - 1;
+  // We add an additional 'stage' for the finish screen, hence no -1:
+  const isFinish = currentStage === stageCount;
 
   return {
     currentStage,
@@ -47,6 +51,9 @@ export const getSessionProgress = (state) => {
     promptCount,
     isFirstPrompt,
     isLastPrompt,
+    isFirstStage,
+    isLastStage,
+    isFinish,
     stageProgress,
     promptProgress,
     totalProgress,

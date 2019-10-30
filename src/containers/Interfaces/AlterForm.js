@@ -38,46 +38,63 @@ class AlterForm extends Component {
 
   getNodeFormName = activeIndex => `NODE_FORM_${this.props.stageIndex}_${activeIndex}`;
 
-  formSubmitAllowed = index => (
-    this.props.formEnabled(this.getNodeFormName(index))
-  );
+  beforeNext = (direction) => {
+    if (this.isIntroScreen() && direction > 0) {
+      this.nextAlter();
+      return;
+    }
 
-  isStageBeginning = () => (
-    this.state.activeIndex === 0
-  );
+    if (this.isIntroScreen() && direction < 0) {
+      this.props.onComplete();
+      return;
+    }
 
-  isStageEnding = () => (
-    this.formSubmitAllowed(this.state.activeIndex) &&
-    this.state.activeIndex === this.props.stageNodes.length
-  );
-
-  clickNext = () => {
-    if (this.state.activeIndex > 0) {
+    this.setState({
+      pendingDirection: direction,
+    }, () => {
       this.props.submitForm(this.getNodeFormName(this.state.activeIndex));
-    }
-    if (this.state.activeIndex < this.props.stageNodes.length &&
-      (this.state.activeIndex === 0 || this.formSubmitAllowed(this.state.activeIndex))) {
-      this.setState({
-        activeIndex: this.state.activeIndex + 1,
-      });
-      this.swipeRef.current.swiper.slideNext();
-    }
-  };
+    });
+  }
 
-  clickPrevious = () => {
-    if (this.state.activeIndex > 0 && this.formSubmitAllowed(this.state.activeIndex)) {
-      this.props.submitForm(this.getNodeFormName(this.state.activeIndex));
-    }
-    if (this.state.activeIndex > 0) {
-      this.setState({
-        activeIndex: this.state.activeIndex - 1,
-      });
-      this.swipeRef.current.swiper.slidePrev();
-    }
-  };
+  previousAlter() {
+    this.setState({
+      activeIndex: this.state.activeIndex - 1,
+    });
+    this.swipeRef.current.swiper.slidePrev();
+  }
 
-  handleUpdate = (node, formData) => (
-    this.props.updateNode(node[entityPrimaryKeyProperty], {}, formData));
+  nextAlter() {
+    this.setState({
+      activeIndex: this.state.activeIndex + 1,
+    });
+    this.swipeRef.current.swiper.slideNext();
+  }
+
+  isIntroScreen = () => this.state.activeIndex === 0;
+
+  isLastAlter = () => this.state.activeIndex === this.props.stageNodes.length
+
+  handleUpdate = (node, formData) => {
+    const { pendingDirection } = this.state;
+    const { updateNode, onComplete } = this.props;
+
+    updateNode(node[entityPrimaryKeyProperty], {}, formData);
+
+    if (
+      (this.isIntroScreen() && pendingDirection < 0) ||
+      (this.isLastAlter() && pendingDirection > 0)
+    ) {
+      onComplete();
+      return;
+    }
+
+    if (pendingDirection < 0) {
+      this.previousAlter();
+      return;
+    }
+
+    this.nextAlter();
+  };
 
   render() {
     const {
@@ -173,10 +190,10 @@ function makeMapStateToProps() {
   };
 }
 
-const mapDispatchToProps = dispatch => ({
-  updateNode: bindActionCreators(sessionsActions.updateNode, dispatch),
-  submitForm: bindActionCreators(formName => submit(formName), dispatch),
-});
+const mapDispatchToProps = {
+  updateNode: sessionsActions.updateNode,
+  submitForm: submit,
+};
 
 export { AlterForm };
 

@@ -36,23 +36,14 @@ class EgoForm extends Component {
     };
   }
 
-  isStageBeginning = () =>
-    this.state.scrollProgress === 0;
-
-  isStageEnding = () =>
-    this.props.canSubmitForm;
-
-  // Called by ProtocolScreen
-  beforeNext = () => {
-    if (this.props.canSubmitForm) {
-      this.props.submitForm(this.props.stageIndex);
-    }
-  };
+  beforeNext() {
+    this.props.submitForm(this.props.stageIndex);
+  }
 
   handleSubmitForm = (formData) => {
     const { updateEgo, onComplete } = this.props;
     updateEgo({}, formData);
-    onComplete(); // report back to ProtocolScreen
+    onComplete();
   }
 
   handleScroll = (scrollTop, scrollProgress) => {

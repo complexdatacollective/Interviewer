@@ -36,42 +36,62 @@ class AlterEdgeForm extends Component {
 
   getEdgeFormName = activeIndex => `EDGE_FORM_${this.props.stageIndex}_${activeIndex}`;
 
-  formSubmitAllowed = index => (
-    this.props.formEnabled(this.getEdgeFormName(index))
-  );
+  beforeNext = (direction) => {
+    if (this.isIntroScreen() && direction > 0) {
+      this.nextEdge();
+      return;
+    }
 
-  isStageBeginning = () => (
-    this.state.activeIndex === 0
-  );
+    if (this.isIntroScreen() && direction < 0) {
+      this.props.onComplete();
+      return;
+    }
 
-  isStageEnding = () => (
-    this.formSubmitAllowed(this.state.activeIndex) &&
-    this.state.activeIndex === this.props.stageEdges.length
-  );
-
-  clickNext = () => {
-    if (this.state.activeIndex > 0) {
+    this.setState({
+      pendingDirection: direction,
+    }, () => {
       this.props.submitForm(this.getEdgeFormName(this.state.activeIndex));
-    }
-    if (this.state.activeIndex < this.props.stageEdges.length &&
-      (this.state.activeIndex === 0 || this.formSubmitAllowed(this.state.activeIndex))) {
-      this.setState({
-        activeIndex: this.state.activeIndex + 1,
-      });
-      this.swipeRef.current.swiper.slideNext();
-    }
-  };
+    });
+  }
 
-  clickPrevious = () => {
-    if (this.state.activeIndex > 0 && this.formSubmitAllowed(this.state.activeIndex)) {
-      this.props.submitForm(this.getEdgeFormName(this.state.activeIndex));
+  previousEdge() {
+    this.setState({
+      activeIndex: this.state.activeIndex - 1,
+    });
+    this.swipeRef.current.swiper.slidePrev();
+  }
+
+  nextEdge() {
+    this.setState({
+      activeIndex: this.state.activeIndex + 1,
+    });
+    this.swipeRef.current.swiper.slideNext();
+  }
+
+  isIntroScreen = () => this.state.activeIndex === 0;
+
+  isLastEdge = () => this.state.activeIndex === this.props.stageEdges.length
+
+  handleUpdate = (formData) => {
+    const { pendingDirection } = this.state;
+    const { updateEdge, onComplete } = this.props;
+
+    updateEdge(formData);
+
+    if (
+      (this.isIntroScreen() && pendingDirection < 0) ||
+      (this.isLastEdge() && pendingDirection > 0)
+    ) {
+      onComplete();
+      return;
     }
-    if (this.state.activeIndex > 0) {
-      this.setState({
-        activeIndex: this.state.activeIndex - 1,
-      });
-      this.swipeRef.current.swiper.slidePrev();
+
+    if (pendingDirection < 0) {
+      this.previousEdge();
+      return;
     }
+
+    this.nextEdge();
   };
 
   render() {
@@ -80,7 +100,6 @@ class AlterEdgeForm extends Component {
       stage,
       stageEdges,
       stageIndex,
-      updateEdge,
     } = this.props;
 
     const swiperParams = {
@@ -124,7 +143,7 @@ class AlterEdgeForm extends Component {
               edge={edge}
               edgeIndex={edgeIndex}
               stageIndex={stageIndex}
-              updateEdge={updateEdge}
+              updateEdge={this.handleUpdate}
               form={form}
             />
           ))}
@@ -169,10 +188,10 @@ function makeMapStateToProps() {
   };
 }
 
-const mapDispatchToProps = dispatch => ({
-  updateEdge: bindActionCreators(sessionsActions.updateEdge, dispatch),
-  submitForm: bindActionCreators(formName => submit(formName), dispatch),
-});
+const mapDispatchToProps = {
+  updateEdge: sessionsActions.updateEdge,
+  submitForm: submit,
+};
 
 export { AlterEdgeForm };
 

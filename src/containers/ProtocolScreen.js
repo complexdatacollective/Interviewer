@@ -52,8 +52,6 @@ class Protocol extends Component {
         goToNext(completeDirection);
       },
     );
-
-    // debugger;
   };
 
   /*
@@ -95,7 +93,7 @@ class Protocol extends Component {
 
     this.setState(
       { completeDirection: direction },
-      beforeNext,
+      () => beforeNext(direction),
     );
   };
 
