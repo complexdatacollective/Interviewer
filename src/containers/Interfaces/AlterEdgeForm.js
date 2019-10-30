@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
-import { isValid, isSubmitting, submit } from 'redux-form';
+import { submit } from 'redux-form';
 import ReactMarkdown from 'react-markdown';
 import Swiper from 'react-id-swiper';
 import { ProgressBar } from '../../components';
@@ -161,7 +160,6 @@ class AlterEdgeForm extends Component {
 
 AlterEdgeForm.propTypes = {
   form: PropTypes.object.isRequired,
-  formEnabled: PropTypes.func.isRequired,
   stage: PropTypes.object.isRequired,
   stageEdges: PropTypes.array,
   stageIndex: PropTypes.number.isRequired,
@@ -182,7 +180,6 @@ function makeMapStateToProps() {
 
     return {
       form: currentForm,
-      formEnabled: formName => isValid(formName)(state) && !isSubmitting(formName)(state),
       stageEdges,
     };
   };
@@ -193,8 +190,8 @@ const mapDispatchToProps = {
   submitForm: submit,
 };
 
+const withStore = connect(makeMapStateToProps, mapDispatchToProps, null, { withRef: true });
+
 export { AlterEdgeForm };
 
-export default compose(
-  connect(makeMapStateToProps, mapDispatchToProps, null, { withRef: true }),
-)(AlterEdgeForm);
+export default withStore(AlterEdgeForm);

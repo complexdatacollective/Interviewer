@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
-import { isValid, isSubmitting, submit } from 'redux-form';
+import { submit } from 'redux-form';
 import ReactMarkdown from 'react-markdown';
 import Swiper from 'react-id-swiper';
 
@@ -163,7 +162,6 @@ class AlterForm extends Component {
 
 AlterForm.propTypes = {
   form: PropTypes.object,
-  formEnabled: PropTypes.func.isRequired,
   stage: PropTypes.object.isRequired,
   stageNodes: PropTypes.array,
   stageIndex: PropTypes.number.isRequired,
@@ -184,7 +182,6 @@ function makeMapStateToProps() {
 
     return {
       form: props.stage.form,
-      formEnabled: formName => isValid(formName)(state) && !isSubmitting(formName)(state),
       stageNodes,
     };
   };
@@ -195,8 +192,8 @@ const mapDispatchToProps = {
   submitForm: submit,
 };
 
+const withStore = connect(makeMapStateToProps, mapDispatchToProps, null, { withRef: true });
+
 export { AlterForm };
 
-export default compose(
-  connect(makeMapStateToProps, mapDispatchToProps, null, { withRef: true }),
-)(AlterForm);
+export default withStore(AlterForm);

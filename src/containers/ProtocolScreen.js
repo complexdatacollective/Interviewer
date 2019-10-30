@@ -1,21 +1,23 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { TransitionGroup } from 'react-transition-group';
-// import withPrompt from '../behaviours/withPrompt';
 import { Timeline } from '../components';
 import { Stage as StageTransition } from '../components/Transition';
 import { Fade } from '../ui/components/Transitions';
 import Stage from './Stage';
-import { getPromptIndexForCurrentSession } from '../selectors/session';
+import { getSessionProgress } from '../selectors/session';
 import { getProtocolStages } from '../selectors/protocol';
 import { getCSSVariableAsNumber } from '../ui/utils/CSSVariables';
 import { actionCreators as navigateActions } from '../ducks/modules/navigate';
 
 const initialState = {
-  completeDirection: 1,
+  pendingDirection: 1,
 };
+
+const childFactoryCreator = stageBackward =>
+  child =>
+    React.cloneElement(child, { stageBackward });
 
 /**
   * Check protocol is loaded, and render the stage
@@ -36,20 +38,14 @@ class Protocol extends Component {
     }
   }
 
-  onClickNext = () =>
-    this.goToNext();
-
-  onClickBack = () =>
-    this.goToNext(-1);
-
   onComplete = () => {
-    const completeDirection = this.state.completeDirection;
+    const pendingDirection = this.state.pendingDirection;
     const goToNext = this.props.goToNext;
 
     this.setState(
       { ...initialState },
       () => {
-        goToNext(completeDirection);
+        goToNext(pendingDirection);
       },
     );
   };
@@ -80,22 +76,25 @@ class Protocol extends Component {
     return interfaceRefInstance && interfaceRefInstance.beforeNext;
   }
 
-  childFactoryCreator = stageBackward =>
-    child =>
-      React.cloneElement(child, { stageBackward });
-
   goToNext = (direction = 1) => {
     const beforeNext = this.getBeforeNextHandler();
 
     if (!beforeNext) {
-      return this.props.goToNext(direction);
+      this.props.goToNext(direction);
+      return;
     }
 
     this.setState(
-      { completeDirection: direction },
+      { pendingDirection: direction },
       () => beforeNext(direction),
     );
   };
+
+  handleClickNext = () =>
+    this.goToNext();
+
+  handleClickBack = () =>
+    this.goToNext(-1);
 
   render() {
     const {
@@ -120,14 +119,14 @@ class Protocol extends Component {
         <Fade in={isSessionLoaded} duration={duration}>
           <Timeline
             id="TIMELINE"
-            onClickBack={this.onClickBack}
-            onClickNext={this.onClickNext}
+            onClickBack={this.handleClickBack}
+            onClickNext={this.handleClickNext}
             percentProgress={percentProgress}
           />
         </Fade>
         <TransitionGroup
           className="protocol__content"
-          childFactory={this.childFactoryCreator(stageBackward)}
+          childFactory={childFactoryCreator(stageBackward)}
         >
           <StageTransition key={stage.id} stageBackward={stageBackward}>
             <Stage
@@ -162,25 +161,19 @@ Protocol.defaultProps = {
   promptId: 0,
   stageBackward: false,
   stageIndex: 0,
-  maxLength: 1,
 };
 
 function mapStateToProps(state, ownProps) {
-  const maxLength = getProtocolStages(state).length;
   const sessionId = state.activeSessionId;
   const stage = getProtocolStages(state)[ownProps.stageIndex] || {};
   const stageIndex = Math.trunc(ownProps.stageIndex) || 0;
-  const promptId = getPromptIndexForCurrentSession(state);
-  // TODO: make this a selector?
-  const stageProgress = stageIndex / (maxLength - 1);
-  const promptProgress = stage.prompts ? (promptId / stage.prompts.length) : 0;
-  const percentProgress = (stageProgress + (promptProgress / (maxLength - 1))) * 100;
+  const { percentProgress, currentPrompt } = getSessionProgress(state);
 
   return {
     isSessionLoaded: !!state.activeSessionId,
     pathPrefix: `/session/${sessionId}`,
     percentProgress,
-    promptId,
+    promptId: currentPrompt,
     stage,
     stageIndex,
   };
@@ -190,6 +183,6 @@ const mapDispatchToProps = {
   goToNext: navigateActions.goToNext,
 };
 
-export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
-)(Protocol);
+const withStore = connect(mapStateToProps, mapDispatchToProps);
+
+export default withStore(Protocol);

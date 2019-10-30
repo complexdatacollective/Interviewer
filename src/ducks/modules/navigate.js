@@ -49,7 +49,7 @@ const goToNextStage = (direction = 1) =>
     while (isStageSkipped(nextIndex)(state)) {
       nextIndex += step;
       if (nextIndex > stageCount || nextIndex < 0) {
-        // If we're at either end of the inteview, abort
+        // If we're at either end of the inteview, stop
         cancel = true;
         break;
       }
@@ -65,8 +65,8 @@ const goToNextStage = (direction = 1) =>
  * @param {number} direction either +1/-1
  */
 const goToNextPrompt = (direction = 1) =>
-  (dispatch, getStore) => {
-    const state = getStore();
+  (dispatch, getState) => {
+    const state = getState();
     const {
       promptCount,
       currentPrompt,
@@ -83,8 +83,8 @@ const goToNextPrompt = (direction = 1) =>
  * @param {number} direction
  */
 const goToNext = (direction = 1) =>
-  (dispatch, getStore) => {
-    const state = getStore();
+  (dispatch, getState) => {
+    const state = getState();
     const {
       promptCount,
       isFirstPrompt,

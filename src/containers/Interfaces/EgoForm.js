@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { clamp } from 'lodash';
-import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import { isValid, isSubmitting, submit } from 'redux-form';
 import ReactMarkdown from 'react-markdown';
@@ -130,13 +129,13 @@ function mapStateToProps(state, props) {
   };
 }
 
-const mapDispatchToProps = dispatch => ({
-  updateEgo: bindActionCreators(sessionsActions.updateEgo, dispatch),
-  submitForm: bindActionCreators(index => submit(getFormName(index)), dispatch),
-});
+const mapDispatchToProps = {
+  updateEgo: sessionsActions.updateEgo,
+  submitForm: index => submit(getFormName(index)),
+};
+
+const withStore = connect(mapStateToProps, mapDispatchToProps, null, { withRef: true });
 
 export { EgoForm };
 
-export default compose(
-  connect(mapStateToProps, mapDispatchToProps, null, { withRef: true }),
-)(EgoForm);
+export default withStore(EgoForm);
