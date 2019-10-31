@@ -94,7 +94,7 @@ const getImageSnaphotConfig = async (app, options = {}) =>
 export const matchImageSnapshot = async (app, options = {}) => {
   await app.client.pause(timing.long);
   await getImageSnaphotConfig(app, options)
-    .then(imageSnaphotConfig =>
+    .then(async imageSnaphotConfig =>
       expect(app.browserWindow.capturePage())
         .resolves.toMatchImageSnapshot(imageSnaphotConfig),
     );
