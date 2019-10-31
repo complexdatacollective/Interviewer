@@ -29,7 +29,7 @@ const defaultImageSnaphotConfig = {
   // { testPath, currentTestName, counter, defaultIdentifier }
   customSnapshotIdentifier: ({ testPath, currentTestName, counter }) =>
     kebabCase(`${path.basename(testPath)}-${currentTestName}-${counter}`),
-  customDiffConfig: { threshold: 0.1 },
+  customDiffConfig: { threshold: 0.25 },
   blur: 1,
 };
 

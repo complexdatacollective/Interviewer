@@ -35,7 +35,9 @@ export const getSessionProgress = (state) => {
   const stageCount = protocol.stages.length;
   const promptCount = get(protocol, ['stages', currentStage, 'prompts', 'length'], 0);
   const stageProgress = currentStage / (stageCount - 1);
-  const promptProgress = promptCount ? currentPrompt / (promptCount - 1) : 0;
+  // promptProgress is calculated on the basis that on the last prompt, we are still 1 away from
+  // the end (because said prompt isn't complete). So `promptCount - 1` would be wrong.
+  const promptProgress = promptCount ? currentPrompt / promptCount : 0;
   const percentProgress = (stageProgress + (promptProgress / (stageCount - 1))) * 100;
   const isFirstPrompt = promptCount > 0 && currentPrompt === 0;
   const isLastPrompt = promptCount > 0 && currentPrompt === promptCount - 1;
