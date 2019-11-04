@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { clamp } from 'lodash';
 import { connect } from 'react-redux';
-import { isValid, isSubmitting, submit } from 'redux-form';
+import { submit } from 'redux-form';
 import ReactMarkdown from 'react-markdown';
 import { isIOS } from '../../utils/Environment';
 import { ProgressBar, Scroller } from '../../components';
@@ -35,8 +35,8 @@ class EgoForm extends Component {
     };
   }
 
-  beforeNext() {
-    this.props.submitForm(this.props.stageIndex);
+  beforeNext = () => {
+    this.props.submitForm(this.props.formName);
   }
 
   handleSubmitForm = (formData) => {
@@ -59,6 +59,7 @@ class EgoForm extends Component {
       form,
       ego,
       introductionPanel,
+      formName,
     } = this.props;
 
     const progressClasses = cx(
@@ -83,7 +84,7 @@ class EgoForm extends Component {
             <Form
               {...form}
               initialValues={ego[entityAttributesProperty]}
-              form={getFormName(this.props.stageIndex)}
+              form={formName}
               subject={{ entity: 'ego' }}
               onSubmit={this.handleSubmitForm}
             />
@@ -105,7 +106,6 @@ EgoForm.propTypes = {
   form: PropTypes.object.isRequired,
   introductionPanel: PropTypes.object.isRequired,
   ego: PropTypes.object,
-  formEnabled: PropTypes.func.isRequired,
   stageIndex: PropTypes.number.isRequired,
   submitForm: PropTypes.func.isRequired,
   updateEgo: PropTypes.func.isRequired,
@@ -118,20 +118,18 @@ EgoForm.defaultProps = {
 function mapStateToProps(state, props) {
   const ego = getNetworkEgo(state);
   const formName = getFormName(props.stageIndex);
-  const isFormValid = isValid(formName)(state);
-  const isFormSubmitting = isSubmitting(formName)(state);
 
   return {
     form: props.stage.form,
     introductionPanel: props.stage.introductionPanel,
     ego,
-    canSubmitForm: isFormValid && !isFormSubmitting,
+    formName,
   };
 }
 
 const mapDispatchToProps = {
   updateEgo: sessionsActions.updateEgo,
-  submitForm: index => submit(getFormName(index)),
+  submitForm: submit,
 };
 
 const withStore = connect(mapStateToProps, mapDispatchToProps, null, { withRef: true });
