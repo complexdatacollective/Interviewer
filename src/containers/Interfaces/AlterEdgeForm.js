@@ -36,8 +36,8 @@ class AlterEdgeForm extends Component {
   getEdgeFormName = activeIndex => `EDGE_FORM_${this.props.stageIndex}_${activeIndex}`;
 
   beforeNext = (direction) => {
-    if (this.isIntroScreen() && direction > 0) {
-      this.nextEdge();
+    if (this.shouldSkipAction(direction)) {
+      this.props.onComplete();
       return;
     }
 
@@ -69,7 +69,19 @@ class AlterEdgeForm extends Component {
 
   isIntroScreen = () => this.state.activeIndex === 0;
 
-  isLastEdge = () => this.state.activeIndex === this.props.stageEdges.length
+  isLastEdge = () => this.state.activeIndex === this.props.stageEdges.length;
+
+  shouldSkipAction = (direction) => {
+    if (this.props.stageEdges.length === 0) { return true; }
+    if (this.isIntroScreen() && direction < 0) { return true; }
+    return false;
+  }
+
+  isComplete = (direction) => {
+    if (this.isIntroScreen() && direction < 0) { return true; }
+    if (this.isLastEdge() && direction > 0) { return true; }
+    return false;
+  }
 
   handleUpdate = (formData) => {
     const { pendingDirection } = this.state;
@@ -77,10 +89,7 @@ class AlterEdgeForm extends Component {
 
     updateEdge(formData);
 
-    if (
-      (this.isIntroScreen() && pendingDirection < 0) ||
-      (this.isLastEdge() && pendingDirection > 0)
-    ) {
+    if (this.isComplete(pendingDirection)) {
       onComplete();
       return;
     }

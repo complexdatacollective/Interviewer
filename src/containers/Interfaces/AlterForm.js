@@ -38,13 +38,13 @@ class AlterForm extends Component {
   getNodeFormName = activeIndex => `NODE_FORM_${this.props.stageIndex}_${activeIndex}`;
 
   beforeNext = (direction) => {
-    if (this.isIntroScreen() && direction > 0) {
-      this.nextAlter();
+    if (this.shouldSkipAction(direction)) {
+      this.props.onComplete();
       return;
     }
 
-    if (this.isIntroScreen() && direction < 0) {
-      this.props.onComplete();
+    if (this.isIntroScreen() && direction > 0) {
+      this.nextAlter();
       return;
     }
 
@@ -71,7 +71,19 @@ class AlterForm extends Component {
 
   isIntroScreen = () => this.state.activeIndex === 0;
 
-  isLastAlter = () => this.state.activeIndex === this.props.stageNodes.length
+  isLastAlter = () => this.state.activeIndex === this.props.stageNodes.length;
+
+  shouldSkipAction = (direction) => {
+    if (this.props.stageNodes.length === 0) { return true; }
+    if (this.isIntroScreen() && direction < 0) { return true; }
+    return false;
+  }
+
+  isComplete = (direction) => {
+    if (this.isIntroScreen() && direction < 0) { return true; }
+    if (this.isLastAlter() && direction > 0) { return true; }
+    return false;
+  }
 
   handleUpdate = (node, formData) => {
     const { pendingDirection } = this.state;
@@ -79,10 +91,7 @@ class AlterForm extends Component {
 
     updateNode(node[entityPrimaryKeyProperty], {}, formData);
 
-    if (
-      (this.isIntroScreen() && pendingDirection < 0) ||
-      (this.isLastAlter() && pendingDirection > 0)
-    ) {
+    if (this.isComplete(pendingDirection)) {
       onComplete();
       return;
     }
