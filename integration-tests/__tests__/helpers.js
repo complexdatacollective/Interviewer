@@ -92,6 +92,11 @@ const getImageSnaphotConfig = async (app, options = {}) =>
     }));
 
 export const matchImageSnapshot = async (app, options = {}) => {
+  if (process.env.TEST_ENV === 'development') {
+    await app.client.pause(timing.short);
+    return;
+  }
+
   await app.client.pause(timing.long);
   await getImageSnaphotConfig(app, options)
     .then(imageSnaphotConfig =>
