@@ -23,7 +23,8 @@ const paths = {
 
 const developmentProtocol = process.env.DEVELOPMENT_PROTOCOL_URL || DEVELOPMENT_PROTOCOL_URL;
 
-const mockProtocol = 'https://documentation.networkcanvas.com/protocols/mock.netcanvas';
+// TODO: update this when feature is merged
+const mockProtocol = 'https://github.com/codaco/Network-Canvas/blob/fix/skip-stage/integration-tests/data/mock.netcanvas?raw=true';
 
 const defaultImageSnaphotConfig = {
   // { testPath, currentTestName, counter, defaultIdentifier }
