@@ -40,12 +40,11 @@ class Protocol extends Component {
 
   onComplete = () => {
     const pendingDirection = this.state.pendingDirection;
-    const goToNext = this.props.goToNext;
 
     this.setState(
       { ...initialState },
       () => {
-        goToNext(pendingDirection);
+        this.props.goToNext(pendingDirection);
       },
     );
   };

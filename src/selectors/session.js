@@ -22,7 +22,7 @@ export const getSessionPath = (state, stageIndex) => {
   const sessionId = state.activeSessionId;
   const sessionPath = `/session/${sessionId}`;
 
-  if (!stageIndex) { return sessionPath; }
+  if (stageIndex === undefined) { return sessionPath; }
 
   return `${sessionPath}/${stageIndex}`;
 };
