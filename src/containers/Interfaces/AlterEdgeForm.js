@@ -41,8 +41,8 @@ class AlterEdgeForm extends Component {
       return;
     }
 
-    if (this.isIntroScreen() && direction < 0) {
-      this.props.onComplete();
+    if (this.isIntroScreen() && direction > 0) {
+      this.nextEdge();
       return;
     }
 
