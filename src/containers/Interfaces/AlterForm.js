@@ -37,6 +37,13 @@ class AlterForm extends Component {
 
   getNodeFormName = activeIndex => `NODE_FORM_${this.props.stageIndex}_${activeIndex}`;
 
+  /**
+   * Called by ProtocolScreen before navigating away from this stage
+   *
+   * If this `beforeNext` method is defined on an interfaces, the
+   * navigation will be blocked until `this.props.onContinue()` is
+   * called, which allows async events to happen such as form submission.
+   */
   beforeNext = (direction) => {
     if (this.shouldContinue(direction)) {
       this.props.onComplete();
