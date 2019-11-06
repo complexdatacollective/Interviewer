@@ -38,7 +38,7 @@ class AlterForm extends Component {
   getNodeFormName = activeIndex => `NODE_FORM_${this.props.stageIndex}_${activeIndex}`;
 
   beforeNext = (direction) => {
-    if (this.shouldSkipAction(direction)) {
+    if (this.shouldContinue(direction)) {
       this.props.onComplete();
       return;
     }
@@ -73,7 +73,7 @@ class AlterForm extends Component {
 
   isLastAlter = () => this.state.activeIndex === this.props.stageNodes.length;
 
-  shouldSkipAction = (direction) => {
+  shouldContinue = (direction) => {
     if (this.props.stageNodes.length === 0) { return true; }
     if (this.isIntroScreen() && direction < 0) { return true; }
     return false;

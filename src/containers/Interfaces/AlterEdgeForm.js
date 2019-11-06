@@ -36,7 +36,7 @@ class AlterEdgeForm extends Component {
   getEdgeFormName = activeIndex => `EDGE_FORM_${this.props.stageIndex}_${activeIndex}`;
 
   beforeNext = (direction) => {
-    if (this.shouldSkipAction(direction)) {
+    if (this.shouldContinue(direction)) {
       this.props.onComplete();
       return;
     }
@@ -71,7 +71,7 @@ class AlterEdgeForm extends Component {
 
   isLastEdge = () => this.state.activeIndex === this.props.stageEdges.length;
 
-  shouldSkipAction = (direction) => {
+  shouldContinue = (direction) => {
     if (this.props.stageEdges.length === 0) { return true; }
     if (this.isIntroScreen() && direction < 0) { return true; }
     return false;
