@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { submit } from 'redux-form';
+import { submit, isValid } from 'redux-form';
 import ReactMarkdown from 'react-markdown';
 import Swiper from 'react-id-swiper';
-
 import { ProgressBar } from '../../components';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { makeNetworkNodesForType } from '../../selectors/interface';
@@ -13,6 +12,7 @@ import { entityPrimaryKeyProperty } from '../../ducks/modules/network';
 import { SlideFormNode } from '../AlterForms';
 import defaultMarkdownRenderers from '../../utils/markdownRenderers';
 import { getCSSVariableAsNumber } from '../../ui/utils/CSSVariables';
+import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 
 const TAGS = [
   'break',
@@ -26,6 +26,13 @@ const TAGS = [
   'thematicBreak',
 ];
 
+const confirmDialog = {
+  type: 'Confirm',
+  title: 'Changes cannot be saved',
+  message: 'There are invalid changes in this form, that will not be saved if you continue. Do you want to go back anyway?',
+  confirmLabel: 'Leave alter',
+};
+
 class AlterForm extends Component {
   constructor(props) {
     super(props);
@@ -35,7 +42,8 @@ class AlterForm extends Component {
     };
   }
 
-  getNodeFormName = activeIndex => `NODE_FORM_${this.props.stageIndex}_${activeIndex}`;
+  getNodeFormName = () =>
+    `NODE_FORM_${this.props.stageIndex}_${this.state.activeIndex}`;
 
   /**
    * Called by ProtocolScreen before navigating away from this stage
@@ -55,11 +63,35 @@ class AlterForm extends Component {
       return;
     }
 
+    if (direction < 0 && !this.isFormValid()) {
+      this.props.openDialog(confirmDialog)
+        .then(this.handleConfirmNavigation);
+      return;
+    }
+
     this.setState({
       pendingDirection: direction,
     }, () => {
-      this.props.submitForm(this.getNodeFormName(this.state.activeIndex));
+      this.submitForm();
     });
+  }
+
+  handleConfirmNavigation = (confirm) => {
+    if (confirm) {
+      this.props.onComplete();
+      return;
+    }
+
+    this.submitForm();
+  };
+
+  isFormValid = () => {
+    const formName = this.getNodeFormName();
+    return this.props.getIsFormValid(formName);
+  };
+
+  submitForm = () => {
+    this.props.submitForm(this.getNodeFormName());
   }
 
   previousAlter() {
@@ -195,10 +227,13 @@ function makeMapStateToProps() {
 
   return function mapStateToProps(state, props) {
     const stageNodes = getStageNodes(state, props);
+    const getIsFormValid = formName =>
+      isValid(formName)(state);
 
     return {
       form: props.stage.form,
       stageNodes,
+      getIsFormValid,
     };
   };
 }
@@ -206,6 +241,7 @@ function makeMapStateToProps() {
 const mapDispatchToProps = {
   updateNode: sessionsActions.updateNode,
   submitForm: submit,
+  openDialog: dialogActions.openDialog,
 };
 
 const withStore = connect(makeMapStateToProps, mapDispatchToProps, null, { withRef: true });

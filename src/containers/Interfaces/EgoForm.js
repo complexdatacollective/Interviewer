@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { clamp } from 'lodash';
 import { connect } from 'react-redux';
-import { submit } from 'redux-form';
+import { submit, isValid } from 'redux-form';
 import ReactMarkdown from 'react-markdown';
 import { isIOS } from '../../utils/Environment';
 import { ProgressBar, Scroller } from '../../components';
@@ -12,6 +12,7 @@ import { actionCreators as sessionsActions } from '../../ducks/modules/sessions'
 import { getNetworkEgo } from '../../selectors/network';
 import defaultMarkdownRenderers from '../../utils/markdownRenderers';
 import { entityAttributesProperty } from '../../ducks/modules/network';
+import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 
 const TAGS = [
   'break',
@@ -25,7 +26,15 @@ const TAGS = [
   'thematicBreak',
 ];
 
-const getFormName = index => `EGO_FORM_${index}`;
+const confirmDialog = {
+  type: 'Confirm',
+  title: 'Changes cannot be saved',
+  message: 'There are invalid changes in this form, that will not be saved if you continue. Do you want to go back anyway?',
+  confirmLabel: 'Leave stage',
+};
+
+const getFormName = index =>
+  `EGO_FORM_${index}`;
 
 class EgoForm extends Component {
   constructor(props) {
@@ -35,9 +44,28 @@ class EgoForm extends Component {
     };
   }
 
-  beforeNext = () => {
-    this.props.submitForm(this.props.formName);
+  beforeNext = (direction) => {
+    if (direction < 0 && !this.props.isFormValid) {
+      this.props.openDialog(confirmDialog)
+        .then(this.handleConfirmNavigation);
+      return;
+    }
+
+    this.submitForm();
   }
+
+  submitForm = () => {
+    this.props.submitForm(this.props.formName);
+  };
+
+  handleConfirmNavigation = (confirm) => {
+    if (confirm) {
+      this.props.onComplete();
+      return;
+    }
+
+    this.submitForm();
+  };
 
   handleSubmitForm = (formData) => {
     const { updateEgo, onComplete } = this.props;
@@ -118,11 +146,13 @@ EgoForm.defaultProps = {
 function mapStateToProps(state, props) {
   const ego = getNetworkEgo(state);
   const formName = getFormName(props.stageIndex);
+  const isFormValid = isValid(formName)(state);
 
   return {
     form: props.stage.form,
     introductionPanel: props.stage.introductionPanel,
     ego,
+    isFormValid,
     formName,
   };
 }
@@ -130,6 +160,7 @@ function mapStateToProps(state, props) {
 const mapDispatchToProps = {
   updateEgo: sessionsActions.updateEgo,
   submitForm: submit,
+  openDialog: dialogActions.openDialog,
 };
 
 const withStore = connect(mapStateToProps, mapDispatchToProps, null, { withRef: true });
