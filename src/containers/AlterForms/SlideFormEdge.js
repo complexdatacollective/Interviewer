@@ -2,32 +2,28 @@ import React, { PureComponent } from 'react';
 import { find } from 'lodash';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-
+import { withProps, compose } from 'recompose';
 import { makeGetEdgeColor, getNetworkNodes } from '../../selectors/network';
 import { Scroller } from '../../components';
 import { entityAttributesProperty, entityPrimaryKeyProperty } from '../../ducks/modules/network';
 import Node from '../Node';
-import { Form } from '..';
+import Form from '../Form';
 
 class SlideFormEdge extends PureComponent {
   handleSubmit = (formData) => {
-    const { edge, updateEdge } = this.props;
-    updateEdge(edge[entityPrimaryKeyProperty], {}, formData);
+    const { id, onUpdate } = this.props;
+    onUpdate(id, {}, formData);
   }
 
   render() {
     const {
       form,
-      edge,
       edgeColor,
-      nodes,
-      edgeIndex,
+      fromNode,
+      toNode,
       subject,
-      stageIndex,
+      initialValues,
     } = this.props;
-
-    const fromNode = find(nodes, [entityPrimaryKeyProperty, edge.from]);
-    const toNode = find(nodes, [entityPrimaryKeyProperty, edge.to]);
 
     return (
       <div className="swiper-slide">
@@ -40,10 +36,9 @@ class SlideFormEdge extends PureComponent {
               <Form
                 {...form}
                 className="alter-form__form"
-                initialValues={edge[entityAttributesProperty]}
+                initialValues={initialValues}
                 autoFocus={false}
                 subject={subject}
-                form={`EDGE_FORM_${stageIndex}_${edgeIndex + 1}`}
                 onSubmit={this.handleSubmit}
               />
             </Scroller>
@@ -54,23 +49,32 @@ class SlideFormEdge extends PureComponent {
   }
 }
 
-function mapStateToProps(state, props) {
-  const getEdgeColor = makeGetEdgeColor();
-  return {
-    nodes: getNetworkNodes(state),
-    edgeColor: getEdgeColor(state, props.edge),
-  };
-}
-
 SlideFormEdge.propTypes = {
   form: PropTypes.object.isRequired,
-  updateEdge: PropTypes.func.isRequired,
+  onUpdate: PropTypes.func.isRequired,
   subject: PropTypes.object.isRequired,
-  edge: PropTypes.object.isRequired,
-  edgeIndex: PropTypes.number.isRequired,
-  stageIndex: PropTypes.number.isRequired,
+  item: PropTypes.object.isRequired,
 };
 
 export { SlideFormEdge };
 
-export default connect(mapStateToProps)(SlideFormEdge);
+const withStore = connect((state, props) => {
+  const getEdgeColor = makeGetEdgeColor();
+  const nodes = getNetworkNodes(state);
+
+  const fromNode = find(nodes, [entityPrimaryKeyProperty, props.item.from]);
+  const toNode = find(nodes, [entityPrimaryKeyProperty, props.item.to]);
+
+  return {
+    fromNode,
+    toNode,
+    edgeColor: getEdgeColor(state, props.item),
+  };
+});
+
+const withEdgeProps = withProps(({ item }) => ({
+  id: item[entityPrimaryKeyProperty],
+  initialValues: item[entityAttributesProperty],
+}));
+
+export default compose(withStore, withEdgeProps)(SlideFormEdge);

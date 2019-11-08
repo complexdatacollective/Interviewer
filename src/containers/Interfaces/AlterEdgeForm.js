@@ -1,250 +1,32 @@
-import React, { Component } from 'react';
-import cx from 'classnames';
-import PropTypes from 'prop-types';
+import React from 'react';
 import { connect } from 'react-redux';
-import { submit, isValid } from 'redux-form';
-import ReactMarkdown from 'react-markdown';
-import Swiper from 'react-id-swiper';
-import { ProgressBar } from '../../components';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { makeNetworkEdgesForType } from '../../selectors/interface';
-import { SlideFormEdge } from '../AlterForms';
-import defaultMarkdownRenderers from '../../utils/markdownRenderers';
-import { getCSSVariableAsNumber } from '../../ui/utils/CSSVariables';
-import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
+import SlideFormEdge from '../AlterForms/SlideFormEdge';
+import SlideForm from '../AlterForms/SlideForm';
 
-const TAGS = [
-  'break',
-  'emphasis',
-  'heading',
-  'link',
-  'list',
-  'listItem',
-  'paragraph',
-  'strong',
-  'thematicBreak',
-];
-
-const confirmDialog = {
-  type: 'Confirm',
-  title: 'Changes cannot be saved',
-  message: 'There are invalid changes in this form, that will not be saved if you continue. Do you want to go back anyway?',
-  confirmLabel: 'Leave edge',
-};
-
-class AlterEdgeForm extends Component {
-  constructor(props) {
-    super(props);
-    this.swipeRef = React.createRef();
-    this.state = {
-      activeIndex: 0,
-    };
-  }
-
-  getEdgeFormName = () =>
-    `EDGE_FORM_${this.props.stageIndex}_${this.state.activeIndex}`;
-
-  /**
-   * Called by ProtocolScreen before navigating away from this stage
-   *
-   * If this `beforeNext` method is defined on an interfaces, the
-   * navigation will be blocked until `this.props.onContinue()` is
-   * called, which allows async events to happen such as form submission.
-   */
-  beforeNext = (direction) => {
-    if (this.shouldContinue(direction)) {
-      this.props.onComplete();
-      return;
-    }
-
-    if (this.isIntroScreen() && direction > 0) {
-      this.nextEdge();
-      return;
-    }
-
-    if (direction < 0 && !this.isFormValid()) {
-      this.props.openDialog(confirmDialog)
-        .then(this.handleConfirmNavigation);
-      return;
-    }
-
-    this.setState({
-      pendingDirection: direction,
-    }, () => {
-      this.submitForm();
-    });
-  }
-
-  handleConfirmNavigation = (confirm) => {
-    if (confirm) {
-      this.props.onComplete();
-      return;
-    }
-
-    this.submitForm();
-  };
-
-  isFormValid = () => {
-    const formName = this.getEdgeFormName();
-    return this.props.getIsFormValid(formName);
-  };
-
-  submitForm = () => {
-    this.props.submitForm(this.getEdgeFormName());
-  }
-
-  previousEdge() {
-    this.setState({
-      activeIndex: this.state.activeIndex - 1,
-    });
-    this.swipeRef.current.swiper.slidePrev();
-  }
-
-  nextEdge() {
-    this.setState({
-      activeIndex: this.state.activeIndex + 1,
-    });
-    this.swipeRef.current.swiper.slideNext();
-  }
-
-  isIntroScreen = () => this.state.activeIndex === 0;
-
-  isLastEdge = () => this.state.activeIndex === this.props.stageEdges.length;
-
-  shouldContinue = (direction) => {
-    if (this.props.stageEdges.length === 0) { return true; }
-    if (this.isIntroScreen() && direction < 0) { return true; }
-    return false;
-  }
-
-  isComplete = (direction) => {
-    if (this.isIntroScreen() && direction < 0) { return true; }
-    if (this.isLastEdge() && direction > 0) { return true; }
-    return false;
-  }
-
-  handleUpdate = (formData) => {
-    const { pendingDirection } = this.state;
-    const { updateEdge, onComplete } = this.props;
-
-    updateEdge(formData);
-
-    if (this.isComplete(pendingDirection)) {
-      onComplete();
-      return;
-    }
-
-    if (pendingDirection < 0) {
-      this.previousEdge();
-      return;
-    }
-
-    this.nextEdge();
-  };
-
-  render() {
-    const {
-      form,
-      stage,
-      stageEdges,
-      stageIndex,
-    } = this.props;
-
-    const swiperParams = {
-      containerClass: 'alter-form__swiper swiper-container',
-      direction: 'vertical',
-      speed: getCSSVariableAsNumber('--animation-duration-slow-ms'),
-      effect: 'coverflow',
-      coverflowEffect: {
-        rotate: 30,
-        slideShadows: false,
-      },
-      slidesPerView: 'auto',
-      centeredSlides: true,
-    };
-
-    const progressClasses = cx(
-      'progress-container',
-      {
-        'progress-container--show': this.state.activeIndex > 0,
-      },
-    );
-
-    return (
-      <div className="alter-form alter-edge-form swiper-no-swiping">
-        <Swiper {...swiperParams} ref={this.swipeRef} >
-          <div>
-            <div key="alter-form__introduction" className="slide-content alter-form__introduction">
-              <h1>{stage.introductionPanel.title}</h1>
-              <ReactMarkdown
-                source={stage.introductionPanel.text}
-                allowedTypes={TAGS}
-                renderers={defaultMarkdownRenderers}
-              />
-            </div>
-          </div>
-
-          {stageEdges.map((edge, edgeIndex) => (
-            <SlideFormEdge
-              key={edgeIndex}
-              subject={stage.subject}
-              edge={edge}
-              edgeIndex={edgeIndex}
-              stageIndex={stageIndex}
-              updateEdge={this.handleUpdate}
-              form={form}
-            />
-          ))}
-        </Swiper>
-        <div className={progressClasses}>
-          <h6 className="progress-container__status-text">
-            <strong>{this.state.activeIndex}</strong> of <strong>{stageEdges.length}</strong>
-          </h6>
-          <ProgressBar orientation="horizontal" percentProgress={(this.state.activeIndex / stageEdges.length) * 100} />
-        </div>
-      </div>
-    );
-  }
-}
-
-AlterEdgeForm.propTypes = {
-  form: PropTypes.object.isRequired,
-  stage: PropTypes.object.isRequired,
-  stageEdges: PropTypes.array,
-  stageIndex: PropTypes.number.isRequired,
-  submitForm: PropTypes.func.isRequired,
-  updateEdge: PropTypes.func.isRequired,
-};
-
-AlterEdgeForm.defaultProps = {
-  stageEdges: [],
-};
+const AlterEdgeForm = props => (
+  <SlideForm
+    itemName="edge"
+    FormComponent={SlideFormEdge}
+    {...props}
+  />
+);
 
 function makeMapStateToProps() {
   const getStageEdges = makeNetworkEdgesForType();
 
-  return function mapStateToProps(state, props) {
-    const currentForm = props.stage.form;
-    const stageEdges = getStageEdges(state, props);
-    const getIsFormValid = formName =>
-      isValid(formName)(state);
+  const mapStateToProps = (state, props) => ({
+    items: getStageEdges(state, props),
+  });
 
-    return {
-      form: currentForm,
-      stageEdges,
-      getIsFormValid,
-    };
-  };
+  return mapStateToProps;
 }
 
 const mapDispatchToProps = {
-  updateEdge: sessionsActions.updateEdge,
-  submitForm: submit,
-  openDialog: dialogActions.openDialog,
+  updateItem: sessionsActions.updateEdge,
 };
 
-const withStore = connect(makeMapStateToProps, mapDispatchToProps, null, { withRef: true });
+const withAlterStore = connect(makeMapStateToProps, mapDispatchToProps);
 
-export { AlterEdgeForm };
-
-export default withStore(AlterEdgeForm);
+export default withAlterStore(AlterEdgeForm);

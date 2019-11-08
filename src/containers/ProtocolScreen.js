@@ -40,6 +40,7 @@ class Protocol extends Component {
 
   onComplete = () => {
     const pendingDirection = this.state.pendingDirection;
+    this.beforeNext = null;
 
     this.setState(
       { ...initialState },
@@ -49,43 +50,19 @@ class Protocol extends Component {
     );
   };
 
-  /*
-   * Typically an interface would iterate through "prompts" via clicking back and forward.
-   * If an interface needs a different iterative process, (e.g. iterating through a list
-   * of nodes instead of prompts), the interface can be accessed here as a ref.
-   *
-   * Expected callbacks:
-   * isStageEnding - boolean indicating the end of the stage
-   * isStageBeginning - boolean indicating the beginning of the stage
-   * clickNext - callback for the stage's "next" behavior; also called on stage end transition
-   * clickPrevious - callback for the stage's "back" behavior
-   */
-  getInterfaceRefInstance = () => {
-    try {
-      return (this.interfaceRef && this.interfaceRef.current &&
-        this.interfaceRef.current.getWrappedInstance());
-    } catch (e) {
-      return false;
-    }
-  }
-
-  getBeforeNextHandler = () => {
-    const interfaceRefInstance = this.getInterfaceRefInstance();
-
-    return interfaceRefInstance && interfaceRefInstance.beforeNext;
+  registerBeforeNext = (beforeNext) => {
+    this.beforeNext = beforeNext;
   }
 
   goToNext = (direction = 1) => {
-    const beforeNext = this.getBeforeNextHandler();
-
-    if (!beforeNext) {
+    if (!this.beforeNext) {
       this.props.goToNext(direction);
       return;
     }
 
     this.setState(
       { pendingDirection: direction },
-      () => beforeNext(direction),
+      () => this.beforeNext(direction),
     );
   };
 
@@ -134,6 +111,8 @@ class Protocol extends Component {
               pathPrefix={pathPrefix}
               stageIndex={stageIndex}
               ref={this.interfaceRef}
+              foo="bar"
+              registerBeforeNext={this.registerBeforeNext}
               onComplete={this.onComplete}
             />
           </StageTransition>

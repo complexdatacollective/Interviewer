@@ -44,6 +44,10 @@ class EgoForm extends Component {
     };
   }
 
+  componentDidMount() {
+    this.props.registerBeforeNext(this.beforeNext);
+  }
+
   beforeNext = (direction) => {
     if (direction < 0 && !this.props.isFormValid) {
       this.props.openDialog(confirmDialog)
