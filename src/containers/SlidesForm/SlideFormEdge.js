@@ -56,7 +56,10 @@ SlideFormEdge.propTypes = {
   item: PropTypes.object.isRequired,
 };
 
-export { SlideFormEdge };
+const withEdgeProps = withProps(({ item }) => ({
+  id: item[entityPrimaryKeyProperty],
+  initialValues: item[entityAttributesProperty],
+}));
 
 const withStore = connect((state, props) => {
   const getEdgeColor = makeGetEdgeColor();
@@ -72,9 +75,8 @@ const withStore = connect((state, props) => {
   };
 });
 
-const withEdgeProps = withProps(({ item }) => ({
-  id: item[entityPrimaryKeyProperty],
-  initialValues: item[entityAttributesProperty],
-}));
+const EnhancedSlideFormEdge = withEdgeProps(SlideFormEdge);
+
+export { EnhancedSlideFormEdge as SlideFormEdge };
 
 export default compose(withStore, withEdgeProps)(SlideFormEdge);

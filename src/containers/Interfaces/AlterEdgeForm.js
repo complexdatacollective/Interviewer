@@ -29,4 +29,6 @@ const mapDispatchToProps = {
 
 const withAlterStore = connect(makeMapStateToProps, mapDispatchToProps);
 
+export { AlterEdgeForm };
+
 export default withAlterStore(AlterEdgeForm);

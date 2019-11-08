@@ -6,7 +6,7 @@ import { entityAttributesProperty, entityPrimaryKeyProperty } from '../../ducks/
 import Node from '../Node';
 import Form from '../Form';
 
-class SlideForm extends PureComponent {
+class SlideFormNode extends PureComponent {
   handleSubmit = (formData) => {
     const { id, item, onUpdate } = this.props;
     // TODO: is item (node) neccessary?
@@ -43,16 +43,15 @@ class SlideForm extends PureComponent {
   }
 }
 
-SlideForm.propTypes = {
+SlideFormNode.propTypes = {
   form: PropTypes.object,
   subject: PropTypes.object.isRequired,
-  item: PropTypes.object,
+  item: PropTypes.object.isRequired,
   onUpdate: PropTypes.func,
 };
 
-SlideForm.defaultProps = {
+SlideFormNode.defaultProps = {
   form: {},
-  item: {},
   onUpdate: () => {},
 };
 
@@ -61,4 +60,8 @@ const withNodeProps = withProps(({ item }) => ({
   initialValues: item[entityAttributesProperty],
 }));
 
-export default withNodeProps(SlideForm);
+const EnhancedSlideFormNode = withNodeProps(SlideFormNode);
+
+export { EnhancedSlideFormNode as SlideFormNode };
+
+export default withNodeProps(SlideFormNode);

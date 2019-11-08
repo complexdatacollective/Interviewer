@@ -3,7 +3,7 @@
 exports[`<SlideFormNode /> should render 1`] = `
 ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
-  Symbol(enzyme.__unrendered__): <SlideForm
+  Symbol(enzyme.__unrendered__): <withProps(SlideFormNode)
     form={
       Object {
         "entity": "node",
@@ -11,13 +11,14 @@ ShallowWrapper {
         "type": "person",
       }
     }
-    node={
+    item={
       Object {
-        "name": "Bob",
+        "attributes": Object {
+          "foo": "bar",
+        },
       }
     }
     nodeIndex={1}
-    onUpdate={[Function]}
     stageIndex={1}
   />,
   Symbol(enzyme.__renderer__): Object {
@@ -32,269 +33,57 @@ ShallowWrapper {
   Symbol(enzyme.__node__): Object {
     "instance": null,
     "key": undefined,
-    "nodeType": "host",
+    "nodeType": "class",
     "props": Object {
-      "children": <div
-        className="slide-content"
-      >
-        <Connect(Node)
-          name="Bob"
-        />
-        <div
-          className="alter-form__form-container"
-        >
-          <Connect(Scroller)>
-            <Connect(AutoInitialisedForm)
-              autoFocus={false}
-              className="alter-form__form"
-              entity="node"
-              form="NODE_FORM_1_2"
-              onSubmit={[Function]}
-              title="alpha"
-              type="person"
-            />
-          </Connect(Scroller)>
-        </div>
-      </div>,
-      "className": "swiper-slide",
+      "form": Object {
+        "entity": "node",
+        "title": "alpha",
+        "type": "person",
+      },
+      "id": undefined,
+      "initialValues": Object {
+        "foo": "bar",
+      },
+      "item": Object {
+        "attributes": Object {
+          "foo": "bar",
+        },
+      },
+      "nodeIndex": 1,
+      "onUpdate": [Function],
+      "stageIndex": 1,
     },
     "ref": null,
-    "rendered": Object {
-      "instance": null,
-      "key": undefined,
-      "nodeType": "host",
-      "props": Object {
-        "children": Array [
-          <Connect(Node)
-            name="Bob"
-          />,
-          <div
-            className="alter-form__form-container"
-          >
-            <Connect(Scroller)>
-              <Connect(AutoInitialisedForm)
-                autoFocus={false}
-                className="alter-form__form"
-                entity="node"
-                form="NODE_FORM_1_2"
-                onSubmit={[Function]}
-                title="alpha"
-                type="person"
-              />
-            </Connect(Scroller)>
-          </div>,
-        ],
-        "className": "slide-content",
-      },
-      "ref": null,
-      "rendered": Array [
-        Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "class",
-          "props": Object {
-            "name": "Bob",
-          },
-          "ref": null,
-          "rendered": null,
-          "type": [Function],
-        },
-        Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "host",
-          "props": Object {
-            "children": <Connect(Scroller)>
-              <Connect(AutoInitialisedForm)
-                autoFocus={false}
-                className="alter-form__form"
-                entity="node"
-                form="NODE_FORM_1_2"
-                onSubmit={[Function]}
-                title="alpha"
-                type="person"
-              />
-            </Connect(Scroller)>,
-            "className": "alter-form__form-container",
-          },
-          "ref": null,
-          "rendered": Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "class",
-            "props": Object {
-              "children": <Connect(AutoInitialisedForm)
-                autoFocus={false}
-                className="alter-form__form"
-                entity="node"
-                form="NODE_FORM_1_2"
-                onSubmit={[Function]}
-                title="alpha"
-                type="person"
-              />,
-            },
-            "ref": null,
-            "rendered": Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "class",
-              "props": Object {
-                "autoFocus": false,
-                "className": "alter-form__form",
-                "entity": "node",
-                "form": "NODE_FORM_1_2",
-                "initialValues": undefined,
-                "onSubmit": [Function],
-                "subject": undefined,
-                "title": "alpha",
-                "type": "person",
-              },
-              "ref": null,
-              "rendered": null,
-              "type": [Function],
-            },
-            "type": [Function],
-          },
-          "type": "div",
-        },
-      ],
-      "type": "div",
-    },
-    "type": "div",
+    "rendered": null,
+    "type": [Function],
   },
   Symbol(enzyme.__nodes__): Array [
     Object {
       "instance": null,
       "key": undefined,
-      "nodeType": "host",
+      "nodeType": "class",
       "props": Object {
-        "children": <div
-          className="slide-content"
-        >
-          <Connect(Node)
-            name="Bob"
-          />
-          <div
-            className="alter-form__form-container"
-          >
-            <Connect(Scroller)>
-              <Connect(AutoInitialisedForm)
-                autoFocus={false}
-                className="alter-form__form"
-                entity="node"
-                form="NODE_FORM_1_2"
-                onSubmit={[Function]}
-                title="alpha"
-                type="person"
-              />
-            </Connect(Scroller)>
-          </div>
-        </div>,
-        "className": "swiper-slide",
+        "form": Object {
+          "entity": "node",
+          "title": "alpha",
+          "type": "person",
+        },
+        "id": undefined,
+        "initialValues": Object {
+          "foo": "bar",
+        },
+        "item": Object {
+          "attributes": Object {
+            "foo": "bar",
+          },
+        },
+        "nodeIndex": 1,
+        "onUpdate": [Function],
+        "stageIndex": 1,
       },
       "ref": null,
-      "rendered": Object {
-        "instance": null,
-        "key": undefined,
-        "nodeType": "host",
-        "props": Object {
-          "children": Array [
-            <Connect(Node)
-              name="Bob"
-            />,
-            <div
-              className="alter-form__form-container"
-            >
-              <Connect(Scroller)>
-                <Connect(AutoInitialisedForm)
-                  autoFocus={false}
-                  className="alter-form__form"
-                  entity="node"
-                  form="NODE_FORM_1_2"
-                  onSubmit={[Function]}
-                  title="alpha"
-                  type="person"
-                />
-              </Connect(Scroller)>
-            </div>,
-          ],
-          "className": "slide-content",
-        },
-        "ref": null,
-        "rendered": Array [
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "class",
-            "props": Object {
-              "name": "Bob",
-            },
-            "ref": null,
-            "rendered": null,
-            "type": [Function],
-          },
-          Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "host",
-            "props": Object {
-              "children": <Connect(Scroller)>
-                <Connect(AutoInitialisedForm)
-                  autoFocus={false}
-                  className="alter-form__form"
-                  entity="node"
-                  form="NODE_FORM_1_2"
-                  onSubmit={[Function]}
-                  title="alpha"
-                  type="person"
-                />
-              </Connect(Scroller)>,
-              "className": "alter-form__form-container",
-            },
-            "ref": null,
-            "rendered": Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "class",
-              "props": Object {
-                "children": <Connect(AutoInitialisedForm)
-                  autoFocus={false}
-                  className="alter-form__form"
-                  entity="node"
-                  form="NODE_FORM_1_2"
-                  onSubmit={[Function]}
-                  title="alpha"
-                  type="person"
-                />,
-              },
-              "ref": null,
-              "rendered": Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "class",
-                "props": Object {
-                  "autoFocus": false,
-                  "className": "alter-form__form",
-                  "entity": "node",
-                  "form": "NODE_FORM_1_2",
-                  "initialValues": undefined,
-                  "onSubmit": [Function],
-                  "subject": undefined,
-                  "title": "alpha",
-                  "type": "person",
-                },
-                "ref": null,
-                "rendered": null,
-                "type": [Function],
-              },
-              "type": [Function],
-            },
-            "type": "div",
-          },
-        ],
-        "type": "div",
-      },
-      "type": "div",
+      "rendered": null,
+      "type": [Function],
     },
   ],
   Symbol(enzyme.__options__): Object {
@@ -323,6 +112,5 @@ ShallowWrapper {
     Symbol(enzyme.__providerValues__): undefined,
   },
   Symbol(enzyme.__providerValues__): Map {},
-  Symbol(enzyme.__childContext__): null,
 }
 `;

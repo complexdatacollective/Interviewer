@@ -13,6 +13,7 @@ const requiredProps = {
   formEnabled: jest.fn(),
   submitForm: jest.fn(),
   updateEgo: jest.fn(),
+  registerBeforeNext: jest.fn(),
 };
 
 describe('EgoForm', () => {
