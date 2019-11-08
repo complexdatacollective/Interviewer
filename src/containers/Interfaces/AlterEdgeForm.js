@@ -2,13 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { makeNetworkEdgesForType } from '../../selectors/interface';
-import SlideFormEdge from '../AlterForms/SlideFormEdge';
-import SlideForm from '../AlterForms/SlideForm';
+import SlideFormEdge from '../SlidesForm/SlideFormEdge';
+import SlidesForm from '../SlidesForm/SlidesForm';
 
 const AlterEdgeForm = props => (
-  <SlideForm
+  <SlidesForm
     itemName="edge"
-    FormComponent={SlideFormEdge}
+    slideForm={SlideFormEdge}
     {...props}
   />
 );

@@ -2,13 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { makeNetworkNodesForType } from '../../selectors/interface';
-import SlideFormNode from '../AlterForms/SlideFormNode';
-import SlideForm from '../AlterForms/SlideForm';
+import SlideFormNode from '../SlidesForm/SlideFormNode';
+import SlidesForm from '../SlidesForm/SlidesForm';
 
 const AlterForm = props => (
-  <SlideForm
+  <SlidesForm
     itemName="alter"
-    FormComponent={SlideFormNode}
+    slideForm={SlideFormNode}
     {...props}
   />
 );

@@ -30,7 +30,7 @@ const confirmDialog = {
   confirmLabel: 'Leave alter',
 };
 
-class SlideForm extends Component {
+class SlidesForm extends Component {
   constructor(props) {
     super(props);
     this.swipeRef = React.createRef();
@@ -153,7 +153,7 @@ class SlideForm extends Component {
       form,
       stage,
       items,
-      FormComponent,
+      slideForm: SlideForm,
     } = this.props;
 
     const swiperParams = {
@@ -197,7 +197,7 @@ class SlideForm extends Component {
             };
 
             return (
-              <FormComponent
+              <SlideForm
                 key={itemIndex}
                 subject={stage.subject}
                 item={item}
@@ -218,7 +218,7 @@ class SlideForm extends Component {
   }
 }
 
-SlideForm.propTypes = {
+SlidesForm.propTypes = {
   form: PropTypes.object.isRequired,
   stage: PropTypes.object.isRequired,
   items: PropTypes.array,
@@ -227,10 +227,10 @@ SlideForm.propTypes = {
   updateItem: PropTypes.func.isRequired,
   className: PropTypes.string,
   itemName: PropTypes.string,
-  FormComponent: PropTypes.elementType.isRequired,
+  slideForm: PropTypes.elementType.isRequired,
 };
 
-SlideForm.defaultProps = {
+SlidesForm.defaultProps = {
   items: [],
   className: '',
   itemName: '',
@@ -253,6 +253,6 @@ const mapDispatchToProps = {
 
 const withStore = connect(mapStateToProps, mapDispatchToProps);
 
-export { SlideForm };
+export { SlidesForm };
 
-export default withStore(SlideForm);
+export default withStore(SlidesForm);
