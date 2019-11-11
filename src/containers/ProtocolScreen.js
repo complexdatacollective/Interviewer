@@ -47,12 +47,10 @@ class Protocol extends Component {
   registerBeforeNext = (beforeNext, stageId) => {
     if (beforeNext === null) {
       delete this.beforeNext[stageId];
-      console.log('REGISTER D', stageId, this.beforeNext);
       return;
     }
 
     this.beforeNext[stageId] = beforeNext;
-    console.log('REGISTER A', stageId, this.beforeNext);
   }
 
   goToNext = (direction = 1) => {
