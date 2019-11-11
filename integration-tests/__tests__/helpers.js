@@ -116,8 +116,11 @@ export const debug = async (app) => {
 };
 
 export const asyncForEach = async (array, callback) => {
-  for (let index = 0; index < array.length; index += 1) {
-    // eslint-disable-next-line no-await-in-loop
-    await callback(array[index], index, array);
+  if (array.length === 0) {
+    return null;
   }
+
+  const item = array.shift();
+  await callback(item);
+  return asyncForEach(array, callback);
 };
