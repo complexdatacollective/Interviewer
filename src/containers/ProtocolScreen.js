@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { TransitionGroup } from 'react-transition-group';
+import { get } from 'lodash';
 import { Timeline } from '../components';
 import { Stage as StageTransition } from '../components/Transition';
 import { Fade } from '../ui/components/Transitions';
@@ -29,18 +30,11 @@ class Protocol extends Component {
     this.state = {
       ...initialState,
     };
-  }
-
-  componentDidUpdate(previousProps) {
-    if (previousProps.stage.id !== this.props.stage.id) {
-      this.interfaceRef = React.createRef();
-      this.forceUpdate();
-    }
+    this.beforeNext = {};
   }
 
   onComplete = () => {
     const pendingDirection = this.state.pendingDirection;
-    this.beforeNext = null;
 
     this.setState(
       { ...initialState },
@@ -50,19 +44,28 @@ class Protocol extends Component {
     );
   };
 
-  registerBeforeNext = (beforeNext) => {
-    this.beforeNext = beforeNext;
+  registerBeforeNext = (beforeNext, stageId) => {
+    if (beforeNext === null) {
+      delete this.beforeNext[stageId];
+      console.log('REGISTER D', stageId, this.beforeNext);
+      return;
+    }
+
+    this.beforeNext[stageId] = beforeNext;
+    console.log('REGISTER A', stageId, this.beforeNext);
   }
 
   goToNext = (direction = 1) => {
-    if (!this.beforeNext) {
+    const beforeNext = get(this.beforeNext, this.props.stage.id);
+
+    if (!beforeNext) {
       this.props.goToNext(direction);
       return;
     }
 
     this.setState(
       { pendingDirection: direction },
-      () => this.beforeNext(direction),
+      () => beforeNext(direction),
     );
   };
 
@@ -110,7 +113,6 @@ class Protocol extends Component {
               promptId={promptId}
               pathPrefix={pathPrefix}
               stageIndex={stageIndex}
-              ref={this.interfaceRef}
               foo="bar"
               registerBeforeNext={this.registerBeforeNext}
               onComplete={this.onComplete}
