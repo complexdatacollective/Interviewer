@@ -10,6 +10,7 @@ import { ProgressBar, Scroller } from '../../components';
 import { Form } from '../../containers';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { getNetworkEgo } from '../../selectors/network';
+import { getSessionProgress } from '../../selectors/session';
 import defaultMarkdownRenderers from '../../utils/markdownRenderers';
 import { entityAttributesProperty } from '../../ducks/modules/network';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
@@ -49,8 +50,16 @@ class EgoForm extends Component {
   }
 
   beforeNext = (direction) => {
-    if (direction < 0 && !this.props.isFormValid) {
-      this.props.openDialog(confirmDialog)
+    const {
+      isFirstStage,
+      isFormValid,
+      openDialog,
+    } = this.props;
+
+    const isBackwards = direction < 0;
+
+    if (!isFirstStage && isBackwards && !isFormValid) {
+      openDialog(confirmDialog)
         .then(this.handleConfirmNavigation);
       return;
     }
@@ -151,6 +160,7 @@ function mapStateToProps(state, props) {
   const ego = getNetworkEgo(state);
   const formName = getFormName(props.stageIndex);
   const isFormValid = isValid(formName)(state);
+  const { isFirstStage } = getSessionProgress(state);
 
   return {
     form: props.stage.form,
@@ -158,6 +168,7 @@ function mapStateToProps(state, props) {
     ego,
     isFormValid,
     formName,
+    isFirstStage,
   };
 }
 

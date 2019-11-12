@@ -27,10 +27,10 @@ const goToStage = index =>
   };
 
 /**
- * Go to the next (or last) stage, will skip past stages as specified by skipLogic.
+ * Get the next (or last) stage, will skip past stages as specified by skipLogic.
  * @param {number} direction either +1/-1
  */
-const goToNextStage = (direction = 1) =>
+const getNextStage = (direction = 1) =>
   (dispatch, getState) => {
     const state = getState();
 
@@ -43,19 +43,29 @@ const goToNextStage = (direction = 1) =>
 
     // starting point
     let nextIndex = currentStage + step;
-    let cancel = false;
 
     // iterate past any skipped steps
     while (isStageSkipped(nextIndex)(state)) {
       nextIndex += step;
+
+      // If we're at either end of the inteview, stop and stay where we are
       if (nextIndex > stageCount || nextIndex < 0) {
-        // If we're at either end of the inteview, stop
-        cancel = true;
-        break;
+        return null;
       }
     }
 
-    if (cancel) { return null; }
+    return nextIndex;
+  };
+
+/**
+ * Go to the next (or last) stage, will skip past stages as specified by skipLogic.
+ * @param {number} direction either +1/-1
+ */
+const goToNextStage = (direction = 1) =>
+  (dispatch) => {
+    const nextIndex = dispatch(getNextStage(direction));
+
+    if (nextIndex === null) { return null; }
 
     return dispatch(goToStage(nextIndex));
   };
