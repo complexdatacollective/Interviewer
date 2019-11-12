@@ -6,7 +6,6 @@ import {
   startApps,
   stopApps,
   forceClick,
-  pause,
   matchImageSnapshot,
 } from './helpers';
 import {
@@ -43,9 +42,11 @@ describe('Name generator', () => {
 
   it('Can create a node', async () => {
     await forceClick(app, '[data-clickable="open-add-node"]');
-    await pause(app, 'medium');
+
+    await app.client.click('h1=Add A Person');
 
     await matchImageSnapshot(app);
+
     // name
     await app.client.setValue('input[name="6be95f85-c2d9-4daf-9de1-3939418af888"]', 'foo');
     // nickname
@@ -57,13 +58,9 @@ describe('Name generator', () => {
       .$('[name="e343a91f-628d-4175-870c-957beffa0154"]')
       .click('label*=Four');
 
-    await pause(app, 'medium');
-
     await matchImageSnapshot(app);
 
     await app.client.click('button=Finished');
-
-    await pause(app, 'medium');
 
     await matchImageSnapshot(app);
 

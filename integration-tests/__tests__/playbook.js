@@ -4,7 +4,7 @@ import path from 'path';
 import fakeDialog from 'spectron-fake-dialog';
 import { timing, paths, mockProtocol } from '../config';
 import getData from '../getData';
-import { forceClick } from './helpers';
+import { forceClick, matchImageSnapshot } from './helpers';
 
 /**
  * common tasks for using protocols
@@ -45,7 +45,7 @@ export const loadProtocolFromNetwork = async (app, url = mockProtocol) => {
   await app.client.pause(timing.medium);
   await app.client.setValue('input[name=protocol_url]', url);
   await app.client.click('button=Import');
-  await app.client.waitForVisible('h4=Protocol imported successfully!', 600000); // 10mins
+  await app.client.waitForVisible('h4=Protocol imported successfully!', 120000); // 2 minutes
   await app.client.click('button=Continue');
   await app.client.waitForExist('.modal', timing.long, true); // wait for not exist
 };

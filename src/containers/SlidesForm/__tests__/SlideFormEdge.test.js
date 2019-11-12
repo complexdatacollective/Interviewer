@@ -6,7 +6,7 @@ import { SlideFormEdge } from '../SlideFormEdge';
 import { entityAttributesProperty } from '../../../ducks/modules/network';
 
 const mockProps = {
-  edge: {
+  item: {
     to: 2,
     from: 1,
   },
@@ -24,6 +24,12 @@ const mockProps = {
   stageIndex: 1,
 };
 
+const mockItem = {
+  [entityAttributesProperty]: {
+    foo: 'bar',
+  },
+};
+
 describe('<SlideFormEdge />', () => {
   it('should render', () => {
     const component = shallow(<SlideFormEdge {...mockProps} />);
@@ -31,15 +37,9 @@ describe('<SlideFormEdge />', () => {
   });
 
   it('should render with prepopulated fields if provided', () => {
-    const withInitialValues = {
-      [entityAttributesProperty]: {
-        foo: 'bar',
-      },
-    };
-    const subject = shallow(<SlideFormEdge {...mockProps} edge={withInitialValues} />);
-    expect(subject.find('.alter-form__form')).toHaveLength(1);
+    const subject = shallow(<SlideFormEdge {...mockProps} item={mockItem} />);
     expect(
-      (subject.find('.alter-form__form')).prop('initialValues'),
+      subject.prop('initialValues'),
     ).toEqual({ foo: 'bar' });
   });
 });

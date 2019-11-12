@@ -1,18 +1,24 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { TransitionGroup } from 'react-transition-group';
-import { push } from 'react-router-redux';
-import { isStageSkipped } from '../selectors/skip-logic';
-import withPrompt from '../behaviours/withPrompt';
+import { get } from 'lodash';
 import { Timeline } from '../components';
 import { Stage as StageTransition } from '../components/Transition';
 import { Fade } from '../ui/components/Transitions';
 import Stage from './Stage';
-import { getPromptIndexForCurrentSession } from '../selectors/session';
+import { getSessionProgress } from '../selectors/session';
 import { getProtocolStages } from '../selectors/protocol';
 import { getCSSVariableAsNumber } from '../ui/utils/CSSVariables';
+import { actionCreators as navigateActions } from '../ducks/modules/navigate';
+
+const initialState = {
+  pendingDirection: 1,
+};
+
+const childFactoryCreator = stageBackward =>
+  child =>
+    React.cloneElement(child, { stageBackward });
 
 /**
   * Check protocol is loaded, and render the stage
@@ -21,88 +27,51 @@ class Protocol extends Component {
   constructor(props) {
     super(props);
     this.interfaceRef = React.createRef();
+    this.state = {
+      ...initialState,
+    };
+    this.beforeNext = {};
   }
 
-  componentDidUpdate(previousProps) {
-    if (previousProps.stage.id !== this.props.stage.id) {
-      this.interfaceRef = React.createRef();
-      this.forceUpdate();
+  onComplete = () => {
+    const pendingDirection = this.state.pendingDirection;
+
+    this.setState(
+      { ...initialState },
+      () => {
+        this.props.goToNext(pendingDirection);
+      },
+    );
+  };
+
+  registerBeforeNext = (beforeNext, stageId) => {
+    if (beforeNext === null) {
+      delete this.beforeNext[stageId];
+      return;
     }
+
+    this.beforeNext[stageId] = beforeNext;
   }
 
-  // change the stage to the next
-  onClickNext = () => {
-    const interfaceRefInstance = this.getInterfaceRefInstance();
-    if (interfaceRefInstance && !interfaceRefInstance.isStageEnding()) {
-      interfaceRefInstance.clickNext();
-    } else if (!this.props.stage.prompts || this.props.isLastPrompt()) {
-      if (interfaceRefInstance) {
-        interfaceRefInstance.clickNext();
-      }
+  goToNext = (direction = 1) => {
+    const beforeNext = get(this.beforeNext, this.props.stage.id);
 
-      let skipToIndex = this.props.nextIndex;
-
-      while (this.props.isSkipped(skipToIndex)) {
-        skipToIndex += 1;
-      }
-      if (skipToIndex > this.props.maxLength - 1) {
-        skipToIndex = this.props.stageIndex;
-      }
-
-      this.props.changeStage(`${this.props.pathPrefix}/${skipToIndex}`);
-    } else {
-      this.props.promptForward();
+    if (!beforeNext) {
+      this.props.goToNext(direction);
+      return;
     }
-  }
 
-  // change the stage to the previous
-  onClickBack = () => {
-    const interfaceRefInstance = this.getInterfaceRefInstance();
-    if (interfaceRefInstance && !interfaceRefInstance.isStageBeginning()) {
-      interfaceRefInstance.clickPrevious();
-    } else if (!this.props.stage.prompts || this.props.isFirstPrompt()) {
-      if (interfaceRefInstance) {
-        interfaceRefInstance.clickPrevious();
-      }
+    this.setState(
+      { pendingDirection: direction },
+      () => beforeNext(direction),
+    );
+  };
 
-      let skipToIndex = this.props.previousIndex;
+  handleClickNext = () =>
+    this.goToNext();
 
-      while (this.props.isSkipped(skipToIndex)) {
-        skipToIndex -= 1;
-      }
-      if (skipToIndex < 0) {
-        skipToIndex = this.props.stageIndex;
-      }
-
-      this.props.changeStage(`${this.props.pathPrefix}/${skipToIndex}`);
-    } else {
-      this.props.promptBackward();
-    }
-  }
-
-  /*
-   * Typically an interface would iterate through "prompts" via clicking back and forward.
-   * If an interface needs a different iterative process, (e.g. iterating through a list
-   * of nodes instead of prompts), the interface can be accessed here as a ref.
-   *
-   * Expected callbacks:
-   * isStageEnding - boolean indicating the end of the stage
-   * isStageBeginning - boolean indicating the beginning of the stage
-   * clickNext - callback for the stage's "next" behavior; also called on stage end transition
-   * clickPrevious - callback for the stage's "back" behavior
-   */
-  getInterfaceRefInstance = () => {
-    try {
-      return (this.interfaceRef && this.interfaceRef.current &&
-        this.interfaceRef.current.getWrappedInstance());
-    } catch (e) {
-      return false;
-    }
-  }
-
-  childFactoryCreator = stageBackward => (
-    child => (React.cloneElement(child, { stageBackward }))
-  );
+  handleClickBack = () =>
+    this.goToNext(-1);
 
   render() {
     const {
@@ -127,14 +96,14 @@ class Protocol extends Component {
         <Fade in={isSessionLoaded} duration={duration}>
           <Timeline
             id="TIMELINE"
-            onClickBack={this.onClickBack}
-            onClickNext={this.onClickNext}
+            onClickBack={this.handleClickBack}
+            onClickNext={this.handleClickNext}
             percentProgress={percentProgress}
           />
         </Fade>
         <TransitionGroup
           className="protocol__content"
-          childFactory={this.childFactoryCreator(stageBackward)}
+          childFactory={childFactoryCreator(stageBackward)}
         >
           <StageTransition key={stage.id} stageBackward={stageBackward}>
             <Stage
@@ -142,7 +111,9 @@ class Protocol extends Component {
               promptId={promptId}
               pathPrefix={pathPrefix}
               stageIndex={stageIndex}
-              ref={this.interfaceRef}
+              foo="bar"
+              registerBeforeNext={this.registerBeforeNext}
+              onComplete={this.onComplete}
             />
           </StageTransition>
         </TransitionGroup>
@@ -152,22 +123,14 @@ class Protocol extends Component {
 }
 
 Protocol.propTypes = {
-  changeStage: PropTypes.func.isRequired,
-  isFirstPrompt: PropTypes.func.isRequired,
-  isLastPrompt: PropTypes.func.isRequired,
-  isSkipped: PropTypes.func.isRequired,
   isSessionLoaded: PropTypes.bool.isRequired,
-  maxLength: PropTypes.number,
-  nextIndex: PropTypes.number.isRequired,
   pathPrefix: PropTypes.string,
   percentProgress: PropTypes.number,
-  previousIndex: PropTypes.number.isRequired,
-  promptBackward: PropTypes.func.isRequired,
-  promptForward: PropTypes.func.isRequired,
   promptId: PropTypes.number,
   stage: PropTypes.object.isRequired,
   stageBackward: PropTypes.bool,
   stageIndex: PropTypes.number,
+  goToNext: PropTypes.func.isRequired,
 };
 
 Protocol.defaultProps = {
@@ -176,42 +139,28 @@ Protocol.defaultProps = {
   promptId: 0,
   stageBackward: false,
   stageIndex: 0,
-  maxLength: 1,
 };
 
 function mapStateToProps(state, ownProps) {
-  const maxLength = getProtocolStages(state).length;
   const sessionId = state.activeSessionId;
   const stage = getProtocolStages(state)[ownProps.stageIndex] || {};
   const stageIndex = Math.trunc(ownProps.stageIndex) || 0;
-  const promptId = getPromptIndexForCurrentSession(state);
-  const stageProgress = stageIndex / (maxLength - 1);
-  const promptProgress = stage.prompts ? (promptId / stage.prompts.length) : 0;
-
-  const isLastStage = () => stageIndex + 1 === maxLength;
-  const isFirstStage = () => stageIndex === 0;
+  const { percentProgress, currentPrompt } = getSessionProgress(state);
 
   return {
     isSessionLoaded: !!state.activeSessionId,
     pathPrefix: `/session/${sessionId}`,
-    isSkipped: index => isStageSkipped(index)(state),
-    percentProgress: (stageProgress + (promptProgress / (maxLength - 1))) * 100,
-    nextIndex: isLastStage() ? stageIndex : stageIndex + 1,
-    previousIndex: isFirstStage() ? 0 : stageIndex - 1,
-    promptId,
+    percentProgress,
+    promptId: currentPrompt,
     stage,
     stageIndex,
-    maxLength,
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    changeStage: path => dispatch(push(path)),
-  };
-}
+const mapDispatchToProps = {
+  goToNext: navigateActions.goToNext,
+};
 
-export default compose(
-  withPrompt,
-  connect(mapStateToProps, mapDispatchToProps),
-)(Protocol);
+const withStore = connect(mapStateToProps, mapDispatchToProps);
+
+export default withStore(Protocol);

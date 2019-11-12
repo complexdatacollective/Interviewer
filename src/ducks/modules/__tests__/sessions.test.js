@@ -2,8 +2,8 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import uuidv4 from '../../../utils/uuid';
-import reducer, { actionCreators, actionTypes } from '../sessions';
-import networkReducer, { actionTypes as networkActionTypes, actionCreators as networkActions } from '../network';
+import reducer, { getReducer, actionCreators, actionTypes } from '../sessions';
+import { actionTypes as networkActionTypes, actionCreators as networkActions } from '../network';
 import { actionTypes as installedProtocolsActionTypes } from '../installedProtocols';
 
 jest.mock('../network');
@@ -42,7 +42,7 @@ uuidv4.mockImplementation(() => mockSessionId);
 describe('sessions', () => {
   describe('reducer', () => {
     beforeEach(() => {
-      networkReducer.mockClear();
+      // networkReducer.mockClear();
     });
 
     it('should handle ADD_SESSION', () => {
@@ -61,6 +61,7 @@ describe('sessions', () => {
           network: {
             ego: {
               _uid: 'session-1',
+              attributes: {},
             },
             nodes: [],
             edges: [],
@@ -129,6 +130,9 @@ describe('sessions', () => {
     });
 
     it('network actions defer to network reducer', () => {
+      const mockNetworkReducer = jest.fn();
+      const sessionReducer = getReducer(mockNetworkReducer);
+
       const networkActionList = [
         networkActionTypes.ADD_NODE,
         networkActionTypes.BATCH_ADD_NODES,
@@ -144,10 +148,14 @@ describe('sessions', () => {
       ];
 
       networkActionList.forEach((actionType) => {
-        reducer({ a: { network: {} } }, { type: actionType, sessionId: 'a' });
+        const state = {
+          a: { network: { } },
+        };
+        const action = { type: actionType, sessionId: 'a' };
+        sessionReducer(state, action);
       });
 
-      expect(networkReducer.mock.calls.length).toBe(11);
+      expect(mockNetworkReducer.mock.calls.length).toBe(11);
     });
   });
 

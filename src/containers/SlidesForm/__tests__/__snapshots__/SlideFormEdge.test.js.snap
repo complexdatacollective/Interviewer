@@ -1,0 +1,136 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SlideFormEdge /> should render 1`] = `
+ShallowWrapper {
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <withProps(SlideFormEdge)
+    edgeColor="blue"
+    edgeIndex={1}
+    form={
+      Object {
+        "entity": "edge",
+        "title": "alpha",
+        "type": "friend",
+      }
+    }
+    item={
+      Object {
+        "from": 1,
+        "to": 2,
+      }
+    }
+    nodes={
+      Object {
+        "1": Object {
+          "name": "One",
+        },
+        "2": Object {
+          "name": "Two",
+        },
+      }
+    }
+    stageIndex={1}
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "checkPropTypes": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateError": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "class",
+    "props": Object {
+      "edgeColor": "blue",
+      "edgeIndex": 1,
+      "form": Object {
+        "entity": "edge",
+        "title": "alpha",
+        "type": "friend",
+      },
+      "id": undefined,
+      "initialValues": undefined,
+      "item": Object {
+        "from": 1,
+        "to": 2,
+      },
+      "nodes": Object {
+        "1": Object {
+          "name": "One",
+        },
+        "2": Object {
+          "name": "Two",
+        },
+      },
+      "stageIndex": 1,
+    },
+    "ref": null,
+    "rendered": null,
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "class",
+      "props": Object {
+        "edgeColor": "blue",
+        "edgeIndex": 1,
+        "form": Object {
+          "entity": "edge",
+          "title": "alpha",
+          "type": "friend",
+        },
+        "id": undefined,
+        "initialValues": undefined,
+        "item": Object {
+          "from": 1,
+          "to": 2,
+        },
+        "nodes": Object {
+          "1": Object {
+            "name": "One",
+          },
+          "2": Object {
+            "name": "Two",
+          },
+        },
+        "stageIndex": 1,
+      },
+      "ref": null,
+      "rendered": null,
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+        "legacyContextMode": "parent",
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getChildContext": Object {
+            "calledByRenderer": false,
+          },
+          "getDerivedStateFromError": true,
+          "getDerivedStateFromProps": Object {
+            "hasShouldComponentUpdateBug": false,
+          },
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
+      },
+    },
+    Symbol(enzyme.__providerValues__): undefined,
+  },
+  Symbol(enzyme.__providerValues__): Map {},
+}
+`;

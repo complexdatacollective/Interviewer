@@ -8,7 +8,8 @@ const getDataFileName = (url) => {
   const shasum = crypto.createHash('sha1');
   shasum.update(url);
   const cacheName = shasum.digest('hex');
-  const extName = path.extname(url);
+  const parsedUrl = new URL(url);
+  const extName = path.extname(parsedUrl.pathname);
   const fileName = `${cacheName}${extName}`;
   const fullPath = path.join(paths.dataDir, fileName);
   return [fullPath, fileName];

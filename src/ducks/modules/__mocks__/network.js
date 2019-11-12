@@ -1,20 +1,10 @@
 /* eslint-env jest */
 
-import uuidv4 from '../../../utils/uuid';
-
+const reducer = jest.requireActual('../network').default;
 const {
   actionTypes,
   actionCreators: networkActionCreators,
-  entityPrimaryKeyProperty,
 } = jest.requireActual('../network');
-
-const reducer = jest.fn(() => ({
-  nodes: [],
-  edges: [],
-  ego: {
-    [entityPrimaryKeyProperty]: uuidv4(),
-  },
-}));
 
 const actionCreators = {
   ...networkActionCreators,

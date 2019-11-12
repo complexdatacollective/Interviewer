@@ -13,24 +13,25 @@ const mockProps = {
   },
   nodeIndex: 1,
   stageIndex: 1,
+  item: {},
+};
+
+const mockItem = {
+  [entityAttributesProperty]: {
+    foo: 'bar',
+  },
 };
 
 describe('<SlideFormNode />', () => {
   it('should render', () => {
-    const component = shallow(<SlideForm {...mockProps} node={{ name: 'Bob' }} />);
+    const component = shallow(<SlideForm {...mockProps} item={mockItem} />);
     expect(component).toMatchSnapshot();
   });
 
   it('should render with prepopulated fields if provided', () => {
-    const withInitialValues = {
-      [entityAttributesProperty]: {
-        foo: 'bar',
-      },
-    };
-    const subject = shallow(<SlideForm {...mockProps} node={withInitialValues} />);
-    expect(subject.find('.alter-form__form')).toHaveLength(1);
+    const subject = shallow(<SlideForm {...mockProps} item={mockItem} />);
     expect(
-      (subject.find('.alter-form__form')).prop('initialValues'),
+      subject.prop('initialValues'),
     ).toEqual({ foo: 'bar' });
   });
 });
