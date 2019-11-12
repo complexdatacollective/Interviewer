@@ -1,4 +1,4 @@
-import { isNil, keys, pickBy } from 'lodash';
+import { isNil, isString, keys, pickBy } from 'lodash';
 
 const coerceArray = (value) => {
   if (value instanceof Object) {
@@ -11,8 +11,15 @@ const coerceArray = (value) => {
 };
 
 export const required = () =>
-  value =>
-    (isNil(value) ? 'You must answer this question before continuing.' : undefined);
+  (value) => {
+    const isEmptyString = isString(value) && value.length === 0;
+
+    if (isNil(value) || isEmptyString) {
+      return 'You must answer this question before continuing.';
+    }
+
+    return undefined;
+  };
 export const maxLength = max =>
   value =>
     (value && value.length > max ? `Your answer must be ${max} characters or less` : undefined);
