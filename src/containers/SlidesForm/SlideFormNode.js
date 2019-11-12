@@ -1,39 +1,38 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-
+import { withProps } from 'recompose';
 import { Scroller } from '../../components';
-import { entityAttributesProperty } from '../../ducks/modules/network';
+import { entityAttributesProperty, entityPrimaryKeyProperty } from '../../ducks/modules/network';
 import Node from '../Node';
-import { Form } from '..';
+import Form from '../Form';
 
-class SlideForm extends PureComponent {
+class SlideFormNode extends PureComponent {
   handleSubmit = (formData) => {
-    const { node, onUpdate } = this.props;
-    onUpdate(node, formData);
+    const { id, item, onUpdate } = this.props;
+    // TODO: is item (node) neccessary?
+    onUpdate(id, item, formData);
   }
 
   render() {
     const {
       form,
-      node,
-      nodeIndex,
+      item,
+      initialValues,
       subject,
-      stageIndex,
     } = this.props;
 
     return (
       <div className="swiper-slide">
         <div className="slide-content">
-          <Node {...node} />
+          <Node {...item} />
           <div className="alter-form__form-container">
             <Scroller>
               <Form
                 {...form}
                 className="alter-form__form"
-                initialValues={node[entityAttributesProperty]}
+                initialValues={initialValues}
                 autoFocus={false}
                 subject={subject}
-                form={`NODE_FORM_${stageIndex}_${nodeIndex + 1}`}
                 onSubmit={this.handleSubmit}
               />
             </Scroller>
@@ -44,20 +43,25 @@ class SlideForm extends PureComponent {
   }
 }
 
-SlideForm.propTypes = {
+SlideFormNode.propTypes = {
   form: PropTypes.object,
   subject: PropTypes.object.isRequired,
-  node: PropTypes.object,
+  item: PropTypes.object.isRequired,
   onUpdate: PropTypes.func,
-  nodeIndex: PropTypes.number,
-  stageIndex: PropTypes.number.isRequired,
 };
 
-SlideForm.defaultProps = {
+SlideFormNode.defaultProps = {
   form: {},
-  nodeIndex: 0,
-  node: {},
   onUpdate: () => {},
 };
 
-export default SlideForm;
+const withNodeProps = withProps(({ item }) => ({
+  id: item[entityPrimaryKeyProperty],
+  initialValues: item[entityAttributesProperty],
+}));
+
+const EnhancedSlideFormNode = withNodeProps(SlideFormNode);
+
+export { EnhancedSlideFormNode as SlideFormNode };
+
+export default withNodeProps(SlideFormNode);

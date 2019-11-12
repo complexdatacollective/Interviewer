@@ -29,13 +29,14 @@ const UPDATE_EGO = 'UPDATE_EGO';
 const ADD_SESSION = 'ADD_SESSION';
 
 // Initial network model structure
-const initialState = {
+const getInitialState = () => ({
   ego: {
     [entityPrimaryKeyProperty]: uuidv4(),
+    [entityAttributesProperty]: {},
   },
   nodes: [],
   edges: [],
-};
+});
 
 // action creators
 
@@ -126,32 +127,31 @@ const removeEdge = (state, edgeId) => ({
   ),
 });
 
-export default function reducer(state = initialState, action = {}) {
+export default function reducer(state = getInitialState(), action = {}) {
   switch (action.type) {
     case ADD_NODE: {
       return {
         ...state,
-        nodes: (
-          () => state.nodes.concat(
-            formatNodeAttributes(
-              action.modelData,
-              action.attributeData,
-            ),
-          )
-        )(),
+        nodes: [
+          ...state.nodes,
+          formatNodeAttributes(
+            action.modelData,
+            action.attributeData,
+          ),
+        ],
       };
     }
     case UPDATE_EGO: {
       return {
         ...state,
-        ego: (() => ({
+        ego: {
           ...state.ego,
           ...action.modelData,
           [entityAttributesProperty]: {
             ...state.ego[entityAttributesProperty],
             ...action.attributeData,
           },
-        }))(),
+        },
       };
     }
     case BATCH_ADD_NODES: {
@@ -289,10 +289,7 @@ export default function reducer(state = initialState, action = {}) {
       return removeEdge(state, action.edgeId);
     case ADD_SESSION:
       return {
-        ...initialState,
-        ego: {
-          [entityPrimaryKeyProperty]: uuidv4(),
-        },
+        ...getInitialState(),
       };
     default:
       return state;

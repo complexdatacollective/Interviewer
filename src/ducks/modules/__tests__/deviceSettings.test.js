@@ -3,7 +3,7 @@ import reducer, { actionCreators, actionTypes } from '../deviceSettings';
 
 const initialState = {
   description: 'Unknown device',
-  useFullScreenForms: true,
+  useFullScreenForms: false,
   useDynamicScaling: undefined,
   interfaceScale: 100,
   showScrollbars: false,

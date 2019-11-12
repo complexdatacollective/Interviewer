@@ -18,16 +18,6 @@ const requiredProps = {
 
 describe('AlterEdgeForm', () => {
   it('renders AlterEdgeForm interface', () => {
-    const component = shallow(<AlterEdgeForm {...requiredProps} />);
-    expect(component.find('.swiper-no-swiping')).toHaveLength(1);
-    expect(component.find('ReactIdSwiper')).toHaveLength(1);
-    expect(component.find('.progress-container')).toHaveLength(1);
-    expect(component.find('.progress-container--show')).toHaveLength(0);
-  });
-
-  it('renders progress', () => {
-    const component = shallow(<AlterEdgeForm {...requiredProps} />);
-    component.setState({ activeIndex: 1 });
-    expect(component.find('.progress-container--show')).toHaveLength(1);
+    shallow((<AlterEdgeForm {...requiredProps} />));
   });
 });
