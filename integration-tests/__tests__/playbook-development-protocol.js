@@ -5,6 +5,7 @@ import {
   forceClick,
   pause,
   asyncForEach,
+  matchImageSnapshot,
 } from './helpers';
 import {
   goToStage,
@@ -45,7 +46,7 @@ export const createNode = async (app, {
     .click(`label*=${toggleGroup}`);
   await app.client.click('button=Finished');
   // otherwise the toggle groups don't reset?
-  await pause(app, 250);
+  await pause(app, 500);
 };
 
 export const createNodes = async (app, nodes = []) => {

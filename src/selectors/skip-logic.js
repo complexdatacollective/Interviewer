@@ -1,6 +1,5 @@
 import { createSelector } from 'reselect';
-
-import filter from '../utils/networkQuery/filter';
+import getQuery from '../utils/networkQuery/query';
 import { getProtocolStages } from './protocol';
 import { getNetwork } from './network';
 import { SkipLogicAction } from '../protocol-consts';
@@ -18,44 +17,29 @@ const getSkipLogic = index => createSelector(
   stages => stages && stages[index] && stages[index].skipLogic,
 );
 
-const getFilterOptions = index => createSelector(
-  getSkipLogic(index),
-  logic => logic && logic.filter,
-);
-
-const getJoinType = index => createSelector(
-  getFilterOptions(index),
-  filterOptions => filterOptions && filterOptions.join,
-);
-
-const getRules = index => createSelector(
-  getFilterOptions(index),
-  filterOptions => (filterOptions && filterOptions.rules) || [],
-);
-
-const getFilterFunction = index => createSelector(
-  getJoinType(index),
-  getRules(index),
-  (join, rules) => filter({ rules, join }),
-);
-
-const filterNetwork = index => createSelector(
-  getFilterFunction(index),
-  getNetwork,
-  (filterFunction, network) => filterFunction(network),
-);
-
+/**
+ * @returns {boolean} true for skip (when query matches), false for show (when query matches)
+ */
 const isSkipAction = index => createSelector(
   getSkipLogic(index),
   logic => logic && logic.action === SkipLogicAction.SKIP,
 );
 
+const formatQueryParameters = params =>
+  Object.assign(
+    {
+      rules: [],
+      join: null,
+    },
+    params,
+  );
+
 export const isStageSkipped = index => createSelector(
   getSkipLogic(index),
   isSkipAction(index),
-  filterNetwork(index),
-  (logic, action, results) => {
-    if (!logic) return false;
+  getNetwork,
+  (logic, skipOnMatch, network) => {
+    if (!logic) { return false; }
 
     // Handle skipLogic with no rules defined differently depending on action.
     // skipLogic.action === SHOW <- always show the stage
@@ -65,9 +49,13 @@ export const isStageSkipped = index => createSelector(
     // Should be changed with https://github.com/codaco/Architect/issues/517
     if (!logic.filter.rules || !logic.filter.rules.length === 0) {
       console.warn('Encountered skip logic with no rules defined at index', index); // eslint-disable-line no-console
-      return !!action;
+      return !!skipOnMatch;
     }
-    const outerQuery = results.nodes.length > 0;
-    return !!logic && ((action && outerQuery) || (!action && !outerQuery));
+
+    const queryParameters = formatQueryParameters(logic.filter);
+    const result = getQuery(queryParameters)(network);
+    const isSkipped = ((skipOnMatch && result) || (!skipOnMatch && !result));
+
+    return isSkipped;
   },
 );
