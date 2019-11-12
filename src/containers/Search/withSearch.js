@@ -14,7 +14,7 @@ const DefaultFuseOpts = {
   threshold: 0.5,
   minMatchCharLength: 1,
   shouldSort: true,
-  tokenize: true, // Ensure that search happens across all fields
+  tokenize: true, // Break up query so it can match across different fields
 };
 
 /**
