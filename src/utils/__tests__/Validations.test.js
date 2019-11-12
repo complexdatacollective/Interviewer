@@ -4,8 +4,8 @@ import {
   required,
   minLength,
   maxLength,
-  // minValue,
-  // maxValue,
+  minValue,
+  maxValue,
   // minSelected,
   // maxSelected,
 } from '../Validations';
@@ -43,7 +43,7 @@ describe('Validations', () => {
       expect(subject(undefined)).toBe(undefined);
     });
 
-    it('fails for a short string', () => {
+    it('fails for a smaller string', () => {
       expect(subject('hi')).toBe(errorMessage);
     });
 
@@ -51,7 +51,7 @@ describe('Validations', () => {
       expect(subject('hello')).toBe(undefined);
     });
 
-    it('passes for a long string', () => {
+    it('passes for a larger string', () => {
       expect(subject('hello world')).toBe(undefined);
     });
   });
@@ -65,7 +65,7 @@ describe('Validations', () => {
       expect(subject(undefined)).toBe(undefined);
     });
 
-    it('passes for a short string', () => {
+    it('passes for a smaller string', () => {
       expect(subject('hi')).toBe(undefined);
     });
 
@@ -73,8 +73,52 @@ describe('Validations', () => {
       expect(subject('hello')).toBe(undefined);
     });
 
-    it('fails for a long string', () => {
+    it('fails for a larger string', () => {
       expect(subject('hello world')).toBe(errorMessage);
+    });
+  });
+
+  describe('minValue()', () => {
+    const errorMessage = 'Your answer must be at least 5';
+    const subject = minValue(5);
+
+    it('passes for null or undefined', () => {
+      expect(subject(null)).toBe(undefined);
+      expect(subject(undefined)).toBe(undefined);
+    });
+
+    it('fails for a smaller value', () => {
+      expect(subject(3)).toBe(errorMessage);
+    });
+
+    it('passes for an exactly matching value', () => {
+      expect(subject(5)).toBe(undefined);
+    });
+
+    it('passes for a larger value', () => {
+      expect(subject(10)).toBe(undefined);
+    });
+  });
+
+  describe('maxValue()', () => {
+    const errorMessage = 'Your answer must be less than 5';
+    const subject = maxValue(5);
+
+    it('passes for null or undefined', () => {
+      expect(subject(null)).toBe(undefined);
+      expect(subject(undefined)).toBe(undefined);
+    });
+
+    it('passes for a smaller value', () => {
+      expect(subject(3)).toBe(undefined);
+    });
+
+    it('passes for an exactly matching value', () => {
+      expect(subject(5)).toBe(undefined);
+    });
+
+    it('fails for a larger value', () => {
+      expect(subject(10)).toBe(errorMessage);
     });
   });
 });
