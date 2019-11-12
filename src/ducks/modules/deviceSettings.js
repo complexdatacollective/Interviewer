@@ -11,7 +11,7 @@ const DEVICE_READY = 'DEVICE_READY';
 const initialState = {
   description: 'Unknown device',
   useDynamicScaling: undefined,
-  // useFullScrenForms should be false for most larger devices, and true for most tablets
+  // useFullScreenForms defaults to false, leave using full screen forms up to user
   useFullScreenForms: false,
   interfaceScale: 100,
   showScrollbars: false,
