@@ -15,7 +15,7 @@ export const required = () =>
     const isEmptyString = isString(value) && value.length === 0;
 
     if (isNil(value) || isEmptyString) {
-      return 'You must answer this question before continuing.';
+      return 'You must answer this question before continuing';
     }
 
     return undefined;
