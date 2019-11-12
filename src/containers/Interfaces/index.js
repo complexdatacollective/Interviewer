@@ -13,6 +13,7 @@ import CategoricalBin from './CategoricalBin';
 import Narrative from './Narrative';
 import AlterForm from './AlterForm';
 import EgoForm from './EgoForm';
+import DyadCensus from './DyadCensus';
 import AlterEdgeForm from './AlterEdgeForm';
 import FinishSession from './FinishSession';
 
@@ -31,6 +32,7 @@ const interfaces = {
   [StageType.AlterForm]: AlterForm,
   [StageType.EgoForm]: EgoForm,
   [StageType.AlterEdgeForm]: AlterEdgeForm,
+  [StageType.DyadCensus]: DyadCensus,
   FinishSession,
 };
 
@@ -59,6 +61,7 @@ export {
   AlterForm,
   EgoForm,
   AlterEdgeForm,
+  DyadCensus,
 };
 
 export default getInterface;

@@ -91,6 +91,7 @@ const StageType = Object.freeze({
   AlterForm: 'AlterForm',
   EgoForm: 'EgoForm',
   AlterEdgeForm: 'AlterEdgeForm',
+  DyadCensus: 'DyadCensus',
 });
 
 // Docs: https://github.com/codaco/Network-Canvas/wiki/Variable-Types
