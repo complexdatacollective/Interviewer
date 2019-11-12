@@ -48,6 +48,7 @@ describe('Start screen', () => {
 
   it('can load a protocol from url', async () => {
     await loadProtocolFromNetwork(app);
+    await matchImageSnapshot(app);
   });
 
   it('can reset state', async () => {

@@ -3,7 +3,7 @@ import uuidv4 from '../../utils/uuid';
 import ApiClient from '../../utils/ApiClient';
 import { actionCreators as SessionWorkerActions } from './sessionWorkers';
 import { actionTypes as installedProtocolsActionTypes } from './installedProtocols';
-import network, { actionTypes as networkActionTypes, actionCreators as networkActions, entityPrimaryKeyProperty } from './network';
+import networkReducer, { actionTypes as networkActionTypes, actionCreators as networkActions, entityPrimaryKeyProperty } from './network';
 
 const ADD_SESSION = 'ADD_SESSION';
 const LOAD_SESSION = 'LOAD_SESSION';
@@ -22,114 +22,115 @@ const withTimestamp = session => ({
   updatedAt: Date.now(),
 });
 
-export default function reducer(state = initialState, action = {}) {
-  switch (action.type) {
-    case installedProtocolsActionTypes.DELETE_PROTOCOL:
-      return reduce(state, (result, sessionData, sessionId) => {
-        if (sessionData.protocolUID !== action.protocolUID) {
-          return { ...result, [sessionId]: sessionData };
-        }
-        return result;
-      }, {});
-    case networkActionTypes.ADD_NODE:
-    case networkActionTypes.BATCH_ADD_NODES:
-    case networkActionTypes.REMOVE_NODE:
-    case networkActionTypes.REMOVE_NODE_FROM_PROMPT:
-    case networkActionTypes.UPDATE_NODE:
-    case networkActionTypes.TOGGLE_NODE_ATTRIBUTES:
-    case networkActionTypes.ADD_EDGE:
-    case networkActionTypes.UPDATE_EDGE:
-    case networkActionTypes.TOGGLE_EDGE:
-    case networkActionTypes.REMOVE_EDGE:
-    case networkActionTypes.UPDATE_EGO:
-      return {
-        ...state,
-        [action.sessionId]: withTimestamp({
-          ...state[action.sessionId],
-          network: network(state[action.sessionId].network, action),
-        }),
-      };
-    case ADD_SESSION:
-      return {
-        ...state,
-        [action.sessionId]: withTimestamp({
-          protocolUID: action.protocolUID,
-          promptIndex: 0,
-          stageIndex: 0,
-          caseId: action.caseId,
-          network: network(state.network, action),
-        }),
-      };
-    case LOAD_SESSION:
-      return state;
-    case UPDATE_PROMPT:
-      return {
-        ...state,
-        [action.sessionId]: withTimestamp({
-          ...state[action.sessionId],
-          promptIndex: action.promptIndex,
-        }),
-      };
-    case UPDATE_STAGE:
-      return {
-        ...state,
-        [action.sessionId]: withTimestamp({
-          ...state[action.sessionId],
-          stageIndex: action.stageIndex,
-        }),
-      };
-    case REMOVE_SESSION:
-      return omit(state, [action.sessionId]);
-    case EXPORT_SESSIONS_START: {
-      const newObj = {
-        ...state,
-      };
+const getReducer = network =>
+  (state = initialState, action = {}) => {
+    switch (action.type) {
+      case installedProtocolsActionTypes.DELETE_PROTOCOL:
+        return reduce(state, (result, sessionData, sessionId) => {
+          if (sessionData.protocolUID !== action.protocolUID) {
+            return { ...result, [sessionId]: sessionData };
+          }
+          return result;
+        }, {});
+      case networkActionTypes.ADD_NODE:
+      case networkActionTypes.BATCH_ADD_NODES:
+      case networkActionTypes.REMOVE_NODE:
+      case networkActionTypes.REMOVE_NODE_FROM_PROMPT:
+      case networkActionTypes.UPDATE_NODE:
+      case networkActionTypes.TOGGLE_NODE_ATTRIBUTES:
+      case networkActionTypes.ADD_EDGE:
+      case networkActionTypes.UPDATE_EDGE:
+      case networkActionTypes.TOGGLE_EDGE:
+      case networkActionTypes.REMOVE_EDGE:
+      case networkActionTypes.UPDATE_EGO:
+        return {
+          ...state,
+          [action.sessionId]: withTimestamp({
+            ...state[action.sessionId],
+            network: network(state[action.sessionId].network, action),
+          }),
+        };
+      case ADD_SESSION:
+        return {
+          ...state,
+          [action.sessionId]: withTimestamp({
+            protocolUID: action.protocolUID,
+            promptIndex: 0,
+            stageIndex: 0,
+            caseId: action.caseId,
+            network: network(state.network, action),
+          }),
+        };
+      case LOAD_SESSION:
+        return state;
+      case UPDATE_PROMPT:
+        return {
+          ...state,
+          [action.sessionId]: withTimestamp({
+            ...state[action.sessionId],
+            promptIndex: action.promptIndex,
+          }),
+        };
+      case UPDATE_STAGE:
+        return {
+          ...state,
+          [action.sessionId]: withTimestamp({
+            ...state[action.sessionId],
+            stageIndex: action.stageIndex,
+          }),
+        };
+      case REMOVE_SESSION:
+        return omit(state, [action.sessionId]);
+      case EXPORT_SESSIONS_START: {
+        const newObj = {
+          ...state,
+        };
 
-      map(action.sessionIDs, (session) => {
-        newObj[session.sessionUUID].exportStatus = 'exporting';
-      });
+        map(action.sessionIDs, (session) => {
+          newObj[session.sessionUUID].exportStatus = 'exporting';
+        });
 
-      return {
-        ...state,
-        ...newObj,
-      };
+        return {
+          ...state,
+          ...newObj,
+        };
+      }
+      case EXPORT_SESSIONS_RESET: {
+        const newObj = {
+          ...state,
+        };
+
+        map(state, (session, sessionUUID) => {
+          newObj[sessionUUID].exportStatus = null;
+          newObj[sessionUUID].exportError = null;
+        });
+        return {
+          ...state,
+          ...newObj,
+        };
+      }
+      case EXPORT_SESSION_SUCCEEDED:
+        return {
+          ...state,
+          [action.sessionId]: withTimestamp({
+            ...state[action.sessionId],
+            lastExportedAt: Date.now(),
+            exportStatus: 'finished',
+          }),
+        };
+      case EXPORT_SESSION_FAILED:
+        return {
+          ...state,
+          [action.sessionId]: withTimestamp({
+            ...state[action.sessionId],
+            exportStatus: 'error',
+            exportError: action.error,
+          }),
+        };
+      default:
+        return state;
     }
-    case EXPORT_SESSIONS_RESET: {
-      const newObj = {
-        ...state,
-      };
-
-      map(state, (session, sessionUUID) => {
-        newObj[sessionUUID].exportStatus = null;
-        newObj[sessionUUID].exportError = null;
-      });
-      return {
-        ...state,
-        ...newObj,
-      };
-    }
-    case EXPORT_SESSION_SUCCEEDED:
-      return {
-        ...state,
-        [action.sessionId]: withTimestamp({
-          ...state[action.sessionId],
-          lastExportedAt: Date.now(),
-          exportStatus: 'finished',
-        }),
-      };
-    case EXPORT_SESSION_FAILED:
-      return {
-        ...state,
-        [action.sessionId]: withTimestamp({
-          ...state[action.sessionId],
-          exportStatus: 'error',
-          exportError: action.error,
-        }),
-      };
-    default:
-      return state;
-  }
-}
+  };
 
 /**
  * This function generates default values for all variables in the variable registry for this node
@@ -484,4 +485,7 @@ const actionTypes = {
 export {
   actionCreators,
   actionTypes,
+  getReducer,
 };
+
+export default getReducer(networkReducer);

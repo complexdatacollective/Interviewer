@@ -23,13 +23,15 @@ const paths = {
 
 const developmentProtocol = process.env.DEVELOPMENT_PROTOCOL_URL || DEVELOPMENT_PROTOCOL_URL;
 
-const mockProtocol = 'https://documentation.networkcanvas.com/protocols/mock.netcanvas';
+// TODO: update this when feature is merged
+const mockProtocol = 'https://raw.githubusercontent.com/codaco/Network-Canvas/fix/skip-stage/integration-tests/data/mock.netcanvas';
+
 
 const defaultImageSnaphotConfig = {
   // { testPath, currentTestName, counter, defaultIdentifier }
   customSnapshotIdentifier: ({ testPath, currentTestName, counter }) =>
     kebabCase(`${path.basename(testPath)}-${currentTestName}-${counter}`),
-  customDiffConfig: { threshold: 0.1 },
+  customDiffConfig: { threshold: 0.25 },
   blur: 1,
 };
 
