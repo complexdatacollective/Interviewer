@@ -6,8 +6,8 @@ import {
   maxLength,
   minValue,
   maxValue,
-  // minSelected,
-  // maxSelected,
+  minSelected,
+  maxSelected,
 } from '../Validations';
 
 describe('Validations', () => {
@@ -119,6 +119,58 @@ describe('Validations', () => {
 
     it('fails for a larger value', () => {
       expect(subject(10)).toBe(errorMessage);
+    });
+  });
+
+  describe('minSelected()', () => {
+    const errorMessage = 'You must choose a minimum of 2 option(s)';
+    const subject = minSelected(2);
+
+    it('fails for null or undefined', () => {
+      expect(subject(null)).toBe(errorMessage);
+      expect(subject(undefined)).toBe(errorMessage);
+    });
+
+    it('fails for an empty array', () => {
+      expect(subject([])).toBe(errorMessage);
+    });
+
+    it('fails for a smaller array', () => {
+      expect(subject([1])).toBe(errorMessage);
+    });
+
+    it('passes for an exactly matching array', () => {
+      expect(subject([1, 2])).toBe(undefined);
+    });
+
+    it('passes for a larger array', () => {
+      expect(subject([1, 2, 3])).toBe(undefined);
+    });
+  });
+
+  describe('maxSelected()', () => {
+    const errorMessage = 'You must choose a maximum of 2 option(s)';
+    const subject = maxSelected(2);
+
+    it('fails for null or undefined', () => {
+      expect(subject(null)).toBe(errorMessage);
+      expect(subject(undefined)).toBe(errorMessage);
+    });
+
+    it('passes for an empty array', () => {
+      expect(subject([])).toBe(undefined);
+    });
+
+    it('passes for a smaller array', () => {
+      expect(subject([1])).toBe(undefined);
+    });
+
+    it('passes for an exactly matching array', () => {
+      expect(subject([1, 2])).toBe(undefined);
+    });
+
+    it('fails for a larger array', () => {
+      expect(subject([1, 2, 3])).toBe(errorMessage);
     });
   });
 });
