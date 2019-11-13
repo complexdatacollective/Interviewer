@@ -196,6 +196,7 @@
       "./build-resources/externals/**"
     ],
     "appId": "Network-Canvas",
+    "afterSign": "./build-resources/scripts/afterSignHook.js",
     "directories": {
       "buildResources": "build-resources",
       "output": "release-builds"
@@ -204,7 +205,9 @@
       "include": "build-resources/scripts/bonjour.nsh"
     },
     "mac": {
-      "category": "public.app-category.education"
+      "category": "public.app-category.education",
+      "hardenedRuntime": true,
+      "entitlements": "./build-resources/entitlements.mac.inherit.plist"
     },
     "win": {
       "target": "nsis",
