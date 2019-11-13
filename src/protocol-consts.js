@@ -38,6 +38,7 @@ const FormComponent = Object.freeze({
   Toggle: 'Toggle',
   ToggleButton: 'ToggleButton',
   ToggleButtonGroup: 'ToggleButtonGroup',
+  Slider: 'Slider',
 });
 
 // Docs: https://github.com/codaco/Network-Canvas/wiki/Information-Interface#content-types

@@ -11,6 +11,7 @@ import {
   Text,
   Number as NumberField,
   Toggle,
+  Slider,
 } from '../ui/components/Fields';
 
 import validations from '../utils/Validations';
@@ -30,6 +31,7 @@ const fieldTypes = {
   [FormComponent.Number]: NumberField,
   [FormComponent.ToggleButton]: ToggleButton,
   [FormComponent.Toggle]: Toggle,
+  [FormComponent.Slider]: Slider,
   [FormComponent.ToggleButtonGroup]: ToggleButtonGroup,
 };
 
