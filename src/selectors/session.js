@@ -39,23 +39,24 @@ export const getSessionProgress = (state) => {
   const currentStage = session.stageIndex;
   const stageCount = protocol.stages.length;
   // includes finish screen if present
-  const stageCountWithFinish = stages.length;
+  const screenCount = stages.length;
   const promptCount = get(stages, [currentStage, 'prompts', 'length'], 0);
-  const stageProgress = currentStage / (stageCountWithFinish - 1);
+  const stageProgress = currentStage / (screenCount - 1);
   const promptProgress = promptCount ? currentPrompt / promptCount : 0;
   // This can go over 100% when finish screen is not present,
   // so it needs to be clamped
-  const percentProgress = clamp((stageProgress + (promptProgress / (stageCountWithFinish - 1))) * 100, 0, 100);
+  const percentProgress = clamp((stageProgress + (promptProgress / (screenCount - 1))) * 100, 0, 100);
   const isFirstPrompt = promptCount > 0 && currentPrompt === 0;
   const isLastPrompt = promptCount > 0 && currentPrompt === promptCount - 1;
   const isFirstStage = currentStage === 0;
   const isLastStage = currentStage === stageCount - 1;
   // includes finish screen if present
-  const isLastScreen = currentStage === stageCountWithFinish - 1;
+  const isLastScreen = currentStage === screenCount - 1;
 
   return {
     currentStage,
     stageCount,
+    screenCount,
     currentPrompt,
     promptCount,
     isFirstPrompt,
