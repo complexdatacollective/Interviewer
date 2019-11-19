@@ -104,13 +104,15 @@ const goToNext = (direction = 1) =>
       isLastScreen,
     } = getSessionProgress(state);
 
+    const isFinishScreen = isLastScreen && !isLastStage;
+    const lastScreenAndPrompt = isLastScreen && !promptCount || isLastPrompt;
+
     if (
         // first screen:
         (direction < 0 && isFirstStage) ||
-        // finish screen:
-        (direction > 0 && isLastScreen && !isLastStage) ||
+        (direction > 0 && isFinishScreen) ||
         // when finish screen is absent we need to check prompts:
-        (direction > 0 && isLastScreen && isLastStage && isLastPrompt)
+        (direction > 0 && !isFinishScreen && lastScreenAndPrompt)
     ) {
       return null;
     }
