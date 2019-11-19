@@ -49,7 +49,7 @@ const getNextStage = (direction = 1) =>
       nextIndex += step;
 
       // If we're at either end of the inteview, stop and stay where we are
-      if (nextIndex > stageCount || nextIndex < 0) {
+      if (nextIndex > stageCount - 1 || nextIndex < 0) {
         return null;
       }
     }
