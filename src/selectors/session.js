@@ -1,6 +1,6 @@
 /* eslint-disable no-shadow */
 import { createSelector } from 'reselect';
-import { get } from 'lodash';
+import { get, clamp } from 'lodash';
 import { currentStageIndex } from '../utils/matchSessionPath';
 import { getAdditionalAttributes, getSubject } from '../utils/protocol/accessors';
 import { createDeepEqualSelector } from './utils';
@@ -30,21 +30,28 @@ export const getSessionPath = (state, stageIndex) => {
 export const getSessionProgress = (state) => {
   const session = getActiveSession(state);
   const protocol = getActiveProtocol(state);
+  /*
+   * We use the stages selector (rather than plain protocol)
+   * because it takes into account the finish screen
+   */
+  const stages = getProtocolStages(state);
   const currentPrompt = session.promptIndex;
   const currentStage = session.stageIndex;
   const stageCount = protocol.stages.length;
-  const promptCount = get(protocol, ['stages', currentStage, 'prompts', 'length'], 0);
-  const stageProgress = currentStage / (stageCount - 1);
-  // promptProgress is calculated on the basis that on the last prompt, we are still 1 away from
-  // the end (because said prompt isn't complete). So `promptCount - 1` would be wrong.
+  // includes finish screen if present
+  const stageCountWithFinish = stages.length;
+  const promptCount = get(stages, [currentStage, 'prompts', 'length'], 0);
+  const stageProgress = currentStage / (stageCountWithFinish - 1);
   const promptProgress = promptCount ? currentPrompt / promptCount : 0;
-  const percentProgress = (stageProgress + (promptProgress / (stageCount - 1))) * 100;
+  // This can go over 100% when finish screen is not present,
+  // so it needs to be clamped
+  const percentProgress = clamp((stageProgress + (promptProgress / (stageCountWithFinish - 1))) * 100, 0, 100);
   const isFirstPrompt = promptCount > 0 && currentPrompt === 0;
   const isLastPrompt = promptCount > 0 && currentPrompt === promptCount - 1;
   const isFirstStage = currentStage === 0;
   const isLastStage = currentStage === stageCount - 1;
-  // We add an additional 'stage' for the finish screen, hence no -1:
-  const isFinish = currentStage === stageCount;
+  // includes finish screen if present
+  const isLastScreen = currentStage === stageCountWithFinish - 1;
 
   return {
     currentStage,
@@ -55,7 +62,7 @@ export const getSessionProgress = (state) => {
     isLastPrompt,
     isFirstStage,
     isLastStage,
-    isFinish,
+    isLastScreen,
     stageProgress,
     promptProgress,
     percentProgress,

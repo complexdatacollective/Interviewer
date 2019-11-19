@@ -100,11 +100,18 @@ const goToNext = (direction = 1) =>
       isFirstPrompt,
       isLastPrompt,
       isFirstStage,
-      isFinish,
+      isLastStage,
+      isLastScreen,
     } = getSessionProgress(state);
 
-    if ((direction < 0 && isFirstStage) || (direction > 0 && isFinish)) {
-      // TODO: handle finish stage & start stage
+    if (
+        // first screen:
+        (direction < 0 && isFirstStage) ||
+        // finish screen:
+        (direction > 0 && isLastScreen && !isLastStage) ||
+        // when finish screen is absent we need to check prompts:
+        (direction > 0 && isLastScreen && isLastStage && isLastPrompt)
+    ) {
       return null;
     }
 
