@@ -31,11 +31,11 @@ class SlideFormEdge extends PureComponent {
           <Node {...fromNode} />
           <div className="fake-edge" style={{ backgroundColor: `var(--${edgeColor})` }} />
           <Node {...toNode} />
-          <div className="alter-form__form-container">
+          <div className="alter-form__form-container alter-edge-form__form-container">
             <Scroller>
               <Form
                 {...form}
-                className="alter-form__form"
+                className="alter-form__form alter-edge-form__form"
                 initialValues={initialValues}
                 autoFocus={false}
                 subject={subject}

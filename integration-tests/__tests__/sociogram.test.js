@@ -15,6 +15,7 @@ import {
 import {
   createNodes,
   loadDevelopmentProtocol,
+  getSociogramCenter,
 } from './playbook-development-protocol';
 
 const app = makeTestingApp('Network-Canvas');
@@ -41,14 +42,6 @@ const setupTest = async () => {
   await goToStage(app, 'sociogram');
 };
 
-const getCenter = async (_app) => {
-  const size = await _app.client.getElementSize('//div[@class="sociogram-interface"]');
-  return {
-    x: size.width * 0.5,
-    y: size.height * 0.5,
-  };
-};
-
 describe('Sociogram', () => {
   beforeAll(setupApp);
   beforeAll(setupTest);
@@ -56,7 +49,7 @@ describe('Sociogram', () => {
 
   it('Can place nodes', async () => {
     // const size = await app.client.getViewportSize();
-    const center = await getCenter(app);
+    const center = await getSociogramCenter(app);
     await app.client.moveToObject('//div[@class="node-bucket"]//div[@class="node"]');
     await app.client.buttonDown(0);
     await app.client.moveToObject(
@@ -91,7 +84,7 @@ describe('Sociogram', () => {
   });
 
   it('Shows active state when selecting a node', async () => {
-    const center = await getCenter(app);
+    const center = await getSociogramCenter(app);
 
     await app.client.moveToObject(
       '//div[@class="sociogram-interface"]',
@@ -108,7 +101,7 @@ describe('Sociogram', () => {
   });
 
   it('Can connect nodes', async () => {
-    const center = await getCenter(app);
+    const center = await getSociogramCenter(app);
 
     await app.client.moveToObject(
       '//div[@class="sociogram-interface"]',

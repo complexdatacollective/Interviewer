@@ -5,7 +5,6 @@ import {
   makeTestingApp,
   startApps,
   stopApps,
-  forceClick,
   matchImageSnapshot,
 } from './helpers';
 import {

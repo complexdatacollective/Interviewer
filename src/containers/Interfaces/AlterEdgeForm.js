@@ -9,6 +9,7 @@ const AlterEdgeForm = props => (
   <SlidesForm
     itemName="edge"
     slideForm={SlideFormEdge}
+    parentClass="alter-edge-form"
     {...props}
   />
 );
