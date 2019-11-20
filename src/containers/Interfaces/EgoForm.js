@@ -29,9 +29,9 @@ const TAGS = [
 
 const confirmDialog = {
   type: 'Confirm',
-  title: 'Changes cannot be saved',
-  message: 'There are invalid changes in this form, that will not be saved if you continue. Do you want to go back anyway?',
-  confirmLabel: 'Leave stage',
+  title: 'Discard changes?',
+  message: 'This form contains invalid data, so it cannot be saved. If you continue it will be reset and your changes will be lost. Do you want to discard your changes?',
+  confirmLabel: 'Discard changes',
 };
 
 const getFormName = index =>
