@@ -12,6 +12,8 @@ import {
   Number as NumberField,
   Toggle,
   Slider,
+  LikertScale,
+  VisualAnalogScale,
 } from '../ui/components/Fields';
 
 import validations from '../utils/Validations';
@@ -32,6 +34,8 @@ const fieldTypes = {
   [FormComponent.ToggleButton]: ToggleButton,
   [FormComponent.Toggle]: Toggle,
   [FormComponent.Slider]: Slider,
+  [FormComponent.LikertScale]: LikertScale,
+  [FormComponent.VisualAnalogScale]: VisualAnalogScale,
   [FormComponent.ToggleButtonGroup]: ToggleButtonGroup,
 };
 
