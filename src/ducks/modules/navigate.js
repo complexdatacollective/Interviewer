@@ -10,8 +10,9 @@ import { actionCreators as sessionsActions } from '../../ducks/modules/sessions'
  * @param {number} direction A positive or negative number indicating
  * forwards or backwards respectively.
  */
-const getStep = direction =>
-  Math.abs(direction) / direction;
+const getStep = direction => Math.abs(direction) / direction;
+const isBackwards = direction => direction < 0;
+const isForwards = direction => direction > 0;
 
 /**
  * Go to the stage at the index provided
@@ -36,7 +37,7 @@ const getNextStage = (direction = 1) =>
 
     const {
       currentStage,
-      stageCount,
+      screenCount,
     } = getSessionProgress(state);
 
     const step = getStep(direction);
@@ -49,7 +50,7 @@ const getNextStage = (direction = 1) =>
       nextIndex += step;
 
       // If we're at either end of the inteview, stop and stay where we are
-      if (nextIndex > stageCount || nextIndex < 0) {
+      if (nextIndex >= screenCount || nextIndex < 0) {
         return null;
       }
     }
@@ -100,11 +101,18 @@ const goToNext = (direction = 1) =>
       isFirstPrompt,
       isLastPrompt,
       isFirstStage,
-      isFinish,
+      isLastScreen,
     } = getSessionProgress(state);
 
-    if ((direction < 0 && isFirstStage) || (direction > 0 && isFinish)) {
-      // TODO: handle finish stage & start stage
+    const isLastPromptOrHasNone = !promptCount || isLastPrompt;
+    const isLastScreenAndLastPrompt = isLastScreen && isLastPromptOrHasNone;
+
+    if (
+      // first screen:
+      (isBackwards(direction) && isFirstStage) ||
+      // when finish screen is absent we need to also check prompts:
+      (isForwards(direction) && isLastScreenAndLastPrompt)
+    ) {
       return null;
     }
 
@@ -113,7 +121,10 @@ const goToNext = (direction = 1) =>
     }
 
     // At the end of the prompts it's time to go to the next stage
-    if ((direction < 0 && isFirstPrompt) || (direction > 0 && isLastPrompt)) {
+    if (
+      (isBackwards(direction) && isFirstPrompt) ||
+      (isForwards(direction) && isLastPrompt)
+    ) {
       return dispatch(goToNextStage(direction));
     }
 
