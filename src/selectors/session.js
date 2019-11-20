@@ -45,7 +45,8 @@ export const getSessionProgress = (state) => {
   const promptProgress = promptCount ? currentPrompt / promptCount : 0;
   // This can go over 100% when finish screen is not present,
   // so it needs to be clamped
-  const percentProgress = clamp((stageProgress + (promptProgress / (screenCount - 1))) * 100, 0, 100);
+  const percentProgress =
+    clamp((stageProgress + (promptProgress / (screenCount - 1))) * 100, 0, 100);
   const isFirstPrompt = promptCount > 0 && currentPrompt === 0;
   const isLastPrompt = promptCount > 0 && currentPrompt === promptCount - 1;
   const isFirstStage = currentStage === 0;
