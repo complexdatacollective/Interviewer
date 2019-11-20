@@ -10,8 +10,9 @@ import { actionCreators as sessionsActions } from '../../ducks/modules/sessions'
  * @param {number} direction A positive or negative number indicating
  * forwards or backwards respectively.
  */
-const getStep = direction =>
-  Math.abs(direction) / direction;
+const getStep = direction => Math.abs(direction) / direction;
+const isBackwards = direction => direction < 0;
+const isForwards = direction => direction > 0;
 
 /**
  * Go to the stage at the index provided
@@ -100,19 +101,17 @@ const goToNext = (direction = 1) =>
       isFirstPrompt,
       isLastPrompt,
       isFirstStage,
-      isLastStage,
       isLastScreen,
     } = getSessionProgress(state);
 
-    const isFinishScreen = isLastScreen && !isLastStage;
-    const isLastScreenAndPrompt = isLastScreen && !promptCount || isLastPrompt;
+    const isLastPromptOrHasNone = !promptCount || isLastPrompt;
+    const isLastScreenAndLastPrompt = isLastScreen && isLastPromptOrHasNone;
 
     if (
       // first screen:
-      (direction < 0 && isFirstStage) ||
-      (direction > 0 && isFinishScreen) ||
-      // when finish screen is absent we need to check prompts:
-      (direction > 0 && !isFinishScreen && isLastScreenAndPrompt)
+      (isBackwards(direction) && isFirstStage) ||
+      // when finish screen is absent we need to also check prompts:
+      (isForwards(direction) && isLastScreenAndLastPrompt)
     ) {
       return null;
     }
@@ -122,7 +121,10 @@ const goToNext = (direction = 1) =>
     }
 
     // At the end of the prompts it's time to go to the next stage
-    if ((direction < 0 && isFirstPrompt) || (direction > 0 && isLastPrompt)) {
+    if (
+      (isBackwards(direction) && isFirstPrompt) ||
+      (isForwards(direction) && isLastPrompt)
+    ) {
       return dispatch(goToNextStage(direction));
     }
 
