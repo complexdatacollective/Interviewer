@@ -4,7 +4,7 @@ import path from 'path';
 import fakeDialog from 'spectron-fake-dialog';
 import { timing, paths, mockProtocol } from '../config';
 import getData from '../getData';
-import { forceClick, matchImageSnapshot } from './helpers';
+import { forceClick } from './helpers';
 
 /**
  * common tasks for using protocols
