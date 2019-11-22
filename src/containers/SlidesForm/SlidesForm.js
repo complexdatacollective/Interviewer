@@ -25,9 +25,9 @@ const TAGS = [
 
 const confirmDialog = {
   type: 'Confirm',
-  title: 'Changes cannot be saved',
-  message: 'There are invalid changes in this form, that will not be saved if you continue. Do you want to go back anyway?',
-  confirmLabel: 'Leave alter',
+  title: 'Discard changes?',
+  message: 'This form contains invalid data, so it cannot be saved. If you continue it will be reset and your changes will be lost. Do you want to discard your changes?',
+  confirmLabel: 'Discard changes',
 };
 
 class SlidesForm extends Component {
@@ -154,11 +154,12 @@ class SlidesForm extends Component {
       stage,
       items,
       slideForm: SlideForm,
+      parentClass,
     } = this.props;
 
     const swiperParams = {
-      containerClass: 'alter-form__swiper swiper-container',
       direction: 'vertical',
+      containerClass: 'alter-form__swiper swiper-container',
       speed: getCSSVariableAsNumber('--animation-duration-slow-ms'),
       effect: 'coverflow',
       coverflowEffect: {
@@ -176,8 +177,13 @@ class SlidesForm extends Component {
       },
     );
 
+    const parentClasses = cx(
+      'alter-form swiper-no-swiping',
+      parentClass,
+    );
+
     return (
-      <div className="alter-form swiper-no-swiping">
+      <div className={parentClasses}>
         <Swiper {...swiperParams} ref={this.swipeRef} >
           <div>
             <div key="alter-form__introduction" className="slide-content alter-form__introduction">
@@ -226,6 +232,7 @@ SlidesForm.propTypes = {
   submitForm: PropTypes.func.isRequired,
   updateItem: PropTypes.func.isRequired,
   className: PropTypes.string,
+  parentClass: PropTypes.string,
   itemName: PropTypes.string,
   slideForm: PropTypes.elementType.isRequired,
 };
@@ -233,6 +240,7 @@ SlidesForm.propTypes = {
 SlidesForm.defaultProps = {
   items: [],
   className: '',
+  parentClass: '',
   itemName: '',
 };
 

@@ -5,7 +5,6 @@ import {
   forceClick,
   pause,
   asyncForEach,
-  matchImageSnapshot,
 } from './helpers';
 import {
   goToStage,
@@ -25,6 +24,14 @@ export const loadDevelopmentProtocol = async (app) => {
       console.info(`loading protocol at "${filename}".`);
       return loadProtocolFromFile(app, filename);
     });
+};
+
+export const getSociogramCenter = async (_app) => {
+  const size = await _app.client.getElementSize('//div[@class="sociogram-interface"]');
+  return {
+    x: size.width * 0.5,
+    y: size.height * 0.5,
+  };
 };
 
 export const createNode = async (app, {
@@ -52,4 +59,72 @@ export const createNode = async (app, {
 export const createNodes = async (app, nodes = []) => {
   await goToStage(app, 'namegen1');
   await asyncForEach(nodes, async node => createNode(app, node));
+};
+
+export const placeNodes = async (app) => {
+  const center = await getSociogramCenter(app);
+  await app.client.moveToObject('//div[@class="node-bucket"]//div[@class="node"]');
+  await app.client.buttonDown(0);
+  await app.client.moveToObject(
+    '//div[@class="sociogram-interface"]',
+    center.x - 100,
+    center.y - 100,
+  );
+  await pause(app, 'medium');
+  await app.client.buttonUp(0);
+
+  await app.client.moveToObject('//div[@class="node-bucket"]//div[@class="node"]');
+  await app.client.buttonDown(0);
+  await app.client.moveToObject(
+    '//div[@class="sociogram-interface"]',
+    center.x - 100,
+    center.y + 100,
+  );
+  await pause(app, 'medium');
+  await app.client.buttonUp(0);
+
+  await app.client.moveToObject('//div[@class="node-bucket"]//div[@class="node"]');
+  await app.client.buttonDown(0);
+  await app.client.moveToObject(
+    '//div[@class="sociogram-interface"]',
+    center.x + 100,
+    center.y - 100,
+  );
+  await pause(app, 'medium');
+  await app.client.buttonUp(0);
+};
+
+export const createEdges = async (app) => {
+  await goToStage(app, 'sociogram');
+  await placeNodes(app);
+
+  const center = await getSociogramCenter(app);
+
+  await app.client.moveToObject(
+    '//div[@class="sociogram-interface"]',
+    center.x - 100,
+    center.y - 100,
+  );
+  await app.client.buttonPress(0);
+
+  await app.client.moveToObject(
+    '//div[@class="sociogram-interface"]',
+    center.x - 100,
+    center.y + 100,
+  );
+  await app.client.buttonPress(0);
+
+  await app.client.moveToObject(
+    '//div[@class="sociogram-interface"]',
+    center.x - 100,
+    center.y + 100,
+  );
+  await app.client.buttonPress(0);
+
+  await app.client.moveToObject(
+    '//div[@class="sociogram-interface"]',
+    center.x + 100,
+    center.y - 100,
+  );
+  await app.client.buttonPress(0);
 };
