@@ -38,7 +38,6 @@ const FormComponent = Object.freeze({
   Toggle: 'Toggle',
   ToggleButton: 'ToggleButton',
   ToggleButtonGroup: 'ToggleButtonGroup',
-  Slider: 'Slider',
   LikertScale: 'LikertScale',
   VisualAnalogScale: 'VisualAnalogScale',
 });
