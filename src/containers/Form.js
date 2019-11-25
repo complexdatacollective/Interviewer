@@ -49,6 +49,13 @@ const scrollToFirstError = (errors) => {
   // All Fields have a name corresponding to variable ID.
   const el = document.querySelector(`[name="${firstError}"]`);
 
+  // If element is not found, prevent crash.
+  if (!el) {
+    // eslint-disable-next-line no-console
+    console.warn(`scrollToFirstError(): Element [name="${firstError}"] not found in DOM`);
+    return;
+  }
+
   // Subtract 200 to put more of the input in view.
   const topPos = el.offsetTop - 200;
 
