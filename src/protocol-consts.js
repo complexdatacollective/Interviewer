@@ -40,6 +40,7 @@ const FormComponent = Object.freeze({
   ToggleButtonGroup: 'ToggleButtonGroup',
   LikertScale: 'LikertScale',
   VisualAnalogScale: 'VisualAnalogScale',
+  DatePicker: 'DatePicker',
 });
 
 // Docs: https://github.com/codaco/Network-Canvas/wiki/Information-Interface#content-types

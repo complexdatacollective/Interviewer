@@ -13,6 +13,7 @@ import {
   Toggle,
   LikertScale,
   VisualAnalogScale,
+  DatePicker,
 } from '../ui/components/Fields';
 
 import validations from '../utils/Validations';
@@ -35,6 +36,7 @@ const fieldTypes = {
   [FormComponent.LikertScale]: LikertScale,
   [FormComponent.VisualAnalogScale]: VisualAnalogScale,
   [FormComponent.ToggleButtonGroup]: ToggleButtonGroup,
+  [FormComponent.DatePicker]: DatePicker,
 };
 
 const ComponentTypeNotFound = componentType =>
