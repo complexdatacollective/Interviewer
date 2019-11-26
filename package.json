@@ -111,6 +111,7 @@
     "json-loader": "0.5.4",
     "jszip": "^3.1.5",
     "lodash": "^4.17.11",
+    "luxon": "^1.21.2",
     "mdns": "^2.5.1",
     "mini-css-extract-plugin": "^0.8.0",
     "node-sass": "^4.12.0",
