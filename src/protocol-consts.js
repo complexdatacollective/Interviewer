@@ -41,6 +41,7 @@ const FormComponent = Object.freeze({
   LikertScale: 'LikertScale',
   VisualAnalogScale: 'VisualAnalogScale',
   DatePicker: 'DatePicker',
+  RelativeDatePicker: 'RelativeDatePicker',
 });
 
 // Docs: https://github.com/codaco/Network-Canvas/wiki/Information-Interface#content-types
