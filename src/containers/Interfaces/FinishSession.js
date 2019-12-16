@@ -10,7 +10,6 @@ import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { getNetwork } from '../../selectors/network';
 import { getActiveSession } from '../../selectors/session';
 import { getProtocolCodebook, getRemoteProtocolId } from '../../selectors/protocol';
-import { asExportableNetwork } from '../../utils/networkFormat';
 import { ExportSessionsOverlay } from '../Setup';
 
 const ExportSection = ({ defaultServer, children }) => (
@@ -57,16 +56,6 @@ class FinishSession extends Component {
   get exportUrl() {
     const { defaultServer } = this.props;
     return defaultServer && defaultServer.secureServiceUrl;
-  }
-
-  export(currentSession) {
-    const { remoteProtocolId, sessionId, codebook } = this.props;
-    const sessionData = asExportableNetwork(
-      currentSession.network,
-      codebook,
-      { _caseID: currentSession.caseId },
-    );
-    this.props.bulkExportSessions([{ remoteProtocolId, sessionUUID: sessionId, sessionData }]);
   }
 
   handleExportError = (additionalInformation) => {
@@ -183,9 +172,7 @@ FinishSession.propTypes = {
   defaultServer: PropTypes.object,
   endSession: PropTypes.func.isRequired,
   resetSessionExport: PropTypes.func.isRequired,
-  bulkExportSessions: PropTypes.func.isRequired,
   openDialog: PropTypes.func.isRequired,
-  remoteProtocolId: PropTypes.string,
   sessionId: PropTypes.string.isRequired,
   codebook: PropTypes.object,
 };
