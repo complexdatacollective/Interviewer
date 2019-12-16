@@ -40,6 +40,7 @@ class FinishSession extends Component {
     this.state = {
       downloadDataAdditionalInfo: '',
       showExportSessionOverlay: false,
+      deleteAfterFinish: false,
     };
   }
 
@@ -81,12 +82,12 @@ class FinishSession extends Component {
   }
 
   handleFinishSession = () => {
-    if (this.state.deleteAfterExport) {
+    if (this.state.deleteAfterFinish) {
       this.props.openDialog({
         type: 'Warning',
         title: 'Finish and delete?',
         confirmLabel: 'Finish and delete',
-        onConfirm: () => this.props.endSession(this.state.deleteAfterExport),
+        onConfirm: () => this.props.endSession(this.state.deleteAfterFinish),
         message: (
           <React.Fragment>
             <p>
@@ -99,9 +100,12 @@ class FinishSession extends Component {
         ),
       });
     } else {
-      this.props.endSession(this.state.deleteAfterExport);
+      this.props.endSession(this.state.deleteAfterFinish);
     }
   };
+
+  handleToggleDelete = () =>
+    this.setState({ deleteAfterFinish: !this.state.deleteAfterFinish });
 
   render() {
     return (
@@ -149,10 +153,8 @@ class FinishSession extends Component {
           </div>
           <Toggle
             input={{
-              value: this.state.deleteAfterExport,
-              onChange: () => {
-                this.setState({ deleteAfterExport: !this.state.deleteAfterExport });
-              },
+              value: this.state.deleteAfterFinish,
+              onChange: this.handleToggleDelete,
             }}
             label="Delete this session after finishing?"
             fieldLabel=" "
