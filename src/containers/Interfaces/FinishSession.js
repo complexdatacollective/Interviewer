@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import createGraphML from '../../utils/ExportData';
 import { Button } from '../../ui/components';
 import { Toggle } from '../../ui/components/Fields';
@@ -208,17 +207,13 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    bulkExportSessions: bindActionCreators(sessionsActions.bulkExportSessions, dispatch),
-    resetSessionExport: bindActionCreators(sessionsActions.sessionExportReset, dispatch),
-    deleteSession: bindActionCreators(sessionsActions.removeSession, dispatch),
-    endSession: (deleteAfterExport) => {
-      dispatch(sessionActions.endSession(deleteAfterExport));
-    },
-    openDialog: bindActionCreators(dialogActions.openDialog, dispatch),
-  };
-}
+const mapDispatchToProps = {
+  bulkExportSessions: sessionsActions.bulkExportSessions,
+  resetSessionExport: sessionsActions.sessionExportReset,
+  deleteSession: sessionsActions.removeSession,
+  endSession: sessionActions.endSession,
+  openDialog: dialogActions.openDialog,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(FinishSession);
 
