@@ -47,7 +47,7 @@ class FinishSession extends Component {
     const { defaultServer } = this.props;
     return (
       <ExportSection defaultServer={defaultServer}>
-        <Button onClick={() => this.setState({ showExportSessionOverlay: true })}>
+        <Button onClick={this.handleOpenExport}>
           Upload
         </Button>
       </ExportSection>
@@ -80,6 +80,12 @@ class FinishSession extends Component {
     });
   }
 
+  handleExport = () => createGraphML(
+    this.props.currentNetwork,
+    this.props.codebook,
+    this.handleExportError,
+  );
+
   handleFinishSession = () => {
     if (this.state.deleteAfterFinish) {
       this.props.openDialog({
@@ -106,18 +112,26 @@ class FinishSession extends Component {
   handleToggleDelete = () =>
     this.setState({ deleteAfterFinish: !this.state.deleteAfterFinish });
 
+  handleOpenExport = () => {
+    this.setState({
+      showExportSessionOverlay: true,
+    });
+  }
+
+  handleCloseExport = () => {
+    this.setState({
+      showExportSessionOverlay: false,
+    });
+    this.props.resetSessionExport();
+  }
+
   render() {
     return (
       <div className="interface finish-session-interface">
         <ExportSessionsOverlay
           show={this.state.showExportSessionOverlay}
           key={this.state.showExportSessionOverlay}
-          onClose={() => {
-            this.setState({
-              showExportSessionOverlay: false,
-            });
-            this.props.resetSessionExport();
-          }}
+          onClose={this.handleCloseExport}
           sessionsToExport={[this.props.sessionId]}
         />
         <div className="finish-session-interface__frame">
@@ -140,12 +154,7 @@ class FinishSession extends Component {
               <p>Export this network as a <code>.graphml</code> file</p>
             </div>
             <div>
-              <Button
-                color="platinum"
-                onClick={() => createGraphML(this.props.currentNetwork,
-                  this.props.codebook, this.handleExportError)
-                }
-              >
+              <Button color="platinum" onClick={this.handleExport}>
                 Export
               </Button>
             </div>
