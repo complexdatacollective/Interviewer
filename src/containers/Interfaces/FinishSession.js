@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import createGraphML from '../../utils/ExportData';
+import createGraphML from '../../utils/network-exporters/graphml/createGraphML';
+import saveFile from '../../utils/SaveFile';
 import { Button } from '../../ui/components';
 import { Toggle } from '../../ui/components/Fields';
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
@@ -73,6 +74,7 @@ class FinishSession extends Component {
     this.props.currentNetwork,
     this.props.codebook,
     this.handleExportError,
+    saveFile,
   );
 
   handleFinishSession = () => {

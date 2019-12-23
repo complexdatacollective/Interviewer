@@ -10,3 +10,6 @@
 [submodule "development-protocol"]
 	path = development-protocol
 	url = https://github.com/codaco/development-protocol.git
+[submodule "src/utils/network-exporters"]
+	path = src/utils/network-exporters
+	url = https://github.com/codaco/network-exporters
