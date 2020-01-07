@@ -47,7 +47,6 @@
     "type": "git"
   },
   "devDependencies": {
-    "@codaco/ui": "3.0.1",
     "@zippytech/sorty": "^2.0.0",
     "ajv": "^6.5.4",
     "animejs": "^2.2.0",
@@ -112,7 +111,6 @@
     "json-loader": "0.5.4",
     "jszip": "^3.1.5",
     "lodash": "^4.17.11",
-    "luxon": "^1.21.2",
     "mdns": "^2.5.1",
     "mini-css-extract-plugin": "^0.8.0",
     "node-sass": "^4.12.0",
@@ -175,6 +173,7 @@
     "ios-sim": "^8.0.1"
   },
   "dependencies": {
+    "@codaco/ui": "^3.0.2",
     "cordova-android": "^8.0.0",
     "cordova-ios": "^5.0.1",
     "cordova-plugin-add-swift-support": "^2.0.2",
