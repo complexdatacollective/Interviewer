@@ -2,9 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import PropTypes from 'prop-types';
-
-import { Icon } from '../../ui/components';
-
+import { Icon } from '@codaco/ui';
 import { DropObstacle } from '../../behaviours/DragAndDrop';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
 

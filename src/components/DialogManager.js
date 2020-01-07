@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { compose, bindActionCreators } from 'redux';
-import Dialogs from '../ui/components/Dialogs';
+import { Dialogs } from '@codaco/ui';
 import { actionCreators as dialogsActions } from '../ducks/modules/dialogs';
 
 const mapStateToProps = state => ({

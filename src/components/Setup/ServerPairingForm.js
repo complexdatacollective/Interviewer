@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { PairingCodeLength } from 'secure-comms-api/pairingCodeConfig';
-
+import { Button, Spinner } from '@codaco/ui';
 import PairingCodeInput from './PairingCodeInput';
-import { Button, Spinner } from '../../ui/components';
 
 /**
  * @class Renders a form for user to enter the out-of-band pairing code presented by Server.

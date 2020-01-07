@@ -3,7 +3,7 @@ import cx from 'classnames';
 import anime from 'animejs';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Modal } from '../ui/components';
+import { Modal } from '@codaco/ui';
 import { getCSSVariableAsNumber, getCSSVariableAsObject } from '../ui/utils/CSSVariables';
 
 /**

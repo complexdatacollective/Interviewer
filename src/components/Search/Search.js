@@ -3,7 +3,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { Icon } from '../../ui/components';
+import { Icon } from '@codaco/ui';
 import SearchTransition from '../../components/Transition/Search';
 import SearchResults from '../../containers/Search/SearchResults';
 import AddCountButton from '../../components/AddCountButton';

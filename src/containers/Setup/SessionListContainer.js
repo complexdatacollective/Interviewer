@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { isEmpty, get } from 'lodash';
+import { Button } from '@codaco/ui';
+import { Toggle } from '@codaco/ui/lib/components/Fields';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { FilterableListWrapper, SessionList, NodeBin } from '../../components';
-import { Button } from '../../ui/components';
-import { Toggle } from '../../ui/components/Fields';
 import { entityAttributesProperty } from '../../ducks/modules/network';
 import { ExportSessionsOverlay } from '.';
 
