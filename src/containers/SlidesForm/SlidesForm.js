@@ -6,9 +6,9 @@ import { submit, isValid } from 'redux-form';
 import ReactMarkdown from 'react-markdown';
 import uuid from 'uuid';
 import Swiper from 'react-id-swiper';
+import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
 import { ProgressBar } from '../../components';
 import defaultMarkdownRenderers from '../../utils/markdownRenderers';
-import { getCSSVariableAsNumber } from '../../ui/utils/CSSVariables';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 
 const TAGS = [

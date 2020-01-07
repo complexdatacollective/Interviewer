@@ -4,7 +4,7 @@ import anime from 'animejs';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Modal } from '@codaco/ui';
-import { getCSSVariableAsNumber, getCSSVariableAsObject } from '../ui/utils/CSSVariables';
+import { getCSSVariableAsNumber, getCSSVariableAsObject } from '@codaco/ui/lib/utils/CSSVariables';
 
 /**
  * Renders a modal window.

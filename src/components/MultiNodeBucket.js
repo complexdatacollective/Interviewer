@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { isEqual } from 'lodash';
 import { TransitionGroup } from 'react-transition-group';
-
+import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
 import Node from '../containers/Node';
-import { getCSSVariableAsNumber } from '../ui/utils/CSSVariables';
 import { Node as NodeTransition } from './Transition';
 import { NO_SCROLL } from '../behaviours/DragAndDrop/DragManager';
 import { DragSource } from '../behaviours/DragAndDrop';

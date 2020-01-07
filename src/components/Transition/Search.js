@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Transition } from 'react-transition-group';
 import anime from 'animejs';
-import { getCSSVariableAsObject, getCSSVariableAsNumber } from '../../ui/utils/CSSVariables';
+import { getCSSVariableAsObject, getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
 
 const getCssProp = (computedStyle, name) => computedStyle.getPropertyValue(name).trim();
 

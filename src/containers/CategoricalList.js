@@ -5,12 +5,12 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Flipper } from 'react-flip-toolkit';
 import cx from 'classnames';
+import { getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
 import { makeNetworkNodesForType, makeGetVariableOptions, makeGetPromptVariable } from '../selectors/interface';
 import { makeGetNodeLabel } from '../selectors/network';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { CategoricalItem } from '../components/';
 import { MonitorDragSource } from '../behaviours/DragAndDrop';
-import { getCSSVariableAsString } from '../ui/utils/CSSVariables';
 import { getEntityAttributes, entityAttributesProperty, entityPrimaryKeyProperty } from '../ducks/modules/network';
 import getAbsoluteBoundingRect from '../utils/getAbsoluteBoundingRect';
 
