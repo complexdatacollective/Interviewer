@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Spinner, Modal, Button, Icon } from '../../ui/components';
+import { Spinner, Modal, Button, Icon } from '@codaco/ui';
 import { ProgressBar } from '../../components';
 import { actionCreators as importProtocolActions } from '../../ducks/modules/importProtocol';
 

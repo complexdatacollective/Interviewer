@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-
-import { Icon } from '../../ui/components';
+import { Icon } from '@codaco/ui';
 
 class Accordion extends Component {
   constructor(props) {

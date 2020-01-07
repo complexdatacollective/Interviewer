@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import React from 'react';
 import { has } from 'lodash';
-import { Icon } from '../../ui/components';
+import { Icon } from '@codaco/ui';
 import NameGenerator from './NameGenerator';
 import NameGeneratorQuickAdd from './NameGeneratorQuickAdd';
 import NameGeneratorAutoComplete from './NameGeneratorAutoComplete';

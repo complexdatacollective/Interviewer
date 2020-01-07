@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Button } from '@codaco/ui';
+import { Toggle } from '@codaco/ui/lib/components/Fields';
 import createGraphML from '../../utils/ExportData';
-import { Button } from '../../ui/components';
-import { Toggle } from '../../ui/components/Fields';
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';

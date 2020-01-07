@@ -3,10 +3,10 @@ import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import { submit } from 'redux-form';
 import { debounce } from 'lodash';
+import { Button } from '@codaco/ui';
 import Overlay from './Overlay';
 import Form from './Form';
 import FormWizard from './FormWizard';
-import { Button } from '../ui/components';
 import { entityAttributesProperty } from '../ducks/modules/network';
 import { Scroller } from '../components';
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from '../ui/components';
+import { Button } from '@codaco/ui';
 import { entityAttributesProperty } from '../ducks/modules/network';
 import sortOrder from '../utils/sortOrder';
 

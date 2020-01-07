@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-
+import { Fade } from '@codaco/ui/lib/components/Transitions';
 import DragManager, { NO_SCROLL } from '../../behaviours/DragAndDrop/DragManager';
-import { Fade } from '../../ui/components/Transitions';
 
 const AnnotationLines =
 ({ lines, isDrawing, isFreeze, linesShowing, linesToFade, onLineFaded }) => (

@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Button } from '@codaco/ui';
 import { actionCreators as sessionActions } from '../ducks/modules/session';
 import { ProgressBar } from '../components';
-import { Button } from '../ui/components';
 
 /**
   * Renders a card with details.

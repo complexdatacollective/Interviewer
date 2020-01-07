@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'recompose';
 import cx from 'classnames';
-import { Icon } from '../../ui/components';
+import { Icon } from '@codaco/ui';
 import { DropObstacle } from '../../behaviours/DragAndDrop';
 import { PresetSwitcherKey } from './';
 

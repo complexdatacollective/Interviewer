@@ -1,8 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-
+import { Button } from '@codaco/ui';
 import { addPairingUrlToService, isValidAddress, isValidPort, maxPort, minPort } from '../../utils/serverAddressing';
-import { Button } from '../../ui/components';
 
 /**
  * @class Renders a form for user to manually enter Server connection info.

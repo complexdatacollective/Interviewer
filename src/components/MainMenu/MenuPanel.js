@@ -1,7 +1,7 @@
 import React from 'react';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import { Icon } from '../../ui/components';
+import { Icon } from '@codaco/ui';
 
 const MenuPanel = ({ active, onClickInactive, onCloseMenu, panel, children }) => {
   const handleClickInactive = !active ? onClickInactive : null;
