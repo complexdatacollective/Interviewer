@@ -47,8 +47,8 @@
     "type": "git"
   },
   "devDependencies": {
+    "@codaco/ui": "3.0.1",
     "@zippytech/sorty": "^2.0.0",
-    "@codaco/ui": "3.0.0",
     "ajv": "^6.5.4",
     "animejs": "^2.2.0",
     "autoprefixer": "7.1.2",
