@@ -161,11 +161,11 @@ class SlidesForm extends Component {
       direction: 'vertical',
       containerClass: 'alter-form__swiper swiper-container',
       speed: getCSSVariableAsNumber('--animation-duration-slow-ms'),
-      effect: 'coverflow',
-      coverflowEffect: {
-        rotate: 30,
-        slideShadows: false,
-      },
+      // effect: 'coverflow',
+      // coverflowEffect: {
+      //   rotate: 30,
+      //   slideShadows: false,
+      // },
       slidesPerView: 'auto',
       centeredSlides: true,
     };
