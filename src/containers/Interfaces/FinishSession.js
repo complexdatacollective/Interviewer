@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import createGraphML from '../../utils/ExportData';
 import { Button } from '../../ui/components';
 import { Toggle } from '../../ui/components/Fields';
@@ -11,7 +10,6 @@ import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { getNetwork } from '../../selectors/network';
 import { getActiveSession } from '../../selectors/session';
 import { getProtocolCodebook, getRemoteProtocolId } from '../../selectors/protocol';
-import { asExportableNetwork } from '../../utils/networkFormat';
 import { ExportSessionsOverlay } from '../Setup';
 
 const ExportSection = ({ defaultServer, children }) => (
@@ -40,6 +38,7 @@ class FinishSession extends Component {
     this.state = {
       downloadDataAdditionalInfo: '',
       showExportSessionOverlay: false,
+      deleteAfterFinish: false,
     };
   }
 
@@ -47,7 +46,7 @@ class FinishSession extends Component {
     const { defaultServer } = this.props;
     return (
       <ExportSection defaultServer={defaultServer}>
-        <Button onClick={() => this.setState({ showExportSessionOverlay: true })}>
+        <Button onClick={this.handleOpenExport}>
           Upload
         </Button>
       </ExportSection>
@@ -57,16 +56,6 @@ class FinishSession extends Component {
   get exportUrl() {
     const { defaultServer } = this.props;
     return defaultServer && defaultServer.secureServiceUrl;
-  }
-
-  export(currentSession) {
-    const { remoteProtocolId, sessionId, codebook } = this.props;
-    const sessionData = asExportableNetwork(
-      currentSession.network,
-      codebook,
-      { _caseID: currentSession.caseId },
-    );
-    this.props.bulkExportSessions([{ remoteProtocolId, sessionUUID: sessionId, sessionData }]);
   }
 
   handleExportError = (additionalInformation) => {
@@ -80,13 +69,19 @@ class FinishSession extends Component {
     });
   }
 
+  handleExport = () => createGraphML(
+    this.props.currentNetwork,
+    this.props.codebook,
+    this.handleExportError,
+  );
+
   handleFinishSession = () => {
-    if (this.state.deleteAfterExport) {
+    if (this.state.deleteAfterFinish) {
       this.props.openDialog({
         type: 'Warning',
         title: 'Finish and delete?',
         confirmLabel: 'Finish and delete',
-        onConfirm: () => this.props.endSession(this.state.deleteAfterExport),
+        onConfirm: () => this.props.endSession(this.state.deleteAfterFinish),
         message: (
           <React.Fragment>
             <p>
@@ -99,9 +94,25 @@ class FinishSession extends Component {
         ),
       });
     } else {
-      this.props.endSession(this.state.deleteAfterExport);
+      this.props.endSession(this.state.deleteAfterFinish);
     }
   };
+
+  handleToggleDelete = () =>
+    this.setState({ deleteAfterFinish: !this.state.deleteAfterFinish });
+
+  handleOpenExport = () => {
+    this.setState({
+      showExportSessionOverlay: true,
+    });
+  }
+
+  handleCloseExport = () => {
+    this.setState({
+      showExportSessionOverlay: false,
+    });
+    this.props.resetSessionExport();
+  }
 
   render() {
     return (
@@ -109,12 +120,7 @@ class FinishSession extends Component {
         <ExportSessionsOverlay
           show={this.state.showExportSessionOverlay}
           key={this.state.showExportSessionOverlay}
-          onClose={() => {
-            this.setState({
-              showExportSessionOverlay: false,
-            });
-            this.props.resetSessionExport();
-          }}
+          onClose={this.handleCloseExport}
           sessionsToExport={[this.props.sessionId]}
         />
         <div className="finish-session-interface__frame">
@@ -137,22 +143,15 @@ class FinishSession extends Component {
               <p>Export this network as a <code>.graphml</code> file</p>
             </div>
             <div>
-              <Button
-                color="platinum"
-                onClick={() => createGraphML(this.props.currentNetwork,
-                  this.props.codebook, this.handleExportError)
-                }
-              >
+              <Button color="platinum" onClick={this.handleExport}>
                 Export
               </Button>
             </div>
           </div>
           <Toggle
             input={{
-              value: this.state.deleteAfterExport,
-              onChange: () => {
-                this.setState({ deleteAfterExport: !this.state.deleteAfterExport });
-              },
+              value: this.state.deleteAfterFinish,
+              onChange: this.handleToggleDelete,
             }}
             label="Delete this session after finishing?"
             fieldLabel=" "
@@ -173,9 +172,7 @@ FinishSession.propTypes = {
   defaultServer: PropTypes.object,
   endSession: PropTypes.func.isRequired,
   resetSessionExport: PropTypes.func.isRequired,
-  bulkExportSessions: PropTypes.func.isRequired,
   openDialog: PropTypes.func.isRequired,
-  remoteProtocolId: PropTypes.string,
   sessionId: PropTypes.string.isRequired,
   codebook: PropTypes.object,
 };
@@ -206,17 +203,13 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    bulkExportSessions: bindActionCreators(sessionsActions.bulkExportSessions, dispatch),
-    resetSessionExport: bindActionCreators(sessionsActions.sessionExportReset, dispatch),
-    deleteSession: bindActionCreators(sessionsActions.removeSession, dispatch),
-    endSession: (deleteAfterExport) => {
-      dispatch(sessionActions.endSession(deleteAfterExport));
-    },
-    openDialog: bindActionCreators(dialogActions.openDialog, dispatch),
-  };
-}
+const mapDispatchToProps = {
+  bulkExportSessions: sessionsActions.bulkExportSessions,
+  resetSessionExport: sessionsActions.sessionExportReset,
+  deleteSession: sessionsActions.removeSession,
+  endSession: sessionActions.endSession,
+  openDialog: dialogActions.openDialog,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(FinishSession);
 
