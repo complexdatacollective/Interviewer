@@ -14,18 +14,7 @@ import { getSessionProgress } from '../../selectors/session';
 import defaultMarkdownRenderers from '../../utils/markdownRenderers';
 import { entityAttributesProperty } from '../../ducks/modules/network';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
-
-const TAGS = [
-  'break',
-  'emphasis',
-  'heading',
-  'link',
-  'list',
-  'listItem',
-  'paragraph',
-  'strong',
-  'thematicBreak',
-];
+import { ALLOWED_MARKDOWN_TAGS } from '../../config';
 
 const confirmDialog = {
   type: 'Confirm',
@@ -118,7 +107,7 @@ class EgoForm extends Component {
               <h1>{introductionPanel.title}</h1>
               <ReactMarkdown
                 source={introductionPanel.text}
-                allowedTypes={TAGS}
+                allowedTypes={ALLOWED_MARKDOWN_TAGS}
                 renderers={defaultMarkdownRenderers}
               />
             </div>

@@ -6,18 +6,8 @@ import { Audio, BackgroundImage, Video } from '../../components';
 import defaultMarkdownRenderers from '../../utils/markdownRenderers';
 import { InformationContentType, AssetType } from '../../protocol-consts';
 import AssetMetaProvider from '../../behaviours/AssetMetaProvider';
+import { ALLOWED_MARKDOWN_TAGS } from '../../config';
 
-const TAGS = [
-  'break',
-  'emphasis',
-  'heading',
-  'link',
-  'list',
-  'listItem',
-  'paragraph',
-  'strong',
-  'thematicBreak',
-];
 
 const getAssetComponent = (asset) => {
   switch (asset.type) {
@@ -43,7 +33,7 @@ const getItemComponent = (item) => {
       return (
         <ReactMarkdown
           source={item.content}
-          allowedTypes={TAGS}
+          allowedTypes={ALLOWED_MARKDOWN_TAGS}
           renderers={defaultMarkdownRenderers}
         />
       );

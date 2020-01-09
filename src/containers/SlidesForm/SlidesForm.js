@@ -10,18 +10,8 @@ import { ProgressBar } from '../../components';
 import defaultMarkdownRenderers from '../../utils/markdownRenderers';
 import { getCSSVariableAsNumber } from '../../ui/utils/CSSVariables';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
+import { ALLOWED_MARKDOWN_TAGS } from '../../config';
 
-const TAGS = [
-  'break',
-  'emphasis',
-  'heading',
-  'link',
-  'list',
-  'listItem',
-  'paragraph',
-  'strong',
-  'thematicBreak',
-];
 
 const confirmDialog = {
   type: 'Confirm',
@@ -190,7 +180,7 @@ class SlidesForm extends Component {
               <h1>{stage.introductionPanel.title}</h1>
               <ReactMarkdown
                 source={stage.introductionPanel.text}
-                allowedTypes={TAGS}
+                allowedTypes={ALLOWED_MARKDOWN_TAGS}
                 renderers={defaultMarkdownRenderers}
               />
             </div>
