@@ -7,7 +7,7 @@ import { shallow, mount } from 'enzyme';
 import Form from '../Form';
 import Field from '../Field';
 
-jest.mock('../../ui/utils/CSSVariables');
+jest.mock('@codaco/ui/lib/utils/CSSVariables');
 
 const mockStore = () =>
   createStore(
