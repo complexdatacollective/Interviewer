@@ -20,9 +20,7 @@ const confirmDialog = {
   confirmLabel: 'Discard changes',
 };
 
-const getFormName = uid =>
-  `${uuid()}_${uid}`;
-
+const formPrefix = uuid();
 
 const SlidesForm = (props) => {
   const {
@@ -30,7 +28,7 @@ const SlidesForm = (props) => {
     stage,
     items,
     slideForm: SlideForm,
-    submitForm: submitFormRedux,
+    submitFormRedux,
     parentClass,
     registerBeforeNext,
     onComplete,
@@ -39,12 +37,19 @@ const SlidesForm = (props) => {
     updateItem,
   } = props;
 
+  const getFormName = uid =>
+    `${formPrefix}_${uid}`;
+
   const [pendingDirection, setPendingDirection] = useState(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [swiper, updateSwiper] = useState(null);
 
+  const getItemIndex = () =>
+    activeIndex - 1;
+
   const isIntroScreen = () => activeIndex === 0;
 
+  // Determine if we should leave the stage
   const shouldContinue = (direction) => {
     if (items.length === 0) { return true; }
     if (isIntroScreen() && direction < 0) { return true; }
@@ -52,7 +57,7 @@ const SlidesForm = (props) => {
   };
 
   const previousItem = () => {
-    setActiveIndex(activeIndex - 1);
+    setActiveIndex(getItemIndex());
     swiper.slidePrev();
   };
 
@@ -64,7 +69,7 @@ const SlidesForm = (props) => {
   const isLastItem = () => activeIndex === items.length;
 
   const submitForm = () => {
-    submitFormRedux(getFormName(activeIndex - 1));
+    submitFormRedux(getFormName(getItemIndex()));
   };
 
   const handleConfirmBack = (confirm) => {
@@ -77,7 +82,7 @@ const SlidesForm = (props) => {
   };
 
   const isFormValid = () => {
-    const formName = getFormName(activeIndex - 1);
+    const formName = getFormName(getItemIndex());
     return getIsFormValid(formName);
   };
 
@@ -89,6 +94,7 @@ const SlidesForm = (props) => {
    * called, which allows async events to happen such as form submission.
    */
   const beforeNext = (direction) => {
+    // Determine if we should leave the stage.
     if (shouldContinue(direction)) {
       onComplete();
       return;
@@ -153,7 +159,7 @@ const SlidesForm = (props) => {
 
   useEffect(() => {
     registerBeforeNext(beforeNext);
-  }, [beforeNext]);
+  }, [swiper, beforeNext]);
 
   return (
     <div className={parentClasses}>
@@ -170,10 +176,12 @@ const SlidesForm = (props) => {
         </div>
 
         {items.map((item, itemIndex) => {
+          const formName = getFormName(itemIndex);
           const slideForm = {
             ...form,
-            form: getFormName(itemIndex),
+            form: formName,
           };
+
 
           return (
             <SlideForm
@@ -201,7 +209,7 @@ SlidesForm.propTypes = {
   stage: PropTypes.object.isRequired,
   items: PropTypes.array,
   stageIndex: PropTypes.number.isRequired,
-  submitForm: PropTypes.func.isRequired,
+  submitFormRedux: PropTypes.func.isRequired,
   updateItem: PropTypes.func.isRequired,
   className: PropTypes.string,
   parentClass: PropTypes.string,
@@ -227,7 +235,7 @@ const mapStateToProps = (state, props) => {
 };
 
 const mapDispatchToProps = {
-  submitForm: submit,
+  submitFormRedux: submit,
   openDialog: dialogActions.openDialog,
 };
 

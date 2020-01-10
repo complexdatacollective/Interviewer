@@ -41,20 +41,23 @@ const getScrollParent = (node) => {
 
 const scrollToFirstError = (errors) => {
   // Todo: first item is an assumption that may not be valid. Should iterate and check
-  // vertical position
+  // vertical position to ensure it is actually the "first" in page order (topmost).
   if (!errors) { return; }
 
   const firstError = Object.keys(errors)[0];
 
-  // All Fields have a name corresponding to variable ID.
-  const el = document.querySelector(`[name="${firstError}"]`);
+
+  // All Fields have a name corresponding to variable ID so look this up.
+  // When used on alter form, multiple forms can be differentiated by the active slide
+  // class. This needs priority, so look it up first.
+  const el = document.querySelector(`.swiper-slide-active [name="${firstError}"]`) ||
+             document.querySelector(`[name="${firstError}"]`);
 
   // Subtract 200 to put more of the input in view.
   const topPos = el.offsetTop - 200;
 
   // Assume forms are inside a scrollable
   const scroller = getScrollParent(el);
-
 
   scroller.scrollTop = topPos;
 };
@@ -94,7 +97,7 @@ class Form extends Component {
     } = this.props;
 
     return (
-      <form className={className} onSubmit={handleSubmit} autoComplete="off">
+      <form className={className} onSubmit={handleSubmit} autoComplete="off" data-form={this.props.form}>
         { fields.map((field, index) => {
           const isFirst = autoFocus && index === 0;
           return (
