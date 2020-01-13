@@ -62,7 +62,6 @@ const scrollToFirstError = (errors) => {
   // Assume forms are inside a scrollable
   const scroller = getScrollParent(el);
 
-
   scroller.scrollTop = topPos;
 };
 
