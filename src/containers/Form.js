@@ -53,6 +53,9 @@ const scrollToFirstError = (errors) => {
   const el = document.querySelector(`.swiper-slide-active [name="${firstError}"]`) ||
              document.querySelector(`[name="${firstError}"]`);
 
+  // If element can't be found, quit
+  if (!el) { throw new Error('Field component has no corresponding name attribute (`[name="VARIABLE_NAME"]`)'); }
+
   // Subtract 200 to put more of the input in view.
   const topPos = el.offsetTop - 200;
 
