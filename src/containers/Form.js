@@ -41,13 +41,17 @@ const getScrollParent = (node) => {
 
 const scrollToFirstError = (errors) => {
   // Todo: first item is an assumption that may not be valid. Should iterate and check
-  // vertical position
+  // vertical position to ensure it is actually the "first" in page order (topmost).
   if (!errors) { return; }
 
   const firstError = Object.keys(errors)[0];
 
-  // All Fields have a name corresponding to variable ID.
-  const el = document.querySelector(`[name="${firstError}"]`);
+
+  // All Fields have a name corresponding to variable ID so look this up.
+  // When used on alter form, multiple forms can be differentiated by the active slide
+  // class. This needs priority, so look it up first.
+  const el = document.querySelector(`.swiper-slide-active [name="${firstError}"]`) ||
+             document.querySelector(`[name="${firstError}"]`);
 
   // If element can't be found, quit
   if (!el) { throw new Error('Field component has no corresponding name attribute (`[name="VARIABLE_NAME"]`)'); }
