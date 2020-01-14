@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -14,106 +14,96 @@ import { actionCreators as uiActions } from '../../ducks/modules/ui';
 /**
   * Display available protocols
   */
-class ProtocolList extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      showNewSessionOverlay: false,
-      selectedProtocol: null,
-    };
-    this.swiper = null;
-    this.overlay = React.createRef();
-  }
+const ProtocolList = (props) => {
+  const {
+    installedProtocols,
+    activeSlideKey,
+    importProtocolFromURI,
+    addSession,
+    updateProtocolIndex,
+  } = props;
 
-  onClickProtocolCard = (protocolUID) => {
-    this.setState({
-      showNewSessionOverlay: true,
-      selectedProtocol: protocolUID,
-    });
-  }
+  const [showNewSessionOverlay, setShowNewSessionOverlay] = useState(false);
+  const [selectedProtocol, setSelectedProtocol] = useState(null);
 
-  handleCreateSession = (caseId) => {
-    this.props.addSession(caseId, this.state.selectedProtocol);
-    this.handleCloseOverlay();
-  }
+  const onClickProtocolCard = (protocolUID) => {
+    setShowNewSessionOverlay(true);
+    setSelectedProtocol(protocolUID);
+  };
 
-  handleCloseOverlay = () => {
-    this.setState({ showNewSessionOverlay: false, selectedProtocol: null });
-  }
+  const handleCloseOverlay = () => {
+    setShowNewSessionOverlay(false);
+    setSelectedProtocol(null);
+  };
 
-  handleSwipe = (index) => {
-    this.props.updateProtocolIndex(index);
-  }
+  const handleCreateSession = (caseId) => {
+    addSession(caseId, selectedProtocol);
+    handleCloseOverlay();
+  };
 
-  render() {
-    const {
-      installedProtocols,
-      activeSlideKey,
-    } = this.props;
+  const handleSwipe = (index) => {
+    updateProtocolIndex(index);
+  };
 
-    const params = {
-      containerClass: 'protocol-list swiper-container',
-      pagination: {},
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
-      renderPrevButton: () => <Icon className="swiper-button-prev" name="form-arrow-left" />,
-      renderNextButton: () => <Icon className="swiper-button-next" name="form-arrow-right" />,
-      loop: false,
-      slidesPerView: 'auto',
-      centeredSlides: true,
-      shouldSwiperUpdate: true,
-      initialSlide: activeSlideKey,
-    };
+  const params = {
+    containerClass: 'protocol-list swiper-container',
+    pagination: {},
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+    renderPrevButton: () => <Icon className="swiper-button-prev" name="form-arrow-left" />,
+    renderNextButton: () => <Icon className="swiper-button-next" name="form-arrow-right" />,
+    loop: false,
+    slidesPerView: 'auto',
+    centeredSlides: true,
+    shouldSwiperUpdate: true,
+    initialSlide: activeSlideKey,
+  };
 
-    const installedProtocolsArray =
-      Object.keys(installedProtocols).map(
-        protocol => ({ ...installedProtocols[protocol], uuid: protocol }));
+  const installedProtocolsArray =
+    Object.keys(installedProtocols).map(
+      protocol => ({ ...installedProtocols[protocol], uuid: protocol }));
 
-    return (
-      <React.Fragment>
-        { size(installedProtocols) > 0 ?
-          <Swiper
-            {...params}
-            ref={(node) => {
-              if (node) {
-                this.swiper = node.swiper;
-                node.swiper.on('slideChange', () => { this.handleSwipe(node.swiper.activeIndex); });
-              }
-            }}
-          >
-            { map(installedProtocolsArray, (protocol, index) => (
-              <div key={index}>
-                <ProtocolCard
-                  protocol={protocol}
-                  selectProtocol={() => this.onClickProtocolCard(protocol.uuid)}
-                />
-              </div>
-            )) }
-          </Swiper>
-          :
-          <div className="protocol-list protocol-list--empty">
-            <div className="protocol-list--empty getting-started">
-              <h1>No interview protocols installed</h1>
-              <p>
-                To get started, install an interview protocol on this device. To do this,
-                click the button in the bottom right to pair with an instance of Server,
-                import a protocol from a URL, or add a local .netcanvas file.
-              </p>
-              <p>Alternatively, click <a onClick={() => this.props.importProtocolFromURI('https://documentation.networkcanvas.com/protocols/Public%20Health%20Protocol%20schema%202.netcanvas')}>here</a> to download and install a sample public health protocol (requires network access).</p>
+  return (
+    <React.Fragment>
+      { size(installedProtocols) > 0 ?
+        <Swiper
+          {...params}
+          getSwiper={(swiper) => {
+            swiper.on('slideChange', () => { handleSwipe(swiper.activeIndex); });
+          }}
+        >
+          { map(installedProtocolsArray, (protocol, index) => (
+            <div key={index}>
+              <ProtocolCard
+                protocol={protocol}
+                selectProtocol={() => onClickProtocolCard(protocol.uuid)}
+              />
             </div>
+          )) }
+        </Swiper>
+        :
+        <div className="protocol-list protocol-list--empty">
+          <div className="protocol-list--empty getting-started">
+            <h1>No interview protocols installed</h1>
+            <p>
+              To get started, install an interview protocol on this device. To do this,
+              click the button in the bottom right to pair with an instance of Server,
+              import a protocol from a URL, or add a local .netcanvas file.
+            </p>
+            <p>Alternatively, click <a onClick={() => importProtocolFromURI('https://documentation.networkcanvas.com/protocols/Public%20Health%20Protocol%20schema%202.netcanvas')}>here</a> to download and install a sample public health protocol (requires network access).</p>
           </div>
-        }
-        <NewSessionOverlay
-          handleSubmit={this.handleCreateSession}
-          onClose={this.handleCloseOverlay}
-          show={this.state.showNewSessionOverlay}
-        />
-      </React.Fragment>
-    );
-  }
-}
+        </div>
+      }
+      <NewSessionOverlay
+        handleSubmit={handleCreateSession}
+        onClose={handleCloseOverlay}
+        show={showNewSessionOverlay}
+      />
+    </React.Fragment>
+  );
+};
 
 ProtocolList.propTypes = {
   addSession: PropTypes.func.isRequired,

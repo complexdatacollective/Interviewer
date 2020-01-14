@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -10,18 +10,8 @@ import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
 import { ProgressBar } from '../../components';
 import defaultMarkdownRenderers from '../../utils/markdownRenderers';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
+import { ALLOWED_MARKDOWN_TAGS } from '../../config';
 
-const TAGS = [
-  'break',
-  'emphasis',
-  'heading',
-  'link',
-  'list',
-  'listItem',
-  'paragraph',
-  'strong',
-  'thematicBreak',
-];
 
 const confirmDialog = {
   type: 'Confirm',
@@ -30,206 +20,196 @@ const confirmDialog = {
   confirmLabel: 'Discard changes',
 };
 
-class SlidesForm extends Component {
-  constructor(props) {
-    super(props);
-    this.swipeRef = React.createRef();
-    this.state = {
-      activeIndex: 0,
-      formPrefix: uuid(),
-    };
-  }
+const formPrefix = uuid();
 
-  componentDidMount() {
-    this.props.registerBeforeNext(this.beforeNext);
-  }
+const SlidesForm = (props) => {
+  const {
+    form,
+    stage,
+    items,
+    slideForm: SlideForm,
+    submitFormRedux,
+    parentClass,
+    registerBeforeNext,
+    onComplete,
+    openDialog,
+    getIsFormValid,
+    updateItem,
+  } = props;
 
-  getItemIndex = () =>
-    this.state.activeIndex - 1;
+  const getFormName = uid =>
+    `${formPrefix}_${uid}`;
 
-  getFormName = uid =>
-    `${this.state.formPrefix}_${uid}`;
+  const [pendingDirection, setPendingDirection] = useState(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [swiper, updateSwiper] = useState(null);
+
+  const getItemIndex = () =>
+    activeIndex - 1;
+
+  const isIntroScreen = () => activeIndex === 0;
+
+  // Determine if we should leave the stage
+  const shouldContinue = (direction) => {
+    if (items.length === 0) { return true; }
+    if (isIntroScreen() && direction < 0) { return true; }
+    return false;
+  };
+
+  const previousItem = () => {
+    setActiveIndex(getItemIndex());
+    swiper.slidePrev();
+  };
+
+  const nextItem = () => {
+    setActiveIndex(activeIndex + 1);
+    swiper.slideNext();
+  };
+
+  const isLastItem = () => activeIndex === items.length;
+
+  const submitForm = () => {
+    submitFormRedux(getFormName(getItemIndex()));
+  };
+
+  const handleConfirmBack = (confirm) => {
+    if (confirm) {
+      previousItem();
+      return;
+    }
+
+    submitForm();
+  };
+
+  const isFormValid = () => {
+    const formName = getFormName(getItemIndex());
+    return getIsFormValid(formName);
+  };
 
   /**
    * Called by ProtocolScreen before navigating away from this stage
    *
    * If this `beforeNext` method is defined on an interfaces, the
-   * navigation will be blocked until `this.props.onContinue()` is
+   * navigation will be blocked until `onContinue()` is
    * called, which allows async events to happen such as form submission.
    */
-  beforeNext = (direction) => {
-    if (this.shouldContinue(direction)) {
-      this.props.onComplete();
+  const beforeNext = (direction) => {
+    // Determine if we should leave the stage.
+    if (shouldContinue(direction)) {
+      onComplete();
       return;
     }
 
-    if (this.isIntroScreen() && direction > 0) {
-      this.nextItem();
+    if (isIntroScreen() && direction > 0) {
+      nextItem();
       return;
     }
 
-    if (direction < 0 && !this.isFormValid()) {
-      this.props.openDialog(confirmDialog)
-        .then(this.handleConfirmBack);
+    if (direction < 0 && !isFormValid()) {
+      openDialog(confirmDialog)
+        .then(handleConfirmBack);
       return;
     }
 
-    this.setState({
-      pendingDirection: direction,
-    }, () => {
-      this.submitForm();
-    });
-  }
-
-  handleConfirmBack = (confirm) => {
-    if (confirm) {
-      this.previousItem();
-      return;
-    }
-
-    this.submitForm();
+    setPendingDirection(direction);
+    submitForm();
   };
 
-  isFormValid = () => {
-    const formName = this.getFormName(this.getItemIndex());
-    return this.props.getIsFormValid(formName);
+  const swiperParams = {
+    direction: 'vertical',
+    containerClass: 'alter-form__swiper swiper-container',
+    speed: getCSSVariableAsNumber('--animation-duration-slow-ms'),
+    slidesPerView: 'auto',
+    centeredSlides: true,
   };
 
-  submitForm = () => {
-    this.props.submitForm(this.getFormName(this.getItemIndex()));
-  }
+  const progressClasses = cx(
+    'progress-container',
+    {
+      'progress-container--show': activeIndex > 0,
+    },
+  );
 
-  previousItem() {
-    this.setState({
-      activeIndex: this.state.activeIndex - 1,
-    });
-    this.swipeRef.current.swiper.slidePrev();
-  }
+  const parentClasses = cx(
+    'alter-form swiper-no-swiping',
+    parentClass,
+  );
 
-  nextItem() {
-    this.setState({
-      activeIndex: this.state.activeIndex + 1,
-    });
-    this.swipeRef.current.swiper.slideNext();
-  }
-
-  isIntroScreen = () => this.state.activeIndex === 0;
-
-  isLastItem = () => this.state.activeIndex === this.props.items.length;
-
-  shouldContinue = (direction) => {
-    if (this.props.items.length === 0) { return true; }
-    if (this.isIntroScreen() && direction < 0) { return true; }
+  const isComplete = (direction) => {
+    if (isIntroScreen() && direction < 0) { return true; }
+    if (isLastItem() && direction > 0) { return true; }
     return false;
-  }
+  };
 
-  isComplete = (direction) => {
-    if (this.isIntroScreen() && direction < 0) { return true; }
-    if (this.isLastItem() && direction > 0) { return true; }
-    return false;
-  }
-
-  handleUpdate = (...update) => {
-    const { pendingDirection } = this.state;
-    const { updateItem, onComplete } = this.props;
-
+  const handleUpdate = (...update) => {
     updateItem(...update);
 
-    if (this.isComplete(pendingDirection)) {
+    if (isComplete(pendingDirection)) {
       onComplete();
       return;
     }
 
     if (pendingDirection < 0) {
-      this.previousItem();
+      previousItem();
       return;
     }
 
-    this.nextItem();
+    nextItem();
   };
 
-  render() {
-    const {
-      form,
-      stage,
-      items,
-      slideForm: SlideForm,
-      parentClass,
-    } = this.props;
+  useEffect(() => {
+    registerBeforeNext(beforeNext);
+  }, [swiper, beforeNext]);
 
-    const swiperParams = {
-      direction: 'vertical',
-      containerClass: 'alter-form__swiper swiper-container',
-      speed: getCSSVariableAsNumber('--animation-duration-slow-ms'),
-      effect: 'coverflow',
-      coverflowEffect: {
-        rotate: 30,
-        slideShadows: false,
-      },
-      slidesPerView: 'auto',
-      centeredSlides: true,
-    };
-
-    const progressClasses = cx(
-      'progress-container',
-      {
-        'progress-container--show': this.state.activeIndex > 0,
-      },
-    );
-
-    const parentClasses = cx(
-      'alter-form swiper-no-swiping',
-      parentClass,
-    );
-
-    return (
-      <div className={parentClasses}>
-        <Swiper {...swiperParams} ref={this.swipeRef} >
-          <div>
-            <div key="alter-form__introduction" className="slide-content alter-form__introduction">
-              <h1>{stage.introductionPanel.title}</h1>
-              <ReactMarkdown
-                source={stage.introductionPanel.text}
-                allowedTypes={TAGS}
-                renderers={defaultMarkdownRenderers}
-              />
-            </div>
+  return (
+    <div className={parentClasses}>
+      <Swiper {...swiperParams} getSwiper={updateSwiper} >
+        <div>
+          <div key="alter-form__introduction" className="slide-content alter-form__introduction">
+            <h1>{stage.introductionPanel.title}</h1>
+            <ReactMarkdown
+              source={stage.introductionPanel.text}
+              allowedTypes={ALLOWED_MARKDOWN_TAGS}
+              renderers={defaultMarkdownRenderers}
+            />
           </div>
-
-          {items.map((item, itemIndex) => {
-            const slideForm = {
-              ...form,
-              form: this.getFormName(itemIndex),
-            };
-
-            return (
-              <SlideForm
-                key={itemIndex}
-                subject={stage.subject}
-                item={item}
-                onUpdate={this.handleUpdate}
-                form={slideForm}
-              />
-            );
-          })}
-        </Swiper>
-        <div className={progressClasses}>
-          <h6 className="progress-container__status-text">
-            <strong>{this.state.activeIndex}</strong> of <strong>{items.length}</strong>
-          </h6>
-          <ProgressBar orientation="horizontal" percentProgress={(this.state.activeIndex / items.length) * 100} />
         </div>
+
+        {items.map((item, itemIndex) => {
+          const formName = getFormName(itemIndex);
+          const slideForm = {
+            ...form,
+            form: formName,
+          };
+
+
+          return (
+            <SlideForm
+              key={itemIndex}
+              subject={stage.subject}
+              item={item}
+              onUpdate={handleUpdate}
+              form={slideForm}
+            />
+          );
+        })}
+      </Swiper>
+      <div className={progressClasses}>
+        <h6 className="progress-container__status-text">
+          <strong>{activeIndex}</strong> of <strong>{items.length}</strong>
+        </h6>
+        <ProgressBar orientation="horizontal" percentProgress={(activeIndex / items.length) * 100} />
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 SlidesForm.propTypes = {
   form: PropTypes.object.isRequired,
   stage: PropTypes.object.isRequired,
   items: PropTypes.array,
   stageIndex: PropTypes.number.isRequired,
-  submitForm: PropTypes.func.isRequired,
+  submitFormRedux: PropTypes.func.isRequired,
   updateItem: PropTypes.func.isRequired,
   className: PropTypes.string,
   parentClass: PropTypes.string,
@@ -255,7 +235,7 @@ const mapStateToProps = (state, props) => {
 };
 
 const mapDispatchToProps = {
-  submitForm: submit,
+  submitFormRedux: submit,
   openDialog: dialogActions.openDialog,
 };
 
