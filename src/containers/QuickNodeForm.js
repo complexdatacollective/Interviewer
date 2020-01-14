@@ -2,9 +2,9 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { compose } from 'redux';
+import { Icon } from '@codaco/ui';
 import withPrompt from '../behaviours/withPrompt';
 import { entityAttributesProperty } from '../ducks/modules/network';
-import { Icon } from '../ui/components/';
 import { Node } from './';
 
 class QuickNodeForm extends PureComponent {

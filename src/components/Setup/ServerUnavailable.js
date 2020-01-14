@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button } from '../../ui/components/';
+import { Button } from '@codaco/ui';
 
 const ServerUnavailable = ({ errorMessage, handleRetry }) => (
   <div className="server-unavailable">

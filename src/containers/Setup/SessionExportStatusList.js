@@ -3,8 +3,8 @@ import { map, pick } from 'lodash';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Spinner, Icon } from '@codaco/ui';
 import Scroller from '../../components/Scroller';
-import { Spinner, Icon } from '../../ui/components';
 
 class SessionExportStatusList extends PureComponent {
   constructor(props) {

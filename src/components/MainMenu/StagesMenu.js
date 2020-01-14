@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { Icon } from '@codaco/ui';
 import Timeline from './Timeline';
-import { Icon } from '../../ui/components';
 import MenuPanel from './MenuPanel';
 
 class StagesMenu extends PureComponent {

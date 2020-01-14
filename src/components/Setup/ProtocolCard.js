@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import cx from 'classnames';
+import { Icon } from '@codaco/ui';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { actionCreators as installedProtocolsActions } from '../../ducks/modules/installedProtocols';
-import { Icon } from '../../ui/components';
 import { APP_SUPPORTED_SCHEMA_VERSIONS, APP_SCHEMA_VERSION } from '../../config';
 
 class ProtocolCard extends React.Component {

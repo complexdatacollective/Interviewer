@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Button } from '@codaco/ui';
 import ProtocolUrlForm from './ProtocolUrlForm';
 import ServerPairing from './ServerPairing';
 import ServerProtocols from './ServerProtocols';
@@ -10,7 +11,6 @@ import { ServerAddressForm, DiscoveredServerList } from '../../components/Setup'
 import importLocalProtocol from '../../utils/protocol/importLocalProtocol';
 import { actionCreators as protocolActions } from '../../ducks/modules/importProtocol';
 import Overlay from '../Overlay';
-import { Button } from '../../ui/components';
 
 /**
  * This component is the top-level interface for protocol importing, wrapping

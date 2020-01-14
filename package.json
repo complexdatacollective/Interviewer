@@ -172,6 +172,7 @@
     "ios-sim": "^8.0.1"
   },
   "dependencies": {
+    "@codaco/ui": "^3.0.3",
     "cordova-android": "^8.0.0",
     "cordova-ios": "^5.0.1",
     "cordova-plugin-add-swift-support": "^2.0.2",
@@ -241,12 +242,13 @@
     "testEnvironment": "node",
     "testURL": "http://localhost",
     "transform": {
+      "/node_modules/(?!codaco/ui).+\\.js$": "<rootDir>/node_modules/babel-jest",
       "^.+\\.(js|jsx)$": "<rootDir>/node_modules/babel-jest",
       "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
       "^(?!.*\\.(js|jsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
     },
     "transformIgnorePatterns": [
-      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"
+      "/node_modules/(?!@codaco/ui).+\\.js$"
     ],
     "moduleNameMapper": {
       "^react-native$": "react-native-web"

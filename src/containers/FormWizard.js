@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Icon } from '../ui/components';
+import { Button, Icon } from '@codaco/ui';
 import { Pips } from '../components/';
 import { Form } from '../containers/';
 

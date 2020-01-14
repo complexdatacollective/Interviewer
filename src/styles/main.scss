@@ -1,9 +1,9 @@
-$font-path: '../ui/assets/fonts';
+$font-path: '~@codaco/ui/lib/assets/fonts';
 
 $scroller-top-padding: 2rem;
 $scroller-top-padding-small: 1rem;
 
-@import '../ui/styles/all';
+@import '~@codaco/ui/lib/styles/all';
 @import 'utils/all';
 @import 'helpers/all';
 @import 'components/all';

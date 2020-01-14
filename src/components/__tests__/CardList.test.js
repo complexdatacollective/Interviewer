@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import { shallow } from 'enzyme';
 import CardList from '../CardList';
 
-jest.mock('../../ui/utils/CSSVariables');
+jest.mock('@codaco/ui/lib/utils/CSSVariables');
 
 const mockState = {
   activeSessionId: '62415a79-cd46-409a-98b3-5a0a2fef1f97',

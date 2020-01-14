@@ -5,7 +5,7 @@ import { createStore } from 'redux';
 import { shallow } from 'enzyme';
 import NodeList from '../NodeList';
 
-jest.mock('../../ui/utils/CSSVariables');
+jest.mock('@codaco/ui/lib/utils/CSSVariables');
 
 const mockStore = createStore(() => (
   { droppable: { activeZones: [] }, draggable: { draggingFromIds: {} } }

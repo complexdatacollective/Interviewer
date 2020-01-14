@@ -3,9 +3,8 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import window from '../../ui/components/window';
-import { Icon } from '../../ui/components';
-import { Radio } from '../../ui/components/Fields';
+import { Icon, window } from '@codaco/ui';
+import { Radio } from '@codaco/ui/lib/components/Fields';
 import { Accordion } from '.';
 
 import { makeGetEdgeColor, makeGetEdgeLabel, makeGetNodeAttributeLabel, makeGetCategoricalOptions } from '../../selectors/network';

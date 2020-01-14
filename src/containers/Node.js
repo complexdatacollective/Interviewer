@@ -1,9 +1,8 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-
+import { Node as UINode } from '@codaco/ui';
 import WorkerAgent from '../utils/WorkerAgent';
-import { Node as UINode } from '../ui/components';
 import { getWorkerNetwork, makeGetNodeLabel, makeGetNodeColor, makeGetNodeTypeDefinition } from '../selectors/network';
 import { getNodeLabelWorkerUrl } from '../selectors/activeSessionWorkers';
 import { asWorkerAgentEntity } from '../utils/networkFormat';

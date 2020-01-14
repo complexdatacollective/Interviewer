@@ -2,12 +2,12 @@ import React, { PureComponent } from 'react';
 import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
 import { makeGetAdditionalAttributes } from '../selectors/interface';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { entityPrimaryKeyProperty } from '../ducks/modules/network';
 import { Panels } from '../components/';
 import { makeGetPanelConfiguration } from '../selectors/name-generator';
-import { getCSSVariableAsString } from '../ui/utils/CSSVariables';
 import NodePanel from './NodePanel';
 import { MonitorDragSource } from '../behaviours/DragAndDrop';
 

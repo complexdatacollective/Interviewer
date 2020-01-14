@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Swiper from 'react-id-swiper';
 import { size, map } from 'lodash';
-import { Icon } from '../../ui/components';
+import { Icon } from '@codaco/ui';
 import { NewSessionOverlay, ProtocolCard } from '../../components/Setup';
 import { actionCreators as sessionActions } from '../../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';

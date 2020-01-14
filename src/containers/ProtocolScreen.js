@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { TransitionGroup } from 'react-transition-group';
 import { get } from 'lodash';
+import { Fade } from '@codaco/ui/lib/components/Transitions';
+import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
 import { Timeline } from '../components';
 import { Stage as StageTransition } from '../components/Transition';
-import { Fade } from '../ui/components/Transitions';
 import Stage from './Stage';
 import { getSessionProgress } from '../selectors/session';
 import { getProtocolStages } from '../selectors/protocol';
-import { getCSSVariableAsNumber } from '../ui/utils/CSSVariables';
 import { actionCreators as navigateActions } from '../ducks/modules/navigate';
 
 const initialState = {

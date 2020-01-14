@@ -53,8 +53,12 @@ const scrollToFirstError = (errors) => {
   const el = document.querySelector(`.swiper-slide-active [name="${firstError}"]`) ||
              document.querySelector(`[name="${firstError}"]`);
 
-  // If element can't be found, quit
-  if (!el) { throw new Error('Field component has no corresponding name attribute (`[name="VARIABLE_NAME"]`)'); }
+  // If element is not found, prevent crash.
+  if (!el) {
+    // eslint-disable-next-line no-console
+    console.warn(`scrollToFirstError(): Element [name="${firstError}"] not found in DOM`);
+    return;
+  }
 
   // Subtract 200 to put more of the input in view.
   const topPos = el.offsetTop - 200;
