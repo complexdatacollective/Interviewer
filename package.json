@@ -60,7 +60,8 @@
     "animejs": "^2.2.0",
     "autoprefixer": "7.1.2",
     "axios": "^0.18.0",
-    "babel-eslint": "^8.2.6",
+    "babel-core": "7.0.0-bridge.0",
+    "babel-eslint": "^7.2.3",
     "babel-jest": "23.6.0",
     "babel-loader": "^8.0.6",
     "babel-runtime": "6.26.0",
@@ -251,6 +252,9 @@
       "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
       "^(?!.*\\.(js|jsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
     },
+    "transformIgnorePatterns": [
+      "<rootDir>/node_modules/"
+    ],
     "moduleNameMapper": {
       "^react-native$": "react-native-web"
     }
