@@ -172,7 +172,7 @@
     "ios-sim": "^8.0.1"
   },
   "dependencies": {
-    "@codaco/ui": "^3.0.3",
+    "@codaco/ui": "^3.0.5",
     "cordova-android": "^8.0.0",
     "cordova-ios": "^5.0.1",
     "cordova-plugin-add-swift-support": "^2.0.2",
