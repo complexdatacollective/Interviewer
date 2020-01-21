@@ -24,14 +24,13 @@
 
     .slide-content {
       display: flex;
-      max-height: 75%;
+      max-height: 70%;
       min-height: 30%;
       width: 100%;
       padding: unit(1) unit(4) unit(2);
       border-radius: var(--border-radius);
       background: var(--light-background);
       position: relative;
-      top: calc(var(--base-node-size) * .2);
 
       &.alter-form__introduction {
         align-self: center;
