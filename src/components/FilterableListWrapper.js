@@ -115,7 +115,7 @@ class FilterableListWrapper extends Component {
           <input
             className="list-select__filter"
             type="search"
-            placeholder="Filter"
+            placeholder="Filter..."
             onChange={this.onFilterChange}
             value={this.state.filterValue}
           />

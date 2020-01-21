@@ -9,19 +9,36 @@
   overflow: hidden;
   position: relative;
 
+  .card-list {
+    padding-bottom: 0;
+    padding-top: 1rem;
+  }
+
   &__filter {
     border-radius: 10rem;
     width: 13rem;
     min-height: 3.5rem;
-    padding: .75rem 2rem;
-    margin: 1rem;
-    border: 1px solid var(--color-platinum);
+    padding: 0 2rem;
+    margin: 0 1rem;
+    border: 0;
+    background: var(--input-background);
+    color: var(--input-color);
     background-clip: padding-box;
+    font-family: var(--heading-font-family);
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+
+    &::placeholder {
+      color: var(--input-placholder);
+      font-style: italic;
+    }
   }
 
   &__sort {
     button {
-      margin: 1rem;
+      margin: 0 1rem;
     }
   }
 
