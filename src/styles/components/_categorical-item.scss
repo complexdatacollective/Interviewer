@@ -23,6 +23,7 @@
     left: 0;
     width: 100%;
     height: 100%;
+    transform: scale(0.95);
   }
 
   .categorical-item__inner {
@@ -48,8 +49,7 @@
 
   &--hover {
     .categorical-item__disk {
-      transform-origin: center;
-      transform: scale(1.05);
+      transform: scale(1);
       background-color: var(--categorical-item-color);
     }
   }
