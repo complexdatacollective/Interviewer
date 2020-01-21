@@ -1,6 +1,5 @@
 .ego-form {
   height: 100%;
-  padding: 2rem 8rem 5rem 4rem;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -28,7 +27,7 @@
     width: 100%;
 
     .scrollable {
-      padding-top: unit(4);
+      padding: unit(4) 7rem 0 2rem;
       height: 100%;
     }
   }
