@@ -1,8 +1,10 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from '@codaco/ui';
+import { Text } from '@codaco/ui/lib/components/Fields';
 import Timeline from './Timeline';
 import MenuPanel from './MenuPanel';
+
 
 class StagesMenu extends PureComponent {
   constructor(props) {
@@ -38,12 +40,16 @@ class StagesMenu extends PureComponent {
           <div className="main-menu-stages-menu__timeline">
             <div className="main-menu-stages-menu__timeline-header">
               <h1>Interview Stages</h1>
-              <input
-                className="stages-input"
-                type="text"
-                placeholder="Filter stages..."
-                onChange={this.onInputChange}
-              />
+              <div className="main-menu-stages-menu__timeline-header--filter">
+                <h4>Filter: </h4>
+                <Text
+                  type="search"
+                  placeholder="Filter Stages..."
+                  input={{
+                    onChange: this.onInputChange,
+                  }}
+                />
+              </div>
             </div>
             <Timeline items={this.state.stages} />
           </div>
