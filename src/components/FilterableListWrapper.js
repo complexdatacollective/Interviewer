@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from '@codaco/ui';
+import { Text } from '@codaco/ui/lib/components/Fields';
 import { entityAttributesProperty } from '../ducks/modules/network';
 import sortOrder from '../utils/sortOrder';
 
@@ -103,22 +104,37 @@ class FilterableListWrapper extends Component {
     return (
       <div className="list-select">
         <div className="list-select__sort">
-          { sortFields && sortFields.map(sortField => (
-            <Button
-              color={this.state.activeSortOrder.property === sortField.variable ? 'primary' : 'white'}
-              key={sortField.variable}
-              onClick={() => this.setSortBy(sortField.variable)}
-            >
-              {(sortField.label || sortField.variable) + this.getDirection(sortField.variable)}
-            </Button>
-          ))}
-          <input
-            className="list-select__filter"
-            type="search"
-            placeholder="Filter..."
-            onChange={this.onFilterChange}
-            value={this.state.filterValue}
-          />
+          <div>
+            { (sortFields && sortFields.length > 0) &&
+              <React.Fragment>
+                <h4>Sort: </h4>
+                {sortFields.map(sortField => (
+                  <Button
+                    color={this.state.activeSortOrder.property === sortField.variable ? 'primary' : 'white'}
+                    key={sortField.variable}
+                    onClick={() => this.setSortBy(sortField.variable)}
+                  >
+                    {
+                      (sortField.label || sortField.variable)
+                        + this.getDirection(sortField.variable)
+                    }
+                  </Button>
+                ))}
+              </React.Fragment>
+            }
+          </div>
+          <div>
+            <h4>Filter: </h4>
+            <Text
+              type="search"
+              placeholder="Filter Items..."
+              className="list-select__filter"
+              input={{
+                value: this.state.filterValue,
+                onChange: this.onFilterChange,
+              }}
+            />
+          </div>
         </div>
         <ListComponent
           {...listComponentProps}

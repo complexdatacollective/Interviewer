@@ -6,11 +6,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-right: calc(6rem + var(--interface-right-margin));
+    margin-left: var(--timeline-width);
   }
 
   .swiper-wrapper {
     box-sizing: border-box;
-    width: 75%;
+    max-width: 80rem;
 
     .scrollable {
       height: 100%;
@@ -80,7 +82,7 @@
 
   .progress-container {
     @include transition-properties((opacity, transform), var(--animation-duration-slow), var(--animation-easing));
-    bottom: unit(4);
+    bottom: unit(2);
     position: absolute;
     z-index: var(--z-panel);
     left: 50%;

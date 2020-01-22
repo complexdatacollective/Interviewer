@@ -14,25 +14,27 @@
     padding-top: 1rem;
   }
 
-  &__filter {
-    border-radius: 10rem;
-    width: 13rem;
-    min-height: 3.5rem;
-    padding: 0 2rem;
-    margin: 0 1rem;
-    border: 0;
-    background: var(--input-background);
-    color: var(--input-color);
-    background-clip: padding-box;
-    font-family: var(--heading-font-family);
-    font-weight: 700;
-    font-size: 0.8rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
+  &__sort {
+    display: flex;
+    align-items: center;
+    align-content: space-evenly;
+    justify-content: space-between;
 
-    &::placeholder {
-      color: var(--input-placholder);
-      font-style: italic;
+    h4 {
+      display: inline;
+    }
+  }
+
+  .form-field-container {
+    display: inline-block;
+    margin: 0 1rem;
+  }
+
+  &__filter {
+    width: 13rem;
+
+    input {
+      margin-bottom: 0;
     }
   }
 
