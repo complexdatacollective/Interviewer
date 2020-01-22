@@ -10,7 +10,6 @@
   &__introduction {
     border-radius: var(--border-radius);
     background: var(--form-intro-panel-background);
-    margin-bottom: unit(10);
     max-height: 80vh;
     padding: unit(6);
     overflow: hidden;
@@ -23,12 +22,16 @@
 
   &__form-container {
     height: 100%;
-    max-width: 60rem;
     width: 100%;
 
     .scrollable {
-      padding: unit(4) 7rem 0 2rem;
+      padding: unit(4) 7rem 8rem 2rem;
       height: 100%;
+
+      & > * {
+        max-width: 60rem;
+        margin: 3rem auto 4rem;
+      }
     }
   }
 
