@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-
-import { Spinner } from '../ui/components';
+import { Spinner } from '@codaco/ui';
 
 const Loading = ({ message, className }) => (
   <div className={cx('loading', className)}>

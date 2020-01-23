@@ -81,26 +81,25 @@ export const forceClick = async (_app, _selector) => {
   }, _selector);
 };
 
-const getImageSnaphotConfig = async (app, options = {}) =>
+const getImageSnaphotConfig = async app =>
   app.client.execute(() => window.devicePixelRatio)
     .then(({ value: devicePixelRatio }) => ({
       ...defaultImageSnaphotConfig,
       customSnapshotIdentifier: ({ testPath, currentTestName, counter }) =>
         `${devicePixelRatio}x-${appSize}-`
           .concat(kebabCase(`${path.basename(testPath)}-${currentTestName}-${counter}`)),
-      ...options,
     }));
 
-export const matchImageSnapshot = async (app, options = {}) => {
+export const matchImageSnapshot = async (app, rect = null) => {
   if (process.env.TEST_ENV === 'development') {
     await app.client.pause(timing.medium);
     return;
   }
 
   await app.client.pause(timing.long);
-  await getImageSnaphotConfig(app, options)
+  await getImageSnaphotConfig(app)
     .then(imageSnaphotConfig =>
-      expect(app.browserWindow.capturePage())
+      expect(app.browserWindow.capturePage(rect))
         .resolves.toMatchImageSnapshot(imageSnaphotConfig),
     );
 };

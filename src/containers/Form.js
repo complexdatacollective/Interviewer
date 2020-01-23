@@ -41,20 +41,30 @@ const getScrollParent = (node) => {
 
 const scrollToFirstError = (errors) => {
   // Todo: first item is an assumption that may not be valid. Should iterate and check
-  // vertical position
+  // vertical position to ensure it is actually the "first" in page order (topmost).
   if (!errors) { return; }
 
   const firstError = Object.keys(errors)[0];
 
-  // All Fields have a name corresponding to variable ID.
-  const el = document.querySelector(`[name="${firstError}"]`);
+
+  // All Fields have a name corresponding to variable ID so look this up.
+  // When used on alter form, multiple forms can be differentiated by the active slide
+  // class. This needs priority, so look it up first.
+  const el = document.querySelector(`.swiper-slide-active [name="${firstError}"]`) ||
+             document.querySelector(`[name="${firstError}"]`);
+
+  // If element is not found, prevent crash.
+  if (!el) {
+    // eslint-disable-next-line no-console
+    console.warn(`scrollToFirstError(): Element [name="${firstError}"] not found in DOM`);
+    return;
+  }
 
   // Subtract 200 to put more of the input in view.
   const topPos = el.offsetTop - 200;
 
   // Assume forms are inside a scrollable
   const scroller = getScrollParent(el);
-
 
   scroller.scrollTop = topPos;
 };

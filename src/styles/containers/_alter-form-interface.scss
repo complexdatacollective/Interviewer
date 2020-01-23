@@ -18,32 +18,31 @@
   }
 
   .swiper-slide {
-    @include transition-properties((opacity, transform), var(--animation-duration-slow), var(--animation-easing));
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 80%;
 
     .slide-content {
       display: flex;
-      max-height: 95%;
-      min-height: 55%;
+      max-height: 75%;
+      min-height: 30%;
       width: 100%;
       padding: unit(1) unit(4) unit(2);
       border-radius: var(--border-radius);
       background: var(--light-background);
       position: relative;
-      left: calc(var(--base-node-size) * .2);
+      top: calc(var(--base-node-size) * .2);
 
       &.alter-form__introduction {
         align-self: center;
         height: auto;
-        max-height: 80vh;
+        max-height: 75%;
         background: var(--form-intro-panel-background);
         width: 100%;
         padding: unit(6);
         left: 0;
-        overflow: hidden;
+        overflow-x: hidden;
+        overflow-y: auto;
         flex-direction: column;
 
         h1 {
@@ -51,35 +50,29 @@
         }
       }
     }
-
-    &.swiper-slide-prev {
-      transform: translate3d(0, 0, 0) rotateX(0) rotateY(0deg) !important; // sass-lint:disable-line no-important
-      opacity: .3;
-    }
-
-    &.swiper-slide-next {
-      opacity: 0;
-    }
   }
 
   .node {
     position: absolute;
-    top: calc(50% - var(--base-node-size) /2);
-    left: calc((var(--base-node-size) / -2));
+    top: calc(var(--base-node-size)*-0.5);
+    left: calc(50% - (var(--base-node-size) /2));
     background: var(--light-background);
     border-radius: 50%;
   }
 
   &__form-container {
     height: inherit;
-    margin-left: calc(var(--base-node-size) * .4);
+    margin-top: calc(var(--base-node-size) * .4);
     width: 100%;
   }
 
   &__form {
-    column-count: 2;
     margin-top: 2rem;
     margin-bottom: 1rem;
+
+    @media screen and (min-aspect-ratio: 16 / 10) {
+      column-count: 2;
+    }
 
     .form-field-container {
       break-inside: avoid;
@@ -114,24 +107,21 @@
 
   }
 
-
-
 }
 
 .alter-edge-form {
   .fake-edge {
     position: absolute;
-    top: 30%;
-    left: -0.25rem;
-    width: 0.5rem;
-    height: 40%;
+    left: calc(50% - 5rem);
+    top: -0.25rem;
+    height: 0.5rem;
+    width: 10rem;
     z-index: 1;
   }
 
   .node {
     position: absolute;
-    top: calc(70% - var(--base-node-size) /2);
-    left: calc((var(--base-node-size) / -2));
+    left: calc(8rem + 50% - var(--base-node-size) /2);
     background: var(--light-background);
     border-radius: 50%;
 
@@ -140,7 +130,7 @@
     }
 
     &:first-of-type {
-      top: calc(30% - var(--base-node-size) /2);
+      left: calc(-8rem + 50% - var(--base-node-size) /2);
     }
   }
 }

@@ -5,11 +5,11 @@ import { Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import cx from 'classnames';
+import { Icon } from '@codaco/ui';
 import { isIOS } from '../../utils/Environment';
 import projectLogo from '../../images/project-logo.svg';
 import betaProjectLogo from '../../images/project-logo-beta.svg';
 import downArrow from '../../images/down-arrow.svg';
-import { Icon } from '../../ui/components';
 import { ProtocolList, ProtocolImportOverlay, SessionListContainer, ImportProgressOverlay } from '.';
 
 /**

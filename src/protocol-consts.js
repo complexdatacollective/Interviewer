@@ -35,9 +35,14 @@ const FormComponent = Object.freeze({
   Number: 'Number',
   RadioGroup: 'RadioGroup',
   Text: 'Text',
+  TextArea: 'TextArea',
   Toggle: 'Toggle',
   ToggleButton: 'ToggleButton',
   ToggleButtonGroup: 'ToggleButtonGroup',
+  LikertScale: 'LikertScale',
+  VisualAnalogScale: 'VisualAnalogScale',
+  DatePicker: 'DatePicker',
+  RelativeDatePicker: 'RelativeDatePicker',
 });
 
 // Docs: https://github.com/codaco/Network-Canvas/wiki/Information-Interface#content-types

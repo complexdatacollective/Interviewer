@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
+import { Icon, Modal } from '@codaco/ui';
 import { isCordova } from '../../utils/Environment';
-import { Icon, Modal } from '../../ui/components';
 import StagesMenu from '../../containers/MainMenu/StagesMenu';
 import SettingsMenu from '../../containers/MainMenu/SettingsMenu';
 

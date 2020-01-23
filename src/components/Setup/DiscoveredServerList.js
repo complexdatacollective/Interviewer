@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-
-import { Icon, Spinner } from '../../ui/components';
+import { Icon, Spinner } from '@codaco/ui';
 import ServerDiscoverer from '../../utils/serverDiscoverer';
 import ServerCard from '../../components/Setup/ServerCard';
 import Scroller from '../Scroller';

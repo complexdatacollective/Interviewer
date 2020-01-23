@@ -2,46 +2,27 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Field as ReduxFormField } from 'redux-form';
 import { map, get, toPairs } from 'lodash';
-import {
-  Checkbox,
-  CheckboxGroup,
-  ToggleButtonGroup,
-  ToggleButton,
-  RadioGroup,
-  Text,
-  Number as NumberField,
-  Toggle,
-} from '../ui/components/Fields';
-
+import * as Fields from '@codaco/ui/lib/components/Fields';
 import validations from '../utils/Validations';
 import { FormComponent } from '../protocol-consts';
+
+const ComponentTypeNotFound = componentType =>
+  () => (<div>Input component &quot;{componentType}&quot; not found.</div>);
 
 /*
   * Returns the named field compontent, if no matching one is found
   or else it just returns a text input
   * @param {object} field The properties handed down from the protocol form
   */
+export const getInputComponent = (componentType = 'Text') => {
+  const def = get(FormComponent, componentType);
 
-const fieldTypes = {
-  [FormComponent.Checkbox]: Checkbox,
-  [FormComponent.CheckboxGroup]: CheckboxGroup,
-  [FormComponent.RadioGroup]: RadioGroup,
-  [FormComponent.Text]: Text,
-  [FormComponent.Number]: NumberField,
-  [FormComponent.ToggleButton]: ToggleButton,
-  [FormComponent.Toggle]: Toggle,
-  [FormComponent.ToggleButtonGroup]: ToggleButtonGroup,
-};
-
-const ComponentTypeNotFound = componentType =>
-  () => (<div>Input component &quot;{componentType}&quot; not found.</div>);
-
-export const getInputComponent = (componentType = 'Text') =>
-  get(
-    fieldTypes,
-    componentType,
+  return get(
+    Fields,
+    def,
     ComponentTypeNotFound(componentType),
   );
+};
 
 /**
 * Returns the named validation function, if no matching one is found it returns a validation

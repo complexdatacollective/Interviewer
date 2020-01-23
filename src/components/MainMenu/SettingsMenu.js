@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { Icon, Button } from '@codaco/ui';
+import { Toggle, Text } from '@codaco/ui/lib/components/Fields';
 import { isElectron, isCordova, isIOS } from '../../utils/Environment';
-import { Icon, Button } from '../../ui/components';
 import Scroller from '../Scroller';
-import { Toggle, Text } from '../../ui/components/Fields';
 import MenuPanel from './MenuPanel';
 import { DEVELOPMENT_PROTOCOL_URL } from '../../config';
 

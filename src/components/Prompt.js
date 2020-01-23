@@ -2,6 +2,7 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
+import { ALLOWED_MARKDOWN_PROMPT_TAGS } from '../config';
 
 /**
   * Renders a single prompt.
@@ -19,18 +20,12 @@ const Prompt = (props) => {
     { 'prompts__prompt--leaving': isLeaving }, // TODO: rename class
   );
 
-  const allowedTags = [
-    'paragraph',
-    'emphasis',
-    'strong',
-  ];
-
   return (
     <div className={classNames}>
       <ReactMarkdown
         className="prompts__prompt-header"
         source={label}
-        allowedTypes={allowedTags}
+        allowedTypes={ALLOWED_MARKDOWN_PROMPT_TAGS}
       />
     </div>
   );

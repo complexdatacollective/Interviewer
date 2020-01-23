@@ -4,7 +4,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { NodePanels } from '../NodePanels';
 
-jest.mock('../../ui/utils/CSSVariables');
+jest.mock('@codaco/ui/lib/utils/CSSVariables');
 
 const mockProps = {
   removeNode: () => {},
