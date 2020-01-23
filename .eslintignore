@@ -1,4 +1,3 @@
 public/protocols/**/*Worker.js
 src/utils/networkQuery
-src/ui
 src/utils/protocol
