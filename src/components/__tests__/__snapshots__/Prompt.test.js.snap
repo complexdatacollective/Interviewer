@@ -1,157 +1,27 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Prompt component renders prompt with markdown 1`] = `
-ShallowWrapper {
-  Symbol(enzyme.__root__): [Circular],
-  Symbol(enzyme.__unrendered__): <Prompt
-    isActive={false}
-    isLeaving={false}
-    label="_prompt_ containing **markdown**"
-  />,
-  Symbol(enzyme.__renderer__): Object {
-    "batchedUpdates": [Function],
-    "checkPropTypes": [Function],
-    "getNode": [Function],
-    "render": [Function],
-    "simulateError": [Function],
-    "simulateEvent": [Function],
-    "unmount": [Function],
-  },
-  Symbol(enzyme.__node__): Object {
-    "instance": null,
-    "key": undefined,
-    "nodeType": "host",
-    "props": Object {
-      "children": <ReactMarkdown
-        allowedTypes={
-          Array [
-            "paragraph",
-            "emphasis",
-            "strong",
-          ]
-        }
-        astPlugins={Array []}
-        className="prompts__prompt-header"
-        escapeHtml={true}
-        plugins={Array []}
-        rawSourcePos={false}
-        renderers={Object {}}
-        skipHtml={false}
-        source="_prompt_ containing **markdown**"
-        sourcePos={false}
-        transformLinkUri={[Function]}
-      />,
-      "className": "prompts__prompt",
-    },
-    "ref": null,
-    "rendered": Object {
-      "instance": null,
-      "key": undefined,
-      "nodeType": "function",
-      "props": Object {
-        "allowedTypes": Array [
-          "paragraph",
-          "emphasis",
-          "strong",
-        ],
-        "astPlugins": Array [],
-        "className": "prompts__prompt-header",
-        "escapeHtml": true,
-        "plugins": Array [],
-        "rawSourcePos": false,
-        "renderers": Object {},
-        "skipHtml": false,
-        "source": "_prompt_ containing **markdown**",
-        "sourcePos": false,
-        "transformLinkUri": [Function],
-      },
-      "ref": null,
-      "rendered": null,
-      "type": [Function],
-    },
-    "type": "div",
-  },
-  Symbol(enzyme.__nodes__): Array [
-    Object {
-      "instance": null,
-      "key": undefined,
-      "nodeType": "host",
-      "props": Object {
-        "children": <ReactMarkdown
-          allowedTypes={
-            Array [
-              "paragraph",
-              "emphasis",
-              "strong",
-            ]
-          }
-          astPlugins={Array []}
-          className="prompts__prompt-header"
-          escapeHtml={true}
-          plugins={Array []}
-          rawSourcePos={false}
-          renderers={Object {}}
-          skipHtml={false}
-          source="_prompt_ containing **markdown**"
-          sourcePos={false}
-          transformLinkUri={[Function]}
-        />,
-        "className": "prompts__prompt",
-      },
-      "ref": null,
-      "rendered": Object {
-        "instance": null,
-        "key": undefined,
-        "nodeType": "function",
-        "props": Object {
-          "allowedTypes": Array [
-            "paragraph",
-            "emphasis",
-            "strong",
-          ],
-          "astPlugins": Array [],
-          "className": "prompts__prompt-header",
-          "escapeHtml": true,
-          "plugins": Array [],
-          "rawSourcePos": false,
-          "renderers": Object {},
-          "skipHtml": false,
-          "source": "_prompt_ containing **markdown**",
-          "sourcePos": false,
-          "transformLinkUri": [Function],
-        },
-        "ref": null,
-        "rendered": null,
-        "type": [Function],
-      },
-      "type": "div",
-    },
-  ],
-  Symbol(enzyme.__options__): Object {
-    "adapter": ReactSixteenAdapter {
-      "options": Object {
-        "enableComponentDidUpdateOnSetState": true,
-        "legacyContextMode": "parent",
-        "lifecycles": Object {
-          "componentDidUpdate": Object {
-            "onSetState": true,
-          },
-          "getChildContext": Object {
-            "calledByRenderer": false,
-          },
-          "getDerivedStateFromError": true,
-          "getDerivedStateFromProps": Object {
-            "hasShouldComponentUpdateBug": false,
-          },
-          "getSnapshotBeforeUpdate": true,
-          "setState": Object {
-            "skipsComponentDidUpdateOnNullish": true,
-          },
-        },
-      },
-    },
-    Symbol(enzyme.__providerValues__): undefined,
-  },
-  Symbol(enzyme.__providerValues__): Map {},
-}
+<div
+  className="prompts__prompt"
+>
+  <ReactMarkdown
+    allowedTypes={
+      Array [
+        "paragraph",
+        "emphasis",
+        "strong",
+      ]
+    }
+    astPlugins={Array []}
+    className="prompts__prompt-header"
+    escapeHtml={true}
+    plugins={Array []}
+    rawSourcePos={false}
+    renderers={Object {}}
+    skipHtml={false}
+    source="_prompt_ containing **markdown**"
+    sourcePos={false}
+    transformLinkUri={[Function]}
+  />
+</div>
 `;

@@ -47,7 +47,7 @@
     "type": "git"
   },
   "devDependencies": {
-    "@babel/core": "^7.7.7",
+    "@babel/core": "^7.8.3",
     "@babel/plugin-proposal-class-properties": "^7.7.4",
     "@babel/plugin-proposal-json-strings": "^7.7.4",
     "@babel/plugin-syntax-dynamic-import": "^7.7.4",
@@ -60,11 +60,9 @@
     "animejs": "^2.2.0",
     "autoprefixer": "7.1.2",
     "axios": "^0.18.0",
-    "babel-core": "7.0.0-bridge.0",
-    "babel-eslint": "^7.2.3",
-    "babel-jest": "23.6.0",
+    "babel-eslint": "^9.0.0",
+    "babel-jest": "^25.1.0",
     "babel-loader": "^8.0.6",
-    "babel-runtime": "6.26.0",
     "bluebird": "^3.5.2",
     "buffer": "^5.2.1",
     "case-sensitive-paths-webpack-plugin": "2.1.1",
@@ -89,8 +87,9 @@
     "electron-updater": "^4.1.2",
     "electron-winstaller": "^4.0.0",
     "emoji-dictionary": "^1.0.9",
-    "enzyme": "^3.7.0",
+    "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.6.0",
+    "enzyme-to-json": "^3.4.3",
     "es6-promise-plugin": "^4.2.2",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^15.0.1",
@@ -110,7 +109,7 @@
     "http-proxy-middleware": "0.17.3",
     "i": "^0.3.6",
     "icon-gen": "^1.2.3",
-    "jest": "^23.6.0",
+    "jest": "^25.1.0",
     "jest-image-snapshot": "^2.9.0",
     "jsdoc": "^3.4.3",
     "jsdoc-babel": "^0.3.0",
@@ -149,6 +148,7 @@
     "redux-observable": "^0.14.1",
     "redux-persist": "^5.10.0",
     "redux-thunk": "^2.3.0",
+    "regenerator-runtime": "^0.13.3",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.5",
     "reselect": "^3.0.0",
@@ -178,6 +178,7 @@
     "ios-sim": "^8.0.1"
   },
   "dependencies": {
+    "@babel/runtime": "^7.8.3",
     "cordova-android": "^8.0.0",
     "cordova-ios": "^5.0.1",
     "cordova-plugin-add-swift-support": "^2.0.2",
@@ -192,7 +193,6 @@
     "cordova-plugin-wkwebview-engine": "^1.1.4",
     "cordova-plugin-x-socialsharing": "^5.6.2",
     "cordova-plugin-zeroconf": "^1.4.1",
-    "regenerator-runtime": "^0.13.3",
     "zeroconf": "^0.1.4"
   },
   "homepage": ".",
@@ -238,6 +238,9 @@
       "<rootDir>/config/jest/enzyme.js",
       "<rootDir>/config/jest/automock.js",
       "<rootDir>/config/jest/matchMedia.js"
+    ],
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
     ],
     "testPathIgnorePatterns": [
       "<rootDir>[/\\\\](www|docs|node_modules|scripts|test)[/\\\\]",
