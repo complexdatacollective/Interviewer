@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { Flipper } from 'react-flip-toolkit';
 import cx from 'classnames';
 import { getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
-import { makeNetworkNodesForType, makeGetVariableOptions, makeGetPromptVariable } from '../../selectors/interface';
+import { makeNetworkNodesForType, makeGetVariableOptions, makeGetPromptVariable, getPromptOtherVariable } from '../../selectors/interface';
 import { makeGetNodeLabel } from '../../selectors/network';
 import { MonitorDragSource } from '../../behaviours/DragAndDrop';
 import { entityAttributesProperty } from '../../ducks/modules/network';
@@ -92,6 +92,7 @@ class CategoricalList extends Component {
       stage,
       prompt,
       activePromptVariable,
+      promptOtherVariable,
       getNodeLabel,
       onExpandBin,
       expandedBinIndex,
@@ -107,6 +108,7 @@ class CategoricalList extends Component {
           bin={bin}
           size={this.getBinSize(index)}
           activePromptVariable={activePromptVariable}
+          promptOtherVariable={promptOtherVariable}
           accentColor={this.getCatColor(index)}
           onExpandBin={onExpandBin}
           isExpanded={expandedBinIndex === index}
@@ -176,7 +178,7 @@ const hasOtherVariable = (node, otherVariable) =>
 
 const matchBin = (bin, variable) =>
   node =>
-    matchVariable(node, variable, bin.value) || hasOtherVariable(node, bin.otherVarible);
+    matchVariable(node, variable, bin.value) || hasOtherVariable(node, bin.otherVariable);
 
 const appendNodesForBin = (nodes, activePromptVariable) =>
   bin => ({
@@ -192,12 +194,15 @@ function makeMapStateToProps() {
   return function mapStateToProps(state, props) {
     const stageNodes = getStageNodes(state, props);
     const activePromptVariable = getPromptVariable(state, props);
+    const [promptOtherVariable] = getPromptOtherVariable(state, props);
     const getNodeLabel = makeGetNodeLabel();
+    const bins = getCategoricalValues(state, props)
+      .map(appendNodesForBin(stageNodes, activePromptVariable));
 
     return {
       activePromptVariable,
-      bins: getCategoricalValues(state, props)
-        .map(appendNodesForBin(stageNodes, activePromptVariable)),
+      promptOtherVariable,
+      bins,
       getNodeLabel: getNodeLabel(state, props),
     };
   };

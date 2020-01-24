@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -6,6 +6,7 @@ import { actionCreators as sessionsActions } from '../../ducks/modules/sessions'
 import { CategoricalItem } from '../../components';
 import { getEntityAttributes, entityPrimaryKeyProperty } from '../../ducks/modules/network';
 import Overlay from '../Overlay';
+import OtherVariableForm from './OtherVariableForm';
 
 const formatBinDetails = (nodes, getNodeLabel) => {
   if (nodes.length === 0) {
@@ -18,12 +19,18 @@ const formatBinDetails = (nodes, getNodeLabel) => {
   return `${name}${nodes.length > 1 ? ` and ${nodes.length - 1} other${nodes.length > 2 ? 's' : ''}` : ''}`;
 };
 
+const otherVariableWindowInitialState = {
+  show: false,
+  node: null,
+};
+
 const CategoricalListItem = ({
   id,
   size,
   isExpanded,
   accentColor,
   activePromptVariable,
+  promptOtherVariable,
   bin,
   index,
   sortOrder,
@@ -32,26 +39,63 @@ const CategoricalListItem = ({
   updateNode,
 }) => {
   const isOtherVariable = !!bin.otherVariable;
+  const [otherVariableWindow, setOtherVariableWindow] = useState(otherVariableWindowInitialState);
   const binDetails = formatBinDetails(bin.nodes, getNodeLabel);
 
-  const handleDrop = ({ meta }) => {
-    const binValue = bin.value;
+  const openOtherVariableWindow = (node) => {
+    setOtherVariableWindow({
+      show: true,
+      node,
+    });
+  };
 
-    if (isOtherVariable) {
-      console.log('other variable');
-      // this.openOtherFieldWindow();
-      return;
-    }
+  const closeOtherVariableWindow = () =>
+    setOtherVariableWindow(otherVariableWindowInitialState);
 
-    if (getEntityAttributes(meta)[activePromptVariable] === [binValue]) {
+  const setNodeCategory = (node, category) => {
+    const variable = bin.otherVariable || activePromptVariable;
+    const resetVariable = bin.otherVariable ? activePromptVariable : promptOtherVariable;
+
+    // categorical requires an array, otherVariable is a string
+    const value = bin.otherVariable ? category : [category];
+
+    if (getEntityAttributes(node)[variable] === value) {
       return;
     }
 
     updateNode(
-      meta[entityPrimaryKeyProperty],
+      node[entityPrimaryKeyProperty],
       {},
-      { [activePromptVariable]: [binValue] },
+      {
+        [variable]: value,
+        // because category can now be promptVariable or
+        // otherVariable we need to reset the alternate.
+        [resetVariable]: null,
+      },
     );
+  };
+
+  const handleDrop = ({ meta: node }) => {
+    const binValue = bin.value;
+
+    if (isOtherVariable) {
+      openOtherVariableWindow(node);
+      return;
+    }
+
+    setNodeCategory(node, binValue);
+  };
+
+  const handleClickItem = (node) => {
+    if (!isOtherVariable) { return; }
+    openOtherVariableWindow(node);
+  }
+
+  const handleSubmitOtherVariableForm = ({ otherVariable: value }) => {
+    const node = otherVariableWindow.node;
+
+    setNodeCategory(node, value);
+    closeOtherVariableWindow();
   };
 
   const handleExpandBin = (e) => {
@@ -73,14 +117,29 @@ const CategoricalListItem = ({
         accentColor={accentColor}
         onDrop={handleDrop}
         onClick={handleExpandBin}
+        onClickItem={handleClickItem}
         details={binDetails}
         isExpanded={isExpanded}
         nodes={bin.nodes}
         sortOrder={sortOrder}
       />
-      <Overlay show={false}>
-        testing
-      </Overlay>
+      { isOtherVariable &&
+        <Overlay
+          show={otherVariableWindow.show}
+          onClose={closeOtherVariableWindow}
+          onBlur={closeOtherVariableWindow}
+        >
+          { otherVariableWindow.show &&
+            <OtherVariableForm
+              otherVariableLabel={bin.label}
+              otherVariable={promptOtherVariable}
+              onSubmit={handleSubmitOtherVariableForm}
+              onCancel={closeOtherVariableWindow}
+              node={otherVariableWindow.node}
+            />
+          }
+        </Overlay>
+      }
     </div>
   );
 };

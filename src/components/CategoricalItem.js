@@ -19,6 +19,7 @@ const CategoricalItem = ({
   label,
   nodes,
   onClick,
+  onClickItem,
   sortOrder,
   willAccept,
 }) => {
@@ -48,6 +49,7 @@ const CategoricalItem = ({
               <NodeList
                 listId={`CATBIN_NODE_LIST_${label}`}
                 id={`CATBIN_NODE_LIST_${label}`}
+                onItemClick={onClickItem}
                 items={nodes}
                 sortOrder={sortOrder}
               />
@@ -68,6 +70,7 @@ CategoricalItem.propTypes = {
   label: PropTypes.string,
   nodes: PropTypes.array,
   onClick: PropTypes.func,
+  onClickItem: PropTypes.func,
   sortOrder: PropTypes.array,
   willAccept: PropTypes.bool,
 };
@@ -80,6 +83,7 @@ CategoricalItem.defaultProps = {
   label: 'undefined',
   nodes: [],
   onClick: () => {},
+  onClickItem: () => {},
   sortOrder: [],
   willAccept: false,
 };
