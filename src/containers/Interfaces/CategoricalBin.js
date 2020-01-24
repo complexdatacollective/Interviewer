@@ -11,11 +11,11 @@ import { entityAttributesProperty } from '../../ducks/modules/network';
 
 const categoricalBinStateHandler = withStateHandlers(
   {
-    expandedBinValue: '',
+    expandedBinIndex: null,
   },
   {
     handleExpandBin: () =>
-      (expandedBinValue = '') => ({ expandedBinValue }),
+      (expandedBinIndex = null) => ({ expandedBinIndex }),
   },
 );
 
@@ -27,7 +27,7 @@ const CategoricalBin = ({
   promptBackward,
   prompt,
   nodesForPrompt,
-  expandedBinValue,
+  expandedBinIndex,
   handleExpandBin,
   stage,
 }) => {
@@ -56,7 +56,7 @@ const CategoricalBin = ({
         key={prompt.id}
         stage={stage}
         prompt={prompt}
-        expandedBinValue={expandedBinValue}
+        expandedBinIndex={expandedBinIndex}
         onExpandBin={handleExpandBin}
       />
     </div>
@@ -69,7 +69,7 @@ CategoricalBin.propTypes = {
   promptForward: PropTypes.func.isRequired,
   promptBackward: PropTypes.func.isRequired,
   nodesForPrompt: PropTypes.array.isRequired,
-  expandedBinValue: PropTypes.string.isRequired,
+  expandedBinIndex: PropTypes.string.isRequired,
   handleExpandBin: PropTypes.func.isRequired,
 };
 

@@ -73,12 +73,22 @@ export const makeGetPromptVariable = () =>
     prompt => prompt.variable,
   );
 
-export const makeGetVariableOptions = () =>
+export const makeGetPromptOtherVariable = () =>
   createSelector(
-    makeGetNodeVariables(), makeGetPromptVariable(),
-    (nodeVariables, promptVariable) => {
-      const optionValues = nodeVariables[promptVariable].options;
-      return optionValues || [];
+    propPrompt,
+    prompt => [prompt.otherVariable, prompt.otherVariableLabel],
+  );
+
+export const makeGetVariableOptions = (includeOtherVariable = false) =>
+  createSelector(
+    makeGetNodeVariables(), makeGetPromptVariable(), makeGetPromptOtherVariable(),
+    (nodeVariables, promptVariable, [promptOtherVariable, promptOtherVariableLabel]) => {
+      const optionValues = nodeVariables[promptVariable].options || [];
+      const otherValue = { label: promptOtherVariableLabel, value: null, otherVariable: promptOtherVariable };
+
+      return includeOtherVariable && promptOtherVariable ?
+        [...optionValues, otherValue ] :
+        optionValues;
     },
   );
 
