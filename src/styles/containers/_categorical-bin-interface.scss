@@ -1,19 +1,15 @@
 .categorical-bin-interface {
-  @include interface-centering;
+  margin-left: var(--timeline-width);
+  margin-right: var(--interface-right-margin);
   --categorical-bucket-basis: 8rem;
   --categorical-padding-top: 1rem;
-  --categorical-padding-bottom: 4rem;
+  --categorical-padding-bottom: 2rem;
 
   height: 100vh;
   //sass-lint:disable shorthand-values
   padding: var(--categorical-padding-top) 0 var(--categorical-padding-bottom);
   display: flex;
   flex-direction: column;
-
-  hr {
-    border: solid 1px var(--light-background);
-    width: 75%;
-  }
 
   &__prompt {
     @include interface-prompt;

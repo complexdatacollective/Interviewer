@@ -68,13 +68,17 @@
     h3,
     h5 {
       width: 100%;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      margin: 0;
     }
 
     h5 {
-      margin: 0;
+      margin-top: 0.5rem;
+      font-weight: 400;
+    }
+
+    h3 {
+      hyphens: auto;
+      -webkit-hyphens: auto;
     }
   }
 
