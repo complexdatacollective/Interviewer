@@ -191,6 +191,7 @@ module.exports = {
                   // It enables caching results in ./node_modules/.cache/babel-loader/
                   // directory for faster rebuilds.
                   cacheDirectory: true,
+                  configFile: path.resolve(__dirname, '../babel.config.js'),
                 },
               },
             ],

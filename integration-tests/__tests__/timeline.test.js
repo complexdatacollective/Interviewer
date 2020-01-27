@@ -53,7 +53,7 @@ describe('Timeline', () => {
   beforeAll(setupTest);
   afterAll(teardownApp);
 
-  describe('Forwards/back buttons', async () => {
+  describe('Forwards/back buttons', () => {
     it('Advances through prompts', async () => {
       // [data-clickable="start-interview"]
       await app.client.click('.timeline-nav--next');

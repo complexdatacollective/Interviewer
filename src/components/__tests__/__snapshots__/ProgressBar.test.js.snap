@@ -1,115 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ProgressBar component renders ProgressBar 1`] = `
-ShallowWrapper {
-  Symbol(enzyme.__root__): [Circular],
-  Symbol(enzyme.__unrendered__): <ProgressBar
-    onClick={[Function]}
-    orientation="vertical"
-    percentProgress="40"
-  />,
-  Symbol(enzyme.__renderer__): Object {
-    "batchedUpdates": [Function],
-    "checkPropTypes": [Function],
-    "getNode": [Function],
-    "render": [Function],
-    "simulateError": [Function],
-    "simulateEvent": [Function],
-    "unmount": [Function],
-  },
-  Symbol(enzyme.__node__): Object {
-    "instance": null,
-    "key": undefined,
-    "nodeType": "host",
-    "props": Object {
-      "children": <div
-        className="progress-bar__filler"
-        style={
-          Object {
-            "height": "40%",
-          }
-        }
-      />,
-      "className": "progress-bar progress-bar progress-bar--vertical",
-      "onClick": [Function],
-    },
-    "ref": null,
-    "rendered": Object {
-      "instance": null,
-      "key": undefined,
-      "nodeType": "host",
-      "props": Object {
-        "className": "progress-bar__filler",
-        "style": Object {
-          "height": "40%",
-        },
-      },
-      "ref": null,
-      "rendered": null,
-      "type": "div",
-    },
-    "type": "div",
-  },
-  Symbol(enzyme.__nodes__): Array [
-    Object {
-      "instance": null,
-      "key": undefined,
-      "nodeType": "host",
-      "props": Object {
-        "children": <div
-          className="progress-bar__filler"
-          style={
-            Object {
-              "height": "40%",
-            }
-          }
-        />,
-        "className": "progress-bar progress-bar progress-bar--vertical",
-        "onClick": [Function],
-      },
-      "ref": null,
-      "rendered": Object {
-        "instance": null,
-        "key": undefined,
-        "nodeType": "host",
-        "props": Object {
-          "className": "progress-bar__filler",
-          "style": Object {
-            "height": "40%",
-          },
-        },
-        "ref": null,
-        "rendered": null,
-        "type": "div",
-      },
-      "type": "div",
-    },
-  ],
-  Symbol(enzyme.__options__): Object {
-    "adapter": ReactSixteenAdapter {
-      "options": Object {
-        "enableComponentDidUpdateOnSetState": true,
-        "legacyContextMode": "parent",
-        "lifecycles": Object {
-          "componentDidUpdate": Object {
-            "onSetState": true,
-          },
-          "getChildContext": Object {
-            "calledByRenderer": false,
-          },
-          "getDerivedStateFromError": true,
-          "getDerivedStateFromProps": Object {
-            "hasShouldComponentUpdateBug": false,
-          },
-          "getSnapshotBeforeUpdate": true,
-          "setState": Object {
-            "skipsComponentDidUpdateOnNullish": true,
-          },
-        },
-      },
-    },
-    Symbol(enzyme.__providerValues__): undefined,
-  },
-  Symbol(enzyme.__providerValues__): Map {},
-}
+<div
+  className="progress-bar progress-bar progress-bar--vertical"
+  onClick={[Function]}
+>
+  <div
+    className="progress-bar__filler"
+    style={
+      Object {
+        "height": "40%",
+      }
+    }
+  />
+</div>
 `;
