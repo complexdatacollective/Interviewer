@@ -1,12 +1,12 @@
 [submodule "src/utils/networkQuery"]
 	path = src/utils/networkQuery
 	url = https://github.com/codaco/networkQuery
-[submodule "src/ui"]
-	path = src/ui
-	url = https://github.com/codaco/Network-Canvas-UI.git
 [submodule "src/utils/protocol/protocol-validation"]
 	path = src/utils/protocol/protocol-validation
 	url = https://github.com/codaco/protocol-validation.git
 [submodule "development-protocol"]
 	path = development-protocol
 	url = https://github.com/codaco/development-protocol.git
+[submodule "src/utils/network-exporters"]
+	path = src/utils/network-exporters
+	url = https://github.com/codaco/network-exporters

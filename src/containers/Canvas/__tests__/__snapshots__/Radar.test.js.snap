@@ -1,300 +1,50 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<Radar /> renders ok 1`] = `
-ShallowWrapper {
-  Symbol(enzyme.__root__): [Circular],
-  Symbol(enzyme.__unrendered__): <Radar
-    n={5}
-    skewed={true}
-  />,
-  Symbol(enzyme.__renderer__): Object {
-    "batchedUpdates": [Function],
-    "checkPropTypes": [Function],
-    "getNode": [Function],
-    "render": [Function],
-    "simulateError": [Function],
-    "simulateEvent": [Function],
-    "unmount": [Function],
-  },
-  Symbol(enzyme.__node__): Object {
-    "instance": null,
-    "key": undefined,
-    "nodeType": "host",
-    "props": Object {
-      "children": Array [
-        <circle
-          className="canvas-radar__range"
-          cx="50"
-          cy="50"
-          fill="#000000"
-          r={50}
-        />,
-        <circle
-          className="canvas-radar__range"
-          cx="50"
-          cy="50"
-          fill="#000000"
-          r={43.54101966249685}
-        />,
-        <circle
-          className="canvas-radar__range"
-          cx="50"
-          cy="50"
-          fill="#000000"
-          r={36.547375096555626}
-        />,
-        <circle
-          className="canvas-radar__range"
-          cx="50"
-          cy="50"
-          fill="#000000"
-          r={28.717082451262844}
-        />,
-        <circle
-          className="canvas-radar__range"
-          cx="50"
-          cy="50"
-          fill="#000000"
-          r={19.270509831248425}
-        />,
-      ],
-      "className": "canvas-radar",
-      "viewBox": "0 0 100 100",
-      "xmlns": "http://www.w3.org/2000/svg",
-    },
-    "ref": null,
-    "rendered": Array [
-      Object {
-        "instance": null,
-        "key": "0",
-        "nodeType": "host",
-        "props": Object {
-          "className": "canvas-radar__range",
-          "cx": "50",
-          "cy": "50",
-          "fill": "#000000",
-          "r": 50,
-        },
-        "ref": null,
-        "rendered": null,
-        "type": "circle",
-      },
-      Object {
-        "instance": null,
-        "key": "1",
-        "nodeType": "host",
-        "props": Object {
-          "className": "canvas-radar__range",
-          "cx": "50",
-          "cy": "50",
-          "fill": "#000000",
-          "r": 43.54101966249685,
-        },
-        "ref": null,
-        "rendered": null,
-        "type": "circle",
-      },
-      Object {
-        "instance": null,
-        "key": "2",
-        "nodeType": "host",
-        "props": Object {
-          "className": "canvas-radar__range",
-          "cx": "50",
-          "cy": "50",
-          "fill": "#000000",
-          "r": 36.547375096555626,
-        },
-        "ref": null,
-        "rendered": null,
-        "type": "circle",
-      },
-      Object {
-        "instance": null,
-        "key": "3",
-        "nodeType": "host",
-        "props": Object {
-          "className": "canvas-radar__range",
-          "cx": "50",
-          "cy": "50",
-          "fill": "#000000",
-          "r": 28.717082451262844,
-        },
-        "ref": null,
-        "rendered": null,
-        "type": "circle",
-      },
-      Object {
-        "instance": null,
-        "key": "4",
-        "nodeType": "host",
-        "props": Object {
-          "className": "canvas-radar__range",
-          "cx": "50",
-          "cy": "50",
-          "fill": "#000000",
-          "r": 19.270509831248425,
-        },
-        "ref": null,
-        "rendered": null,
-        "type": "circle",
-      },
-    ],
-    "type": "svg",
-  },
-  Symbol(enzyme.__nodes__): Array [
-    Object {
-      "instance": null,
-      "key": undefined,
-      "nodeType": "host",
-      "props": Object {
-        "children": Array [
-          <circle
-            className="canvas-radar__range"
-            cx="50"
-            cy="50"
-            fill="#000000"
-            r={50}
-          />,
-          <circle
-            className="canvas-radar__range"
-            cx="50"
-            cy="50"
-            fill="#000000"
-            r={43.54101966249685}
-          />,
-          <circle
-            className="canvas-radar__range"
-            cx="50"
-            cy="50"
-            fill="#000000"
-            r={36.547375096555626}
-          />,
-          <circle
-            className="canvas-radar__range"
-            cx="50"
-            cy="50"
-            fill="#000000"
-            r={28.717082451262844}
-          />,
-          <circle
-            className="canvas-radar__range"
-            cx="50"
-            cy="50"
-            fill="#000000"
-            r={19.270509831248425}
-          />,
-        ],
-        "className": "canvas-radar",
-        "viewBox": "0 0 100 100",
-        "xmlns": "http://www.w3.org/2000/svg",
-      },
-      "ref": null,
-      "rendered": Array [
-        Object {
-          "instance": null,
-          "key": "0",
-          "nodeType": "host",
-          "props": Object {
-            "className": "canvas-radar__range",
-            "cx": "50",
-            "cy": "50",
-            "fill": "#000000",
-            "r": 50,
-          },
-          "ref": null,
-          "rendered": null,
-          "type": "circle",
-        },
-        Object {
-          "instance": null,
-          "key": "1",
-          "nodeType": "host",
-          "props": Object {
-            "className": "canvas-radar__range",
-            "cx": "50",
-            "cy": "50",
-            "fill": "#000000",
-            "r": 43.54101966249685,
-          },
-          "ref": null,
-          "rendered": null,
-          "type": "circle",
-        },
-        Object {
-          "instance": null,
-          "key": "2",
-          "nodeType": "host",
-          "props": Object {
-            "className": "canvas-radar__range",
-            "cx": "50",
-            "cy": "50",
-            "fill": "#000000",
-            "r": 36.547375096555626,
-          },
-          "ref": null,
-          "rendered": null,
-          "type": "circle",
-        },
-        Object {
-          "instance": null,
-          "key": "3",
-          "nodeType": "host",
-          "props": Object {
-            "className": "canvas-radar__range",
-            "cx": "50",
-            "cy": "50",
-            "fill": "#000000",
-            "r": 28.717082451262844,
-          },
-          "ref": null,
-          "rendered": null,
-          "type": "circle",
-        },
-        Object {
-          "instance": null,
-          "key": "4",
-          "nodeType": "host",
-          "props": Object {
-            "className": "canvas-radar__range",
-            "cx": "50",
-            "cy": "50",
-            "fill": "#000000",
-            "r": 19.270509831248425,
-          },
-          "ref": null,
-          "rendered": null,
-          "type": "circle",
-        },
-      ],
-      "type": "svg",
-    },
-  ],
-  Symbol(enzyme.__options__): Object {
-    "adapter": ReactSixteenAdapter {
-      "options": Object {
-        "enableComponentDidUpdateOnSetState": true,
-        "legacyContextMode": "parent",
-        "lifecycles": Object {
-          "componentDidUpdate": Object {
-            "onSetState": true,
-          },
-          "getChildContext": Object {
-            "calledByRenderer": false,
-          },
-          "getDerivedStateFromError": true,
-          "getDerivedStateFromProps": Object {
-            "hasShouldComponentUpdateBug": false,
-          },
-          "getSnapshotBeforeUpdate": true,
-          "setState": Object {
-            "skipsComponentDidUpdateOnNullish": true,
-          },
-        },
-      },
-    },
-    Symbol(enzyme.__providerValues__): undefined,
-  },
-  Symbol(enzyme.__providerValues__): Map {},
-}
+<svg
+  className="canvas-radar"
+  viewBox="0 0 100 100"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <circle
+    className="canvas-radar__range"
+    cx="50"
+    cy="50"
+    fill="#000000"
+    key="0"
+    r={50}
+  />
+  <circle
+    className="canvas-radar__range"
+    cx="50"
+    cy="50"
+    fill="#000000"
+    key="1"
+    r={43.54101966249685}
+  />
+  <circle
+    className="canvas-radar__range"
+    cx="50"
+    cy="50"
+    fill="#000000"
+    key="2"
+    r={36.547375096555626}
+  />
+  <circle
+    className="canvas-radar__range"
+    cx="50"
+    cy="50"
+    fill="#000000"
+    key="3"
+    r={28.717082451262844}
+  />
+  <circle
+    className="canvas-radar__range"
+    cx="50"
+    cy="50"
+    fill="#000000"
+    key="4"
+    r={19.270509831248425}
+  />
+</svg>
 `;
