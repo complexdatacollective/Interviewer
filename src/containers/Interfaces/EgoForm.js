@@ -102,7 +102,7 @@ class EgoForm extends Component {
     return (
       <div className="ego-form alter-form">
         <div className="ego-form__form-container">
-          <Scroller onScroll={this.handleScroll}>
+          <Scroller className="ego-form__form-container-scroller" onScroll={this.handleScroll}>
             <div className="ego-form__introduction">
               <h1>{introductionPanel.title}</h1>
               <ReactMarkdown
