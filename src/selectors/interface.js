@@ -84,7 +84,11 @@ export const makeGetVariableOptions = (includeOtherVariable = false) =>
     makeGetNodeVariables(), makeGetPromptVariable(), getPromptOtherVariable,
     (nodeVariables, promptVariable, [promptOtherVariable, promptOtherVariableLabel]) => {
       const optionValues = nodeVariables[promptVariable].options || [];
-      const otherValue = { label: promptOtherVariableLabel, value: null, otherVariable: promptOtherVariable };
+      const otherValue = {
+        label: promptOtherVariableLabel,
+        value: null,
+        otherVariable: promptOtherVariable,
+      };
 
       return includeOtherVariable && promptOtherVariable ?
         [...optionValues, otherValue] :

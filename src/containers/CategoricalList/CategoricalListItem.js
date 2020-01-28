@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { get } from 'lodash';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
-import { CategoricalItem } from '../../components';
 import { getEntityAttributes, entityPrimaryKeyProperty } from '../../ducks/modules/network';
+import { CategoricalItem } from '../../components';
 import Overlay from '../Overlay';
 import OtherVariableForm from './OtherVariableForm';
 
@@ -35,6 +36,7 @@ const CategoricalListItem = ({
   index,
   sortOrder,
   getNodeLabel,
+  nodeColor,
   onExpandBin,
   updateNode,
 }) => {
@@ -43,9 +45,16 @@ const CategoricalListItem = ({
   const binDetails = formatBinDetails(bin.nodes, getNodeLabel);
 
   const openOtherVariableWindow = (node) => {
+    const otherVariable = get(getEntityAttributes(node), promptOtherVariable);
+
     setOtherVariableWindow({
       show: true,
       node,
+      label: getNodeLabel(node),
+      color: nodeColor,
+      initialValues: {
+        otherVariable,
+      },
     });
   };
 
@@ -89,7 +98,7 @@ const CategoricalListItem = ({
   const handleClickItem = (node) => {
     if (!isOtherVariable) { return; }
     openOtherVariableWindow(node);
-  }
+  };
 
   const handleSubmitOtherVariableForm = ({ otherVariable: value }) => {
     const node = otherVariableWindow.node;
@@ -131,11 +140,12 @@ const CategoricalListItem = ({
         >
           { otherVariableWindow.show &&
             <OtherVariableForm
+              label={otherVariableWindow.label}
+              color={otherVariableWindow.color}
               otherVariableLabel={bin.label}
-              otherVariable={promptOtherVariable}
               onSubmit={handleSubmitOtherVariableForm}
               onCancel={closeOtherVariableWindow}
-              node={otherVariableWindow.node}
+              initialValues={otherVariableWindow.initialValues}
             />
           }
         </Overlay>
@@ -148,10 +158,12 @@ CategoricalListItem.propTypes = {
   id: PropTypes.string.isRequired,
   isExpanded: PropTypes.bool.isRequired,
   activePromptVariable: PropTypes.string.isRequired,
+  promptOtherVariable: PropTypes.string.isRequired,
   bin: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
   sortOrder: PropTypes.func.isRequired,
   getNodeLabel: PropTypes.func.isRequired,
+  nodeColor: PropTypes.string.isRequired,
   onExpandBin: PropTypes.func.isRequired,
   updateNode: PropTypes.func.isRequired,
   accentColor: PropTypes.string,
