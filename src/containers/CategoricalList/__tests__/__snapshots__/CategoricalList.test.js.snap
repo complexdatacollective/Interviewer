@@ -1,0 +1,421 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CategoricalList component renders categorical list 1`] = `
+ShallowWrapper {
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <CategoricalList
+    bins={
+      Array [
+        Object {
+          "label": "one",
+          "nodes": Array [
+            1,
+            2,
+            3,
+          ],
+          "value": 1,
+        },
+        Object {
+          "label": "two",
+          "nodes": Array [
+            4,
+            5,
+          ],
+          "value": 2,
+        },
+      ]
+    }
+    expandedBinValue=""
+    getNodeLabel={[Function]}
+    isDragging={false}
+    meta={Object {}}
+    nodeColor=""
+    prompt={
+      Object {
+        "id": 1,
+      }
+    }
+    stage={
+      Object {
+        "id": 1,
+      }
+    }
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "checkPropTypes": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateError": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "host",
+    "props": Object {
+      "children": <Flipper
+        applyTransformOrigin={true}
+        className="categorical-list__items"
+        element="div"
+      >
+        <Connect(CategoricalListItem)
+          accentColor={null}
+          bin={
+            Object {
+              "label": "one",
+              "nodes": Array [
+                1,
+                2,
+                3,
+              ],
+              "value": 1,
+            }
+          }
+          getNodeLabel={[Function]}
+          id="CATBIN_ITEM_1_1_0"
+          index={0}
+          isExpanded={false}
+        />
+        <Connect(CategoricalListItem)
+          accentColor={null}
+          bin={
+            Object {
+              "label": "two",
+              "nodes": Array [
+                4,
+                5,
+              ],
+              "value": 2,
+            }
+          }
+          getNodeLabel={[Function]}
+          id="CATBIN_ITEM_1_1_1"
+          index={1}
+          isExpanded={false}
+        />
+      </Flipper>,
+      "className": "categorical-list categorical-list--items--2 categorical-list--expanded",
+      "onClick": [Function],
+    },
+    "ref": Object {
+      "current": null,
+    },
+    "rendered": Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "class",
+      "props": Object {
+        "applyTransformOrigin": true,
+        "children": Array [
+          undefined,
+          Array [
+            <Connect(CategoricalListItem)
+              accentColor={null}
+              bin={
+                Object {
+                  "label": "one",
+                  "nodes": Array [
+                    1,
+                    2,
+                    3,
+                  ],
+                  "value": 1,
+                }
+              }
+              getNodeLabel={[Function]}
+              id="CATBIN_ITEM_1_1_0"
+              index={0}
+              isExpanded={false}
+            />,
+            <Connect(CategoricalListItem)
+              accentColor={null}
+              bin={
+                Object {
+                  "label": "two",
+                  "nodes": Array [
+                    4,
+                    5,
+                  ],
+                  "value": 2,
+                }
+              }
+              getNodeLabel={[Function]}
+              id="CATBIN_ITEM_1_1_1"
+              index={1}
+              isExpanded={false}
+            />,
+          ],
+        ],
+        "className": "categorical-list__items",
+        "element": "div",
+        "flipKey": undefined,
+      },
+      "ref": null,
+      "rendered": Array [
+        undefined,
+        Object {
+          "instance": null,
+          "key": "0",
+          "nodeType": "class",
+          "props": Object {
+            "accentColor": null,
+            "activePromptVariable": undefined,
+            "bin": Object {
+              "label": "one",
+              "nodes": Array [
+                1,
+                2,
+                3,
+              ],
+              "value": 1,
+            },
+            "getNodeColor": undefined,
+            "getNodeLabel": [Function],
+            "id": "CATBIN_ITEM_1_1_0",
+            "index": 0,
+            "isExpanded": false,
+            "onExpandBin": undefined,
+            "promptOtherVariable": undefined,
+            "size": undefined,
+            "sortOrder": undefined,
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": "1",
+          "nodeType": "class",
+          "props": Object {
+            "accentColor": null,
+            "activePromptVariable": undefined,
+            "bin": Object {
+              "label": "two",
+              "nodes": Array [
+                4,
+                5,
+              ],
+              "value": 2,
+            },
+            "getNodeColor": undefined,
+            "getNodeLabel": [Function],
+            "id": "CATBIN_ITEM_1_1_1",
+            "index": 1,
+            "isExpanded": false,
+            "onExpandBin": undefined,
+            "promptOtherVariable": undefined,
+            "size": undefined,
+            "sortOrder": undefined,
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+      ],
+      "type": [Function],
+    },
+    "type": "div",
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": <Flipper
+          applyTransformOrigin={true}
+          className="categorical-list__items"
+          element="div"
+        >
+          <Connect(CategoricalListItem)
+            accentColor={null}
+            bin={
+              Object {
+                "label": "one",
+                "nodes": Array [
+                  1,
+                  2,
+                  3,
+                ],
+                "value": 1,
+              }
+            }
+            getNodeLabel={[Function]}
+            id="CATBIN_ITEM_1_1_0"
+            index={0}
+            isExpanded={false}
+          />
+          <Connect(CategoricalListItem)
+            accentColor={null}
+            bin={
+              Object {
+                "label": "two",
+                "nodes": Array [
+                  4,
+                  5,
+                ],
+                "value": 2,
+              }
+            }
+            getNodeLabel={[Function]}
+            id="CATBIN_ITEM_1_1_1"
+            index={1}
+            isExpanded={false}
+          />
+        </Flipper>,
+        "className": "categorical-list categorical-list--items--2 categorical-list--expanded",
+        "onClick": [Function],
+      },
+      "ref": Object {
+        "current": null,
+      },
+      "rendered": Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "applyTransformOrigin": true,
+          "children": Array [
+            undefined,
+            Array [
+              <Connect(CategoricalListItem)
+                accentColor={null}
+                bin={
+                  Object {
+                    "label": "one",
+                    "nodes": Array [
+                      1,
+                      2,
+                      3,
+                    ],
+                    "value": 1,
+                  }
+                }
+                getNodeLabel={[Function]}
+                id="CATBIN_ITEM_1_1_0"
+                index={0}
+                isExpanded={false}
+              />,
+              <Connect(CategoricalListItem)
+                accentColor={null}
+                bin={
+                  Object {
+                    "label": "two",
+                    "nodes": Array [
+                      4,
+                      5,
+                    ],
+                    "value": 2,
+                  }
+                }
+                getNodeLabel={[Function]}
+                id="CATBIN_ITEM_1_1_1"
+                index={1}
+                isExpanded={false}
+              />,
+            ],
+          ],
+          "className": "categorical-list__items",
+          "element": "div",
+          "flipKey": undefined,
+        },
+        "ref": null,
+        "rendered": Array [
+          undefined,
+          Object {
+            "instance": null,
+            "key": "0",
+            "nodeType": "class",
+            "props": Object {
+              "accentColor": null,
+              "activePromptVariable": undefined,
+              "bin": Object {
+                "label": "one",
+                "nodes": Array [
+                  1,
+                  2,
+                  3,
+                ],
+                "value": 1,
+              },
+              "getNodeColor": undefined,
+              "getNodeLabel": [Function],
+              "id": "CATBIN_ITEM_1_1_0",
+              "index": 0,
+              "isExpanded": false,
+              "onExpandBin": undefined,
+              "promptOtherVariable": undefined,
+              "size": undefined,
+              "sortOrder": undefined,
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+          Object {
+            "instance": null,
+            "key": "1",
+            "nodeType": "class",
+            "props": Object {
+              "accentColor": null,
+              "activePromptVariable": undefined,
+              "bin": Object {
+                "label": "two",
+                "nodes": Array [
+                  4,
+                  5,
+                ],
+                "value": 2,
+              },
+              "getNodeColor": undefined,
+              "getNodeLabel": [Function],
+              "id": "CATBIN_ITEM_1_1_1",
+              "index": 1,
+              "isExpanded": false,
+              "onExpandBin": undefined,
+              "promptOtherVariable": undefined,
+              "size": undefined,
+              "sortOrder": undefined,
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+        ],
+        "type": [Function],
+      },
+      "type": "div",
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+        "legacyContextMode": "parent",
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getChildContext": Object {
+            "calledByRenderer": false,
+          },
+          "getDerivedStateFromError": true,
+          "getDerivedStateFromProps": Object {
+            "hasShouldComponentUpdateBug": false,
+          },
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
+      },
+    },
+    Symbol(enzyme.__providerValues__): undefined,
+  },
+  Symbol(enzyme.__providerValues__): Map {},
+  Symbol(enzyme.__childContext__): null,
+}
+`;

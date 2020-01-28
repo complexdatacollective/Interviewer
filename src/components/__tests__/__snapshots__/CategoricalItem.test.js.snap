@@ -11,6 +11,7 @@ ShallowWrapper {
     label="undefined"
     nodes={Array []}
     onClick={[Function]}
+    onClickItem={[Function]}
     sortOrder={Array []}
     willAccept={false}
   />,

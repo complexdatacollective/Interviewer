@@ -214,7 +214,7 @@ function makeMapStateToProps() {
   };
 }
 
-export { CategoricalList as UnconnectedCategoricalList };
+export { CategoricalList };
 
 export default compose(
   connect(makeMapStateToProps),
