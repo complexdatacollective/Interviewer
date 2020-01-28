@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 import { Button, Node } from '@codaco/ui';
 import Field from '../Field';
-import './OtherVariableForm.scss';
 
 const stopClickPropagation = e =>
   e.stopPropagation();
