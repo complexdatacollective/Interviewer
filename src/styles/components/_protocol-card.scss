@@ -5,11 +5,12 @@ $component: 'protocol-card';
   background-color: var(--color-platinum);
   border-radius: var(--border-radius);
   padding: unit(6) unit(4) unit(4);
-  width: 20rem;
+  width: 24rem;
   border-bottom: .75rem solid var(--color-platinum--dark);
   color: var(--color-charcoal);
-  height: 40vh;
-  max-height: 22rem;
+  height: 100%;
+  max-height: 26rem;
+  box-sizing: border-box;
 
   &--warning {
     border-bottom-color: var(--warning);
