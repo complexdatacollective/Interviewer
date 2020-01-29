@@ -42,6 +42,6 @@ RUN npm install
 # Necessary config for builds
 COPY .eslintrc.json /app
 COPY .eslintignore /app
-COPY .babelrc /app
+COPY babel.config.js /app
 
 CMD ["/usr/bin/env bash"]
