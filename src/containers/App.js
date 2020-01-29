@@ -10,7 +10,6 @@ import '../styles/main.scss';
 import { isElectron, isCordova, isWindows, isMacOS, isLinux, isPreview, getEnv } from '../utils/Environment';
 import DialogManager from '../components/DialogManager';
 import MainMenu from '../containers/MainMenu';
-import SettingsMenuButton from '../components/MainMenu/SettingsMenuButton';
 
 /**
   * Main app container.
@@ -79,7 +78,6 @@ class App extends PureComponent {
       >
         <MainMenu />
         <div className="electron-titlebar" />
-        <SettingsMenuButton id="SETTINGS_MENU_OBSTACLE" />
         <div
           id="page-wrap"
           className={cx({

@@ -121,7 +121,7 @@ class EgoForm extends Component {
           </Scroller>
         </div>
         <div className={progressClasses}>
-          { (!isIOS() && this.state.scrollProgress === 1) && (<span className="progress-container__status-text">Click next to continue</span>)}
+          { (!isIOS() && this.state.scrollProgress === 1) && (<span className="progress-container__status-text">&#10003; When ready, click next to continue...</span>)}
           <ProgressBar
             orientation="horizontal"
             percentProgress={this.state.scrollProgress * 100}

@@ -8,12 +8,15 @@
   margin-right: var(--interface-right-margin);
 
   &__introduction {
+    width: 100%;
+    flex: 1 0 auto;
     border-radius: var(--border-radius);
     background: var(--form-intro-panel-background);
     max-height: 80vh;
     padding: unit(6);
     overflow: hidden;
     flex-direction: column;
+    margin: 3rem 0;
 
     h1 {
       text-align: center;
@@ -26,12 +29,13 @@
   }
 
   &__form-container-scroller {
-    padding: 0 6rem 0 1rem;
     height: calc(100% - 3rem);
+    display: flex;
+    flex-direction: column;
 
     & > * {
       max-width: 55rem;
-      margin: 3rem auto 4rem;
+      align-self: center;
     }
   }
 
