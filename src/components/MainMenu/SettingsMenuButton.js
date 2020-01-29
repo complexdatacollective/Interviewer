@@ -9,7 +9,11 @@ import { actionCreators as uiActions } from '../../ducks/modules/ui';
 class SettingsMenuButton extends PureComponent {
   render() {
     return (
-      <Icon name="settings" onClick={this.props.toggleMenu} className="app-settings" />
+      <div className="app-settings-container">
+        <div className="app-settings-container__button">
+          <Icon name="settings" onClick={this.props.toggleMenu} />
+        </div>
+      </div>
     );
   }
 }

@@ -11,7 +11,6 @@ import projectLogo from '../../images/project-logo.svg';
 import betaProjectLogo from '../../images/project-logo-beta.svg';
 import downArrow from '../../images/down-arrow.svg';
 import { ProtocolList, ProtocolImportOverlay, SessionListContainer, ImportProgressOverlay } from '.';
-import SettingsMenuButton from '../../components/MainMenu/SettingsMenuButton';
 
 /**
   * Setup screen
@@ -56,7 +55,6 @@ class Setup extends Component {
           progress={this.props.importProtocolProgress}
         />
         <div className={setupClassnames}>
-          <SettingsMenuButton />
           <div className="setup__header">
             <img src={isIOS() ? projectLogo : betaProjectLogo} className="logo setup__header--logo" alt="Network Canvas" />
           </div>

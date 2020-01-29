@@ -2,15 +2,20 @@
 $timeline-button-size: 6rem;
 
 .timeline {
+  --light-background: #4a4677;
+
   align-items: center;
   display: flex;
   flex-direction: column;
-  height: 100%;
-  width: var(--timeline-width);
+  width: calc(6rem + var(--timeline-width));
   position: absolute;
   top: 0;
-  left: 0;
+  bottom: 0;
+  left: -5rem;
   z-index: var(--z-global-ui);
+  border-radius: 5rem;
+  background: var(--panel-bg-muted);
+  padding: 2rem 0 2rem 5rem;
 
   svg {
     height: 2rem;
@@ -23,11 +28,10 @@ $timeline-button-size: 6rem;
     cursor: pointer;
     display: flex;
     justify-content: center;
-    margin: 1.8rem;
+    height: $timeline-button-size;
+    width: $timeline-button-size;
 
     &--next {
-      height: $timeline-button-size;
-      width: $timeline-button-size;
       background: var(--light-background);
 
       svg {

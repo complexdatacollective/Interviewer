@@ -6,6 +6,7 @@ import { Icon } from '@codaco/ui';
 import { ProgressBar } from '../components';
 import { DropObstacle } from '../behaviours/DragAndDrop';
 import { actionCreators as uiActions } from '../ducks/modules/ui';
+import SettingsMenuButton from '../components/MainMenu/SettingsMenuButton';
 
 class Timeline extends PureComponent {
   render() {
@@ -18,6 +19,7 @@ class Timeline extends PureComponent {
 
     return (
       <div className="timeline">
+        <SettingsMenuButton id="SETTINGS_MENU_OBSTACLE" />
         <div className="timeline-nav timeline-nav--back">
           <Icon
             onClick={(e) => {

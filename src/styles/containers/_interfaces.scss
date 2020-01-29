@@ -5,6 +5,6 @@
 }
 
 @mixin interface-centering {
-  margin-left: var(--timeline-width);
+  margin-left: calc(2.5rem + var(--timeline-width));
   margin-right: var(--interface-right-margin);
 }

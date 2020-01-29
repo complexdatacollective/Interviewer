@@ -15,6 +15,31 @@
     visibility: hidden;
   }
 
+  .app-settings-container {
+    width: var(--timeline-width);
+    z-index: var(--z-global-ui);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1.5rem;
+
+    &__button {
+      height: 6rem;
+      width: 6rem;
+      border-radius: 100%;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: var(--light-background);
+
+      svg {
+        height: 2.5rem;
+        width: 2.5rem;
+      }
+    }
+  }
+
   &--electron {
     .electron-titlebar {
       display: block;
