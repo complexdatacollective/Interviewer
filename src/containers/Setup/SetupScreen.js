@@ -56,7 +56,7 @@ class Setup extends Component {
           progress={this.props.importProtocolProgress}
         />
         <div className={setupClassnames}>
-          <SettingsMenuButton />
+          <SettingsMenuButton id="SETTINGS_MENU_BUTTON" />
           <div className="setup__header">
             <img src={isIOS() ? projectLogo : betaProjectLogo} className="logo setup__header--logo" alt="Network Canvas" />
           </div>
