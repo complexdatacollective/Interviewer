@@ -76,6 +76,7 @@ class FinishSession extends Component {
     this.props.codebook,
     this.handleExportError,
     saveFile,
+    `${this.props.currentSession.caseId}_${this.props.sessionId}`,
   );
 
   handleFinishSession = () => {
