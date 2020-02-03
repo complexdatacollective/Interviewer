@@ -6,6 +6,7 @@
 
   &__swiper {
     height: 100vh;
+    width: 100%;
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -40,6 +41,7 @@
         align-self: center;
         height: auto;
         max-height: 75%;
+        max-width: 55rem; // Same as ego form container with - for readability
         background: var(--form-intro-panel-background);
         width: 100%;
         padding: unit(6);
