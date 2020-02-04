@@ -4,9 +4,10 @@ import { connect } from 'react-redux';
 import { withStateHandlers } from 'recompose';
 import PropTypes from 'prop-types';
 import withPrompt from '../../behaviours/withPrompt';
-import { PromptSwiper, CategoricalList } from '../';
+import PromptSwiper from '../PromptSwiper';
+import CategoricalList from '../CategoricalList';
 import { makeGetPromptVariable, getPromptOtherVariable, makeNetworkNodesForType } from '../../selectors/interface';
-import { MultiNodeBucket } from '../../components';
+import MultiNodeBucket from '../../components/MultiNodeBucket';
 import { entityAttributesProperty } from '../../ducks/modules/network';
 
 const categoricalBinStateHandler = withStateHandlers(

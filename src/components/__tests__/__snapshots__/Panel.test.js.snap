@@ -1,226 +1,30 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Panel component renders ok 1`] = `
-ShallowWrapper {
-  Symbol(enzyme.__root__): [Circular],
-  Symbol(enzyme.__unrendered__): <Panel
-    highlight={null}
-    minimise={false}
-    title="foo"
+<div
+  className="panel"
+  style={
+    Object {
+      "borderColor": null,
+    }
+  }
+>
+  <div
+    className="panel__heading"
+    onClick={[Function]}
+  >
+    <h3
+      className="panel__heading-header"
+    >
+      foo
+    </h3>
+  </div>
+  <div
+    className="panel__content"
   >
     <span>
       bar
     </span>
-  </Panel>,
-  Symbol(enzyme.__renderer__): Object {
-    "batchedUpdates": [Function],
-    "checkPropTypes": [Function],
-    "getNode": [Function],
-    "render": [Function],
-    "simulateError": [Function],
-    "simulateEvent": [Function],
-    "unmount": [Function],
-  },
-  Symbol(enzyme.__node__): Object {
-    "instance": null,
-    "key": undefined,
-    "nodeType": "host",
-    "props": Object {
-      "children": Array [
-        <div
-          className="panel__heading"
-          onClick={[Function]}
-        >
-          <h3
-            className="panel__heading-header"
-          >
-            foo
-          </h3>
-        </div>,
-        <div
-          className="panel__content"
-        >
-          <span>
-            bar
-          </span>
-        </div>,
-      ],
-      "className": "panel",
-      "style": Object {
-        "borderColor": null,
-      },
-    },
-    "ref": null,
-    "rendered": Array [
-      Object {
-        "instance": null,
-        "key": undefined,
-        "nodeType": "host",
-        "props": Object {
-          "children": <h3
-            className="panel__heading-header"
-          >
-            foo
-          </h3>,
-          "className": "panel__heading",
-          "onClick": [Function],
-        },
-        "ref": null,
-        "rendered": Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "host",
-          "props": Object {
-            "children": "foo",
-            "className": "panel__heading-header",
-          },
-          "ref": null,
-          "rendered": "foo",
-          "type": "h3",
-        },
-        "type": "div",
-      },
-      Object {
-        "instance": null,
-        "key": undefined,
-        "nodeType": "host",
-        "props": Object {
-          "children": <span>
-            bar
-          </span>,
-          "className": "panel__content",
-        },
-        "ref": null,
-        "rendered": Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "host",
-          "props": Object {
-            "children": "bar",
-          },
-          "ref": null,
-          "rendered": "bar",
-          "type": "span",
-        },
-        "type": "div",
-      },
-    ],
-    "type": "div",
-  },
-  Symbol(enzyme.__nodes__): Array [
-    Object {
-      "instance": null,
-      "key": undefined,
-      "nodeType": "host",
-      "props": Object {
-        "children": Array [
-          <div
-            className="panel__heading"
-            onClick={[Function]}
-          >
-            <h3
-              className="panel__heading-header"
-            >
-              foo
-            </h3>
-          </div>,
-          <div
-            className="panel__content"
-          >
-            <span>
-              bar
-            </span>
-          </div>,
-        ],
-        "className": "panel",
-        "style": Object {
-          "borderColor": null,
-        },
-      },
-      "ref": null,
-      "rendered": Array [
-        Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "host",
-          "props": Object {
-            "children": <h3
-              className="panel__heading-header"
-            >
-              foo
-            </h3>,
-            "className": "panel__heading",
-            "onClick": [Function],
-          },
-          "ref": null,
-          "rendered": Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "host",
-            "props": Object {
-              "children": "foo",
-              "className": "panel__heading-header",
-            },
-            "ref": null,
-            "rendered": "foo",
-            "type": "h3",
-          },
-          "type": "div",
-        },
-        Object {
-          "instance": null,
-          "key": undefined,
-          "nodeType": "host",
-          "props": Object {
-            "children": <span>
-              bar
-            </span>,
-            "className": "panel__content",
-          },
-          "ref": null,
-          "rendered": Object {
-            "instance": null,
-            "key": undefined,
-            "nodeType": "host",
-            "props": Object {
-              "children": "bar",
-            },
-            "ref": null,
-            "rendered": "bar",
-            "type": "span",
-          },
-          "type": "div",
-        },
-      ],
-      "type": "div",
-    },
-  ],
-  Symbol(enzyme.__options__): Object {
-    "adapter": ReactSixteenAdapter {
-      "options": Object {
-        "enableComponentDidUpdateOnSetState": true,
-        "legacyContextMode": "parent",
-        "lifecycles": Object {
-          "componentDidUpdate": Object {
-            "onSetState": true,
-          },
-          "getChildContext": Object {
-            "calledByRenderer": false,
-          },
-          "getDerivedStateFromError": true,
-          "getDerivedStateFromProps": Object {
-            "hasShouldComponentUpdateBug": false,
-          },
-          "getSnapshotBeforeUpdate": true,
-          "setState": Object {
-            "skipsComponentDidUpdateOnNullish": true,
-          },
-        },
-      },
-    },
-    Symbol(enzyme.__providerValues__): undefined,
-  },
-  Symbol(enzyme.__providerValues__): Map {},
-  Symbol(enzyme.__childContext__): null,
-}
+  </div>
+</div>
 `;
