@@ -9,19 +9,38 @@
   overflow: hidden;
   position: relative;
 
+  .card-list {
+    padding-bottom: 0;
+    padding-top: 1rem;
+  }
+
+  &__sort {
+    display: flex;
+    align-items: center;
+    align-content: space-evenly;
+    justify-content: space-between;
+
+    h4 {
+      display: inline;
+    }
+  }
+
+  .form-field-container {
+    display: inline-block;
+    margin: 0 1rem;
+  }
+
   &__filter {
-    border-radius: 10rem;
     width: 13rem;
-    min-height: 3.5rem;
-    padding: .75rem 2rem;
-    margin: 1rem;
-    border: 1px solid var(--color-platinum);
-    background-clip: padding-box;
+
+    input {
+      margin-bottom: 0;
+    }
   }
 
   &__sort {
     button {
-      margin: 1rem;
+      margin: 0 1rem;
     }
   }
 

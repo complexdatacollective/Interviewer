@@ -38,6 +38,17 @@
   top: 0;
   background-image: linear-gradient(to top, var(--background), transparent 10rem);
 
+  .app-settings {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 2.5rem;
+    height: 4rem;
+    width: 4rem;
+    z-index: var(--z-global-ui);
+  }
+
+
   &--show-sessions {
     .setup__header {
       opacity: 0;

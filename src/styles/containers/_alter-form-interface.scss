@@ -1,7 +1,12 @@
 .alter-form {
+  @include interface-centering;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 
   &__swiper {
     height: 100vh;
+    width: 100%;
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -10,7 +15,7 @@
 
   .swiper-wrapper {
     box-sizing: border-box;
-    width: 75%;
+    max-width: 80rem;
 
     .scrollable {
       height: 100%;
@@ -24,19 +29,19 @@
 
     .slide-content {
       display: flex;
-      max-height: 75%;
+      max-height: 70%;
       min-height: 30%;
       width: 100%;
       padding: unit(1) unit(4) unit(2);
       border-radius: var(--border-radius);
       background: var(--light-background);
       position: relative;
-      top: calc(var(--base-node-size) * .2);
 
       &.alter-form__introduction {
         align-self: center;
         height: auto;
         max-height: 75%;
+        max-width: 55rem; // Same as ego form container with - for readability
         background: var(--form-intro-panel-background);
         width: 100%;
         padding: unit(6);
@@ -81,16 +86,14 @@
 
   .progress-container {
     @include transition-properties((opacity, transform), var(--animation-duration-slow), var(--animation-easing));
-    bottom: unit(4);
-    position: absolute;
     z-index: var(--z-panel);
-    left: 50%;
-    transform: translateX(-50%);
     opacity: 0;
     text-align: center;
     display: flex;
     flex-direction: column;
     width: 20rem;
+    position: absolute;
+    bottom: unit(2);
 
     &__status-text {
       margin-bottom: 0.5rem;
@@ -110,6 +113,7 @@
 }
 
 .alter-edge-form {
+
   .fake-edge {
     position: absolute;
     left: calc(50% - 5rem);

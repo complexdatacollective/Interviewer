@@ -1,4 +1,10 @@
+:root {
+  --input-text: var(--text--dark);
+  --input-placeholder: var(--color-platinum--dark); // There seems to be a bug in iOS that requires this override go here.
+}
+
 .main-menu-stages-menu {
+  --input-background: var(--color-platinum);
   width: 100%;
   height: 100%;
   display: flex;
@@ -19,17 +25,23 @@
       justify-content: space-between;
       padding-right: 4rem;
 
-      h1 {
-        margin-bottom: 0;
+      &--filter {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        h4 {
+          margin: 0 unit(2);
+        }
       }
 
-      .stages-input {
-        display: block;
-        border-radius: 10rem;
-        width: 13rem;
-        padding: .75rem 2rem;
-        border: 1px solid var(--color-platinum);
-        background-clip: padding-box;
+      h1 {
+        margin: 0;
+      }
+
+      .form-field-container,
+      input {
+        margin-bottom: 0;
       }
     }
   }

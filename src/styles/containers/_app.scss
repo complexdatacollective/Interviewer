@@ -15,16 +15,6 @@
     visibility: hidden;
   }
 
-  .app-settings {
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin: 2.5rem;
-    height: 4rem;
-    width: 4rem;
-    z-index: var(--z-global-ui);
-  }
-
   &--electron {
     .electron-titlebar {
       display: block;

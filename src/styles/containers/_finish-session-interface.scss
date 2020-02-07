@@ -7,21 +7,29 @@
   justify-content: center;
 
   &__frame {
-    width: 80%;
     max-width: 50rem;
-    padding: unit(4);
+    padding: unit(2) unit(4);
     background: var(--light-background);
     border-radius: var(--border-radius);
+    max-height: calc(100% - 2rem);
+    display: flex;
+    flex-direction: column;
   }
 
   &__title {
     text-align: center;
+    margin: 0;
   }
 
   &__section {
-    margin-top: spacing(medium);
-    padding-bottom: spacing(small);
-    padding-top: spacing(small);
+
+    &:first-of-type {
+      padding-top: unit(2);
+    }
+
+    &:last-of-type {
+      padding-top: unit(2);
+    }
 
     &--export,
     &--download {
@@ -31,19 +39,12 @@
       background: var(--background);
       padding: unit(2) unit(4);
       border-radius: var(--border-radius);
+      margin: unit(2) 0;
     }
 
     &--buttons {
       text-align: center;
-      flex-basis: 15rem;
     }
   }
 
-  .form-field-container {
-    margin-bottom: 0;
-
-    .form-field {
-      margin-bottom: 0;
-    }
-  }
 }

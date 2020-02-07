@@ -28,6 +28,17 @@
         width: 16rem;
         height: 17rem;
       }
+
+      &__prompt-header {
+        p {
+          height: auto;
+          overflow: hidden;
+
+          &::after {
+            display: none;
+          }
+        }
+      }
     }
   }
 }
