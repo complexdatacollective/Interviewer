@@ -42,7 +42,8 @@
       &.alter-form__introduction {
         align-self: center;
         height: auto;
-        max-height: 80vh;
+        max-height: 75%;
+        max-width: 55rem; // Same as ego form container with - for readability
         background: var(--form-intro-panel-background);
         width: 100%;
         padding: unit(6);
