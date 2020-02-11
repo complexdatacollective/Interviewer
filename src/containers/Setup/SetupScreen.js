@@ -64,13 +64,16 @@ class Setup extends Component {
         </div>
         <div className={resumeOverlayClassnames}>
           <div className="resume-session-panel--toggle" role="button" tabIndex="0" onClick={() => this.setState({ showSessionOverlay: !this.state.showSessionOverlay })}>
-            <img className="toggle-image" src={downArrow} alt="Resume interview" />
-            <h4>
-              { !this.state.showSessionOverlay ?
-                ('Manage Interview Sessions') :
-                ('Start New Session')
-              }
-            </h4>
+            <div className="toggle-button">
+              <img className="toggle-image" src={downArrow} alt="Resume interview" />
+              <h4>
+                { !this.state.showSessionOverlay ?
+                  ('Manage Interview Sessions') :
+                  ('Start New Session')
+                }
+              </h4>
+            </div>
+
           </div>
           <SessionListContainer />
         </div>
