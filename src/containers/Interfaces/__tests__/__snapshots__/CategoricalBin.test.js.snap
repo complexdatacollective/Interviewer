@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CategoricalBin renders CategoricalBin interface 1`] = `
+<div
+  className="categorical-bin-interface"
+>
+  <div
+    className="categorical-bin-interface__prompt"
+  >
+    <Connect(PromptSwiper)
+      backward={[MockFunction]}
+      forward={[MockFunction]}
+      prompt={Object {}}
+    />
+  </div>
+  <div
+    className="categorical-bin-interface__bucket"
+    onClick={[Function]}
+  >
+    <MultiNodeBucket
+      itemType="NODE"
+      label={[Function]}
+      listId="undefined_undefined_CAT_BUCKET"
+      nodeColor=""
+      nodes={Array []}
+      sortOrder={Array []}
+    />
+  </div>
+  <Connect(Monitor)
+    prompt={Object {}}
+    stage={Object {}}
+  />
+</div>
+`;
