@@ -27,6 +27,7 @@ exports[`CategoricalBin renders CategoricalBin interface 1`] = `
     />
   </div>
   <Connect(Monitor)
+    expandedBinIndex={null}
     prompt={Object {}}
     stage={Object {}}
   />
