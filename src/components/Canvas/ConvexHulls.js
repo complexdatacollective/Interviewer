@@ -4,6 +4,11 @@ import { findIndex } from 'lodash';
 import getAbsoluteBoundingRect from '../../utils/getAbsoluteBoundingRect';
 import { ConvexHull } from './ConvexHull';
 
+const getColor = (group, options) => {
+  const colorIndex = findIndex(options, ['value', group]) + 1 || 1;
+  const color = `cat-color-seq-${colorIndex}`;
+  return color;
+};
 
 class ConvexHulls extends Component {
   constructor() {
@@ -46,14 +51,13 @@ class ConvexHulls extends Component {
 
     return (
       <div style={{ width: '100%', height: '100%' }} ref={this.hullComponent}>
-        {Object.keys(nodesByGroup).map((group, index) => {
-          const colorIndex = findIndex(categoricalOptions, ['value', group]) + 1 || 1;
-          const color = `cat-color-seq-${colorIndex}`;
+        {Object.values(nodesByGroup).map(({ group, nodes }, index) => {
+          const color = getColor(group, categoricalOptions);
           return (
             <ConvexHull
               windowDimensions={this.state.size}
               color={color}
-              nodePoints={nodesByGroup[group]}
+              nodePoints={nodes}
               key={index}
               layoutVariable={layoutVariable}
             />
