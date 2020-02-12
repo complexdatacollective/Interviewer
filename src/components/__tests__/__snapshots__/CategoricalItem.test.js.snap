@@ -26,7 +26,6 @@ exports[`CategoricalItem component renders unexpanded categorical item 1`] = `
           <h3>
             undefined
           </h3>
-          <h5 />
         </div>
       </FlippedWithContext>
     </div>
