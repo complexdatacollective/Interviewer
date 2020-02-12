@@ -12,7 +12,7 @@ const node1 = { _uid: 1, type: 'person', [entityAttributesProperty]: { role: ['a
 const node2 = { _uid: 2, type: 'person', [entityAttributesProperty]: { role: ['a'], name: 'foxtrot', closeness: null } };
 const node3 = { _uid: 3, type: 'person', [entityAttributesProperty]: { role: ['a'], name: 'bravo', closeness: null } };
 const node4 = { _uid: 4, type: 'person', [entityAttributesProperty]: { role: ['a'], name: 'echo', closeness: [1, 1] } };
-const node5 = { _uid: 5, type: 'person', [entityAttributesProperty]: { role: ['b'], name: 'charlie', closeness: [1, 1] } };
+const node5 = { _uid: 5, type: 'person', [entityAttributesProperty]: { role: [2], name: 'charlie', closeness: [1, 1] } };
 
 
 const mockState = {
@@ -65,8 +65,8 @@ describe('canvas selectors', () => {
     };
     it('groups placed nodes based on groupVariable', () => {
       const groups = getNodesByCategorical(mockState, props);
-      expect(groups.a).toEqual([node1, node4]);
-      expect(groups.b).toEqual([node5]);
+      expect(groups.a).toEqual({ group: 'a', nodes: [node1, node4] });
+      expect(groups['2']).toEqual({ group: 2, nodes: [node5] });
     });
   });
 

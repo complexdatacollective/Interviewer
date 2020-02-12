@@ -79,20 +79,16 @@ export const makeGetNodesByCategorical = () => {
         const categoricalValues = node[entityAttributesProperty][categoricalVariable];
 
         // Filter out nodes with no value for this variable.
-        if (!categoricalValues) {
-          return false;
-        }
+        if (!categoricalValues) { return; }
 
         categoricalValues.forEach((categoricalValue) => {
           if (groupedList[categoricalValue]) {
-            groupedList[categoricalValue].push(node);
+            groupedList[categoricalValue].nodes.push(node);
           } else {
-            groupedList[categoricalValue] = [];
-            groupedList[categoricalValue].push(node);
+            groupedList[categoricalValue] = { group: categoricalValue, nodes: [] };
+            groupedList[categoricalValue].nodes.push(node);
           }
         });
-
-        return true;
       });
 
       return groupedList;
