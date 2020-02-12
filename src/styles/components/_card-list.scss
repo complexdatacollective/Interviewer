@@ -1,19 +1,27 @@
 .card-list {
   padding-bottom: 2rem;
-  padding-top: calc(#{$scroller-top-padding});
+  padding-top: $scroller-top-padding;
   width: 100%;
   height: 100%;
 
   &__row {
     display: flex;
     width: 100%;
-    padding-bottom: unit(1);
+    padding-top: unit(2);
+
+    &:first-of-type {
+      padding-top: unit(2);
+    }
+
+    &:last-of-type {
+      padding-bottom: unit(5);
+    }
   }
 
   &__content {
     position: relative;
     flex: 1;
-    padding: 0 unit(1) 0 0;
+    padding: 0 unit(2) 0 0;
   }
 
   &--single {

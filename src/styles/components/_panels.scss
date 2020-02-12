@@ -5,6 +5,7 @@
   opacity: 1;
   margin-right: 0;
   width: 24rem;
+  max-width: 30vw; // To constrain large font sizes
   transform: translateZ(0);
   will-change: transform;
 

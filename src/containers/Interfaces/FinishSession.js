@@ -13,6 +13,7 @@ import { getNetwork } from '../../selectors/network';
 import { getActiveSession } from '../../selectors/session';
 import { getProtocolCodebook, getRemoteProtocolId } from '../../selectors/protocol';
 import { ExportSessionsOverlay } from '../Setup';
+import Scroller from '../../components/Scroller';
 
 const ExportSection = ({ defaultServer, children }) => (
   <div className="finish-session-interface__section finish-session-interface__section--export">
@@ -131,35 +132,38 @@ class FinishSession extends Component {
           <h1 className="finish-session-interface__title type--title-1">
             Finish Interview
           </h1>
-          <div className="finish-session-interface__section finish-session-interface__section--instructions">
-            <p>
-              You have reached the end of the interview.
-              If you are satisfied with the information you have entered, you may finish the
-              interview now.
-            </p>
-          </div>
-
-          { this.exportSection }
-
-          <div className="finish-session-interface__section finish-session-interface__section--download">
-            <div>
-              <h2>Data Export</h2>
-              <p>Export this network as a <code>.graphml</code> file</p>
+          <Scroller>
+            <div className="finish-session-interface__section finish-session-interface__section--instructions">
+              <p>
+                You have reached the end of the interview.
+                If you are satisfied with the information you have entered, you may finish the
+                interview now.
+              </p>
             </div>
-            <div>
-              <Button color="platinum" onClick={this.handleExport}>
-                Export
-              </Button>
+
+            { this.exportSection }
+
+            <div className="finish-session-interface__section finish-session-interface__section--download">
+              <div>
+                <h2>Data Export</h2>
+                <p>Export this network as a <code>.graphml</code> file</p>
+              </div>
+              <div>
+                <Button color="platinum" onClick={this.handleExport}>
+                  Export
+                </Button>
+              </div>
             </div>
-          </div>
-          <Toggle
-            input={{
-              value: this.state.deleteAfterFinish,
-              onChange: this.handleToggleDelete,
-            }}
-            label="Delete this session after finishing?"
-            fieldLabel=" "
-          />
+            <Toggle
+              input={{
+                value: this.state.deleteAfterFinish,
+                onChange: this.handleToggleDelete,
+              }}
+              label="Delete this session after finishing?"
+              fieldLabel=" "
+            />
+
+          </Scroller>
           <div className="finish-session-interface__section finish-session-interface__section--buttons">
             <Button onClick={this.handleFinishSession}>
               Finish
