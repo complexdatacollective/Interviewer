@@ -2,13 +2,14 @@
 
 exports[`CategoricalList component renders categorical list 1`] = `
 <div
-  className="categorical-list categorical-list--items--2 categorical-list--expanded"
+  className="categorical-list categorical-list--items--2"
   onClick={[Function]}
 >
   <Flipper
     applyTransformOrigin={true}
     className="categorical-list__items"
     element="div"
+    flipKey={null}
   >
     <Connect(CategoricalListItem)
       accentColor={null}
@@ -28,6 +29,8 @@ exports[`CategoricalList component renders categorical list 1`] = `
       index={0}
       isExpanded={false}
       key="0"
+      nodeColor=""
+      promptOtherVariable={null}
     />
     <Connect(CategoricalListItem)
       accentColor={null}
@@ -46,6 +49,8 @@ exports[`CategoricalList component renders categorical list 1`] = `
       index={1}
       isExpanded={false}
       key="1"
+      nodeColor=""
+      promptOtherVariable={null}
     />
   </Flipper>
 </div>

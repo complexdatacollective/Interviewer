@@ -94,7 +94,7 @@ class CategoricalList extends Component {
       activePromptVariable,
       promptOtherVariable,
       getNodeLabel,
-      getNodeColor,
+      nodeColor,
       onExpandBin,
       expandedBinIndex,
     } = this.props;
@@ -106,7 +106,7 @@ class CategoricalList extends Component {
           key={index}
           index={index}
           getNodeLabel={getNodeLabel}
-          getNodeColor={getNodeColor}
+          nodeColor={nodeColor}
           bin={bin}
           size={this.getBinSize(index)}
           activePromptVariable={activePromptVariable}
@@ -134,7 +134,7 @@ class CategoricalList extends Component {
     const expandedBin = categoricalBins[expandedBinIndex];
 
     const otherBins = categoricalBins.filter(
-      (bin, index) => index !== expandedBinIndex,
+      (_, index) => index !== expandedBinIndex,
     );
 
     return (
@@ -157,17 +157,19 @@ class CategoricalList extends Component {
 
 CategoricalList.propTypes = {
   activePromptVariable: PropTypes.string.isRequired,
-  promptOtherVariable: PropTypes.string.isRequired,
+  promptOtherVariable: PropTypes.string,
   bins: PropTypes.array.isRequired,
   getNodeLabel: PropTypes.func.isRequired,
-  getNodeColor: PropTypes.string.isRequired,
+  nodeColor: PropTypes.string.isRequired,
   prompt: PropTypes.object.isRequired,
   stage: PropTypes.object.isRequired,
-  expandedBinIndex: PropTypes.number.isRequired,
+  expandedBinIndex: PropTypes.number,
   onExpandBin: PropTypes.func.isRequired,
 };
 
 CategoricalList.defaultProps = {
+  expandedBinIndex: null,
+  promptOtherVariable: null,
   isDragging: false,
   meta: {},
 };
@@ -198,7 +200,7 @@ function makeMapStateToProps() {
   return function mapStateToProps(state, props) {
     const stageNodes = getStageNodes(state, props);
     const activePromptVariable = getPromptVariable(state, props);
-    const [promptOtherVariable] = getPromptOtherVariable(state, props);
+    const [promptOtherVariable, promptOtherVariablePrompt] = getPromptOtherVariable(state, props);
     const getNodeLabel = makeGetNodeLabel();
     const getNodeColor = makeGetNodeColor();
     const bins = getCategoricalValues(state, props)
@@ -207,6 +209,7 @@ function makeMapStateToProps() {
     return {
       activePromptVariable,
       promptOtherVariable,
+      promptOtherVariablePrompt,
       bins,
       getNodeLabel: getNodeLabel(state, props),
       nodeColor: getNodeColor(state, props),

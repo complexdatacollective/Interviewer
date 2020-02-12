@@ -25,27 +25,29 @@ const otherVariableWindowInitialState = {
   node: null,
 };
 
-const CategoricalListItem = ({
-  id,
-  size,
-  isExpanded,
-  accentColor,
-  activePromptVariable,
-  promptOtherVariable,
-  bin,
-  index,
-  sortOrder,
-  getNodeLabel,
-  nodeColor,
-  onExpandBin,
-  updateNode,
-}) => {
+const CategoricalListItem = (props) => {
+  const {
+    id,
+    size,
+    isExpanded,
+    accentColor,
+    activePromptVariable,
+    promptOtherVariable,
+    bin,
+    index,
+    sortOrder,
+    getNodeLabel,
+    nodeColor,
+    onExpandBin,
+    updateNode,
+  } = props;
+
   const isOtherVariable = !!bin.otherVariable;
   const [otherVariableWindow, setOtherVariableWindow] = useState(otherVariableWindowInitialState);
   const binDetails = formatBinDetails(bin.nodes, getNodeLabel);
 
   const openOtherVariableWindow = (node) => {
-    const otherVariable = get(getEntityAttributes(node), promptOtherVariable);
+    const otherVariable = get(getEntityAttributes(node), bin.otherVariable);
 
     setOtherVariableWindow({
       show: true,
@@ -63,6 +65,7 @@ const CategoricalListItem = ({
 
   const setNodeCategory = (node, category) => {
     const variable = bin.otherVariable || activePromptVariable;
+
     const resetVariable = bin.otherVariable ? activePromptVariable : promptOtherVariable;
 
     // categorical requires an array, otherVariable is a string
@@ -142,7 +145,7 @@ const CategoricalListItem = ({
             <OtherVariableForm
               label={otherVariableWindow.label}
               color={otherVariableWindow.color}
-              otherVariableLabel={bin.label}
+              otherVariablePrompt={bin.otherVariablePrompt}
               onSubmit={handleSubmitOtherVariableForm}
               onCancel={closeOtherVariableWindow}
               initialValues={otherVariableWindow.initialValues}
@@ -158,12 +161,12 @@ CategoricalListItem.propTypes = {
   id: PropTypes.string.isRequired,
   isExpanded: PropTypes.bool.isRequired,
   activePromptVariable: PropTypes.string.isRequired,
-  promptOtherVariable: PropTypes.string.isRequired,
+  promptOtherVariable: PropTypes.string,
   bin: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
-  sortOrder: PropTypes.func.isRequired,
+  sortOrder: PropTypes.array,
   getNodeLabel: PropTypes.func.isRequired,
-  nodeColor: PropTypes.string.isRequired,
+  nodeColor: PropTypes.string,
   onExpandBin: PropTypes.func.isRequired,
   updateNode: PropTypes.func.isRequired,
   accentColor: PropTypes.string,
@@ -171,8 +174,11 @@ CategoricalListItem.propTypes = {
 };
 
 CategoricalListItem.defaultProps = {
+  promptOtherVariable: null,
   accentColor: null,
+  nodeColor: null,
   size: 0,
+  sortOrder: [],
 };
 
 export { CategoricalListItem };
