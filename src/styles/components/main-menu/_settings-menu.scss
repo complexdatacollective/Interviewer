@@ -3,19 +3,23 @@
 }
 
 .main-menu-settings-menu {
-  --input-background: var(--color-platinum);
-
+  --input-background: var(--transparent-light);
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
-  padding: spacing(large) spacing(large) spacing(large) spacing(huge);
-  opacity: 1;
-  transition: opacity var(--animation-duration-standard) var(--animation-easing);
-  transition-delay: var(--animation-duration-standard);
+  padding: unit(8) unit(12) unit(8) spacing(huge);
+  transition: transform var(--animation-duration-standard) var(--animation-easing);
+  /* transform: translateX(-100vw); */
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: var(--z-panel);
+  background: rgb(226, 33, 91);
+  padding-left: calc(10rem + var(--timeline-width));
 
   fieldset {
-    border: .1rem solid var(--color-platinum);
+    border: .1rem solid var(--transparent-light);
     border-radius: .75rem;
     padding: spacing(medium);
     margin: spacing(medium);
