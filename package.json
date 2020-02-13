@@ -230,6 +230,9 @@
       }
     ]
   },
+  "browserslist": [
+    "defaults"
+  ],
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}"
