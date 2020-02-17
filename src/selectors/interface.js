@@ -67,18 +67,37 @@ export const makeGetNodeVariables = () => createDeepEqualSelector(
   },
 );
 
+// TODO: Not sure this needs to be a createSelector
 export const makeGetPromptVariable = () =>
   createSelector(
     propPrompt,
     prompt => prompt.variable,
   );
 
-export const makeGetVariableOptions = () =>
+export const getPromptOtherVariable = (state, props) => {
+  const prompt = propPrompt(state, props);
+  return [prompt.otherVariable, prompt.otherOptionLabel, prompt.otherVariablePrompt];
+};
+
+export const makeGetVariableOptions = (includeOtherVariable = false) =>
   createSelector(
-    makeGetNodeVariables(), makeGetPromptVariable(),
-    (nodeVariables, promptVariable) => {
-      const optionValues = nodeVariables[promptVariable].options;
-      return optionValues || [];
+    makeGetNodeVariables(), makeGetPromptVariable(), getPromptOtherVariable,
+    (
+      nodeVariables,
+      promptVariable,
+      [promptOtherVariable, promptOtherOptionLabel, promptOtherVariablePrompt],
+    ) => {
+      const optionValues = nodeVariables[promptVariable].options || [];
+      const otherValue = {
+        label: promptOtherOptionLabel,
+        value: null,
+        otherVariablePrompt: promptOtherVariablePrompt,
+        otherVariable: promptOtherVariable,
+      };
+
+      return includeOtherVariable && promptOtherVariable ?
+        [...optionValues, otherValue] :
+        optionValues;
     },
   );
 

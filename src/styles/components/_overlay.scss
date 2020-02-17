@@ -8,7 +8,7 @@ $close-button-size: 1rem;
   border-radius: .75rem;
   padding: 2rem;
   width: 55rem;
-  max-height: calc(100% - 4rem);
+  max-height: calc(100% - 4rem); //
   margin: 2rem;
   display: flex;
   flex-direction: column;
@@ -52,6 +52,7 @@ $close-button-size: 1rem;
     display: block;
     height: 100%;
     width: 100%;
+    max-height: 100%;
     border-radius: 0;
     padding: 6rem 10rem;
     margin: 0;

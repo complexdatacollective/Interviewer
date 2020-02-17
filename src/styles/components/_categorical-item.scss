@@ -78,7 +78,7 @@
 
     h3 {
       hyphens: auto;
-      -webkit-hyphens: auto;
+      -webkit-hyphens: auto; // sass-lint:disable-line no-vendor-prefixes
     }
   }
 

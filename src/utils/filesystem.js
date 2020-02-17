@@ -1,5 +1,5 @@
 /* eslint-disable global-require */
-/* global FileReader, FileWriter, window, cordova */
+/* global FileWriter, FileError, cordova */
 
 import { trimChars } from 'lodash/fp';
 import environments from './environments';

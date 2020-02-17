@@ -4,18 +4,19 @@ import { connect } from 'react-redux';
 import { withStateHandlers } from 'recompose';
 import PropTypes from 'prop-types';
 import withPrompt from '../../behaviours/withPrompt';
-import { PromptSwiper, CategoricalList } from '../';
-import { makeGetPromptVariable, makeNetworkNodesForType } from '../../selectors/interface';
-import { MultiNodeBucket } from '../../components';
+import PromptSwiper from '../PromptSwiper';
+import CategoricalList from '../CategoricalList';
+import { makeGetPromptVariable, getPromptOtherVariable, makeNetworkNodesForType } from '../../selectors/interface';
+import MultiNodeBucket from '../../components/MultiNodeBucket';
 import { entityAttributesProperty } from '../../ducks/modules/network';
 
 const categoricalBinStateHandler = withStateHandlers(
   {
-    expandedBinValue: '',
+    expandedBinIndex: null,
   },
   {
     handleExpandBin: () =>
-      (expandedBinValue = '') => ({ expandedBinValue }),
+      (expandedBinIndex = null) => ({ expandedBinIndex }),
   },
 );
 
@@ -26,8 +27,8 @@ const CategoricalBin = ({
   promptForward,
   promptBackward,
   prompt,
-  nodesForPrompt,
-  expandedBinValue,
+  uncategorizedNodes,
+  expandedBinIndex,
   handleExpandBin,
   stage,
 }) => {
@@ -46,7 +47,7 @@ const CategoricalBin = ({
       </div>
       <div className="categorical-bin-interface__bucket" onClick={() => handleExpandBin()}>
         <MultiNodeBucket
-          nodes={nodesForPrompt}
+          nodes={uncategorizedNodes}
           listId={`${stage.id}_${prompt.id}_CAT_BUCKET`}
           sortOrder={prompt.bucketSortOrder}
         />
@@ -55,7 +56,7 @@ const CategoricalBin = ({
         key={prompt.id}
         stage={stage}
         prompt={prompt}
-        expandedBinValue={expandedBinValue}
+        expandedBinIndex={expandedBinIndex}
         onExpandBin={handleExpandBin}
       />
     </div>
@@ -67,9 +68,13 @@ CategoricalBin.propTypes = {
   prompt: PropTypes.object.isRequired,
   promptForward: PropTypes.func.isRequired,
   promptBackward: PropTypes.func.isRequired,
-  nodesForPrompt: PropTypes.array.isRequired,
-  expandedBinValue: PropTypes.string.isRequired,
+  uncategorizedNodes: PropTypes.array.isRequired,
+  expandedBinIndex: PropTypes.string,
   handleExpandBin: PropTypes.func.isRequired,
+};
+
+CategoricalBin.defaultProps = {
+  expandedBinIndex: null,
 };
 
 function makeMapStateToProps() {
@@ -79,12 +84,15 @@ function makeMapStateToProps() {
   return function mapStateToProps(state, props) {
     const stageNodes = getStageNodes(state, props);
     const activePromptVariable = getPromptVariable(state, props);
+    const [promptOtherVariable] = getPromptOtherVariable(state, props);
+
+    const matchNoCategory = node =>
+      !node[entityAttributesProperty][activePromptVariable] &&
+      !node[entityAttributesProperty][promptOtherVariable];
 
     return {
       activePromptVariable,
-      nodesForPrompt: stageNodes.filter(
-        node => !node[entityAttributesProperty][activePromptVariable],
-      ),
+      uncategorizedNodes: stageNodes.filter(matchNoCategory),
     };
   };
 }
