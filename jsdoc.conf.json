@@ -1,9 +1,0 @@
-{
-  "source": {
-    "includePattern": ".+\\.js$"
-  },
-  "plugins": ["node_modules/jsdoc-babel"],
-  "babel": {
-    "babelrc": true
-  }
-}
