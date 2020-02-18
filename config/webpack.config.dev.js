@@ -9,7 +9,6 @@ const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
-const browsers = require('./browsers');
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
 
@@ -228,11 +227,7 @@ module.exports = {
                   // https://github.com/facebookincubator/create-react-app/issues/2677
                   ident: 'postcss',
                   plugins: () => [
-                    require('postcss-flexbugs-fixes'),
-                    autoprefixer({
-                      browsers,
-                      flexbox: 'no-2009',
-                    }),
+                    require('postcss-flexbugs-fixes')
                   ],
                 },
               },
@@ -263,11 +258,7 @@ module.exports = {
                   // https://github.com/facebookincubator/create-react-app/issues/2677
                   ident: 'postcss',
                   plugins: () => [
-                    require('postcss-flexbugs-fixes'),
-                    autoprefixer({
-                      browsers,
-                      flexbox: 'no-2009',
-                    }),
+                    require('postcss-flexbugs-fixes')
                   ],
                 },
               },
