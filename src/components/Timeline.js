@@ -6,7 +6,7 @@ import { Icon } from '@codaco/ui';
 import { ProgressBar } from '../components';
 import { DropObstacle } from '../behaviours/DragAndDrop';
 import { actionCreators as uiActions } from '../ducks/modules/ui';
-import SettingsMenuButton from '../components/MainMenu/SettingsMenuButton';
+import SettingsMenuButton from '../containers/MainMenu/SettingsMenu/SettingsMenuButton';
 
 class Timeline extends PureComponent {
   render() {

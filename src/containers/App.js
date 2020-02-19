@@ -9,7 +9,7 @@ import { actionCreators as deviceSettingsActions } from '../ducks/modules/device
 import '../styles/main.scss';
 import { isElectron, isCordova, isWindows, isMacOS, isLinux, isPreview, getEnv } from '../utils/Environment';
 import DialogManager from '../components/DialogManager';
-import { SettingsMenu } from '../containers/MainMenu';
+import SettingsMenu from '../containers/MainMenu/SettingsMenu/SettingsMenu';
 
 /**
   * Main app container.
@@ -76,8 +76,8 @@ class App extends PureComponent {
         'app--preview': isPreview(),
       })}
       >
-        <SettingsMenu />
         <div className="electron-titlebar" />
+        <SettingsMenu />
         <div
           id="page-wrap"
           className={cx({
