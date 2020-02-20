@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, Icon } from '@codaco/ui';
+import { Modal } from '@codaco/ui';
 import { motion, AnimatePresence } from 'framer-motion';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
@@ -9,6 +9,9 @@ import Scroller from '../../../components/Scroller';
 import VisualPreferences from './VisualPreferences';
 import DeviceSettings from './DeviceSettings';
 import DeveloperTools from './DeveloperTools';
+import CloseButton from '../CloseButton';
+import SettingsMenuButton from './SettingsMenuButton';
+import getVersion from '../../../utils/getVersion';
 
 const tabVariants = {
   hidden: {
@@ -29,10 +32,8 @@ const tabVariants = {
   },
 };
 
-const SettingsMenu = (props) => {
-  const {
-    isOpen,
-  } = props;
+const SettingsMenu = () => {
+  const [open, toggleMenu] = useState(false);
 
   const tabs = {
     'Visual Preferences': VisualPreferences,
@@ -41,9 +42,20 @@ const SettingsMenu = (props) => {
   };
 
   const [activeTab, setActiveTab] = useState('Visual Preferences');
+  const [appVersion, setAppVersion] = useState('0.0.0');
+
+  getVersion().then(version => setAppVersion(version));
 
   const renderNavigation = Object.keys(tabs).map(tabName => (
-    <motion.li onClick={() => setActiveTab(tabName)}>{tabName}</motion.li>
+    <motion.li
+      key={tabName}
+      onClick={() => setActiveTab(tabName)}
+      className={activeTab === tabName ? 'active' : ''}
+      // whileHover={{ scale: 1.1 }}
+      // whileTap={{ scale: 0.95 }}
+    >
+      {tabName}
+    </motion.li>
   ));
 
   const renderTabs = Object.keys(tabs).map((tabName) => {
@@ -53,12 +65,12 @@ const SettingsMenu = (props) => {
     return (
       <motion.div
         key={tabName}
-        className="tab"
+        className="tab-content"
         variants={tabVariants}
         initial="hidden"
         exit="hidden"
         animate={isActive ? 'visible' : 'hidden'}
-        transition={{ duration: getCSSVariableAsNumber('--animation-duration-fast-ms') / 1000 }}
+        transition={{ duration: getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000 }}
       >
         <h1>{tabName}</h1>
         <Scroller>
@@ -69,36 +81,36 @@ const SettingsMenu = (props) => {
   });
 
   return (
-    <Modal show>
-      <div
-        className="settings-menu"
-      >
-        <header className="settings-menu__header">
-          <h1>Settings Menu</h1>
-          <motion.div
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Icon name="close" />
-          </motion.div>
-        </header>
-        <article className="settings-menu__wrapper">
-          <nav>
-            <ul>
-              { renderNavigation }
-            </ul>
-          </nav>
-          <section>
-            <AnimatePresence exitBeforeEnter>
-              { renderTabs }
-            </AnimatePresence>
-          </section>
-        </article>
+    <React.Fragment>
+      <div>
+        <SettingsMenuButton onClick={() => { toggleMenu(true); }} />
       </div>
-    </Modal>
+      <Modal show={open}>
+        <div
+          className="settings-menu"
+        >
+          <header className="settings-menu__header">
+            <h1>Settings Menu</h1>
+            <CloseButton onClick={() => toggleMenu(false)} />
+          </header>
+          <article className="settings-menu__wrapper">
+            <nav>
+              <ul>
+                { renderNavigation }
+              </ul>
+              <div className="version-code">Version {appVersion}</div>
+            </nav>
+            <section>
+              <AnimatePresence exitBeforeEnter>
+                { renderTabs }
+              </AnimatePresence>
+            </section>
+          </article>
+        </div>
+      </Modal>
+    </React.Fragment>
   );
 };
-
 
 const mapDispatchToProps = dispatch => ({
   closeMenu: () => dispatch(uiActions.update({ isMenuOpen: false })),

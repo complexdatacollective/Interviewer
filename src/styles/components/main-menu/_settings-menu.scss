@@ -34,6 +34,10 @@
       background: var(--color-neon-coral);
       flex: 0 0 25%;
       padding: unit(6) 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
 
       ul {
         padding: 0;
@@ -45,27 +49,42 @@
         margin-bottom: unit(2);
         list-style: none;
         font-weight: 300;
+        transition: background var(--animation-duration-fast) var(--animation-easing), font-weight var(--animation-duration-fast) var(--animation-easing);
+        cursor: pointer;
+        backface-visibility: hidden;
+
+        &:hover {
+          background: var(--active-tab-background);
+        }
 
         &.active {
           background: var(--active-tab-background);
           font-weight: 700;
         }
       }
+
+      .version-code {
+        align-self: center;
+      }
     }
 
     section {
       --input-background: var(--color-platinum);
       --input-text: var(--text--dark);
-      // --text: var(--text--dark);
 
       width: 100%;
       color: var(--text-dark);
-      display: flex;
-      flex-direction: column;
       padding: unit(3) unit(8);
+      display: flex;
 
-      .scrollable {
-        padding-top: 2rem;
+      .tab-content {
+        display: flex;
+        flex-direction: column;
+
+        .scrollable {
+          padding-top: 2rem;
+          padding-bottom: 4rem;
+        }
       }
 
       .settings-element {

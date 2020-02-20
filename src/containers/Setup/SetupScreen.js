@@ -10,7 +10,7 @@ import { isIOS } from '../../utils/Environment';
 import projectLogo from '../../images/project-logo.svg';
 import betaProjectLogo from '../../images/project-logo-beta.svg';
 import downArrow from '../../images/down-arrow.svg';
-import SettingsMenuButton from '../../containers/MainMenu/SettingsMenu/SettingsMenuButton';
+import SettingsMenu from '../../containers/MainMenu/SettingsMenu/SettingsMenu';
 import { ProtocolList, ProtocolImportOverlay, SessionListContainer, ImportProgressOverlay } from '.';
 
 /**
@@ -48,7 +48,7 @@ class Setup extends Component {
       <React.Fragment>
         <div className="bg bg-1" />
         { !this.state.showSessionOverlay &&
-        (<SettingsMenuButton />)
+        (<SettingsMenu />)
         }
         <ProtocolImportOverlay
           show={this.state.showImportProtocolOverlay}

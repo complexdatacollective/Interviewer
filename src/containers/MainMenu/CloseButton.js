@@ -1,16 +1,15 @@
 import React from 'react';
-import { Icon } from '@codaco/ui';
 import { motion } from 'framer-motion';
+import { Icon } from '@codaco/ui';
 
-const SettingsMenuButton = props => (
+const CloseButton = props => (
   <motion.div
     whileHover={{ scale: 1.1 }}
     whileTap={{ scale: 0.95 }}
-    className="settings-menu-button"
     {...props}
   >
-    <Icon name="settings" />
+    <Icon name="close" />
   </motion.div>
 );
 
-export default SettingsMenuButton;
+export default CloseButton;
