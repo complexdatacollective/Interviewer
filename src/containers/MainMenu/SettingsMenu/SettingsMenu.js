@@ -3,6 +3,7 @@ import { Modal, Icon } from '@codaco/ui';
 import { motion, AnimatePresence } from 'framer-motion';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
+import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
 import { actionCreators as uiActions } from '../../../ducks/modules/ui';
 import Scroller from '../../../components/Scroller';
 import VisualPreferences from './VisualPreferences';
@@ -10,11 +11,20 @@ import DeviceSettings from './DeviceSettings';
 import DeveloperTools from './DeveloperTools';
 
 const tabVariants = {
-  hidden: { opacity: 0 },
+  hidden: {
+    opacity: 0,
+    transition: {
+      // when: 'afterChildren',
+      staggerChildren: 0.05,
+      staggerDirection: -1,
+    },
+  },
   visible: {
     opacity: 1,
     transition: {
-      opacity: 2,
+      // when: 'beforeChildren',
+      staggerChildren: 0.05,
+      delayChildren: 0.2,
     },
   },
 };
@@ -48,6 +58,7 @@ const SettingsMenu = (props) => {
         initial="hidden"
         exit="hidden"
         animate={isActive ? 'visible' : 'hidden'}
+        transition={{ duration: getCSSVariableAsNumber('--animation-duration-fast-ms') / 1000 }}
       >
         <h1>{tabName}</h1>
         <Scroller>

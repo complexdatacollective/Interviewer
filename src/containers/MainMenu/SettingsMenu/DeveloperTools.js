@@ -2,11 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withHandlers, compose } from 'recompose';
 import { bindActionCreators } from 'redux';
+import { motion } from 'framer-motion';
 import { Button } from '@codaco/ui/lib/components';
 import { actionCreators as importProtocolActions } from '../../../ducks/modules/importProtocol';
 import { actionCreators as mockActions } from '../../../ducks/modules/mock';
 import { getAdditionalAttributesForCurrentPrompt, getNodeEntryForCurrentPrompt } from '../../../selectors/session';
 import { DEVELOPMENT_PROTOCOL_URL } from '../../../config';
+import TabItemVariants from './TabItemVariants';
 
 const DeveloperTools = (props) => {
   const {
@@ -18,7 +20,7 @@ const DeveloperTools = (props) => {
 
   return (
     <React.Fragment>
-      <article className="settings-element">
+      <motion.article variants={TabItemVariants} className="settings-element">
         <div className="form-field-container">
           <div className="form-field">
             <Button
@@ -37,10 +39,10 @@ const DeveloperTools = (props) => {
             in-progress interviews, and all application settings.
           </p>
         </div>
-      </article>
+      </motion.article>
       {
         shouldShowMocksItem &&
-        <article className="settings-element">
+        <motion.article variants={TabItemVariants} className="settings-element">
           <div className="form-field-container">
             <div className="form-field">
               <Button
@@ -58,9 +60,9 @@ const DeveloperTools = (props) => {
               mock nodes for testing purposes.
             </p>
           </div>
-        </article>
+        </motion.article>
       }
-      <article className="settings-element">
+      <motion.article variants={TabItemVariants} className="settings-element">
         <div className="form-field-container">
           <div className="form-field">
             <Button
@@ -78,7 +80,7 @@ const DeveloperTools = (props) => {
             version of Network Canvas.
           </p>
         </div>
-      </article>
+      </motion.article>
     </React.Fragment>
   );
 };

@@ -1,9 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
+import { motion } from 'framer-motion';
 import { Toggle } from '@codaco/ui/lib/components/Fields';
 import { isElectron, isCordova, isIOS } from '../../../utils/Environment';
 import { actionCreators as deviceSettingsActions } from '../../../ducks/modules/deviceSettings';
+import TabItemVariants from './TabItemVariants';
+
 
 const VisualPreferences = (props) => {
   const {
@@ -41,7 +44,7 @@ const VisualPreferences = (props) => {
 
   return (
     <React.Fragment>
-      <article className="settings-element">
+      <motion.article variants={TabItemVariants} className="settings-element">
         {/* <input
           type="range"
           name="scaleFactor"
@@ -75,8 +78,8 @@ const VisualPreferences = (props) => {
             visible on each screen.
           </p>
         </div>
-      </article>
-      {!isCordova() && <article className="settings-element">
+      </motion.article>
+      {!isCordova() && <motion.article variants={TabItemVariants} className="settings-element">
         <Toggle
           input={{
             checked: true,
@@ -91,9 +94,9 @@ const VisualPreferences = (props) => {
             the size of the window. Turning it off will use a fixed size.
           </p>
         </div>
-      </article>
+      </motion.article>
       }
-      {!isIOS() && <article className="settings-element">
+      {!isIOS() && <motion.article variants={TabItemVariants} className="settings-element">
         <Toggle
           input={{
             checked: false,
@@ -110,9 +113,9 @@ const VisualPreferences = (props) => {
             here.
           </p>
         </div>
-      </article>
+      </motion.article>
       }
-      {isElectron() && <article className="settings-element">
+      {isElectron() && <motion.article variants={TabItemVariants} className="settings-element">
         <Toggle
           input={{
             checked: !!startFullScreen,
@@ -131,8 +134,8 @@ const VisualPreferences = (props) => {
             can access the native app menu by passing the <code>alt</code> key.</em>
           </p>
         </div>
-      </article>}
-      <article className="settings-element">
+      </motion.article>}
+      <motion.article variants={TabItemVariants} className="settings-element">
         <Toggle
           input={{
             checked: true,
@@ -147,7 +150,7 @@ const VisualPreferences = (props) => {
             no physical keyboard.
           </p>
         </div>
-      </article>
+      </motion.article>
     </React.Fragment>
   );
 };
