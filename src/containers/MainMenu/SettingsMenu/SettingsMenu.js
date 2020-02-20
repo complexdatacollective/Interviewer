@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, Icon } from '@codaco/ui';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { actionCreators as uiActions } from '../../../ducks/modules/ui';
@@ -8,6 +8,16 @@ import Scroller from '../../../components/Scroller';
 import VisualPreferences from './VisualPreferences';
 import DeviceSettings from './DeviceSettings';
 import DeveloperTools from './DeveloperTools';
+
+const tabVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      opacity: 2,
+    },
+  },
+};
 
 const SettingsMenu = (props) => {
   const {
@@ -22,11 +32,30 @@ const SettingsMenu = (props) => {
 
   const [activeTab, setActiveTab] = useState('Visual Preferences');
 
-  const TabComponent = tabs[activeTab];
-
-  const navTabs = Object.keys(tabs).map(tabName => (
+  const renderNavigation = Object.keys(tabs).map(tabName => (
     <motion.li onClick={() => setActiveTab(tabName)}>{tabName}</motion.li>
   ));
+
+  const renderTabs = Object.keys(tabs).map((tabName) => {
+    const TabComponent = tabs[tabName];
+    const isActive = activeTab === tabName;
+    if (!isActive) { return ''; }
+    return (
+      <motion.div
+        key={tabName}
+        className="tab"
+        variants={tabVariants}
+        initial="hidden"
+        exit="hidden"
+        animate={isActive ? 'visible' : 'hidden'}
+      >
+        <h1>{tabName}</h1>
+        <Scroller>
+          <TabComponent />
+        </Scroller>
+      </motion.div>
+    );
+  });
 
   return (
     <Modal show>
@@ -45,14 +74,13 @@ const SettingsMenu = (props) => {
         <article className="settings-menu__wrapper">
           <nav>
             <ul>
-              { navTabs }
+              { renderNavigation }
             </ul>
           </nav>
           <section>
-            <h1>{activeTab}</h1>
-            <Scroller>
-              <TabComponent />
-            </Scroller>
+            <AnimatePresence exitBeforeEnter>
+              { renderTabs }
+            </AnimatePresence>
           </section>
         </article>
       </div>

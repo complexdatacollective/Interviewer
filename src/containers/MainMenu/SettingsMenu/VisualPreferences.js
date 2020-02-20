@@ -83,7 +83,6 @@ const VisualPreferences = (props) => {
             value: useDynamicScaling,
             onChange: toggleUseDynamicScaling,
           }}
-          label=""
         />
         <div>
           <h2>Use dynamic scaling?</h2>
