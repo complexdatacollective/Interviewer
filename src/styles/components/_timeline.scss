@@ -3,19 +3,29 @@ $timeline-button-size: 6rem;
 
 .timeline {
   --light-background: #4a4677;
-
-  align-items: center;
+  align-items: flex-end;
   display: flex;
   flex-direction: column;
-  width: calc(6rem + var(--timeline-width));
+  width: calc(var(--timeline-width) + 22rem);
   position: absolute;
-  top: 0;
-  bottom: 0;
-  left: -5rem;
+  top: -5vh;
+  bottom: -5vh;
+  left: -22rem;
   z-index: var(--z-global-ui);
-  border-radius: 5rem;
+  border-radius: 8rem;
   background: var(--panel-bg-muted);
-  padding: 2rem 0 2rem 5rem;
+  padding: unit(2);
+
+  .timeline-content {
+    display: flex;
+    padding: 10vh 0;
+    flex-direction: column;
+    flex: 0 0 var(--timeline-width);
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    height: 100%;
+  }
 
   svg {
     height: 2rem;

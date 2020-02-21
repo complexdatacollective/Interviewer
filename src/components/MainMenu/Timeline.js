@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Scroller from '../Scroller';
-import TimelineStage from '../../containers/MainMenu/TimelineStage';
+import TimelineStage from '../../containers/MainMenu/StagesMenu/TimelineStage';
 
 const Timeline = ({ items }) => {
+  console.log('TIMELINE', items);
   const menuItems = items.map((item, index) =>
     (<TimelineStage item={item} key={item.id} index={index} />),
   );

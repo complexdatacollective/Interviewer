@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withHandlers, compose } from 'recompose';
 import { push } from 'react-router-redux';
-import { isStageSkipped } from '../../selectors/skip-logic';
-import TimelineStage from '../../components/MainMenu/TimelineStage';
-import { actionCreators as uiActions } from '../../ducks/modules/ui';
-import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
-import { currentStageIndex } from '../../utils/matchSessionPath';
+import { isStageSkipped } from '../../../selectors/skip-logic';
+import TimelineStage from '../../../components/MainMenu/TimelineStage';
+import { actionCreators as uiActions } from '../../../ducks/modules/ui';
+import { actionCreators as dialogActions } from '../../../ducks/modules/dialogs';
+import { currentStageIndex } from '../../../utils/matchSessionPath';
 
 const timelineStageHandlers = withHandlers({
   handleOpenStage: props =>

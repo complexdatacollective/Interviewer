@@ -1,0 +1,28 @@
+.main-menu {
+  display: flex;
+  flex-flow: column;
+  width: 70rem;
+  height: 100%;
+  padding-bottom: 5rem;
+  max-width: 90%;
+
+  &__header {
+    flex: 0 1 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 20%;
+
+    h1 {
+      font-size: 2rem;
+    }
+  }
+
+  &__wrapper {
+    display: flex;
+    background: var(--color-white);
+    border-radius: var(--border-radius);
+    height: 80%;
+    overflow: hidden;
+  }
+}

@@ -1,13 +1,13 @@
 .settings-menu-button {
-  width: var(--timeline-width);
-  z-index: var(--z-global-ui);
   display: flex;
   justify-content: center;
   align-items: center;
+  background: var(--light-background);
+  border-radius: 50%;
+  padding: 1.5rem;
+  width: 6rem;
+  height: 6rem;
   margin-bottom: 1.5rem;
-  position: absolute;
-  top: unit(4);
-  left: unit(4);
 
   &__button {
     height: 6rem;
@@ -17,7 +17,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: var(--light-background);
 
     svg {
       height: 2.5rem;
@@ -25,29 +24,3 @@
     }
   }
 }
-
-
-// .app-settings-container {
-//   width: var(--timeline-width);
-//   z-index: var(--z-global-ui);
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   margin-bottom: 1.5rem;
-
-//   &__button {
-//     height: 6rem;
-//     width: 6rem;
-//     border-radius: 100%;
-//     cursor: pointer;
-//     display: flex;
-//     justify-content: center;
-//     align-items: center;
-//     background: var(--light-background);
-
-//     svg {
-//       height: 2.5rem;
-//       width: 2.5rem;
-//     }
-//   }
-// }

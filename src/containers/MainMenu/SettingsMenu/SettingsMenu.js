@@ -3,7 +3,6 @@ import { Modal } from '@codaco/ui';
 import { motion, AnimatePresence } from 'framer-motion';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
 import { actionCreators as uiActions } from '../../../ducks/modules/ui';
 import Scroller from '../../../components/Scroller';
 import VisualPreferences from './VisualPreferences';
@@ -70,7 +69,7 @@ const SettingsMenu = () => {
         initial="hidden"
         exit="hidden"
         animate={isActive ? 'visible' : 'hidden'}
-        transition={{ duration: getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000 }}
+        transition={{ duration: 0.2 }}
       >
         <h1>{tabName}</h1>
         <Scroller>
@@ -87,13 +86,13 @@ const SettingsMenu = () => {
       </div>
       <Modal show={open}>
         <div
-          className="settings-menu"
+          className="main-menu settings-menu"
         >
-          <header className="settings-menu__header">
+          <header className="main-menu__header settings-menu__header">
             <h1>Settings Menu</h1>
             <CloseButton onClick={() => toggleMenu(false)} />
           </header>
-          <article className="settings-menu__wrapper">
+          <article className="main-menu__wrapper settings-menu__wrapper">
             <nav>
               <ul>
                 { renderNavigation }

@@ -10,7 +10,7 @@ import { isIOS } from '../../utils/Environment';
 import projectLogo from '../../images/project-logo.svg';
 import betaProjectLogo from '../../images/project-logo-beta.svg';
 import downArrow from '../../images/down-arrow.svg';
-import SettingsMenu from '../../containers/MainMenu/SettingsMenu/SettingsMenu';
+import { SettingsMenu } from '../../containers/MainMenu';
 import { ProtocolList, ProtocolImportOverlay, SessionListContainer, ImportProgressOverlay } from '.';
 
 /**

@@ -1,4 +1,79 @@
-:root {
-  --input-text: var(--text--dark);
-  --input-placeholder: var(--color-platinum--dark); // There seems to be a bug in iOS that requires this override go here.
+.stages-menu {
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding-bottom: 5rem;
+  max-width: 90%;
+  flex: 1 1 auto;
+
+  &__header {
+    flex: 0 1 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 20%;
+
+    h1 {
+      font-size: 2rem;
+    }
+  }
+
+
+  &__wrapper {
+    display: flex;
+    background: var(--color-white);
+    border-radius: var(--border-radius);
+    height: 80%;
+    overflow: hidden;
+
+    aside {
+      order: 2;
+      background: var(--color-slate-blue);
+      flex: 0 0 35%;
+      padding: unit(6) unit(2);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+
+      .summary-panel {
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+
+        h2 {
+          margin-top: 0;
+        }
+
+        .scrollable {
+          padding-top: 2rem;
+          padding-bottom: 4rem;
+        }
+    }
+    }
+
+    section {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+
+      header {
+        display: flex;
+        padding: unit(3) unit(8);
+
+        h4 {
+          margin-right: 1rem;
+        }
+
+        .form-field-container {
+          margin: 0;
+
+          .form-field {
+            margin: 0;
+          }
+        }
+      }
+    }
+  }
 }
