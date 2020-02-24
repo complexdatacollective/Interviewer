@@ -4,11 +4,12 @@ import { compose } from 'recompose';
 import { Icon } from '@codaco/ui';
 import { motion, AnimatePresence, useInvertedScale } from 'framer-motion';
 import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
-import { ProgressBar } from '../components';
-import { DropObstacle } from '../behaviours/DragAndDrop';
-import { actionCreators as uiActions } from '../ducks/modules/ui';
-import { SettingsMenu, StagesMenu } from '../containers/MainMenu';
-import CloseButton from '../containers/MainMenu/CloseButton';
+import { ProgressBar, CloseButton } from '../';
+import { DropObstacle } from '../../behaviours/DragAndDrop';
+import { actionCreators as uiActions } from '../../ducks/modules/ui';
+import { SettingsMenu } from '../../containers/SettingsMenu';
+import { StagesMenu } from '../../containers/Timeline';
+
 
 const containerVariants = {
   normal: {

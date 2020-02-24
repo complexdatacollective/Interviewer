@@ -46,11 +46,12 @@
 @import 'information-interface';
 @import 'ordinal-bins';
 @import 'progress-bar';
+
+// Settings Menu
+@import 'settings-menu';
+
+// Stages Menu
 @import 'timeline';
-
-// Menu
-@import 'main-menu';
-
 
 @import 'categorical-list';
 @import 'categorical-item';

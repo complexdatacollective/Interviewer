@@ -3,14 +3,14 @@ import { Modal } from '@codaco/ui';
 import { motion, AnimatePresence } from 'framer-motion';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import { actionCreators as uiActions } from '../../../ducks/modules/ui';
-import Scroller from '../../../components/Scroller';
-import VisualPreferences from './VisualPreferences';
-import DeviceSettings from './DeviceSettings';
-import DeveloperTools from './DeveloperTools';
-import CloseButton from '../CloseButton';
+import { actionCreators as uiActions } from '../../ducks/modules/ui';
+import Scroller from '../../components/Scroller';
+import VisualPreferences from './Sections/VisualPreferences';
+import DeviceSettings from './Sections/DeviceSettings';
+import DeveloperTools from './Sections/DeveloperTools';
+import CloseButton from '../../components/CloseButton';
 import SettingsMenuButton from './SettingsMenuButton';
-import getVersion from '../../../utils/getVersion';
+import getVersion from '../../utils/getVersion';
 
 const tabVariants = {
   hidden: {

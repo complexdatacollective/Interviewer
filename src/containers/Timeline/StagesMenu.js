@@ -5,9 +5,8 @@ import { connect } from 'react-redux';
 import { motion, useInvertedScale, AnimatePresence } from 'framer-motion';
 import { compose } from 'recompose';
 import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
-import CloseButton from '../CloseButton';
-import { getProtocolStages } from '../../../selectors/protocol';
-import { Scroller } from '../../../components';
+import { getProtocolStages } from '../../selectors/protocol';
+import { Scroller } from '../../components';
 import TimelineStage from './TimelineStage';
 
 
