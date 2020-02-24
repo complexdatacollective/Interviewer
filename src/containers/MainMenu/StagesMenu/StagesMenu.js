@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button } from '@codaco/ui';
 import { Text } from '@codaco/ui/lib/components/Fields';
 import { connect } from 'react-redux';
-import { motion, useInvertedScale } from 'framer-motion';
+import { motion, useInvertedScale, AnimatePresence } from 'framer-motion';
 import { compose } from 'recompose';
 import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
 import CloseButton from '../CloseButton';
@@ -11,11 +11,15 @@ import { Scroller } from '../../../components';
 import TimelineStage from './TimelineStage';
 
 
+const standardDuration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
+
 const variants = {
   normal: {
     opacity: 0,
     transition: {
-      duration: 1,
+      duration: standardDuration,
+      staggerChildren: 0.05,
+      staggerDirection: -1,
     },
   },
   expanded: {
@@ -24,8 +28,8 @@ const variants = {
       // when: 'beforeChildren',
       staggerChildren: 0.075,
       delayChildren: 0.2,
-      // delay: 0.4,
-      duration: 1,
+      // delay: 0.2,
+      duration: standardDuration,
     },
   },
 };
@@ -35,14 +39,14 @@ const timelineVariants = {
     x: 0,
     opacity: 1,
     transition: {
-      x: { stiffness: 500, velocity: -100 },
+      stiffness: 500, velocity: -100,
     },
   },
   normal: {
     x: '-5rem',
     opacity: 0,
     transition: {
-      x: { stiffness: 500 },
+      stiffness: 500, velocity: -100,
     },
   },
 };
@@ -60,8 +64,11 @@ const StagesMenu = (props) => {
     (
       <motion.div
         variants={timelineVariants}
+        exit="normal"
+        key={item.id}
+        positionTransition
       >
-        <TimelineStage item={item} key={item.id} index={index} />
+        <TimelineStage item={item} index={index} />
       </motion.div>
     ),
   );
@@ -77,27 +84,28 @@ const StagesMenu = (props) => {
       style={{ scaleX, scaleY }}
     >
       <article className="stages-menu__wrapper">
-        <div className="main-menu-timeline">
+        <header>
+          <Text
+            type="search"
+            placeholder="Filter by stage name..."
+            input={{
+              onChange: onFilterChange,
+            }}
+          />
+        </header>
+        <div className="menu-timeline">
           {renderMenuItems.length > 0 ? (
             <Scroller>
-              { renderMenuItems }
+              <AnimatePresence>
+                { renderMenuItems }
+              </AnimatePresence>
             </Scroller>
           ) : (
-            <p>No stages to display.</p>
+            <h4>No stages match your filter.</h4>
           )}
         </div>
         <footer>
-          <div>
-            <h4>Filter: </h4>
-            <Text
-              type="search"
-              placeholder="Filter Stages..."
-              input={{
-                onChange: onFilterChange,
-              }}
-            />
-          </div>
-          <Button>Finish Interview</Button>
+          <Button color="neon-coral">Exit Interview</Button>
         </footer>
       </article>
     </motion.div>

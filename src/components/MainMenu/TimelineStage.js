@@ -13,9 +13,9 @@ const TimelineStage = ({
   currentStageIndex,
 }) => {
   const classes = cx({
-    'main-menu-timeline-stage': true,
-    'main-menu-timeline-stage--current': currentStageIndex === index,
-    'main-menu-timeline-stage-past': currentStageIndex > index,
+    'menu-timeline-stage': true,
+    'menu-timeline-stage--current': currentStageIndex === index,
+    'menu-timeline-stage-past': currentStageIndex > index,
   });
 
   return (
@@ -24,15 +24,14 @@ const TimelineStage = ({
       className={classes}
       data-stage-id={id}
     >
-      <div className="main-menu-timeline-stage__notch" />
-      <div className="main-menu-timeline-stage__preview">
+      <div className="menu-timeline-stage__preview">
         <img
           src={getTimelineImage(type)}
           alt="NameGenerator Interface"
           title="NameGenerator Interface"
         />
       </div>
-      <div className="main-menu-timeline-stage__label">{index + 1}. {label}</div>
+      <div className="menu-timeline-stage__label">{index + 1}. {label}</div>
     </div>
   );
 };
