@@ -50,8 +50,6 @@ const SettingsMenu = () => {
       key={tabName}
       onClick={() => setActiveTab(tabName)}
       className={activeTab === tabName ? 'active' : ''}
-      // whileHover={{ scale: 1.1 }}
-      // whileTap={{ scale: 0.95 }}
     >
       {tabName}
     </motion.li>

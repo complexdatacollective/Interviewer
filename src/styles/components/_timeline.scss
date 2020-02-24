@@ -3,22 +3,23 @@ $timeline-button-size: 6rem;
 
 .timeline {
   --light-background: #4a4677;
+  background: var(--background);
   align-items: flex-end;
   display: flex;
   flex-direction: column;
-  width: calc(var(--timeline-width) + 22rem);
   position: absolute;
-  top: -5vh;
-  bottom: -5vh;
-  left: -22rem;
+  top: 0;
+  bottom: 0;
+  // left: -15rem;
   z-index: var(--z-global-ui);
-  border-radius: 8rem;
+  // border-radius: 0 7rem 7rem 0rem;
   background: var(--panel-bg-muted);
   padding: unit(2);
+  overflow: hidden;
 
   .timeline-content {
     display: flex;
-    padding: 10vh 0;
+    padding: unit(2) 0;
     flex-direction: column;
     flex: 0 0 var(--timeline-width);
     justify-content: center;

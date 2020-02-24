@@ -2,63 +2,92 @@ import React, { useState } from 'react';
 import { Button } from '@codaco/ui';
 import { Text } from '@codaco/ui/lib/components/Fields';
 import { connect } from 'react-redux';
-import { motion } from 'framer-motion';
+import { motion, useInvertedScale } from 'framer-motion';
 import { compose } from 'recompose';
 import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
-import { actionCreators as uiActions } from '../../../ducks/modules/ui';
 import CloseButton from '../CloseButton';
 import { getProtocolStages } from '../../../selectors/protocol';
 import { Scroller } from '../../../components';
-import Timeline from '../../../components/MainMenu/Timeline';
+import TimelineStage from './TimelineStage';
+
+
+const variants = {
+  normal: {
+    opacity: 0,
+    transition: {
+      duration: 1,
+    },
+  },
+  expanded: {
+    opacity: 1,
+    transition: {
+      // when: 'beforeChildren',
+      staggerChildren: 0.075,
+      delayChildren: 0.2,
+      // delay: 0.4,
+      duration: 1,
+    },
+  },
+};
+
+const timelineVariants = {
+  expanded: {
+    x: 0,
+    opacity: 1,
+    transition: {
+      x: { stiffness: 500, velocity: -100 },
+    },
+  },
+  normal: {
+    x: '-5rem',
+    opacity: 0,
+    transition: {
+      x: { stiffness: 500 },
+    },
+  },
+};
 
 const StagesMenu = (props) => {
-  // const [open, toggleMenu] = useState(true);
   const [filter, setFilter] = useState('');
+  const { scaleX, scaleY } = useInvertedScale();
 
   const onFilterChange = event => setFilter(event.target.value || '');
 
   const filteredStageList = props.stages.filter(
     stage => stage.label.toLowerCase().includes(filter.toLowerCase()));
 
+  const renderMenuItems = filteredStageList.map((item, index) =>
+    (
+      <motion.div
+        variants={timelineVariants}
+      >
+        <TimelineStage item={item} key={item.id} index={index} />
+      </motion.div>
+    ),
+  );
+
   return (
     <motion.div
       className="stages-menu"
       key="stages-menu"
-      variants={props.animationVariants}
-      initial="expanded"
-      exit="expanded"
-      animate="normal"
+      variants={variants}
+      initial="normal"
+      exit="normal"
+      animate="expanded"
+      style={{ scaleX, scaleY }}
     >
-      <header className="stages-menu__header">
-        <h1>Interview Menu</h1>
-        <CloseButton onClick={() => props.toggleExpanded(false)} />
-      </header>
       <article className="stages-menu__wrapper">
-        {/* <aside>
-          <div className="summary-panel">
-            <h2>Interview Summary</h2>
+        <div className="main-menu-timeline">
+          {renderMenuItems.length > 0 ? (
             <Scroller>
-              <ul>
-                <li>Duration: 23:04</li>
-                <li>Nodes (249):</li>
-                <ul>
-                  <li>Person: 12</li>
-                  <li>Infant: 2</li>
-                  <li>Animal: 235</li>
-                </ul>
-                <li>Edges (15):</li>
-                <ul>
-                  <li>Friend: 2</li>
-                  <li>Enemy: 1</li>
-                  <li>Romance: 12</li>
-                </ul>
-              </ul>
+              { renderMenuItems }
             </Scroller>
-          </div>
-          <Button>Finish Interview</Button>
-        </aside> */}
-        <section>
-          <header>
+          ) : (
+            <p>No stages to display.</p>
+          )}
+        </div>
+        <footer>
+          <div>
             <h4>Filter: </h4>
             <Text
               type="search"
@@ -67,17 +96,13 @@ const StagesMenu = (props) => {
                 onChange: onFilterChange,
               }}
             />
-          </header>
-          <Timeline items={filteredStageList} />
-        </section>
+          </div>
+          <Button>Finish Interview</Button>
+        </footer>
       </article>
     </motion.div>
   );
 };
-
-const mapDispatchToProps = dispatch => ({
-  closeMenu: () => dispatch(uiActions.update({ isMenuOpen: false })),
-});
 
 function mapStateToProps(state) {
   const currentStages = getProtocolStages(state);
@@ -90,5 +115,5 @@ function mapStateToProps(state) {
 }
 
 export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(mapStateToProps, null),
 )(StagesMenu);
