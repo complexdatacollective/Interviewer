@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { mount } from 'enzyme';
-import { Timeline } from '../Timeline';
+import { TimelineButtons } from '../TimelineButtons';
 
 
 describe('Timeline component', () => {
@@ -11,7 +11,7 @@ describe('Timeline component', () => {
   const nextMock = jest.fn();
 
   const component = mount(
-    <Timeline
+    <TimelineButtons
       percentProgress="40"
       onClickBack={backMock}
       onClickNext={nextMock}

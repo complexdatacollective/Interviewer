@@ -61,7 +61,7 @@ export const goToStage = async (app, stageId) => {
   if (!stageId) { throw Error('goToStage() requires a stageId'); }
   await app.client.click('.progress-bar');
   await app.client.waitForVisible('.main-menu-stages-menu');
-  forceClick(app, `[data-stage-id=${stageId}]`);
+  forceClick(app, `[data-stage-name=${stageId}]`);
   await app.client.pause(timing.long);
 };
 

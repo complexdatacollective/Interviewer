@@ -7,7 +7,7 @@ import { StagesMenu } from '../../containers/Timeline';
 import BackgroundDimmer from './BackgroundDimmer';
 import TimelineButtons from './TimelineButtons';
 
-const Timeline = () => {
+const Timeline = (props) => {
   const containerVariants = {
     normal: {
       // background: 'var(--panel-bg-muted)',
@@ -38,7 +38,14 @@ const Timeline = () => {
         }}
       >
         <AnimatePresence initial={false} exitBeforeEnter>
-          { !expanded && (<TimelineButtons toggleExpanded={toggleExpanded} />)}
+          { !expanded && (
+            <TimelineButtons
+              onClickNext={props.onClickNext}
+              onClickBack={props.onClickBack}
+              percentProgress={props.percentProgress}
+              toggleExpanded={toggleExpanded}
+            />
+          )}
           { expanded && (<StagesMenu />) }
         </AnimatePresence>
       </motion.div>

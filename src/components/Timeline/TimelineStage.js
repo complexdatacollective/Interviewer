@@ -10,19 +10,18 @@ const getTimelineImage = type =>
 const TimelineStage = ({
   item: { type, label, index, id },
   handleOpenStage,
-  currentStageIndex,
+  active,
 }) => {
-  const classes = cx({
-    'menu-timeline-stage': true,
-    'menu-timeline-stage--current': currentStageIndex === index,
-    'menu-timeline-stage-past': currentStageIndex > index,
+  const classes = cx('menu-timeline-stage', {
+    'menu-timeline-stage--current': active,
   });
-
+  console.log(type, label, index, id);
   return (
     <div
       onClick={handleOpenStage}
       className={classes}
-      data-stage-id={id}
+      data-stage-name={id}
+      data-stage-id={index}
     >
       <div className="menu-timeline-stage__preview">
         <img
@@ -38,7 +37,7 @@ const TimelineStage = ({
 
 TimelineStage.propTypes = {
   item: PropTypes.object.isRequired,
-  currentStageIndex: PropTypes.number.isRequired,
+  active: PropTypes.bool.isRequired,
   handleOpenStage: PropTypes.func.isRequired,
 };
 
