@@ -12,9 +12,12 @@
     height: 100%;
     padding: 0 unit(4);
 
+
     header {
-      --input-background: var(--background);
-      padding: unit(4) 0 unit(2) 0;
+      --input-background: var(--color-platinum);
+      --input-placeholder: var(--color-platinum--dark);
+      --input-text: var(--color-charcoal);
+      padding: 0 0 unit(6);
 
       .form-field-container {
         margin: 0;
@@ -27,7 +30,7 @@
 
     footer {
       display: flex;
-      padding: unit(4) unit(8);
+      padding: unit(6) 0 unit(3);
       flex-direction: column;
       flex: 0 0 auto;
     }

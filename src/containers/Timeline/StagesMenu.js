@@ -84,6 +84,7 @@ const StagesMenu = (props) => {
     >
       <article className="stages-menu__wrapper">
         <header>
+          <h4>Filter: </h4>
           <Text
             type="search"
             placeholder="Filter by stage name..."

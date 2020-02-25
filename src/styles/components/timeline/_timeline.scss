@@ -2,7 +2,7 @@
   flex: 1 1 auto;
   overflow: hidden;
   display: flex;
-  width: 26rem;
+  width: 28rem;
   justify-content: center;
 
   .scrollable {
@@ -17,8 +17,7 @@
 $timeline-button-size: 6rem;
 
 .timeline {
-  --light-background: #4a4677;
-  background: var(--background);
+  --light-background: #4a4677; //sass-lint:disable-line no-color-literals
   align-items: flex-end;
   display: flex;
   flex-direction: column;

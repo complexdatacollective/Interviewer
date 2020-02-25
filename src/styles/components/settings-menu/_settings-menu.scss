@@ -102,14 +102,16 @@
           margin-left: 2rem;
         }
 
+        .form-field-toggle__button {
+          &::before {
+            background-color: var(--color-platinum--dark);
+          }
+        }
+
         .form-field {
           background: var(--color-white);
           padding: 0 2rem 0 0;
           width: auto;
-
-          .form-field-toggle__button::before {
-            background-color: var(--color-platinum--dark);
-          }
 
           button {
             width: 12rem;

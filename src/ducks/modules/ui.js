@@ -3,7 +3,6 @@
  */
 
 const initialState = {
-  isMenuOpen: false,
   protocolIndex: 0,
 };
 

@@ -1,147 +1,30 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import { Icon } from '@codaco/ui';
-import { motion, AnimatePresence, useInvertedScale } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
-import { ProgressBar, CloseButton } from '../';
 import { DropObstacle } from '../../behaviours/DragAndDrop';
-import { actionCreators as uiActions } from '../../ducks/modules/ui';
-import { SettingsMenu } from '../../containers/SettingsMenu';
 import { StagesMenu } from '../../containers/Timeline';
+import BackgroundDimmer from './BackgroundDimmer';
+import TimelineButtons from './TimelineButtons';
 
-
-const containerVariants = {
-  normal: {
-    // background: 'var(--panel-bg-muted)',
-  },
-  expanded: {
-    // background: 'var(--light-background)',
-
-  },
-};
-
-const TimelineNavigation = (props) => {
-  const {
-    onClickBack,
-    onClickNext,
-    percentProgress,
-    toggleExpanded,
-  } = props;
-
-  const { scaleX, scaleY } = useInvertedScale();
-
-  const variants = {
+const Timeline = () => {
+  const containerVariants = {
     normal: {
-      opacity: 1,
-      transition: {
-        duration: 1,
-      },
+      // background: 'var(--panel-bg-muted)',
     },
     expanded: {
-      opacity: 0,
-      transition: {
-        duration: 1,
-      },
+      // background: 'var(--light-background)',
     },
   };
 
-  return (
-    <motion.div
-      key="menu"
-      variants={variants}
-      initial="expanded"
-      exit="expanded"
-      animate="normal"
-      className="timeline-content"
-      useInvertedScale
-      style={{ scaleX, scaleY }}
-    >
-      <SettingsMenu />
-      <motion.div
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-        className="timeline-nav timeline-nav--back"
-      >
-        <Icon
-          onClick={(e) => {
-            if (e) {
-              e.stopPropagation();
-              e.preventDefault();
-            }
-            onClickBack(e);
-          }}
-          name="chevron-up"
-        />
-      </motion.div>
-      <ProgressBar
-        percentProgress={percentProgress}
-        onClick={() => toggleExpanded(prevState => !prevState)}
-      />
-      <motion.div
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-        className="timeline-nav timeline-nav--next"
-        onClick={(e) => {
-          if (e) {
-            e.stopPropagation();
-            e.preventDefault();
-          }
-          onClickNext(e);
-        }}
-      >
-        <Icon name="chevron-down" />
-      </motion.div>
-    </motion.div>
-  );
-};
-
-const Dimmer = (props) => {
-  const slowDuration = getCSSVariableAsNumber('--animation-duration-slow-ms') / 1000;
-
-  const variants = {
-    normal: {
-      opacity: 1,
-      transition: {
-        duration: slowDuration,
-      },
-    },
-    expanded: {
-      opacity: 0,
-      transition: {
-        duration: slowDuration,
-      },
-    },
-  };
-
-  return (
-    <motion.div
-      key="dimmer"
-      variants={variants}
-      className="dimmer"
-      initial="expanded"
-      exit="expanded"
-      animate="normal"
-      onClick={() => props.toggleExpanded(prevState => !prevState)}
-    >
-      <CloseButton />
-    </motion.div>
-  );
-};
-
-const Timeline = (props) => {
-  const {
-    onClickBack,
-    onClickNext,
-    percentProgress,
-  } = props;
+  const standardDuration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
 
   const [expanded, toggleExpanded] = useState(false);
 
   return (
     <React.Fragment>
       <AnimatePresence>
-        { expanded && (<Dimmer toggleExpanded={toggleExpanded} />)}
+        { expanded && (<BackgroundDimmer toggleExpanded={toggleExpanded} />)}
       </AnimatePresence>
       <motion.div
         className="timeline"
@@ -151,11 +34,11 @@ const Timeline = (props) => {
         animate={expanded ? 'expanded' : 'normal'}
         layoutTransition
         transition={{
-          duration: 0.5,
+          duration: standardDuration,
         }}
       >
         <AnimatePresence initial={false} exitBeforeEnter>
-          { !expanded && (<TimelineNavigation toggleExpanded={toggleExpanded} />)}
+          { !expanded && (<TimelineButtons toggleExpanded={toggleExpanded} />)}
           { expanded && (<StagesMenu />) }
         </AnimatePresence>
       </motion.div>
@@ -163,13 +46,8 @@ const Timeline = (props) => {
   );
 };
 
-const mapDispatchToProps = dispatch => ({
-  toggleMenu: () => dispatch(uiActions.toggle('isMenuOpen')),
-});
-
 export { Timeline };
 
 export default compose(
-  connect(null, mapDispatchToProps),
   DropObstacle,
 )(Timeline);
