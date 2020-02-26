@@ -7,7 +7,7 @@ class Scroller extends Component {
   constructor(props) {
     super(props);
 
-    this.scrollable = React.createRef();
+    this.scrollable = props.forwardedRef || React.createRef();
   }
 
   handleScroll = () => {

@@ -10,49 +10,8 @@ import { Scroller } from '../../components';
 import TimelineStage from './TimelineStage';
 import { currentStageIndex } from '../../utils/matchSessionPath';
 
-const getScrollParent = (node) => {
-  const regex = /(auto|scroll)/;
-  const parents = (_node, ps) => {
-    if (_node.parentNode === null) { return ps; }
-    return parents(_node.parentNode, ps.concat([_node]));
-  };
-
-  const style = (_node, prop) => getComputedStyle(_node, null).getPropertyValue(prop);
-  const overflow = _node => style(_node, 'overflow') + style(_node, 'overflow-y') + style(_node, 'overflow-x');
-  const scroll = _node => regex.test(overflow(_node));
-
-  /* eslint-disable consistent-return */
-  const scrollParent = (_node) => {
-    if (!(_node instanceof HTMLElement || _node instanceof SVGElement)) {
-      return;
-    }
-
-    const ps = parents(_node.parentNode, []);
-
-    for (let i = 0; i < ps.length; i += 1) {
-      if (scroll(ps[i])) {
-        return ps[i];
-      }
-    }
-
-    return document.scrollingElement || document.documentElement;
-  };
-
-  return scrollParent(node);
-  /* eslint-enable consistent-return */
-};
 
 const standardDuration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
-
-const scrollToActive = (activeID) => {
-  const element = document.querySelectorAll(`[data-stage-id='${activeID}']`)[0];
-  console.log(activeID, element);
-  if (element) {
-    const scroller = getScrollParent(element);
-    const scrollValue = element.offsetTop - scroller.offsetTop - 50;
-    scroller.scrollTo(0, scrollValue);
-  }
-};
 
 const variants = {
   normal: {
@@ -95,6 +54,14 @@ const timelineVariants = {
 const StagesMenu = (props) => {
   const [filter, setFilter] = useState('');
   const { scaleX, scaleY } = useInvertedScale();
+  const scrollerRef = useRef(null);
+
+  const scrollToLocation = (amount) => {
+    if (scrollerRef && scrollerRef.current) {
+      console.log('scrolling...', amount, scrollerRef);
+      scrollerRef.current.scrollTo(0, amount);
+    }
+  };
 
   const onFilterChange = event => setFilter(event.target.value || '');
 
@@ -118,9 +85,15 @@ const StagesMenu = (props) => {
 
 
   useEffect(() => {
-    setTimeout(() => {
-      scrollToActive(props.currentStageIndex);
-    }, getCSSVariableAsNumber('--animation-duration-standard-ms') + 500);
+    // Scroll to the active stage
+    // This can't use a reference to a dom element because of the staggered
+    // animation (ref won't exist until the element has rendered). Instead,
+    // scroll the container to where the element will be when it finishes
+    // animating.
+    if (!filter) {
+      const itemHeight = 122; // TODO: find a better way to calculate this!
+      setTimeout(() => scrollToLocation(props.currentStageIndex * itemHeight, 0.2));
+    }
   });
 
   return (
@@ -146,7 +119,7 @@ const StagesMenu = (props) => {
         </header>
         <div className="menu-timeline">
           {renderMenuItems.length > 0 ? (
-            <Scroller>
+            <Scroller forwardedRef={scrollerRef}>
               <AnimatePresence>
                 { renderMenuItems }
               </AnimatePresence>
