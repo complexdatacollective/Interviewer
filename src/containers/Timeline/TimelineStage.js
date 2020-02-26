@@ -5,7 +5,6 @@ import { withHandlers, compose } from 'recompose';
 import { push } from 'react-router-redux';
 import { isStageSkipped } from '../../selectors/skip-logic';
 import TimelineStage from '../../components/Timeline/TimelineStage';
-import { actionCreators as uiActions } from '../../ducks/modules/ui';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { currentStageIndex } from '../../utils/matchSessionPath';
 
@@ -20,14 +19,18 @@ const timelineStageHandlers = withHandlers({
         openDialog,
       } = props;
 
-      const path = sessionId ? `/session/${sessionId}/${stageIndex}` : '/';
+      const performOpen = () => {
+        const path = sessionId ? `/session/${sessionId}/${stageIndex}` : '/';
+        openStage(path);
+        props.toggleExpanded(false);
+      };
 
       if (isSkipped(stageIndex)) {
         openDialog({
           type: 'Warning',
           title: 'Show this stage?',
           confirmLabel: 'Show Stage',
-          onConfirm: () => openStage(path),
+          onConfirm: () => performOpen(),
           message: (
             <p>
               Your skip logic settings would normally prevent this stage from being shown in this
@@ -36,7 +39,7 @@ const timelineStageHandlers = withHandlers({
           ),
         });
       } else {
-        openStage(path);
+        performOpen();
       }
     },
 });
@@ -50,7 +53,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   openStage: (path) => {
     dispatch(push(path));
-    dispatch(uiActions.update({ isMenuOpen: false }));
   },
   openDialog: bindActionCreators(dialogActions.openDialog, dispatch),
 });

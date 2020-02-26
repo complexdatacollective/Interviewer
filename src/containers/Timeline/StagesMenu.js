@@ -39,14 +39,14 @@ const timelineVariants = {
     x: 0,
     opacity: 1,
     transition: {
-      stiffness: 500, velocity: -100,
+      stiffness: 1000, velocity: -100,
     },
   },
   normal: {
     x: '-5rem',
     opacity: 0,
     transition: {
-      stiffness: 500, velocity: -100,
+      stiffness: 1000, velocity: -100,
     },
   },
 };
@@ -58,7 +58,6 @@ const StagesMenu = (props) => {
 
   const scrollToLocation = (amount) => {
     if (scrollerRef && scrollerRef.current) {
-      console.log('scrolling...', amount, scrollerRef);
       scrollerRef.current.scrollTo(0, amount);
     }
   };
@@ -69,7 +68,7 @@ const StagesMenu = (props) => {
     stage => stage.label.toLowerCase().includes(filter.toLowerCase()));
 
   const renderMenuItems = filteredStageList.map((item, index) => {
-    const isActive = props.currentStageIndex === index;
+    const isActive = props.currentStageIndex === item.index;
 
     return (
       <motion.div
@@ -78,7 +77,12 @@ const StagesMenu = (props) => {
         key={item.id}
         positionTransition
       >
-        <TimelineStage item={item} index={index} active={isActive} />
+        <TimelineStage
+          item={item}
+          index={index}
+          active={isActive}
+          toggleExpanded={props.toggleExpanded}
+        />
       </motion.div>
     );
   });

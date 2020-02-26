@@ -46,7 +46,7 @@ const Timeline = (props) => {
               toggleExpanded={toggleExpanded}
             />
           )}
-          { expanded && (<StagesMenu />) }
+          { expanded && (<StagesMenu toggleExpanded={toggleExpanded} />) }
         </AnimatePresence>
       </motion.div>
     </React.Fragment>

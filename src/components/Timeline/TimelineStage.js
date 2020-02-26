@@ -15,7 +15,7 @@ const TimelineStage = ({
   const classes = cx('menu-timeline-stage', {
     'menu-timeline-stage--current': active,
   });
-  console.log(type, label, index, id);
+
   return (
     <div
       onClick={handleOpenStage}
