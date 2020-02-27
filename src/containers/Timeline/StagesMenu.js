@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { motion, useInvertedScale, AnimatePresence } from 'framer-motion';
 import { compose } from 'recompose';
 import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
+import { actionCreators as sessionActions } from '../../ducks/modules/session';
 import { getProtocolStages } from '../../selectors/protocol';
 import { Scroller } from '../../components';
 import TimelineStage from './TimelineStage';
@@ -94,9 +95,15 @@ const StagesMenu = (props) => {
     // animation (ref won't exist until the element has rendered). Instead,
     // scroll the container to where the element will be when it finishes
     // animating.
+    //
+    // setTimeout is there so the container & elements have height set.
+    // Please implement a better way if you know of one!
     if (!filter) {
-      const itemHeight = 122; // TODO: find a better way to calculate this!
-      setTimeout(() => scrollToLocation(props.currentStageIndex * itemHeight, 0.2));
+      setTimeout(() => {
+        // TODO: find a better way to calculate this!
+        const itemHeight = document.getElementsByClassName('menu-timeline-stage')[0].clientHeight;
+        scrollToLocation(props.currentStageIndex * itemHeight, 0.2);
+      });
     }
   });
 
@@ -133,7 +140,7 @@ const StagesMenu = (props) => {
           )}
         </div>
         <footer>
-          <Button color="neon-coral">Exit Interview</Button>
+          <Button color="neon-coral" onClick={props.endSession}>Exit Interview</Button>
         </footer>
       </article>
     </motion.div>
@@ -151,6 +158,10 @@ function mapStateToProps(state) {
   };
 }
 
+const mapDispatchToProps = {
+  endSession: sessionActions.endSession,
+};
+
 export default compose(
-  connect(mapStateToProps, null),
+  connect(mapStateToProps, mapDispatchToProps),
 )(StagesMenu);

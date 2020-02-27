@@ -38,15 +38,16 @@ const Timeline = (props) => {
         }}
       >
         <AnimatePresence initial={false} exitBeforeEnter>
-          { !expanded && (
+          { expanded ? (
+            <StagesMenu toggleExpanded={toggleExpanded} />
+          ) : (
             <TimelineButtons
               onClickNext={props.onClickNext}
               onClickBack={props.onClickBack}
               percentProgress={props.percentProgress}
               toggleExpanded={toggleExpanded}
             />
-          )}
-          { expanded && (<StagesMenu toggleExpanded={toggleExpanded} />) }
+          ) }
         </AnimatePresence>
       </motion.div>
     </React.Fragment>

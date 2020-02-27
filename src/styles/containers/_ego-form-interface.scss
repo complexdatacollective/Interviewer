@@ -9,7 +9,6 @@
 
   &__introduction {
     width: 100%;
-    flex: 1 0 auto;
     border-radius: var(--border-radius);
     background: var(--form-intro-panel-background);
     max-height: 80vh;
@@ -37,6 +36,7 @@
     & > * {
       max-width: 55rem;
       align-self: center;
+      width: 100%;
     }
   }
 
