@@ -71,7 +71,7 @@ const SettingsMenu = () => {
       >
         <h1>{tabName}</h1>
         <Scroller>
-          <TabComponent />
+          <TabComponent toggleMenu={toggleMenu} />
         </Scroller>
       </motion.div>
     );

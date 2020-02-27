@@ -7,7 +7,7 @@ import { StagesMenu } from '../../containers/Timeline';
 import BackgroundDimmer from './BackgroundDimmer';
 import TimelineButtons from './TimelineButtons';
 
-const Timeline = (props) => {
+const Timeline = React.forwardRef((props, ref) => {
   const containerVariants = {
     normal: {
       // background: 'var(--panel-bg-muted)',
@@ -26,6 +26,7 @@ const Timeline = (props) => {
       <AnimatePresence>
         { expanded && (<BackgroundDimmer toggleExpanded={toggleExpanded} />)}
       </AnimatePresence>
+      <div className="timeline-drop-obstacle" ref={ref} />
       <motion.div
         className="timeline"
         key="timeline"
@@ -52,7 +53,7 @@ const Timeline = (props) => {
       </motion.div>
     </React.Fragment>
   );
-};
+});
 
 export { Timeline };
 
