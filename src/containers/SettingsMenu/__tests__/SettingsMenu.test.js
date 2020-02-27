@@ -7,7 +7,7 @@ import { mount } from 'enzyme';
 import thunk from 'redux-thunk';
 import epics from '../../../ducks/middleware/epics';
 import rootReducer from '../../../ducks/modules/rootReducer';
-import MainMenu from '../MainMenu';
+import SettingsMenu from '../SettingsMenu';
 
 const actionLogger = actions =>
   () =>
@@ -89,7 +89,7 @@ const getSubject = store =>
     <Provider
       store={store}
     >
-      <MainMenu />
+      <SettingsMenu />
     </Provider>
   ));
 
@@ -102,7 +102,7 @@ const gotoSettings = subject =>
 const gotoStages = subject =>
   subject.find('MenuPanel').at(1).simulate('click');
 
-describe('<MainMenu />', () => {
+describe('<SettingsMenu />', () => {
   it('Close button', () => {
     const { store } = getMockStore({ ui: { isMenuOpen: true } });
     const subject = getSubject(store);
