@@ -28,7 +28,7 @@ const BackgroundDimmer = (props) => {
       initial="expanded"
       exit="expanded"
       animate="normal"
-      onClick={() => props.toggleExpanded(prevState => !prevState)}
+      onClick={() => props.resetMenuState()}
     />
   );
 };

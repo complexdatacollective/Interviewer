@@ -3,7 +3,8 @@ import { compose } from 'recompose';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
 import { DropObstacle } from '../../behaviours/DragAndDrop';
-import { StagesMenu } from '../../containers/Timeline';
+import { SettingsMenu } from '../../containers/SettingsMenu';
+import { StagesMenu, SubMenu } from '../../containers/Timeline';
 import BackgroundDimmer from './BackgroundDimmer';
 import TimelineButtons from './TimelineButtons';
 
@@ -19,12 +20,22 @@ const Timeline = React.forwardRef((props, ref) => {
 
   const standardDuration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
 
-  const [expanded, toggleExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const [showSubMenu, setShowSubMenu] = useState(false);
+
+  const resetMenuState = () => {
+    setExpanded(false);
+    setShowSubMenu(false);
+  };
+
+  const menuContent = showSubMenu ?
+    (<SubMenu setShowSubMenu={setShowSubMenu} />) : <StagesMenu setExpanded={setExpanded} />;
 
   return (
     <React.Fragment>
+      <SettingsMenu />
       <AnimatePresence>
-        { expanded && (<BackgroundDimmer toggleExpanded={toggleExpanded} />)}
+        { expanded && (<BackgroundDimmer resetMenuState={resetMenuState} />)}
       </AnimatePresence>
       <div className="timeline-drop-obstacle" ref={ref} />
       <motion.div
@@ -39,14 +50,13 @@ const Timeline = React.forwardRef((props, ref) => {
         }}
       >
         <AnimatePresence initial={false} exitBeforeEnter>
-          { expanded ? (
-            <StagesMenu toggleExpanded={toggleExpanded} />
-          ) : (
+          { expanded ? menuContent : (
             <TimelineButtons
               onClickNext={props.onClickNext}
               onClickBack={props.onClickBack}
               percentProgress={props.percentProgress}
-              toggleExpanded={toggleExpanded}
+              setExpanded={setExpanded}
+              setShowSubMenu={setShowSubMenu}
             />
           ) }
         </AnimatePresence>

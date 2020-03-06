@@ -17,7 +17,7 @@
 $timeline-button-size: 6rem;
 
 // This is needed because .timeline can't have a width - it animates
-// its width using framer-motion based on content. Without a width,
+// its width automatically based on content. Without a width,
 // it cannot function as a drop obstacle, so we create this dummy
 // element.
 .timeline-drop-obstacle {

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { motion } from 'framer-motion';
 import cx from 'classnames';
 import { get } from 'lodash';
 import timelineImages from '../../images/timeline';
@@ -17,11 +18,14 @@ const TimelineStage = ({
   });
 
   return (
-    <div
+    <motion.div
       onClick={handleOpenStage}
       className={classes}
       data-stage-name={id}
       data-stage-id={index}
+      initial={{ scale: 0.95 }}
+      whileHover={{ scale: 1 }}
+      whileTap={{ scale: 0.90 }}
     >
       <div className="menu-timeline-stage__preview">
         <img
@@ -31,7 +35,7 @@ const TimelineStage = ({
         />
       </div>
       <div className="menu-timeline-stage__label">{index + 1}. {label}</div>
-    </div>
+    </motion.div>
   );
 };
 

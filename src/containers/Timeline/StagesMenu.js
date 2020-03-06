@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Button } from '@codaco/ui';
 import { Text } from '@codaco/ui/lib/components/Fields';
 import { connect } from 'react-redux';
 import { motion, useInvertedScale, AnimatePresence } from 'framer-motion';
@@ -40,14 +39,14 @@ const timelineVariants = {
     x: 0,
     opacity: 1,
     transition: {
-      stiffness: 1000, velocity: -100,
+      duration: standardDuration,
     },
   },
   normal: {
     x: '-5rem',
     opacity: 0,
     transition: {
-      stiffness: 1000, velocity: -100,
+      duration: standardDuration,
     },
   },
 };
@@ -63,6 +62,13 @@ const StagesMenu = (props) => {
     }
   };
 
+  const positionTransition = {
+    type: 'spring',
+    damping: 200,
+    stiffness: 1200,
+    velocity: 200,
+  };
+
   const onFilterChange = event => setFilter(event.target.value || '');
 
   const filteredStageList = props.stages.filter(
@@ -76,13 +82,13 @@ const StagesMenu = (props) => {
         variants={timelineVariants}
         exit="normal"
         key={item.id}
-        positionTransition
+        positionTransition={positionTransition}
       >
         <TimelineStage
           item={item}
           index={index}
           active={isActive}
-          toggleExpanded={props.toggleExpanded}
+          setExpanded={props.setExpanded}
         />
       </motion.div>
     );
@@ -119,14 +125,7 @@ const StagesMenu = (props) => {
     >
       <article className="stages-menu__wrapper">
         <header>
-          <h4>Filter: </h4>
-          <Text
-            type="search"
-            placeholder="Filter by stage name..."
-            input={{
-              onChange: onFilterChange,
-            }}
-          />
+          <h1>Interview Stages</h1>
         </header>
         <div className="menu-timeline">
           {renderMenuItems.length > 0 ? (
@@ -140,7 +139,13 @@ const StagesMenu = (props) => {
           )}
         </div>
         <footer>
-          <Button color="neon-coral" onClick={props.endSession}>Exit Interview</Button>
+          <Text
+            type="search"
+            placeholder="Type to filter stages..."
+            input={{
+              onChange: onFilterChange,
+            }}
+          />
         </footer>
       </article>
     </motion.div>

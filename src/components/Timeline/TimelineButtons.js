@@ -3,14 +3,14 @@ import { Icon } from '@codaco/ui';
 import { motion, useInvertedScale } from 'framer-motion';
 import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
 import { ProgressBar } from '../';
-import { SettingsMenu } from '../../containers/SettingsMenu';
 
 const TimelineButtons = (props) => {
   const {
     onClickBack,
     onClickNext,
     percentProgress,
-    toggleExpanded,
+    setExpanded,
+    setShowSubMenu,
   } = props;
 
   const { scaleX, scaleY } = useInvertedScale();
@@ -43,7 +43,21 @@ const TimelineButtons = (props) => {
       useInvertedScale
       style={{ scaleX, scaleY }}
     >
-      <SettingsMenu />
+      {/* <SettingsMenu /> */}
+
+      <motion.div
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+        className="timeline-nav"
+      >
+        <Icon
+          onClick={() => {
+            setShowSubMenu(true);
+            setExpanded(true);
+          }}
+          name="menu"
+        />
+      </motion.div>
       <motion.div
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
@@ -62,7 +76,7 @@ const TimelineButtons = (props) => {
       </motion.div>
       <ProgressBar
         percentProgress={percentProgress}
-        onClick={() => toggleExpanded(prevState => !prevState)}
+        onClick={() => setExpanded(prevState => !prevState)}
       />
       <motion.div
         whileHover={{ scale: 1.1 }}

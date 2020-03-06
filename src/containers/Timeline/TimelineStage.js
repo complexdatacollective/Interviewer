@@ -22,7 +22,7 @@ const timelineStageHandlers = withHandlers({
       const performOpen = () => {
         const path = sessionId ? `/session/${sessionId}/${stageIndex}` : '/';
         openStage(path);
-        props.toggleExpanded(false);
+        props.setExpanded(false);
       };
 
       if (isSkipped(stageIndex)) {

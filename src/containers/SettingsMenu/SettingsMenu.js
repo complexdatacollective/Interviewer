@@ -79,9 +79,9 @@ const SettingsMenu = () => {
 
   return (
     <React.Fragment>
-      <div>
+      {/* <div>
         <SettingsMenuButton onClick={() => { toggleMenu(true); }} />
-      </div>
+      </div> */}
       <Modal show={open}>
         <div
           className="main-menu settings-menu"

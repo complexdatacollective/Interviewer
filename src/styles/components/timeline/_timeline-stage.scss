@@ -3,9 +3,13 @@
   align-items: stretch;
   padding: 0 spacing(medium);
   border-radius: var(--border-radius);
+  cursor: pointer;
 
   &--current {
     background: var(--light-background);
+    border-bottom: 0.5rem solid var(--primary);
+    // margin: 1rem 0;
+    // padding: 1rem 2rem;
   }
 
   &__preview {
