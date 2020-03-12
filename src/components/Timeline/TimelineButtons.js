@@ -49,14 +49,12 @@ const TimelineButtons = (props) => {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         className="timeline-nav"
+        onClick={() => {
+          setShowSubMenu(true);
+          setExpanded(true);
+        }}
       >
-        <Icon
-          onClick={() => {
-            setShowSubMenu(true);
-            setExpanded(true);
-          }}
-          name="menu"
-        />
+        <Icon name="menu" />
       </motion.div>
       <motion.div
         whileHover={{ scale: 1.1 }}
