@@ -111,7 +111,6 @@ class Protocol extends Component {
               promptId={promptId}
               pathPrefix={pathPrefix}
               stageIndex={stageIndex}
-              foo="bar"
               registerBeforeNext={this.registerBeforeNext}
               onComplete={this.onComplete}
             />
