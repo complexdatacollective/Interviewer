@@ -78,6 +78,8 @@
     flex: 0 0 1.5rem;
     position: relative;
     margin-right: 1rem;
+    overflow: hidden;
+
 
     &::before {
       content: '';
@@ -86,6 +88,7 @@
       left: 50%;
       position: absolute;
       border-left: var(--timeline-color) .2rem solid;
+      transition: height var(--animation-easing) var(--animation-duration-fast);
       transform: translateX(-.1rem);
     }
 

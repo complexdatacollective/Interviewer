@@ -63,10 +63,14 @@ const TimelineButtons = (props) => {
           name="chevron-up"
         />
       </motion.div>
-      <ProgressBar
-        percentProgress={percentProgress}
+      <motion.div
+        className="timeline-progress-bar"
         onClick={() => setExpanded(prevState => !prevState)}
-      />
+      >
+        <ProgressBar
+          percentProgress={percentProgress}
+        />
+      </motion.div>
       <motion.div
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}

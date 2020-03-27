@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { compose } from 'recompose';
 import { motion, AnimatePresence } from 'framer-motion';
-import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
+import { getCSSVariableAsNumber, getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
 import { DropObstacle } from '../../behaviours/DragAndDrop';
 import { SettingsMenu } from '../../containers/SettingsMenu';
 import { StagesMenu, SubMenu } from '../../containers/Timeline';
@@ -9,6 +9,7 @@ import BackgroundDimmer from './BackgroundDimmer';
 import TimelineButtons from './TimelineButtons';
 
 export const baseAnimationDuration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
+export const baseAnimationEasing = getCSSVariableAsString('--animation-easing-json');
 
 const Timeline = React.forwardRef((props, ref) => {
   const [expanded, setExpanded] = useState(false);
@@ -34,6 +35,7 @@ const Timeline = React.forwardRef((props, ref) => {
         key="timeline"
         layoutTransition={{
           duration: baseAnimationDuration,
+          easing: baseAnimationEasing,
         }}
       >
         { expanded ? menuContent : (

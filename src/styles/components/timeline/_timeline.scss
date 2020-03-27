@@ -40,7 +40,6 @@ $timeline-button-size: 6rem;
   height: 100%;
   z-index: var(--z-global-ui);
   background: var(--panel-bg-muted);
-  overflow: hidden;
 
   .timeline-content {
     display: flex;
@@ -50,12 +49,46 @@ $timeline-button-size: 6rem;
     align-content: center;
     align-items: center;
     height: 100%;
-    padding: unit(2) unit(2);
+    padding: unit(2);
   }
 
   svg {
     height: 2rem;
     width: 2rem;
+  }
+
+  &-progress-bar {
+    display: flex;
+    flex-grow: 1;
+    padding: 2rem;
+    border-radius: 5rem;
+    margin: 1rem 0;
+    transition: box-shadow 0.3s ease-in-out;
+
+    box-shadow: 0 0 0 1rem transparent;
+
+    &:hover {
+      cursor: pointer;
+
+      @keyframes pulse {
+        // sass-lint:disable-block no-color-literals
+        0% {
+          box-shadow: 0 0 0 0 rgba(var(--color-sea-green---rgb), 0.8);
+        }
+
+        70% {
+          box-shadow: 0 0 0 2rem rgba(var(--color-sea-green---rgb), 0);
+        }
+
+        100% {
+          box-shadow: 0 0 0 0 rgba(var(--color-sea-green---rgb), 0);
+        }
+      }
+
+      .progress-bar{
+        animation: pulse 2s infinite;
+      }
+    }
   }
 
   &-nav {

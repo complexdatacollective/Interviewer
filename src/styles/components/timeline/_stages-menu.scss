@@ -4,6 +4,7 @@
   flex-direction: column;
   height: 100%;
   flex: 1 1 auto;
+  overflow: hidden;
 
   &__wrapper {
     display: flex;

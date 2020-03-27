@@ -9,7 +9,6 @@ import VisualPreferences from './Sections/VisualPreferences';
 import DeviceSettings from './Sections/DeviceSettings';
 import DeveloperTools from './Sections/DeveloperTools';
 import CloseButton from '../../components/CloseButton';
-import SettingsMenuButton from './SettingsMenuButton';
 import getVersion from '../../utils/getVersion';
 
 const tabVariants = {
@@ -78,34 +77,29 @@ const SettingsMenu = () => {
   });
 
   return (
-    <React.Fragment>
-      {/* <div>
-        <SettingsMenuButton onClick={() => { toggleMenu(true); }} />
-      </div> */}
-      <Modal show={open}>
-        <div
-          className="main-menu settings-menu"
-        >
-          <header className="main-menu__header settings-menu__header">
-            <h1>Settings Menu</h1>
-            <CloseButton onClick={() => toggleMenu(false)} />
-          </header>
-          <article className="main-menu__wrapper settings-menu__wrapper">
-            <nav>
-              <ul>
-                { renderNavigation }
-              </ul>
-              <div className="version-code">Version {appVersion}</div>
-            </nav>
-            <section>
-              <AnimatePresence exitBeforeEnter>
-                { renderTabs }
-              </AnimatePresence>
-            </section>
-          </article>
-        </div>
-      </Modal>
-    </React.Fragment>
+    <Modal show={open}>
+      <div
+        className="main-menu settings-menu"
+      >
+        <header className="main-menu__header settings-menu__header">
+          <h1>Settings Menu</h1>
+          <CloseButton onClick={() => toggleMenu(false)} />
+        </header>
+        <article className="main-menu__wrapper settings-menu__wrapper">
+          <nav>
+            <ul>
+              { renderNavigation }
+            </ul>
+            <div className="version-code">Version {appVersion}</div>
+          </nav>
+          <section>
+            <AnimatePresence exitBeforeEnter>
+              { renderTabs }
+            </AnimatePresence>
+          </section>
+        </article>
+      </div>
+    </Modal>
   );
 };
 

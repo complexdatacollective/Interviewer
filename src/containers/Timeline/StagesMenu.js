@@ -7,17 +7,15 @@ import { actionCreators as sessionActions } from '../../ducks/modules/session';
 import { getProtocolStages } from '../../selectors/protocol';
 import { Scroller } from '../../components';
 import TimelineStage from './TimelineStage';
-import { baseAnimationDuration } from '../../components/Timeline/Timeline';
+import { baseAnimationDuration, baseAnimationEasing } from '../../components/Timeline/Timeline';
 import { currentStageIndex } from '../../utils/matchSessionPath';
-
-
-const standardDuration = baseAnimationDuration;
 
 const variants = {
   normal: {
     opacity: 0,
     transition: {
-      duration: standardDuration,
+      duration: baseAnimationDuration,
+      easing: baseAnimationEasing,
       staggerChildren: 0.05,
       staggerDirection: -1,
     },
@@ -25,11 +23,12 @@ const variants = {
   expanded: {
     opacity: 1,
     transition: {
-      // when: 'beforeChildren',
+      when: 'beforeChildren',
       staggerChildren: 0.075,
       // delayChildren: 0.2,
       // delay: 0.2,
-      duration: standardDuration,
+      duration: baseAnimationDuration,
+      easing: baseAnimationEasing,
     },
   },
 };
@@ -40,15 +39,17 @@ const timelineVariants = {
     opacity: 1,
     transition: {
       when: 'beforeChildren',
-      duration: standardDuration,
+      duration: baseAnimationDuration,
+      easing: baseAnimationEasing,
     },
   },
   normal: {
     x: '-5rem',
     opacity: 0,
     transition: {
-      when: 'afterChildren',
-      duration: standardDuration,
+      // when: 'afterChildren',
+      duration: baseAnimationDuration,
+      easing: baseAnimationEasing,
     },
   },
 };
@@ -146,7 +147,7 @@ const StagesMenu = (props) => {
         <motion.footer
           animate={{ y: 0 }}
           initial={{ y: '100%' }}
-          transition={{ duration: baseAnimationDuration }}
+          transition={{ duration: baseAnimationDuration, delay: baseAnimationDuration }}
         >
           <Text
             type="search"

@@ -22,21 +22,21 @@ const TimelineStage = ({
   const timelineVariants = {
     expanded: {
       // scaleY: 1,
-      // y: 0,
+      y: 0,
       opacity: 1,
       height: 'auto',
       transition: {
-        delay: baseAnimationDuration * 0.2,
-        duration: baseAnimationDuration,
+        // delay: 0.1 + 0.15,
+        duration: 0.25,
       },
     },
     normal: {
-      // scaleY: 0.1,
-      // y: '-10%',
+      // scaleY: 0.05,
+      y: '-100%',
       opacity: 0,
       height: 0,
       transition: {
-        duration: baseAnimationDuration,
+        duration: 0.25,
       },
     },
   };
