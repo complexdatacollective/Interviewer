@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon } from '@codaco/ui';
+import { Icon, Button } from '@codaco/ui';
 import { connect } from 'react-redux';
 import { motion, useInvertedScale } from 'framer-motion';
 import { compose } from 'recompose';
@@ -12,7 +12,7 @@ const SubMenu = (props) => {
     setSettingsMenuOpen,
   } = props;
 
-  const slowDuration = getCSSVariableAsNumber('--animation-duration-slow-ms') / 1000;
+  const transitionDuration = getCSSVariableAsNumber('--animation-duration-fast-ms') / 1000;
 
   const { scaleX, scaleY } = useInvertedScale();
 
@@ -20,13 +20,13 @@ const SubMenu = (props) => {
     normal: {
       opacity: 0,
       transition: {
-        duration: slowDuration,
+        duration: transitionDuration,
       },
     },
     expanded: {
       opacity: 1,
       transition: {
-        duration: slowDuration,
+        duration: transitionDuration,
       },
     },
   };
@@ -44,35 +44,17 @@ const SubMenu = (props) => {
           <h1>Menu</h1>
         </header>
         <div className="sub-menu__items">
-          <div className="sub-menu-item sub-menu-item--stages" onClick={() => setShowSubMenu(false)}>
-            <Icon name="menu-default-interface" />
-            <div>
-              <h4>Show Interview Stages</h4>
-              {/* <p>
-                Show the stages of this interview.
-              </p> */}
-            </div>
-          </div>
-          <div className="sub-menu-item sub-menu-item--settings" onClick={() => setSettingsMenuOpen()}>
-            <Icon name="settings" />
-            <div>
-              <h4>Open Settings Menu</h4>
-              {/* <p>
-                Change device settings, such as <strong>text size</strong> and <strong>export
-                options</strong>.
-              </p> */}
-            </div>
-          </div>
-          <div className="sub-menu-item sub-menu-item--exit" onClick={props.endSession}>
-            <Icon name="menu-quit" />
-            <div>
-              <h4>Exit Interview</h4>
-              {/* <p>
-                Leave this interview now, and return to the start screen. Your current
-                interview will be saved, and you can resume it later.
-              </p> */}
-            </div>
-          </div>
+          <Button onClick={() => setShowSubMenu(false)} icon={<Icon name="menu-default-interface" />} color="cyber-grape">
+            Show Interview Stages
+          </Button>
+          <Button onClick={() => setSettingsMenuOpen()} icon={<Icon name="settings" />} color="cyber-grape">
+            Open Settings Menu
+          </Button>
+        </div>
+        <div className="sub-menu__exit">
+          <Button onClick={props.endSession} icon={<Icon name="menu-quit" />} color="cyber-grape">
+            Exit Interview
+          </Button>
         </div>
       </article>
 

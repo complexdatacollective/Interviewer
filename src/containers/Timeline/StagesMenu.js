@@ -1,17 +1,17 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useLayoutEffect } from 'react';
 import { Text } from '@codaco/ui/lib/components/Fields';
 import { connect } from 'react-redux';
 import { motion, useInvertedScale, AnimatePresence } from 'framer-motion';
 import { compose } from 'recompose';
-import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
 import { getProtocolStages } from '../../selectors/protocol';
 import { Scroller } from '../../components';
 import TimelineStage from './TimelineStage';
+import { baseAnimationDuration } from '../../components/Timeline/Timeline';
 import { currentStageIndex } from '../../utils/matchSessionPath';
 
 
-const standardDuration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
+const standardDuration = baseAnimationDuration;
 
 const variants = {
   normal: {
@@ -27,7 +27,7 @@ const variants = {
     transition: {
       // when: 'beforeChildren',
       staggerChildren: 0.075,
-      delayChildren: 0.2,
+      // delayChildren: 0.2,
       // delay: 0.2,
       duration: standardDuration,
     },
@@ -39,6 +39,7 @@ const timelineVariants = {
     x: 0,
     opacity: 1,
     transition: {
+      when: 'beforeChildren',
       duration: standardDuration,
     },
   },
@@ -46,6 +47,7 @@ const timelineVariants = {
     x: '-5rem',
     opacity: 0,
     transition: {
+      when: 'afterChildren',
       duration: standardDuration,
     },
   },
@@ -53,6 +55,7 @@ const timelineVariants = {
 
 const StagesMenu = (props) => {
   const [filter, setFilter] = useState('');
+  const [imageLoaded, updateImageLoaded] = useState(false);
   const { scaleX, scaleY } = useInvertedScale();
   const scrollerRef = useRef(null);
 
@@ -83,35 +86,40 @@ const StagesMenu = (props) => {
         exit="normal"
         key={item.id}
         positionTransition={positionTransition}
+        className="menu-timeline-stage-preview"
       >
         <TimelineStage
           item={item}
           index={index}
           active={isActive}
           setExpanded={props.setExpanded}
+          onImageLoaded={() => updateImageLoaded(true)}
         />
       </motion.div>
     );
   });
 
-
-  useEffect(() => {
-    // Scroll to the active stage
+  useLayoutEffect(() => {
+    // This effect is designed to scroll to the active stage
+    //
     // This can't use a reference to a dom element because of the staggered
     // animation (ref won't exist until the element has rendered). Instead,
     // scroll the container to where the element will be when it finishes
     // animating.
     //
-    // setTimeout is there so the container & elements have height set.
-    // Please implement a better way if you know of one!
+    // NOTE: because element height changes after the image is loaded, and
+    // because the image does not load immediately, we need to tie this
+    // effect to the imageLoaded state, which is itself updated as images
+    // load.
+    //
+    // This is not at all graceful. Please implement a better way if you
+    // know of one!
+
     if (!filter) {
-      setTimeout(() => {
-        // TODO: find a better way to calculate this!
-        const itemHeight = document.getElementsByClassName('menu-timeline-stage')[0].clientHeight;
-        scrollToLocation(props.currentStageIndex * itemHeight, 0.2);
-      });
+      const itemHeight = document.getElementsByClassName('menu-timeline-stage')[0].clientHeight;
+      scrollToLocation(props.currentStageIndex * itemHeight, 0.2);
     }
-  });
+  }, [imageLoaded]);
 
   return (
     <motion.div
@@ -124,12 +132,9 @@ const StagesMenu = (props) => {
       style={{ scaleX, scaleY }}
     >
       <article className="stages-menu__wrapper">
-        <header>
-          <h1>Interview Stages</h1>
-        </header>
         <div className="menu-timeline">
           {renderMenuItems.length > 0 ? (
-            <Scroller forwardedRef={scrollerRef}>
+            <Scroller useSmoothScrolling={false} forwardedRef={scrollerRef}>
               <AnimatePresence>
                 { renderMenuItems }
               </AnimatePresence>
@@ -138,15 +143,19 @@ const StagesMenu = (props) => {
             <h4>No stages match your filter.</h4>
           )}
         </div>
-        <footer>
+        <motion.footer
+          animate={{ y: 0 }}
+          initial={{ y: '100%' }}
+          transition={{ duration: baseAnimationDuration }}
+        >
           <Text
             type="search"
-            placeholder="Type to filter stages..."
+            placeholder="Filter..."
             input={{
               onChange: onFilterChange,
             }}
           />
-        </footer>
+        </motion.footer>
       </article>
     </motion.div>
   );

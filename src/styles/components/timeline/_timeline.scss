@@ -2,11 +2,12 @@
   flex: 1 1 auto;
   overflow: hidden;
   display: flex;
-  width: 28rem;
+  width: 35rem;
   justify-content: center;
+  padding: unit(2) 0;
 
   .scrollable {
-    padding-top: unit(2);
+    padding: unit(4) 0;
   }
 
   h4 {
@@ -39,18 +40,17 @@ $timeline-button-size: 6rem;
   height: 100%;
   z-index: var(--z-global-ui);
   background: var(--panel-bg-muted);
-  padding: unit(2);
   overflow: hidden;
 
   .timeline-content {
     display: flex;
-    padding: unit(2) 0;
     flex-direction: column;
-    flex: 1 0 var(--timeline-width);
+    flex: 1 0 auto;
     justify-content: center;
     align-content: center;
     align-items: center;
     height: 100%;
+    padding: unit(2) unit(2);
   }
 
   svg {

@@ -25,12 +25,14 @@ class Scroller extends Component {
       className,
       children,
       showScrollbars,
+      useSmoothScrolling,
     } = this.props;
 
     return (
       <div
         className={cx('scrollable', { 'scrollable--show-scrollbars': showScrollbars }, className)}
         onScroll={this.handleScroll}
+        style={{ scrollBehavior: useSmoothScrolling ? 'smooth' : 'unset' }}
         ref={this.scrollable}
       >
         {children}
@@ -42,6 +44,7 @@ class Scroller extends Component {
 Scroller.defaultProps = {
   className: '',
   onScroll: () => {},
+  useSmoothScrolling: true,
 };
 
 Scroller.propTypes = {
@@ -49,6 +52,7 @@ Scroller.propTypes = {
   className: PropTypes.string,
   onScroll: PropTypes.func,
   showScrollbars: PropTypes.bool.isRequired,
+  useSmoothScrolling: PropTypes.bool,
 };
 
 function mapStateToProps(state) {

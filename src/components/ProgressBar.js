@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { motion } from 'framer-motion';
 import cx from 'classnames';
 
 const fillerValue = (orientation, percentProgress) => {
@@ -11,17 +10,9 @@ const fillerValue = (orientation, percentProgress) => {
   };
 };
 
-
-const spring = {
-  type: 'spring',
-  damping: 10,
-  stiffness: 100,
-};
-
 const ProgressBar = ({ percentProgress, onClick, orientation }) =>
   (
-    <motion.div
-      positionTransition={spring}
+    <div
       className={cx(
         'progress-bar',
         `progress-bar progress-bar--${orientation}`,
@@ -30,7 +21,7 @@ const ProgressBar = ({ percentProgress, onClick, orientation }) =>
       onClick={onClick}
     >
       <div className="progress-bar__filler" style={fillerValue(orientation, percentProgress)} />
-    </motion.div>
+    </div>
   );
 
 ProgressBar.propTypes = {

@@ -8,18 +8,9 @@ import { StagesMenu, SubMenu } from '../../containers/Timeline';
 import BackgroundDimmer from './BackgroundDimmer';
 import TimelineButtons from './TimelineButtons';
 
+export const baseAnimationDuration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
+
 const Timeline = React.forwardRef((props, ref) => {
-  const containerVariants = {
-    normal: {
-      // background: 'var(--panel-bg-muted)',
-    },
-    expanded: {
-      // background: 'var(--light-background)',
-    },
-  };
-
-  const standardDuration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
-
   const [expanded, setExpanded] = useState(false);
   const [showSubMenu, setShowSubMenu] = useState(false);
 
@@ -29,7 +20,7 @@ const Timeline = React.forwardRef((props, ref) => {
   };
 
   const menuContent = showSubMenu ?
-    (<SubMenu setShowSubMenu={setShowSubMenu} />) : <StagesMenu setExpanded={setExpanded} />;
+    (<SubMenu setShowSubMenu={setShowSubMenu} key="sub-menu" />) : <StagesMenu setExpanded={setExpanded} key="stages-menu" />;
 
   return (
     <React.Fragment>
@@ -41,25 +32,20 @@ const Timeline = React.forwardRef((props, ref) => {
       <motion.div
         className="timeline"
         key="timeline"
-        variants={containerVariants}
-        initial="normal"
-        animate={expanded ? 'expanded' : 'normal'}
-        layoutTransition
-        transition={{
-          duration: standardDuration,
+        layoutTransition={{
+          duration: baseAnimationDuration,
         }}
       >
-        <AnimatePresence initial={false} exitBeforeEnter>
-          { expanded ? menuContent : (
-            <TimelineButtons
-              onClickNext={props.onClickNext}
-              onClickBack={props.onClickBack}
-              percentProgress={props.percentProgress}
-              setExpanded={setExpanded}
-              setShowSubMenu={setShowSubMenu}
-            />
-          ) }
-        </AnimatePresence>
+        { expanded ? menuContent : (
+          <TimelineButtons
+            onClickNext={props.onClickNext}
+            onClickBack={props.onClickBack}
+            percentProgress={props.percentProgress}
+            setExpanded={setExpanded}
+            setShowSubMenu={setShowSubMenu}
+            key="timelinebuttons"
+          />
+        ) }
       </motion.div>
     </React.Fragment>
   );

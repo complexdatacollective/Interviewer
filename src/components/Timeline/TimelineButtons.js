@@ -1,7 +1,6 @@
 import React from 'react';
 import { Icon } from '@codaco/ui';
 import { motion, useInvertedScale } from 'framer-motion';
-import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
 import { ProgressBar } from '../';
 
 const TimelineButtons = (props) => {
@@ -15,20 +14,12 @@ const TimelineButtons = (props) => {
 
   const { scaleX, scaleY } = useInvertedScale();
 
-  const slowDuration = getCSSVariableAsNumber('--animation-duration-slow-ms') / 1000;
-
   const variants = {
     normal: {
       opacity: 1,
-      transition: {
-        duration: slowDuration,
-      },
     },
     expanded: {
       opacity: 0,
-      transition: {
-        duration: slowDuration,
-      },
     },
   };
 
