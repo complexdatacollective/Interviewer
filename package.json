@@ -38,7 +38,7 @@
     "dist:ios": "npm run build:ios && cordova build ios --release --buildFlag='-UseModernBuildSystem=0' --developmentTeam=85EZ69PQHJ --target=\"iPad-Pro--12-9-inch---3rd-generation-, 13.1\"",
     "dist:linux": "npm run build:electron && electron-builder -l --publish=always",
     "dist:mac": "npm run build:electron && electron-builder -m --publish=always",
-    "dist:win": "npm run build:electron && electron-builder -w --publish=never",
+    "dist:win": "npm run build:electron && electron-builder -w --publish=always",
     "bump": "sh scripts/bump",
     "preflight": "npm run lint -- --max-warnings 0 && npm run sass-lint -- --max-warnings 0 && npm test -- --coverage"
   },
@@ -213,6 +213,10 @@
       "category": "public.app-category.education",
       "hardenedRuntime": true,
       "entitlements": "./build-resources/entitlements.mac.inherit.plist"
+    },
+    "win": {
+      "target": "nsis",
+      "certificateSha1": "512E5573B1961B0ADCAFB21288935F8A3E6E656F"
     },
     "publish": [
       {
