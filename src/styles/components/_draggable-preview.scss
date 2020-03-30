@@ -1,5 +1,6 @@
 .draggable-preview {
   z-index: var(--z-global-ui);
+  cursor: grabbing;
 
   .node {
     font-size: calc(var(--base-node-size) * 1.1);
