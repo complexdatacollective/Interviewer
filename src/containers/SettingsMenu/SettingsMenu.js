@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Modal } from '@codaco/ui';
 import { motion, AnimatePresence } from 'framer-motion';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
@@ -10,6 +9,7 @@ import DeviceSettings from './Sections/DeviceSettings';
 import DeveloperTools from './Sections/DeveloperTools';
 import CloseButton from '../../components/CloseButton';
 import getVersion from '../../utils/getVersion';
+
 
 const tabVariants = {
   hidden: {
@@ -30,16 +30,21 @@ const tabVariants = {
   },
 };
 
-const SettingsMenu = () => {
-  const [open, toggleMenu] = useState(false);
+const SettingsMenu = (props) => {
+  const {
+    closeMenu,
+    settingsMenuOpen,
+  } = props;
 
   const tabs = {
+    'General Settings': DeviceSettings,
+    'Data Export Options': DeveloperTools,
+    Pairing: DeveloperTools,
     'Visual Preferences': VisualPreferences,
-    'Device Settings': DeviceSettings,
-    'Developer Tools': DeveloperTools,
+    'Developer Options': DeveloperTools,
   };
 
-  const [activeTab, setActiveTab] = useState('Visual Preferences');
+  const [activeTab, setActiveTab] = useState('General Settings');
   const [appVersion, setAppVersion] = useState('0.0.0');
 
   getVersion().then(version => setAppVersion(version));
@@ -70,44 +75,48 @@ const SettingsMenu = () => {
       >
         <h1>{tabName}</h1>
         <Scroller>
-          <TabComponent toggleMenu={toggleMenu} />
+          <TabComponent closeMenu={closeMenu} />
         </Scroller>
       </motion.div>
     );
   });
 
   return (
-    <Modal show={open}>
-      <div
-        className="main-menu settings-menu"
-      >
-        <header className="main-menu__header settings-menu__header">
-          <h1>Settings Menu</h1>
-          <CloseButton onClick={() => toggleMenu(false)} />
-        </header>
-        <article className="main-menu__wrapper settings-menu__wrapper">
-          <nav>
-            <ul>
-              { renderNavigation }
-            </ul>
-            <div className="version-code">Version {appVersion}</div>
-          </nav>
-          <section>
-            <AnimatePresence exitBeforeEnter>
-              { renderTabs }
-            </AnimatePresence>
-          </section>
-        </article>
-      </div>
-    </Modal>
+    <React.Fragment>
+      { settingsMenuOpen && (
+        <div
+          className="main-menu settings-menu"
+        >
+          <article className="main-menu__wrapper settings-menu__wrapper">
+            <nav>
+              <ul>
+                { renderNavigation }
+              </ul>
+              <div className="version-code">Network Canvas {appVersion}</div>
+            </nav>
+            <section>
+              <CloseButton onClick={closeMenu} className="close-button-wrapper" />
+              <AnimatePresence exitBeforeEnter>
+                { renderTabs }
+              </AnimatePresence>
+            </section>
+          </article>
+        </div>
+      )}
+    </React.Fragment>
+
   );
 };
 
+const mapStateToProps = state => ({
+  settingsMenuOpen: state.ui.settingsMenuOpen,
+});
+
 const mapDispatchToProps = dispatch => ({
-  closeMenu: () => dispatch(uiActions.update({ isMenuOpen: false })),
+  closeMenu: () => dispatch(uiActions.update({ settingsMenuOpen: false })),
 });
 
 export default compose(
-  connect(null, mapDispatchToProps),
+  connect(mapStateToProps, mapDispatchToProps),
 )(SettingsMenu);
 

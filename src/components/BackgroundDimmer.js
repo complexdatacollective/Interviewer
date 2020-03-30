@@ -28,8 +28,10 @@ const BackgroundDimmer = (props) => {
       initial="expanded"
       exit="expanded"
       animate="normal"
-      onClick={() => props.resetMenuState()}
-    />
+      onClick={() => props.clickHandler()}
+    >
+      {props.children}
+    </motion.div>
   );
 };
 

@@ -1,18 +1,18 @@
 import React from 'react';
-import { Icon, Button } from '@codaco/ui';
+import { Icon } from '@codaco/ui';
 import { connect } from 'react-redux';
 import { motion, useInvertedScale } from 'framer-motion';
 import { compose } from 'recompose';
-import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
+import { baseAnimationDuration, baseAnimationEasing } from '../../components/Timeline/Timeline';
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
+import { actionCreators as uiActions } from '../../ducks/modules/ui';
 
 const SubMenu = (props) => {
   const {
     setShowSubMenu,
-    setSettingsMenuOpen,
+    openSettingsMenu,
+    endSession,
   } = props;
-
-  const transitionDuration = getCSSVariableAsNumber('--animation-duration-fast-ms') / 1000;
 
   const { scaleX, scaleY } = useInvertedScale();
 
@@ -20,13 +20,21 @@ const SubMenu = (props) => {
     normal: {
       opacity: 0,
       transition: {
-        duration: transitionDuration,
+        duration: baseAnimationDuration,
+        easing: baseAnimationEasing,
+        staggerChildren: 0.05,
+        staggerDirection: -1,
       },
     },
     expanded: {
       opacity: 1,
       transition: {
-        duration: transitionDuration,
+        when: 'beforeChildren',
+        staggerChildren: 0.075,
+        // delayChildren: 0.2,
+        // delay: 0.2,
+        duration: baseAnimationDuration,
+        easing: baseAnimationEasing,
       },
     },
   };
@@ -40,21 +48,21 @@ const SubMenu = (props) => {
       key="sub-menu"
     >
       <article className="sub-menu__wrapper">
-        <header className="sub-menu__header">
-          <h1>Menu</h1>
-        </header>
         <div className="sub-menu__items">
-          <Button onClick={() => setShowSubMenu(false)} icon={<Icon name="menu-default-interface" />} color="cyber-grape">
-            Show Interview Stages
-          </Button>
-          <Button onClick={() => setSettingsMenuOpen()} icon={<Icon name="settings" />} color="cyber-grape">
-            Open Settings Menu
-          </Button>
+          <div className="item" onClick={() => setShowSubMenu(false)}>
+            <Icon name="menu-default-interface" />
+            Interview Stages
+          </div>
+          <div className="item" onClick={() => { openSettingsMenu(); props.setExpanded(false); }}>
+            <Icon name="settings" />
+            Device Settings
+          </div>
         </div>
         <div className="sub-menu__exit">
-          <Button onClick={props.endSession} icon={<Icon name="menu-quit" />} color="cyber-grape">
+          <div className="item" onClick={endSession}>
+            <Icon name="menu-quit" />
             Exit Interview
-          </Button>
+          </div>
         </div>
       </article>
 
@@ -63,9 +71,10 @@ const SubMenu = (props) => {
 };
 
 
-const mapDispatchToProps = {
-  endSession: sessionActions.endSession,
-};
+const mapDispatchToProps = dispatch => ({
+  endSession: () => dispatch(sessionActions.endSession()),
+  openSettingsMenu: () => dispatch(uiActions.update({ settingsMenuOpen: true })),
+});
 
 export default compose(
   connect(null, mapDispatchToProps),

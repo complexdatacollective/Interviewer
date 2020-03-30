@@ -6,6 +6,7 @@ const CloseButton = props => (
   <motion.div
     whileHover={{ scale: 1.1 }}
     whileTap={{ scale: 0.95 }}
+    style={{ cursor: 'pointer' }}
     {...props}
   >
     <Icon name="close" />

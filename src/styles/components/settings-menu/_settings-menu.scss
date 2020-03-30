@@ -1,64 +1,51 @@
-:root {
-  --input-text: var(--text--dark); // There seems to be a bug in iOS that requires this override go here.
-  --active-tab-background: #{transparentize(rgb(0, 0, 0), 0.85)};
-}
 
 .settings-menu {
   display: flex;
   flex-flow: column;
-  width: 70rem;
+  width: 100%;
   height: 100%;
-  padding-bottom: 5rem;
-  max-width: 90%;
-
-  &__header {
-    flex: 0 1 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 20%;
-
-    h1 {
-      font-size: 2rem;
-    }
-  }
+  position: absolute;
+  z-index: var(--z-modal);
 
   &__wrapper {
     display: flex;
-    background: var(--color-white);
-    border-radius: var(--border-radius);
-    height: 80%;
+    height: 100%;
     overflow: hidden;
 
     nav {
-      background: var(--color-neon-coral);
-      flex: 0 0 25%;
+      background: var(--panel-bg-muted);
+      flex: 0 0 20rem; // Match to sub-menu component width
       padding: unit(6) 0;
       display: flex;
-      flex-direction: column;
       justify-content: space-between;
+      flex-direction: column;
       overflow: hidden;
+
+      h1 {
+        padding: unit(2) unit(4);
+      }
 
       ul {
         padding: 0;
       }
 
       li {
-        font-size: 1.2rem;
-        padding: unit(2) unit(4);
-        margin-bottom: unit(2);
+        padding: unit(4);
         list-style: none;
-        font-weight: 300;
         transition: background var(--animation-duration-fast) var(--animation-easing), font-weight var(--animation-duration-fast) var(--animation-easing);
         cursor: pointer;
         backface-visibility: hidden;
+        font-weight: 700;
+        font-size: 0.8rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
 
         &:hover {
-          background: var(--active-tab-background);
+          background: var(--color-slate-blue--dark);
         }
 
         &.active {
-          background: var(--active-tab-background);
+          background: var(--color-slate-blue);
           font-weight: 700;
         }
       }
@@ -69,13 +56,16 @@
     }
 
     section {
-      --input-background: var(--color-platinum);
-      --input-text: var(--text--dark);
-
-      width: 100%;
-      color: var(--text-dark);
-      padding: unit(3) unit(8);
+      width: 1000%;
+      padding: 2.4rem 4.4rem;
       display: flex;
+      background: var(--color-cyber-grape);
+
+      .close-button-wrapper {
+        position: absolute;
+        top: unit(4);
+        right: unit(4);
+      }
 
       .tab-content {
         display: flex;
@@ -89,6 +79,7 @@
 
       .settings-element {
         display: flex;
+        margin-bottom: 2rem;
 
         .form-field-container {
           flex: 0 1 7rem;
@@ -102,15 +93,10 @@
           margin-left: 2rem;
         }
 
-        .form-field-toggle__button {
-          &::before {
-            background-color: var(--color-platinum--dark);
-          }
-        }
 
         .form-field {
-          background: var(--color-white);
           padding: 0 2rem 0 0;
+          background: transparent;
           width: auto;
 
           button {

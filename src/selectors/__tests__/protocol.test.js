@@ -67,7 +67,7 @@ const mockState = {
       protocolUID: 'mockProtocol',
     },
   },
-  ui: { isMenuOpen: false },
+  ui: { settingsMenuOpen: false },
 };
 
 

@@ -10,7 +10,7 @@ import { isIOS } from '../../utils/Environment';
 import projectLogo from '../../images/project-logo.svg';
 import betaProjectLogo from '../../images/project-logo-beta.svg';
 import downArrow from '../../images/down-arrow.svg';
-import { SettingsMenu } from '../../containers/SettingsMenu';
+import { SettingsMenuButton } from '../../containers/SettingsMenu';
 import { ProtocolList, ProtocolImportOverlay, SessionListContainer, ImportProgressOverlay } from '.';
 
 /**
@@ -47,9 +47,6 @@ class Setup extends Component {
     return (
       <React.Fragment>
         <div className="bg bg-1" />
-        { !this.state.showSessionOverlay &&
-        (<SettingsMenu />)
-        }
         <ProtocolImportOverlay
           show={this.state.showImportProtocolOverlay}
           onClose={() => this.setState({ showImportProtocolOverlay: false })}
@@ -59,6 +56,9 @@ class Setup extends Component {
           progress={this.props.importProtocolProgress}
         />
         <div className={setupClassnames}>
+          { !this.state.showSessionOverlay &&
+          (<SettingsMenuButton />)
+          }
           <div className="setup__header">
             <img src={isIOS() ? projectLogo : betaProjectLogo} className="logo setup__header--logo" alt="Network Canvas" />
           </div>

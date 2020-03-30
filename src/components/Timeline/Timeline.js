@@ -3,10 +3,10 @@ import { compose } from 'recompose';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getCSSVariableAsNumber, getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
 import { DropObstacle } from '../../behaviours/DragAndDrop';
-import { SettingsMenu } from '../../containers/SettingsMenu';
 import { StagesMenu, SubMenu } from '../../containers/Timeline';
-import BackgroundDimmer from './BackgroundDimmer';
+import BackgroundDimmer from '../BackgroundDimmer';
 import TimelineButtons from './TimelineButtons';
+import CloseButton from '../CloseButton';
 
 export const baseAnimationDuration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
 export const baseAnimationEasing = getCSSVariableAsString('--animation-easing-json');
@@ -21,13 +21,12 @@ const Timeline = React.forwardRef((props, ref) => {
   };
 
   const menuContent = showSubMenu ?
-    (<SubMenu setShowSubMenu={setShowSubMenu} key="sub-menu" />) : <StagesMenu setExpanded={setExpanded} key="stages-menu" />;
+    (<SubMenu setShowSubMenu={setShowSubMenu} setExpanded={setExpanded} key="sub-menu" />) : <StagesMenu setExpanded={setExpanded} key="stages-menu" />;
 
   return (
     <React.Fragment>
-      <SettingsMenu />
       <AnimatePresence>
-        { expanded && (<BackgroundDimmer resetMenuState={resetMenuState} />)}
+        { expanded && (<BackgroundDimmer clickHandler={resetMenuState} ><CloseButton onClick={() => setExpanded(false)} className="close-button-wrapper" /></BackgroundDimmer>)}
       </AnimatePresence>
       <div className="timeline-drop-obstacle" ref={ref} />
       <motion.div

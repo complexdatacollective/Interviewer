@@ -38,6 +38,12 @@
   top: 0;
   background-image: linear-gradient(to top, var(--background), transparent 10rem);
 
+  .settings-menu-button {
+    position: absolute;
+    top: unit(4);
+    left: unit(4);
+  }
+
   &--show-sessions {
     .setup__header {
       opacity: 0;

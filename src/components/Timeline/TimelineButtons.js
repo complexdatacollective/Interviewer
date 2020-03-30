@@ -34,8 +34,6 @@ const TimelineButtons = (props) => {
       useInvertedScale
       style={{ scaleX, scaleY }}
     >
-      {/* <SettingsMenu /> */}
-
       <motion.div
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}

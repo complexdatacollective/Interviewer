@@ -11,7 +11,7 @@
   &:hover {
     &:not(.menu-timeline-stage--current) {
       cursor: pointer;
-      background: var(--light-background);
+      background: var(--color-slate-blue);
     }
   }
 
@@ -37,6 +37,9 @@
     display: flex;
     align-items: center;
     font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
   }
 }
 
@@ -55,19 +58,10 @@
   padding: unit(4);
   text-align: right;
 
-  &__button {
-    height: 6rem;
-    width: 6rem;
-    border-radius: 100%;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    svg {
-      height: 2.5rem;
-      width: 2.5rem;
-    }
+  .close-button-wrapper {
+    position: absolute;
+    top: unit(4);
+    right: unit(4);
   }
 }
 

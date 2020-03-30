@@ -28,23 +28,15 @@ $close-button-size: 1rem;
   }
 
   &__close {
-    background: transparent;
-    background-image: url('../images/close.svg');
-    background-repeat: no-repeat;
-    background-size: 100%;
-    background-position: 0 50%;
-    text-transform: uppercase;
-    border: 0;
     position: absolute;
-    height: $close-button-size;
-    width: $close-button-size;
-    right: 2rem;
-    top: 2rem;
-    color: palette('text');
-    cursor: pointer;
+    top: unit(4);
+    right: unit(4);
 
-    &:focus {
-      outline: none;
+    svg {
+      &.icon {
+        height: 2rem;
+        width: 2rem;
+      }
     }
   }
 

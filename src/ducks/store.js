@@ -20,7 +20,6 @@ const persistConfig = {
     'search',
     'activeSessionId',
     'sessions',
-    'ui',
   ],
 };
 

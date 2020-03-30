@@ -131,7 +131,7 @@ const VisualPreferences = (props) => {
           </p>
           <p>
             <em><strong>Windows users:</strong> when in full screen mode you
-            can access the native app menu by passing the <code>alt</code> key.</em>
+            can access the native app menu by pressing the <code>alt</code> key.</em>
           </p>
         </div>
       </motion.article>}

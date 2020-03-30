@@ -92,7 +92,7 @@ const developerToolsHandlers = withHandlers({
     }
     const [typeKey, nodeDefinition] = props.nodeVariableEntry;
     props.generateNodes(nodeDefinition.variables, typeKey, 20, props.additionalMockAttributes);
-    props.toggleMenu();
+    props.closeMenu();
   },
 });
 

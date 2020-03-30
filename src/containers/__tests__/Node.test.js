@@ -50,7 +50,7 @@ const mockState = {
       updatedAt: 1554130548004,
     },
   },
-  ui: { isMenuOpen: false },
+  ui: { settingsMenuOpen: false },
 };
 
 

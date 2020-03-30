@@ -27,7 +27,7 @@ const TimelineStage = ({
       height: 'auto',
       transition: {
         // delay: 0.1 + 0.15,
-        duration: 0.25,
+        duration: baseAnimationDuration / 3,
       },
     },
     normal: {
@@ -36,7 +36,7 @@ const TimelineStage = ({
       opacity: 0,
       height: 0,
       transition: {
-        duration: 0.25,
+        duration: baseAnimationDuration / 3,
       },
     },
   };

@@ -62,7 +62,7 @@ const initialState = {
       updatedAt: 1554130548004,
     },
   },
-  ui: { isMenuOpen: true },
+  ui: { settingsMenuOpen: true },
   router: {
     location: {
       pathname: '',
@@ -93,7 +93,7 @@ const getSubject = store =>
     </Provider>
   ));
 
-const isMenuOpen = subject =>
+const settingsMenuOpen = subject =>
   subject.find('MainMenu').prop('isOpen');
 
 const gotoSettings = subject =>
@@ -104,16 +104,16 @@ const gotoStages = subject =>
 
 describe('<SettingsMenu />', () => {
   it('Close button', () => {
-    const { store } = getMockStore({ ui: { isMenuOpen: true } });
+    const { store } = getMockStore({ ui: { settingsMenuOpen: true } });
     const subject = getSubject(store);
 
-    expect(isMenuOpen(subject)).toBe(true);
+    expect(settingsMenuOpen(subject)).toBe(true);
     subject.find('Icon[name="close"]').at(0).simulate('click');
-    expect(isMenuOpen(subject)).toBe(false);
+    expect(settingsMenuOpen(subject)).toBe(false);
   });
 
   it('Return to start screen button', () => {
-    const { store, actions } = getMockStore({ ui: { isMenuOpen: true } });
+    const { store, actions } = getMockStore({ ui: { settingsMenuOpen: true } });
     const subject = getSubject(store);
 
     subject.find('.main-menu__return-button').at(0).simulate('click');
@@ -127,7 +127,7 @@ describe('<SettingsMenu />', () => {
 
     expect(actions.filter(({ type }) => type === 'END_SESSION').length).toBe(1);
 
-    expect(isMenuOpen(subject)).toBe(false);
+    expect(settingsMenuOpen(subject)).toBe(false);
   });
 
   describe('Settings screen', () => {
@@ -149,7 +149,7 @@ describe('<SettingsMenu />', () => {
       subject.find('Button[children="Add mock nodes"]').at(0).simulate('click');
 
       expect(actions.filter(({ type }) => type === 'ADD_NODE')).toHaveLength(20);
-      expect(isMenuOpen(subject)).toBe(false);
+      expect(settingsMenuOpen(subject)).toBe(false);
     });
   });
 

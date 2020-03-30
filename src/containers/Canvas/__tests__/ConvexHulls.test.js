@@ -45,7 +45,7 @@ describe('Connect(ConvexHulls)', () => {
         updatedAt: 1554130548004,
       },
     },
-    ui: { isMenuOpen: false },
+    ui: { settingsMenuOpen: false },
   };
   const mockProps = {
     subject: {},

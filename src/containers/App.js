@@ -9,6 +9,7 @@ import { actionCreators as deviceSettingsActions } from '../ducks/modules/device
 import '../styles/main.scss';
 import { isElectron, isCordova, isWindows, isMacOS, isLinux, isPreview, getEnv } from '../utils/Environment';
 import DialogManager from '../components/DialogManager';
+import { SettingsMenu } from './SettingsMenu';
 
 /**
   * Main app container.
@@ -82,6 +83,7 @@ class App extends PureComponent {
             app__content: true,
           })}
         >
+          <SettingsMenu />
           { children }
         </div>
         <DialogManager />
