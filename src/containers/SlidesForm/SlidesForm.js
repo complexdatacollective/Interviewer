@@ -4,14 +4,13 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { submit, isValid } from 'redux-form';
 import ReactMarkdown from 'react-markdown';
-import uuid from 'uuid';
 import Swiper from 'react-id-swiper';
 import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
+import useGetFormName from '../../hooks/useGetFormName';
 import { ProgressBar } from '../../components';
 import defaultMarkdownRenderers from '../../utils/markdownRenderers';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { ALLOWED_MARKDOWN_TAGS } from '../../config';
-
 
 const confirmDialog = {
   type: 'Confirm',
@@ -19,8 +18,6 @@ const confirmDialog = {
   message: 'This form contains invalid data, so it cannot be saved. If you continue it will be reset and your changes will be lost. Do you want to discard your changes?',
   confirmLabel: 'Discard changes',
 };
-
-const formPrefix = uuid();
 
 const SlidesForm = (props) => {
   const {
@@ -37,8 +34,7 @@ const SlidesForm = (props) => {
     updateItem,
   } = props;
 
-  const getFormName = uid =>
-    `${formPrefix}_${uid}`;
+  const getFormName = useGetFormName(stage);
 
   const [pendingDirection, setPendingDirection] = useState(null);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -181,7 +177,6 @@ const SlidesForm = (props) => {
             ...form,
             form: formName,
           };
-
 
           return (
             <SlideForm
