@@ -30,6 +30,12 @@
       }
 
       li {
+        @include platform-not-ios {
+          &:hover {
+            background: var(--color-slate-blue--dark);
+          }
+        }
+
         padding: unit(4);
         list-style: none;
         transition: background var(--animation-duration-fast) var(--animation-easing), font-weight var(--animation-duration-fast) var(--animation-easing);
@@ -39,10 +45,6 @@
         font-size: 0.8rem;
         letter-spacing: 0.15em;
         text-transform: uppercase;
-
-        &:hover {
-          background: var(--color-slate-blue--dark);
-        }
 
         &.active {
           background: var(--color-slate-blue);

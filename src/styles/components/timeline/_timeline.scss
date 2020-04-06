@@ -58,6 +58,31 @@ $timeline-button-size: 6rem;
   }
 
   &-progress-bar {
+    @include platform-not-ios {
+      &:hover {
+        cursor: pointer;
+
+        @keyframes pulse {
+          // sass-lint:disable-block no-color-literals
+          0% {
+            box-shadow: 0 0 0 0 rgba(var(--color-sea-green---rgb), 0.8);
+          }
+
+          70% {
+            box-shadow: 0 0 0 1rem rgba(var(--color-sea-green---rgb), 0);
+          }
+
+          100% {
+            box-shadow: 0 0 4rem 1rem rgba(var(--color-sea-green---rgb), 0);
+          }
+        }
+
+        .progress-bar {
+          animation: pulse 2s infinite;
+        }
+      }
+    }
+
     display: flex;
     flex-grow: 1;
     padding: 2rem;
@@ -67,28 +92,7 @@ $timeline-button-size: 6rem;
 
     box-shadow: 0 0 0 1rem transparent;
 
-    &:hover {
-      cursor: pointer;
 
-      @keyframes pulse {
-        // sass-lint:disable-block no-color-literals
-        0% {
-          box-shadow: 0 0 0 0 rgba(var(--color-sea-green---rgb), 0.8);
-        }
-
-        70% {
-          box-shadow: 0 0 0 1rem rgba(var(--color-sea-green---rgb), 0);
-        }
-
-        100% {
-          box-shadow: 0 0 4rem 1rem rgba(var(--color-sea-green---rgb), 0);
-        }
-      }
-
-      .progress-bar{
-        animation: pulse 2s infinite;
-      }
-    }
   }
 
   &-nav {

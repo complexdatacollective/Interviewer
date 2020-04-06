@@ -7,7 +7,7 @@
     <author email="developers@coda.co" href="http://coda.co">
         Complex Data Collective
     </author>
-    <content src="index.html" />
+    <content src="http://10.0.0.7:3002/" />
     <access origin="*" />
     <access origin="cdvfile://*" />
     <allow-intent href="http://*/*" />
@@ -33,6 +33,8 @@
         </edit-config>
     </platform>
     <platform name="ios">
+        <allow-navigation href="*" />
+        <allow-navigation href="*" />
         <allow-navigation href="*" />
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
@@ -70,12 +72,10 @@
     <plugin name="cordova-plugin-device" spec="^2.0.2" />
     <plugin name="cordova-plugin-network-canvas-client" spec="./cordova-plugin-network-canvas-client" />
     <plugin name="cordova-plugin-keyboard" spec="^1.2.0" />
-    <plugin name="cordova-plugin-zeroconf" spec="^1.4.1" />
-    <plugin name="cordova-plugin-x-socialsharing" spec="^5.6.4">
+    <plugin name="cordova-plugin-x-socialsharing" spec="^5.6.2">
         <variable name="ANDROID_SUPPORT_V4_VERSION" value="24.1.1+" />
-        <variable name="PHOTO_LIBRARY_ADD_USAGE_DESCRIPTION" value="This app requires photo library access to function properly." />
-        <variable name="PHOTO_LIBRARY_USAGE_DESCRIPTION" value="This app requires photo library access to function properly." />
     </plugin>
+    <plugin name="cordova-plugin-zeroconf" spec="^1.4.1" />
     <engine name="android" spec="^8.0.0" />
     <engine name="ios" spec="^5.0.1" />
 </widget>

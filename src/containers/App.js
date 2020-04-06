@@ -7,7 +7,7 @@ import cx from 'classnames';
 import 'swiper/css/swiper.css';
 import { actionCreators as deviceSettingsActions } from '../ducks/modules/deviceSettings';
 import '../styles/main.scss';
-import { isElectron, isCordova, isWindows, isMacOS, isLinux, isPreview, getEnv } from '../utils/Environment';
+import { isElectron, isCordova, isWindows, isMacOS, isLinux, isPreview, getEnv, isIOS, isAndroid } from '../utils/Environment';
 import DialogManager from '../components/DialogManager';
 import { SettingsMenu } from './SettingsMenu';
 
@@ -72,6 +72,8 @@ class App extends PureComponent {
         'app--electron': isElectron(),
         'app--windows': isWindows(),
         'app--macos': isMacOS(),
+        'app--ios': isIOS(),
+        'app-android': isAndroid(),
         'app--linux': isLinux(),
         'app--preview': isPreview(),
       })}

@@ -19,7 +19,7 @@
   }
 
   .item {
-    padding: 2.4rem 2.4rem;
+    padding: unit(4);
     transition: background var(--animation-duration-fast) var(--animation-easing), font-weight var(--animation-duration-fast) var(--animation-easing);
     cursor: pointer;
     font-weight: 700;
@@ -29,14 +29,16 @@
 
     svg {
       &.icon {
-        height: 1.5rem !important;
-        width: 1.5rem !important;
+        height: 1.5rem !important; // sass-lint:disable-line no-important
+        width: 1.5rem !important; // sass-lint:disable-line no-important
         margin-right: 1rem;
       }
     }
 
-    &:hover {
-      background: var(--color-slate-blue--dark);
+    @include platform-not-ios {
+      &:hover {
+        background: var(--color-slate-blue--dark);
+      }
     }
   }
 

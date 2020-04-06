@@ -3,17 +3,19 @@
 }
 
 .menu-timeline-stage {
+  @include platform-not-ios {
+    &:hover {
+      &:not(.menu-timeline-stage--current) {
+        cursor: pointer;
+        background: var(--color-slate-blue);
+      }
+    }
+  }
+
   display: flex;
   align-items: stretch;
   padding: 0 unit(4);
   transition: background var(--animation-easing) var(--animation-duration-fast);
-
-  &:hover {
-    &:not(.menu-timeline-stage--current) {
-      cursor: pointer;
-      background: var(--color-slate-blue);
-    }
-  }
 
   &--current {
     background: var(--primary);
