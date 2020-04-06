@@ -64,21 +64,23 @@ $module-name: prompts;
       font-family: var(--heading-font-family);
 
       p {
+        @include platform-not-ios {
+          &::after {
+            content: '';
+            text-align: right;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 70%;
+            height: 1.3em;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0) 70%, var(--background) 90%); //sass-lint:disable-line no-color-literals
+          }
+        }
+
         margin: 0;
         line-height: 1.25;
         height: 6rem;
         overflow: hidden;
-
-        &::after {
-          content: '';
-          text-align: right;
-          position: absolute;
-          bottom: 0;
-          right: 0;
-          width: 70%;
-          height: 1.3em;
-          background: linear-gradient(to right, rgba(255, 255, 255, 0) 70%, var(--background) 90%); //sass-lint:disable-line no-color-literals
-        }
       }
     }
   }

@@ -49,13 +49,13 @@ const SubMenu = (props) => {
     >
       <article className="sub-menu__wrapper">
         <div className="sub-menu__items">
-          <div className="item" onClick={() => setShowSubMenu(false)}>
-            <Icon name="menu-default-interface" />
-            Interview Stages
-          </div>
           <div className="item" onClick={() => { openSettingsMenu(); props.setExpanded(false); }}>
             <Icon name="settings" />
             Device Settings
+          </div>
+          <div className="item" onClick={() => setShowSubMenu(false)}>
+            <Icon name="menu-default-interface" />
+            Interview Stages
           </div>
         </div>
         <div className="sub-menu__exit">
