@@ -18,6 +18,8 @@ const VisualPreferences = (props) => {
     toggleUseFullScreenForms,
     toggleStartFullScreen,
     toggleShowScrollbars,
+    setInterfaceScale,
+    interfaceScale,
   } = props;
 
   const getElectronWindow = () => {
@@ -45,28 +47,23 @@ const VisualPreferences = (props) => {
   return (
     <React.Fragment>
       <motion.article variants={TabItemVariants} className="settings-element">
-        {/* <input
-          type="range"
-          name="scaleFactor"
-          min="80"
-          max="160"
-          value={interfaceScale}
-          onChange:{(e) => { setInterfaceScale(parseInt(e.target.value, 10)); }}
-          onChange={handleChangeToggle}
-          step="5"
-        /> */}
         <div className="form-field-container">
           <div className="form-field">
-            <select name="scaleFactor" className="select-css">
+            <select
+              name="scaleFactor"
+              className="select-css"
+              value={interfaceScale}
+              onChange={(e) => { setInterfaceScale(parseInt(e.target.value, 10)); }}
+            >
               <option value="80">80%</option>
               <option value="90">90%</option>
-              <option value="100" selected>100%</option>
+              <option value="95">95%</option>
+              <option value="100">100%</option>
+              <option value="105">105%</option>
               <option value="110">110%</option>
+              <option value="115">115%</option>
               <option value="120">120%</option>
               <option value="130">130%</option>
-              <option value="140">140%</option>
-              <option value="150">150%</option>
-              <option value="160">160%</option>
             </select>
           </div>
         </div>

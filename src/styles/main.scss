@@ -24,7 +24,7 @@ $scroller-top-padding-small: 1rem;
 :root {
   --body-font-family: #{$netcanvas-font-stack}; // override Network Canvas UI
   --code-font: courier;
-  --timeline-width: 8rem;
+  --timeline-width: 9rem; // Does *not* change actual timeline width (which is automatically calculated). Used for drop obstacle and stage margins
   --interface-prompt-flex-basis: 8rem;
   --interface-right-margin: 2rem;
   --base-font-size: 1.75vmin;
@@ -42,7 +42,7 @@ body {
   color: palette('text');
   background: palette('background');
   width: 100%;
-  height: 100%;
+  height: 100vh;
 }
 
 a {
