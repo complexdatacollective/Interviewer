@@ -1,6 +1,7 @@
 import path from 'path';
 import { isElectron, isCordova } from './Environment';
 import { archive } from './archive';
+import GraphMLFormatter from './network-exporters/graphml/GraphMLFormatter';
 
 const saveFile = (data, openErrorDialog, filterName, extensions, defaultFileName, fileType,
   shareOptions) => {
@@ -124,4 +125,170 @@ const saveFile = (data, openErrorDialog, filterName, extensions, defaultFileName
   }
 };
 
+
+const getFileSystem = () => new Promise((resolve, reject) => {
+  window.requestFileSystem(
+    window.LocalFileSystem.TEMPORARY,
+    5 * 1024 * 1024,
+    fileSystem => resolve(fileSystem),
+    err => reject(err),
+  );
+});
+
+const getFile = (filename, fileSystem) => new Promise((resolve, reject) => {
+  fileSystem.root.getFile(filename, { create: true, exclusive: false },
+    fileEntry => resolve(fileEntry),
+    err => reject(err),
+  );
+});
+
+const createWriter = fileEntry => new Promise((resolve, reject) => {
+  fileEntry.createWriter(
+    fileWriter => resolve({
+      fileWriter,
+      filename: fileEntry.fullPath,
+      fileURL: fileEntry.toURL(),
+    }),
+    err => reject(err),
+  );
+});
+
+const writeFile = (fileWriter, filename, data, fileType) => new Promise((resolve, reject) => {
+  const blob = new Blob([data], { type: fileType });
+  fileWriter.seek(0);
+  fileWriter.onwrite = () => resolve(filename); // eslint-disable-line no-param-reassign
+  fileWriter.onerror = err => reject(err); // eslint-disable-line no-param-reassign
+  fileWriter.write(blob);
+  return filename;
+});
+
+const exportCordovaFile = (fs, session, sessionId, sessionCodebook, fileType) => {
+  let data;
+  const formatter = new GraphMLFormatter(session.network, false, false, sessionCodebook);
+  return new Promise((resolve, reject) => {
+    formatter.writeToString()
+      .then((value) => {
+        data = value;
+        return getFile(`${session.caseId}_${sessionId}.graphml`, fs);
+      })
+      .then(fileEntry => createWriter(fileEntry))
+      .then(({ fileWriter, filename }) => resolve(writeFile(fileWriter, filename, data, fileType)))
+      .catch(err => reject(err));
+  });
+};
+
+const saveZippedSessionsCordova = (exportedSessionIds, sessions, installedProtocols) => {
+  const defaultFileName = 'networkCanvasExport.zip';
+  const fileType = 'text/xml';
+  const shareOptions = { message: 'Your network canvas zip file.', subject: 'network canvas export' };
+
+  let fileSystem;
+  let dataFilenames;
+  return new Promise((resolve, reject) => {
+    getFileSystem()
+      .then((fs) => {
+        fileSystem = fs;
+        const promisedExports = exportedSessionIds.map((sessionId) => {
+          const session = sessions[sessionId];
+          const sessionProtocolUID = session.protocolUID;
+          const sessionCodebook = installedProtocols[sessionProtocolUID].codebook;
+
+          // export one file at a time
+          return exportCordovaFile(fs, session, sessionId, sessionCodebook, fileType);
+        });
+        // collect exported temp file names
+        return Promise.all(promisedExports);
+      })
+      .then((files) => {
+        dataFilenames = files;
+        return getFile(defaultFileName, fileSystem);
+      })
+      .then(fe => createWriter(fe))
+      .then(({ fileWriter, fileURL }) => archive(dataFilenames, fileURL, fileWriter, fileSystem))
+      .then((shareURL) => {
+        const options = {
+          message: 'Your network canvas file.', // not supported on some apps
+          subject: 'network canvas export',
+          files: [shareURL],
+          chooserTitle: 'Share file via', // Android only
+          ...shareOptions,
+        };
+        window.plugins.socialsharing.shareWithOptions(options);
+      })
+      .then(() => resolve(dataFilenames))
+      .catch(err => reject(err));
+  });
+};
+
+const unlink = (filePath, fs) => (new Promise((resolve, reject) => {
+  try {
+    fs.unlink(filePath, (err, ...args) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(...args);
+      }
+    });
+  } catch (err) { reject(err); }
+}));
+
+const exportElectronFile = (fs, session, sessionId, sessionCodebook, tempPath) => {
+  const dataFileName = path.join(tempPath, `${session.caseId}_${sessionId}.graphml`);
+  const formatter = new GraphMLFormatter(session.network, false, false, sessionCodebook);
+
+  return new Promise((resolve, reject) => {
+    const writeStream = fs.createWriteStream(dataFileName);
+    writeStream.on('finish', () => resolve(dataFileName));
+    writeStream.on('error', err => reject(err));
+    formatter.writeToStream(writeStream);
+  });
+};
+
+const saveZippedSessionsElectron = (exportedSessionIds, sessions, installedProtocols) => {
+  // eslint-disable-next-line global-require
+  const electron = require('electron');
+  const fs = window.require('fs');
+  const { dialog, shell } = window.require('electron').remote;
+  const tempPath = (electron.app || electron.remote.app).getPath('temp');
+
+  const defaultFileName = 'networkCanvasExport.zip';
+
+  return new Promise((resolve, reject) => {
+    dialog.showSaveDialog({
+      filters: [{ name: 'zip', extensions: ['zip'] }],
+      defaultPath: defaultFileName,
+    }, (filename) => {
+      if (filename === undefined) return;
+
+      const promisedExports = exportedSessionIds.map((sessionId) => {
+        const session = sessions[sessionId];
+        const sessionProtocolUID = session.protocolUID;
+        const sessionCodebook = installedProtocols[sessionProtocolUID].codebook;
+
+        // export one file at a time
+        return exportElectronFile(fs, session, sessionId, sessionCodebook, tempPath);
+      });
+
+      Promise.all(promisedExports)
+        .then(savedDataFile => archive(savedDataFile, filename))
+        // .then(() => unlink(dataFileName))
+        .then(() => shell.showItemInFolder(filename))
+        .then(resolve)
+        .catch(err => reject(err));
+    });
+  });
+};
+
+const saveZippedSessions = (exportedSessionIds, sessions, installedProtocols) => {
+  if (isElectron()) { // electron save dialog
+    return saveZippedSessionsElectron(exportedSessionIds, sessions, installedProtocols);
+  } else if (isCordova()) {
+    return saveZippedSessionsCordova(exportedSessionIds, sessions, installedProtocols);
+  }
+
+  return Promise.reject('Export not supported on this platform.');
+};
+
 export default saveFile;
+
+export { saveZippedSessions };

@@ -16,6 +16,7 @@ import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import Overlay from '../Overlay';
 import { asExportableNetwork } from '../../utils/networkFormat';
 import PairedServerWrapper from '../../components/Setup/PairedServerWrapper';
+import { saveZippedSessions } from '../../utils/SaveFile';
 
 /**
  * The remote protocol ID on any instance of Server is the hex-encoded sha256 of its [unique] name.
@@ -182,6 +183,18 @@ class ExportSessionsOverlay extends PureComponent {
     });
   }
 
+  exportToFile = (exportedSessions) => {
+    this.setState({ showExportProgress: true, exportFinished: false });
+
+    saveZippedSessions(
+      exportedSessions,
+      this.props.sessions,
+      this.props.installedProtocols,
+      this.handleExportError,
+    )
+      .then(() => { this.setState({ exportFinished: true }); });
+  };
+
   contentAreas() {
     const {
       manualEntry,
@@ -254,11 +267,7 @@ class ExportSessionsOverlay extends PureComponent {
         <div
           className="tab"
           onClick={() => {
-            this.props.openDialog({
-              type: 'Notice',
-              title: 'Not yet available',
-              message: "This feature is not yet available. If you need to export an interview as a file, please use the 'finish session' screen from within the interview.",
-            });
+            this.exportToFile(this.props.sessionsToExport);
           }}
         >
           Export to File
