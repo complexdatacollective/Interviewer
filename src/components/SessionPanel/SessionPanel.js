@@ -3,17 +3,18 @@ import { compose } from 'recompose';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getCSSVariableAsNumber, getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
 import { DropObstacle } from '../../behaviours/DragAndDrop';
-import { StagesMenu, SubMenu } from '../../containers/Timeline';
+import StagesMenu from '../StagesMenu/StagesMenu';
+import SubMenu from './SubMenu';
 import BackgroundDimmer from '../BackgroundDimmer';
-import TimelineButtons from './TimelineButtons';
+import SessionNavigation from './SessionNavigation';
 import CloseButton from '../CloseButton';
 
-export const baseAnimationDuration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
-export const baseAnimationEasing = getCSSVariableAsString('--animation-easing-json');
-
-const Timeline = React.forwardRef((props, ref) => {
+const SessionPanel = React.forwardRef((props, ref) => {
   const [expanded, setExpanded] = useState(false);
   const [showSubMenu, setShowSubMenu] = useState(false);
+
+  const baseAnimationDuration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
+  const baseAnimationEasing = getCSSVariableAsString('--animation-easing-json');
 
   const resetMenuState = () => {
     setExpanded(false);
@@ -38,13 +39,13 @@ const Timeline = React.forwardRef((props, ref) => {
         }}
       >
         { expanded ? menuContent : (
-          <TimelineButtons
+          <SessionNavigation
             onClickNext={props.onClickNext}
             onClickBack={props.onClickBack}
             percentProgress={props.percentProgress}
             setExpanded={setExpanded}
             setShowSubMenu={setShowSubMenu}
-            key="timelinebuttons"
+            key="SessionNavigation"
           />
         ) }
       </motion.div>
@@ -52,8 +53,8 @@ const Timeline = React.forwardRef((props, ref) => {
   );
 });
 
-export { Timeline };
+export { SessionPanel };
 
 export default compose(
   DropObstacle,
-)(Timeline);
+)(SessionPanel);

@@ -3,11 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
-import Scroller from '../../components/Scroller';
+import Scroller from '../Scroller';
 import VisualPreferences from './Sections/VisualPreferences';
 import DeviceSettings from './Sections/DeviceSettings';
 import DeveloperTools from './Sections/DeveloperTools';
-import CloseButton from '../../components/CloseButton';
+import CloseButton from '../CloseButton';
 import getVersion from '../../utils/getVersion';
 
 

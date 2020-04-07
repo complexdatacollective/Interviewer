@@ -3,7 +3,7 @@ import { Icon } from '@codaco/ui';
 import { connect } from 'react-redux';
 import { motion, useInvertedScale } from 'framer-motion';
 import { compose } from 'recompose';
-import { baseAnimationDuration, baseAnimationEasing } from '../../components/Timeline/Timeline';
+import { getCSSVariableAsNumber, getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
 
@@ -15,6 +15,9 @@ const SubMenu = (props) => {
   } = props;
 
   const { scaleX, scaleY } = useInvertedScale();
+
+  const baseAnimationDuration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
+  const baseAnimationEasing = getCSSVariableAsString('--animation-easing-json');
 
   const variants = {
     normal: {

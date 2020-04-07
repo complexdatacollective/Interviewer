@@ -9,7 +9,7 @@ import { actionCreators as deviceSettingsActions } from '../ducks/modules/device
 import '../styles/main.scss';
 import { isElectron, isCordova, isWindows, isMacOS, isLinux, isPreview, getEnv, isIOS, isAndroid } from '../utils/Environment';
 import DialogManager from '../components/DialogManager';
-import { SettingsMenu } from './SettingsMenu';
+import { SettingsMenu } from '../components/SettingsMenu';
 
 /**
   * Main app container.

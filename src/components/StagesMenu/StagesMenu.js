@@ -3,62 +3,65 @@ import { Text } from '@codaco/ui/lib/components/Fields';
 import { connect } from 'react-redux';
 import { motion, useInvertedScale, AnimatePresence } from 'framer-motion';
 import { compose } from 'recompose';
+import { getCSSVariableAsNumber, getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
 import { getProtocolStages } from '../../selectors/protocol';
-import { Scroller } from '../../components';
-import TimelineStage from './TimelineStage';
-import { baseAnimationDuration, baseAnimationEasing } from '../../components/Timeline/Timeline';
+import { Scroller } from '..';
+import StagePreview from './StagePreview';
 import { currentStageIndex } from '../../utils/matchSessionPath';
-
-const variants = {
-  normal: {
-    opacity: 0,
-    transition: {
-      duration: baseAnimationDuration,
-      easing: baseAnimationEasing,
-      staggerChildren: 0.05,
-      staggerDirection: -1,
-    },
-  },
-  expanded: {
-    opacity: 1,
-    transition: {
-      when: 'beforeChildren',
-      staggerChildren: 0.075,
-      // delayChildren: 0.2,
-      // delay: 0.2,
-      duration: baseAnimationDuration,
-      easing: baseAnimationEasing,
-    },
-  },
-};
-
-const timelineVariants = {
-  expanded: {
-    x: 0,
-    opacity: 1,
-    transition: {
-      when: 'beforeChildren',
-      duration: baseAnimationDuration,
-      easing: baseAnimationEasing,
-    },
-  },
-  normal: {
-    x: '-5rem',
-    opacity: 0,
-    transition: {
-      // when: 'afterChildren',
-      duration: baseAnimationDuration,
-      easing: baseAnimationEasing,
-    },
-  },
-};
 
 const StagesMenu = (props) => {
   const [filter, setFilter] = useState('');
   const [imageLoaded, updateImageLoaded] = useState(false);
   const { scaleX, scaleY } = useInvertedScale();
   const scrollerRef = useRef(null);
+
+  const baseAnimationDuration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
+  const baseAnimationEasing = getCSSVariableAsString('--animation-easing-json');
+
+  const variants = {
+    normal: {
+      opacity: 0,
+      transition: {
+        duration: baseAnimationDuration,
+        easing: baseAnimationEasing,
+        staggerChildren: 0.05,
+        staggerDirection: -1,
+      },
+    },
+    expanded: {
+      opacity: 1,
+      transition: {
+        when: 'beforeChildren',
+        staggerChildren: 0.075,
+        // delayChildren: 0.2,
+        // delay: 0.2,
+        duration: baseAnimationDuration,
+        easing: baseAnimationEasing,
+      },
+    },
+  };
+
+  const timelineVariants = {
+    expanded: {
+      x: 0,
+      opacity: 1,
+      transition: {
+        when: 'beforeChildren',
+        duration: baseAnimationDuration,
+        easing: baseAnimationEasing,
+      },
+    },
+    normal: {
+      x: '-5rem',
+      opacity: 0,
+      transition: {
+        // when: 'afterChildren',
+        duration: baseAnimationDuration,
+        easing: baseAnimationEasing,
+      },
+    },
+  };
 
   const scrollToLocation = (amount) => {
     if (scrollerRef && scrollerRef.current) {
@@ -89,7 +92,7 @@ const StagesMenu = (props) => {
         positionTransition={positionTransition}
         className="menu-timeline-stage-preview"
       >
-        <TimelineStage
+        <StagePreview
           item={item}
           index={index}
           active={isActive}

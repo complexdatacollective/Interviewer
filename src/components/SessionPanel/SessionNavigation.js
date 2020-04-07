@@ -1,9 +1,9 @@
 import React from 'react';
 import { Icon } from '@codaco/ui';
 import { motion, useInvertedScale } from 'framer-motion';
-import { ProgressBar } from '../';
+import { ProgressBar } from '..';
 
-const TimelineButtons = (props) => {
+const SessionNavigation = (props) => {
   const {
     onClickBack,
     onClickNext,
@@ -87,4 +87,4 @@ const TimelineButtons = (props) => {
   );
 };
 
-export default TimelineButtons;
+export default SessionNavigation;
