@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { compose } from 'recompose';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getCSSVariableAsNumber, getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
@@ -29,10 +30,10 @@ const SessionPanel = React.forwardRef((props, ref) => {
       <AnimatePresence>
         { expanded && (<BackgroundDimmer clickHandler={resetMenuState} ><CloseButton onClick={() => setExpanded(false)} className="close-button-wrapper" /></BackgroundDimmer>)}
       </AnimatePresence>
-      <div className="timeline-drop-obstacle" ref={ref} />
+      <div className="session-panel-drop-obstacle" ref={ref} />
       <motion.div
-        className="timeline"
-        key="timeline"
+        className="session-panel"
+        key="session-panel"
         layoutTransition={{
           duration: baseAnimationDuration,
           easing: baseAnimationEasing,
@@ -45,13 +46,19 @@ const SessionPanel = React.forwardRef((props, ref) => {
             percentProgress={props.percentProgress}
             setExpanded={setExpanded}
             setShowSubMenu={setShowSubMenu}
-            key="SessionNavigation"
+            key="session-navigation"
           />
         ) }
       </motion.div>
     </React.Fragment>
   );
 });
+
+SessionPanel.propTypes = {
+  onClickNext: PropTypes.func.isRequired,
+  onClickBack: PropTypes.func.isRequired,
+  percentProgress: PropTypes.number.isRequired,
+};
 
 export { SessionPanel };
 

@@ -46,11 +46,14 @@
 @import 'ordinal-bins';
 @import 'progress-bar';
 
+// Session Panel
+@import './session-panel/all';
+
 // Settings Menu
-@import 'settings-menu';
+@import './settings-menu/all';
 
 // Stages Menu
-@import 'timeline';
+@import './stages-menu/all';
 
 @import 'categorical-list';
 @import 'categorical-item';

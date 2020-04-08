@@ -2,10 +2,10 @@
   --timeline-color: var(--color-neon-coral);
 }
 
-.menu-timeline-stage {
+.stage-preview {
   @include platform-not-ios {
     &:hover {
-      &:not(.menu-timeline-stage--current) {
+      &:not(.stage-preview--current) {
         cursor: pointer;
         background: var(--color-slate-blue);
       }
@@ -19,11 +19,9 @@
 
   &--current {
     background: var(--primary);
-    // margin: 1rem 0;
-    // padding: 1rem 2rem;
   }
 
-  &__preview {
+  &__image {
     flex: 0 0 8rem;
     margin: 1rem 2rem 1rem 0;
 
@@ -67,10 +65,10 @@
   }
 }
 
-.menu-timeline-stage-preview {
+.stages-menu__preview-wrapper {
   display: flex;
 
-  .menu-timeline-stage-notch {
+  .stage-preview__notch {
     flex: 0 0 1.5rem;
     position: relative;
     margin-right: 1rem;
@@ -104,7 +102,7 @@
   }
 
   &:first-child {
-    .menu-timeline-stage-notch {
+    .stage-preview__notch {
       &::before {
         height: 50%;
         top: 50%;
@@ -113,7 +111,7 @@
   }
 
   &:last-child {
-    .menu-timeline-stage-notch {
+    .stage-preview__notch {
       &::before {
         height: 50%;
       }
@@ -121,7 +119,7 @@
   }
 
   &:only-child {
-    .menu-timeline-stage-notch {
+    .stage-preview__notch {
       &::before {
         display: none;
       }

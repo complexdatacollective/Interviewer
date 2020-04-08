@@ -22,25 +22,22 @@ const StagePreview = ({
   onImageLoaded,
   active,
 }) => {
-  const classes = cx('menu-timeline-stage', {
-    'menu-timeline-stage--current': active,
+  const classes = cx('stage-preview', {
+    'stage-preview--current': active,
   });
 
   const baseAnimationDuration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
 
   const timelineVariants = {
     expanded: {
-      // scaleY: 1,
       y: 0,
       opacity: 1,
       height: 'auto',
       transition: {
-        // delay: 0.1 + 0.15,
         duration: baseAnimationDuration / 3,
       },
     },
     normal: {
-      // scaleY: 0.05,
       y: '-100%',
       opacity: 0,
       height: 0,
@@ -58,11 +55,11 @@ const StagePreview = ({
       data-stage-id={index}
     >
       <motion.div
-        className="menu-timeline-stage-notch"
+        className="stage-preview__notch"
         variants={timelineVariants}
         key={id}
       />
-      <div className="menu-timeline-stage__preview">
+      <div className="stage-preview__image">
         <img
           src={getTimelineImage(type)}
           alt="NameGenerator Interface"
@@ -70,7 +67,7 @@ const StagePreview = ({
           onLoad={onImageLoaded}
         />
       </div>
-      <div className="menu-timeline-stage__label">{index + 1}. {label}</div>
+      <div className="stage-preview__label">{index + 1}. {label}</div>
     </div>
   );
 };

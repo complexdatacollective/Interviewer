@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Icon } from '@codaco/ui';
 import { connect } from 'react-redux';
 import { motion, useInvertedScale } from 'framer-motion';
@@ -10,6 +11,7 @@ import { actionCreators as uiActions } from '../../ducks/modules/ui';
 const SubMenu = (props) => {
   const {
     setShowSubMenu,
+    setExpanded,
     openSettingsMenu,
     endSession,
   } = props;
@@ -34,8 +36,6 @@ const SubMenu = (props) => {
       transition: {
         when: 'beforeChildren',
         staggerChildren: 0.075,
-        // delayChildren: 0.2,
-        // delay: 0.2,
         duration: baseAnimationDuration,
         easing: baseAnimationEasing,
       },
@@ -52,7 +52,7 @@ const SubMenu = (props) => {
     >
       <article className="sub-menu__wrapper">
         <div className="sub-menu__items">
-          <div className="item" onClick={() => { openSettingsMenu(); props.setExpanded(false); }}>
+          <div className="item" onClick={() => { openSettingsMenu(); setExpanded(false); }}>
             <Icon name="settings" />
             Device Settings
           </div>
@@ -78,6 +78,13 @@ const mapDispatchToProps = dispatch => ({
   endSession: () => dispatch(sessionActions.endSession()),
   openSettingsMenu: () => dispatch(uiActions.update({ settingsMenuOpen: true })),
 });
+
+SubMenu.propTypes = {
+  setShowSubMenu: PropTypes.func.isRequired,
+  setExpanded: PropTypes.func.isRequired,
+  openSettingsMenu: PropTypes.func.isRequired,
+  endSession: PropTypes.func.isRequired,
+};
 
 export default compose(
   connect(null, mapDispatchToProps),

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
@@ -9,26 +10,6 @@ import DeviceSettings from './Sections/DeviceSettings';
 import DeveloperTools from './Sections/DeveloperTools';
 import CloseButton from '../CloseButton';
 import getVersion from '../../utils/getVersion';
-
-
-const tabVariants = {
-  hidden: {
-    opacity: 0,
-    transition: {
-      // when: 'afterChildren',
-      staggerChildren: 0.05,
-      staggerDirection: -1,
-    },
-  },
-  visible: {
-    opacity: 1,
-    transition: {
-      // when: 'beforeChildren',
-      staggerChildren: 0.05,
-      delayChildren: 0.2,
-    },
-  },
-};
 
 const SettingsMenu = (props) => {
   const {
@@ -42,6 +23,23 @@ const SettingsMenu = (props) => {
     Pairing: DeveloperTools,
     'Visual Preferences': VisualPreferences,
     'Developer Options': DeveloperTools,
+  };
+
+  const tabVariants = {
+    hidden: {
+      opacity: 0,
+      transition: {
+        staggerChildren: 0.05,
+        staggerDirection: -1,
+      },
+    },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.05,
+        delayChildren: 0.2,
+      },
+    },
   };
 
   const [activeTab, setActiveTab] = useState('General Settings');
@@ -85,9 +83,9 @@ const SettingsMenu = (props) => {
     <React.Fragment>
       { settingsMenuOpen && (
         <div
-          className="main-menu settings-menu"
+          className="settings-menu"
         >
-          <article className="main-menu__wrapper settings-menu__wrapper">
+          <article className="settings-menu__wrapper">
             <nav>
               <ul>
                 { renderNavigation }
@@ -115,6 +113,11 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   closeMenu: () => dispatch(uiActions.update({ settingsMenuOpen: false })),
 });
+
+SettingsMenu.propTypes = {
+  closeMenu: PropTypes.func.isRequired,
+  settingsMenuOpen: PropTypes.bool.isRequired,
+};
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),

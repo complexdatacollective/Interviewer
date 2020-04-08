@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Icon } from '@codaco/ui';
 import { motion, useInvertedScale } from 'framer-motion';
 import { ProgressBar } from '..';
@@ -25,19 +26,19 @@ const SessionNavigation = (props) => {
 
   return (
     <motion.div
-      key="menu"
+      key="session-navigation"
       variants={variants}
       initial="expanded"
       exit="expanded"
       animate="normal"
-      className="timeline-content"
+      className="session-navigation"
       useInvertedScale
       style={{ scaleX, scaleY }}
     >
       <motion.div
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
-        className="timeline-nav"
+        className="session-navigation__button"
         onClick={() => {
           setShowSubMenu(true);
           setExpanded(true);
@@ -48,7 +49,7 @@ const SessionNavigation = (props) => {
       <motion.div
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
-        className="timeline-nav timeline-nav--back"
+        className="session-navigation__button session-navigation__button--back"
       >
         <Icon
           onClick={(e) => {
@@ -62,7 +63,7 @@ const SessionNavigation = (props) => {
         />
       </motion.div>
       <motion.div
-        className="timeline-progress-bar"
+        className="session-navigation__progress-bar"
         onClick={() => setExpanded(prevState => !prevState)}
       >
         <ProgressBar
@@ -72,7 +73,7 @@ const SessionNavigation = (props) => {
       <motion.div
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
-        className="timeline-nav timeline-nav--next"
+        className="session-navigation__button session-navigation__button--next"
         onClick={(e) => {
           if (e) {
             e.stopPropagation();
@@ -85,6 +86,14 @@ const SessionNavigation = (props) => {
       </motion.div>
     </motion.div>
   );
+};
+
+SessionNavigation.propTypes = {
+  onClickNext: PropTypes.func.isRequired,
+  onClickBack: PropTypes.func.isRequired,
+  percentProgress: PropTypes.number.isRequired,
+  setExpanded: PropTypes.func.isRequired,
+  setShowSubMenu: PropTypes.func.isRequired,
 };
 
 export default SessionNavigation;

@@ -34,8 +34,6 @@ const StagesMenu = (props) => {
       transition: {
         when: 'beforeChildren',
         staggerChildren: 0.075,
-        // delayChildren: 0.2,
-        // delay: 0.2,
         duration: baseAnimationDuration,
         easing: baseAnimationEasing,
       },
@@ -56,7 +54,6 @@ const StagesMenu = (props) => {
       x: '-5rem',
       opacity: 0,
       transition: {
-        // when: 'afterChildren',
         duration: baseAnimationDuration,
         easing: baseAnimationEasing,
       },
@@ -90,7 +87,7 @@ const StagesMenu = (props) => {
         exit="normal"
         key={item.id}
         positionTransition={positionTransition}
-        className="menu-timeline-stage-preview"
+        className="stages-menu__preview-wrapper"
       >
         <StagePreview
           item={item}
@@ -120,7 +117,7 @@ const StagesMenu = (props) => {
     // know of one!
 
     if (!filter) {
-      const itemHeight = document.getElementsByClassName('menu-timeline-stage')[0].clientHeight;
+      const itemHeight = document.getElementsByClassName('stages-menu__preview-wrapper')[0].clientHeight;
       scrollToLocation(props.currentStageIndex * itemHeight, 0.2);
     }
   }, [imageLoaded]);
@@ -136,31 +133,30 @@ const StagesMenu = (props) => {
       style={{ scaleX, scaleY }}
     >
       <article className="stages-menu__wrapper">
-        <div className="menu-timeline">
-          {renderMenuItems.length > 0 ? (
-            <Scroller useSmoothScrolling={false} forwardedRef={scrollerRef}>
-              <AnimatePresence>
-                { renderMenuItems }
-              </AnimatePresence>
-            </Scroller>
-          ) : (
-            <h4>No stages match your filter.</h4>
-          )}
-        </div>
-        <motion.footer
-          animate={{ y: 0 }}
-          initial={{ y: '100%' }}
-          transition={{ duration: baseAnimationDuration, delay: baseAnimationDuration }}
-        >
-          <Text
-            type="search"
-            placeholder="Filter..."
-            input={{
-              onChange: onFilterChange,
-            }}
-          />
-        </motion.footer>
+        {renderMenuItems.length > 0 ? (
+          <Scroller useSmoothScrolling={false} forwardedRef={scrollerRef}>
+            <AnimatePresence>
+              { renderMenuItems }
+            </AnimatePresence>
+          </Scroller>
+        ) : (
+          <h4>No stages match your filter.</h4>
+        )}
       </article>
+      <motion.footer
+        animate={{ y: 0 }}
+        initial={{ y: '100%' }}
+        transition={{ duration: baseAnimationDuration, delay: baseAnimationDuration }}
+        className="stages-menu__footer"
+      >
+        <Text
+          type="search"
+          placeholder="Filter..."
+          input={{
+            onChange: onFilterChange,
+          }}
+        />
+      </motion.footer>
     </motion.div>
   );
 };
