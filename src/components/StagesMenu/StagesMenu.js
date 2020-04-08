@@ -1,10 +1,10 @@
 import React, { useState, useRef, useLayoutEffect } from 'react';
+import PropTypes from 'prop-types';
 import { Text } from '@codaco/ui/lib/components/Fields';
 import { connect } from 'react-redux';
 import { motion, useInvertedScale, AnimatePresence } from 'framer-motion';
 import { compose } from 'recompose';
 import { getCSSVariableAsNumber, getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
-import { actionCreators as sessionActions } from '../../ducks/modules/session';
 import { getProtocolStages } from '../../selectors/protocol';
 import { Scroller } from '..';
 import StagePreview from './StagePreview';
@@ -106,7 +106,8 @@ const StagesMenu = (props) => {
     // This can't use a reference to a dom element because of the staggered
     // animation (ref won't exist until the element has rendered). Instead,
     // scroll the container to where the element will be when it finishes
-    // animating.
+    // animating, based on the calculated height of each element * number
+    // of elements.
     //
     // NOTE: because element height changes after the image is loaded, and
     // because the image does not load immediately, we need to tie this
@@ -128,7 +129,6 @@ const StagesMenu = (props) => {
       key="stages-menu"
       variants={variants}
       initial="normal"
-      exit="normal"
       animate="expanded"
       style={{ scaleX, scaleY }}
     >
@@ -172,10 +172,12 @@ function mapStateToProps(state) {
   };
 }
 
-const mapDispatchToProps = {
-  endSession: sessionActions.endSession,
+
+StagesMenu.propTypes = {
+  stages: PropTypes.array.isRequired,
+  currentStageIndex: PropTypes.number.isRequired,
 };
 
 export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(mapStateToProps, null),
 )(StagesMenu);

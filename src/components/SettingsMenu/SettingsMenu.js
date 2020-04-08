@@ -71,7 +71,6 @@ const SettingsMenu = (props) => {
         animate={isActive ? 'visible' : 'hidden'}
         transition={{ duration: 0.2 }}
       >
-        <h1>{tabName}</h1>
         <Scroller>
           <TabComponent closeMenu={closeMenu} />
         </Scroller>
@@ -87,6 +86,7 @@ const SettingsMenu = (props) => {
         >
           <article className="settings-menu__wrapper">
             <nav>
+              <h1>Settings</h1>
               <ul>
                 { renderNavigation }
               </ul>

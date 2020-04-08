@@ -4,7 +4,6 @@ import { Icon } from '@codaco/ui';
 import { connect } from 'react-redux';
 import { motion, useInvertedScale } from 'framer-motion';
 import { compose } from 'recompose';
-import { getCSSVariableAsNumber, getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
 
@@ -18,26 +17,30 @@ const SubMenu = (props) => {
 
   const { scaleX, scaleY } = useInvertedScale();
 
-  const baseAnimationDuration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
-  const baseAnimationEasing = getCSSVariableAsString('--animation-easing-json');
-
   const variants = {
-    normal: {
-      opacity: 0,
-      transition: {
-        duration: baseAnimationDuration,
-        easing: baseAnimationEasing,
-        staggerChildren: 0.05,
-        staggerDirection: -1,
-      },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.07, delayChildren: 0.2 },
     },
-    expanded: {
+    hide: {
+      opacity: 0,
+      transition: { staggerChildren: 0.05, staggerDirection: -1 },
+    },
+  };
+
+  const itemVariants = {
+    show: {
+      y: 0,
       opacity: 1,
       transition: {
-        when: 'beforeChildren',
-        staggerChildren: 0.075,
-        duration: baseAnimationDuration,
-        easing: baseAnimationEasing,
+        y: { stiffness: 1000, velocity: -100 },
+      },
+    },
+    hide: {
+      y: '20%',
+      opacity: 0,
+      transition: {
+        y: { stiffness: 1000 },
       },
     },
   };
@@ -46,27 +49,40 @@ const SubMenu = (props) => {
     <motion.div
       variants={variants}
       className="sub-menu"
-      exit="expanded"
+      animate="show"
+      initial="hide"
       style={{ scaleX, scaleY }}
       key="sub-menu"
     >
       <article className="sub-menu__wrapper">
+        <h1>Menu</h1>
         <div className="sub-menu__items">
-          <div className="item" onClick={() => { openSettingsMenu(); setExpanded(false); }}>
+          <motion.div
+            className="item"
+            onClick={() => { openSettingsMenu(); setExpanded(false); }}
+            variants={itemVariants}
+          >
             <Icon name="settings" />
             Device Settings
-          </div>
-          <div className="item" onClick={() => setShowSubMenu(false)}>
+          </motion.div>
+          <motion.div
+            className="item"
+            onClick={() => setShowSubMenu(false)}
+            variants={itemVariants}
+          >
             <Icon name="menu-default-interface" />
             Interview Stages
-          </div>
+          </motion.div>
         </div>
-        <div className="sub-menu__exit">
+        <motion.div
+          className="sub-menu__exit"
+          variants={itemVariants}
+        >
           <div className="item" onClick={endSession}>
             <Icon name="menu-quit" />
             Exit Interview
           </div>
-        </div>
+        </motion.div>
       </article>
 
     </motion.div>

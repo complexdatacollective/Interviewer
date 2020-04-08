@@ -10,6 +10,7 @@ const SessionNavigation = (props) => {
     onClickNext,
     percentProgress,
     setExpanded,
+    isExpanded,
     setShowSubMenu,
   } = props;
 
@@ -30,7 +31,7 @@ const SessionNavigation = (props) => {
       variants={variants}
       initial="expanded"
       exit="expanded"
-      animate="normal"
+      animate={isExpanded ? 'expanded' : 'normal'}
       className="session-navigation"
       useInvertedScale
       style={{ scaleX, scaleY }}
@@ -64,7 +65,7 @@ const SessionNavigation = (props) => {
       </motion.div>
       <motion.div
         className="session-navigation__progress-bar"
-        onClick={() => setExpanded(prevState => !prevState)}
+        onClick={() => { setShowSubMenu(false); setExpanded(true); }}
       >
         <ProgressBar
           percentProgress={percentProgress}
@@ -93,6 +94,7 @@ SessionNavigation.propTypes = {
   onClickBack: PropTypes.func.isRequired,
   percentProgress: PropTypes.number.isRequired,
   setExpanded: PropTypes.func.isRequired,
+  isExpanded: PropTypes.bool.isRequired,
   setShowSubMenu: PropTypes.func.isRequired,
 };
 

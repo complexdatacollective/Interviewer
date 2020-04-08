@@ -4,14 +4,17 @@
   flex-direction: column;
   height: 100%;
   flex: 1 1 auto;
-  padding: unit(4) 0;
-  width: 20rem;
+  width: 22rem;
 
   &__wrapper {
     display: flex;
     overflow: hidden;
     flex-direction: column;
     height: 100%;
+
+    h1 {
+      padding: unit(2) unit(4);
+    }
   }
 
   &__items {
@@ -46,5 +49,9 @@
   &__exit {
     display: flex;
     flex-direction: column;
+  }
+
+  &__exit {
+    background: var(--color-neon-coral);
   }
 }

@@ -23,7 +23,8 @@ const SessionPanel = React.forwardRef((props, ref) => {
   };
 
   const menuContent = showSubMenu ?
-    (<SubMenu setShowSubMenu={setShowSubMenu} setExpanded={setExpanded} key="sub-menu" />) : <StagesMenu setExpanded={setExpanded} key="stages-menu" />;
+    <SubMenu setShowSubMenu={setShowSubMenu} setExpanded={setExpanded} key="sub-menu" />
+    : <StagesMenu setExpanded={setExpanded} key="stages-menu" />;
 
   return (
     <React.Fragment>

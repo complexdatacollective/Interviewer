@@ -14,10 +14,8 @@
 
     nav {
       background: var(--panel-bg-muted);
-      flex: 0 0 20rem; // Match to sub-menu component width
-      padding: unit(6) 0;
+      flex: 0 0 22rem; // Match to sub-menu component width
       display: flex;
-      justify-content: space-between;
       flex-direction: column;
       overflow: hidden;
 
@@ -32,7 +30,9 @@
       li {
         @include platform-not-ios {
           &:hover {
-            background: var(--color-slate-blue--dark);
+            &:not(.active) {
+              background: var(--color-slate-blue--dark);
+            }
           }
         }
 
@@ -53,13 +53,16 @@
       }
 
       .version-code {
-        align-self: center;
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column-reverse;
+        padding: unit(2) unit(4);
       }
     }
 
     section {
       width: 1000%;
-      padding: 2.4rem 4.4rem;
+      padding: unit(8);
       display: flex;
       background: var(--color-cyber-grape);
 
