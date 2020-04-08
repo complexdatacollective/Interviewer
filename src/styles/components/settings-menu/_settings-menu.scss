@@ -1,4 +1,3 @@
-
 .settings-menu {
   display: flex;
   flex-flow: column;
@@ -18,6 +17,8 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
+      position: relative;
+      z-index: var(--z-modal);
 
       h1 {
         padding: unit(2) unit(4);
@@ -52,12 +53,6 @@
         }
       }
 
-      .version-code {
-        flex: 1 1 auto;
-        display: flex;
-        flex-direction: column-reverse;
-        padding: unit(2) unit(4);
-      }
     }
 
     section {

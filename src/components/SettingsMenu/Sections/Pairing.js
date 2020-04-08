@@ -9,7 +9,7 @@ import { actionCreators as deviceSettingsActions } from '../../../ducks/modules/
 import { actionCreators as dialogsActions } from '../../../ducks/modules/dialogs';
 import TabItemVariants from './TabItemVariants';
 
-const DeviceSettings = (props) => {
+const Pairing = (props) => {
   const {
     deviceDescription,
     setDeviceDescription,
@@ -34,7 +34,7 @@ const DeviceSettings = (props) => {
   );
 };
 
-const deviceSettingsHandlers = withHandlers({
+const pairingHandlers = withHandlers({
   handleResetAppData: props => () => {
     props.openDialog({
       type: 'Warning',
@@ -60,5 +60,5 @@ const mapStateToProps = state => ({
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
-  deviceSettingsHandlers,
-)(DeviceSettings);
+  pairingHandlers,
+)(Pairing);

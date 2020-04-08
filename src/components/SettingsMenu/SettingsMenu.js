@@ -3,13 +3,15 @@ import PropTypes from 'prop-types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
+import { getCSSVariableAsNumber, getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
 import Scroller from '../Scroller';
 import VisualPreferences from './Sections/VisualPreferences';
-import DeviceSettings from './Sections/DeviceSettings';
 import DeveloperTools from './Sections/DeveloperTools';
+import About from './Sections/About';
+import Pairing from './Sections/Pairing';
+import ExportOptions from './Sections/ExportOptions';
 import CloseButton from '../CloseButton';
-import getVersion from '../../utils/getVersion';
 
 const SettingsMenu = (props) => {
   const {
@@ -17,12 +19,76 @@ const SettingsMenu = (props) => {
     settingsMenuOpen,
   } = props;
 
+  const baseAnimationDuration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
+  const baseAnimationEasing = getCSSVariableAsString('--animation-easing-json');
+
   const tabs = {
-    'General Settings': DeviceSettings,
-    'Data Export Options': DeveloperTools,
-    Pairing: DeveloperTools,
     'Visual Preferences': VisualPreferences,
+    'Data Export Options': ExportOptions,
+    Pairing,
     'Developer Options': DeveloperTools,
+    About,
+  };
+
+  const variants = {
+    show: {
+      x: 0,
+      transition: {
+        when: 'beforeChildren',
+        staggerChildren: 0.07,
+        duration: baseAnimationDuration,
+        easing: baseAnimationEasing,
+      },
+    },
+    hide: {
+      x: '-100%',
+      transition: {
+        when: 'afterChildren',
+        staggerChildren: 0.05,
+        staggerDirection: -1,
+        duration: baseAnimationDuration,
+        easing: baseAnimationEasing,
+      },
+    },
+  };
+
+  const navVariants = {
+    show: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: baseAnimationDuration,
+        easing: baseAnimationEasing,
+      },
+    },
+    hide: {
+      y: '20%',
+      opacity: 0,
+      transition: {
+        duration: baseAnimationDuration,
+        easing: baseAnimationEasing,
+      },
+    },
+  };
+
+  const contentVariants = {
+    show: {
+      opacity: 1,
+      transition: {
+        when: 'beforeChildren',
+        duration: baseAnimationDuration,
+        delay: baseAnimationDuration,
+        easing: baseAnimationEasing,
+      },
+    },
+    hide: {
+      opacity: 0,
+      transition: {
+        when: 'afterChildren',
+        duration: baseAnimationDuration,
+        easing: baseAnimationEasing,
+      },
+    },
   };
 
   const tabVariants = {
@@ -42,16 +108,14 @@ const SettingsMenu = (props) => {
     },
   };
 
-  const [activeTab, setActiveTab] = useState('General Settings');
-  const [appVersion, setAppVersion] = useState('0.0.0');
-
-  getVersion().then(version => setAppVersion(version));
+  const [activeTab, setActiveTab] = useState('Visual Preferences');
 
   const renderNavigation = Object.keys(tabs).map(tabName => (
     <motion.li
       key={tabName}
       onClick={() => setActiveTab(tabName)}
       className={activeTab === tabName ? 'active' : ''}
+      variants={navVariants}
     >
       {tabName}
     </motion.li>
@@ -69,7 +133,7 @@ const SettingsMenu = (props) => {
         initial="hidden"
         exit="hidden"
         animate={isActive ? 'visible' : 'hidden'}
-        transition={{ duration: 0.2 }}
+        transition={{ duration: baseAnimationDuration }}
       >
         <Scroller>
           <TabComponent closeMenu={closeMenu} />
@@ -79,29 +143,33 @@ const SettingsMenu = (props) => {
   });
 
   return (
-    <React.Fragment>
+    <AnimatePresence>
       { settingsMenuOpen && (
-        <div
+        <motion.div
           className="settings-menu"
+          animate="show"
+          exit="hide"
+          initial="hide"
         >
           <article className="settings-menu__wrapper">
-            <nav>
+            <motion.nav
+              variants={variants}
+            >
               <h1>Settings</h1>
               <ul>
                 { renderNavigation }
               </ul>
-              <div className="version-code">Network Canvas {appVersion}</div>
-            </nav>
-            <section>
+            </motion.nav>
+            <motion.section variants={contentVariants}>
               <CloseButton onClick={closeMenu} className="close-button-wrapper" />
-              <AnimatePresence exitBeforeEnter>
+              <AnimatePresence exitBeforeEnter initial={false}>
                 { renderTabs }
               </AnimatePresence>
-            </section>
+            </motion.section>
           </article>
-        </div>
+        </motion.div>
       )}
-    </React.Fragment>
+    </AnimatePresence>
 
   );
 };
