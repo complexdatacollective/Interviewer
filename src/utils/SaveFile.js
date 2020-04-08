@@ -164,6 +164,7 @@ const writeFile = (fileWriter, filename, data, fileType) => new Promise((resolve
 
 const exportCordovaFile = (fs, session, sessionId, sessionCodebook, fileType) => {
   let data;
+  let fileEntry;
   const formatter = new GraphMLFormatter(session.network, false, false, sessionCodebook);
   return new Promise((resolve, reject) => {
     formatter.writeToString()
@@ -171,10 +172,24 @@ const exportCordovaFile = (fs, session, sessionId, sessionCodebook, fileType) =>
         data = value;
         return getFile(`${session.caseId}_${sessionId}.graphml`, fs);
       })
-      .then(fileEntry => createWriter(fileEntry))
-      .then(({ fileWriter, filename }) => resolve(writeFile(fileWriter, filename, data, fileType)))
+      .then((fe) => {
+        fileEntry = fe;
+        return createWriter(fe);
+      })
+      .then(({ fileWriter, filename }) => writeFile(fileWriter, filename, data, fileType))
+      .then(filename => resolve({ filename, fileEntry }))
       .catch(err => reject(err));
   });
+};
+
+const tryFileCleanup = (fileEntries) => {
+  if (fileEntries) {
+    fileEntries.map((fileEntry) => {
+      try {
+        return fileEntry.remove();
+      } catch (err) { return err; }
+    });
+  }
 };
 
 const saveZippedSessionsCordova = (exportedSessionIds, sessions, installedProtocols) => {
@@ -184,6 +199,7 @@ const saveZippedSessionsCordova = (exportedSessionIds, sessions, installedProtoc
 
   let fileSystem;
   let dataFilenames;
+  let fileEntries;
   return new Promise((resolve, reject) => {
     getFileSystem()
       .then((fs) => {
@@ -200,7 +216,8 @@ const saveZippedSessionsCordova = (exportedSessionIds, sessions, installedProtoc
         return Promise.all(promisedExports);
       })
       .then((files) => {
-        dataFilenames = files;
+        dataFilenames = files.map(file => file.filename);
+        fileEntries = files.map(file => file.fileEntry);
         return getFile(defaultFileName, fileSystem);
       })
       .then(fe => createWriter(fe))
@@ -213,23 +230,25 @@ const saveZippedSessionsCordova = (exportedSessionIds, sessions, installedProtoc
           chooserTitle: 'Share file via', // Android only
           ...shareOptions,
         };
-        window.plugins.socialsharing.shareWithOptions(options);
+        return new Promise((res, rej) =>
+          window.plugins.socialsharing.shareWithOptions(options, res, rej));
       })
+      .then(() => tryFileCleanup(fileEntries))
       .then(() => resolve(dataFilenames))
       .catch(err => reject(err));
   });
 };
 
-const unlink = (filePath, fs) => (new Promise((resolve, reject) => {
+const tryUnlink = (filePath, fs) => (new Promise((resolve) => {
   try {
     fs.unlink(filePath, (err, ...args) => {
       if (err) {
-        reject(err);
+        resolve(err);
       } else {
         resolve(...args);
       }
     });
-  } catch (err) { reject(err); }
+  } catch (err) { resolve(err); }
 }));
 
 const exportElectronFile = (fs, session, sessionId, sessionCodebook, tempPath) => {
@@ -269,9 +288,13 @@ const saveZippedSessionsElectron = (exportedSessionIds, sessions, installedProto
         return exportElectronFile(fs, session, sessionId, sessionCodebook, tempPath);
       });
 
+      let dataFileNames;
       Promise.all(promisedExports)
-        .then(savedDataFile => archive(savedDataFile, filename))
-        // .then(() => unlink(dataFileName))
+        .then((savedDataFile) => {
+          dataFileNames = savedDataFile;
+          return archive(savedDataFile, filename);
+        })
+        .then(() => dataFileNames.map(dataFileName => tryUnlink(dataFileName, fs)))
         .then(() => shell.showItemInFolder(filename))
         .then(resolve)
         .catch(err => reject(err));
