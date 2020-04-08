@@ -14,7 +14,6 @@ const About = () => {
         <div>
           <h1>About Network Canvas</h1>
           <code className="version-code">Version {appVersion}</code>
-          <p>Thank you for using our software.</p>
         </div>
       </motion.article>
     </React.Fragment>
