@@ -16,7 +16,7 @@ import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import Overlay from '../Overlay';
 import { asExportableNetwork } from '../../utils/networkFormat';
 import PairedServerWrapper from '../../components/Setup/PairedServerWrapper';
-import { saveZippedSessions } from '../../utils/SaveFile';
+import saveFile from '../../utils/SaveFile';
 
 /**
  * The remote protocol ID on any instance of Server is the hex-encoded sha256 of its [unique] name.
@@ -186,13 +186,13 @@ class ExportSessionsOverlay extends PureComponent {
   exportToFile = (exportedSessions) => {
     this.setState({ showExportProgress: true, exportFinished: false });
 
-    saveZippedSessions(
+    saveFile(
       exportedSessions,
       this.props.sessions,
       this.props.installedProtocols,
-      this.handleExportError,
     )
-      .then(() => { this.setState({ exportFinished: true }); });
+      .then(() => { this.setState({ exportFinished: true }); })
+      .catch(err => this.handleExportError(err));
   };
 
   contentAreas() {

@@ -4,14 +4,11 @@ import { connect } from 'react-redux';
 import { Button } from '@codaco/ui';
 import { Toggle } from '@codaco/ui/lib/components/Fields';
 
-import createGraphML from '../../utils/network-exporters/graphml/createGraphML';
 import saveFile from '../../utils/SaveFile';
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
-import { getNetwork } from '../../selectors/network';
-import { getActiveSession } from '../../selectors/session';
-import { getProtocolCodebook, getRemoteProtocolId } from '../../selectors/protocol';
+import { getRemoteProtocolId } from '../../selectors/protocol';
 import { ExportSessionsOverlay } from '../Setup';
 import Scroller from '../../components/Scroller';
 
@@ -72,13 +69,13 @@ class FinishSession extends Component {
     });
   }
 
-  handleExport = () => createGraphML(
-    this.props.currentNetwork,
-    this.props.codebook,
-    this.handleExportError,
-    saveFile,
-    `${this.props.currentSession.caseId}_${this.props.sessionId}`,
-  );
+  handleExport = () => {
+    saveFile(
+      [this.props.sessionId],
+      this.props.sessions,
+      this.props.installedProtocols)
+      .catch(err => this.handleExportError(err));
+  };
 
   handleFinishSession = () => {
     if (this.state.deleteAfterFinish) {
@@ -176,13 +173,13 @@ class FinishSession extends Component {
 }
 
 FinishSession.propTypes = {
-  currentNetwork: PropTypes.object.isRequired,
   defaultServer: PropTypes.object,
   endSession: PropTypes.func.isRequired,
   resetSessionExport: PropTypes.func.isRequired,
   openDialog: PropTypes.func.isRequired,
   sessionId: PropTypes.string.isRequired,
-  codebook: PropTypes.object,
+  sessions: PropTypes.object.isRequired,
+  installedProtocols: PropTypes.object.isRequired,
 };
 
 FinishSession.defaultProps = {
@@ -202,12 +199,11 @@ ExportSection.defaultProps = {
 
 function mapStateToProps(state) {
   return {
-    currentNetwork: getNetwork(state),
-    currentSession: getActiveSession(state),
     remoteProtocolId: getRemoteProtocolId(state),
     sessionId: state.activeSessionId,
     defaultServer: state.pairedServer,
-    codebook: getProtocolCodebook(state),
+    sessions: state.sessions,
+    installedProtocols: state.installedProtocols,
   };
 }
 
