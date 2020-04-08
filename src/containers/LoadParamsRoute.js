@@ -29,7 +29,12 @@ class LoadParamsRoute extends Component {
     const { params: nextParams } = nextProps.computedMatch;
 
     // Reset promptIndex when stage changes.
-    if (nextParams && nextParams.stageIndex && nextParams.stageIndex !== this.props.stageIndex) {
+    if (
+      nextParams && // there are new params
+      nextParams.stageIndex && // there's a stage index
+      nextParams.stageIndex !== this.props.stageIndex && // the new stage index is different
+      nextProps.sessionId // We still have an active session
+    ) {
       this.props.updateStage(parseInt(nextParams.stageIndex, 10));
       this.props.updatePrompt(0);
     }

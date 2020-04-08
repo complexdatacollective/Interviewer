@@ -18,6 +18,33 @@ if (!process.env.TEST) {
 }
 
 const MenuTemplate = (window) => {
+  const appMenu = [
+    {
+      label: 'Settings...',
+      click: () => window.webContents.send('OPEN_SETTINGS_MENU'),
+    },
+    {
+      label: 'Check for updates...',
+      click: () => updater.checkForUpdates(),
+    },
+    {
+      label: 'Reset Data...',
+      click: () => {
+        dialog.showMessageBox({
+          message: 'Destroy all application files and data?',
+          detail: 'This includes all application settings, imported protocols, and interview data.',
+          buttons: ['Reset Data', 'Cancel'],
+        }, (response) => {
+          if (response === 0) {
+            window.webContents.send('RESET_STATE');
+          }
+        });
+      },
+    },
+    { type: 'separator' },
+    { role: 'quit' },
+  ];
+
   const menu = [
     {
       label: 'File',
@@ -27,19 +54,10 @@ const MenuTemplate = (window) => {
           click: openFile(window),
         },
         {
-          label: 'Reset Data...',
-          click: () => {
-            dialog.showMessageBox({
-              message: 'Destroy all application files and data?',
-              detail: 'This includes all application settings, imported protocols, and interview data.',
-              buttons: ['Reset Data', 'Cancel'],
-            }, (response) => {
-              if (response === 0) {
-                window.webContents.send('RESET_STATE');
-              }
-            });
-          },
+          label: 'Exit Current Interview',
+          click: () => window.webContents.send('EXIT_INTERVIEW'),
         },
+        { type: 'separator' },
       ],
     },
     {
@@ -74,16 +92,6 @@ const MenuTemplate = (window) => {
         { role: 'close' },
       ],
     },
-  ];
-
-  const appMenu = [
-    { role: 'about' },
-    {
-      label: 'Check for updates...',
-      click: () => updater.checkForUpdates(),
-    },
-    { type: 'separator' },
-    { role: 'quit' },
   ];
 
   if (process.platform !== 'darwin') {

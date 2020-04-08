@@ -46,6 +46,8 @@ const endSession = (alsoDelete = false) => (dispatch, getState) => {
 
   dispatch(push('/'));
 
+  dispatch(SessionWorkerActions.resetWorkerMapAction());
+
   if (alsoDelete) {
     const { activeSessionId } = getState();
     dispatch(SessionsActions.removeSession(activeSessionId));

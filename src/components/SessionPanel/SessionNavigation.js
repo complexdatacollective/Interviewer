@@ -10,7 +10,7 @@ const SessionNavigation = (props) => {
     onClickNext,
     percentProgress,
     setExpanded,
-    isExpanded,
+
     setShowSubMenu,
   } = props;
 
@@ -31,7 +31,7 @@ const SessionNavigation = (props) => {
       variants={variants}
       initial="expanded"
       exit="expanded"
-      animate={isExpanded ? 'expanded' : 'normal'}
+      animate="normal"
       className="session-navigation"
       useInvertedScale
       style={{ scaleX, scaleY }}
@@ -51,15 +51,15 @@ const SessionNavigation = (props) => {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         className="session-navigation__button session-navigation__button--back"
+        onClick={(e) => {
+          if (e) {
+            e.stopPropagation();
+            e.preventDefault();
+          }
+          onClickBack(e);
+        }}
       >
         <Icon
-          onClick={(e) => {
-            if (e) {
-              e.stopPropagation();
-              e.preventDefault();
-            }
-            onClickBack(e);
-          }}
           name="chevron-up"
         />
       </motion.div>
@@ -94,7 +94,6 @@ SessionNavigation.propTypes = {
   onClickBack: PropTypes.func.isRequired,
   percentProgress: PropTypes.number.isRequired,
   setExpanded: PropTypes.func.isRequired,
-  isExpanded: PropTypes.bool.isRequired,
   setShowSubMenu: PropTypes.func.isRequired,
 };
 
