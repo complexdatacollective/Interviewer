@@ -50,7 +50,7 @@ const MenuTemplate = (window) => {
       label: 'File',
       submenu: [
         {
-          label: 'Import Protocol...',
+          label: 'Import Protocol from File...',
           click: openFile(window),
         },
         {
