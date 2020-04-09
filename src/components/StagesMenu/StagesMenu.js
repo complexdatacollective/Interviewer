@@ -8,9 +8,15 @@ import { getCSSVariableAsNumber, getCSSVariableAsString } from '@codaco/ui/lib/u
 import { getProtocolStages } from '../../selectors/protocol';
 import { Scroller } from '..';
 import StagePreview from './StagePreview';
-import { currentStageIndex } from '../../utils/matchSessionPath';
+import { currentStageIndex as getCurrentStageIndex } from '../../utils/matchSessionPath';
 
 const StagesMenu = (props) => {
+  const {
+    currentStageIndex,
+    stages,
+    setExpanded,
+  } = props;
+
   const [filter, setFilter] = useState('');
   const [imageLoaded, updateImageLoaded] = useState(false);
   const { scaleX, scaleY } = useInvertedScale();
@@ -25,39 +31,83 @@ const StagesMenu = (props) => {
       transition: {
         duration: baseAnimationDuration,
         easing: baseAnimationEasing,
-        staggerChildren: 0.05,
-        staggerDirection: -1,
       },
     },
     expanded: {
       opacity: 1,
       transition: {
         when: 'beforeChildren',
-        staggerChildren: 0.075,
         duration: baseAnimationDuration,
         easing: baseAnimationEasing,
       },
     },
   };
 
+  const calculateDelay = (currentItemIndex) => {
+    /**
+     * Purpose of this function is to ensure we animate only the items
+     * that are currently visible.
+     * */
+
+    const delayScale = 0.075;
+
+    // Active index 0, current index less than 8: animate first 8 items.
+    if (
+      currentStageIndex === 0 &&
+      currentItemIndex < 8
+    ) {
+      return currentItemIndex * delayScale;
+    }
+
+    // Active index non-zero: resequence index to 8 following current.
+    if (
+      currentStageIndex > 0 &&
+      currentItemIndex < (currentStageIndex + 8) &&
+      (stages.length - currentStageIndex) > 8
+    ) {
+      const resequencedIndex = currentItemIndex - currentStageIndex;
+      return resequencedIndex * delayScale;
+    }
+
+    // Active index within 8 of end: resequence to last 8
+    if (
+      (stages.length - currentStageIndex) < 8 &&
+      stages.length - currentItemIndex < 8
+    ) {
+      const resequencedIndex = (stages.length - currentItemIndex - 8) * -1;
+      return resequencedIndex * delayScale;
+    }
+
+    // Don't animate
+    return 0;
+  };
+
   const timelineVariants = {
-    expanded: {
+    expanded: currentItemIndex => ({
       x: 0,
       opacity: 1,
       transition: {
-        when: 'beforeChildren',
+        delay: calculateDelay(currentItemIndex),
         duration: baseAnimationDuration,
         easing: baseAnimationEasing,
       },
-    },
-    normal: {
+    }),
+    normal: currentItemIndex => ({
       x: '-5rem',
+      opacity: 0,
+      transition: {
+        delay: calculateDelay(currentItemIndex),
+        duration: baseAnimationDuration,
+        easing: baseAnimationEasing,
+      },
+    }),
+    filtered: () => ({
       opacity: 0,
       transition: {
         duration: baseAnimationDuration,
         easing: baseAnimationEasing,
       },
-    },
+    }),
   };
 
   const scrollToLocation = (amount) => {
@@ -75,16 +125,17 @@ const StagesMenu = (props) => {
 
   const onFilterChange = event => setFilter(event.target.value || '');
 
-  const filteredStageList = props.stages.filter(
+  const filteredStageList = stages.filter(
     stage => stage.label.toLowerCase().includes(filter.toLowerCase()));
 
   const renderMenuItems = filteredStageList.map((item, index) => {
-    const isActive = props.currentStageIndex === item.index;
+    const isActive = currentStageIndex === item.index;
 
     return (
       <motion.div
+        custom={index}
         variants={timelineVariants}
-        exit="normal"
+        exit="filtered"
         key={item.id}
         positionTransition={positionTransition}
         className="stages-menu__preview-wrapper"
@@ -93,7 +144,7 @@ const StagesMenu = (props) => {
           item={item}
           index={index}
           active={isActive}
-          setExpanded={props.setExpanded}
+          setExpanded={setExpanded}
           onImageLoaded={() => updateImageLoaded(true)}
         />
       </motion.div>
@@ -119,7 +170,7 @@ const StagesMenu = (props) => {
 
     if (!filter) {
       const itemHeight = document.getElementsByClassName('stages-menu__preview-wrapper')[0].clientHeight;
-      scrollToLocation(props.currentStageIndex * itemHeight, 0.2);
+      scrollToLocation(currentStageIndex * itemHeight, 0.2);
     }
   }, [imageLoaded]);
 
@@ -168,14 +219,14 @@ function mapStateToProps(state) {
 
   return {
     stages: withIndex,
-    currentStageIndex: currentStageIndex(state.router.location.pathname),
+    currentStageIndex: getCurrentStageIndex(state.router.location.pathname),
   };
 }
-
 
 StagesMenu.propTypes = {
   stages: PropTypes.array.isRequired,
   currentStageIndex: PropTypes.number.isRequired,
+  setExpanded: PropTypes.func.isRequired,
 };
 
 export default compose(
