@@ -47,6 +47,7 @@ const DeveloperTools = (props) => {
             <div className="form-field">
               <Button
                 color="mustard"
+                id="add-mock-nodes"
                 onClick={handleAddMockNodes}
               >
                 Add nodes

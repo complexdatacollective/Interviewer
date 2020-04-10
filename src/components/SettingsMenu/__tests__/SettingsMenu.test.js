@@ -9,6 +9,13 @@ import epics from '../../../ducks/middleware/epics';
 import rootReducer from '../../../ducks/modules/rootReducer';
 import SettingsMenu from '../SettingsMenu';
 
+jest.mock('@codaco/ui/lib/utils/CSSVariables');
+
+// jest.mock('framer-motion', () => ({
+//   AnimatePresence: 'AnimatePresence',
+// }));
+
+
 const actionLogger = actions =>
   () =>
     next =>
@@ -24,9 +31,10 @@ const initialState = {
     description: 'Kirby (macOS)',
     useDynamicScaling: true,
     useFullScreenForms: false,
+    showScrollbars: false,
+    startFullScreen: false,
     interfaceScale: 100,
   },
-  dialogs: { dialogs: Array(0) },
   form: {},
   importProtocol: { status: 'inactive', step: 0 },
   installedProtocols: {
@@ -84,6 +92,9 @@ const getMockStore = () => {
   return { store, actions };
 };
 
+const isMenuOpen = subject =>
+  subject.find('SettingsMenu').prop('settingsMenuOpen');
+
 const getSubject = store =>
   mount((
     <Provider
@@ -93,44 +104,25 @@ const getSubject = store =>
     </Provider>
   ));
 
-const settingsMenuOpen = subject =>
-  subject.find('MainMenu').prop('isOpen');
-
-const gotoSettings = subject =>
-  subject.find('MenuPanel').at(0).simulate('click');
-
-const gotoStages = subject =>
-  subject.find('MenuPanel').at(1).simulate('click');
-
 describe('<SettingsMenu />', () => {
-  it('Close button', () => {
-    const { store } = getMockStore({ ui: { settingsMenuOpen: true } });
+  it('Close button closes menu', () => {
+    const { store } = getMockStore({ ui: { isMenuOpen: true } });
     const subject = getSubject(store);
 
-    expect(settingsMenuOpen(subject)).toBe(true);
+    expect(isMenuOpen(subject)).toBe(true);
     subject.find('Icon[name="close"]').at(0).simulate('click');
-    expect(settingsMenuOpen(subject)).toBe(false);
+    expect(isMenuOpen(subject)).toBe(false);
   });
 
-  it('Return to start screen button', () => {
-    const { store, actions } = getMockStore({ ui: { settingsMenuOpen: true } });
+  it('Navigation changes tab', () => {
+    const { store } = getMockStore({ ui: { isMenuOpen: true } });
     const subject = getSubject(store);
 
-    subject.find('.main-menu__return-button').at(0).simulate('click');
-
-    const redirectAction = actions.find(({ type }) => type === '@@router/CALL_HISTORY_METHOD');
-
-    expect(redirectAction.payload).toMatchObject({
-      method: 'push',
-      args: ['/'],
-    });
-
-    expect(actions.filter(({ type }) => type === 'END_SESSION').length).toBe(1);
-
-    expect(settingsMenuOpen(subject)).toBe(false);
+    subject.find('li[data-name="Developer Options"]').simulate('click');
+    expect(subject.find('DeveloperTools')).toHaveLength(1);
   });
 
-  describe('Settings screen', () => {
+  describe('Developer options screen', () => {
     let store;
     let actions;
     let subject;
@@ -141,30 +133,14 @@ describe('<SettingsMenu />', () => {
       actions = mockStore.actions;
 
       subject = getSubject(store);
-
-      gotoSettings(subject);
     });
 
-    it('Mock data button', () => {
-      subject.find('Button[children="Add mock nodes"]').at(0).simulate('click');
+    it('Add Mock Nodes', () => {
+      subject.find('li[data-name="Developer Options"]').simulate('click');
+
+      subject.find('#add-mock-nodes').at(0).simulate('click');
 
       expect(actions.filter(({ type }) => type === 'ADD_NODE')).toHaveLength(20);
-      expect(settingsMenuOpen(subject)).toBe(false);
-    });
-  });
-
-  describe('Stage screen', () => {
-    let store;
-    let subject;
-
-    beforeEach(() => {
-      const mockStore = getMockStore(initialState);
-
-      store = mockStore.store;
-
-      subject = getSubject(store);
-
-      gotoStages(subject);
     });
   });
 });
