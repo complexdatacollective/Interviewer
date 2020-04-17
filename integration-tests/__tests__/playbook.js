@@ -22,7 +22,7 @@ export const loadProtocolFromFile = async (app, filename) => {
   await app.client.waitForVisible('h4=Protocol imported successfully!');
   await app.client.click('button=Continue');
   await app.client.pause(timing.medium);
-  await app.client.click('button.overlay__close');
+  await app.client.click('.overlay__close');
   await app.client.waitForExist('.modal', timing.long, true);
 };
 
