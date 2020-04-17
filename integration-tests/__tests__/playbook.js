@@ -58,9 +58,11 @@ export const startInterview = async (app, caseId = 'test') => {
 };
 
 export const goToStage = async (app, stageId) => {
+  console.log('Going to stage ', stageId);
   if (!stageId) { throw Error('goToStage() requires a stageId'); }
   await app.client.click('.session-navigation__progress-bar');
   await app.client.waitForVisible('.stages-menu');
+  await app.client.pause(timing.long); // Added to give menu stagger animation time to complete
   forceClick(app, `[data-stage-name=${stageId}]`);
   await app.client.pause(timing.long);
 };

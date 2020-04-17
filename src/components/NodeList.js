@@ -7,7 +7,7 @@ import { TransitionGroup } from 'react-transition-group';
 import { getCSSVariableAsString, getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
 import Node from '../containers/Node';
 import { Node as NodeTransition } from './Transition';
-import { scrollable } from '../behaviours';
+import { scrollable, selectable } from '../behaviours';
 import {
   DragSource,
   DropTarget,
@@ -17,7 +17,7 @@ import {
 import sortOrder from '../utils/sortOrder';
 import { entityPrimaryKeyProperty } from '../ducks/modules/network';
 
-const EnhancedNode = DragSource(Node);
+const EnhancedNode = DragSource(selectable(Node));
 
 /**
   * Renders a list of Nodes.
