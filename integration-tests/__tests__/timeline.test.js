@@ -14,6 +14,7 @@ import {
 import {
   loadDevelopmentProtocol,
 } from './playbook-development-protocol';
+import { timing } from '../config';
 
 const app = makeTestingApp('Network-Canvas');
 
@@ -44,7 +45,7 @@ const setupTest = async () => {
 const timelineCoords = {
   x: 0,
   y: 0,
-  width: 135,
+  width: 125,
   height: 900,
 };
 
@@ -58,12 +59,14 @@ describe('Timeline', () => {
       // [data-clickable="start-interview"]
       await app.client.click('.session-navigation__button--next');
       await app.client.click('.session-navigation__button--next');
+      await app.client.pause(timing.medium);
       await matchImageSnapshot(app, timelineCoords);
     });
 
     it('Reverses through prompts', async () => {
       await app.client.click('.session-navigation__button--back');
       await app.client.click('.session-navigation__button--back');
+      await app.client.pause(timing.medium);
       await matchImageSnapshot(app, timelineCoords);
     });
 
@@ -72,13 +75,13 @@ describe('Timeline', () => {
       await app.client.click('.session-navigation__button--next');
       await app.client.click('.session-navigation__button--next');
       await app.client.click('.session-navigation__button--next');
-      await app.client.pause(500);
+      await app.client.pause(timing.medium);
       await matchImageSnapshot(app, timelineCoords);
     });
 
     it('Reverses through stages', async () => {
       await app.client.click('.session-navigation__button--back');
-      await app.client.pause(500);
+      await app.client.pause(timing.medium);
       await matchImageSnapshot(app, timelineCoords);
     });
   });
@@ -86,13 +89,17 @@ describe('Timeline', () => {
   it('Shows the percentage progress visually', async () => {
     // Go to first screen
     await goToStage(app, 'ego-form-1');
+    await app.client.pause(timing.medium);
     await matchImageSnapshot(app, timelineCoords);
     // Go halfwayish
     await goToStage(app, 'sociogram2');
+    await app.client.pause(timing.medium);
     await matchImageSnapshot(app, timelineCoords);
     // Go to finish screen
     await goToStage(app, 'markdown');
+    await app.client.pause(timing.medium);
     await app.client.click('.session-navigation__button--next');
+    await app.client.pause(timing.medium);
     await matchImageSnapshot(app, timelineCoords);
   });
 });
