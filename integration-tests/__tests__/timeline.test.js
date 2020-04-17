@@ -56,28 +56,28 @@ describe('Timeline', () => {
   describe('Forwards/back buttons', () => {
     it('Advances through prompts', async () => {
       // [data-clickable="start-interview"]
-      await app.client.click('.timeline-nav--next');
-      await app.client.click('.timeline-nav--next');
+      await app.client.click('.session-navigation__button--next');
+      await app.client.click('.session-navigation__button--next');
       await matchImageSnapshot(app, timelineCoords);
     });
 
     it('Reverses through prompts', async () => {
-      await app.client.click('.timeline-nav--back');
-      await app.client.click('.timeline-nav--back');
+      await app.client.click('.session-navigation__button--back');
+      await app.client.click('.session-navigation__button--back');
       await matchImageSnapshot(app, timelineCoords);
     });
 
     it('Advances through stages', async () => {
-      await app.client.click('.timeline-nav--next');
-      await app.client.click('.timeline-nav--next');
-      await app.client.click('.timeline-nav--next');
-      await app.client.click('.timeline-nav--next');
+      await app.client.click('.session-navigation__button--next');
+      await app.client.click('.session-navigation__button--next');
+      await app.client.click('.session-navigation__button--next');
+      await app.client.click('.session-navigation__button--next');
       await app.client.pause(500);
       await matchImageSnapshot(app, timelineCoords);
     });
 
     it('Reverses through stages', async () => {
-      await app.client.click('.timeline-nav--back');
+      await app.client.click('.session-navigation__button--back');
       await app.client.pause(500);
       await matchImageSnapshot(app, timelineCoords);
     });
@@ -92,7 +92,7 @@ describe('Timeline', () => {
     await matchImageSnapshot(app, timelineCoords);
     // Go to finish screen
     await goToStage(app, 'markdown');
-    await app.client.click('.timeline-nav--next');
+    await app.client.click('.session-navigation__button--next');
     await matchImageSnapshot(app, timelineCoords);
   });
 });

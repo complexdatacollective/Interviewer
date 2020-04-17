@@ -60,15 +60,15 @@ export const startInterview = async (app, caseId = 'test') => {
 export const goToStage = async (app, stageId) => {
   if (!stageId) { throw Error('goToStage() requires a stageId'); }
   await app.client.click('.progress-bar');
-  await app.client.waitForVisible('.main-menu-stages-menu');
+  await app.client.waitForVisible('.stages-menu');
   forceClick(app, `[data-stage-name=${stageId}]`);
   await app.client.pause(timing.long);
 };
 
 export const timelineNext = async (app) => {
-  await app.client.click('.timeline-nav--next');
+  await app.client.click('.session-navigation__button--next');
 };
 
 export const timelinePrevious = async (app) => {
-  await app.client.click('.timeline-nav--back');
+  await app.client.click('.session-navigation__button--back');
 };
