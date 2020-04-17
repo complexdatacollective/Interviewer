@@ -1,10 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { withHandlers, compose } from 'recompose';
 import { bindActionCreators } from 'redux';
+import { withHandlers, compose } from 'recompose';
+import { push } from 'react-router-redux';
 import { motion } from 'framer-motion';
 import { Button } from '@codaco/ui/lib/components';
 import { actionCreators as importProtocolActions } from '../../../ducks/modules/importProtocol';
+import { actionCreators as dialogsActions } from '../../../ducks/modules/dialogs';
 import { actionCreators as mockActions } from '../../../ducks/modules/mock';
 import { getAdditionalAttributesForCurrentPrompt, getNodeEntryForCurrentPrompt } from '../../../selectors/session';
 import { DEVELOPMENT_PROTOCOL_URL } from '../../../config';
@@ -95,12 +97,24 @@ const developerToolsHandlers = withHandlers({
     props.generateNodes(nodeDefinition.variables, typeKey, 20, props.additionalMockAttributes);
     props.closeMenu();
   },
+  handleResetAppData: props => () => {
+    props.openDialog({
+      type: 'Warning',
+      title: 'Reset application data?',
+      message: 'This will delete ALL data from Network Canvas, including interview data and settings. Do you wish to continue?',
+      onConfirm: () => {
+        props.resetState();
+      },
+      confirmLabel: 'Continue',
+    });
+  },
 });
 
 const mapDispatchToProps = dispatch => ({
   generateNodes: bindActionCreators(mockActions.generateNodes, dispatch),
-  importProtocolFromURI:
-    bindActionCreators(importProtocolActions.importProtocolFromURI, dispatch),
+  importProtocolFromURI: bindActionCreators(importProtocolActions.importProtocolFromURI, dispatch),
+  openDialog: bindActionCreators(dialogsActions.openDialog, dispatch),
+  resetState: () => dispatch(push('/reset')),
 });
 
 const mapStateToProps = state => ({
