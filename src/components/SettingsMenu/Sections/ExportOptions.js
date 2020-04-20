@@ -54,8 +54,12 @@ const mapStateToProps = state => ({
 });
 
 ExportOptions.propTypes = {
-  exportFormat: PropTypes.string.isRequired,
+  exportFormat: PropTypes.string,
   updateSetting: PropTypes.func.isRequired,
+};
+
+ExportOptions.defaultProps = {
+  exportFormat: '',
 };
 
 export default compose(

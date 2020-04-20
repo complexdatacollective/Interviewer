@@ -30,9 +30,9 @@ const VisualPreferences = (props) => {
     return false;
   };
 
-  const electronWindow = () => getElectronWindow();
-
   const handleToggleUseFullScreenApp = () => {
+    const electronWindow = getElectronWindow();
+
     if (electronWindow) {
       if (electronWindow.isFullScreen()) {
         electronWindow.setFullScreen(false);
