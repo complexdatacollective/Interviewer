@@ -69,7 +69,7 @@ CategoricalBin.propTypes = {
   promptForward: PropTypes.func.isRequired,
   promptBackward: PropTypes.func.isRequired,
   uncategorizedNodes: PropTypes.array.isRequired,
-  expandedBinIndex: PropTypes.string,
+  expandedBinIndex: PropTypes.number,
   handleExpandBin: PropTypes.func.isRequired,
 };
 
