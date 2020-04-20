@@ -39,23 +39,6 @@ const appManager = {
         .catch(err => console.log(err)),
     );
   },
-  loadDevTools: () => {
-    const extensions = process.env.NC_DEVTOOLS_EXTENSION_PATH;
-    if (process.env.NODE_ENV !== 'development' || process.env.TEST || !extensions) { return; }
-    try {
-      console.log(extensions);
-      extensions.split(';').forEach(
-        filepath =>
-          BrowserWindow.addDevToolsExtension(filepath),
-      );
-    } catch (err) {
-      /* eslint-disable no-console */
-      console.warn(err);
-      console.warn('A Chrome dev tools extension failed to load. If the extension has upgraded, update your NC_DEVTOOLS_EXTENSION_PATH:');
-      console.warn(process.env.NC_DEVTOOLS_EXTENSION_PATH);
-      /* eslint-enable */
-    }
-  },
   openFileFromArgs: function openFileFromArgs(argv) {
     return this.restore()
       .then((window) => {

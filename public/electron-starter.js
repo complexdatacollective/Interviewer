@@ -1,6 +1,6 @@
 const { app, ipcMain, protocol } = require('electron');
 const log = require('./components/log');
-
+const loadDevTools = require('./components/loadDevTools');
 const appManager = require('./components/appManager');
 const { commonName } = require('secure-comms-api/sslConfig.js');
 
@@ -29,7 +29,7 @@ app.on('second-instance', argv => appManager.openFileFromArgs(argv));
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   appManager.start();
-  appManager.loadDevTools();
+  loadDevTools();
 });
 
 // Quit when all windows are closed.
