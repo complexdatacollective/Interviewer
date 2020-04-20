@@ -135,6 +135,8 @@ const StagesMenu = (props) => {
       <motion.div
         custom={index}
         variants={timelineVariants}
+        initial="normal"
+        animate="expanded"
         exit="filtered"
         key={item.id}
         positionTransition={positionTransition}
