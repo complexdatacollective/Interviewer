@@ -1,4 +1,6 @@
 /* eslint-env jest */
+/* eslint-disable @codaco/spellcheck/spell-checker */
+
 import React from 'react';
 import { shallow } from 'enzyme';
 

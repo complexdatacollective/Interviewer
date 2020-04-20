@@ -19,11 +19,11 @@ class Panel extends Component {
   };
 
   render() {
-    const { title, children, minimise, highlight } = this.props;
+    const { title, children, minimize, highlight } = this.props;
 
     const panelClasses = cx(
       'panel',
-      { 'panel--minimise': minimise },
+      { 'panel--minimize': minimize },
       { 'panel--collapsed': this.state.collapsed },
     );
 
@@ -45,14 +45,14 @@ class Panel extends Component {
 Panel.propTypes = {
   title: PropTypes.string,
   children: PropTypes.any,
-  minimise: PropTypes.bool,
+  minimize: PropTypes.bool,
   highlight: PropTypes.string,
 };
 
 Panel.defaultProps = {
   title: '',
   children: null,
-  minimise: false,
+  minimize: false,
   highlight: null,
 };
 

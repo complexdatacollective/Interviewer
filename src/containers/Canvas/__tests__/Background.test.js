@@ -1,4 +1,5 @@
 /* eslint-env jest */
+/* eslint-disable @codaco/spellcheck/spell-checker */
 
 import React from 'react';
 import { shallow } from 'enzyme';
@@ -32,7 +33,7 @@ const mockPropsForImage = {
   image: 'map.png',
 };
 
-describe('<SociowgramBackground />', () => {
+describe('<SociogramBackground />', () => {
   it('renders ok for radar', () => {
     const component = shallow(<Background {...mockPropsForRadar} />);
 

@@ -20,7 +20,7 @@ const Pairing = (props) => {
       <motion.article variants={TabItemVariants} className="settings-element--wide">
         <div>
           <h2>Device Name</h2>
-          <p>This is the name that your device will appear as when paring with Server.</p>
+          <p>This is the name that your device will appear as when pairing with Server.</p>
         </div>
         <Text
           input={{

@@ -41,7 +41,7 @@
     font-size: calc(var(--base-node-size) * .66);
   }
 
-  &--minimise {
+  &--minimize {
     border-bottom-width: 0;
     flex-basis: 0;
     flex-grow: 0;
@@ -50,7 +50,7 @@
   }
 
   &--collapsed {
-    &:not(.panel--minimise) {
+    &:not(.panel--minimize) {
       flex-grow: 0;
 
       .panel__content {

@@ -71,7 +71,9 @@ class App extends PureComponent {
         app: true,
         'app--electron': isElectron(),
         'app--windows': isWindows(),
+        // eslint-disable-next-line @codaco/spellcheck/spell-checker
         'app--macos': isMacOS(),
+        // eslint-disable-next-line @codaco/spellcheck/spell-checker
         'app--ios': isIOS(),
         'app-android': isAndroid(),
         'app--linux': isLinux(),

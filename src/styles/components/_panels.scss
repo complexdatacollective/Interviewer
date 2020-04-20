@@ -9,7 +9,7 @@
   transform: translateZ(0);
   will-change: transform;
 
-  &--minimise {
+  &--minimize {
     display: block; // Override flex to fix Safari layout issue (#407)
     margin-right: 0;
     width: 0;
