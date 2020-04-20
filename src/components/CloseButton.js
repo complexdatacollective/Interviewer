@@ -4,6 +4,7 @@ import { Icon } from '@codaco/ui';
 
 const CloseButton = props => (
   <motion.div
+    id="close-button"
     whileHover={{ scale: 1.1 }}
     whileTap={{ scale: 0.95 }}
     style={{ cursor: 'pointer' }}

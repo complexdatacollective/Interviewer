@@ -207,6 +207,7 @@ const StagesMenu = (props) => {
           placeholder="Filter..."
           input={{
             onChange: onFilterChange,
+            id: 'stages-filter-input',
           }}
         />
       </motion.footer>

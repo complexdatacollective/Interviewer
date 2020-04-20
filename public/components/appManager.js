@@ -1,4 +1,4 @@
-const { ipcMain, app, BrowserWindow } = require('electron');
+const { ipcMain, app } = require('electron');
 const path = require('path');
 const windowManager = require('./windowManager');
 const registerAssetProtocol = require('./assetProtocol').registerProtocol;
