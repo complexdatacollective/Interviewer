@@ -32,7 +32,6 @@ const setupTest = async () => {
   await app.client.waitUntilWindowLoaded();
   await loadDevelopmentProtocol(app);
   await startInterview(app);
-  await goToStage(app, 'namegen1');
 };
 
 const openSettingsMenu = async () => {
