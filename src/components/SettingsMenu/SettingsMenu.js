@@ -164,11 +164,7 @@ const SettingsMenu = (props) => {
             </motion.nav>
             <motion.section variants={contentVariants}>
               <CloseButton onClick={closeMenu} className="close-button-wrapper" />
-              {/* The presence animation is temporarily disabled because it breaks
-              the tests (possible bug) */}
-              {/* <AnimatePresence exitBeforeEnter initial={false}> */}
               { renderTabs }
-              {/* </AnimatePresence> */}
             </motion.section>
           </article>
         </motion.div>

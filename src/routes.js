@@ -12,7 +12,7 @@ import {
   ProtocolScreen,
 } from './containers';
 
-import { SetupScreen } from './containers/Setup';
+import { SetupScreen } from './containers/SetupScreen';
 
 function mapStateToProps(state) {
   return {

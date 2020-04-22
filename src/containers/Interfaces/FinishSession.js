@@ -12,7 +12,7 @@ import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { getNetwork } from '../../selectors/network';
 import { getActiveSession } from '../../selectors/session';
 import { getProtocolCodebook, getRemoteProtocolId } from '../../selectors/protocol';
-import { ExportSessionsOverlay } from '../Setup';
+import ExportSessionsOverlay from '../ExportSessions/ExportSessionsOverlay';
 import Scroller from '../../components/Scroller';
 
 const ExportSection = ({ defaultServer, children }) => (

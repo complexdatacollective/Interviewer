@@ -9,7 +9,7 @@ import { actionCreators as sessionsActions } from '../../ducks/modules/sessions'
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { FilterableListWrapper, SessionList, NodeBin } from '../../components';
 import { entityAttributesProperty } from '../../ducks/modules/network';
-import { ExportSessionsOverlay } from '.';
+import ExportSessionsOverlay from '../ExportSessions/ExportSessionsOverlay';
 
 const displayDate = timestamp => timestamp && new Date(timestamp).toLocaleString(undefined, { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' });
 
