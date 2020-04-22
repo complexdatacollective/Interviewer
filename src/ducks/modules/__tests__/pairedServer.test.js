@@ -1,4 +1,6 @@
 /* eslint-env jest */
+/* eslint-disable @codaco/spellcheck/spell-checker */
+
 import reducer, { actionCreators, actionTypes } from '../pairedServer';
 
 const initialState = null;

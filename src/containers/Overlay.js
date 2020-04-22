@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Modal } from '@codaco/ui';
 import { getCSSVariableAsNumber, getCSSVariableAsObject } from '@codaco/ui/lib/utils/CSSVariables';
+import { CloseButton } from '../components';
 
 /**
  * Renders a modal window.
@@ -50,7 +51,7 @@ class Overlay extends React.Component {
           <div className="overlay__content" ref={this.contentRef}>
             {children}
           </div>
-          <button className="overlay__close" onClick={onClose} />
+          <CloseButton className="overlay__close" onClick={onClose} />
         </div>
       </Modal>
     );

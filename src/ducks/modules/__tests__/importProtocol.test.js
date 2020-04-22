@@ -1,4 +1,6 @@
 /* eslint-env jest */
+/* eslint-disable @codaco/spellcheck/spell-checker */
+
 import reducer, { initialState, helpers } from '../importProtocol';
 
 describe('importProtocol', () => {

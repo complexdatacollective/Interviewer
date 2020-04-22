@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<SociowgramBackground /> renders ok for image 1`] = `
+exports[`<SociogramBackground /> renders ok for image 1`] = `
 <div
   className="canvas-background"
 >
@@ -11,7 +11,7 @@ exports[`<SociowgramBackground /> renders ok for image 1`] = `
 </div>
 `;
 
-exports[`<SociowgramBackground /> renders ok for radar 1`] = `
+exports[`<SociogramBackground /> renders ok for radar 1`] = `
 <div
   className="canvas-background"
 >

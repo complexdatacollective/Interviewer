@@ -106,7 +106,9 @@ class Narrative extends Component {
     const backgroundImage = stage.background && stage.background.image;
     const concentricCircles = stage.background && stage.background.concentricCircles;
     const skewedTowardCenter = stage.background && stage.background.skewedTowardCenter;
+    // eslint-disable-next-line @codaco/spellcheck/spell-checker
     const allowRepositioning = get(stage, 'behaviours.allowRepositioning', false);
+    // eslint-disable-next-line @codaco/spellcheck/spell-checker
     const freeDraw = get(stage, 'behaviours.freeDraw', false);
 
     const showResetButton = this.state.activeAnnotations || this.state.activeFocusNodes;

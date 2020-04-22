@@ -119,7 +119,7 @@ const dragSource = WrappedComponent =>
       } = this.props;
 
       return (
-        <div style={this.styles()}>
+        <div style={this.styles()} className="draggable">
           <div ref={(node) => { this.node = node; }}>
             <WrappedComponent {...rest} ref={(component) => { this.component = component; }} />
           </div>

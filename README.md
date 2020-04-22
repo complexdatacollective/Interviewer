@@ -65,27 +65,19 @@ node-gyp rebuild --target=5.0.9 --arch=x64 --dist-url=https://atom.io/download/e
 
 |`npm run <script>`|Description|
 |------------------|-----------|
-|`start`|Serves your app at `localhost:3000`.|
-|`build:android`|Compiles assets and prepares app for production.|
-|`build:ios`|Compiles assets and prepares app for production.|
-|`build:electron`|Compiles assets and prepares app for production.|
+|`start:[platform]`|Serves your app at `localhost:3000` targeted at the platform you specify.|
+|`dev:[platform]`|Run a live-reloading build of the app, targeted at the platform you specify. Requires the live server to be running (see start task).|
+|`build:[platform]`|Compiles assets and prepares app for production on the given platform.|
 |`test`|Runs testing suite.|
-|`build-docs`|Builds HTML API docs into the docs-build directory.|
-|`electron`|Runs the built code (`./www`) in electron, for testing.|
 |`generate-icons`|Uses icon-gen package to generate iconsets and icon files for OSX and Windows.|
-|`android:dev`|Run a live-reloading build of the Android app. Requires dev server to be running.|
-|`ios:dev`|Run a live-reloading build of the iOS app. Requires dev server to be running.|
-|`dist:linux`|Uses electron-packager to package a Linux release.|
-|`dist:mac`|Uses electron-packager to package an OSX release.|
-|`dist:win`|Uses electron-packager to package a Windows release.|
-|`dist:ios`|Builds iOS cordova project|
-|`dist:android`|Builds Android cordova project|
-|`validate-protocol [path-to-protocol]`|Validate the named protocol (.netcanvas or .json), or the development protocol by default, against the JSON schema|
+|`dist:[platform]`|Uses electron-packager or cordova to package a release for the specified platform.|
+|`lint`|Lints the project according to our eslint configuration|
+|`sass-lint`|Lints the project's SASS files only, according to our sass-lint configuration.|
 
 ## Quick development reference
 
 - In-browser development: `npm start`
-- Platform-specific development: `npm run start:[platform]` and `npm run [platform]:dev`, where `platform` is one of `android`, `electron`, or `ios`.
+- Platform-specific development: `npm run start:[platform]` and `npm run dev:[platform]`, where `platform` is one of `android`, `electron`, or `ios`.
   + Currently, you can only run *one platform at a time*
 
 See below for installation, options, and information on platform specifics.
@@ -103,7 +95,7 @@ See Cordova's [iOS docs](http://cordova.apache.org/docs/en/latest/guide/platform
 
 Starting the web app: If you have a running webpack dev server (started with `npm start`), you can run dev cordova builds on devices & emulators with live reloading.
 
-Starting a device or simulator: Run `npm run [android|ios]:dev`. This is a thin wrapper around `cordova run [android|ios]`; you can pass arguments to the cordova script with an extra pair of dashes. For example: `npm run android:dev -- --emulator`, or `npm run ios:dev -- --target="iPad-Pro, 11.4"`. Changes will be picked up from the dev server.
+Starting a device or simulator: Run `npm run dev:[android|ios]`. This is a thin wrapper around `cordova run [android|ios]`; you can pass arguments to the cordova script with an extra pair of dashes. For example: `npm run dev:android -- --emulator`, or `npm run dev:ios -- --target="iPad-Pro, 11.4"`. Changes will be picked up from the dev server.
 
 This assumes you have the relevant platform development tools installed. For a list of Apple simulator types ("iPad-Pro") and runtimes ("11.4"), try `xcrun simctl list`.
 
@@ -115,7 +107,7 @@ To get full Cordova support, with native integration & plugins:
 
 1. (one time) `cordova build [android|ios]` to install cordova deps, plugins, and static (public) app resources
 2. `npm run start:[android|ios]` to start the dev server (React app)
-3. `npm run [android|ios]:dev` as above
+3. `npm run dev:[android|ios]` as above
 
 However, this comes with some limitations:
 - You can only to run dev server content from a device or simulator on that platform. (Running simultaneous android clients is fine; running electron concurrently requires starting another server in another directory.)
@@ -124,7 +116,7 @@ However, this comes with some limitations:
 ## Electron development
 
 - `npm run start:electron` starts the dev server (React app)
-- `npm run electron:dev` start Electron, pointed at the dev server
+- `npm run dev:electron` start Electron, pointed at the dev server
 
 Troubleshooting:
 

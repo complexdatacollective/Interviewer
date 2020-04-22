@@ -1,4 +1,6 @@
 /* eslint-env jest */
+/* eslint-disable @codaco/spellcheck/spell-checker */
+
 import environments from '../environments';
 import { getEnvironment } from '../Environment';
 

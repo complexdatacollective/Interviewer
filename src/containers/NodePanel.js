@@ -56,7 +56,7 @@ class NodePanel extends PureComponent {
       dataSource,
       id,
       listId,
-      minimise,
+      minimize,
       onDrop,
       nodes,
       ...nodeListProps
@@ -66,7 +66,7 @@ class NodePanel extends PureComponent {
       <Panel
         title={title}
         highlight={highlight}
-        minimise={minimise}
+        minimize={minimize}
       >
         <NodeList
           {...nodeListProps}

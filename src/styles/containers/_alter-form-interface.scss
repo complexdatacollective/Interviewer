@@ -16,6 +16,7 @@
   .swiper-wrapper {
     box-sizing: border-box;
     max-width: 80rem;
+    width: 100%;
 
     .scrollable {
       height: 100%;
@@ -26,10 +27,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
 
     .slide-content {
       display: flex;
-      max-height: 70%;
+      max-height: 80%;
       min-height: 30%;
       width: 100%;
       padding: unit(1) unit(4) unit(2);
@@ -75,9 +77,13 @@
     margin-top: 2rem;
     margin-bottom: 1rem;
 
-    @media screen and (min-aspect-ratio: 16 / 10) {
-      column-count: 2;
-    }
+    // JRM - remove multiple column support following user feedback
+    // TODO - consider having this as a menu option, and look at
+    // alternative ways of calculating form item position to avoid
+    // issues with jumping content, etc.
+    // @media screen and (min-aspect-ratio: 16 / 10) {
+    //   column-count: 2;
+    // }
 
     .form-field-container {
       break-inside: avoid;
@@ -93,10 +99,10 @@
     flex-direction: column;
     width: 20rem;
     position: absolute;
-    bottom: unit(2);
+    bottom: unit(3);
 
     &__status-text {
-      margin-bottom: 0.5rem;
+      margin-bottom: unit(3);
     }
 
     &--show {

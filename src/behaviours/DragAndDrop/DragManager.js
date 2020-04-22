@@ -162,6 +162,7 @@ class dragManager {
   onMove = (e) => {
     if (this.state.moveStart === true) {
       const movement = this.movementFromEvent(e);
+
       const { x, y, t } = movement;
 
       // Determine move type

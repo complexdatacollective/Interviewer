@@ -1,4 +1,5 @@
 /* eslint-env jest */
+/* eslint-disable @codaco/spellcheck/spell-checker */
 
 import React from 'react';
 import { shallow } from 'enzyme';
@@ -54,7 +55,7 @@ describe('Connect(PresetSwitcherKey)', () => {
         updatedAt: 1554130548004,
       },
     },
-    ui: { isMenuOpen: false },
+    ui: { settingsMenuOpen: false },
   };
   const mockProps = {
     displayEdges: [],

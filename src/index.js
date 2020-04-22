@@ -8,6 +8,7 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter, push } from 'react-router-redux';
 import { Spinner } from '@codaco/ui';
 import initFileOpener from './utils/initFileOpener';
+import initMenuActions from './utils/initMenuActions';
 import { history, store, persistor } from './ducks/store';
 import { actionCreators as deviceActions } from './ducks/modules/deviceSettings';
 import App from './containers/App';
@@ -60,6 +61,9 @@ if (isElectron()) {
   const { webFrame, ipcRenderer } = window.require('electron'); // eslint-disable-line global-require
   webFrame.setVisualZoomLevelLimits(1, 1); // Prevents pinch-to-zoom
   remote.init();
+
+  // Listen for native menu UI events
+  initMenuActions();
 
   ipcRenderer.on('RESET_STATE', () => {
     store.dispatch(push('/reset'));

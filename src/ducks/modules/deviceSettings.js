@@ -16,6 +16,9 @@ const initialState = {
   interfaceScale: 100,
   showScrollbars: false,
   startFullScreen: shouldStartFullScreen(),
+
+  // Export Options
+  exportFormat: 'graphml',
 };
 
 // This provides additional default state based on information unavailable before 'deviceready'.

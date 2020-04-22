@@ -2,6 +2,6 @@
 
 exports[`<NodePanels /> renders ok 1`] = `
 <Panels
-  minimise={true}
+  minimize={true}
 />
 `;
