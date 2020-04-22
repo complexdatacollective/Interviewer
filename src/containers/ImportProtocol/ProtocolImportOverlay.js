@@ -7,7 +7,7 @@ import { Button } from '@codaco/ui';
 import ProtocolUrlForm from './ProtocolUrlForm';
 import ServerPairing from '../ServerPairing/ServerPairing';
 import ServerProtocols from '../ServerPairing/ServerProtocols';
-import { ServerAddressForm, DiscoveredServerList } from '../../components/Setup';
+import { ServerAddressForm, DiscoveredServerList } from '../../components/SetupScreen';
 import importLocalProtocol from '../../utils/protocol/importLocalProtocol';
 import { actionCreators as protocolActions } from '../../ducks/modules/importProtocol';
 import Overlay from '../Overlay';

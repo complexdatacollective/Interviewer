@@ -10,6 +10,8 @@ import '../styles/main.scss';
 import { isElectron, isCordova, isWindows, isMacOS, isLinux, isPreview, getEnv, isIOS, isAndroid } from '../utils/Environment';
 import DialogManager from '../components/DialogManager';
 import { SettingsMenu } from '../components/SettingsMenu';
+import ProtocolImportOverlay from './ImportProtocol/ProtocolImportOverlay';
+import ImportProgressOverlay from './ImportProtocol/ImportProgressOverlay';
 
 /**
   * Main app container.
@@ -88,6 +90,14 @@ class App extends PureComponent {
           })}
         >
           <SettingsMenu />
+          <ProtocolImportOverlay
+            show={this.props.showImportProtocolOverlay}
+            onClose={() => setShowImportProtocolOverlay(false)}
+          />
+          <ImportProgressOverlay
+            show={this.props.importProtocolProgress && this.props.importProtocolProgress.step > 0}
+            progress={this.props.importProtocolProgress}
+          />
           { children }
         </div>
         <DialogManager />
@@ -117,6 +127,7 @@ function mapStateToProps(state) {
     interfaceScale: state.deviceSettings.interfaceScale,
     useDynamicScaling: state.deviceSettings.useDynamicScaling,
     startFullScreen: state.deviceSettings.startFullScreen,
+    importProtocolProgress: state.importProtocol,
   };
 }
 

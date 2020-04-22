@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Icon, Spinner } from '@codaco/ui';
 import ServerDiscoverer from '../../utils/serverDiscoverer';
-import ServerCard from '../../components/Setup/ServerCard';
+import ServerCard from './ServerCard';
 import Scroller from '../Scroller';
 
 const loadingPlaceholder = (

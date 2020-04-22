@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import ApiClient from '../../utils/ApiClient';
 import { addSecureApiUrlToServer } from '../../utils/serverAddressing';
-import { ServerSetup, ServerPairingForm } from '../../components/Setup';
+import { ServerSetup, ServerPairingForm } from '../../components/SetupScreen';
 import { actionCreators } from '../../ducks/modules/pairedServer';
 
 const emptyState = Object.freeze({

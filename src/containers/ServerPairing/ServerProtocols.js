@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ApiClient from '../../utils/ApiClient';
-import { ServerProtocolList, ServerSetup, PairedServerWrapper, ServerUnavailable } from '../../components/Setup';
+import { ServerProtocolList, ServerSetup, PairedServerWrapper, ServerUnavailable } from '../../components/SetupScreen';
 
 
 /**

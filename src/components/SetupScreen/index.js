@@ -9,4 +9,4 @@ export { default as ServerPairingForm } from './ServerPairingForm';
 export { default as ServerSetup } from './ServerSetup';
 export { default as ServerCard } from './ServerCard';
 export { default as ServerUnavailable } from './ServerUnavailable';
-export { default as NewSessionOverlay } from '../../components/Setup/NewSessionOverlay';
+export { default as NewSessionOverlay } from './NewSessionOverlay';

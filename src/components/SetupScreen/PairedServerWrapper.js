@@ -7,7 +7,7 @@ import { Button } from '@codaco/ui';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { actionCreators as serverActions } from '../../ducks/modules/pairedServer';
 import ApiClient from '../../utils/ApiClient';
-import { ServerUnavailable } from '../../components/Setup';
+import ServerUnavailable from './ServerUnavailable';
 import logo from '../../images/Srv-Flat.svg';
 
 const noClick = () => {};

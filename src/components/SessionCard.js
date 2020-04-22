@@ -1,17 +1,15 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
+import { motion } from 'framer-motion';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { isEmpty, get } from 'lodash';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Button } from '@codaco/ui';
+import { getCSSVariableAsNumber, getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
 import { actionCreators as sessionActions } from '../ducks/modules/session';
 import { ProgressBar } from '../components';
-import { nodeAttributesProperty } from '../utils/network-exporters/graphml/helpers';
 
-const displayDate = timestamp => timestamp && new Date(timestamp).toLocaleString(undefined, { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' });
-
-const oneBasedIndex = i => parseInt(i || 0, 10) + 1;
+const formatDate = timestamp => timestamp && new Date(timestamp).toLocaleString(undefined, { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' });
 
 const SessionCard = (props) => {
   const {
@@ -24,11 +22,10 @@ const SessionCard = (props) => {
 
   const {
     caseId,
-    network,
-    promptIndex,
     protocolUID,
-    stageIndex,
+    progress,
     updatedAt,
+    lastExportedAt,
   } = attributes;
 
   const classes = cx({
@@ -36,25 +33,11 @@ const SessionCard = (props) => {
     'session-card--selected': isSelected(sessionUUID),
   });
 
-
-  // const attributes = details.map(
-  //   (detail, index) => {
-  //     const key = Object.keys(detail)[0];
-  //     return (
-  //       <h5 key={index} className={cx('session-card__attribute')}>
-  //         {key}: {detail[key]}
-  //       </h5>
-  //     );
-  //   },
-  // );
-
-  const progress = Math.round(
-    (oneBasedIndex(stageIndex) / oneBasedIndex(get(installedProtocols, [protocolUID, 'stages'], []).length)) * 100,
-  );
-
-  console.log(props);
   return (
-    <div className={classes}>
+    <motion.div
+      className={classes}
+      key={sessionUUID}
+    >
       <div className="session-card__content">
         <div className="progress-wrapper">
           <ProgressBar percentProgress={progress} />
@@ -64,7 +47,15 @@ const SessionCard = (props) => {
           <h1 className="card__label">
             { caseId }
           </h1>
-          {/* { attributes } */}
+          <h5 className="session-card__attribute">
+            Protocol: { installedProtocols[protocolUID].name || '[Unavailable protocol]'}
+          </h5>
+          <h5 className="session-card__attribute">
+            Last Changed: { formatDate(updatedAt) }
+          </h5>
+          <h5 className="session-card__attribute">
+            Last Exported: { lastExportedAt ? formatDate(lastExportedAt) : 'Not yet exported' }
+          </h5>
         </div>
       </div>
       <Button
@@ -73,7 +64,7 @@ const SessionCard = (props) => {
       >
         Resume
       </Button>
-    </div>
+    </motion.div>
   );
 };
 

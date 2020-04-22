@@ -11,6 +11,8 @@ import { NewFilterableListWrapper, NodeBin, SessionCard } from '../../components
 import { entityAttributesProperty } from '../../ducks/modules/network';
 import ExportSessionsOverlay from '../ExportSessions/ExportSessionsOverlay';
 
+const oneBasedIndex = i => parseInt(i || 0, 10) + 1;
+
 const emptyView = (
   <div className="session-list-container--empty">
     <div className="getting-started">
@@ -54,7 +56,15 @@ class SessionList extends Component {
     const { sessions } = this.props;
     // Display most recent first, and filter out any session that doesn't have a protocol
     const sessionList = Object.keys(sessions)
-      .map(key => ({ sessionUUID: key, [entityAttributesProperty]: sessions[key] }));
+      .map(key => ({
+        sessionUUID: key,
+        [entityAttributesProperty]: {
+          ...sessions[key],
+          progress: Math.round(
+            (oneBasedIndex(sessions[key].stageIndex) / oneBasedIndex(get(this.props.installedProtocols, [sessions[key].protocolUID, 'stages'], []).length)) * 100,
+          ),
+        },
+      }));
 
     if (isEmpty(sessionList)) {
       return emptyView;
@@ -78,7 +88,7 @@ class SessionList extends Component {
             },
             {
               label: 'Progress',
-              variable: 'stageIndex',
+              variable: 'progress',
             },
           ]}
         />

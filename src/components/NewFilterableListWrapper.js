@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import PropTypes from 'prop-types';
 import { Button } from '@codaco/ui';
 import { Text } from '@codaco/ui/lib/components/Fields';
@@ -9,7 +9,6 @@ import sortOrder from '../utils/sortOrder';
 import { selectable } from '../behaviours';
 import {
   DragSource,
-  MonitorDragSource,
 } from '../behaviours/DragAndDrop';
 
 const NewFilterableListWrapper = (props) => {
@@ -21,7 +20,7 @@ const NewFilterableListWrapper = (props) => {
     sortableProperties,
   } = props;
 
-  const [filterTerm, setFilterTerm] = useState('');
+  const [filterTerm, setFilterTerm] = useState(null);
   const [sortProperty, setSortProperty] = useState(initialSortProperty);
   const [sortAscending, setSortAscending] = useState(initialSortDirection === 'asc');
 
@@ -34,7 +33,12 @@ const NewFilterableListWrapper = (props) => {
     }
   };
 
-  const sortedItems = sortOrder([sortProperty, sortAscending ? 'asc' : 'desc'])(items);
+  const onFilterChange = event => setFilterTerm(event.target.value || null);
+
+  const sortedItems = sortOrder([{
+    property: sortProperty,
+    direction: sortAscending ? 'asc' : 'desc',
+  }])(items);
 
   const getFilteredAndSortedItemList = () => {
     if (!filterTerm) { return sortedItems; }
@@ -54,7 +58,9 @@ const NewFilterableListWrapper = (props) => {
   };
 
   return (
-    <div className="new-filterable-list">
+    <motion.div
+      className="new-filterable-list"
+    >
       <header className="new-filterable-list__header">
         <section>
           { (sortableProperties && sortableProperties.length > 0) &&
@@ -81,11 +87,10 @@ const NewFilterableListWrapper = (props) => {
           <h4>Filter: </h4>
           <Text
             type="search"
-            placeholder="Filter Items..."
+            placeholder="Filter..."
             className="new-filterable-list__filter"
             input={{
-              value: filterTerm,
-              onChange: setFilterTerm,
+              onChange: onFilterChange,
             }}
           />
         </section>
@@ -102,7 +107,7 @@ const NewFilterableListWrapper = (props) => {
           }
         </Scroller>
       </main>
-    </div>
+    </motion.div>
   );
 };
 
