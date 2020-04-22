@@ -8,6 +8,9 @@
   width: 6rem;
   height: 6rem;
   cursor: pointer;
+  position: absolute;
+  top: unit(4);
+  left: unit(4);
 
   &__button {
     height: 6rem;

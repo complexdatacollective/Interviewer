@@ -1,0 +1,29 @@
+.import-protocol-overlay {
+
+  .import-protocol-overlay__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    h4 {
+      margin-top: 1rem;
+    }
+
+    .icon {
+      height: 8rem;
+      background: var(--color-platinum);
+      border-radius: 50%;
+    }
+
+    .progress-bar {
+      width: 20rem;
+      height: 1.5rem;
+      background: var(--color-platinum);
+      margin-bottom: unit(1);
+
+      &__filler {
+        background: var(--primary);
+      }
+    }
+  }
+}

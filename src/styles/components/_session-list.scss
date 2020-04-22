@@ -1,22 +1,18 @@
 .session-list {
-  flex-wrap: wrap;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 2rem 3rem;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   padding: unit(4);
 
-  @media screen and (min-aspect-ratio: 4 / 3) {
-    grid-template-columns: 1fr 1fr 1fr;
+  .new-filterable-list__main {
+    .scrollable {
+      & > * {
+        width: 25%;
+        padding: 1rem;
+      }
+    }
   }
-
-  @media screen and (min-aspect-ratio: 16 / 10) {
-    grid-template-columns: 1fr 1fr 1fr;
-  }
-
-  @media screen and (min-aspect-ratio: 16 / 9) {
-    grid-template-columns: 1fr 1fr 1fr;
-  }
-
 }
 
 .session-card {
@@ -97,78 +93,4 @@
     }
   }
 
-}
-
-.session-list-container {
-  height: 100%;
-  width: 100%;
-
-  &__wrapper {
-    width: 90vw;
-    height: calc(80vh);
-    margin: 0 auto;
-    background: var(--session-management-screen-bg);
-    border-radius: var(--border-radius);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-
-    .list-select {
-      flex-grow: 1;
-      flex-shrink: 1;
-
-      .list-select__sort {
-        padding: unit(2) unit(2) 0;
-      }
-    }
-
-  }
-
-  &__selected {
-    background: var(--color-slate-blue);
-    padding: unit(2) unit(4);
-    flex-basis: 8rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    .selected__info {
-      display: flex;
-      align-items: center;
-
-      .form-field-container {
-        margin: 0;
-
-        .form-field {
-          background: none;
-          margin: 0;
-        }
-      }
-
-      h1 {
-        margin-right: 1rem;
-      }
-    }
-  }
-
-  &--empty {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    height: 70%;
-    align-items: center;
-
-    .getting-started {
-      padding: unit(6);
-      background: var(--light-background);
-      display: flex;
-      flex-direction: column;
-      width: 60vw;
-      border-radius: var(--border-radius);
-
-      &__header {
-        text-align: center;
-      }
-    }
-  }
 }

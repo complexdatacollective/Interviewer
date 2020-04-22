@@ -1,0 +1,62 @@
+.new-filterable-list {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+
+  .card-list {
+    padding-bottom: 0;
+    padding-top: 1rem;
+  }
+
+  &__header {
+    display: flex;
+    flex: 1 0 auto;
+    align-items: center;
+    align-content: space-evenly;
+    justify-content: space-between;
+    margin-bottom: unit(2);
+
+    section {
+      button {
+        margin: 0 1rem;
+      }
+
+      h4 {
+        display: inline;
+      }
+
+      .form-field-container {
+        display: inline-block;
+        margin: 0 1rem;
+      }
+
+      input {
+        margin-bottom: 0;
+      }
+
+      &__filter {
+        width: 13rem;
+
+        input {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+
+  &__main {
+    flex: 1 0 auto;
+    height: 100%;
+
+    .scrollable {
+      height: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      align-content: flex-start;
+      padding: unit(2) 0;
+    }
+
+  }
+}
