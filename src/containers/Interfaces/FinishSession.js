@@ -70,11 +70,21 @@ class FinishSession extends Component {
   }
 
   handleExport = () => {
+    this.props.sessionExportStart([{ sessionUUID: this.props.sessionId }]);
     saveFile(
       [this.props.sessionId],
       this.props.sessions,
       this.props.installedProtocols)
-      .catch(err => this.handleExportError(err));
+      .then((result) => {
+        if (result === 'cancelled') {
+          return this.props.resetSessionExport();
+        }
+        return this.props.sessionExportSucceeded(this.props.sessionId);
+      })
+      .catch((err) => {
+        this.props.sessionExportFailed(this.props.sessionId, err);
+        return this.handleExportError(err);
+      });
   };
 
   handleFinishSession = () => {
@@ -176,6 +186,9 @@ FinishSession.propTypes = {
   defaultServer: PropTypes.object,
   endSession: PropTypes.func.isRequired,
   resetSessionExport: PropTypes.func.isRequired,
+  sessionExportStart: PropTypes.func.isRequired,
+  sessionExportSucceeded: PropTypes.func.isRequired,
+  sessionExportFailed: PropTypes.func.isRequired,
   openDialog: PropTypes.func.isRequired,
   sessionId: PropTypes.string.isRequired,
   sessions: PropTypes.object.isRequired,
@@ -210,6 +223,9 @@ function mapStateToProps(state) {
 const mapDispatchToProps = {
   bulkExportSessions: sessionsActions.bulkExportSessions,
   resetSessionExport: sessionsActions.sessionExportReset,
+  sessionExportStart: sessionsActions.sessionExportStart,
+  sessionExportSucceeded: sessionsActions.sessionExportSucceeded,
+  sessionExportFailed: sessionsActions.sessionExportFailed,
   deleteSession: sessionsActions.removeSession,
   endSession: sessionActions.endSession,
   openDialog: dialogActions.openDialog,

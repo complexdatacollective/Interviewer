@@ -34,6 +34,8 @@ class ExportSessionsOverlay extends PureComponent {
       deleteAfterExport: false, //  determines if successfully uploaded sessions should be removed.
       showExportProgress: false, // Weather to show the SessionExportStatusList
       exportFinished: false,
+      showDownloadProgress: false,
+      downloadFinished: false,
     };
   }
 
@@ -68,8 +70,13 @@ class ExportSessionsOverlay extends PureComponent {
       return foundSession;
     };
 
-    if (this.sessionsAreExportable) {
-      if (this.state.showExportProgress) {
+    const exportFunc = this.state.exportMode === 'server' ? this.export : this.exportToFile;
+    const progress = this.state.exportMode === 'server' ? this.state.showExportProgress : this.state.showDownloadProgress;
+    const finished = this.state.exportMode === 'server' ? this.state.exportFinished : this.state.downloadFinished;
+    const errorMessage = this.state.exportMode === 'server' ? 'This session is not exportable: it is not associated with any Server.' : 'This session is not exportable.';
+
+    if (this.sessionsAreExportable || this.state.exportMode === 'download') {
+      if (progress) {
         return (
           <div className="session-export-content">
             <div className="session-export-content__container">
@@ -78,7 +85,7 @@ class ExportSessionsOverlay extends PureComponent {
                 deleteWhenFinished={this.state.deleteAfterExport}
               />
             </div>
-            { this.state.exportFinished &&
+            { finished &&
             <div className="session-export-content__footer">
               { !this.props.activeSession && successfullyExportedSession() &&
                 <Toggle
@@ -119,32 +126,38 @@ class ExportSessionsOverlay extends PureComponent {
           </div>
         );
       }
+      const destination = this.state.exportMode === 'server' ? this.props.pairedServer.name : 'file';
+      const tabContent = (
+        <React.Fragment>
+          <div>
+            <h2>Ready to export</h2>
+            <p>
+              Ready to export {this.props.sessionsToExport.length} session{this.props.sessionsToExport.length > 1 && ('s')} to {destination}.
+                    Ensure this is the correct destination before continuing.
+            </p>
+          </div>
+          <div className="session-export-content__footer">
+            <div className="session-export-content__footer--actions">
+              <Button onClick={() => exportFunc(this.props.sessionsToExport)}>
+                Export
+              </Button>
+            </div>
+          </div>
+        </React.Fragment>);
+      const serverWrapper = (
+        <PairedServerWrapper className="server-setup__card" data={this.props.pairedServer} isPaired>
+          {tabContent}
+        </PairedServerWrapper>);
       return (
         <div className="session-export-content">
           <div className="session-export-content__container">
-            <PairedServerWrapper className="server-setup__card" data={this.props.pairedServer} isPaired>
-              <div>
-                <h2>Ready to export</h2>
-                <p>
-                  Ready to export {this.props.sessionsToExport.length} session{this.props.sessionsToExport.length > 1 && ('s')} to {this.props.pairedServer.name}.
-                  Ensure this is the correct destination before continuing.
-                </p>
-
-              </div>
-              <div className="session-export-content__footer">
-                <div className="session-export-content__footer--actions">
-                  <Button onClick={() => this.export(this.props.sessionsToExport)}>
-                    Export
-                  </Button>
-                </div>
-              </div>
-            </PairedServerWrapper>
+            {this.state.exportMode === 'server' ? serverWrapper : <div>{tabContent}</div>}
           </div>
         </div>
       );
     }
 
-    return <p>This session is not exportable: it is not associated with any Server.</p>;
+    return <p>{errorMessage}</p>;
   }
 
   export(sessionList) {
@@ -184,16 +197,34 @@ class ExportSessionsOverlay extends PureComponent {
   }
 
   exportToFile = (exportedSessions) => {
-    this.setState({ showExportProgress: true, exportFinished: false });
-
+    this.setState({ showDownloadProgress: true, downloadFinished: false });
+    this.props.sessionExportStart(exportedSessions.map(sessionId => ({ sessionUUID: sessionId })));
     saveFile(
       exportedSessions,
       this.props.sessions,
       this.props.installedProtocols,
     )
-      .then(() => { this.setState({ exportFinished: true }); })
-      .catch(err => this.handleExportError(err));
+      .then((result) => {
+        if (result === 'cancelled') {
+          this.setState({ showDownloadProgress: false });
+          return this.props.sessionExportReset();
+        }
+
+        this.setState({ downloadFinished: true });
+        return exportedSessions.map(sessionId => this.props.sessionExportSucceeded(sessionId));
+      })
+      .catch((err) => {
+        exportedSessions.map(sessionId => this.props.sessionExportFailed(sessionId, err));
+        return this.handleExportError(err);
+      });
   };
+
+  switchTab = (exportMode) => {
+    if (exportMode === this.state.exportMode) return;
+
+    this.setState({ exportMode, showDownloadProgress: false, showExportProgress: false });
+    this.props.sessionExportReset();
+  }
 
   contentAreas() {
     const {
@@ -213,8 +244,8 @@ class ExportSessionsOverlay extends PureComponent {
       content = (
         <ProtocolUrlForm />
       );
-    // If we are paired, show the server list.
-    } else if (pairedServer) {
+    // If we are paired, show the server list, or exporting to file, show the session list
+    } else if (exportMode === 'download' || pairedServer) {
       content = this.exportSection;
 
     // If user has requested manual entry show the form
@@ -260,15 +291,13 @@ class ExportSessionsOverlay extends PureComponent {
       <div className="session-export-overlay__tabs">
         <div
           className={cx('tab', { 'tab--selected': this.state.exportMode === 'server' })}
-          onClick={() => this.setState({ exportMode: 'server' })}
+          onClick={() => this.switchTab('server')}
         >
           Upload to Server
         </div>
         <div
-          className="tab"
-          onClick={() => {
-            this.exportToFile(this.props.sessionsToExport);
-          }}
+          className={cx('tab', { 'tab--selected': this.state.exportMode === 'download' })}
+          onClick={() => this.switchTab('download')}
         >
           Export to File
         </div>
@@ -311,6 +340,10 @@ ExportSessionsOverlay.propTypes = {
   sessionsToExport: PropTypes.array.isRequired,
   openDialog: PropTypes.func.isRequired,
   bulkExportSessions: PropTypes.func.isRequired,
+  sessionExportReset: PropTypes.func.isRequired,
+  sessionExportStart: PropTypes.func.isRequired,
+  sessionExportSucceeded: PropTypes.func.isRequired,
+  sessionExportFailed: PropTypes.func.isRequired,
   activeSession: PropTypes.string,
   pairedServer: PropTypes.shape({
     pairingServiceUrl: PropTypes.string.isRequired,
@@ -327,6 +360,10 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   bulkExportSessions: bindActionCreators(sessionsActions.bulkExportSessions, dispatch),
+  sessionExportReset: bindActionCreators(sessionsActions.sessionExportReset, dispatch),
+  sessionExportStart: bindActionCreators(sessionsActions.sessionExportStart, dispatch),
+  sessionExportSucceeded: bindActionCreators(sessionsActions.sessionExportSucceeded, dispatch),
+  sessionExportFailed: bindActionCreators(sessionsActions.sessionExportFailed, dispatch),
   removeSession: bindActionCreators(sessionsActions.removeSession, dispatch),
   openDialog: bindActionCreators(dialogActions.openDialog, dispatch),
 });

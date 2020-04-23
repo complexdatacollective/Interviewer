@@ -466,6 +466,7 @@ const actionCreators = {
   updateStage,
   removeSession,
   sessionExportStart,
+  sessionExportSucceeded,
   sessionExportReset,
   sessionExportFailed,
   bulkExportSessions,

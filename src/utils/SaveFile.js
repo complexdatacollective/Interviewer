@@ -54,7 +54,7 @@ const exportCordovaFile = (fs, session, sessionId, sessionCodebook, fileType) =>
         fileEntry = fe;
         return createWriter(fe);
       })
-      .then(({ fileWriter, filename, fileURL }) => { 
+      .then(({ fileWriter, filename, fileURL }) => {
         shareURL = fileURL;
         return writeFile(fileWriter, filename, data, fileType);
       })
@@ -71,8 +71,8 @@ const cordovaShare = (shareURL, shareOptions) => {
     chooserTitle: 'Share zip file via', // Android only
     ...shareOptions,
   };
-  return new Promise((res, rej) =>
-    window.plugins.socialsharing.shareWithOptions(options, res, rej));
+  return new Promise(res =>
+    window.plugins.socialsharing.shareWithOptions(options, () => res(shareURL), () => res('cancelled')));
 };
 
 const tryFileCleanup = (fileEntries) => {
@@ -157,8 +157,9 @@ const saveZippedSessionsElectron = (exportedSessionIds, sessions, installedProto
     dialog.showSaveDialog({
       filters: [{ name: 'zip', extensions: ['zip'] }],
       defaultPath: defaultFileName,
+    // eslint-disable-next-line consistent-return
     }, (filename) => {
-      if (filename === undefined) return;
+      if (filename === undefined) resolve('cancelled');
 
       const promisedExports = exportedSessionIds.map((sessionId) => {
         const session = sessions[sessionId];
@@ -211,8 +212,9 @@ const saveFile = (exportedSessionIds, sessions, installedProtocols) => {
       dialog.showSaveDialog({
         filters: [{ name: 'graphml', extensions: ['graphml'] }],
         defaultPath: `${session.caseId}_${sessionId}.graphml`,
+      // eslint-disable-next-line consistent-return
       }, (filename) => {
-        if (filename === undefined) return;
+        if (filename === undefined) resolve('cancelled');
         exportElectronFile(fs, session, sessionCodebook, filename)
           .then(exportedFilename => shell.showItemInFolder(exportedFilename))
           .then(resolve)
