@@ -3,7 +3,6 @@ $component: 'protocol-card';
 .#{$component} {
   background: var(--color-platinum);
   border-radius: var(--border-radius);
-  width: 100%;
   height: 20rem;
   display: flex;
   overflow: hidden;
@@ -47,9 +46,9 @@ $component: 'protocol-card';
     }
 
     @media screen and (max-aspect-ratio: 16 / 10) {
-      flex: 0 1 7rem;
+      flex: 0 0 7rem;
       flex-direction: row;
-      padding: 1rem;
+      padding: unit(2);
 
       .protocol-icon {
         flex: 0 1 5rem;
@@ -75,7 +74,7 @@ $component: 'protocol-card';
     flex-direction: column;
 
     @media screen and (max-aspect-ratio: 16 / 10) {
-      flex: 1 0 auto;
+      flex: 1 1 auto;
     }
 
     .protocol-name {
@@ -90,6 +89,7 @@ $component: 'protocol-card';
       flex: 1 1 auto;
       height: 100%;
       overflow-y: auto;
+      overflow-x: hidden;
       margin: 0;
     }
 

@@ -3,6 +3,16 @@
   flex-direction: row;
   flex: 1;
 
+
+  @media screen and (max-aspect-ratio: 16 / 10) {
+    .new-filterable-list__main {
+      >.scrollable {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  }
+
+
   &--empty {
     display: flex;
     justify-content: center;
