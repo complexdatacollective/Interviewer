@@ -62,9 +62,9 @@ const NewFilterableListWrapper = (props) => {
       className="new-filterable-list"
     >
       <header className="new-filterable-list__header">
-        <section>
+        <section className="new-filterable-list__header-section new-filterable-list__header-section--sort">
           { (sortableProperties && sortableProperties.length > 0) &&
-            <React.Fragment>
+            <div className="scroll-container">
               <h4>Sort: </h4>
               {sortableProperties.map(sortField => (
                 <Button
@@ -76,14 +76,14 @@ const NewFilterableListWrapper = (props) => {
                     (sortField.label)
                   }
                   {
-                    sortProperty === sortField.variable && (sortAscending ? '\u25B2' : ' \u25BC')
+                    sortProperty === sortField.variable && (sortAscending ? ' \u25B2' : ' \u25BC')
                   }
                 </Button>
               ))}
-            </React.Fragment>
+            </div>
           }
         </section>
-        <section>
+        <section className="new-filterable-list__header-section new-filterable-list__header-section--filter">
           <h4>Filter: </h4>
           <Text
             type="search"

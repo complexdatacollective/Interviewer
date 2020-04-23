@@ -11,6 +11,7 @@
   position: absolute;
   top: unit(4);
   left: unit(4);
+  z-index: var(--z-global-ui);
 
   &__button {
     height: 6rem;

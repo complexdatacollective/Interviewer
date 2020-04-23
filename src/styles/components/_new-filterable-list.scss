@@ -1,8 +1,10 @@
 .new-filterable-list {
   display: flex;
+  flex: 1;
   flex-direction: column;
-  height: 100%;
   overflow: hidden;
+  border-radius: var(--border-radius);
+  background: var(--color-slate-blue--dark);
 
   .card-list {
     padding-bottom: 0;
@@ -11,13 +13,32 @@
 
   &__header {
     display: flex;
-    flex: 1 0 auto;
+    flex: 0 1 auto;
     align-items: center;
     align-content: space-evenly;
     justify-content: space-between;
-    margin-bottom: unit(2);
+    background: var(--color-slate-blue);
 
-    section {
+    &-section {
+      padding: unit(2);
+
+      &--sort {
+        // display: flex;
+        overflow-x: auto;
+        flex: 1 1;
+        $opaque: rgba(0, 0, 0, 1);
+        $distance: unit(2);
+        -webkit-mask-image: linear-gradient(90deg, transparent, $opaque unit(2), $opaque calc(100% - #{unit(2)}), transparent 100%);
+
+        .scroll-container {
+          white-space: nowrap;
+        }
+      }
+
+      &--filter {
+        flex: 0 0 auto;
+      }
+
       button {
         margin: 0 1rem;
       }
@@ -46,12 +67,13 @@
   }
 
   &__main {
-    flex: 1 0 auto;
-    height: 100%;
+    flex: 1 0;
+    display: flex;
+    flex-direction: column;
 
     .scrollable {
-      height: 100%;
       display: flex;
+      // flex: 1 1;
       flex-wrap: wrap;
       justify-content: flex-start;
       align-content: flex-start;

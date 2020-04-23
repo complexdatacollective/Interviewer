@@ -9,6 +9,7 @@ import { actionCreators as sessionActions } from '../../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { actionCreators as importProtocolActions } from '../../ducks/modules/importProtocol';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
+import { entityAttributesProperty } from '../../ducks/modules/network';
 
 const ProtocolList = (props) => {
   const {
@@ -50,12 +51,17 @@ const ProtocolList = (props) => {
 
   const installedProtocolsArray =
     Object.keys(installedProtocols).map(
-      protocol => ({ ...installedProtocols[protocol], protocolUID: protocol }));
+      protocol => ({
+        protocolUID: protocol,
+        [entityAttributesProperty]: {
+          ...installedProtocols[protocol],
+        },
+      }));
 
   console.log(installedProtocolsArray);
 
   return (
-    <React.Fragment>
+    <div className="protocol-list">
       { size(installedProtocols) > 0 ?
         <NewFilterableListWrapper
           ItemComponent={ProtocolCard}
@@ -75,10 +81,6 @@ const ProtocolList = (props) => {
               label: 'Last Used',
               variable: 'last_used',
             },
-            {
-              label: 'Last Modified',
-              variable: 'lastModified',
-            },
           ]}
         />
         :
@@ -89,7 +91,7 @@ const ProtocolList = (props) => {
         onClose={handleCloseOverlay}
         show={showNewSessionOverlay}
       />
-    </React.Fragment>
+    </div>
   );
 };
 

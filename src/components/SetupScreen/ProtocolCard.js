@@ -11,12 +11,16 @@ import { APP_SUPPORTED_SCHEMA_VERSIONS, APP_SCHEMA_VERSION } from '../../config'
 
 const ProtocolCard = (props) => {
   const {
+    attributes,
+    protocolUID,
+  } = props;
+
+  const {
     schemaVersion,
     lastModified,
     name,
-    protocolUID,
     description,
-  } = props;
+  } = attributes;
 
   const isOutdatedProtocol = () =>
     schemaVersion !== APP_SCHEMA_VERSION &&
@@ -40,7 +44,7 @@ const ProtocolCard = (props) => {
   const renderCardIcon = () => {
     if (isOutdatedProtocol()) {
       return (
-        <div className="protocol-card__info" onClick={() => handleSchemaOutdatedInfo}>
+        <div className="status-icon status-icon__info" onClick={() => handleSchemaOutdatedInfo}>
           <Icon name="info" />
         </div>
       );
@@ -48,7 +52,7 @@ const ProtocolCard = (props) => {
 
     if (isObsoleteProtocol()) {
       return (
-        <div className="protocol-card__error" onClick={() => handleSchemaObsoleteInfo}>
+        <div className="status-icon status-icon__error" onClick={() => handleSchemaObsoleteInfo}>
           <Icon name="error" />
         </div>
       );
@@ -59,24 +63,24 @@ const ProtocolCard = (props) => {
 
   return (
     <div className={modifierClasses} onClick={onClickProtocolCard}>
-      <div className="protocol-card__delete" onClick={() => { handleDeleteProtocol() }}>
-        <Icon name="delete" />
+      <div className="protocol-card__icon-section">
+        <div className="protocol-icon">
+          <Icon name="protocol-card" />
+          {/* {renderCardIcon()} */}
+        </div>
+        <div className="protocol-meta">
+          <h6>Installed: March 03, 19:46</h6>
+          <h6>Last Used: March 03, 19:46</h6>
+          <h6>Schema Version: 4</h6>
+        </div>
       </div>
-      {renderCardIcon()}
-      <h2 className="protocol-card__name">{name}</h2>
-      <p className="protocol-card__description">
-        { description ?
-          description : (<em>No protocol description.</em>)}
-      </p>
-      <div
-        className={startButtonClasses}
-        data-clickable="start-interview"
-        onClick={() => selectProtocol(protocol)}
-      >
-        <Icon className="start-button__protocol-icon" name="protocol-card" />
-        <div className="start-button__text">Start new interview</div>
-        <Icon className="start-button__arrow" name="chevron-right" />
+      <div className="protocol-card__main-section">
+        <h1 className="protocol-name">{name}</h1>
+        <p className="protocol-description">
+          { description || (<em>No protocol description.</em>) }
+        </p>
       </div>
+
     </div>
   );
 };
