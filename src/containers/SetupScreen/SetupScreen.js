@@ -71,8 +71,8 @@ const SetupScreen = (props) => {
         <main className="setup-screen__main">
           {/* <ToggleSessionListButton sessionListShown={showSessionList} /> */}
           {/* <ImportProtocolButton /> */}
-          <ProtocolList />
-          {/* <SessionList /> */}
+          {/* <ProtocolList /> */}
+          <SessionList />
         </main>
       </div>
     </React.Fragment>

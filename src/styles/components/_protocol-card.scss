@@ -7,6 +7,7 @@ $component: 'protocol-card';
   height: 20rem;
   display: flex;
   overflow: hidden;
+  margin: unit(2);
 
   @media screen and (max-aspect-ratio: 16 / 10) {
     flex-direction: column-reverse;

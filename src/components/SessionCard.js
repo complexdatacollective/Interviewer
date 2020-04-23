@@ -7,7 +7,7 @@ import { bindActionCreators } from 'redux';
 import { Button } from '@codaco/ui';
 import { getCSSVariableAsNumber, getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
 import { actionCreators as sessionActions } from '../ducks/modules/session';
-import { ProgressBar } from '../components';
+import { ProgressBar, Scroller } from '../components';
 
 const formatDate = timestamp => timestamp && new Date(timestamp).toLocaleString(undefined, { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' });
 
@@ -43,7 +43,7 @@ const SessionCard = (props) => {
           <ProgressBar percentProgress={progress} />
           <h6>{progress}%</h6>
         </div>
-        <div className="card__attributes">
+        <Scroller>
           <h1 className="card__label">
             { caseId }
           </h1>
@@ -56,14 +56,17 @@ const SessionCard = (props) => {
           <h5 className="session-card__attribute">
             Last Exported: { lastExportedAt ? formatDate(lastExportedAt) : 'Not yet exported' }
           </h5>
-        </div>
+        </Scroller>
       </div>
-      <Button
-        color="neon-coral"
-        onClick={(e) => { e.preventDefault(); setSession(sessionUUID); }}
-      >
-        Resume
-      </Button>
+      <footer className="session-card__footer">
+        <Button
+          color="neon-coral"
+          onClick={(e) => { e.preventDefault(); setSession(sessionUUID); }}
+        >
+          Resume
+        </Button>
+      </footer>
+
     </motion.div>
   );
 };

@@ -2,13 +2,4 @@
   display: flex;
   flex-direction: row;
   flex: 1;
-
-  .new-filterable-list__main {
-    .scrollable {
-      & > * {
-        width: 25%;
-        padding: 1rem;
-      }
-    }
-  }
 }

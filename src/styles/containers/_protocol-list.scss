@@ -3,15 +3,6 @@
   flex-direction: row;
   flex: 1;
 
-  .new-filterable-list__main {
-    .scrollable {
-      & > * {
-        width: 50%;
-        padding: 1rem;
-      }
-    }
-  }
-
   &--empty {
     display: flex;
     justify-content: center;

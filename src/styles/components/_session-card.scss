@@ -6,11 +6,11 @@
   border-radius: var(--border-radius);
   display: flex;
   flex-direction: column;
-  padding: unit(2);
-  height: 100%;
+  height: 20rem;
   border-bottom: 0.5rem solid var(--color-platinum--dark);
   color: var(--color-navy-taupe);
-  justify-content: center;
+  justify-content: space-between;
+  margin: unit(2);
 
   &--selected {
     background-color: var(--color-platinum--dark);
@@ -27,18 +27,36 @@
     }
   }
 
+  &__footer {
+    display: flex;
+    align-items: center;
+    padding-bottom: unit(2);
+  }
+
   &__content {
     display: flex;
     align-items: center;
+    flex: 1 0;
     width: 100%;
+    padding: unit(2) 0;
+    margin-right: unit(2);
+
+    @media screen and (max-aspect-ratio: 16 / 11) {
+      margin: 0;
+      padding: unit(2);
+    }
 
     .progress-wrapper {
-      height: 8rem;
-      margin: 0 auto;
+      height: 100%;
       display: flex;
       align-items: center;
       flex-direction: column;
-      flex-basis: 20%;
+      flex: 0 0 20%;
+      margin: unit(2) 0 0 unit(2);
+
+      @media screen and (max-aspect-ratio: 16 / 11) {
+        display: none;
+      }
 
       .progress-bar {
         height: 100%;
@@ -61,17 +79,17 @@
       }
     }
 
-    .card__attributes {
-      width: 80%;
+    >.scrollable {
       align-self: flex-start;
+      overflow-y: auto;
+      height: 100%;
+      padding: unit(2) 0;
 
       .card__label {
-        word-break: break-all;
+        margin-top: 0;
         font-size: 1.45rem;
         width: 100%;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        hyphens: auto;
       }
     }
   }
