@@ -151,7 +151,7 @@ class ExportSessionsOverlay extends PureComponent {
       return (
         <div className="session-export-content">
           <div className="session-export-content__container">
-            {this.state.exportMode === 'server' ? serverWrapper : <div>{tabContent}</div>}
+            {this.state.exportMode === 'server' ? serverWrapper : <div className="session-export-content__to-file">{tabContent}</div>}
           </div>
         </div>
       );
