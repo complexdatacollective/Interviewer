@@ -1,4 +1,5 @@
 /* eslint-env jest */
+/* eslint-disable @codaco/spellcheck/spell-checker */
 
 import * as Network from '../network';
 
@@ -66,7 +67,7 @@ describe('network selector', () => {
       expect(label).toEqual('Node Label');
     });
 
-    it('handles irregularly capitalised codebook variable name', () => {
+    it('handles irregularly capitalized codebook variable name', () => {
       const label = Network.labelLogic(mockNodeCodebookDefinitionWithCaps, mockNode1);
       expect(label).toEqual('Node Label');
     });

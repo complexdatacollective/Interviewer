@@ -1,4 +1,6 @@
 /* eslint-env jest */
+/* eslint-disable @codaco/spellcheck/spell-checker */
+
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import uuidv4 from '../../../utils/uuid';

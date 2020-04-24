@@ -26,6 +26,10 @@ describe('Start screen', () => {
   beforeAll(setup);
   afterAll(teardown);
 
+  // it.only('does nothing', async () => {
+  //   await app.client.pause(10000);
+  // });
+
   it('on first load it shows no protocols installed', async () => {
     await app.client.waitForVisible('h1=No interview protocols installed');
     await app.client.pause(timing.medium);
@@ -54,12 +58,16 @@ describe('Start screen', () => {
   it('can reset state', async () => {
     await app.client.click('svg[name=settings]');
     await app.client.pause(timing.medium);
+    await app.client.waitForVisible('li[data-name="Developer Options"]');
+    await app.client.moveToObject('li[data-name="Developer Options"]');
+    await forceClick(app, 'li[data-name="Developer Options"]');
+    await app.client.pause(timing.short);
     await app.client.waitForVisible('#reset-all-nc-data');
-    await app.client.moveToObject('#reset-all-nc-data'); // for added realism, as we click using dom
+    await app.client.moveToObject('#reset-all-nc-data');
     await forceClick(app, '#reset-all-nc-data');
     await app.client.pause(timing.medium);
     await app.client.click('button=Continue');
-    // await app.client.waitForVisible('h1=No interview protocols installed');
-    // await app.client.waitForExist('.modal', timing.long, true); // wait for not exist
+    await app.client.waitForVisible('h1=No interview protocols installed');
+    await app.client.waitForExist('.modal', timing.long, true); // wait for not exist
   });
 });

@@ -31,6 +31,8 @@ const defaultImageSnaphotConfig = {
     kebabCase(`${path.basename(testPath)}-${currentTestName}-${counter}`),
   customDiffConfig: { threshold: 0.25 },
   blur: 1,
+  failureThreshold: 0.01,
+  failureThresholdType: 'percent',
 };
 
 const getAppConfiguration = () => {

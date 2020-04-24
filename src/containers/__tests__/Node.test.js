@@ -1,4 +1,6 @@
 /* eslint-env jest */
+/* eslint-disable @codaco/spellcheck/spell-checker */
+
 import React from 'react';
 import { mount, shallow } from 'enzyme';
 import { createStore } from 'redux';
@@ -50,7 +52,7 @@ const mockState = {
       updatedAt: 1554130548004,
     },
   },
-  ui: { isMenuOpen: false },
+  ui: { settingsMenuOpen: false },
 };
 
 

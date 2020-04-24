@@ -3,6 +3,7 @@ import reducer, { actionCreators, actionTypes } from '../deviceSettings';
 
 const initialState = {
   description: 'Unknown device',
+  exportFormat: 'graphml',
   useFullScreenForms: false,
   useDynamicScaling: undefined,
   interfaceScale: 100,

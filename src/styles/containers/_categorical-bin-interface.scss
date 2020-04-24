@@ -1,6 +1,5 @@
 .categorical-bin-interface {
-  margin-left: var(--timeline-width);
-  margin-right: var(--interface-right-margin);
+  @include interface-centering;
   --categorical-bucket-basis: 8rem;
   --categorical-padding-top: 1rem;
   --categorical-padding-bottom: 2rem;

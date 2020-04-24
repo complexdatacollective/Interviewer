@@ -5,10 +5,10 @@ import cx from 'classnames';
 /**
   * Renders a pane container.
   */
-const Panels = ({ children, minimise }) => {
+const Panels = ({ children, minimize }) => {
   const panelsClasses = cx(
     'panels',
-    { 'panels--minimise': minimise },
+    { 'panels--minimize': minimize },
   );
   return (
     <div className={panelsClasses}>
@@ -19,12 +19,12 @@ const Panels = ({ children, minimise }) => {
 
 Panels.propTypes = {
   children: PropTypes.any,
-  minimise: PropTypes.bool,
+  minimize: PropTypes.bool,
 };
 
 Panels.defaultProps = {
   children: null,
-  minimise: false,
+  minimize: false,
 };
 
 export default Panels;

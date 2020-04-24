@@ -1,4 +1,5 @@
 $font-path: '~@codaco/ui/lib/assets/fonts';
+$image-path: '~@codaco/ui/lib/assets/images';
 
 $scroller-top-padding: 2rem;
 $scroller-top-padding-small: 1rem;
@@ -23,7 +24,7 @@ $scroller-top-padding-small: 1rem;
 :root {
   --body-font-family: #{$netcanvas-font-stack}; // override Network Canvas UI
   --code-font: courier;
-  --timeline-width: 9rem;
+  --session-panel-width: 9rem; // Does *not* change actual timeline width (which is automatically calculated). Used for drop obstacle and stage margins
   --interface-prompt-flex-basis: 8rem;
   --interface-right-margin: 2rem;
   --base-font-size: 1.75vmin;
@@ -37,11 +38,10 @@ html,
 body {
   cursor: default;
   overflow: hidden;
-  user-select: none;
   color: palette('text');
   background: palette('background');
   width: 100%;
-  height: 100%;
+  height: 100vh;
 }
 
 a {

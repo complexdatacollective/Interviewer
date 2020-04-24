@@ -144,7 +144,7 @@ class NodePanels extends PureComponent {
         accepts={() => this.isPanelCompatible(index)}
         externalDataSource={dataSource !== 'existing' && dataSource}
         highlight={this.getHighlight(index)}
-        minimise={!this.isPanelOpen(index)}
+        minimize={!this.isPanelOpen(index)}
         id={`PANEL_NODE_LIST_${index}`}
         listId={`PANEL_NODE_LIST_${stage.id}_${prompt.id}_${index}`}
         itemType="NEW_NODE"
@@ -156,7 +156,7 @@ class NodePanels extends PureComponent {
 
   render() {
     return (
-      <Panels minimise={!this.isAnyPanelOpen()}>
+      <Panels minimize={!this.isAnyPanelOpen()}>
         {this.props.panels.map(this.renderNodePanel)}
       </Panels>
     );

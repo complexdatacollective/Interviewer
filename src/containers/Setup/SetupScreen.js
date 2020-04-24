@@ -10,8 +10,8 @@ import { isIOS } from '../../utils/Environment';
 import projectLogo from '../../images/project-logo.svg';
 import betaProjectLogo from '../../images/project-logo-beta.svg';
 import downArrow from '../../images/down-arrow.svg';
+import SettingsMenuButton from '../../components/SettingsMenu/SettingsMenuButton';
 import { ProtocolList, ProtocolImportOverlay, SessionListContainer, ImportProgressOverlay } from '.';
-import SettingsMenuButton from '../../components/MainMenu/SettingsMenuButton';
 
 /**
   * Setup screen
@@ -56,7 +56,9 @@ class Setup extends Component {
           progress={this.props.importProtocolProgress}
         />
         <div className={setupClassnames}>
-          <SettingsMenuButton id="SETTINGS_MENU_BUTTON" />
+          { !this.state.showSessionOverlay &&
+          (<SettingsMenuButton />)
+          }
           <div className="setup__header">
             <img src={isIOS() ? projectLogo : betaProjectLogo} className="logo setup__header--logo" alt="Network Canvas" />
           </div>
@@ -66,13 +68,16 @@ class Setup extends Component {
         </div>
         <div className={resumeOverlayClassnames}>
           <div className="resume-session-panel--toggle" role="button" tabIndex="0" onClick={() => this.setState({ showSessionOverlay: !this.state.showSessionOverlay })}>
-            <img className="toggle-image" src={downArrow} alt="Resume interview" />
-            <h4>
-              { !this.state.showSessionOverlay ?
-                ('Manage Interview Sessions') :
-                ('Start New Session')
-              }
-            </h4>
+            <div className="toggle-button">
+              <img className="toggle-image" src={downArrow} alt="Resume interview" />
+              <h4>
+                { !this.state.showSessionOverlay ?
+                  ('Manage Interview Sessions') :
+                  ('Start New Session')
+                }
+              </h4>
+            </div>
+
           </div>
           <SessionListContainer />
         </div>

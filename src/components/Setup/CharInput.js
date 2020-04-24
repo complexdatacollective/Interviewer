@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 // TODO: Share with Server
+// eslint-disable-next-line @codaco/spellcheck/spell-checker
 const charSet = 'abcdefghijklmnopqrstuvwxyz'.split('');
 
 const CharInput = ({ value, disabled, index, onChange }) => {

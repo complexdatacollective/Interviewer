@@ -1,4 +1,6 @@
 /* eslint-env jest */
+/* eslint-disable @codaco/spellcheck/spell-checker */
+
 import { shallow } from 'enzyme';
 
 import markdownRenderers from '../markdownRenderers';

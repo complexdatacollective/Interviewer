@@ -3,8 +3,7 @@
  */
 
 const initialState = {
-  isMenuOpen: false,
-  protocolIndex: 0,
+  settingsMenuOpen: false,
 };
 
 const UPDATE = 'UI/UPDATE';

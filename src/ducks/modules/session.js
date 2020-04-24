@@ -39,15 +39,17 @@ const setSession = id => (dispatch, getState) => {
   });
 };
 
-const endSession = alsoDelete => (dispatch, getState) => {
-  const { activeSessionId } = getState();
+const endSession = (alsoDelete = false) => (dispatch, getState) => {
   dispatch({
     type: END_SESSION,
   });
 
   dispatch(push('/'));
 
+  dispatch(SessionWorkerActions.resetWorkerMapAction());
+
   if (alsoDelete) {
+    const { activeSessionId } = getState();
     dispatch(SessionsActions.removeSession(activeSessionId));
   }
 };

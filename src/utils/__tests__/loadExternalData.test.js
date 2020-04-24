@@ -1,4 +1,6 @@
 /* eslint-env jest */
+/* eslint-disable @codaco/spellcheck/spell-checker */
+
 import loadExternalData from '../loadExternalData';
 
 const mockProtocolName = 'myMockProtocol';

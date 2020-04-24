@@ -1,4 +1,5 @@
 /* eslint-env jest */
+/* eslint-disable @codaco/spellcheck/spell-checker */
 
 import * as Protocol from '../protocol';
 
@@ -67,7 +68,7 @@ const mockState = {
       protocolUID: 'mockProtocol',
     },
   },
-  ui: { isMenuOpen: false },
+  ui: { settingsMenuOpen: false },
 };
 
 

@@ -18,5 +18,6 @@ export { default as Audio } from './Audio';
 export { default as Video } from './Video';
 export { default as BackgroundImage } from './BackgroundImage';
 export { default as ProgressBar } from './ProgressBar';
-export { default as Timeline } from './Timeline';
+export { default as Timeline } from './SessionPanel/SessionPanel';
 export { default as CategoricalItem } from './CategoricalItem';
+export { default as CloseButton } from './CloseButton';

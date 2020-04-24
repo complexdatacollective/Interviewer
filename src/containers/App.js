@@ -7,9 +7,9 @@ import cx from 'classnames';
 import 'swiper/css/swiper.css';
 import { actionCreators as deviceSettingsActions } from '../ducks/modules/deviceSettings';
 import '../styles/main.scss';
-import { isElectron, isCordova, isWindows, isMacOS, isLinux, isPreview, getEnv } from '../utils/Environment';
+import { isElectron, isCordova, isWindows, isMacOS, isLinux, isPreview, getEnv, isIOS, isAndroid } from '../utils/Environment';
 import DialogManager from '../components/DialogManager';
-import MainMenu from '../containers/MainMenu';
+import { SettingsMenu } from '../components/SettingsMenu';
 
 /**
   * Main app container.
@@ -71,12 +71,15 @@ class App extends PureComponent {
         app: true,
         'app--electron': isElectron(),
         'app--windows': isWindows(),
+        // eslint-disable-next-line @codaco/spellcheck/spell-checker
         'app--macos': isMacOS(),
+        // eslint-disable-next-line @codaco/spellcheck/spell-checker
+        'app--ios': isIOS(),
+        'app-android': isAndroid(),
         'app--linux': isLinux(),
         'app--preview': isPreview(),
       })}
       >
-        <MainMenu />
         <div className="electron-titlebar" />
         <div
           id="page-wrap"
@@ -84,6 +87,7 @@ class App extends PureComponent {
             app__content: true,
           })}
         >
+          <SettingsMenu />
           { children }
         </div>
         <DialogManager />

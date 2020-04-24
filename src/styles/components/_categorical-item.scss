@@ -37,11 +37,13 @@
     flex-direction: column;
   }
 
-  &:hover {
-    &:not(.categorical-item--hover) {
-      &:not(.categorical-item--expanded) {
-        .categorical-item__disk {
-          background-color: var(--categorical-item-color);
+  @include platform-not-ios {
+    &:hover {
+      &:not(.categorical-item--hover) {
+        &:not(.categorical-item--expanded) {
+          .categorical-item__disk {
+            background-color: var(--categorical-item-color);
+          }
         }
       }
     }

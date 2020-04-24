@@ -22,7 +22,7 @@ export const loadProtocolFromFile = async (app, filename) => {
   await app.client.waitForVisible('h4=Protocol imported successfully!');
   await app.client.click('button=Continue');
   await app.client.pause(timing.medium);
-  await app.client.click('button.overlay__close');
+  await app.client.click('.overlay__close');
   await app.client.waitForExist('.modal', timing.long, true);
 };
 
@@ -58,17 +58,19 @@ export const startInterview = async (app, caseId = 'test') => {
 };
 
 export const goToStage = async (app, stageId) => {
+  console.log('Going to stage ', stageId);
   if (!stageId) { throw Error('goToStage() requires a stageId'); }
-  await app.client.click('.progress-bar');
-  await app.client.waitForVisible('.main-menu-stages-menu');
-  forceClick(app, `[data-stage-id=${stageId}]`);
+  await app.client.click('.session-navigation__progress-bar');
+  await app.client.waitForVisible('.stages-menu');
+  await app.client.pause(timing.long); // Added to give menu stagger animation time to complete
+  forceClick(app, `[data-stage-name=${stageId}]`);
   await app.client.pause(timing.long);
 };
 
 export const timelineNext = async (app) => {
-  await app.client.click('.timeline-nav--next');
+  await app.client.click('.session-navigation__button--next');
 };
 
 export const timelinePrevious = async (app) => {
-  await app.client.click('.timeline-nav--back');
+  await app.client.click('.session-navigation__button--back');
 };

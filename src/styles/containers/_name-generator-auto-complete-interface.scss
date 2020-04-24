@@ -17,12 +17,12 @@ $search-z-index: var(--z-global-ui);
   &__search {
     .search {
       --right-collapsed-js: 3rem; // align with 'core' of button
-      --right-offset: var(--timeline-width); // margin equal to left menu width
+      --right-offset: var(--session-panel-width); // margin equal to left menu width
 
       // Position collapsed search element around the 'core' of the icon
       bottom: $search-icon-offset-y;
       right: var(--right-offset);
-      width: calc(100% - calc(var(--right-offset)*1.2) - var(--timeline-width));
+      width: calc(100% - calc(var(--right-offset)*1.2) - var(--session-panel-width));
       z-index: $search-z-index;
     }
   }
