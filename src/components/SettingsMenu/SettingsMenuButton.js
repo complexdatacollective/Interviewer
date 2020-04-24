@@ -8,8 +8,6 @@ import { actionCreators as uiActions } from '../../ducks/modules/ui';
 
 const SettingsMenuButton = props => (
   <motion.div
-    whileHover={{ scale: 1.1 }}
-    whileTap={{ scale: 0.95 }}
     className="settings-menu-button"
     onClick={props.openSettingsMenu}
     {...props}

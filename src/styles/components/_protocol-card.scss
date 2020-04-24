@@ -1,6 +1,8 @@
 $component: 'protocol-card';
 
 .#{$component} {
+  @include clickable(3);
+
   background: var(--color-platinum);
   border-radius: var(--border-radius);
   height: 20rem;
@@ -10,7 +12,7 @@ $component: 'protocol-card';
 
   @media screen and (max-aspect-ratio: 16 / 10) {
     flex-direction: column-reverse;
-    height: 25rem;
+    height: 22rem;
   }
 
   &__icon-section {

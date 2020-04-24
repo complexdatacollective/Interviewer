@@ -15,6 +15,18 @@
   }
 }
 
+.server-status {
+  @include clickable;
+
+  position: absolute;
+  top: unit(4);
+  right: unit(4);
+  height: 6rem;
+  width: 6rem;
+  z-index: var(--z-global-ui);
+  border-radius: 50%;
+}
+
 .setup-screen {
   height: 100%;
   width: 100%;
@@ -23,59 +35,183 @@
   z-index: var(--z-default);
   position: absolute;
   top: 0;
-  background-image: linear-gradient(to top, var(--background), transparent 10rem);
 
   &__header {
     align-items: center;
     justify-content: center;
-    height: 20vh;
     display: flex;
     flex-direction: column;
-    padding: unit(2);
-    flex: 0 0 20vh;
+    flex: 0 0 16vh;
 
     .header-logo {
       height: 100%;
-      max-height: 10rem;
+      max-height: 8rem;
     }
   }
 
   &__main {
     flex: 1 0;
-    margin: 2.4rem;
-    display: flex;
-    overflow: hidden;
-  }
-}
+    overflow-x: auto;
+    flex-direction: column;
+    margin: 0 unit(4);
 
-.session-panel-toggle {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  z-index: var(--z-panel);
-
-  &--toggle {
-    height: var(--manage-interview-panel-height);
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    .toggle-button {
+    .setup-section {
+      background: #{transparentize(rgb(58, 58, 117), 0.45)};
+      margin: unit(4) auto;
+      max-width: 80rem;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
+      border-radius: var(--border-radius);
+      overflow: hidden;
 
-      h4 {
-        margin-bottom: 0;
+      &__content {
+        flex: 1;
+        padding: unit(4) unit(8);
+        display: flex;
+        flex-direction: column;
+
+        heading {
+          h2 {
+            margin-top: 0;
+            margin-bottom: 2.4rem;
+            color: #d0d0e4;
+          }
+        }
       }
 
-      .toggle-image {
-        height: 2rem;
-        transition: transform var(--animation-duration-fast) var(--animation-easing);
+      &__action {
+        padding: unit(4) unit(8);
+        background: var(--color-cyber-grape);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        flex: 0 0 25rem;
+
+        h4 {
+          margin-top: 0;
+          margin-bottom: unit(1);
+          color: rgb(123, 123, 183);
+        }
+      }
+    }
+
+    .welcome-section {
+      padding: unit(4) unit(8);
+      background: var(--color-slate-blue);
+      flex-direction: column;
+
+      heading {
+
+      }
+
+      main {
+      }
+    }
+
+    .resume-section {
+      &__session-card {
+        @include clickable(2);
+
+        background-image: url('../images/card-background.png');
+        background-size: cover;
+        color: var(--color-cyber-grape);
+        border-radius: var(--border-radius);
+        overflow: hidden;
+        position: relative;
+        height: 15rem;
+        max-width: 40rem;
+        display: flex;
+
+        &::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          z-index: 1;
+        }
+
+        & > * {
+          z-index: 100;
+          position: relative;
+        }
+
+        &--others {
+          color: var(--text);
+          align-items: center;
+          justify-content: center;
+
+          &::after {
+            background-image: linear-gradient(120deg, rgba(32, 28, 66, 0.78), rgba(93, 91, 138, 0.82));
+          }
+        }
+
+        &--main {
+          .card-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            flex: 1 0;
+            padding: 0 unit(4);
+
+            h1 {
+              margin-bottom: unit(1);
+            }
+          }
+
+          .card-action {
+            background: var(--color-slate-blue);
+            flex: 0 0 10rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: translateX(10rem);
+            transition: transform var(--animation-duration-standard) var(--animation-easing);
+          }
+
+          &:hover {
+            .card-action {
+              transform: translateX(0);
+            }
+          }
+
+          &::after {
+            background-image: linear-gradient(120deg, #ffffff, #c7d0fba6);
+          }
+        }
       }
     }
   }
 
+  &__footer {
+    display: flex;
+    background: var(--color-navy-taupe);
+    border-top: 0.1rem solid var(--color-cyber-grape);
+    justify-content: center;
+
+    .footer-section {
+      padding: unit(3) 0;
+      display: flex;
+      width: 25rem;
+      justify-content: center;
+      align-items: center;
+
+      &__label {
+        letter-spacing: 0.25em;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+      }
+
+      .icon {
+        height: 3rem;
+        padding: 0.5rem;
+        width: auto;
+      }
+
+      &:hover {
+        background: var(--color-neon-coral--dark);
+        cursor: pointer;
+      }
+    }
+  }
 }
