@@ -56,12 +56,22 @@
     margin: 0 unit(4);
 
     .setup-section {
-      background: #{transparentize(rgb(58, 58, 117), 0.45)};
       margin: unit(4) auto;
       max-width: 80rem;
       display: flex;
-      border-radius: var(--border-radius);
-      overflow: hidden;
+      flex-direction: column;
+
+      .section-heading {
+
+      }
+
+      .section-wrapper {
+        background: #{transparentize(rgb(58, 58, 117), 0.45)};
+        display: flex;
+        border-radius: var(--border-radius);
+        overflow: hidden;
+
+      }
 
       &__content {
         flex: 1;

@@ -6,7 +6,7 @@ import { Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import cx from 'classnames';
-import { Icon } from '@codaco/ui';
+import { Icon, Button } from '@codaco/ui';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
 import { isIOS } from '../../utils/Environment';
 import NCLogo from '../../images/NC-Logo.svg';
@@ -64,7 +64,7 @@ const SetupScreen = (props) => {
           {/* <ProtocolList /> */}
           {/* <SessionList /> */}
 
-          <section className="setup-section welcome-section">
+          {/* <section className="setup-section welcome-section">
             <heading>
               <h1>Welcome to Network Canvas</h1>
             </heading>
@@ -74,52 +74,70 @@ const SetupScreen = (props) => {
                 purposes.
               </p>
             </main>
-          </section>
+          </section> */}
           <section className="setup-section start-section">
-            <main className="setup-section__content">
-              <heading>
-                <h2>Start a new Interview</h2>
-              </heading>
-              <article className="start-section__protocol-card start-section__protocol-card--main">
-                <div className="card-content">
-                  <h1>Development Protocol</h1>
-                  <small>March 4th 2020, 19:26</small>
-                  <h4>Development Protocol</h4>
+            <heading className="section-heading">
+              <h1>Start a new Interview</h1>
+            </heading>
+            <main className="section-wrapper">
+              <section className="setup-section__content">
+                <heading>
+                  <h2>Last Used Protocol</h2>
+                </heading>
+                <article className="start-section__protocol-card start-section__protocol-card--main">
+                  <div className="card-content">
+                    <h1>Development Protocol</h1>
+                    <small>March 4th 2020, 19:26</small>
+                    <h4>Active Pill</h4>
+                  </div>
+                  <div className="card-action">
+                    <Icon name="arrow-right" />
+                  </div>
+                </article>
+              </section>
+              <aside className="setup-section__action">
+                <h4>Use a different protocol...</h4>
+                <div className="setup-section__session-card setup-section__protocol-card--others">
+                  <h2>Select protocol...</h2>
                 </div>
-                <div className="card-action">
-                  <Icon name="arrow-right" />
+              </aside>
+              <aside className="setup-section__action">
+                <h4>Manage Protocols</h4>
+                <div className="start-section__protocol-card start-section__protocol-card--others">
+                  <Button color="primary" disabled>Import from Server</Button>
+                  <Button color="primary">Import from File</Button>
+                  <Button color="primary">Open Protocol Library</Button>
                 </div>
-              </article>
+              </aside>
             </main>
-            <aside className="setup-section__action">
-              <h4>Resume Other Session</h4>
-              <div className="start-section__protocol-card start-section__protocol-card--others">
-                <h2>+12 Others...</h2>
-              </div>
-            </aside>
           </section>
           <section className="setup-section resume-section">
-            <main className="setup-section__content">
-              <heading>
-                <h2>Resume Last Session</h2>
-              </heading>
-              <article className="resume-section__session-card resume-section__session-card--main">
-                <div className="card-content">
-                  <h1>Joshua Melville</h1>
-                  <small>March 4th 2020, 19:26</small>
-                  <h4>Development Protocol</h4>
+            <heading className="section-heading">
+              <h1>Resume an Interview</h1>
+            </heading>
+            <main className="section-wrapper">
+              <section className="setup-section__content">
+                <heading>
+                  <h2>Last Session</h2>
+                </heading>
+                <article className="resume-section__session-card resume-section__session-card--main">
+                  <div className="card-content">
+                    <h1>Joshua Melville</h1>
+                    <small>March 4th 2020, 19:26</small>
+                    <h4>Development Protocol</h4>
+                  </div>
+                  <div className="card-action">
+                    <Icon name="arrow-right" />
+                  </div>
+                </article>
+              </section>
+              <aside className="setup-section__action">
+                <h4>Resume Other Session</h4>
+                <div className="resume-section__session-card resume-section__session-card--others">
+                  <h2>+12 Others...</h2>
                 </div>
-                <div className="card-action">
-                  <Icon name="arrow-right" />
-                </div>
-              </article>
+              </aside>
             </main>
-            <aside className="setup-section__action">
-              <h4>Resume Other Session</h4>
-              <div className="resume-section__session-card resume-section__session-card--others">
-                <h2>+12 Others...</h2>
-              </div>
-            </aside>
           </section>
           <section className="setup-section">
             <heading>
