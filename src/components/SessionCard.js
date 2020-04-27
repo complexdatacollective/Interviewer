@@ -58,15 +58,6 @@ const SessionCard = (props) => {
           </h5>
         </Scroller>
       </div>
-      <footer className="session-card__footer">
-        <Button
-          color="neon-coral"
-          onClick={(e) => { e.preventDefault(); setSession(sessionUUID); }}
-        >
-          Resume
-        </Button>
-      </footer>
-
     </motion.div>
   );
 };

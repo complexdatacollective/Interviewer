@@ -1,16 +1,17 @@
 
 .session-card {
   @include transition-properties((background-color, border-bottom-color, transform, box-shadow), var(--animation-easing), var(--animation-duration-standard));
+  @include clickable(2);
   align-items: center;
   background-color: var(--color-platinum);
   border-radius: var(--border-radius);
   display: flex;
   flex-direction: column;
-  height: 20rem;
-  border-bottom: 0.5rem solid var(--color-platinum--dark);
+  max-height: 20rem;
   color: var(--color-navy-taupe);
   justify-content: space-between;
   margin: unit(2);
+  overflow: hidden;
 
   &--selected {
     background-color: var(--color-platinum--dark);
@@ -27,43 +28,27 @@
     }
   }
 
-  &__footer {
-    display: flex;
-    align-items: center;
-    padding-bottom: unit(2);
-  }
-
   &__content {
     display: flex;
     align-items: center;
     flex: 1 0;
     width: 100%;
-    padding: unit(2) 0;
-    margin-right: unit(2);
-
-    @media screen and (max-aspect-ratio: 16 / 11) {
-      margin: 0;
-      padding: unit(2);
-    }
 
     .progress-wrapper {
       height: 100%;
       display: flex;
       align-items: center;
       flex-direction: column;
-      flex: 0 0 20%;
-      margin: unit(2) 0 0 unit(2);
-
-      @media screen and (max-aspect-ratio: 16 / 11) {
-        display: none;
-      }
+      flex: 0 0 25%;
+      padding: unit(4) 0;
+      background: var(--color-platinum--dark);
 
       .progress-bar {
         height: 100%;
-        background-color: var(--color-platinum--dark);
+        background-color: var(--color-platinum);
 
         .progress-bar__filler {
-          background-color: var(--color-slate-blue);
+          background-color: var(--color-cerulean-blue);
         }
 
         &--complete {
@@ -83,7 +68,7 @@
       align-self: flex-start;
       overflow-y: auto;
       height: 100%;
-      padding: unit(2) 0;
+      padding: unit(4);
 
       .card__label {
         margin-top: 0;

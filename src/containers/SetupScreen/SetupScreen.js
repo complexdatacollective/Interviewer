@@ -15,6 +15,8 @@ import serverLogo from '../../images/Srv-Flat.svg';
 import downArrow from '../../images/down-arrow.svg';
 import SettingsMenuButton from '../../components/SettingsMenu/SettingsMenuButton';
 import { ProtocolList, SessionList } from '.';
+import { ProtocolCard } from '../../components/SetupScreen';
+import { SessionCard } from '../../components';
 
 const ServerStatus = () => (
   <img src={serverLogo} className="server-status" alt="Server Status" />
@@ -49,6 +51,21 @@ const SetupScreen = (props) => {
     return (<Redirect to={{ pathname: `${pathname}` }} />);
   }
 
+  const testingProtocol = {
+    name: 'Development Protocol',
+    uuid: '2342-234234-2323-23423',
+    description: 'Something about the protocol should go here.',
+    schemaVersion: 2,
+  };
+
+  const testSession = {
+    caseId: 'Joshua Melville',
+    protocolUID: '2bfdc64c-5753-4539-bf18-f5b007169911',
+    progress: 35,
+    updatedAt: 1587545990894,
+    lastExportedAt: 1587545990894,
+  };
+
   return (
     <React.Fragment>
       <div className="bg bg-1" />
@@ -64,7 +81,7 @@ const SetupScreen = (props) => {
           {/* <ProtocolList /> */}
           {/* <SessionList /> */}
 
-          {/* <section className="setup-section welcome-section">
+          <section className="setup-section welcome-section">
             <heading>
               <h1>Welcome to Network Canvas</h1>
             </heading>
@@ -74,7 +91,7 @@ const SetupScreen = (props) => {
                 purposes.
               </p>
             </main>
-          </section> */}
+          </section>
           <section className="setup-section start-section">
             <heading className="section-heading">
               <h1>Start a new Interview</h1>
@@ -82,67 +99,79 @@ const SetupScreen = (props) => {
             <main className="section-wrapper">
               <section className="setup-section__content">
                 <heading>
-                  <h2>Last Used Protocol</h2>
+                  <h2>Last Used Protocol...</h2>
                 </heading>
-                <article className="start-section__protocol-card start-section__protocol-card--main">
-                  <div className="card-content">
-                    <h1>Development Protocol</h1>
-                    <small>March 4th 2020, 19:26</small>
-                    <h4>Active Pill</h4>
-                  </div>
-                  <div className="card-action">
-                    <Icon name="arrow-right" />
-                  </div>
-                </article>
+                <ProtocolCard attributes={testingProtocol} protocolUID="234234234" />
               </section>
               <aside className="setup-section__action">
-                <h4>Use a different protocol...</h4>
-                <div className="setup-section__session-card setup-section__protocol-card--others">
-                  <h2>Select protocol...</h2>
+                <div className="start-section__select-protocol">
+                  <h4>Use different protocol</h4>
+                  <div className="form-field-container">
+                    <div className="form-field">
+                      <select
+                        name="scaleFactor"
+                        className="select-css"
+                        value="0"
+                        // onChange={(e) => { setInterfaceScale(parseInt(e.target.value, 10)); }}
+                      >
+                        <option value="0">Select a protocol...</option>
+                        <option value="1">Development Protocol</option>
+                        <option value="2">My Special Protocol</option>
+                        <option value="3">DPhil protocol</option>
+                      </select>
+                    </div>
+                  </div>
                 </div>
-              </aside>
-              <aside className="setup-section__action">
-                <h4>Manage Protocols</h4>
-                <div className="start-section__protocol-card start-section__protocol-card--others">
-                  <Button color="primary" disabled>Import from Server</Button>
-                  <Button color="primary">Import from File</Button>
-                  <Button color="primary">Open Protocol Library</Button>
+                <div className="start-section__action">
+                  <h4>Manage Protocols</h4>
+                  <div className="library-card">
+                    <h2>Open Protocol Library...</h2>
+                  </div>
                 </div>
               </aside>
             </main>
           </section>
           <section className="setup-section resume-section">
             <heading className="section-heading">
-              <h1>Resume an Interview</h1>
+              <h1>Resume an Interview Session</h1>
             </heading>
             <main className="section-wrapper">
               <section className="setup-section__content">
                 <heading>
-                  <h2>Last Session</h2>
+                  <h2>Last Session...</h2>
                 </heading>
-                <article className="resume-section__session-card resume-section__session-card--main">
-                  <div className="card-content">
-                    <h1>Joshua Melville</h1>
-                    <small>March 4th 2020, 19:26</small>
-                    <h4>Development Protocol</h4>
-                  </div>
-                  <div className="card-action">
-                    <Icon name="arrow-right" />
-                  </div>
-                </article>
+                <SessionCard attributes={testSession} />
               </section>
               <aside className="setup-section__action">
                 <h4>Resume Other Session</h4>
-                <div className="resume-section__session-card resume-section__session-card--others">
-                  <h2>+12 Others...</h2>
+                <div className="resume-card">
+                  <h2>+12 Sessions...</h2>
                 </div>
               </aside>
             </main>
           </section>
-          <section className="setup-section">
-            <heading>
+          <section className="setup-section export-section">
+            <heading className="section-heading">
               <h1>Export Data</h1>
             </heading>
+            <main className="section-wrapper">
+              <section className="setup-section__content">
+                <heading>
+                  <h2>All Unexported</h2>
+                </heading>
+                <div className="resume-card">
+                  <h2>+12 Sessions...</h2>
+                </div>
+              </section>
+              <section className="setup-section__content">
+                <heading>
+                  <h2>Select sessions to export</h2>
+                </heading>
+                <div className="resume-card">
+                  <h2>Select Sessions</h2>
+                </div>
+              </section>
+            </main>
           </section>
         </main>
         <footer className="setup-screen__footer">
