@@ -1,6 +1,7 @@
 import { push } from 'react-router-redux';
 import { actionTypes as SessionsActionTypes, actionCreators as SessionsActions } from './sessions';
 import { actionCreators as SessionWorkerActions } from './sessionWorkers';
+import { actionCreators as uiActions } from './ui';
 import { actionTypes as installedProtocolsActionTypes } from './installedProtocols';
 
 const ADD_SESSION = SessionsActionTypes.ADD_SESSION;
@@ -31,6 +32,7 @@ const setSession = id => (dispatch, getState) => {
 
   const sessionProtocolUID = sessions[id].protocolUID;
 
+  dispatch(uiActions.update({ activeProtocol: sessionProtocolUID }));
   dispatch(SessionWorkerActions.initializeSessionWorkersThunk(sessionProtocolUID));
 
   dispatch({

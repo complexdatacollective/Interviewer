@@ -1,4 +1,5 @@
 import { CancellationError } from 'builder-util-runtime';
+import { actionCreators as uiActions } from './ui';
 
 import { removeDirectory } from '../../utils/filesystem';
 import downloadProtocol from '../../utils/protocol/downloadProtocol';
@@ -98,12 +99,10 @@ function importProtocolFailedAction(error) {
   };
 }
 
-function importProtocolCompleteAction(protocolData) {
-  return {
-    type: IMPORT_PROTOCOL_COMPLETE,
-    protocolData,
-  };
-}
+const importProtocolCompleteAction = protocolData => ({
+  type: IMPORT_PROTOCOL_COMPLETE,
+  protocolData,
+});
 
 function resetImportAction() {
   return {
@@ -172,6 +171,7 @@ const importProtocolFromURI = (uri, usePairedServer) => (dispatch, getState) => 
     })
     .then((protocolContent) => {
       if (getState().importProtocol.step === 0) return cancelledImport();
+      dispatch(uiActions.update({ activeProtocol: protocolContent.uid }));
       return dispatch(importProtocolCompleteAction(protocolContent));
     }, catchError)
     .catch(

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import PropTypes from 'prop-types';
-import { get } from 'lodash';
+import { get, sortBy, values, mapValues, omit } from 'lodash';
 import { Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
@@ -17,6 +17,7 @@ import SettingsMenuButton from '../../components/SettingsMenu/SettingsMenuButton
 import { ProtocolList, SessionList } from '.';
 import { ProtocolCard } from '../../components/SetupScreen';
 import { SessionCard } from '../../components';
+import { entityAttributesProperty } from '../../ducks/modules/network';
 
 const ServerStatus = () => (
   <img src={serverLogo} className="server-status" alt="Server Status" />
@@ -39,6 +40,9 @@ const SetupScreen = (props) => {
     sessions,
     isSessionActive,
     sessionId,
+    lastActiveSession,
+    activeProtocol,
+    installedProtocols,
   } = props;
 
   const [showSessionList, setShowSessionList] = useState(false);
@@ -51,21 +55,16 @@ const SetupScreen = (props) => {
     return (<Redirect to={{ pathname: `${pathname}` }} />);
   }
 
-  const testingProtocol = {
-    name: 'Development Protocol',
-    uuid: '2342-234234-2323-23423',
-    description: 'Something about the protocol should go here.',
-    schemaVersion: 2,
-  };
+  const ResumeOtherSessionLabel = `+${Object.keys(sessions).length - 1} Other Interview${Object.keys(sessions).length - 1 > 1 ? 's' : null}...`;
 
-  const testSession = {
-    caseId: 'Joshua Melville',
-    protocolUID: '2bfdc64c-5753-4539-bf18-f5b007169911',
-    progress: 35,
-    updatedAt: 1587545990894,
-    lastExportedAt: 1587545990894,
-  };
+  const ProtocolSelectOptions = Object.keys(installedProtocols).map(
+    (protocol) => {
+      if (protocol === activeProtocol) { return null; }
+      return (<option key={protocol} value={protocol}>{installedProtocols[protocol].name}</option>);
+    },
+  );
 
+  console.log('this', ProtocolSelectOptions);
   return (
     <React.Fragment>
       <div className="bg bg-1" />
@@ -81,48 +80,52 @@ const SetupScreen = (props) => {
           {/* <ProtocolList /> */}
           {/* <SessionList /> */}
 
-          <section className="setup-section welcome-section">
-            <heading>
+          {/* <section className="setup-section welcome-section">
+            <header>
               <h1>Welcome to Network Canvas</h1>
-            </heading>
+            </header>
             <main>
               <p>
                 This is an example of the size of some text that can be used for reference
                 purposes.
               </p>
             </main>
-          </section>
+          </section> */}
           <section className="setup-section start-section">
-            <heading className="section-heading">
-              <h1>Start a new Interview</h1>
-            </heading>
+            <header className="section-header">
+              <h1>Start a New Interview</h1>
+            </header>
             <main className="section-wrapper">
               <section className="setup-section__content">
-                <heading>
-                  <h2>Last Used Protocol...</h2>
-                </heading>
-                <ProtocolCard attributes={testingProtocol} protocolUID="234234234" />
+                <header>
+                  <h2>Last Active Protocol...</h2>
+                </header>
+                <ProtocolCard
+                  attributes={installedProtocols[activeProtocol]}
+                  protocolUID={activeProtocol}
+                />
               </section>
               <aside className="setup-section__action">
-                <div className="start-section__select-protocol">
-                  <h4>Use different protocol</h4>
-                  <div className="form-field-container">
-                    <div className="form-field">
-                      <select
-                        name="scaleFactor"
-                        className="select-css"
-                        value="0"
-                        // onChange={(e) => { setInterfaceScale(parseInt(e.target.value, 10)); }}
-                      >
-                        <option value="0">Select a protocol...</option>
-                        <option value="1">Development Protocol</option>
-                        <option value="2">My Special Protocol</option>
-                        <option value="3">DPhil protocol</option>
-                      </select>
+                {ProtocolSelectOptions.length > 1 && (
+                  <div className="start-section__select-protocol">
+                    <h4>Use different protocol</h4>
+                    <div className="form-field-container">
+                      <div className="form-field">
+                        <select
+                          name="scaleFactor"
+                          className="select-css"
+                          value="0"
+                          // onChange={(e) => { setInterfaceScale(parseInt(e.target.value, 10)); }}
+                        >
+                          <option value="" selected>Select a protocol...</option>
+                          {ProtocolSelectOptions}
+                        </select>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="start-section__action">
+                )}
+
+                <div className="manage-protocols">
                   <h4>Manage Protocols</h4>
                   <div className="library-card">
                     <h2>Open Protocol Library...</h2>
@@ -131,42 +134,49 @@ const SetupScreen = (props) => {
               </aside>
             </main>
           </section>
-          <section className="setup-section resume-section">
-            <heading className="section-heading">
-              <h1>Resume an Interview Session</h1>
-            </heading>
-            <main className="section-wrapper">
-              <section className="setup-section__content">
-                <heading>
-                  <h2>Last Session...</h2>
-                </heading>
-                <SessionCard attributes={testSession} />
-              </section>
-              <aside className="setup-section__action">
-                <h4>Resume Other Session</h4>
-                <div className="resume-card">
-                  <h2>+12 Sessions...</h2>
-                </div>
-              </aside>
-            </main>
-          </section>
+          {Object.keys(sessions).length > 0 && (
+            <section className="setup-section resume-section">
+              <header className="section-header">
+                <h1>Resume an Interview</h1>
+              </header>
+              <main className="section-wrapper">
+                <section className="setup-section__content">
+                  <header>
+                    <h2>Last Active Interview...</h2>
+                  </header>
+                  <SessionCard
+                    sessionUUID={lastActiveSession.sessionUUID}
+                    attributes={lastActiveSession.attributes}
+                  />
+                </section>
+                { Object.keys(sessions).length > 2 && (
+                  <aside className="setup-section__action">
+                    <h4>Resume Other Interview</h4>
+                    <div className="resume-card">
+                      <h2>{ResumeOtherSessionLabel}</h2>
+                    </div>
+                  </aside>
+                )}
+              </main>
+            </section>
+          )}
           <section className="setup-section export-section">
-            <heading className="section-heading">
+            <header className="section-header">
               <h1>Export Data</h1>
-            </heading>
+            </header>
             <main className="section-wrapper">
               <section className="setup-section__content">
-                <heading>
+                <header>
                   <h2>All Unexported</h2>
-                </heading>
+                </header>
                 <div className="resume-card">
                   <h2>+12 Sessions...</h2>
                 </div>
               </section>
               <section className="setup-section__content">
-                <heading>
+                <header>
                   <h2>Select sessions to export</h2>
-                </heading>
+                </header>
                 <div className="resume-card">
                   <h2>Select Sessions</h2>
                 </div>
@@ -198,23 +208,37 @@ const SetupScreen = (props) => {
 };
 
 SetupScreen.propTypes = {
-  sessions: PropTypes.object.isRequired,
-  sessionId: PropTypes.string,
-  isSessionActive: PropTypes.bool.isRequired,
 };
 
 SetupScreen.defaultProps = {
-  isPairedWithServer: false,
-  sessionId: null,
 };
 
 function mapStateToProps(state) {
+  const getLastActiveSession = () => {
+    const sessionsCollection = values(mapValues(state.sessions, (session, sessionUUID) => { session['sessionUUID'] = sessionUUID; return session; }));
+    const lastActive = sortBy(sessionsCollection, ['updatedAt'])[0];
+    return {
+      sessionUUID: lastActive.sessionUUID,
+      [entityAttributesProperty]: {
+        ...omit(lastActive, 'sessionUUID'),
+      },
+    };
+  };
+
+  const getActiveProtocol = () => {
+    const lastActiveSession = getLastActiveSession();
+
+    return state.ui.activeProtocolUUID
+      || lastActiveSession.protocolUID
+      || Object.keys(state.installedProtocols)[0];
+  };
+
   return {
     isSessionActive: !!state.activeSessionId,
-    isPairedWithServer: !!state.pairedServer,
-    protocolUID: get(state.sessions[state.activeSessionId], 'protocolUID'),
-    sessionId: state.activeSessionId,
+    installedProtocols: state.installedProtocols,
     sessions: state.sessions,
+    lastActiveSession: getLastActiveSession(),
+    activeProtocol: getActiveProtocol(),
   };
 }
 

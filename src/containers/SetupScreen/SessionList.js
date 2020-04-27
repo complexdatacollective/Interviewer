@@ -11,8 +11,6 @@ import { NewFilterableListWrapper, NodeBin, SessionCard } from '../../components
 import { entityAttributesProperty } from '../../ducks/modules/network';
 import ExportSessionsOverlay from '../ExportSessions/ExportSessionsOverlay';
 
-const oneBasedIndex = i => parseInt(i || 0, 10) + 1;
-
 const emptyView = (
   <div className="session-list-container--empty">
     <div className="getting-started">

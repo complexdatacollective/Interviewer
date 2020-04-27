@@ -74,6 +74,7 @@ const deleteProtocolAction = protocolUID =>
       .then((confirmed) => {
         if (!confirmed) { return; }
 
+        console.error('add reset active protocol here');
         dispatch({ type: DELETE_PROTOCOL, protocolUID });
         deleteProtocol(protocolUID);
       });

@@ -4,6 +4,7 @@
 
 const initialState = {
   settingsMenuOpen: false,
+  activeProtocol: null,
 };
 
 const UPDATE = 'UI/UPDATE';

@@ -2,14 +2,15 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import { get } from 'lodash';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Button } from '@codaco/ui';
-import { getCSSVariableAsNumber, getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
 import { actionCreators as sessionActions } from '../ducks/modules/session';
 import { ProgressBar, Scroller } from '../components';
 
 const formatDate = timestamp => timestamp && new Date(timestamp).toLocaleString(undefined, { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' });
+
+const oneBasedIndex = i => parseInt(i || 0, 10) + 1;
 
 const SessionCard = (props) => {
   const {
@@ -23,9 +24,9 @@ const SessionCard = (props) => {
   const {
     caseId,
     protocolUID,
-    progress,
     updatedAt,
     lastExportedAt,
+    stageIndex,
   } = attributes;
 
   const classes = cx({
@@ -33,10 +34,15 @@ const SessionCard = (props) => {
     'session-card--selected': isSelected(sessionUUID),
   });
 
+  const progress = Math.round(
+    (oneBasedIndex(stageIndex) / oneBasedIndex(get(installedProtocols, [protocolUID, 'stages'], []).length)) * 100,
+  );
+
   return (
     <motion.div
       className={classes}
       key={sessionUUID}
+      onClick={() => setSession(sessionUUID)}
     >
       <div className="session-card__content">
         <div className="progress-wrapper">

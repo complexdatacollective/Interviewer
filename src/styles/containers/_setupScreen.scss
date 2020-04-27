@@ -76,7 +76,7 @@
         flex-direction: column;
         justify-content: center;
 
-        heading {
+        header {
           h2 {
             margin-top: 0;
             margin-bottom: unit(1);
@@ -102,6 +102,12 @@
           letter-spacing: 0.2em;
           font-size: 0.85rem;
         }
+
+        .manage-protocols {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+        }
       }
     }
 
@@ -117,7 +123,6 @@
 
       .library-card {
         @include clickable(2);
-
         background-image: url('../images/protocol-card-background.png');
         background-size: cover;
         border-radius: var(--border-radius);
@@ -172,6 +177,8 @@
         color: var(--text);
         align-items: center;
         justify-content: center;
+        padding: unit(4);
+        text-align: center;
         flex: 1;
 
         &::after {

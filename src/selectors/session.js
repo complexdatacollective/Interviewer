@@ -5,7 +5,7 @@ import { currentStageIndex } from '../utils/matchSessionPath';
 import { getAdditionalAttributes, getSubject } from '../utils/protocol/accessors';
 import { createDeepEqualSelector } from './utils';
 import { initialState } from '../ducks/modules/session';
-import { getProtocolCodebook, getProtocolStages, getActiveProtocol } from './protocol';
+import { getProtocolCodebook, getProtocolStages, getCurrentSessionProtocol } from './protocol';
 
 const currentPathname = router => router && router.location && router.location.pathname;
 const stageIndexForCurrentSession = state => currentStageIndex(currentPathname(state.router));
@@ -29,7 +29,7 @@ export const getSessionPath = (state, stageIndex) => {
 
 export const getSessionProgress = (state) => {
   const session = getActiveSession(state);
-  const protocol = getActiveProtocol(state);
+  const protocol = getCurrentSessionProtocol(state);
   /*
    * We use the stages selector (rather than plain protocol)
    * because it takes into account the finish screen
@@ -118,3 +118,4 @@ export const getAdditionalAttributesForCurrentPrompt = createSelector(
   getStageForCurrentSession,
   (prompt, stage) => getAdditionalAttributes(stage, prompt),
 );
+
