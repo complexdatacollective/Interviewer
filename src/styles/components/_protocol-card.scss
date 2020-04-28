@@ -98,12 +98,13 @@ $component: 'protocol-card';
   }
 
   .status-icon {
-    height: 2.75rem;
+    height: 3rem;
     width: 3rem;
     text-align: center;
-    background: var(--color-mustard);
+    background: var(--info);
     padding: unit(1);
-    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    margin-left: unit(1);
+    border-radius: 50%;
     display: inline-block;
 
     .icon {

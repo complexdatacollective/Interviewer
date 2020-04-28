@@ -1,7 +1,6 @@
 import React from 'react';
 import cx from 'classnames';
 import anime from 'animejs';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Modal } from '@codaco/ui';
 import { getCSSVariableAsNumber, getCSSVariableAsObject } from '@codaco/ui/lib/utils/CSSVariables';
@@ -35,23 +34,21 @@ class Overlay extends React.Component {
       onBlur,
       show,
       title,
-      useFullScreenForms,
-      forceDisableFullScreen,
       className,
     } = this.props;
 
     return (
       <Modal show={show} onBlur={onBlur}>
-        <div className={cx('overlay', { 'overlay--fullscreen': !forceDisableFullScreen && useFullScreenForms }, className)}>
+        <div className={cx('overlay', className)}>
           { title && (
             <div className="overlay__title">
               <h1>{title}</h1>
+              <CloseButton className="overlay__close" onClick={onClose} />
             </div>
           )}
           <div className="overlay__content" ref={this.contentRef}>
             {children}
           </div>
-          <CloseButton className="overlay__close" onClick={onClose} />
         </div>
       </Modal>
     );
@@ -64,8 +61,6 @@ Overlay.propTypes = {
   title: PropTypes.string,
   show: PropTypes.bool,
   children: PropTypes.any,
-  useFullScreenForms: PropTypes.bool.isRequired,
-  forceDisableFullScreen: PropTypes.bool,
   className: PropTypes.string,
 };
 
@@ -76,14 +71,10 @@ Overlay.defaultProps = {
   className: '',
   show: false,
   children: null,
-  forceDisableFullScreen: false,
 };
 
 export {
   Overlay,
 };
 
-const mapStateToProps = state =>
-  ({ useFullScreenForms: state.deviceSettings.useFullScreenForms });
-
-export default connect(mapStateToProps, null, null, { withRef: true })(Overlay);
+export default Overlay;

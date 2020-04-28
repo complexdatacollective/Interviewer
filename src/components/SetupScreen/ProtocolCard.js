@@ -1,18 +1,15 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { Icon } from '@codaco/ui';
-import { actionCreators as sessionActions } from '../../ducks/modules/session';
-import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { APP_SUPPORTED_SCHEMA_VERSIONS, APP_SCHEMA_VERSION } from '../../config';
 
 const ProtocolCard = (props) => {
   const {
     attributes,
     protocolUID,
+    onClickHandler,
   } = props;
 
   const {
@@ -33,13 +30,6 @@ const ProtocolCard = (props) => {
     { 'protocol-card--info': !isObsoleteProtocol() && isOutdatedProtocol() },
     { 'protocol-card--error': isObsoleteProtocol() },
   );
-
-  const startButtonClasses = isObsoleteProtocol() ? ('start-button start-button--disabled') : ('start-button');
-
-  const onClickProtocolCard = () => {
-    setShowNewSessionOverlay(true);
-    setSelectedProtocol(protocolUID);
-  };
 
   const renderCardIcon = () => {
     if (isOutdatedProtocol()) {
@@ -62,11 +52,10 @@ const ProtocolCard = (props) => {
   };
 
   return (
-    <div className={modifierClasses} onClick={onClickProtocolCard}>
+    <div className={modifierClasses} onClick={() => onClickHandler(protocolUID)}>
       <div className="protocol-card__icon-section">
         <div className="protocol-icon">
           <Icon name="protocol-card" />
-          {/* {renderCardIcon()} */}
         </div>
         <div className="protocol-meta">
           <h6>Installed: March 03, 19:46</h6>
@@ -75,26 +64,23 @@ const ProtocolCard = (props) => {
         </div>
       </div>
       <div className="protocol-card__main-section">
-        <h1 className="protocol-name">{name}</h1>
+        <h1 className="protocol-name">{name} {renderCardIcon()}</h1>
         <p className="protocol-description">
           { description || (<em>No protocol description.</em>) }
         </p>
       </div>
-
     </div>
   );
 };
 
 ProtocolCard.defaultProps = {
   className: '',
-  selectProtocol: () => {},
+  onClickHandler: () => {},
   description: null,
 };
 
 ProtocolCard.propTypes = {
-  selectProtocol: PropTypes.func,
-  openDialog: PropTypes.func.isRequired,
-  deleteProtocol: PropTypes.func.isRequired,
+  onClickHandler: PropTypes.func,
   protocol: PropTypes.shape({
     uuid: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
@@ -112,8 +98,6 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    openDialog: dialogActions.openDialog,
-    setSession: bindActionCreators(sessionActions.setSession, dispatch),
   };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(ProtocolCard);

@@ -14,7 +14,7 @@ const getSize = (element) => {
 const styles = (x, y) =>
   `display: inline-block; position: absolute; left: 0px; top: 0px; transform: translate(${x}px, ${y}px);`;
 
-const parent = () => document.getElementById('page-wrap');
+const body = () => document.getElementsByTagName('body')[0];
 
 export default class DraggablePreview {
   constructor(node) {
@@ -30,7 +30,7 @@ export default class DraggablePreview {
 
     this.node.appendChild(clone);
 
-    parent().appendChild(this.node);
+    body().appendChild(this.node);
   }
 
   size() {
@@ -75,6 +75,6 @@ export default class DraggablePreview {
 
   cleanup() {
     window.cancelAnimationFrame(this.animationFrame);
-    parent().removeChild(this.node);
+    body().removeChild(this.node);
   }
 }

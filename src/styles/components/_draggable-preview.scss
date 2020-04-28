@@ -1,14 +1,4 @@
 .draggable-preview {
-  z-index: var(--z-global-ui);
+  z-index: var(--z-fx);
   cursor: grabbing;
-
-  .node {
-    font-size: calc(var(--base-node-size) * 1.1);
-    filter: drop-shadow(0 1rem 2rem var(--transparent-dark));
-  }
-
-  .session-card {
-    min-width: 25rem;
-    filter: drop-shadow(0 1rem 2rem var(--transparent-dark));
-  }
 }
