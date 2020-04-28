@@ -11,17 +11,18 @@ const getSize = (element) => {
   };
 };
 
-const styles = (x, y) =>
-  `display: inline-block; position: absolute; left: 0px; top: 0px; transform: translate(${x}px, ${y}px);`;
+const styles = (width, height, x, y) =>
+  `width: ${width}px; height: ${height}px; display: inline-block; position: absolute; left: 0px; top: 0px; transform: translate(${x}px, ${y}px);`;
 
 const body = () => document.getElementsByTagName('body')[0];
 
 export default class DraggablePreview {
   constructor(node) {
     this.node = document.createElement('div');
+    this.initialSize = getSize(node);
     this.node.setAttribute('class', 'draggable-preview');
-    this.x = -1000;
-    this.y = -1000;
+    // this.x = -1000;
+    // this.y = -1000;
     this.validMove = true;
 
     this.update();
@@ -55,7 +56,7 @@ export default class DraggablePreview {
   }
 
   render() {
-    this.node.setAttribute('style', styles(this.x, this.y));
+    this.node.setAttribute('style', styles(this.initialSize.width, this.initialSize.height, this.x, this.y));
 
     if (this.validMove) {
       this.node.setAttribute('class', 'draggable-preview');

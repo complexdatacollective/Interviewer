@@ -15,6 +15,7 @@ const NewFilterableListWrapper = (props) => {
   const {
     items,
     ItemComponent,
+    itemProperties,
     initialSortProperty,
     initialSortDirection,
     sortableProperties,
@@ -47,10 +48,10 @@ const NewFilterableListWrapper = (props) => {
 
     return sortedItems.filter(
       (item) => {
-        const itemProperties = Object.values(item[entityAttributesProperty]);
+        const itemAttributes = Object.values(item[entityAttributesProperty]);
         // Include in filtered list if any of the attribute property values
         // include the filter value
-        return itemProperties.some(
+        return itemAttributes.some(
           property => property.toString().toLowerCase().includes(normalizedFilterTerm),
         );
       },
@@ -101,7 +102,7 @@ const NewFilterableListWrapper = (props) => {
             getFilteredAndSortedItemList().map((item, index) => {
               const EnhancedItem = DragSource(selectable(ItemComponent));
               return (
-                <EnhancedItem {...item} key={index} />
+                <EnhancedItem {...item} {...itemProperties} key={index} />
               );
             })
           }
@@ -113,6 +114,7 @@ const NewFilterableListWrapper = (props) => {
 
 NewFilterableListWrapper.propTypes = {
   ItemComponent: PropTypes.elementType.isRequired,
+  itemProperties: PropTypes.object,
   items: PropTypes.array.isRequired,
   initialSortProperty: PropTypes.string.isRequired,
   initialSortDirection: PropTypes.oneOf(['asc', 'desc']),
@@ -121,6 +123,7 @@ NewFilterableListWrapper.propTypes = {
 
 NewFilterableListWrapper.defaultProps = {
   initialSortDirection: 'asc',
+  itemProperties: null,
   sortableProperties: [],
 };
 

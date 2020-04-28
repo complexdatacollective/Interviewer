@@ -65,6 +65,9 @@ const ProtocolList = (props) => {
       { size(installedProtocols) > 0 ?
         <NewFilterableListWrapper
           ItemComponent={ProtocolCard}
+          itemProperties={{
+            onClickHandler: onClickProtocolCard,
+          }}
           items={installedProtocolsArray}
           initialSortProperty="name"
           initialSortDirection="asc"
