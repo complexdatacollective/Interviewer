@@ -6,65 +6,47 @@ $component: 'protocol-card';
   background: var(--color-platinum);
   color: var(--color-navy-taupe);
   border-radius: var(--border-radius);
-  max-height: 20rem;
   display: flex;
   overflow: hidden;
   margin: unit(2);
-
-  @media screen and (max-aspect-ratio: 16 / 10) {
-    flex-direction: column-reverse;
-    max-height: 22rem;
-  }
+  flex-direction: column-reverse;
+  max-height: 22rem;
 
   &__icon-section {
-    flex: 0 0 35%;
-    padding: unit(2);
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
     color: #aab0fd;
     background: var(--color-slate-blue--dark);
+    flex: 0 0 7rem;
+    flex-direction: row;
+    padding: unit(2) unit(4);
 
     .protocol-icon {
-      flex: 0 0 50%;
+      flex: 0 1 5rem;
+      height: 100%;
       display: flex;
 
       .icon {
-        flex: 1 1 100%;
+        flex: 0 1 auto;
         height: 100% !important;
         width: 100% !important;
       }
     }
 
     .protocol-meta {
-      flex: 0 1 auto;
-      text-align: center;
+      flex: 1 0 auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
 
       h6 {
-        margin: 0 0 unit(1);
+        margin: 0.6rem;
         text-transform: uppercase;
         letter-spacing: 0.15em;
-      }
-    }
-
-    @media screen and (max-aspect-ratio: 16 / 10) {
-      flex: 0 0 7rem;
-      flex-direction: row;
-      padding: unit(2);
-
-      .protocol-icon {
-        flex: 0 1 5rem;
-        height: 100%;
-
-        .icon {
-          flex: 0 1 auto;
-        }
-      }
-
-      .protocol-meta {
-        flex: 1 0 auto;
-        text-align: right;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
       }
     }
   }
@@ -80,7 +62,7 @@ $component: 'protocol-card';
     }
 
     .protocol-name {
-      flex: 0 0 auto;
+      flex: 0 0 3rem; // Same height as the status icon - may or may not be shown
       margin-top: 0;
       align-items: center;
       display: flex;
@@ -88,8 +70,7 @@ $component: 'protocol-card';
     }
 
     .protocol-description {
-      flex: 1 1 auto;
-      height: 100%;
+      flex: 1 1 4rem;
       overflow-y: auto;
       overflow-x: hidden;
       margin: 0;

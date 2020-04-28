@@ -13,70 +13,85 @@
   margin: unit(2);
   overflow: hidden;
 
-  &--selected {
-    background-color: var(--color-platinum--dark);
-    border-bottom-color: var(--color-mustard);
-    transform: scale(1.05);
-    box-shadow: 1rem 1rem 1rem rgba(0, 0, 0, 0.2); // sass-lint:disable-line no-color-literals
-
-    .session-card__content {
-      .progress-wrapper {
-        .progress-bar {
-          background-color: var(--color-white);
-        }
-      }
-    }
-  }
-
   &__content {
     display: flex;
-    align-items: center;
     flex: 1 0;
+    flex-direction: column-reverse;
     width: 100%;
 
-    .progress-wrapper {
-      height: 100%;
+    .meta-wrapper {
       display: flex;
-      align-items: center;
-      flex-direction: column;
-      flex: 0 0 25%;
-      padding: unit(4) 0;
+      flex-direction: row;
+      padding: unit(2) unit(4);
       background: var(--color-platinum--dark);
+      flex: 0 0 auto;
 
-      .progress-bar {
-        height: 100%;
-        background-color: var(--color-platinum);
+      .meta {
+        flex: 1 0 auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
 
-        .progress-bar__filler {
-          background-color: var(--color-cerulean-blue);
+        .highlight {
+          color: var(--error);
         }
 
-        &--complete {
+        h6 {
+          margin: 0.6rem;
+          text-transform: uppercase;
+          letter-spacing: 0.15em;
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+        }
+
+      }
+
+      .progress-wrapper {
+        flex: 0 1 12rem;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        h6 {
+          margin: 0 0 0.6rem;
+          text-transform: uppercase;
+          letter-spacing: 0.15em;
+        }
+
+        .progress-bar {
+          width: 100%;
+          background-color: var(--color-platinum);
+          flex: 0 0.7rem;
+
           .progress-bar__filler {
-            background-color: var(--primary);
+            background-color: var(--color-cerulean-blue);
+          }
+
+          &--complete {
+            .progress-bar__filler {
+              background-color: var(--primary);
+            }
           }
         }
       }
 
-      h6 {
-        margin-bottom: 0;
-        margin-top: 0.5rem;
-      }
     }
 
-    >.scrollable {
-      align-self: flex-start;
-      overflow-y: auto;
-      height: 100%;
+    .main-wrapper {
+      flex: 1 1 auto;
       padding: unit(4);
 
       .card__label {
-        margin-top: 0;
-        font-size: 1.45rem;
-        width: 100%;
+        flex: 0 0 auto;
+        margin: 0;
+        align-items: center;
+        display: flex;
         hyphens: auto;
       }
     }
+
   }
 
 }

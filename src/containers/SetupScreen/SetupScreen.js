@@ -41,8 +41,8 @@ const SetupScreen = (props) => {
       <div className="bg bg-1" />
       <ServerStatus />
       <ProtocolsOverlay />
-      {/* <SessionsOverlay />
-      <ExportOverlay /> */}
+      <SessionsOverlay />
+      {/* <ExportOverlay /> */}
       <div className="setup-screen">
         <header className="setup-screen__header">
           <img src={isIOS() ? NCLogo : NCLogoBeta} className="header-logo" alt="Network Canvas" />

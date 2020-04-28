@@ -25,10 +25,6 @@ const FooterNavigation = (props) => {
         <Icon name="menu-download-data" />
         <h4 className="footer-section__label">Export Data</h4>
       </section>
-      <section className="footer-section" >
-        <Icon name="info" />
-        <h4 className="footer-section__label">Help</h4>
-      </section>
     </footer>
   );
 };

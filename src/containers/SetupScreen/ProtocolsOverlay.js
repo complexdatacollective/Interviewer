@@ -12,9 +12,9 @@ const ProtocolsOverlay = (props) => {
 
   return (
     <Overlay show={show} title="Protocol Library" onClose={() => close()}>
-      <div>
+      {/* <div>
         Some introductory text can go here that explains you can drag a protocol into this window to import it, or else you can use the import buttons.
-      </div>
+      </div> */}
       <ProtocolList />
     </Overlay>
   );

@@ -1,15 +1,15 @@
 .protocol-list {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex: 1;
+  max-width: 70rem;
 
-
-  @media screen and (max-aspect-ratio: 16 / 10) {
-    .new-filterable-list__main {
-      >.scrollable {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
+  &__footer {
+    margin-top: unit(1);
+    border-radius: var(--border-radius);
+    padding: unit(2) unit(4);
+    display: flex;
+    background: var(--color-slate-blue);
   }
 
 

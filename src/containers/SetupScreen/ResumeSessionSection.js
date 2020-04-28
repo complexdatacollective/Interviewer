@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { sortBy, values, mapValues, omit } from 'lodash';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
@@ -10,6 +10,7 @@ const NewInterviewSection = (props) => {
   const {
     sessions,
     lastActiveSession,
+    showSessionsOverlay,
   } = props;
 
   const ResumeOtherSessionLabel = `+${Object.keys(sessions).length - 1} Other Interview${Object.keys(sessions).length - 1 > 1 ? 's' : null}...`;
@@ -34,7 +35,7 @@ const NewInterviewSection = (props) => {
             { Object.keys(sessions).length > 2 && (
               <aside className="setup-section__action">
                 <h4>Resume Other Interview</h4>
-                <div className="resume-card">
+                <div className="resume-card" onClick={showSessionsOverlay}>
                   <h2>{ResumeOtherSessionLabel}</h2>
                 </div>
               </aside>
@@ -72,8 +73,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    setShowImportProtocolOverlay: status =>
-      dispatch(uiActions.update({ showImportProtocolOverlay: status })),
+    showSessionsOverlay: () => dispatch(uiActions.update({ showSessionsOverlay: true })),
   };
 }
 

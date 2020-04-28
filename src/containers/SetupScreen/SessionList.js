@@ -9,7 +9,8 @@ import { actionCreators as sessionsActions } from '../../ducks/modules/sessions'
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { NewFilterableListWrapper, NodeBin, SessionCard } from '../../components';
 import { entityAttributesProperty } from '../../ducks/modules/network';
-import ExportSessionsOverlay from '../ExportSessions/ExportSessionsOverlay';
+
+const oneBasedIndex = i => parseInt(i || 0, 10) + 1;
 
 const emptyView = (
   <div className="session-list-container--empty">
@@ -51,7 +52,7 @@ class SessionList extends Component {
   };
 
   render() {
-    const { sessions } = this.props;
+    const { sessions, installedProtocols } = this.props;
     // Display most recent first, and filter out any session that doesn't have a protocol
     const sessionList = Object.keys(sessions)
       .map(key => ({
@@ -59,8 +60,7 @@ class SessionList extends Component {
         [entityAttributesProperty]: {
           ...sessions[key],
           progress: Math.round(
-            (oneBasedIndex(sessions[key].stageIndex) / oneBasedIndex(get(this.props.installedProtocols, [sessions[key].protocolUID, 'stages'], []).length)) * 100,
-          ),
+            (oneBasedIndex(sessions[key].stageIndex) / oneBasedIndex(get(installedProtocols, [sessions[key].protocolUID, 'stages'], []).length)) * 100),
         },
       }));
 
@@ -119,6 +119,10 @@ class SessionList extends Component {
           </Button>
         </div>
         }
+        <div className="session-list__footer">
+          <Button>Import Protocol from File</Button>
+          <Button>Import Protocol from URL</Button>
+        </div>
         <NodeBin
           accepts={() => true}
           dropHandler={meta => this.onDeleteCard(meta.uuid)}

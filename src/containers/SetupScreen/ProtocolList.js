@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { size } from 'lodash';
-import { NewFilterableListWrapper } from '../../components';
+import { Button } from '@codaco/ui';
+import { NewFilterableListWrapper, NodeBin } from '../../components';
 import { NewSessionOverlay, ProtocolCard } from '../../components/SetupScreen';
 import { actionCreators as sessionActions } from '../../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
@@ -58,8 +59,6 @@ const ProtocolList = (props) => {
         },
       }));
 
-  console.log(installedProtocolsArray);
-
   return (
     <div className="protocol-list">
       { size(installedProtocols) > 0 ?
@@ -77,7 +76,7 @@ const ProtocolList = (props) => {
               variable: 'name',
             },
             {
-              label: 'Installed',
+              label: 'When Installed',
               variable: '*',
             },
             {
@@ -89,10 +88,19 @@ const ProtocolList = (props) => {
         :
         { emptyView }
       }
+      <div className="protocol-list__footer">
+        <Button>Import Protocol from File</Button>
+        <Button>Import Protocol from URL</Button>
+      </div>
       <NewSessionOverlay
         handleSubmit={handleCreateSession}
         onClose={handleCloseOverlay}
         show={showNewSessionOverlay}
+      />
+      <NodeBin
+        accepts={() => true}
+        dropHandler={meta => this.onDeleteCard(meta.uuid)}
+        id="PROTOCOL_BIN"
       />
     </div>
   );

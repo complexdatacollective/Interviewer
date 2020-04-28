@@ -1,10 +1,11 @@
 .new-filterable-list {
+  --transparent-background: #{transparentize(rgb(0, 0, 0), 0.8)};
   display: flex;
   flex: 1;
   flex-direction: column;
   overflow: hidden;
   border-radius: var(--border-radius);
-  background: var(--color-slate-blue--dark);
+  background: var(--transparent-background);
 
   .card-list {
     padding-bottom: 0;
@@ -17,7 +18,6 @@
     align-items: center;
     align-content: space-evenly;
     justify-content: space-between;
-    background: var(--color-slate-blue);
 
     &-section {
 
@@ -75,7 +75,7 @@
     >.scrollable {
       padding: unit(2) 0;
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr;
     }
 
   }

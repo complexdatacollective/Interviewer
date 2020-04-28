@@ -1,13 +1,22 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
+import { SessionList } from '.';
+import { Overlay } from '../Overlay';
 
 const SessionsOverlay = (props) => {
-  // const {
-  // } = props;
+  const {
+    show,
+    close,
+  } = props;
 
   return (
-    <h1>SessionsOverlay</h1>
+    <Overlay show={show} title="Interview Sessions" onClose={() => close()}>
+      {/* <div>
+        Some introductory text about interview sessions.
+      </div> */}
+      <SessionList />
+    </Overlay>
   );
 };
 
@@ -19,12 +28,13 @@ SessionsOverlay.defaultProps = {
 
 function mapStateToProps(state) {
   return {
-    sessions: state.sessions,
+    show: !!state.ui.showSessionsOverlay,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
+    close: () => dispatch(uiActions.update({ showSessionsOverlay: false })),
   };
 }
 

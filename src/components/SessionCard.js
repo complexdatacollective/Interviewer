@@ -6,7 +6,7 @@ import { get } from 'lodash';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actionCreators as sessionActions } from '../ducks/modules/session';
-import { ProgressBar, Scroller } from '../components';
+import { ProgressBar } from '../components';
 
 const formatDate = timestamp => timestamp && new Date(timestamp).toLocaleString(undefined, { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' });
 
@@ -45,24 +45,28 @@ const SessionCard = (props) => {
       onClick={() => setSession(sessionUUID)}
     >
       <div className="session-card__content">
-        <div className="progress-wrapper">
-          <ProgressBar percentProgress={progress} />
-          <h6>{progress}%</h6>
+        <div className="meta-wrapper">
+          <div className="progress-wrapper">
+            <h6>{progress}% Completed</h6>
+            <ProgressBar percentProgress={progress} orientation="horizontal" />
+          </div>
+          <div className="meta">
+            <h6>
+              Protocol: { installedProtocols[protocolUID].name || '[Unavailable protocol]'}
+            </h6>
+            <h6 className="meta-wrapper__attribute">
+              Last Changed: { formatDate(updatedAt) }
+            </h6>
+            <h6 className="meta-wrapper__attribute">
+              Last Exported:&nbsp;{ lastExportedAt ? formatDate(lastExportedAt) : (<span className="highlight">Not yet exported</span>) }
+            </h6>
+          </div>
         </div>
-        <Scroller>
+        <div className="main-wrapper">
           <h1 className="card__label">
             { caseId }
           </h1>
-          <h5 className="session-card__attribute">
-            Protocol: { installedProtocols[protocolUID].name || '[Unavailable protocol]'}
-          </h5>
-          <h5 className="session-card__attribute">
-            Last Changed: { formatDate(updatedAt) }
-          </h5>
-          <h5 className="session-card__attribute">
-            Last Exported: { lastExportedAt ? formatDate(lastExportedAt) : 'Not yet exported' }
-          </h5>
-        </Scroller>
+        </div>
       </div>
     </motion.div>
   );
