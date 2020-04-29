@@ -119,7 +119,7 @@ const SetupScreen = (props) => {
                 </div>
                 <div className="export-action">
                   <h4>Change Export Settings</h4>
-                  <div className="export-settings-card">
+                  <div className="export-settings-card allow-text-select">
                     <h3>Open Export Settings...</h3>
                   </div>
                 </div>
