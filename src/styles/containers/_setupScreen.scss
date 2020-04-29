@@ -1,3 +1,38 @@
+@mixin action-card {
+  @include clickable(2);
+
+  background-image: url('../images/misc-card-background.png');
+  background-size: cover;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  position: relative;
+  max-width: 40rem;
+  display: flex;
+  color: var(--text);
+  align-items: center;
+  justify-content: center;
+  padding: unit(4);
+  text-align: center;
+  flex: 1;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background-image: linear-gradient(120deg, rgba(32, 28, 66, 0.78), rgba(93, 91, 138, 0.82));
+  }
+
+  & > * {
+    z-index: 100;
+    position: relative;
+  }
+}
+
+
 .bg {
   position: absolute;
   left: 0;
@@ -71,29 +106,35 @@
 
       &__content {
         flex: 1;
-        padding: unit(4) unit(8);
+        padding: unit(4);
         display: flex;
         flex-direction: column;
         justify-content: center;
 
         header {
-          h2 {
+          h3 {
             margin-top: 0;
-            margin-bottom: unit(1);
+            margin-bottom: unit(2);
             color: #d0d0e470;
             text-transform: uppercase;
             letter-spacing: 0.2em;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
           }
+        }
+
+        .protocol-card,
+        .session-card {
+          flex: 1;
+          margin: 0;
         }
       }
 
       &__action {
-        padding: unit(4) unit(8);
+        padding: unit(4);
         background: var(--color-cyber-grape);
         display: flex;
         flex-direction: column;
-        flex: 0 0 25rem;
+        flex: 0 0 30rem;
         justify-content: center;
 
         h4 {
@@ -101,6 +142,7 @@
           text-transform: uppercase;
           letter-spacing: 0.2em;
           font-size: 0.85rem;
+          margin-top: 0;
         }
 
         .manage-protocols {
@@ -122,36 +164,8 @@
       }
 
       .library-card {
-        @include clickable(2);
+        @include action-card;
         background-image: url('../images/protocol-card-background.png');
-        background-size: cover;
-        border-radius: var(--border-radius);
-        overflow: hidden;
-        position: relative;
-        max-width: 40rem;
-        display: flex;
-        color: var(--text);
-        align-items: center;
-        justify-content: center;
-        padding: unit(4);
-        flex: 1;
-
-        &::after {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          z-index: 1;
-          background-image: linear-gradient(120deg, rgba(32, 28, 66, 0.78), rgba(93, 91, 138, 0.82));
-        }
-
-        & > * {
-          z-index: 100;
-          position: relative;
-          text-align: center;
-        }
       }
     }
 
@@ -165,37 +179,57 @@
 
     .resume-section {
       .resume-card {
-        @include clickable(2);
-
+        @include action-card;
         background-image: url('../images/session-card-background.png');
-        background-size: cover;
-        border-radius: var(--border-radius);
-        overflow: hidden;
-        position: relative;
-        max-width: 40rem;
-        display: flex;
-        color: var(--text);
-        align-items: center;
-        justify-content: center;
-        padding: unit(4);
-        text-align: center;
-        flex: 1;
+      }
+    }
 
-        &::after {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          z-index: 1;
-          background-image: linear-gradient(120deg, rgba(32, 28, 66, 0.78), rgba(93, 91, 138, 0.82));
-        }
+    .export-section {
+      .unexported-card {
+        @include action-card;
+        background-image: url('../images/export-card-background.png');
+      }
 
-        & > * {
-          z-index: 100;
-          position: relative;
+      .select-sessions-card {
+        @include action-card;
+        background-image: url('../images/session-card-background.png');
+      }
+
+      .export-settings-card {
+        @include action-card;
+      }
+
+      &__action {
+        flex: 1 1;
+
+        .export-action {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+
+          &:not(:only-child) {
+            &:first-child {
+              margin-bottom: unit(2);
+            }
+          }
         }
+      }
+    };
+
+    .import-section {
+      .url-card {
+        @include action-card;
+        background-image: url('../images/url-card-background.png');
+      }
+
+      .device-card {
+        @include action-card;
+        background-image: url('../images/device-card-background.png');
+      }
+
+      .server-import-card {
+        @include action-card;
+        background-image: url('../images/server-card-background.png');
       }
     }
   }

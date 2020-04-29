@@ -20,12 +20,12 @@ const NewInterviewSection = (props) => {
       {Object.keys(sessions).length > 0 && (
         <section className="setup-section resume-section">
           <header className="section-header">
-            <h1>Resume an Interview</h1>
+            <h2>Resume an Interview</h2>
           </header>
           <main className="section-wrapper">
             <section className="setup-section__content">
               <header>
-                <h2>Last Active Interview...</h2>
+                <h3>Last Active Interview...</h3>
               </header>
               <SessionCard
                 sessionUUID={lastActiveSession.sessionUUID}
@@ -34,9 +34,9 @@ const NewInterviewSection = (props) => {
             </section>
             { Object.keys(sessions).length > 2 && (
               <aside className="setup-section__action">
-                <h4>Resume Other Interview</h4>
+                <h4>Manage All Interviews</h4>
                 <div className="resume-card" onClick={showSessionsOverlay}>
-                  <h2>{ResumeOtherSessionLabel}</h2>
+                  <h3>{ResumeOtherSessionLabel}</h3>
                 </div>
               </aside>
             )}

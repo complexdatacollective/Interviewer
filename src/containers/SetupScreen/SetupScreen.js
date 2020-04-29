@@ -66,28 +66,64 @@ const SetupScreen = (props) => {
           </section> */}
           <NewInterviewSection />
           <ResumeSessionSection />
-
-          <section className="setup-section export-section">
+          <section className="setup-section import-section">
             <header className="section-header">
-              <h1>Export Data</h1>
+              <h2>Import Protocol</h2>
             </header>
             <main className="section-wrapper">
               <section className="setup-section__content">
                 <header>
-                  <h2>All Unexported</h2>
+                  <h3>From File</h3>
                 </header>
-                <div className="resume-card">
-                  <h2>+12 Sessions...</h2>
+                <div className="device-card">
+                  <h4>Browse your device...</h4>
                 </div>
               </section>
               <section className="setup-section__content">
                 <header>
-                  <h2>Select sessions to export</h2>
+                  <h3>From URL</h3>
                 </header>
-                <div className="resume-card">
-                  <h2>Select Sessions</h2>
+                <div className="url-card">
+                  <h4>Enter a URL...</h4>
                 </div>
               </section>
+              <section className="setup-section__content">
+                <header>
+                  <h3>From Server</h3>
+                </header>
+                <div className="server-import-card">
+                  <h4>View Server Protocols...</h4>
+                </div>
+              </section>
+            </main>
+          </section>
+          <section className="setup-section export-section">
+            <header className="section-header">
+              <h2>Export Data</h2>
+            </header>
+            <main className="section-wrapper">
+              <section className="setup-section__content">
+                <header>
+                  <h3>All Unexported</h3>
+                </header>
+                <div className="unexported-card">
+                  <h4>+12 Unexported Sessions...</h4>
+                </div>
+              </section>
+              <aside className="setup-section__action export-section__action">
+                <div className="export-action">
+                  <h4>Select sessions to export</h4>
+                  <div className="select-sessions-card">
+                    <h3>Open Session List...</h3>
+                  </div>
+                </div>
+                <div className="export-action">
+                  <h4>Change Export Settings</h4>
+                  <div className="export-settings-card">
+                    <h3>Open Export Settings...</h3>
+                  </div>
+                </div>
+              </aside>
             </main>
           </section>
         </main>

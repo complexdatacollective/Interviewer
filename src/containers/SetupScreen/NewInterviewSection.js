@@ -52,12 +52,12 @@ const NewInterviewSection = (props) => {
         show={showNewSessionOverlay}
       />
       <header className="section-header">
-        <h1>Start a New Interview</h1>
+        <h2>Start a New Interview</h2>
       </header>
       <main className="section-wrapper">
         <section className="setup-section__content">
           <header>
-            <h2>Last Active Protocol...</h2>
+            <h3>Last Active Protocol...</h3>
           </header>
           <ProtocolCard
             attributes={installedProtocols[activeProtocol]}
@@ -88,9 +88,9 @@ const NewInterviewSection = (props) => {
             </div>
           )}
           <div className="manage-protocols">
-            <h4>Manage Protocols</h4>
+            <h4>Add or Remove Protocols</h4>
             <div className="library-card" onClick={() => showProtocolsOverlay()}>
-              <h2>Open Protocol Library...</h2>
+              <h3>Open Protocol Library...</h3>
             </div>
           </div>
         </aside>
