@@ -119,10 +119,10 @@ class SessionList extends Component {
           </Button>
         </div>
         }
-        <div className="session-list__footer">
+        {/* <div className="session-list__footer">
           <Button>Import Protocol from File</Button>
           <Button>Import Protocol from URL</Button>
-        </div>
+        </div> */}
         <NodeBin
           accepts={() => true}
           dropHandler={meta => this.onDeleteCard(meta.uuid)}

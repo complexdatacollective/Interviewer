@@ -5,25 +5,27 @@ import { Icon } from '@codaco/ui';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
 
 const FooterNavigation = (props) => {
-  // const {
-  // } = props;
+  const {
+    openOverlay,
+  } = props;
+
   return (
     <footer className="setup-screen__footer">
-      <section className="footer-section">
+      <section className="footer-section" onClick={() => openOverlay('settingsMenuOpen')}>
         <Icon name="settings" />
         <h4 className="footer-section__label">Settings</h4>
       </section>
-      <section className="footer-section">
+      <section className="footer-section" onClick={() => openOverlay('showSessionsOverlay')}>
         <Icon name="menu-sociogram" />
         <h4 className="footer-section__label">Interview Sessions</h4>
       </section>
-      <section className="footer-section">
+      <section className="footer-section" onClick={() => openOverlay('showProtocolsOverlay')}>
         <Icon name="menu-default-interface" />
         <h4 className="footer-section__label">Protocol Library</h4>
       </section>
       <section className="footer-section">
-        <Icon name="menu-download-data" />
-        <h4 className="footer-section__label">Export Data</h4>
+        <Icon name="info" />
+        <h4 className="footer-section__label">Help</h4>
       </section>
     </footer>
   );
@@ -45,8 +47,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    setShowImportProtocolOverlay: status =>
-      dispatch(uiActions.update({ showImportProtocolOverlay: status })),
+    openOverlay: overlay =>
+      dispatch(uiActions.update({ [overlay]: true })),
   };
 }
 

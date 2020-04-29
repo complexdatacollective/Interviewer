@@ -6,6 +6,7 @@ import { compose } from 'recompose';
 import { getCSSVariableAsNumber, getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
 import Scroller from '../Scroller';
+import BackgroundDimmer from '../BackgroundDimmer';
 import VisualPreferences from './Sections/VisualPreferences';
 import DeveloperTools from './Sections/DeveloperTools';
 import About from './Sections/About';
@@ -146,6 +147,9 @@ const SettingsMenu = (props) => {
 
   return (
     <AnimatePresence>
+      <AnimatePresence>
+        { settingsMenuOpen && (<BackgroundDimmer clickHandler={closeMenu} ><CloseButton onClick={closeMenu} className="close-button-wrapper" /></BackgroundDimmer>)}
+      </AnimatePresence>
       { settingsMenuOpen && (
         <motion.div
           className="settings-menu"

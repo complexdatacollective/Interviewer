@@ -49,7 +49,7 @@ const StagesMenu = (props) => {
      * that are currently visible.
      * */
 
-    const delayScale = 0.075;
+    const delayScale = 0.1;
 
     // Active index 0, current index less than 8: animate first 8 items.
     if (

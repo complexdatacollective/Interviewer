@@ -1,7 +1,7 @@
 $close-button-size: 1rem;
 
 .overlay {
-  flex: 1;
+  // flex: 1;
   background: var(--color-cyber-grape);
   color: var(--text-light);
   box-shadow: 0 0 4rem 0 var(--modal-window-box-shadow);
@@ -9,7 +9,8 @@ $close-button-size: 1rem;
   border-radius: .75rem;
   display: flex;
   flex-direction: column;
-  margin: unit(4);
+  margin: unit(4) unit(12);
+  width: 80%;
 
   &__title {
     display: flex;

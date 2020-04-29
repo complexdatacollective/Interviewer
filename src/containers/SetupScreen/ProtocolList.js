@@ -88,10 +88,10 @@ const ProtocolList = (props) => {
         :
         { emptyView }
       }
-      <div className="protocol-list__footer">
+      {/* <div className="protocol-list__footer">
         <Button>Import Protocol from File</Button>
         <Button>Import Protocol from URL</Button>
-      </div>
+      </div> */}
       <NewSessionOverlay
         handleSubmit={handleCreateSession}
         onClose={handleCloseOverlay}

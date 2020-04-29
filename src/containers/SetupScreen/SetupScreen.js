@@ -68,7 +68,7 @@ const SetupScreen = (props) => {
           <ResumeSessionSection />
           <section className="setup-section import-section">
             <header className="section-header">
-              <h2>Import Protocol</h2>
+              <h2>Import a Protocol</h2>
             </header>
             <main className="section-wrapper">
               <section className="setup-section__content">
@@ -102,12 +102,22 @@ const SetupScreen = (props) => {
               <h2>Export Data</h2>
             </header>
             <main className="section-wrapper">
-              <section className="setup-section__content">
-                <header>
-                  <h3>All Unexported</h3>
-                </header>
-                <div className="unexported-card">
-                  <h4>+12 Unexported Sessions...</h4>
+              <section className="setup-section__content export-section__content">
+                <div className="export-content">
+                  <header>
+                    <h3>All Unexported to File</h3>
+                  </header>
+                  <div className="unexported-file-card">
+                    <h4>Export 12 New Sessions to Files...</h4>
+                  </div>
+                </div>
+                <div className="export-content">
+                  <header>
+                    <h3>All Unexported to Server</h3>
+                  </header>
+                  <div className="unexported-server-card">
+                    <h4>Export 12 New Sessions to Server...</h4>
+                  </div>
                 </div>
               </section>
               <aside className="setup-section__action export-section__action">
@@ -119,7 +129,7 @@ const SetupScreen = (props) => {
                 </div>
                 <div className="export-action">
                   <h4>Change Export Settings</h4>
-                  <div className="export-settings-card allow-text-select">
+                  <div className="export-settings-card">
                     <h3>Open Export Settings...</h3>
                   </div>
                 </div>
