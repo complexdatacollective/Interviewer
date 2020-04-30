@@ -39,7 +39,6 @@ const NewInterviewSection = (props) => {
 
   const ProtocolSelectOptions = Object.keys(installedProtocols).map(
     (protocol) => {
-      if (protocol === activeProtocol) { return null; }
       return (<option key={protocol} value={protocol}>{installedProtocols[protocol].name}</option>);
     },
   );
@@ -51,13 +50,11 @@ const NewInterviewSection = (props) => {
         onClose={handleCloseOverlay}
         show={showNewSessionOverlay}
       />
-      <header className="section-header">
-        <h2>Start a New Interview</h2>
-      </header>
       <main className="section-wrapper">
         <section className="setup-section__content">
           <header>
-            <h3>Last Active Protocol...</h3>
+            <h1>Start a New Interview</h1>
+            <h3>Active Protocol...</h3>
           </header>
           <ProtocolCard
             attributes={installedProtocols[activeProtocol]}
@@ -68,13 +65,13 @@ const NewInterviewSection = (props) => {
         <aside className="setup-section__action">
           {ProtocolSelectOptions.length > 1 && (
             <div className="start-section__select-protocol">
-              <h4>Use different protocol</h4>
+              <h4>Change Active Protocol</h4>
               <div className="form-field-container">
                 <div className="form-field">
                   <select
                     name="scaleFactor"
                     className="select-css"
-                    value=""
+                    value={installedProtocols[activeProtocol.uuid]}
                     onChange={(e) => {
                       if (!e.target.value) { return; }
                       handlePrimeSession(e.target.value);

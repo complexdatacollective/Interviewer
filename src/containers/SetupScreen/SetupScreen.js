@@ -67,54 +67,37 @@ const SetupScreen = (props) => {
           <NewInterviewSection />
           <ResumeSessionSection />
           <section className="setup-section import-section">
-            <header className="section-header">
-              <h2>Import a Protocol</h2>
-            </header>
             <main className="section-wrapper">
-              <section className="setup-section__content">
+              <section className="setup-section__content import-section__content">
                 <header>
-                  <h3>From File</h3>
+                  <h1>Import a Protocol</h1>
+                  <h3>Choose Location</h3>
                 </header>
-                <div className="device-card">
-                  <h4>Browse your device...</h4>
-                </div>
-              </section>
-              <section className="setup-section__content">
-                <header>
-                  <h3>From URL</h3>
-                </header>
-                <div className="url-card">
-                  <h4>Enter a URL...</h4>
-                </div>
-              </section>
-              <section className="setup-section__content">
-                <header>
-                  <h3>From Server</h3>
-                </header>
-                <div className="server-import-card">
-                  <h4>View Server Protocols...</h4>
+                <div className="import-content">
+                  <div className="device-card">
+                    <h4>Browse your device...</h4>
+                  </div>
+                  <div className="url-card">
+                    <h4>Enter a URL...</h4>
+                  </div>
+                  <div className="server-import-card">
+                    <h4>From Server...</h4>
+                  </div>
                 </div>
               </section>
             </main>
           </section>
           <section className="setup-section export-section">
-            <header className="section-header">
-              <h2>Export Data</h2>
-            </header>
             <main className="section-wrapper">
               <section className="setup-section__content export-section__content">
+                <header>
+                  <h1>Export Data</h1>
+                  <h3>Quick Export</h3>
+                </header>
                 <div className="export-content">
-                  <header>
-                    <h3>All Unexported to File</h3>
-                  </header>
                   <div className="unexported-file-card">
                     <h4>Export 12 New Sessions to Files...</h4>
                   </div>
-                </div>
-                <div className="export-content">
-                  <header>
-                    <h3>All Unexported to Server</h3>
-                  </header>
                   <div className="unexported-server-card">
                     <h4>Export 12 New Sessions to Server...</h4>
                   </div>

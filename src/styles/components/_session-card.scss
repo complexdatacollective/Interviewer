@@ -21,10 +21,10 @@
 
     .meta-wrapper {
       display: flex;
-      flex-direction: row;
-      padding: unit(2) unit(4);
+      padding: unit(1) unit(4);
       background: var(--color-platinum--dark);
       flex: 0 0 auto;
+      align-items: center;
 
       .meta {
         flex: 1 0 auto;
@@ -43,12 +43,13 @@
           display: flex;
           align-items: center;
           justify-content: flex-end;
+          font-size: 0.6rem;
         }
 
       }
 
       .progress-wrapper {
-        flex: 0 1 12rem;
+        flex: 1;
         height: 100%;
         display: flex;
         flex-direction: column;
@@ -58,6 +59,7 @@
           margin: 0 0 0.3rem;
           text-transform: uppercase;
           letter-spacing: 0.15em;
+          font-size: 0.6rem;
         }
 
         .progress-bar {

@@ -63,9 +63,9 @@ const SessionCard = (props) => {
           </div>
         </div>
         <div className="main-wrapper">
-          <h1 className="card__label">
+          <h2 className="card__label">
             { caseId }
-          </h1>
+          </h2>
         </div>
       </div>
     </motion.div>

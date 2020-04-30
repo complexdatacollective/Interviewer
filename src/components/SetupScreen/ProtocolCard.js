@@ -119,6 +119,7 @@ const ProtocolCard = (props) => {
         <div className="protocol-icon">
           <Icon name="protocol-card" />
         </div>
+        {renderCardIcon()}
         <div className="protocol-meta">
           <h6>Installed: {formatDate(lastModified)}</h6>
           <h6>Last Used: {formatDate(lastModified)}</h6>
@@ -126,8 +127,8 @@ const ProtocolCard = (props) => {
         </div>
       </div>
       <div className="protocol-card__main-section">
-        <h1 className="protocol-name">{name} {renderCardIcon()}</h1>
-        <p className="protocol-description">
+        <h2 className="protocol-name">{name}</h2>
+        <p className="protocol-description scrollable">
           { description || (<em>No protocol description.</em>) }
         </p>
       </div>

@@ -19,12 +19,10 @@ const NewInterviewSection = (props) => {
     <React.Fragment>
       {Object.keys(sessions).length > 0 && (
         <section className="setup-section resume-section">
-          <header className="section-header">
-            <h2>Resume an Interview</h2>
-          </header>
           <main className="section-wrapper">
             <section className="setup-section__content">
               <header>
+                <h1>Resume an Interview</h1>
                 <h3>Last Active Interview...</h3>
               </header>
               <SessionCard
