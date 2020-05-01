@@ -1,17 +1,33 @@
 /* eslint-disable no-shadow */
 import { createSelector } from 'reselect';
-import { get, clamp } from 'lodash';
+import { get, clamp, orderBy, values, mapValues, omit } from 'lodash';
 import { currentStageIndex } from '../utils/matchSessionPath';
 import { getAdditionalAttributes, getSubject } from '../utils/protocol/accessors';
 import { createDeepEqualSelector } from './utils';
 import { initialState } from '../ducks/modules/session';
 import { getProtocolCodebook, getProtocolStages, getCurrentSessionProtocol } from './protocol';
+import { entityAttributesProperty } from '../ducks/modules/network';
 
 const currentPathname = router => router && router.location && router.location.pathname;
 const stageIndexForCurrentSession = state => currentStageIndex(currentPathname(state.router));
 
 export const getActiveSession = state =>
   state.activeSessionId && state.sessions[state.activeSessionId];
+
+export const getLastActiveSession = (state) => {
+  const sessionsCollection = values(mapValues(state.sessions, (session, uuid) => ({
+    sessionUUID: uuid,
+    ...session,
+  })));
+
+  const lastActive = orderBy(sessionsCollection, ['updatedAt', 'caseId'], ['desc', 'asc'])[0];
+  return {
+    sessionUUID: lastActive.sessionUUID,
+    [entityAttributesProperty]: {
+      ...omit(lastActive, 'sessionUUID'),
+    },
+  };
+};
 
 export const getCaseId = createDeepEqualSelector(
   getActiveSession,

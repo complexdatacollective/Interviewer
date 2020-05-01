@@ -1,10 +1,9 @@
 import React from 'react';
-import { sortBy, values, mapValues, omit } from 'lodash';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
 import { SessionCard } from '../../components';
-import { entityAttributesProperty } from '../../ducks/modules/network';
+import { getLastActiveSession } from '../../selectors/session';
 
 const NewInterviewSection = (props) => {
   const {
@@ -52,20 +51,9 @@ NewInterviewSection.defaultProps = {
 };
 
 function mapStateToProps(state) {
-  const getLastActiveSession = () => {
-    const sessionsCollection = values(mapValues(state.sessions, (session, sessionUUID) => { session['sessionUUID'] = sessionUUID; return session; }));
-    const lastActive = sortBy(sessionsCollection, ['updatedAt'])[0];
-    return {
-      sessionUUID: lastActive.sessionUUID,
-      [entityAttributesProperty]: {
-        ...omit(lastActive, 'sessionUUID'),
-      },
-    };
-  };
-
   return {
     sessions: state.sessions,
-    lastActiveSession: getLastActiveSession(),
+    lastActiveSession: getLastActiveSession(state),
   };
 }
 

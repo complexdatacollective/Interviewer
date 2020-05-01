@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
+import { Button } from '@codaco/ui';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
 import { isIOS } from '../../utils/Environment';
 import NCLogo from '../../images/NC-Logo.svg';
@@ -16,6 +17,7 @@ import {
   ExportOverlay,
   SessionsOverlay,
 } from '.';
+import { Scroller } from '../../components';
 
 const ServerStatus = () => (
   <img src={serverLogo} className="server-status" alt="Server Status" />
@@ -47,11 +49,7 @@ const SetupScreen = (props) => {
         <header className="setup-screen__header">
           <img src={isIOS() ? NCLogo : NCLogoBeta} className="header-logo" alt="Network Canvas" />
         </header>
-        <main className="setup-screen__main scrollable">
-          {/* <ToggleSessionListButton sessionListShown={showSessionList} /> */}
-          {/* <ImportProtocolButton /> */}
-          {/* <ProtocolList /> */}
-          {/* <SessionList /> */}
+        <Scroller className="setup-screen__main">
 
           {/* <section className="setup-section welcome-section">
             <header>
@@ -75,13 +73,13 @@ const SetupScreen = (props) => {
                 </header>
                 <div className="import-content">
                   <div className="device-card">
-                    <h4>Browse your device...</h4>
+                    <Button>Browse your device...</Button>
                   </div>
                   <div className="url-card">
-                    <h4>Enter a URL...</h4>
+                    <Button>Enter a URL...</Button>
                   </div>
                   <div className="server-import-card">
-                    <h4>From Server...</h4>
+                    <Button>From Server...</Button>
                   </div>
                 </div>
               </section>
@@ -96,10 +94,10 @@ const SetupScreen = (props) => {
                 </header>
                 <div className="export-content">
                   <div className="unexported-file-card">
-                    <h4>Export 12 New Sessions to Files...</h4>
+                    <h3>Export 12 New Sessions to Files...</h3>
                   </div>
                   <div className="unexported-server-card">
-                    <h4>Export 12 New Sessions to Server...</h4>
+                    <h3>Export 12 New Sessions to Server...</h3>
                   </div>
                 </div>
               </section>
@@ -119,7 +117,7 @@ const SetupScreen = (props) => {
               </aside>
             </main>
           </section>
-        </main>
+        </Scroller>
         <FooterNavigation />
       </div>
     </React.Fragment>

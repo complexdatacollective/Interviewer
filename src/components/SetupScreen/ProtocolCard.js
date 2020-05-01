@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { connect } from 'react-redux';
 import { Icon } from '@codaco/ui';
+import { Scroller } from '../../components';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { APP_SUPPORTED_SCHEMA_VERSIONS, APP_SCHEMA_VERSION } from '../../config';
 
@@ -128,9 +129,9 @@ const ProtocolCard = (props) => {
       </div>
       <div className="protocol-card__main-section">
         <h2 className="protocol-name">{name}</h2>
-        <p className="protocol-description scrollable">
+        <Scroller className="protocol-description">
           { description || (<em>No protocol description.</em>) }
-        </p>
+        </Scroller>
       </div>
     </div>
   );
@@ -144,12 +145,16 @@ ProtocolCard.defaultProps = {
 
 ProtocolCard.propTypes = {
   onClickHandler: PropTypes.func,
-  protocol: PropTypes.shape({
-    uuid: PropTypes.string.isRequired,
+  openDialog: PropTypes.func.isRequired,
+  isSelected: PropTypes.bool.isRequired,
+  attributes: PropTypes.shape({
+    schemaVersion: PropTypes.number.isRequired,
+    lastModified: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     description: PropTypes.string,
-    schemaVersion: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   }).isRequired,
+  protocolUID: PropTypes.string.isRequired,
+
 };
 
 function mapStateToProps(state) {

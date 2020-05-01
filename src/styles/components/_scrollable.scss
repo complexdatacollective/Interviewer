@@ -19,8 +19,8 @@
   }
 
   &--show-scrollbars {
-    $scrollbar-height: 1.25rem;
-    $scrollbar-padding: 1rem;
+    $scrollbar-height: unit(1);
+    $scrollbar-padding: unit(1);
 
     &::-webkit-scrollbar {
       display: block;
@@ -40,9 +40,8 @@
     }
 
     &::-webkit-scrollbar-thumb {
-      background-color: var(--color-cyber-grape);
+      background-color: var(--transparent-light);
       border-radius: 5rem;
-      min-height: 10rem;
     }
 
     &::-webkit-scrollbar-button {

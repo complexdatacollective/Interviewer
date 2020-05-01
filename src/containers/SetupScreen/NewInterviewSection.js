@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { sortBy, values, mapValues, omit } from 'lodash';
-import { withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actionCreators as sessionActions } from '../../ducks/modules/sessions';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
+import { actionCreators as setupScreenActions } from '../../ducks/modules/setupScreen';
 import { NewSessionOverlay, ProtocolCard } from '../../components/SetupScreen';
+import { getLastActiveSession } from '../../selectors/session';
 import { entityAttributesProperty } from '../../ducks/modules/network';
 
 const NewInterviewSection = (props) => {
@@ -14,24 +14,22 @@ const NewInterviewSection = (props) => {
     activeProtocol,
     addSession,
     showProtocolsOverlay,
+    setActiveProtocol,
   } = props;
 
   const [showNewSessionOverlay, setShowNewSessionOverlay] = useState(false);
-  const [selectedProtocol, setSelectedProtocol] = useState(null);
 
   const handlePrimeSession = (protocolUID) => {
-    setSelectedProtocol(protocolUID);
     setShowNewSessionOverlay(true);
   };
 
   const handleCloseOverlay = () => {
     setShowNewSessionOverlay(false);
-    setSelectedProtocol(null);
   };
 
 
   const handleCreateSession = (caseId) => {
-    addSession(caseId, selectedProtocol);
+    addSession(caseId, activeProtocol);
 
     // Close overlay
     handleCloseOverlay();
@@ -71,13 +69,11 @@ const NewInterviewSection = (props) => {
                   <select
                     name="scaleFactor"
                     className="select-css"
-                    value={installedProtocols[activeProtocol.uuid]}
+                    value={activeProtocol}
                     onChange={(e) => {
-                      if (!e.target.value) { return; }
-                      handlePrimeSession(e.target.value);
+                      setActiveProtocol(e.target.value);
                     }}
                   >
-                    <option value="">Select a protocol...</option>
                     {ProtocolSelectOptions}
                   </select>
                 </div>
@@ -103,29 +99,24 @@ NewInterviewSection.defaultProps = {
 };
 
 function mapStateToProps(state) {
-  const getLastActiveSession = () => {
-    const sessionsCollection = values(mapValues(state.sessions, (session, sessionUUID) => { session['sessionUUID'] = sessionUUID; return session; }));
-    const lastActive = sortBy(sessionsCollection, ['updatedAt'])[0];
-    return {
-      sessionUUID: lastActive.sessionUUID,
-      [entityAttributesProperty]: {
-        ...omit(lastActive, 'sessionUUID'),
-      },
-    };
-  };
+  const lastActiveSession = getLastActiveSession(state);
 
   const getActiveProtocol = () => {
-    const lastActiveSession = getLastActiveSession();
+    if (state.setupScreen.activeProtocolUUID) {
+      return state.setupScreen.activeProtocolUUID;
+    }
 
-    return state.ui.activeProtocolUUID
-      || lastActiveSession.protocolUID
-      || Object.keys(state.installedProtocols)[0];
+    if (lastActiveSession[entityAttributesProperty].protocolUID) {
+      return lastActiveSession[entityAttributesProperty].protocolUID;
+    }
+
+    return Object.keys(state.installedProtocols)[0];
   };
 
   return {
     installedProtocols: state.installedProtocols,
     sessions: state.sessions,
-    lastActiveSession: getLastActiveSession(),
+    lastActiveSession,
     activeProtocol: getActiveProtocol(),
   };
 }
@@ -134,9 +125,11 @@ function mapDispatchToProps(dispatch) {
   return {
     addSession: bindActionCreators(sessionActions.addSession, dispatch),
     showProtocolsOverlay: () => dispatch(uiActions.update({ showProtocolsOverlay: true })),
+    setActiveProtocol:
+      protocolUUID => dispatch(setupScreenActions.update({ activeProtocolUUID: protocolUUID })),
   };
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(NewInterviewSection));
+export default connect(mapStateToProps, mapDispatchToProps)(NewInterviewSection);
 
 export { NewInterviewSection as UnconnectedNewInterviewSection };

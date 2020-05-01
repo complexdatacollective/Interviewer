@@ -18,6 +18,7 @@ const persistConfig = {
     'installedProtocols',
     'router',
     'search',
+    'setupScreen',
     'activeSessionId',
     'sessions',
   ],
