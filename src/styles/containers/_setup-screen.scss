@@ -76,18 +76,6 @@
   }
 }
 
-.server-status {
-  @include clickable;
-
-  position: absolute;
-  top: unit(4);
-  right: unit(4);
-  height: 6rem;
-  width: 6rem;
-  z-index: var(--z-global-ui);
-  border-radius: 50%;
-}
-
 .setup-screen {
   height: 100%;
   width: 100%;

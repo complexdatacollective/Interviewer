@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { actionCreators as sessionActions } from '../../ducks/modules/sessions';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
 import { actionCreators as setupScreenActions } from '../../ducks/modules/setupScreen';
-import { NewSessionOverlay, ProtocolCard } from '../../components/SetupScreen';
+import { NewSessionOverlay } from '../../components/SetupScreen';
+import { ProtocolCard } from '../../components';
 import { getLastActiveSession } from '../../selectors/session';
 import { entityAttributesProperty } from '../../ducks/modules/network';
 
@@ -19,7 +20,7 @@ const NewInterviewSection = (props) => {
 
   const [showNewSessionOverlay, setShowNewSessionOverlay] = useState(false);
 
-  const handlePrimeSession = (protocolUID) => {
+  const handlePrimeSession = () => {
     setShowNewSessionOverlay(true);
   };
 

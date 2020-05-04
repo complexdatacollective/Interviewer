@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { connect } from 'react-redux';
 import { Icon } from '@codaco/ui';
-import { Scroller } from '../../components';
-import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
-import { APP_SUPPORTED_SCHEMA_VERSIONS, APP_SCHEMA_VERSION } from '../../config';
+import { Scroller } from '.';
+import { actionCreators as dialogActions } from '../ducks/modules/dialogs';
+import { APP_SUPPORTED_SCHEMA_VERSIONS, APP_SCHEMA_VERSION } from '../config';
 
 const formatDate = timestamp => timestamp && new Date(timestamp).toLocaleString(undefined, { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' });
 

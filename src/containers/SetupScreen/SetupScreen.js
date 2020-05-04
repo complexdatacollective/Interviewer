@@ -6,22 +6,17 @@ import { connect } from 'react-redux';
 import { Button } from '@codaco/ui';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
 import { isIOS } from '../../utils/Environment';
+import ServerStatusIcon from '../ServerPairing/ServerStatusIcon';
 import NCLogo from '../../images/NC-Logo.svg';
 import NCLogoBeta from '../../images/NC-Logo-beta.svg';
-import serverLogo from '../../images/Srv-Flat.svg';
 import {
   ResumeSessionSection,
   NewInterviewSection,
   FooterNavigation,
   ProtocolsOverlay,
-  ExportOverlay,
   SessionsOverlay,
 } from '.';
 import { Scroller } from '../../components';
-
-const ServerStatus = () => (
-  <img src={serverLogo} className="server-status" alt="Server Status" />
-);
 
 const SetupScreen = (props) => {
   const {
@@ -41,7 +36,7 @@ const SetupScreen = (props) => {
   return (
     <React.Fragment>
       <div className="bg bg-1" />
-      <ServerStatus />
+      <ServerStatusIcon />
       <ProtocolsOverlay />
       <SessionsOverlay />
       {/* <ExportOverlay /> */}

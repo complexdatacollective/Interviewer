@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
-import { ProtocolList } from '.';
+import { ProtocolList } from '../';
 import { Overlay } from '../Overlay';
 
 const ProtocolsOverlay = (props) => {

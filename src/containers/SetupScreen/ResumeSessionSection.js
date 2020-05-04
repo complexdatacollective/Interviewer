@@ -1,5 +1,4 @@
 import React from 'react';
-import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
 import { SessionCard } from '../../components';
@@ -63,6 +62,6 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(NewInterviewSection));
+export default connect(mapStateToProps, mapDispatchToProps)(NewInterviewSection);
 
 export { NewInterviewSection as UnconnectedNewInterviewSection };

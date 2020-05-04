@@ -15,7 +15,7 @@ import { actionCreators as sessionsActions } from '../../ducks/modules/sessions'
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import Overlay from '../Overlay';
 import { asExportableNetwork } from '../../utils/networkFormat';
-import PairedServerWrapper from '../../components/SetupScreen/PairedServerWrapper';
+import PairedServerWrapper from '../../components/ServerPairing/PairedServerWrapper';
 
 /**
  * The remote protocol ID on any instance of Server is the hex-encoded sha256 of its [unique] name.

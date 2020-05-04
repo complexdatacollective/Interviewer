@@ -12,3 +12,4 @@ export { default as QuickNodeForm } from './QuickNodeForm';
 export { default as FormWizard } from './FormWizard';
 export { default as LoadParamsRoute } from './LoadParamsRoute';
 export { default as CategoricalList } from './CategoricalList';
+export { default as ProtocolList } from './ProtocolList';

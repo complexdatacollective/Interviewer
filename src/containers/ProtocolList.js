@@ -4,13 +4,14 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { size } from 'lodash';
 import { Button } from '@codaco/ui';
-import { NewFilterableListWrapper, NodeBin } from '../../components';
-import { NewSessionOverlay, ProtocolCard } from '../../components/SetupScreen';
-import { actionCreators as sessionActions } from '../../ducks/modules/sessions';
-import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
-import { actionCreators as importProtocolActions } from '../../ducks/modules/importProtocol';
-import { actionCreators as uiActions } from '../../ducks/modules/ui';
-import { entityAttributesProperty } from '../../ducks/modules/network';
+import { NewFilterableListWrapper, NodeBin } from '../components';
+import { NewSessionOverlay } from '../components/SetupScreen';
+import { ProtocolCard } from '../components';
+import { actionCreators as sessionActions } from '../ducks/modules/sessions';
+import { actionCreators as dialogActions } from '../ducks/modules/dialogs';
+import { actionCreators as importProtocolActions } from '../ducks/modules/importProtocol';
+import { actionCreators as uiActions } from '../ducks/modules/ui';
+import { entityAttributesProperty } from '../ducks/modules/network';
 
 const ProtocolList = (props) => {
   const {

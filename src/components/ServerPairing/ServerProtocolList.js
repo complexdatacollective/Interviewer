@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Scroller } from '../../components';
-import ProtocolCardMini from './ProtocolCardMini';
+import { Scroller } from '..';
+import ProtocolCard from '../ProtocolCard';
 
 const EmptyProtocolList = (
   <div className="server-protocol-list server-protocol-list--empty">
@@ -20,7 +20,7 @@ const ServerProtocolList = ({ protocols, selectProtocol }) => {
       <Scroller className="server-protocol-list__scroller">
         {
           protocols.map(protocol => (
-            <ProtocolCardMini
+            <ProtocolCard
               key={protocol.id}
               selectProtocol={p => selectProtocol(p)}
               protocol={protocol}
