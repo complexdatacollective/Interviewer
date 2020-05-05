@@ -54,7 +54,7 @@ class FilterableListWrapper extends Component {
         // Include in filtered list if any of the attribute property values
         // include the filter value
         return nodeDetails.some(
-          item => item.toString().toLowerCase().includes(filterValue),
+          item => item && item.toString().toLowerCase().includes(filterValue),
         );
       },
     );
