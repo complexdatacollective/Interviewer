@@ -1,6 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { actionCreators as uiActions } from '../../ducks/modules/ui';
+import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { Overlay } from '../Overlay';
 import ServerPairing from './ServerPairing';
 
@@ -8,25 +9,35 @@ import ServerPairing from './ServerPairing';
 const ServerPairingDialog = (props) => {
   const {
     show,
-    close,
+    handleClose,
+    handleSuccess,
+    openDialog,
     server,
   } = props;
 
-  console.log('SPD', props);
+  const handleError = (error) => {
+    openDialog({
+      type: 'Error',
+      error,
+      confirmLabel: 'Okay',
+    });
+  };
 
   return (
-    <Overlay title="ServerPairingDialog" show={show}>
+    <Overlay title="ServerPairingDialog" show={show} onClose={handleClose}>
       <ServerPairing
         server={server}
-        onComplete={() => console.log('serverPairing on pairing complete')}
-        onError={() => console.log('serverPairing: on pairing error')}
-        onCancel={() => close()}
+        onComplete={handleSuccess}
+        onError={handleError}
+        onCancel={() => handleClose()}
       />
     </Overlay>
   );
 };
 
 ServerPairingDialog.propTypes = {
+  handleClose: PropTypes.func.isRequired,
+  handleSuccess: PropTypes.func.isRequired,
 };
 
 ServerPairingDialog.defaultProps = {
@@ -40,7 +51,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    close: () => dispatch(uiActions.update({ showServerPairingDialog: false })),
+    openDialog: dialogActions.openDialog,
   };
 }
 

@@ -33,14 +33,8 @@ const unpairServer = () => ({
   type: UNPAIR_SERVER,
 });
 
-const pairingFailed = error => ({
-  type: SERVER_PAIRING_FAILED,
-  error,
-});
-
 const actionCreators = {
   setPairedServer,
-  pairingFailed,
   unpairServer,
 };
 

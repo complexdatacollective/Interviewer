@@ -24,7 +24,6 @@ class ServerPairing extends Component {
   }
 
   componentDidMount() {
-    console.log('here', this.props);
     this.apiClient = new ApiClient(this.props.server.pairingServiceUrl);
     this.requestPairingCode();
   }
@@ -34,7 +33,6 @@ class ServerPairing extends Component {
   }
 
   handleApiError(err) {
-    this.props.pairingFailed(err);
     this.setState(emptyState);
     this.props.onError(err);
   }
@@ -112,7 +110,6 @@ ServerPairing.propTypes = {
   deviceName: PropTypes.string,
   onComplete: PropTypes.func,
   onError: PropTypes.func,
-  pairingFailed: PropTypes.func.isRequired,
   server: PropTypes.shape({
     pairingServiceUrl: PropTypes.string.isRequired,
     host: PropTypes.string,
@@ -130,7 +127,6 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     setPairedServer: bindActionCreators(actionCreators.setPairedServer, dispatch),
-    pairingFailed: bindActionCreators(actionCreators.pairingFailed, dispatch),
   };
 }
 

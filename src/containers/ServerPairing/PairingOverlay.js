@@ -21,7 +21,7 @@ const PairingOverlay = (props) => {
   const [autoPairingMode, setAutoPairingMode] = useState(true);
 
   const [showPairingCodeDialog, setShowPairingCodeDialog] = useState(false);
-  const [selectedServer, setSelectedServer] = useState(null)
+  const [selectedServer, setSelectedServer] = useState(null);
 
   const pairClickHandler = () => {
     if (autoPairingMode) {
@@ -91,7 +91,12 @@ const PairingOverlay = (props) => {
           </span>
         </div>
       </div>
-      <ServerPairingDialog show={showPairingCodeDialog} server={selectedServer} />
+      <ServerPairingDialog
+        show={showPairingCodeDialog}
+        server={selectedServer}
+        handleClose={() => setShowPairingCodeDialog(false)}
+        handleSuccess={() => { setShowPairingCodeDialog(false); close(); }}
+      />
     </Overlay>
   );
 };

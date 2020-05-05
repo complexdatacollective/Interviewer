@@ -57,10 +57,12 @@ const ServerAddressForm = (props) => {
             name: 'serverPort',
             component: 'Number',
             placeholder: 51001,
-            value: 51001,
             validate: [validatePort],
           },
         ]}
+        initialValues={{
+          serverPort: 25,
+        }}
       />
     </div>
   );

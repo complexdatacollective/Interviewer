@@ -49,6 +49,8 @@ class Field extends PureComponent {
   constructor(props) {
     super(props);
     this.component = getInputComponent(props.component);
+    // Use validate if it exists, enabling custom validations. Otherwise
+    // use our validation getter.
     this.validate = props.validate || getValidation(props.validation);
   }
 
