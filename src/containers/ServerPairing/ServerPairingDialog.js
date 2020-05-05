@@ -12,6 +12,8 @@ const ServerPairingDialog = (props) => {
     server,
   } = props;
 
+  console.log('SPD', props);
+
   return (
     <Overlay title="ServerPairingDialog" show={show}>
       <ServerPairing
@@ -32,7 +34,7 @@ ServerPairingDialog.defaultProps = {
 
 function mapStateToProps(state) {
   return {
-    show: !!state.ui.showServerPairingDialog,
+    // show: !!state.ui.showServerPairingDialog,
   };
 }
 

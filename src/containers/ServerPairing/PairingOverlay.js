@@ -1,141 +1,97 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
+import { submit } from 'redux-form';
 import { Button } from '@codaco/ui';
-import { Toggle, Text, Number } from '@codaco/ui/lib/components/Fields';
+import { Toggle } from '@codaco/ui/lib/components/Fields';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
+import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { Overlay } from '../Overlay';
 import { DiscoveredServerList, ServerAddressForm } from '../../components/SetupScreen';
 import ServerPairingDialog from './ServerPairingDialog';
-import { addPairingUrlToService, isValidAddress, isValidPort, maxPort, minPort } from '../../utils/serverAddressing';
-import { Form } from '..';
+import { addPairingUrlToService } from '../../utils/serverAddressing';
 
 const PairingOverlay = (props) => {
   const {
     show,
     close,
+    submitForm,
+    openDialog,
   } = props;
-
-  const [selectedServer, setSelectedServer] = useState(null);
-  const [serverAddress, setServerAddress] = useState('');
-  const [serverPort, setServerPort] = useState(51001);
 
   const [autoPairingMode, setAutoPairingMode] = useState(true);
 
-  const renderManualForm = () => {
+  const [showPairingCodeDialog, setShowPairingCodeDialog] = useState(false);
+  const [selectedServer, setSelectedServer] = useState(null)
 
-    const validateAddress = (address) => {
-      const addressError = { address: address && !isValidAddress(address) };
-      this.setState({ error: { ...this.state.error, ...addressError } });
-    };
-
-    const required = value => value ? undefined : 'Required'
-    const maxLength = max => value =>
-      value && value.length > max ? `Must be ${max} characters or less` : undefined
-    const maxLength15 = maxLength(15)
-
-    const onSubmit = (evt) => {
-      evt.preventDefault();
-      const server = addPairingUrlToService({
-        addresses: [this.state.address],
-        port: this.state.port,
-      });
-      if (server.pairingServiceUrl) {
-        this.props.selectServer(server);
-        this.props.onCancel();
-      } else {
-        this.setState({
-          error: {
-            address: !isValidAddress(this.state.address),
-            port: !isValidPort(this.state.port),
-          },
-        });
-      }
-    };
-
-    return (
-      <div>
-        <h4>Enter manual connection information</h4>
-        <Form
-          className="server-address-form"
-          form="server-address-form"
-          onSubmit={e => console.log('yoo', e)}
-          formName="server-address-form"
-          fields={[
-            {
-              label: 'Server Address',
-              name: 'serverAddress',
-              component: 'Text',
-              placeholder: 'Enter an IP address or domain name...',
-              validate: [required, maxLength15],
-            },
-            {
-              label: 'Server Port',
-              name: 'serverPort',
-              component: 'Number',
-              placeholder: '5101',
-              validation: {
-                required: true,
-                maxLength: 20,
-              },
-            },
-          ]}
-        />
-      </div>
-    );
+  const pairClickHandler = () => {
+    if (autoPairingMode) {
+      console.log('auto pairing submitted');
+    } else {
+      // If we are in manual mode
+      submitForm();
+    }
   };
 
-  // const pairClickHandler = () => {
-  //   const server = addPairingUrlToService({
-  //     addresses: [this.state.address],
-  //     port: this.state.port,
-  //   });
+  const setServerFromFormValues = (values) => {
+    console.log('settingserver', values);
 
-  //   if (autoPairingMode) {
+    const server = addPairingUrlToService({
+      addresses: [values.serverAddress],
+      port: values.serverPort,
+    });
 
-  //   } else {
-  //     // If we are in manual mode
+    setSelectedServer(server);
 
-  //   }
-
-  // }
+    if (server.pairingServiceUrl) {
+      // Now show the pairing key
+      console.log('showing pairing key');
+      setShowPairingCodeDialog(true);
+    } else {
+      openDialog({
+        type: 'Error',
+        error: 'Pairing request failed. An error ocurred while attempting to pair.',
+        confirmLabel: 'Okay',
+      });
+    }
+  };
 
   return (
     <Overlay show={show} title="Pair with Server" onClose={() => close()}>
-      <h2>Step 1: Choose which Server to pair with</h2>
+      <h2>Choose which Server to pair with</h2>
       <p>
         First, you much choose which computer running server you wish to pair this device
         with. Either select a computer that has been automatically discovered below, or enter
         manual connection details.
       </p>
+      <Toggle
+        input={{
+          value: !autoPairingMode,
+          onChange: () => {
+            setAutoPairingMode(!autoPairingMode);
+          },
+        }}
+        label="Enter manual connection details"
+      />
       { autoPairingMode ? (
-        <DiscoveredServerList selectServer={setSelectedServer} />
+        <DiscoveredServerList
+          selectHandler={setServerFromFormValues}
+        />
       ) : (
-        // <ServerAddressForm
-        //   selectServer={setSelectedServer}
-        //   onCancel={() => console.log('server address form: onCancel()')}
-        // />
-        renderManualForm()
+        <ServerAddressForm
+          submitHandler={setServerFromFormValues}
+        />
       )}
       <div className="protocol-import--footer">
-        <Toggle
-          input={{
-            value: !autoPairingMode,
-            onChange: () => {
-              setAutoPairingMode(!autoPairingMode);
-            },
-          }}
-          label="Enter manual connection details"
-        />
         <div>
-          <Button color="platinum" onClick={() => onCancel()} type="button">
+          <Button color="platinum" onClick={() => close()} type="button">
             Cancel
           </Button>
           <span className="server-address-form__submit">
-            <Button content="Pair" type="submit" onClick={() => console.log('main click')} />
+            <Button content="Pair" type="submit" onClick={pairClickHandler} />
           </span>
         </div>
       </div>
-      <ServerPairingDialog server={selectedServer} />
+      <ServerPairingDialog show={showPairingCodeDialog} server={selectedServer} />
     </Overlay>
   );
 };
@@ -155,6 +111,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     close: () => dispatch(uiActions.update({ showPairingOverlay: false })),
+    submitForm: () => dispatch(submit('server-address-form')),
+    openDialog: dialogActions.openDialog,
   };
 }
 

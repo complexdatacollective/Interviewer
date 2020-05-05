@@ -24,6 +24,7 @@ class ServerPairing extends Component {
   }
 
   componentDidMount() {
+    console.log('here', this.props);
     this.apiClient = new ApiClient(this.props.server.pairingServiceUrl);
     this.requestPairingCode();
   }
@@ -123,7 +124,6 @@ ServerPairing.propTypes = {
 function mapStateToProps(state) {
   return {
     deviceName: state.deviceSettings.description,
-    isFactory: state.importProtocol.isFactory,
   };
 }
 

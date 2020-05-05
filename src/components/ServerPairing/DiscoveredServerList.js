@@ -8,7 +8,7 @@ import Scroller from '../Scroller';
 
 const loadingPlaceholder = (
   <div className="server-list__placeholder">
-    <h4>Listening for nearby Servers...</h4>
+    <h4>Looking for nearby Servers...</h4>
     <Spinner small />
   </div>
 );
