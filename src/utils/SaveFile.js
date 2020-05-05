@@ -93,36 +93,37 @@ const saveZippedSessionsCordova = (exportedSessionIds, sessions, installedProtoc
   let fileSystem;
   let dataFilenames;
   let fileEntries;
-  return new Promise((resolve, reject) => {
-    getFileSystem()
-      .then((fs) => {
-        fileSystem = fs;
-        const promisedExports = exportedSessionIds.map((sessionId) => {
-          const session = sessions[sessionId];
-          const sessionCodebook = installedProtocols[session.protocolUID].codebook;
+  return getFileSystem()
+    .then((fs) => {
+      fileSystem = fs;
+      const promisedExports = exportedSessionIds.map((sessionId) => {
+        const session = sessions[sessionId];
+        const sessionCodebook = installedProtocols[session.protocolUID].codebook;
 
-          // export one file at a time
-          return exportCordovaFile(fs, session, sessionId, sessionCodebook, fileType);
-        });
+        // export one file at a time
+        return exportCordovaFile(fs, session, sessionId, sessionCodebook, fileType);
+      });
         // collect exported temp file names
-        return Promise.all(promisedExports);
-      })
-      .then((files) => {
-        dataFilenames = files.map(file => file.filename);
-        fileEntries = files.map(file => file.fileEntry);
-        return getFile(defaultFileName, fileSystem);
-      })
-      .then(fe => createWriter(fe))
-      .then(({ fileWriter, fileURL }) => archive(dataFilenames, fileURL, fileWriter, fileSystem))
-      .then(shareURL => cordovaShare(shareURL, shareOptions))
-      .then(() => tryFileCleanup(fileEntries))
-      .then(() => resolve(dataFilenames))
-      .catch(err => reject(err));
-  });
+      return Promise.all(promisedExports);
+    })
+    .then((files) => {
+      dataFilenames = files.map(file => file.filename);
+      fileEntries = files.map(file => file.fileEntry);
+      return getFile(defaultFileName, fileSystem);
+    })
+    .then(fe => createWriter(fe))
+    .then(({ fileWriter, fileURL }) => archive(dataFilenames, fileURL, fileWriter, fileSystem))
+    .then(shareURL => cordovaShare(shareURL, shareOptions))
+    .then(() => {
+      tryFileCleanup(fileEntries);
+      return dataFilenames;
+    })
+    .catch(err => err);
 };
 
-const tryUnlink = (filePath, fs) => (new Promise((resolve) => {
+const tryUnlink = filePath => (new Promise((resolve) => {
   try {
+    const fs = window.require('fs');
     fs.unlink(filePath, (err, ...args) => {
       if (err) {
         resolve(err);
@@ -133,7 +134,8 @@ const tryUnlink = (filePath, fs) => (new Promise((resolve) => {
   } catch (err) { resolve(err); }
 }));
 
-const exportElectronFile = (fs, session, sessionCodebook, dataFileName) => {
+const exportElectronFile = (session, sessionCodebook, dataFileName) => {
+  const fs = window.require('fs');
   const formatter = new GraphMLFormatter(session.network, false, false, sessionCodebook);
 
   return new Promise((resolve, reject) => {
@@ -144,44 +146,55 @@ const exportElectronFile = (fs, session, sessionCodebook, dataFileName) => {
   });
 };
 
+const saveDialog = (defaultFileName, extension) => {
+  const { dialog } = window.require('electron').remote;
+
+  return new Promise((resolve) => {
+    dialog.showSaveDialog({
+      filters: [{ name: extension, extensions: [extension] }],
+      defaultPath: defaultFileName,
+    }, (filename) => {
+      if (filename === undefined) resolve({ cancelled: true });
+
+      resolve({ cancelled: false, filename });
+    });
+  });
+};
+
 const saveZippedSessionsElectron = (exportedSessionIds, sessions, installedProtocols) => {
   // eslint-disable-next-line global-require
   const electron = require('electron');
-  const fs = window.require('fs');
-  const { dialog, shell } = window.require('electron').remote;
+  const { shell } = electron.remote;
   const tempPath = (electron.app || electron.remote.app).getPath('temp');
-
   const defaultFileName = 'networkCanvasExport.zip';
 
-  return new Promise((resolve, reject) => {
-    dialog.showSaveDialog({
-      filters: [{ name: 'zip', extensions: ['zip'] }],
-      defaultPath: defaultFileName,
-    // eslint-disable-next-line consistent-return
-    }, (filename) => {
-      if (filename === undefined) resolve('cancelled');
+  const exportFiles = () => {
+    const promisedExports = exportedSessionIds.map((sessionId) => {
+      const session = sessions[sessionId];
+      const sessionCodebook = installedProtocols[session.protocolUID].codebook;
+      const dataFileName = path.join(tempPath, `${session.caseId}_${sessionId}.graphml`);
 
-      const promisedExports = exportedSessionIds.map((sessionId) => {
-        const session = sessions[sessionId];
-        const sessionCodebook = installedProtocols[session.protocolUID].codebook;
-        const dataFileName = path.join(tempPath, `${session.caseId}_${sessionId}.graphml`);
-
-        // export one file at a time
-        return exportElectronFile(fs, session, sessionCodebook, dataFileName);
-      });
-
-      let dataFileNames;
-      Promise.all(promisedExports)
-        .then((savedDataFile) => {
-          dataFileNames = savedDataFile;
-          return archive(savedDataFile, filename);
-        })
-        .then(() => dataFileNames.map(dataFileName => tryUnlink(dataFileName, fs)))
-        .then(() => shell.showItemInFolder(filename))
-        .then(resolve)
-        .catch(err => reject(err));
+      // export one file at a time
+      return exportElectronFile(session, sessionCodebook, dataFileName);
     });
-  });
+
+    return Promise.all(promisedExports);
+  };
+
+  const exportArchive = filename =>
+    exportFiles()
+      .then(sourceFiles =>
+        archive(sourceFiles, filename)
+          .then(() => sourceFiles.map(dataFileName => tryUnlink(dataFileName)),
+          ));
+
+  return saveDialog(defaultFileName, 'zip')
+    .then(({ cancelled, filename }) => {
+      if (cancelled) { return { cancelled }; }
+
+      return exportArchive(filename)
+        .then(() => shell.showItemInFolder(filename));
+    });
 };
 
 const saveZippedSessions = (exportedSessionIds, sessions, installedProtocols) => {
@@ -205,22 +218,15 @@ const saveFile = (exportedSessionIds, sessions, installedProtocols) => {
   const sessionCodebook = installedProtocols[session.protocolUID].codebook;
 
   if (isElectron()) {
-    const fs = window.require('fs');
-    const { dialog, shell } = window.require('electron').remote;
+    const { shell } = window.require('electron').remote;
 
-    return new Promise((resolve, reject) => {
-      dialog.showSaveDialog({
-        filters: [{ name: 'graphml', extensions: ['graphml'] }],
-        defaultPath: `${session.caseId}_${sessionId}.graphml`,
-      // eslint-disable-next-line consistent-return
-      }, (filename) => {
-        if (filename === undefined) resolve('cancelled');
-        exportElectronFile(fs, session, sessionCodebook, filename)
-          .then(exportedFilename => shell.showItemInFolder(exportedFilename))
-          .then(resolve)
-          .catch(err => reject(err));
+    return saveDialog(`${session.caseId}_${sessionId}.graphml`, 'graphml')
+      .then(({ cancelled, filename }) => {
+        if (cancelled) { return { cancelled }; }
+
+        return exportElectronFile(session, sessionCodebook, filename)
+          .then(() => shell.showItemInFolder(filename));
       });
-    });
   } else if (isCordova()) {
     return getFileSystem()
       .then(fileSystem => exportCordovaFile(fileSystem, session, sessionId, sessionCodebook, 'text/xml'))

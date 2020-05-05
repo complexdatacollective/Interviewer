@@ -1,6 +1,7 @@
 import { omit, map, reduce } from 'lodash';
 import uuidv4 from '../../utils/uuid';
 import ApiClient from '../../utils/ApiClient';
+import saveFile from '../../utils/SaveFile';
 import { actionCreators as SessionWorkerActions } from './sessionWorkers';
 import { actionTypes as installedProtocolsActionTypes } from './installedProtocols';
 import networkReducer, { actionTypes as networkActionTypes, actionCreators as networkActions, entityPrimaryKeyProperty } from './network';
@@ -407,7 +408,22 @@ const sessionExportFailed = (id, error) => ({
   sessionId: id,
 });
 
-const bulkExportSessions = sessionList => (dispatch, getState) => {
+const bulkFileExportSessions = sessionList => (dispatch, getState) => {
+  dispatch(sessionExportStart(sessionList.map(sessionId => ({ sessionUUID: sessionId }))));
+  const { sessions, installedProtocols } = getState();
+  return saveFile(sessionList, sessions, installedProtocols)
+    .then(({ cancelled }) => {
+      if (cancelled) {
+        dispatch(sessionExportReset());
+        return { cancelled };
+      }
+
+      return sessionList.map(sessionId => dispatch(sessionExportSucceeded(sessionId)));
+    })
+    .catch(err => sessionList.map(sessionId => dispatch(sessionExportFailed(sessionId, err))));
+};
+
+const bulkServerExportSessions = sessionList => (dispatch, getState) => {
   const pairedServer = getState().pairedServer;
 
   if (pairedServer) {
@@ -469,7 +485,8 @@ const actionCreators = {
   sessionExportSucceeded,
   sessionExportReset,
   sessionExportFailed,
-  bulkExportSessions,
+  bulkServerExportSessions,
+  bulkFileExportSessions,
 };
 
 const actionTypes = {

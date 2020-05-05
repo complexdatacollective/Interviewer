@@ -64,7 +64,9 @@ const createReader = fileEntry => new Promise((resolve, reject) => {
 
 /**
  * Write a bundled (zip) from source files
- * @param {string} destinationPath full FS path to write
+ * @param {object} filesystem filesystem to use for reading files in to zip
+ * @param {object} fileWriter fileWriter to use for outputting zip
+ * @param {string} targetFileName full FS path to write
  * @param {string[]} sourcePaths
  * @return Returns a promise that resolves to (sourcePath, destinationPath)
  */
@@ -94,7 +96,9 @@ const archiveCordova = (sourcePaths, targetFileName, fileWriter, filesystem) => 
 
 /**
  * Write a bundled (zip) from source files
- * @param {string} destinationPath full FS path to write
+ * @param {object} filesystem filesystem to use for reading files in to zip
+ * @param {object} fileWriter fileWriter to use for outputting zip
+ * @param {string} targetFileName full FS path to write
  * @param {string[]} sourcePaths
  * @return Returns a promise that resolves to (sourcePath, destinationPath)
  */
