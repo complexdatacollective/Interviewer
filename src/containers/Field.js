@@ -49,7 +49,7 @@ class Field extends PureComponent {
   constructor(props) {
     super(props);
     this.component = getInputComponent(props.component);
-    this.validate = getValidation(props.validation);
+    this.validate = props.validate || getValidation(props.validation);
   }
 
   render() {
@@ -71,11 +71,13 @@ Field.propTypes = {
   name: PropTypes.string.isRequired,
   component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]).isRequired,
   validation: PropTypes.object,
+  validate: PropTypes.array,
 };
 
 Field.defaultProps = {
   label: '',
   validation: {},
+  validate: null,
 };
 
 export default Field;

@@ -72,7 +72,7 @@ class ServerAddressForm extends PureComponent {
 
     return (
       <form className="server-address-form" onSubmit={this.onSubmit}>
-        <h2>Manual connection information</h2>
+        <h4>Manual connection information</h4>
         <p>
           Enter the address and port number of the computer running Server.
           These can be found on your Server’s overview screen.
@@ -111,16 +111,6 @@ class ServerAddressForm extends PureComponent {
             />
           </div>
         </fieldset>
-        <div className="protocol-import--footer">
-          <div>
-            <Button color="platinum" onClick={() => onCancel()} type="button">
-              Cancel
-            </Button>
-            <span className="server-address-form__submit">
-              <Button content="Pair" type="submit" />
-            </span>
-          </div>
-        </div>
       </form>
     );
   }
