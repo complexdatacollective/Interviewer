@@ -57,7 +57,7 @@
     width: 25rem;
     top: 0.5rem;
     right: 8rem;
-    padding: 2.4rem;
+    padding: unit(2);
 
     &::after {
       content: '';
@@ -118,41 +118,6 @@
     }
   }
 
-  &--error {
-
-    .server-icon {
-      .st0 {
-        fill: none;
-      }
-
-      .st1 {
-        fill: var(--color-white);
-      }
-
-      .st2 {
-        fill: var(--color-charcoal);
-      }
-
-      .st3 {
-        fill: var(--color-platinum--dark);
-      }
-
-      .st4 {
-        fill: var(--color-platinum--dark);
-      }
-
-      .st5 {
-        animation: blinking-light 1.2s infinite;
-        fill: var(--color-neon-coral);
-      }
-
-      .st6 {
-        animation: blinking-light 1.2s infinite;
-        fill: var(--color-neon-coral--dark);
-      }
-    }
-  }
-
   &--paired {
 
     .server-icon {
@@ -184,6 +149,41 @@
       .st6 {
         animation: none;
         fill: var(--color-sea-green--dark);
+      }
+    }
+  }
+
+  &--error {
+
+    .server-icon {
+      .st0 {
+        fill: none;
+      }
+
+      .st1 {
+        fill: var(--color-white);
+      }
+
+      .st2 {
+        fill: var(--color-charcoal);
+      }
+
+      .st3 {
+        fill: var(--color-platinum--dark);
+      }
+
+      .st4 {
+        fill: var(--color-platinum--dark);
+      }
+
+      .st5 {
+        animation: blinking-light 1.2s infinite;
+        fill: var(--color-neon-coral);
+      }
+
+      .st6 {
+        animation: blinking-light 1.2s infinite;
+        fill: var(--color-neon-coral--dark);
       }
     }
   }

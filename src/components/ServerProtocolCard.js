@@ -9,21 +9,17 @@ import { APP_SUPPORTED_SCHEMA_VERSIONS, APP_SCHEMA_VERSION } from '../config';
 
 const formatDate = timestamp => timestamp && new Date(timestamp).toLocaleString(undefined, { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' });
 
-const ProtocolCard = (props) => {
+const ServerProtocolCard = (props) => {
   const {
-    attributes,
-    protocolUID,
+    protocolid,
     onClickHandler,
     openDialog,
-  } = props;
-
-  const {
     schemaVersion,
     lastModified,
-    installationDate,
+    whenInstalled,
     name,
     description,
-  } = attributes;
+  } = props;
 
   const isOutdatedProtocol = () =>
     schemaVersion !== APP_SCHEMA_VERSION &&
@@ -91,6 +87,7 @@ const ProtocolCard = (props) => {
 
   const modifierClasses = cx(
     'protocol-card',
+    'protocol-card--server',
     { 'protocol-card--info': !isObsoleteProtocol() && isOutdatedProtocol() },
     { 'protocol-card--error': isObsoleteProtocol() },
   );
@@ -116,14 +113,14 @@ const ProtocolCard = (props) => {
   };
 
   return (
-    <div className={modifierClasses} onClick={() => onClickHandler(protocolUID)}>
+    <div className={modifierClasses} onClick={() => onClickHandler(protocolid)}>
       <div className="protocol-card__icon-section">
         <div className="protocol-icon">
-          <Icon name="protocol-card" />
+          <Icon name="server" />
         </div>
         {renderCardIcon()}
         <div className="protocol-meta">
-          <h6>Installed: {formatDate(installationDate)}</h6>
+          <h6>Installed: {formatDate(whenInstalled)}</h6>
           <h6>Last Modified: {formatDate(lastModified)}</h6>
           <h6>Schema Version: {schemaVersion}</h6>
         </div>
@@ -138,30 +135,26 @@ const ProtocolCard = (props) => {
   );
 };
 
-ProtocolCard.defaultProps = {
+ServerProtocolCard.defaultProps = {
   className: '',
   onClickHandler: () => {},
   description: null,
 };
 
-ProtocolCard.propTypes = {
+ServerProtocolCard.propTypes = {
   onClickHandler: PropTypes.func,
   openDialog: PropTypes.func.isRequired,
-  isSelected: PropTypes.bool.isRequired,
-  attributes: PropTypes.shape({
-    schemaVersion: PropTypes.number.isRequired,
-    lastModified: PropTypes.string.isRequired,
-    installationDate: PropTypes.string,
-    name: PropTypes.string.isRequired,
-    description: PropTypes.string,
-  }).isRequired,
-  protocolUID: PropTypes.string.isRequired,
+  schemaVersion: PropTypes.number.isRequired,
+  lastModified: PropTypes.string.isRequired,
+  whenInstalled: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  description: PropTypes.string,
+  id: PropTypes.string.isRequired,
 
 };
 
 function mapStateToProps(state) {
   return {
-    isSelected: uuid => state.selectedSessions && state.selectedSessions.includes(uuid),
     installedProtocols: state.installedProtocols,
   };
 }
@@ -170,5 +163,5 @@ const mapDispatchToProps = {
   openDialog: dialogActions.openDialog,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProtocolCard);
+export default connect(mapStateToProps, mapDispatchToProps)(ServerProtocolCard);
 

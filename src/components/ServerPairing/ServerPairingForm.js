@@ -72,7 +72,7 @@ class ServerPairingForm extends Component {
                     Cancel
                   </Button>
                   <Button className="button button--primary pairing-form__submit" disabled={!submittable} type="submit">
-                    Pair
+                    Submit Pairing Code
                   </Button>
                 </div>
                 <a

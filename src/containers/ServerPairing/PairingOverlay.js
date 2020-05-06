@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { submit } from 'redux-form';
+import { submit, isInvalid } from 'redux-form';
 import { Button } from '@codaco/ui';
 import { Toggle } from '@codaco/ui/lib/components/Fields';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { Overlay } from '../Overlay';
 import { DiscoveredServerList, ServerAddressForm } from '../../components/SetupScreen';
-import ServerPairingDialog from './ServerPairingDialog';
+import PairingCodeDialog from './PairingCodeDialog';
 import { addPairingUrlToService } from '../../utils/serverAddressing';
 
 const PairingOverlay = (props) => {
@@ -16,6 +16,7 @@ const PairingOverlay = (props) => {
     close,
     submitForm,
     openDialog,
+    isManualFormInvalid,
   } = props;
 
   const [autoPairingMode, setAutoPairingMode] = useState(true);
@@ -37,7 +38,7 @@ const PairingOverlay = (props) => {
 
     const server = addPairingUrlToService({
       addresses: [values.serverAddress],
-      port: values.serverPort,
+      port: 51001, // Port is set statically, since it cannot be changed in server.
     });
 
     setSelectedServer(server);
@@ -49,7 +50,7 @@ const PairingOverlay = (props) => {
     } else {
       openDialog({
         type: 'Error',
-        error: 'Pairing request failed. An error ocurred while attempting to pair.',
+        error: 'Pairing request failed. An error occurred while attempting to pair.',
         confirmLabel: 'Okay',
       });
     }
@@ -87,11 +88,11 @@ const PairingOverlay = (props) => {
             Cancel
           </Button>
           <span className="server-address-form__submit">
-            <Button content="Pair" type="submit" onClick={pairClickHandler} />
+            <Button type="submit" onClick={pairClickHandler} disabled={(isManualFormInvalid)}>Send Pairing Request</Button>
           </span>
         </div>
       </div>
-      <ServerPairingDialog
+      <PairingCodeDialog
         show={showPairingCodeDialog}
         server={selectedServer}
         handleClose={() => setShowPairingCodeDialog(false)}
@@ -110,6 +111,7 @@ PairingOverlay.defaultProps = {
 function mapStateToProps(state) {
   return {
     show: !!state.ui.showPairingOverlay,
+    isManualFormInvalid: isInvalid('server-address-form')(state),
   };
 }
 

@@ -13,6 +13,7 @@ import search from './search';
 import setupScreen from './setupScreen';
 import ui from './ui';
 import pairedServer from './pairedServer';
+import pairingStatus from './pairingStatus';
 import { actionTypes as resetActionTypes } from './reset';
 
 const appReducer = combineReducers({
@@ -29,6 +30,8 @@ const appReducer = combineReducers({
   setupScreen,
   ui,
   pairedServer,
+  pairingStatus,
+
 });
 
 const rootReducer = (state, action) => {

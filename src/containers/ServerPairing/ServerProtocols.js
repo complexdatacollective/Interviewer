@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ApiClient from '../../utils/ApiClient';
-import { ServerProtocolList, ServerSetup, PairedServerWrapper, ServerUnavailable } from '../../components/SetupScreen';
+import { NewFilterableListWrapper, ServerProtocolCard } from '../../components';
 
 
 /**
@@ -12,7 +12,9 @@ import { ServerProtocolList, ServerSetup, PairedServerWrapper, ServerUnavailable
 class ServerProtocols extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      protocols: [],
+    };
   }
 
   componentDidMount() {
@@ -43,34 +45,33 @@ class ServerProtocols extends Component {
 
   render() {
     const { error, protocols } = this.state;
-    const { server } = this.props;
 
-    let content = null;
-
-    if (protocols) {
-      content = (
-        <ServerProtocolList
-          protocols={protocols}
-          selectProtocol={this.handleSelectProtocol}
-        />
-      );
-    } // else still loading
+    console.log('SP:', this.props, this.state);
 
     return (
-      <PairedServerWrapper className="server-setup__card" data={server}>
-        { error ?
-          (
-            <ServerUnavailable
-              errorMessage={error.friendlyMessage || error.message}
-              handleRetry={this.handleRetry}
-            />
-          ) : (
-            <ServerSetup server={server} handleUnpair={this.handleUnpairRequest}>
-              {content}
-            </ServerSetup>
-          )
-        }
-      </PairedServerWrapper>
+      <NewFilterableListWrapper
+        ItemComponent={ServerProtocolCard}
+        itemProperties={{
+          onClickHandler: () => console.log('cleeeek'),
+        }}
+        items={protocols}
+        initialSortProperty="name"
+        initialSortDirection="asc"
+        sortableProperties={[
+          {
+            label: 'Name',
+            variable: 'name',
+          },
+          {
+            label: 'Schema Version',
+            variable: 'schemaVersion',
+          },
+          {
+            label: 'Last Modified',
+            variable: 'lastModified',
+          },
+        ]}
+      />
     );
   }
 }

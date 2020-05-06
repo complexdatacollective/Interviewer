@@ -6,11 +6,11 @@ import { withRouter } from 'react-router';
 import cx from 'classnames';
 import 'swiper/css/swiper.css';
 import { actionCreators as deviceSettingsActions } from '../ducks/modules/deviceSettings';
+import { actionCreators as pairingStatusActions } from '../ducks/modules/pairingStatus';
 import '../styles/main.scss';
 import { isElectron, isCordova, isWindows, isMacOS, isLinux, isPreview, getEnv, isIOS, isAndroid } from '../utils/Environment';
 import DialogManager from '../components/DialogManager';
 import { SettingsMenu } from '../components/SettingsMenu';
-import ProtocolImportOverlay from './ImportProtocol/ProtocolImportOverlay';
 import ImportProgressOverlay from './ImportProtocol/ImportProgressOverlay';
 
 /**
@@ -43,6 +43,15 @@ class App extends PureComponent {
         });
       }
     }
+
+    // Check if existing pairedServer is reachable
+    this.props.updatePairingStatus();
+
+    // Check again if network changes
+    window.addEventListener('online', this.props.updatePairingStatus);
+    window.addEventListener('offline', this.props.updatePairingStatus);
+
+
   }
 
   componentDidUpdate() {
@@ -68,6 +77,11 @@ class App extends PureComponent {
 
   render() {
     const { children } = this.props;
+
+    setInterval(() => {
+
+    }, 3000);
+
     return (
       <div className={cx({
         app: true,
@@ -90,10 +104,6 @@ class App extends PureComponent {
           })}
         >
           <SettingsMenu />
-          <ProtocolImportOverlay
-            show={this.props.showImportProtocolOverlay}
-            onClose={() => setShowImportProtocolOverlay(false)}
-          />
           <ImportProgressOverlay
             show={this.props.importProtocolProgress && this.props.importProtocolProgress.step > 0}
             progress={this.props.importProtocolProgress}
@@ -120,6 +130,7 @@ App.defaultProps = {
 
 const mapDispatchToProps = dispatch => ({
   setStartFullScreen: value => dispatch(deviceSettingsActions.setSetting('startFullScreen', value)),
+  updatePairingStatus: () => dispatch(pairingStatusActions.updatePairingStatus()),
 });
 
 function mapStateToProps(state) {

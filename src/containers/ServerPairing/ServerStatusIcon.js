@@ -4,13 +4,17 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { connect } from 'react-redux';
 import { Icon } from '@codaco/ui';
+import { bindActionCreators } from 'redux';
 import useInterval from '../../hooks/useInterval';
 import ServerDiscoverer from '../../utils/serverDiscoverer';
 import ServerIcon from './ServerIcon';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
+import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
+import { actionCreators as pairingStatusActions } from '../../ducks/modules/pairingStatus';
 import { ProgressBar } from '../../components';
 import uuidv4 from '../../utils/uuid';
 import PairingOverlay from './PairingOverlay';
+import ServerProtocolsOverlay from './ServerProtocolsOverlay';
 
 const ServerStatusToast = (props) => {
   const {
@@ -57,107 +61,166 @@ const ServerStatusToast = (props) => {
   );
 };
 
-const ServerStatusIcon = (props) => {
-  const {
-    pairedServer,
-    showPairingOverlay,
-  } = props;
+const remove = (array, name) => array.filter(item => (item.data.name !== name));
 
-  const [notifications, setNotifications] = useState([]);
-  const [showStatusPanel, setShowStatusPanel] = useState(false);
-  const [error, setErrorState] = useState(null);
+const createNotification = (
+  title,
+  message,
+  type,
+  data,
+  displayDuration,
+  handleClick,
+) => {
+  const id = uuidv4();
 
-  const classes = cx({
-    'server-status': true,
-    'server-status--error': error,
-    'server-status--paired': !!pairedServer,
-  });
-
-  const remove = (array, name) => array.filter(item => (item.data.name !== name));
-
-  const createNotification = (
+  return {
+    id,
     title,
     message,
     type,
     data,
     displayDuration,
     handleClick,
-  ) => {
-    const id = uuidv4();
-
-    return {
-      id,
-      title,
-      message,
-      type,
-      data,
-      displayDuration,
-      handleClick,
-    };
   };
+};
+
+const ServerStatusIcon = (props) => {
+  const {
+    pairedServer,
+    pairingStatus,
+    showPairingOverlay,
+    showServerProtocolsOverlay,
+    updatePairingStatus,
+    openDialog,
+  } = props;
+
+  const [notifications, setNotifications] = useState([]);
+  const [showStatusPanel, setShowStatusPanel] = useState(false);
+
+  const [serverDiscovererErrorState, setServerDiscovererErrorState] = useState(null)
+
+  const classes = cx({
+    'server-status': true,
+    'server-status--paired': !!pairedServer,
+    'server-status--error': pairingStatus.error || serverDiscovererErrorState,
+  });
+
+  // Check for change in ability to contact server, every 2 seconds.
+  useInterval(() => {
+    updatePairingStatus();
+  }, 2000);
 
   useEffect(() => {
-    try {
-      const serverDiscoverer = new ServerDiscoverer();
-      console.log(serverDiscoverer);
-      if (!serverDiscoverer) { return; }
+    if (!pairedServer) {
+      try {
+        const serverDiscoverer = new ServerDiscoverer();
+        console.log(serverDiscoverer);
+        if (!serverDiscoverer) { return; }
 
-      serverDiscoverer.on('SERVER_RESET', () => {
-        setErrorState(null);
-      });
+        serverDiscoverer.on('SERVER_RESET', () => {
+          setServerDiscovererErrorState(null);
+        });
 
-      serverDiscoverer.on('SERVER_ANNOUNCED', (response) => {
-        if (!response.name) { return; }
+        serverDiscoverer.on('SERVER_ANNOUNCED', (response) => {
+          if (!response.name) { return; }
 
-        // Detect if we already have a service with this name
-        const existingIndex =
-          notifications.findIndex(notification => response.name === notification.data.name);
+          // Detect if we already have a service with this name
+          const existingIndex =
+            notifications.findIndex(notification => response.name === notification.data.name);
 
-        if (existingIndex === -1) {
+          if (existingIndex === -1) {
 
-          const newNotification = createNotification(
-            `${response.name} became available!`,
-            'Click to begin pairing with this computer running Server.',
-            'SERVER_ANNOUNCED',
-            response,
-            5000,
-            () => console.log('clicked'),
-          );
+            const newNotification = createNotification(
+              `${response.name} became available!`,
+              'Click to begin pairing with this computer running Server.',
+              'SERVER_ANNOUNCED',
+              response,
+              5000,
+              () => console.log('clicked'),
+            );
 
-          setNotifications([...notifications, newNotification]);
-        }
-      });
+            setNotifications([...notifications, newNotification]);
+          }
+        });
 
-      serverDiscoverer.on('SERVER_REMOVED', (response) => {
-        setNotifications(remove(notifications, response.name));
-      });
+        serverDiscoverer.on('SERVER_REMOVED', (response) => {
+          setNotifications(remove(notifications, response.name));
+        });
 
-      serverDiscoverer.on('SERVER_ERROR', (e) => {
-        setErrorState({ e });
-      });
+        serverDiscoverer.on('SERVER_ERROR', (e) => {
+          setServerDiscovererErrorState({ e });
+        });
 
-      serverDiscoverer.init();
-    } catch (e) {
-      setErrorState({ e });
+        serverDiscoverer.init();
+      } catch (e) {
+        setServerDiscovererErrorState({ e });
+      }
     }
   }, []);
 
 
   // Click icon action based on state:
   // - Paired: show protocol list overlay
+  // - Paired but can't connect to server: show dialog with error and ask if you want to unpair.
   // - Error: show error dialog
   // - Searching: pairingoverlay
   const handleIconClick = () => {
-    showPairingOverlay();
+    if (pairedServer) {
+      if (pairingStatus.error) {
+        console.log('here');
+        openDialog({
+          type: 'Warning',
+          title: 'Could not Communicate with Server',
+          confirmLabel: 'Unpair Server',
+          onConfirm: () => console.log('confirmed'),
+          message: (
+            <React.Fragment>
+              <p>
+                There was an error connecting to the Server this device is paired with. the specific
+                error encountered was:
+              </p>
+              <p>
+                <pre>
+                  { pairingStatus.error.message }
+                </pre>
+              </p>
+              <p>
+                If you are unable to resolve this error, you should un-pair from Server
+                and attempt to pair again.
+              </p>
+            </React.Fragment>
+          ),
+        });
+
+        return;
+      }
+
+      showServerProtocolsOverlay();
+    } else {
+      showPairingOverlay();
+    }
   };
 
 
   // Hover panel content based on state:
   // - Paired: show protocol list with one click download
+  // -- Paired but can't connect to server: show dialog with error and ask if you want to unpair.
   // - Error: show error
   // - Searching: show click to pair instructions
   const renderStatusPanel = () => {
     if (pairedServer) {
+      if (pairingStatus.error) {
+        return (
+          <div className="server-status__status">
+            <h4>Error communicating with Server</h4>
+            <p>
+              This device is paired, but it could not communicate with Server. Click
+              to view a description of the error, and optionally un-pair.
+            </p>
+          </div>
+        );
+      }
+
       return (
         <div className="server-status__status">
           <h4>Paired with {pairedServer.name}</h4>
@@ -186,6 +249,7 @@ const ServerStatusIcon = (props) => {
   return (
     <React.Fragment>
       <PairingOverlay />
+      <ServerProtocolsOverlay />
       <div className={classes}>
         <div
           onPointerOver={() => setShowStatusPanel(true)}
@@ -227,12 +291,17 @@ ServerStatusIcon.propTypes = {
 
 const mapStateToProps = state => ({
   pairedServer: state.pairedServer,
+  pairingStatus: state.pairingStatus,
 });
 
 
 const mapDispatchToProps = dispatch => ({
   showPairingOverlay: () =>
     dispatch(uiActions.update({ showPairingOverlay: true })),
+  showServerProtocolsOverlay: () =>
+    dispatch(uiActions.update({ showServerProtocolsOverlay: true })),
+  updatePairingStatus: () => dispatch(pairingStatusActions.updatePairingStatus()),
+  openDialog: bindActionCreators(dialogActions.openDialog, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ServerStatusIcon);

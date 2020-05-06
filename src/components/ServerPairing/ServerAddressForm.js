@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Form } from '../../containers/';
-import { isValidAddress, isValidPort, maxPort, minPort } from '../../utils/serverAddressing';
+import { isValidAddress } from '../../utils/serverAddressing';
 
 const ServerAddressForm = (props) => {
   const {
@@ -20,25 +20,9 @@ const ServerAddressForm = (props) => {
     return undefined;
   };
 
-  const validatePort = (port) => {
-    if (!port) {
-      return 'Please enter a port number.';
-    }
-
-    if (!isValidPort(port)) {
-      return `Please enter a valid port number (${minPort} - ${maxPort}).`;
-    }
-
-    if (port < minPort || port > maxPort) {
-      return `Please enter a port in the range ${minPort} - ${maxPort}.`;
-    }
-
-    return undefined;
-  };
-
   return (
     <div>
-      <h4>Enter manual connection information</h4>
+      <h4>Manual Connection Information</h4>
       <Form
         className="server-address-form"
         form="server-address-form"
@@ -52,17 +36,7 @@ const ServerAddressForm = (props) => {
             placeholder: 'Enter an IP address or domain name...',
             validate: [validateAddress],
           },
-          {
-            label: 'Server Port',
-            name: 'serverPort',
-            component: 'Number',
-            placeholder: 51001,
-            validate: [validatePort],
-          },
         ]}
-        initialValues={{
-          serverPort: 25,
-        }}
       />
     </div>
   );

@@ -12,6 +12,13 @@ $component: 'protocol-card';
   flex-direction: column-reverse;
   max-height: 22rem;
 
+  &--server {
+    .#{$component}__icon-section {
+      background: var(--color-mustard);
+      color: white;
+    }
+  }
+
   &__icon-section {
     display: flex;
     justify-content: center;

@@ -15,7 +15,6 @@ import { actionCreators as sessionsActions } from '../../ducks/modules/sessions'
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import Overlay from '../Overlay';
 import { asExportableNetwork } from '../../utils/networkFormat';
-import PairedServerWrapper from '../../components/ServerPairing/PairedServerWrapper';
 
 /**
  * The remote protocol ID on any instance of Server is the hex-encoded sha256 of its [unique] name.
@@ -121,23 +120,20 @@ class ExportSessionsOverlay extends PureComponent {
       return (
         <div className="session-export-content">
           <div className="session-export-content__container">
-            <PairedServerWrapper className="server-setup__card" data={this.props.pairedServer} isPaired>
-              <div>
-                <h2>Ready to export</h2>
-                <p>
-                  Ready to export {this.props.sessionsToExport.length} session{this.props.sessionsToExport.length > 1 && ('s')} to {this.props.pairedServer.name}.
-                  Ensure this is the correct destination before continuing.
-                </p>
-
+            <div>
+              <h2>Ready to export</h2>
+              <p>
+                Ready to export {this.props.sessionsToExport.length} session{this.props.sessionsToExport.length > 1 && ('s')} to {this.props.pairedServer.name}.
+                Ensure this is the correct destination before continuing.
+              </p>
+            </div>
+            <div className="session-export-content__footer">
+              <div className="session-export-content__footer--actions">
+                <Button onClick={() => this.export(this.props.sessionsToExport)}>
+                  Export
+                </Button>
               </div>
-              <div className="session-export-content__footer">
-                <div className="session-export-content__footer--actions">
-                  <Button onClick={() => this.export(this.props.sessionsToExport)}>
-                    Export
-                  </Button>
-                </div>
-              </div>
-            </PairedServerWrapper>
+            </div>
           </div>
         </div>
       );

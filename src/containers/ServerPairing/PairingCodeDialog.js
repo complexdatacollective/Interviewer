@@ -6,7 +6,7 @@ import { Overlay } from '../Overlay';
 import ServerPairing from './ServerPairing';
 
 
-const ServerPairingDialog = (props) => {
+const PairingCodeDialog = (props) => {
   const {
     show,
     handleClose,
@@ -24,7 +24,7 @@ const ServerPairingDialog = (props) => {
   };
 
   return (
-    <Overlay title="ServerPairingDialog" show={show} onClose={handleClose}>
+    <Overlay title="Enter a Pairing Code" show={show} onClose={handleClose}>
       <ServerPairing
         server={server}
         onComplete={handleSuccess}
@@ -35,17 +35,17 @@ const ServerPairingDialog = (props) => {
   );
 };
 
-ServerPairingDialog.propTypes = {
+PairingCodeDialog.propTypes = {
   handleClose: PropTypes.func.isRequired,
   handleSuccess: PropTypes.func.isRequired,
 };
 
-ServerPairingDialog.defaultProps = {
+PairingCodeDialog.defaultProps = {
 };
 
 function mapStateToProps(state) {
   return {
-    // show: !!state.ui.showServerPairingDialog,
+    // show: !!state.ui.showPairingCodeDialog,
   };
 }
 
@@ -55,4 +55,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ServerPairingDialog);
+export default connect(mapStateToProps, mapDispatchToProps)(PairingCodeDialog);
