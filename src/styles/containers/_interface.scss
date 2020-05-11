@@ -1,0 +1,23 @@
+.interface {
+  @include interface-centering;
+  height: 100%;
+  padding: 1rem 0 2rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  &__prompt {
+    @include interface-prompt;
+  }
+
+  &__main {
+    flex: 1 auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100%;
+    position: relative;
+    margin-top: 1rem;
+    min-height: 0;
+  }
+}
