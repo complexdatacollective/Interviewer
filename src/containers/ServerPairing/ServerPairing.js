@@ -33,6 +33,7 @@ class ServerPairing extends Component {
   }
 
   handleApiError(err) {
+    console.log('api error', err);
     this.setState(emptyState);
     this.props.onError(err);
   }

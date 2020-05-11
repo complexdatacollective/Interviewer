@@ -8,6 +8,7 @@ import { Text } from '@codaco/ui/lib/components/Fields';
 import { actionCreators as deviceSettingsActions } from '../../../ducks/modules/deviceSettings';
 import { actionCreators as dialogsActions } from '../../../ducks/modules/dialogs';
 import TabItemVariants from './TabItemVariants';
+import { PairedServerCard } from '../../SetupScreen';
 
 const Pairing = (props) => {
   const {
@@ -20,7 +21,7 @@ const Pairing = (props) => {
       <motion.article variants={TabItemVariants} className="settings-element--wide">
         <div>
           <h2>Device Name</h2>
-          <p>This is the name that your device will appear as when pairing with Server.</p>
+          <p>This is the name that your device will appear as within Server when paired.</p>
         </div>
         <Text
           input={{
@@ -29,6 +30,12 @@ const Pairing = (props) => {
           }}
           name="deviceName"
         />
+      </motion.article>
+      <motion.article variants={TabItemVariants} className="settings-element--wide">
+        <div>
+          <h2>Pairing Status</h2>
+        </div>
+        <PairedServerCard />
       </motion.article>
     </React.Fragment>
   );

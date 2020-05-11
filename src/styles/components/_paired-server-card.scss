@@ -1,0 +1,22 @@
+.paired-server-card {
+  background: var(--color-navy-taupe);
+  border-radius: var(--border-radius);
+  padding: unit(2);
+
+  &__card {
+    margin: unit(2);
+    width: 8rem;
+    text-align: center;
+  }
+
+  &__icon {
+    width: 6rem;
+  }
+
+  &__label {
+    text-align: center;
+    margin: 0;
+    margin-top: .5rem;
+    overflow-wrap: break-word;
+  }
+}

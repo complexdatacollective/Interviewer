@@ -278,6 +278,7 @@
         .import-content {
           display: flex;
           flex: 1;
+          justify-content: center;
 
           :first-child {
             margin-right: unit(2);

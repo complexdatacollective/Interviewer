@@ -116,7 +116,7 @@ const ServerProtocolCard = (props) => {
     <div className={modifierClasses} onClick={() => onClickHandler(protocolid)}>
       <div className="protocol-card__icon-section">
         <div className="protocol-icon">
-          <Icon name="server" />
+          <Icon name="protocol-card" />
         </div>
         {renderCardIcon()}
         <div className="protocol-meta">

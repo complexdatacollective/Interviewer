@@ -1,92 +1,65 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import { bindActionCreators } from 'redux';
+import cx from 'classnames';
+import { get } from 'lodash';
 import { connect } from 'react-redux';
-import { Button } from '@codaco/ui';
-import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
-import { actionCreators as serverActions } from '../../ducks/modules/pairedServer';
+import { bindActionCreators } from 'redux';
+import { actionCreators as sessionActions } from '../../ducks/modules/session';
 import logo from '../../images/Srv-Flat.svg';
 
-const noClick = () => {};
+const ServerCard = (props) => {
+  const {
+    server,
+    selected,
+    clickHandler,
+  } = props;
 
-/**
- * Renders a server icon & label. The label defaults to server name, falling back
- * to its first address (both provided via the `data` prop). If `secondaryLabel`
- * is provided, then it will be appended.
- */
-const ServerCard = ({
-  data,
-  secondaryLabel,
-  selectServer,
-  isPaired,
-  className,
-  openDialog,
-  unpairServer,
-}) => {
-  const cssClass = classNames(
-    'server-card',
-    { 'server-card--paired': isPaired },
-    { 'server-card--clickable': selectServer !== noClick },
-    className,
-  );
-  const { name, addresses = [] } = data;
-  let label = name || addresses[0];
-  if (secondaryLabel) {
-    label += ` ${secondaryLabel}`;
-  }
+  const {
+    name,
+  } = server;
 
-  const handleUnpairRequest = () => {
-    openDialog({
-      type: 'Warning',
-      title: 'Unpair this Server?',
-      confirmLabel: 'Unpair Server',
-      onConfirm: unpairServer,
-      message: 'This will remove the connection to this instance of Server. Are you sure you want to continue?',
-    });
-  };
+  const classes = cx({
+    'server-card': true,
+    'server-card--selected': selected,
+  });
 
+  console.log('SC', props);
   return (
-    <div className={cssClass} onClick={() => selectServer(data)} >
-      <img src={logo} className="server-card__icon" alt="Available Server" />
-      <h4 className="server-card__label">
-        {label}
-      </h4>
-      {isPaired &&
-      <Button size="small" color="mustard" onClick={handleUnpairRequest}>Unpair</Button>
-      }
-    </div>
+    <motion.div
+      className={classes}
+      key={server}
+      selected={selected}
+      onClick={() => clickHandler(server)}
+    >
+      <div className="server-card__content">
+        <div className="server-card__icon">
+          <img src={logo} alt="Available Server" />
+        </div>
+        <div className="main-wrapper">
+          <h2 className="card__label">
+            { name }
+          </h2>
+        </div>
+      </div>
+    </motion.div>
   );
 };
 
 ServerCard.propTypes = {
-  data: PropTypes.shape({
-    name: PropTypes.string,
-    addresses: PropTypes.array,
-  }),
-  className: PropTypes.string,
-  isPaired: PropTypes.bool,
-  selectServer: PropTypes.func,
-  secondaryLabel: PropTypes.string,
-  unpairServer: PropTypes.func.isRequired,
-  openDialog: PropTypes.func.isRequired,
 };
 
 ServerCard.defaultProps = {
-  data: {},
-  className: '',
-  isPaired: false,
-  selectServer: noClick,
-  secondaryLabel: null,
 };
 
-function mapDispatchToProps(dispatch) {
+function mapStateToProps(state) {
   return {
-    openDialog: bindActionCreators(dialogActions.openDialog, dispatch),
-    unpairServer: bindActionCreators(serverActions.unpairServer, dispatch),
   };
 }
 
-export { ServerCard as UnconnectedServerCard };
+function mapDispatchToProps(dispatch) {
+  return {
+  };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(ServerCard);
 
-export default connect(null, mapDispatchToProps)(ServerCard);

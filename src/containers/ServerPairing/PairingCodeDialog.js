@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { Overlay } from '../Overlay';
@@ -20,6 +21,7 @@ const PairingCodeDialog = (props) => {
       type: 'Error',
       error,
       confirmLabel: 'Okay',
+      onConfirm: handleClose,
     });
   };
 
@@ -51,7 +53,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    openDialog: dialogActions.openDialog,
+    openDialog: bindActionCreators(dialogActions.openDialog, dispatch),
   };
 }
 

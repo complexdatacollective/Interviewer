@@ -23,6 +23,8 @@ const SetupScreen = (props) => {
     sessions,
     isSessionActive,
     sessionId,
+    pairedServer,
+    pairingStatus,
   } = props;
 
   // If we have an active session, don't render this component. Redirect to
@@ -73,9 +75,12 @@ const SetupScreen = (props) => {
                   <div className="url-card">
                     <Button>Enter a URL...</Button>
                   </div>
-                  <div className="server-import-card">
-                    <Button>From Server...</Button>
-                  </div>
+                  { pairedServer && pairingStatus.status === 'OK' && (
+                    <div className="server-import-card">
+                      <Button>From Server...</Button>
+                    </div>
+                  ) }
+
                 </div>
               </section>
             </main>
@@ -91,9 +96,11 @@ const SetupScreen = (props) => {
                   <div className="unexported-file-card">
                     <h3>Export 12 New Sessions to Files...</h3>
                   </div>
-                  <div className="unexported-server-card">
-                    <h3>Export 12 New Sessions to Server...</h3>
-                  </div>
+                  { pairedServer && pairingStatus.status === 'OK' && (
+                    <div className="unexported-server-card">
+                      <h3>Export 12 New Sessions to Server...</h3>
+                    </div>
+                  )}
                 </div>
               </section>
               <aside className="setup-section__action export-section__action">
@@ -130,6 +137,8 @@ function mapStateToProps(state) {
     isSessionActive: !!state.activeSessionId,
     sessions: state.sessions,
     sessionId: state.activeSessionId,
+    pairedServer: state.pairedServer,
+    pairingStatus: state.pairingStatus,
   };
 }
 

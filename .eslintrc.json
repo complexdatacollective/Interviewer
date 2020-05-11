@@ -105,7 +105,8 @@
                 "Unpair",
                 "discoverability",
                 "scrollable",
-                "draggable"
+                "draggable",
+                "hostname"
              ],
              "skipIfMatch": [
                 "http(s)?://[^s]*",

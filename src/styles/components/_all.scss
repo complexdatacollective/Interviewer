@@ -27,6 +27,7 @@
 @import 'search';
 @import 'server-address-form';
 @import 'server-card';
+@import 'paired-server-card';
 @import 'server-protocol-list';
 @import 'server-setup';
 @import 'server-unavailable';
@@ -46,6 +47,7 @@
 @import 'information-interface';
 @import 'ordinal-bins';
 @import 'progress-bar';
+@import 'pairing-overlay';
 
 // Session Panel
 @import './session-panel/all';

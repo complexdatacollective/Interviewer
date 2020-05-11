@@ -15,6 +15,7 @@ import { ProgressBar } from '../../components';
 import uuidv4 from '../../utils/uuid';
 import PairingOverlay from './PairingOverlay';
 import ServerProtocolsOverlay from './ServerProtocolsOverlay';
+import { PairedServerCard } from '../../components/SetupScreen';
 
 const ServerStatusToast = (props) => {
   const {
@@ -105,13 +106,16 @@ const ServerStatusIcon = (props) => {
     'server-status--error': pairingStatus.error || serverDiscovererErrorState,
   });
 
-  // Check for change in ability to contact server, every 2 seconds.
+  // Check for change in ability to contact server, repeat every 60 seconds.
+
   useInterval(() => {
     updatePairingStatus();
-  }, 2000);
+  }, 1000 * 60);
 
   useEffect(() => {
-    if (!pairedServer) {
+    if (pairedServer) {
+      updatePairingStatus();
+    } else {
       try {
         const serverDiscoverer = new ServerDiscoverer();
         console.log(serverDiscoverer);
@@ -165,47 +169,49 @@ const ServerStatusIcon = (props) => {
   // - Error: show error dialog
   // - Searching: pairingoverlay
   const handleIconClick = () => {
-    if (pairedServer) {
-      if (pairingStatus.error) {
-        console.log('here');
-        openDialog({
-          type: 'Warning',
-          title: 'Could not Communicate with Server',
-          confirmLabel: 'Unpair Server',
-          onConfirm: () => console.log('confirmed'),
-          message: (
-            <React.Fragment>
-              <p>
-                There was an error connecting to the Server this device is paired with. the specific
-                error encountered was:
-              </p>
-              <p>
+    updatePairingStatus().then(() => {
+      if (pairedServer) {
+        if (pairingStatus.error) {
+          console.log('here');
+          openDialog({
+            type: 'Notice',
+            title: 'Could not Communicate with Server',
+            confirmLabel: 'Unpair Server',
+            onConfirm: () => console.log('confirmed'),
+            message: (
+              <React.Fragment>
+                <p>
+                  There was an error connecting to the Server this device is paired with. the specific
+                  error encountered was:
+                </p>
                 <pre>
                   { pairingStatus.error.message }
                 </pre>
-              </p>
-              <p>
-                If you are unable to resolve this error, you should un-pair from Server
-                and attempt to pair again.
-              </p>
-            </React.Fragment>
-          ),
-        });
+                <p>
+                  If you are unable to resolve this error, you should un-pair from Server
+                  and attempt to pair again.
+                </p>
+                <PairedServerCard />
+              </React.Fragment>
+            ),
+          });
 
-        return;
+          return;
+        }
+
+        showServerProtocolsOverlay();
+      } else {
+        showPairingOverlay();
       }
 
-      showServerProtocolsOverlay();
-    } else {
-      showPairingOverlay();
-    }
+    });
   };
 
 
   // Hover panel content based on state:
   // - Paired: show protocol list with one click download
-  // -- Paired but can't connect to server: show dialog with error and ask if you want to unpair.
-  // - Error: show error
+  // - Paired but can't connect to server: show dialog with error and ask if you want to unpair.
+  // - MDNS Error : "show error icon"
   // - Searching: show click to pair instructions
   const renderStatusPanel = () => {
     if (pairedServer) {
@@ -223,7 +229,7 @@ const ServerStatusIcon = (props) => {
 
       return (
         <div className="server-status__status">
-          <h4>Paired with {pairedServer.name}</h4>
+          <h4>Paired with {pairedServer.name || pairedServer.addresses[0]}</h4>
           <p>
             This device is paired. Export options are enabled. Click to view and
             install interview protocols.
@@ -232,12 +238,32 @@ const ServerStatusIcon = (props) => {
       );
     }
 
+    // We haven't paired yet.
+
+    // There is an error with MDNS
+    if (serverDiscovererErrorState) {
+      return (
+        <div className="server-status__status">
+          <h4>Ready to pair with manual connection details.</h4>
+          <p>
+            This device is not paired with a computer running Server. Automatic Server discovery
+            is unavailable, but you can still pair using manual connection details. Click this
+            icon to begin pairing.
+          </p>
+          <p>
+            Automatic Server Discovery: <strong>unavailable</strong>
+          </p>
+        </div>
+      );
+    }
+
+    // Ready to pair
     return (
       <div className="server-status__status">
         <h4>Ready to pair.</h4>
         <p>
           This device is not paired with a computer running Server, but is ready
-          to begin the process.
+          to begin the process. Click this icon to begin pairing.
         </p>
         <p>
           Automatic Server Discovery: <strong>enabled</strong>

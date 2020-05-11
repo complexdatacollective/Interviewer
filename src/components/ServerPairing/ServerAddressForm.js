@@ -22,7 +22,6 @@ const ServerAddressForm = (props) => {
 
   return (
     <div>
-      <h4>Manual Connection Information</h4>
       <Form
         className="server-address-form"
         form="server-address-form"

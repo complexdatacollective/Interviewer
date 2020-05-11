@@ -4,6 +4,9 @@
   height: 100%;
   justify-content: center;
   overflow-y: auto;
+  background: var(--color-navy-taupe);
+  border-radius: var(--border-radius);
+  margin-bottom: unit(2);
 
 
   &--available {
@@ -12,14 +15,9 @@
 
   &__content {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    max-height: 20rem;
-    padding: 2rem 0;
-    grid-gap: 3rem;
-
-    .server-card {
-      margin: 0;
-    }
+    padding: unit(4) unit(2);
+    grid-template-columns: 1fr 1fr;
+    grid-gap: unit(2);
   }
 
   &__placeholder {

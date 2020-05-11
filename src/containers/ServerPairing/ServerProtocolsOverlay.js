@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
 import { Overlay } from '../Overlay';
 import ServerProtocols from './ServerProtocols';
+import { PairedServerCard } from '../../components/SetupScreen';
 
 const ServerProtocolsOverlay = (props) => {
   const {
@@ -16,6 +17,7 @@ const ServerProtocolsOverlay = (props) => {
         Click one or more protocols to import them from Server.
       </p>
       <ServerProtocols />
+      <PairedServerCard handleUnpair={close} />
     </Overlay>
   );
 };

@@ -8,7 +8,7 @@ import Scroller from '../Scroller';
 
 const loadingPlaceholder = (
   <div className="server-list__placeholder">
-    <h4>Looking for nearby Servers...</h4>
+    <h4>No nearby Servers found. Searching...</h4>
     <Spinner small />
   </div>
 );
@@ -86,17 +86,18 @@ class DiscoveredServerList extends Component {
   }
 
   renderServerList() {
-    const { selectServer } = this.props;
+    const { selectHandler, selectedServer } = this.props;
+
     return (
       <React.Fragment>
-        <h4>Nearby devices running Server:</h4>
         <Scroller className="server-list__content">
           {
             this.state.servers.map(server => (
               <ServerCard
                 key={server.pairingServiceUrl}
-                data={server}
-                selectServer={selectServer}
+                server={server}
+                selected={server === selectedServer}
+                clickHandler={selectHandler}
               />
             ))
           }
@@ -133,12 +134,12 @@ class DiscoveredServerList extends Component {
 }
 
 DiscoveredServerList.defaultProps = {
-  selectPairedServer: () => {},
-  selectServer: () => {},
+  selectHandler: () => {},
 };
 
 DiscoveredServerList.propTypes = {
-  selectServer: PropTypes.func,
+  selectHandler: PropTypes.func,
+  selectedServer: PropTypes.object.isRequired,
 };
 
 export default DiscoveredServerList;

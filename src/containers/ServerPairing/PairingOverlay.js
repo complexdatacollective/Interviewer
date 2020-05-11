@@ -26,69 +26,98 @@ const PairingOverlay = (props) => {
 
   const pairClickHandler = () => {
     if (autoPairingMode) {
-      console.log('auto pairing submitted');
+      if (selectedServer.pairingServiceUrl) {
+        // Now show the pairing key
+        setShowPairingCodeDialog(true);
+      } else {
+        openDialog({
+          type: 'Error',
+          error: 'Pairing request failed. An error occurred while attempting to send the pairing request.',
+          confirmLabel: 'Okay',
+        });
+      }
     } else {
       // If we are in manual mode
       submitForm();
     }
   };
 
+  const setServerFromDiscovery = (server) => {
+    setSelectedServer(server);
+  };
+
   const setServerFromFormValues = (values) => {
     console.log('settingserver', values);
 
-    const server = addPairingUrlToService({
+    const serverWithPairingUrl = addPairingUrlToService({
       addresses: [values.serverAddress],
       port: 51001, // Port is set statically, since it cannot be changed in server.
     });
 
-    setSelectedServer(server);
+    setSelectedServer(serverWithPairingUrl);
 
-    if (server.pairingServiceUrl) {
+    if (serverWithPairingUrl.pairingServiceUrl) {
       // Now show the pairing key
-      console.log('showing pairing key');
       setShowPairingCodeDialog(true);
     } else {
       openDialog({
         type: 'Error',
-        error: 'Pairing request failed. An error occurred while attempting to pair.',
+        error: 'Pairing request failed. An error occurred while attempting to send the pairing request.',
         confirmLabel: 'Okay',
       });
     }
   };
 
   return (
-    <Overlay show={show} title="Pair with Server" onClose={() => close()}>
-      <h2>Choose which Server to pair with</h2>
-      <p>
-        First, you much choose which computer running server you wish to pair this device
-        with. Either select a computer that has been automatically discovered below, or enter
-        manual connection details.
-      </p>
-      <Toggle
-        input={{
-          value: !autoPairingMode,
-          onChange: () => {
-            setAutoPairingMode(!autoPairingMode);
-          },
-        }}
-        label="Enter manual connection details"
-      />
+    <Overlay
+      show={show}
+      title="Pair with Server"
+      onClose={() => close()}
+      className="pairing-overlay"
+    >
       { autoPairingMode ? (
-        <DiscoveredServerList
-          selectHandler={setServerFromFormValues}
-        />
+        <React.Fragment>
+          <h2>Automatic Server Discovery</h2>
+          <p>
+            Network Canvas can discover computers on the same Local Area Network that
+            are running Server.
+          </p>
+          <DiscoveredServerList
+            selectedServer={selectedServer}
+            selectHandler={setServerFromDiscovery}
+          />
+        </React.Fragment>
       ) : (
-        <ServerAddressForm
-          submitHandler={setServerFromFormValues}
-        />
+        <React.Fragment>
+          <h2>Manual Connection details</h2>
+          <p>
+            Enter the hostname or IP address of the computer running Server, and then
+            click <strong>send pairing request</strong>. The computer you want to request
+            pairing with must be reachable from this device using the details you provide.
+          </p>
+          <ServerAddressForm
+            submitHandler={setServerFromFormValues}
+          />
+        </React.Fragment>
+
       )}
-      <div className="protocol-import--footer">
+      <div className="pairing-overlay__footer">
+        <Toggle
+          input={{
+            value: !autoPairingMode,
+            onChange: () => {
+              setSelectedServer(null);
+              setAutoPairingMode(!autoPairingMode);
+            },
+          }}
+          label="Enter manual connection details"
+        />
         <div>
           <Button color="platinum" onClick={() => close()} type="button">
             Cancel
           </Button>
           <span className="server-address-form__submit">
-            <Button type="submit" onClick={pairClickHandler} disabled={(isManualFormInvalid)}>Send Pairing Request</Button>
+            <Button type="submit" onClick={pairClickHandler} disabled={(isManualFormInvalid || !selectedServer)}>Send Pairing Request</Button>
           </span>
         </div>
       </div>
