@@ -1,16 +1,17 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import PropTypes from 'prop-types';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Button } from '@codaco/ui';
 import RadioGroup from '@codaco/ui/lib/components/Fields/RadioGroup';
-import withPrompt from '../../behaviours/withPrompt';
-import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
-import { entityPrimaryKeyProperty } from '../../ducks/modules/network';
-import { makeNetworkNodesForPrompt as makeGetNodesForPrompt } from '../../selectors/interface';
-import { getNetworkEdges } from '../../selectors/network';
-import PromptSwiper from '../PromptSwiper';
+import withPrompt from '../../../behaviours/withPrompt';
+import { actionCreators as sessionsActions } from '../../../ducks/modules/sessions';
+import { entityPrimaryKeyProperty } from '../../../ducks/modules/network';
+import { makeNetworkNodesForType as makeGetNodes } from '../../../selectors/interface';
+import { getNetworkEdges as getEdges } from '../../../selectors/network';
+import PromptSwiper from '../../PromptSwiper';
+import useStageState from './useStageState';
 
 const variants = {
   initial: { translateX: '100%', opacity: 0, position: 'absolute', top: 0, left: 0 },
@@ -29,6 +30,7 @@ const options = [
 const DyadCensus = ({
   onComplete,
   registerBeforeNext,
+  promptIndex,
   prompt,
   promptBackward,
   promptForward,
@@ -36,48 +38,31 @@ const DyadCensus = ({
   pairs,
   nodes,
   edges,
+  addEdge,
+  removeEdge,
 }) => {
-  const [state, setState] = useState({
-    progress: null,
-    current: 0,
-    selected: null,
+  const { edge: createEdge } = prompt;
+
+  const [state, { back, next, select }] = useStageState({
+    pairs,
+    addEdge,
+    removeEdge,
+    promptIndex,
+    prompts,
+    promptForward,
+    promptBackward,
+    createEdge,
+    onComplete,
   });
-
-  const next = () => {
-    // save edge state
-    setState(s => ({
-      ...s,
-      current: s.current + 1,
-      selected: null,
-      progress: s.progress > s.current + 1 ? s.progress : s.current + 1,
-    }));
-  };
-
-  const back = () => {
-    setState(s => ({
-      ...s,
-      current: s.current - 1,
-      selected: null,
-    }));
-  };
-
-  const select = (value) => {
-    setState(s => ({
-      ...s,
-      selected: value,
-    }));
-  };
 
   // TODO: Should this also receive an onComplete method?
   const beforeNext = useCallback((direction) => {
-    if (direction < 0 && state.current > 0) {
+    if (direction < 0) {
       back();
       return;
     }
 
-    console.log('yes or no only!');
     next();
-    // could save and continue...s
   }, [back, next]);
 
   useEffect(() => {
@@ -95,11 +80,12 @@ const DyadCensus = ({
   const currentPair = pairs[state.current];
 
   const getCurrentValue = () => {
-    if (state.selected) { return state.selected; }
+    if (state.selected !== null) { return state.selected; }
 
-    const edge = edges.find(({ from, to }) => (
-      from === currentPair[0] && to === currentPair[1] ||
-      to === currentPair[0] && from === currentPair[1]
+    const edge = edges.find(({ from, to, type }) => (
+      type === createEdge &&
+      ((from === currentPair[0] && to === currentPair[1]) ||
+        (to === currentPair[0] && from === currentPair[1]))
     ));
 
     if (edge) {
@@ -124,7 +110,6 @@ const DyadCensus = ({
         />
       </div>
       <div className="interface__main">
-        <h3>PAIR</h3>
         <p>{state.current + 1}/{pairs.length}</p>
         <div
           style={{
@@ -170,11 +155,11 @@ DyadCensus.propTypes = {
 };
 
 const makeMapStateToProps = () => {
-  const getNodesForPrompt = makeGetNodesForPrompt();
+  const getNodes = makeGetNodes();
 
   const mapStateToProps = (state, props) => {
-    const nodes = getNodesForPrompt(state, props);
-    const edges = getNetworkEdges(state, props);
+    const nodes = getNodes(state, props);
+    const edges = getEdges(state, props);
     const nodeIds = nodes.map(node => node[entityPrimaryKeyProperty]);
 
     // const pairs = nodeIds.flatMap(
@@ -213,7 +198,8 @@ const makeMapStateToProps = () => {
 };
 
 const mapDispatchToProps = {
-  updateNode: sessionsActions.updateNode,
+  addEdge: sessionsActions.addEdge,
+  removeEdge: sessionsActions.removeEdge,
 };
 
 export default compose(
