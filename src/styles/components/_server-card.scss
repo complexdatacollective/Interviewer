@@ -9,9 +9,10 @@
   color: var(--color-navy-taupe);
   justify-content: space-between;
   overflow: hidden;
+  border: 0.25rem solid transparent;
 
   &--selected {
-    border: 0.25rem solid var(--color-mustard);
+    border-color: var(--color-mustard);
   }
 
   &__content {

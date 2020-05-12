@@ -11,7 +11,7 @@ const NewInterviewSection = (props) => {
     showSessionsOverlay,
   } = props;
 
-  const ResumeOtherSessionLabel = `+${Object.keys(sessions).length - 1} Other Interview${Object.keys(sessions).length - 1 > 1 ? 's' : null}...`;
+  const ResumeOtherSessionLabel = `+${Object.keys(sessions).length - 1} Other Interview${Object.keys(sessions).length - 1 > 1 ? 's' : ''}...`;
 
   return (
     <React.Fragment>
@@ -28,7 +28,7 @@ const NewInterviewSection = (props) => {
                 attributes={lastActiveSession.attributes}
               />
             </section>
-            { Object.keys(sessions).length > 2 && (
+            { Object.keys(sessions).length > 1 && (
               <aside className="setup-section__action">
                 <h4>Manage All Interviews</h4>
                 <div className="resume-card" onClick={showSessionsOverlay}>

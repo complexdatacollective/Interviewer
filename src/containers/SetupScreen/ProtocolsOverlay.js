@@ -11,7 +11,7 @@ const ProtocolsOverlay = (props) => {
   } = props;
 
   return (
-    <Overlay show={show} title="Protocol Library" onClose={() => close()}>
+    <Overlay className="overlay--full-height" show={show} title="Protocol Library" onClose={() => close()}>
       {/* <div>
         Some introductory text can go here that explains you can drag a protocol into this window to import it, or else you can use the import buttons.
       </div> */}

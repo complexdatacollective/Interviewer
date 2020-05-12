@@ -14,6 +14,7 @@ const Pairing = (props) => {
   const {
     deviceDescription,
     setDeviceDescription,
+    pairedServer,
   } = props;
 
   return (
@@ -35,7 +36,11 @@ const Pairing = (props) => {
         <div>
           <h2>Pairing Status</h2>
         </div>
-        <PairedServerCard />
+        { pairedServer ? (
+          <PairedServerCard />
+        ) : (
+          <p>Not currently paired. Use the server icon on the start screen to begin the process.</p>
+        )}
       </motion.article>
     </React.Fragment>
   );
@@ -63,6 +68,7 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = state => ({
   deviceDescription: state.deviceSettings.description,
+  pairedServer: state.pairedServer,
 });
 
 export default compose(

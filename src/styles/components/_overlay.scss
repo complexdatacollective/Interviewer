@@ -9,8 +9,12 @@ $close-button-size: 1rem;
   border-radius: .75rem;
   display: flex;
   flex-direction: column;
-  margin: unit(4) unit(12);
-  width: 80%;
+  margin: unit(4);
+  max-width: 75rem;
+
+  &--full-height {
+    height: 100%;
+  }
 
   &__title {
     display: flex;
@@ -27,7 +31,7 @@ $close-button-size: 1rem;
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding: unit(2);
+    padding: unit(4);
   }
 
   &__close {

@@ -36,6 +36,8 @@ const updatePairingStatus = () => (dispatch, getState) => {
     return;
   }
 
+  const promise = new Promise();
+
   const apiClient = new ApiClient(pairedServer);
 
   apiClient

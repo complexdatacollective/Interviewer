@@ -21,23 +21,21 @@ const ServerAddressForm = (props) => {
   };
 
   return (
-    <div>
-      <Form
-        className="server-address-form"
-        form="server-address-form"
-        onSubmit={submitHandler}
-        formName="server-address-form"
-        fields={[
-          {
-            label: 'Server Address',
-            name: 'serverAddress',
-            component: 'Text',
-            placeholder: 'Enter an IP address or domain name...',
-            validate: [validateAddress],
-          },
-        ]}
-      />
-    </div>
+    <Form
+      className="server-address-form"
+      form="server-address-form"
+      onSubmit={submitHandler}
+      formName="server-address-form"
+      fields={[
+        {
+          label: 'Server Address',
+          name: 'serverAddress',
+          component: 'Text',
+          placeholder: 'Enter an IP address or domain name...',
+          validate: [validateAddress],
+        },
+      ]}
+    />
   );
 };
 

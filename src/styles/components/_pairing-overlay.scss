@@ -1,4 +1,9 @@
 .pairing-overlay {
+  height: 50rem;
+
+  .server-address-form {
+    flex: 1;
+  }
 
   &__footer {
     display: flex;

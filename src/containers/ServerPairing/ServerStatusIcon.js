@@ -162,49 +162,45 @@ const ServerStatusIcon = (props) => {
     }
   }, []);
 
-
   // Click icon action based on state:
   // - Paired: show protocol list overlay
   // - Paired but can't connect to server: show dialog with error and ask if you want to unpair.
   // - Error: show error dialog
   // - Searching: pairingoverlay
   const handleIconClick = () => {
-    updatePairingStatus().then(() => {
-      if (pairedServer) {
-        if (pairingStatus.error) {
-          console.log('here');
-          openDialog({
-            type: 'Notice',
-            title: 'Could not Communicate with Server',
-            confirmLabel: 'Unpair Server',
-            onConfirm: () => console.log('confirmed'),
-            message: (
-              <React.Fragment>
-                <p>
-                  There was an error connecting to the Server this device is paired with. the specific
-                  error encountered was:
-                </p>
-                <pre>
-                  { pairingStatus.error.message }
-                </pre>
-                <p>
-                  If you are unable to resolve this error, you should un-pair from Server
-                  and attempt to pair again.
-                </p>
-                <PairedServerCard />
-              </React.Fragment>
-            ),
-          });
+    if (pairedServer) {
+      if (pairingStatus.error) {
+        console.log('here');
+        openDialog({
+          type: 'Notice',
+          title: 'Could not Communicate with Server',
+          confirmLabel: 'Unpair Server',
+          onConfirm: () => console.log('confirmed'),
+          message: (
+            <React.Fragment>
+              <p>
+                There was an error connecting to the Server this device is paired with. the specific
+                error encountered was:
+              </p>
+              <pre>
+                { pairingStatus.error.message }
+              </pre>
+              <p>
+                If you are unable to resolve this error, you should un-pair from Server
+                and attempt to pair again.
+              </p>
+              <PairedServerCard />
+            </React.Fragment>
+          ),
+        });
 
-          return;
-        }
-
-        showServerProtocolsOverlay();
-      } else {
-        showPairingOverlay();
+        return;
       }
 
-    });
+      showServerProtocolsOverlay();
+    } else {
+      showPairingOverlay();
+    }
   };
 
 

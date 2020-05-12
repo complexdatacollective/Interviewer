@@ -47,7 +47,7 @@ const SessionCard = (props) => {
       <div className="session-card__content">
         <div className="meta-wrapper">
           <div className="progress-wrapper">
-            <h6>{progress}% Completed</h6>
+            <h6>{progress}% Complete</h6>
             <ProgressBar percentProgress={progress} orientation="horizontal" />
           </div>
           <div className="meta">

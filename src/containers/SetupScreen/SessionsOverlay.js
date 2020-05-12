@@ -11,7 +11,7 @@ const SessionsOverlay = (props) => {
   } = props;
 
   return (
-    <Overlay show={show} title="Interview Sessions" onClose={() => close()}>
+    <Overlay className="overlay--full-height" show={show} title="Interview Sessions" onClose={() => close()}>
       {/* <div>
         Some introductory text about interview sessions.
       </div> */}

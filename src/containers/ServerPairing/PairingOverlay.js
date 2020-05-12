@@ -10,6 +10,12 @@ import { DiscoveredServerList, ServerAddressForm } from '../../components/SetupS
 import PairingCodeDialog from './PairingCodeDialog';
 import { addPairingUrlToService } from '../../utils/serverAddressing';
 
+const initialState = {
+  autoPairingMode: true,
+  showPairingCodeDialog: false,
+  selectedServer: null,
+};
+
 const PairingOverlay = (props) => {
   const {
     show,
@@ -19,10 +25,24 @@ const PairingOverlay = (props) => {
     isManualFormInvalid,
   } = props;
 
-  const [autoPairingMode, setAutoPairingMode] = useState(true);
+  const [autoPairingMode, setAutoPairingMode] = useState(initialState.autoPairingMode);
 
-  const [showPairingCodeDialog, setShowPairingCodeDialog] = useState(false);
-  const [selectedServer, setSelectedServer] = useState(null);
+  const [
+    showPairingCodeDialog,
+    setShowPairingCodeDialog,
+  ] = useState(initialState.showPairingCodeDialog);
+  const [selectedServer, setSelectedServer] = useState(initialState.selectedServer);
+
+  const resetState = () => {
+    setAutoPairingMode(initialState.autoPairingMode);
+    setShowPairingCodeDialog(initialState.showPairingCodeDialog);
+    setSelectedServer(initialState.selectedServer);
+  };
+
+  const handleClose = () => {
+    close();
+    resetState();
+  };
 
   const pairClickHandler = () => {
     if (autoPairingMode) {
@@ -72,15 +92,21 @@ const PairingOverlay = (props) => {
     <Overlay
       show={show}
       title="Pair with Server"
-      onClose={() => close()}
+      onClose={handleClose}
       className="pairing-overlay"
     >
       { autoPairingMode ? (
         <React.Fragment>
           <h2>Automatic Server Discovery</h2>
           <p>
-            Network Canvas can discover computers on the same Local Area Network that
-            are running Server.
+            Network Canvas will now try to discover computers on the same Local Area Network that
+            are running Server. Ensure you are connected to the same network as the computer running
+            Server, and make sure that the app is open. If you are unable to locate the other
+            computer using this method, try entering manual connection details.
+          </p>
+          <p>
+            Click on the name of the computer to select it when it appears below, and then
+            click <strong>send pairing request</strong>.
           </p>
           <DiscoveredServerList
             selectedServer={selectedServer}
@@ -117,7 +143,7 @@ const PairingOverlay = (props) => {
             Cancel
           </Button>
           <span className="server-address-form__submit">
-            <Button type="submit" onClick={pairClickHandler} disabled={(isManualFormInvalid || !selectedServer)}>Send Pairing Request</Button>
+            <Button type="submit" onClick={pairClickHandler} disabled={((!autoPairingMode && isManualFormInvalid) || (autoPairingMode && !selectedServer))}>Send Pairing Request</Button>
           </span>
         </div>
       </div>
@@ -125,7 +151,7 @@ const PairingOverlay = (props) => {
         show={showPairingCodeDialog}
         server={selectedServer}
         handleClose={() => setShowPairingCodeDialog(false)}
-        handleSuccess={() => { setShowPairingCodeDialog(false); close(); }}
+        handleSuccess={() => { setShowPairingCodeDialog(false); handleClose(); }}
       />
     </Overlay>
   );
