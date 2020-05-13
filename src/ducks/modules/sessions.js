@@ -1,10 +1,11 @@
 import { omit, map, reduce } from 'lodash';
 import uuidv4 from '../../utils/uuid';
 import ApiClient from '../../utils/ApiClient';
-import saveFile from '../../utils/SaveFile';
+import exportSessions from '../../utils/exportSessions';
 import { actionCreators as SessionWorkerActions } from './sessionWorkers';
 import { actionTypes as installedProtocolsActionTypes } from './installedProtocols';
 import networkReducer, { actionTypes as networkActionTypes, actionCreators as networkActions, entityPrimaryKeyProperty } from './network';
+import { sessionProperty } from '../../utils/network-exporters/src/utils/reservedAttributes';
 
 const ADD_SESSION = 'ADD_SESSION';
 const LOAD_SESSION = 'LOAD_SESSION';
@@ -86,7 +87,6 @@ const getReducer = network =>
         const newObj = {
           ...state,
         };
-
         map(action.sessionIDs, (session) => {
           newObj[session.sessionUUID].exportStatus = 'exporting';
         });
@@ -409,18 +409,20 @@ const sessionExportFailed = (id, error) => ({
 });
 
 const bulkFileExportSessions = sessionList => (dispatch, getState) => {
-  dispatch(sessionExportStart(sessionList.map(sessionId => ({ sessionUUID: sessionId }))));
-  const { sessions, installedProtocols } = getState();
-  return saveFile(sessionList, sessions, installedProtocols)
+  console.log(sessionList);
+  dispatch(sessionExportStart(sessionList.map(session => ({ sessionUUID: session[sessionProperty] }))));
+  const { installedProtocols } = getState();
+
+  return exportSessions(sessionList, installedProtocols)
     .then(({ cancelled }) => {
       if (cancelled) {
         dispatch(sessionExportReset());
         return { cancelled };
       }
 
-      return sessionList.map(sessionId => dispatch(sessionExportSucceeded(sessionId)));
+      return sessionList.map(session => dispatch(sessionExportSucceeded(session[sessionProperty])));
     })
-    .catch(err => sessionList.map(sessionId => dispatch(sessionExportFailed(sessionId, err))));
+    .catch(err => sessionList.map(session => dispatch(sessionExportFailed(session[sessionProperty], err))));
 };
 
 const bulkServerExportSessions = sessionList => (dispatch, getState) => {

@@ -16,6 +16,7 @@ import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import Overlay from '../Overlay';
 import { asExportableNetwork } from '../../utils/networkFormat';
 import PairedServerWrapper from '../../components/Setup/PairedServerWrapper';
+import { caseProperty, protocolProperty, sessionProperty } from '../../utils/network-exporters/src/utils/reservedAttributes';
 
 /**
  * The remote protocol ID on any instance of Server is the hex-encoded sha256 of its [unique] name.
@@ -161,7 +162,6 @@ class ExportSessionsOverlay extends PureComponent {
 
   export(sessionList) {
     this.setState({ showExportProgress: true, exportFinished: false });
-
     this.props.bulkServerExportSessions(sessionList.map((sessionId) => {
       const session = this.props.sessions[sessionId];
       const sessionProtocolUID = session.protocolUID;
@@ -197,7 +197,23 @@ class ExportSessionsOverlay extends PureComponent {
 
   exportToFile = (exportedSessions) => {
     this.setState({ showDownloadProgress: true, downloadFinished: false });
-    this.props.bulkFileExportSessions(exportedSessions)
+    this.props.bulkFileExportSessions(exportedSessions.map((session) => {
+      const sessionProtocol =
+        this.props.installedProtocols[this.props.sessions[session].protocolUID];
+
+      const exportableSessionNetwork = asExportableNetwork(
+        this.props.sessions[session].network,
+        sessionProtocol.codebook,
+      );
+
+      return {
+        [caseProperty]: this.props.sessions[session].caseId,
+        [protocolProperty]: this.props.sessions[session].protocolUID,
+        [sessionProperty]: session,
+        remoteProtocolId: nameDigest(sessionProtocol.name),
+        ...exportableSessionNetwork,
+      };
+    }))
       .then(({ cancelled }) => {
         if (cancelled) {
           return this.setState({ showDownloadProgress: false });

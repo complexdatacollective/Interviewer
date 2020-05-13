@@ -90,7 +90,7 @@
     "enzyme-adapter-react-16": "^1.6.0",
     "enzyme-to-json": "^3.4.3",
     "es6-promise-plugin": "^4.2.2",
-    "eslint": "^4.19.1",
+    "eslint": "^7.0.0",
     "eslint-config-airbnb": "^15.0.1",
     "eslint-config-react-app": "^2.0.0",
     "eslint-loader": "^2.2.1",
