@@ -11,7 +11,7 @@ import { entityPrimaryKeyProperty } from '../../../ducks/modules/network';
 import { makeNetworkNodesForType as makeGetNodes } from '../../../selectors/interface';
 import { getNetworkEdges as getEdges } from '../../../selectors/network';
 import PromptSwiper from '../../PromptSwiper';
-import useStageState from './useStageState';
+import useSteps from './useSteps';
 
 const variants = {
   initial: { translateX: '100%', opacity: 0, position: 'absolute', top: 0, left: 0 },
@@ -40,47 +40,53 @@ const DyadCensus = ({
   edges,
   addEdge,
   removeEdge,
+  dispatch,
 }) => {
   const { edge: createEdge } = prompt;
 
-  const [state, { back, next, select }] = useStageState({
-    pairs,
-    addEdge,
-    removeEdge,
-    promptIndex,
-    prompts,
-    promptForward,
-    promptBackward,
-    createEdge,
-    onComplete,
-  });
+  const [stepState, nextStep, previousStep] = useSteps(
+    { step: 0, prompt: promptIndex || 0 },
+    Array(prompts.length).fill(pairs.length),
+    { onComplete, dispatch },
+  );
+
+  // const [state, { back, next, select }] = useStageState({
+    // pairs,
+    // addEdge,
+    // removeEdge,
+    // promptIndex,
+    // prompts,
+    // promptForward,
+    // promptBackward,
+    // createEdge,
+    // onComplete,
+  // });
 
   // TODO: Should this also receive an onComplete method?
   const beforeNext = useCallback((direction) => {
     if (direction < 0) {
-      back();
+      previousStep();
       return;
     }
 
-    next();
-  }, [back, next]);
+    nextStep();
+  }, [previousStep, nextStep]);
 
   useEffect(() => {
     registerBeforeNext(beforeNext);
   }, [beforeNext]);
 
   const handleChange = useCallback((newValue) => {
-    select(newValue);
-  }, [select]);
+  }, []);
 
   const handleConfirm = useCallback(() => {
-    next();
-  }, [next]);
+    nextStep();
+  }, [nextStep]);
 
-  const currentPair = pairs[state.current];
+  const currentPair = pairs[stepState.location.step];
 
   const getCurrentValue = () => {
-    if (state.selected !== null) { return state.selected; }
+    // if (state.selected !== null) { return state.selected; }
 
     const edge = edges.find(({ from, to, type }) => (
       type === createEdge &&
@@ -92,9 +98,9 @@ const DyadCensus = ({
       return true;
     }
 
-    if (!edge && state.progress > state.current) {
-      return false;
-    }
+    // if (!edge && state.progress > state.current) {
+      // return false;
+    // }
 
     return null;
   };
@@ -110,7 +116,7 @@ const DyadCensus = ({
         />
       </div>
       <div className="interface__main">
-        <p>{state.current + 1}/{pairs.length}</p>
+        <p>{stepState.location.step + 1}/{pairs.length}</p>
         <div
           style={{
             position: 'relative',
@@ -118,7 +124,7 @@ const DyadCensus = ({
         >
           <AnimatePresence>
             <motion.div
-              key={state.current}
+              key={`${stepState.location.prompt}_${stepState.location.step}`}
               variants={variants}
               initial="initial"
               animate="enter"
@@ -205,6 +211,7 @@ const mapDispatchToProps = {
 export default compose(
   withPrompt,
   connect(makeMapStateToProps, mapDispatchToProps),
+  connect(), // pass dispatch to component
 )(DyadCensus);
 
 export {
