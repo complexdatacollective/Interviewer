@@ -33,13 +33,13 @@ const options = [
 const DyadCensus = ({
   onComplete,
   registerBeforeNext,
-  promptId: promptIndex,
+  promptId: promptIndex, // TODO: what is going on here?
   prompt,
   promptBackward,
   promptForward,
   stage,
   pairs,
-  nodes,
+  // nodes,
   edges,
   dispatch,
 }) => {
@@ -51,6 +51,13 @@ const DyadCensus = ({
     { onComplete, dispatch },
   );
 
+  const [edgeState, setEdgeState, updateNetwork] = useEdgeState(
+    prompt.edge, // TODO: createEdge?
+    { dispatch },
+    [promptIndex, state.step],
+  );
+
+  // TODO: extract these getters into single function, possible useEdgeState
   const getCurrentPair = () => pairs[state.step];
 
   const getEdgeInNetwork = () => {
@@ -66,12 +73,6 @@ const DyadCensus = ({
 
   const getHasEdgeInNetwork = () =>
     !!getEdgeInNetwork();
-
-  const [edgeState, setEdgeState, updateNetwork] = useEdgeState(
-    prompt.edge, // TODO: createEdge?
-    { dispatch },
-    [promptIndex, state.step],
-  );
 
   const getHasEdge = () => {
     // Have we set a manual value? If so return that
@@ -116,13 +117,6 @@ const DyadCensus = ({
 
   const handleConfirm = next;
 
-  const progressClasses = cx(
-    'progress-container',
-    {
-      'progress-container--show': state.progress > 0,
-    },
-  );
-
   return (
     <div className="interface">
       <div className="interface__prompt">
@@ -134,7 +128,6 @@ const DyadCensus = ({
         />
       </div>
       <div className="interface__main">
-        <p>{state.step + 1}/{pairs.length}</p>
         <div
           style={{
             position: 'relative',
@@ -162,11 +155,11 @@ const DyadCensus = ({
             </motion.div>
           </AnimatePresence>
         </div>
-        <div className={progressClasses}>
+        <div>
           <h6 className="progress-container__status-text">
-            <strong>{state.step}</strong> of <strong>{pairs.length}</strong>
+            <strong>{state.step + 1}</strong> of <strong>{pairs.length}</strong>
           </h6>
-          <ProgressBar orientation="horizontal" percentProgress={(state.step / pairs.length) * 100} />
+          <ProgressBar orientation="horizontal" percentProgress={((state.step + 1) / pairs.length) * 100} />
         </div>
       </div>
     </div>
