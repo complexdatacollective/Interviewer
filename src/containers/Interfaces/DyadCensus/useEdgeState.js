@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { actionCreators as sessionsActions } from '../../../ducks/modules/sessions';
+import { entityPrimaryKeyProperty } from '../../../ducks/modules/network';
 
 const useEdgeState = (
   edgeType,
@@ -8,12 +9,13 @@ const useEdgeState = (
 ) => {
   const [hasEdge, setHasEdge] = useState(null);
 
-  const updateNetwork = (pair) => {
-    console.log({ pair, hasEdge });
+  const updateNetwork = (pair, edge = {}) => {
     if (hasEdge) {
       dispatch(sessionsActions.addEdge({ from: pair[0], to: pair[1], type: edgeType }));
     } else {
-      dispatch(sessionsActions.removeEdge({ from: pair[0], to: pair[1], type: edgeType }));
+      if (!edge) { return; }
+
+      dispatch(sessionsActions.removeEdge(edge[entityPrimaryKeyProperty]));
     }
   };
 

@@ -50,7 +50,7 @@ const DyadCensus = ({
 
   const getCurrentPair = () => pairs[stepState.location.step];
 
-  const getHasEdgeInNetwork = () => {
+  const getEdgeInNetwork = () => {
     const [a, b] = getCurrentPair();
 
     const edge = edges.find(({ from, to, type }) => (
@@ -58,8 +58,11 @@ const DyadCensus = ({
       ((from === a && to === b) || (to === b && from === a))
     ));
 
-    return !!edge;
+    return edge;
   };
+
+  const getHasEdgeInNetwork = () =>
+    !!getEdgeInNetwork();
 
   const [edgeState, setEdgeState, updateNetwork] = useEdgeState(
     prompt.edge, // TODO: createEdge?
@@ -75,7 +78,7 @@ const DyadCensus = ({
 
   const next = () => {
     // validate
-    updateNetwork(getCurrentPair());
+    updateNetwork(getCurrentPair(), getEdgeInNetwork());
     nextStep();
   };
 
