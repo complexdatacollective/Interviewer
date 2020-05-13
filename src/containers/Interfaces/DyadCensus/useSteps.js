@@ -1,98 +1,72 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { actionCreators as sessionsActions } from '../../../ducks/modules/sessions';
 
-/**
- * returns -1 if location is behind progress
- * returns 1 if location is ahead of progress
- * returns 0 if location and progress are equal
- */
-export const compareSteps = (progress, location) => {
-  if (progress.prompt > location.prompt) { return -1; }
-  if (progress.prompt < location.prompt) { return 1; }
-  if (progress.step > location.step) { return -1; }
-  if (progress.step < location.step) { return 1; }
-  return 0;
-};
-
 const useSteps = (
-  location = { step: 0, prompt: 0 },
-  steps = [],
+  steps = [], // map of steps per prompt, e.g. [3, 2, 1]
+  prompt,
   { onComplete, dispatch },
 ) => {
-  // [1, 2]
+  const promptSteps = steps[prompt];
+  const promptCount = steps.length;
+
   const [state, setState] = useState({
-    progress: { step: null, prompt: null },
-    location,
+    progress: null, // max step reached
+    step: 0,
   });
 
+  useEffect(() => {
+    setState(s => ({
+      ...s,
+      progress: null, // max step reached
+      step: 0,
+    }));
+  }, [prompt]);
+
   const updatePrompt = (nextIndex) => {
-    if (nextIndex !== state.location.prompt) {
+    if (nextIndex !== prompt) {
       dispatch(sessionsActions.updatePrompt(nextIndex));
     }
   };
 
   const next = () => {
-    const { step, prompt } = state.location;
-    const nextStep = step + 1 > steps[prompt] - 1 ? 0 : step + 1;
-    const nextPrompt = step + 1 > steps[prompt] - 1 ? prompt + 1 : prompt;
+    const nextStep = state.step + 1;
 
-    if (nextPrompt > steps.length - 1) {
+    if (nextStep > promptSteps - 1 && prompt >= promptCount - 1) {
       onComplete();
       return;
     }
 
-    const nextLocation = {
-      step: nextStep,
-      prompt: nextPrompt,
-    };
+    if (nextStep > promptSteps - 1) {
+      updatePrompt(prompt + 1);
+      return;
+    }
 
-    const hasNoProgress = state.progress.step === null;
-    const isLocationAheadOfProgress =
-      (
-        nextLocation.step > state.progress.step &&
-        nextLocation.prompt === state.progress.prompt
-      ) ||
-      nextLocation.prompt > state.progress.prompt;
-    const nextProgress = hasNoProgress || isLocationAheadOfProgress ?
-      { step: nextStep, prompt: nextPrompt } :
-      state.progress;
+    const nextProgress = nextStep > state.progress ? nextStep : state.progress;
 
     setState(s => ({
       ...s,
-      location: nextLocation,
+      step: nextStep,
       progress: nextProgress,
     }));
-
-    updatePrompt(nextLocation.prompt);
   };
 
   const previous = () => {
-    const { step, prompt } = state.location;
-    let nextPrompt = prompt;
-    let nextStep = step - 1;
+    const nextStep = state.step - 1;
 
-    if (nextStep < 0) {
-      nextPrompt = prompt - 1;
-
-      if (nextPrompt < 0) {
-        onComplete();
-        return;
-      }
-
-      nextStep = steps[nextPrompt] - 1;
+    if (nextStep < 0 && prompt === 0) {
+      onComplete();
+      return;
     }
 
-    const nextLocation = {
-      step: nextStep,
-      prompt: nextPrompt,
-    };
+    if (nextStep < 0) {
+      updatePrompt(prompt - 1);
+      return;
+    }
 
     setState(s => ({
       ...s,
-      location: nextLocation,
+      step: nextStep,
     }));
-
-    updatePrompt(nextLocation.prompt);
   };
 
   return [state, next, previous];

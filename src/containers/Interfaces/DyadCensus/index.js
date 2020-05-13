@@ -27,27 +27,13 @@ const options = [
   { value: true, label: 'yes' },
 ];
 
-const getProgress = (stepMap, location) =>
-  stepMap.reduce((acc, steps, index) => {
-    console.log({ steps, index, location });
-    if (location.prompt > index) {
-      return acc + steps;
-    }
-
-    if (location.prompt === index) {
-      return acc + location.step;
-    }
-
-    return acc;
-  }, 0);
-
 /**
   * Dyad Census Interface
   */
 const DyadCensus = ({
   onComplete,
   registerBeforeNext,
-  promptIndex,
+  promptId: promptIndex,
   prompt,
   promptBackward,
   promptForward,
@@ -59,14 +45,13 @@ const DyadCensus = ({
 }) => {
   const steps = Array(stage.prompts.length).fill(pairs.length);
 
-  const [stepState, nextStep, previousStep] = useSteps(
-    { step: 0, prompt: promptIndex || 0 },
+  const [state, nextStep, previousStep] = useSteps(
     steps,
+    promptIndex || 0,
     { onComplete, dispatch },
-    [promptIndex], // TODO: react to this
   );
 
-  const getCurrentPair = () => pairs[stepState.location.step];
+  const getCurrentPair = () => pairs[state.step];
 
   const getEdgeInNetwork = () => {
     const [a, b] = getCurrentPair();
@@ -85,7 +70,7 @@ const DyadCensus = ({
   const [edgeState, setEdgeState, updateNetwork] = useEdgeState(
     prompt.edge, // TODO: createEdge?
     { dispatch },
-    [stepState.location.step, stepState.location.prompt],
+    [promptIndex, state.step],
   );
 
   const getHasEdge = () => {
@@ -99,8 +84,7 @@ const DyadCensus = ({
 
     // If we've visited this step previously (progress), and no edge exists consider
     // this an implicit 'no'
-    const relativeToProgress = compareSteps(stepState.progress, stepState.location);
-    if (relativeToProgress < 0) {
+    if (state.progress > state.step) {
       return false;
     }
 
@@ -132,12 +116,10 @@ const DyadCensus = ({
 
   const handleConfirm = next;
 
-  const progress = getProgress(steps, stepState.location);
-
   const progressClasses = cx(
     'progress-container',
     {
-      'progress-container--show': progress > 0,
+      'progress-container--show': state.progress > 0,
     },
   );
 
@@ -152,7 +134,7 @@ const DyadCensus = ({
         />
       </div>
       <div className="interface__main">
-        <p>{stepState.location.step + 1}/{pairs.length}</p>
+        <p>{state.step + 1}/{pairs.length}</p>
         <div
           style={{
             position: 'relative',
@@ -160,7 +142,7 @@ const DyadCensus = ({
         >
           <AnimatePresence>
             <motion.div
-              key={`${stepState.location.prompt}_${stepState.location.step}`}
+              key={`${promptIndex}_${state.step}`}
               variants={variants}
               initial="initial"
               animate="enter"
@@ -182,9 +164,9 @@ const DyadCensus = ({
         </div>
         <div className={progressClasses}>
           <h6 className="progress-container__status-text">
-            <strong>{progress}</strong> of <strong>{pairs.length}</strong>
+            <strong>{state.step}</strong> of <strong>{pairs.length}</strong>
           </h6>
-          <ProgressBar orientation="horizontal" percentProgress={(progress / pairs.length) * 100} />
+          <ProgressBar orientation="horizontal" percentProgress={(state.step / pairs.length) * 100} />
         </div>
       </div>
     </div>
@@ -245,15 +227,9 @@ const makeMapStateToProps = () => {
   return mapStateToProps;
 };
 
-const mapDispatchToProps = {
-  addEdge: sessionsActions.addEdge,
-  removeEdge: sessionsActions.removeEdge,
-};
-
 export default compose(
   withPrompt,
-  connect(makeMapStateToProps, mapDispatchToProps),
-  connect(), // pass dispatch to component
+  connect(makeMapStateToProps),
 )(DyadCensus);
 
 export {
