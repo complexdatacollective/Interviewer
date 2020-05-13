@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import PropTypes from 'prop-types';
 import { AnimatePresence, motion } from 'framer-motion';
+import cx from 'classnames';
 import { Button } from '@codaco/ui';
 import RadioGroup from '@codaco/ui/lib/components/Fields/RadioGroup';
 import withPrompt from '../../../behaviours/withPrompt';
@@ -10,6 +11,7 @@ import { actionCreators as sessionsActions } from '../../../ducks/modules/sessio
 import { entityPrimaryKeyProperty } from '../../../ducks/modules/network';
 import { makeNetworkNodesForType as makeGetNodes } from '../../../selectors/interface';
 import { getNetworkEdges as getEdges } from '../../../selectors/network';
+import ProgressBar from '../../../components/ProgressBar';
 import PromptSwiper from '../../PromptSwiper';
 import useSteps, { compareSteps } from './useSteps';
 import useEdgeState from './useEdgeState';
@@ -24,6 +26,20 @@ const options = [
   { value: false, label: 'no' },
   { value: true, label: 'yes' },
 ];
+
+const getProgress = (stepMap, location) =>
+  stepMap.reduce((acc, steps, index) => {
+    console.log({ steps, index, location });
+    if (location.prompt > index) {
+      return acc + steps;
+    }
+
+    if (location.prompt === index) {
+      return acc + location.step;
+    }
+
+    return acc;
+  }, 0);
 
 /**
   * Dyad Census Interface
@@ -41,11 +57,13 @@ const DyadCensus = ({
   edges,
   dispatch,
 }) => {
+  const steps = Array(stage.prompts.length).fill(pairs.length);
+
   const [stepState, nextStep, previousStep] = useSteps(
     { step: 0, prompt: promptIndex || 0 },
-    Array(stage.prompts.length).fill(pairs.length),
+    steps,
     { onComplete, dispatch },
-    [promptIndex],
+    [promptIndex], // TODO: react to this
   );
 
   const getCurrentPair = () => pairs[stepState.location.step];
@@ -82,7 +100,6 @@ const DyadCensus = ({
     // If we've visited this step previously (progress), and no edge exists consider
     // this an implicit 'no'
     const relativeToProgress = compareSteps(stepState.progress, stepState.location);
-    console.log(stepState.progress, stepState.location, relativeToProgress);
     if (relativeToProgress < 0) {
       return false;
     }
@@ -114,6 +131,15 @@ const DyadCensus = ({
   const handleChange = setEdgeState;
 
   const handleConfirm = next;
+
+  const progress = getProgress(steps, stepState.location);
+
+  const progressClasses = cx(
+    'progress-container',
+    {
+      'progress-container--show': progress > 0,
+    },
+  );
 
   return (
     <div className="interface">
@@ -153,6 +179,12 @@ const DyadCensus = ({
               >Confirm</Button>
             </motion.div>
           </AnimatePresence>
+        </div>
+        <div className={progressClasses}>
+          <h6 className="progress-container__status-text">
+            <strong>{progress}</strong> of <strong>{pairs.length}</strong>
+          </h6>
+          <ProgressBar orientation="horizontal" percentProgress={(progress / pairs.length) * 100} />
         </div>
       </div>
     </div>
