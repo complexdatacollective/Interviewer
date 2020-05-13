@@ -12,6 +12,7 @@ import { makeNetworkNodesForType as makeGetNodes } from '../../../selectors/inte
 import { getNetworkEdges as getEdges } from '../../../selectors/network';
 import PromptSwiper from '../../PromptSwiper';
 import useSteps from './useSteps';
+import useEdgeState from './useEdgeState';
 
 const variants = {
   initial: { translateX: '100%', opacity: 0, position: 'absolute', top: 0, left: 0 },
@@ -34,33 +35,49 @@ const DyadCensus = ({
   prompt,
   promptBackward,
   promptForward,
-  stage: { prompts },
+  stage,
   pairs,
   nodes,
   edges,
-  addEdge,
-  removeEdge,
   dispatch,
 }) => {
-  const { edge: createEdge } = prompt;
-
   const [stepState, nextStep, previousStep] = useSteps(
     { step: 0, prompt: promptIndex || 0 },
-    Array(prompts.length).fill(pairs.length),
+    Array(stage.prompts.length).fill(pairs.length),
     { onComplete, dispatch },
+    [promptIndex],
   );
 
-  // const [state, { back, next, select }] = useStageState({
-    // pairs,
-    // addEdge,
-    // removeEdge,
-    // promptIndex,
-    // prompts,
-    // promptForward,
-    // promptBackward,
-    // createEdge,
-    // onComplete,
-  // });
+  const getCurrentPair = () => pairs[stepState.location.step];
+
+  const getHasEdgeInNetwork = () => {
+    const [a, b] = getCurrentPair();
+
+    const edge = edges.find(({ from, to, type }) => (
+      type === prompt.edge &&
+      ((from === a && to === b) || (to === b && from === a))
+    ));
+
+    return !!edge;
+  };
+
+  const [edgeState, setEdgeState, updateNetwork] = useEdgeState(
+    prompt.edge, // TODO: createEdge?
+    { dispatch },
+    [stepState.location.step, stepState.location.prompt],
+  );
+
+  const getHasEdge = () => {
+    console.log({ edgeState, inNetwork: getHasEdgeInNetwork() });
+    if (edgeState !== null) { return edgeState; }
+    return getHasEdgeInNetwork();
+  };
+
+  const next = () => {
+    // validate
+    updateNetwork(getCurrentPair());
+    nextStep();
+  };
 
   // TODO: Should this also receive an onComplete method?
   const beforeNext = useCallback((direction) => {
@@ -69,41 +86,16 @@ const DyadCensus = ({
       return;
     }
 
-    nextStep();
-  }, [previousStep, nextStep]);
+    next();
+  }, [previousStep, next]);
 
   useEffect(() => {
     registerBeforeNext(beforeNext);
   }, [beforeNext]);
 
-  const handleChange = useCallback((newValue) => {
-  }, []);
+  const handleChange = setEdgeState;
 
-  const handleConfirm = useCallback(() => {
-    nextStep();
-  }, [nextStep]);
-
-  const currentPair = pairs[stepState.location.step];
-
-  const getCurrentValue = () => {
-    // if (state.selected !== null) { return state.selected; }
-
-    const edge = edges.find(({ from, to, type }) => (
-      type === createEdge &&
-      ((from === currentPair[0] && to === currentPair[1]) ||
-        (to === currentPair[0] && from === currentPair[1]))
-    ));
-
-    if (edge) {
-      return true;
-    }
-
-    // if (!edge && state.progress > state.current) {
-      // return false;
-    // }
-
-    return null;
-  };
+  const handleConfirm = next;
 
   return (
     <div className="interface">
@@ -112,7 +104,7 @@ const DyadCensus = ({
           forward={promptForward}
           backward={promptBackward}
           prompt={prompt}
-          prompts={prompts}
+          prompts={stage.prompts}
         />
       </div>
       <div className="interface__main">
@@ -133,7 +125,7 @@ const DyadCensus = ({
               <RadioGroup
                 input={{
                   onChange: handleChange,
-                  value: getCurrentValue(),
+                  value: getHasEdge(),
                 }}
                 options={options}
               />

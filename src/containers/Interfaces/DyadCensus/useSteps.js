@@ -1,16 +1,23 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { actionCreators as sessionsActions } from '../../../ducks/modules/sessions';
 
 const useSteps = (
   location = { step: 0, prompt: 0 },
   steps = [],
   { onComplete, dispatch },
+  deps,
 ) => {
   // [1, 2]
   const [state, setState] = useState({
     progress: { step: null, prompt: null },
     location,
   });
+
+  const updatePrompt = (nextIndex) => {
+    if (nextIndex !== state.location.prompt) {
+      dispatch(sessionsActions.updatePrompt(nextIndex));
+    }
+  };
 
   const next = () => {
     const { step, prompt } = state.location;
@@ -41,7 +48,7 @@ const useSteps = (
       progress: nextProgress,
     }));
 
-    dispatch(sessionsActions.updatePrompt(nextLocation.prompt));
+    updatePrompt(nextLocation.prompt);
   };
 
   const previous = () => {
@@ -70,7 +77,7 @@ const useSteps = (
       location: nextLocation,
     }));
 
-    dispatch(sessionsActions.updatePrompt(nextLocation.prompt));
+    updatePrompt(nextLocation.prompt);
   };
 
   return [state, next, previous];
