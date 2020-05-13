@@ -11,7 +11,7 @@ import { entityPrimaryKeyProperty } from '../../../ducks/modules/network';
 import { makeNetworkNodesForType as makeGetNodes } from '../../../selectors/interface';
 import { getNetworkEdges as getEdges } from '../../../selectors/network';
 import PromptSwiper from '../../PromptSwiper';
-import useSteps from './useSteps';
+import useSteps, { compareSteps } from './useSteps';
 import useEdgeState from './useEdgeState';
 
 const variants = {
@@ -71,9 +71,24 @@ const DyadCensus = ({
   );
 
   const getHasEdge = () => {
-    console.log({ edgeState, inNetwork: getHasEdgeInNetwork() });
+    // Have we set a manual value? If so return that
     if (edgeState !== null) { return edgeState; }
-    return getHasEdgeInNetwork();
+
+    const hasEdgeInNetwork = getHasEdgeInNetwork();
+
+    // If we haven't set a value, and an edge exists, consider this a 'yes';
+    if (hasEdgeInNetwork) { return true; }
+
+    // If we've visited this step previously (progress), and no edge exists consider
+    // this an implicit 'no'
+    const relativeToProgress = compareSteps(stepState.progress, stepState.location);
+    console.log(stepState.progress, stepState.location, relativeToProgress);
+    if (relativeToProgress < 0) {
+      return false;
+    }
+
+    // Otherwise consider this blank
+    return null;
   };
 
   const next = () => {

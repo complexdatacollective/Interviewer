@@ -1,11 +1,23 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { actionCreators as sessionsActions } from '../../../ducks/modules/sessions';
+
+/**
+ * returns -1 if location is behind progress
+ * returns 1 if location is ahead of progress
+ * returns 0 if location and progress are equal
+ */
+export const compareSteps = (progress, location) => {
+  if (progress.prompt > location.prompt) { return -1; }
+  if (progress.prompt < location.prompt) { return 1; }
+  if (progress.step > location.step) { return -1; }
+  if (progress.step < location.step) { return 1; }
+  return 0;
+};
 
 const useSteps = (
   location = { step: 0, prompt: 0 },
   steps = [],
   { onComplete, dispatch },
-  deps,
 ) => {
   // [1, 2]
   const [state, setState] = useState({
@@ -34,13 +46,16 @@ const useSteps = (
       prompt: nextPrompt,
     };
 
-    const nextProgress =
+    const hasNoProgress = state.progress.step === null;
+    const isLocationAheadOfProgress =
       (
-        state.location.nextStep > state.progress.step &&
-        state.location.nextPrompt >= state.progress.prompt
-      ) ?
-        { step: nextStep, prompt: nextPrompt } :
-        state.progress;
+        nextLocation.step > state.progress.step &&
+        nextLocation.prompt === state.progress.prompt
+      ) ||
+      nextLocation.prompt > state.progress.prompt;
+    const nextProgress = hasNoProgress || isLocationAheadOfProgress ?
+      { step: nextStep, prompt: nextPrompt } :
+      state.progress;
 
     setState(s => ({
       ...s,
