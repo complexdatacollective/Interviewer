@@ -38,7 +38,7 @@ const mockStateWithProtocol = {
   },
 };
 
-jest.mock('../../../utils/uuid');
+jest.mock('uuid/v4');
 uuid.mockImplementation(() => mockSessionId);
 
 describe('sessions', () => {
