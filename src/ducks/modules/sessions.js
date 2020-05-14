@@ -409,8 +409,10 @@ const sessionExportFailed = (id, error) => ({
 });
 
 const bulkFileExportSessions = sessionList => (dispatch, getState) => {
-  console.log(sessionList);
-  dispatch(sessionExportStart(sessionList.map(session => ({ sessionUUID: session[sessionProperty] }))));
+  dispatch(sessionExportStart(
+    sessionList.map(session => ({ sessionUUID: session[sessionProperty] })),
+  ));
+
   const { installedProtocols } = getState();
 
   return exportSessions(sessionList, installedProtocols)
@@ -422,7 +424,9 @@ const bulkFileExportSessions = sessionList => (dispatch, getState) => {
 
       return sessionList.map(session => dispatch(sessionExportSucceeded(session[sessionProperty])));
     })
-    .catch(err => sessionList.map(session => dispatch(sessionExportFailed(session[sessionProperty], err))));
+    .catch(err =>
+      sessionList.map(session => dispatch(sessionExportFailed(session[sessionProperty], err))),
+    );
 };
 
 const bulkServerExportSessions = sessionList => (dispatch, getState) => {
