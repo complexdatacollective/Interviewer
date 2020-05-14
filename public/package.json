@@ -11,6 +11,7 @@
     "electron-log": "^3.0.7",
     "electron-updater": "^4.1.2",
     "mdns": "^2.5.1",
+    "archiver": "^2.1.1",
     "secure-comms-api": "git+https://github.com/codaco/secure-comms-api.git"
   }
 }
