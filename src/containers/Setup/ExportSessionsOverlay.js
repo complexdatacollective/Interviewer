@@ -30,7 +30,7 @@ class ExportSessionsOverlay extends PureComponent {
     this.state = {
       selectedServer: null, // set when user selects/enters a server to pair with
       previousSelectedServer: null, // selectedServer clone to populate manual inputs
-      exportMode: 'server', // used to switch between tabbed views
+      exportMode: 'download', // used to switch between tabbed views
       deleteAfterExport: false, //  determines if successfully uploaded sessions should be removed.
       showExportProgress: false, // Weather to show the SessionExportStatusList
       exportFinished: false,
@@ -133,7 +133,6 @@ class ExportSessionsOverlay extends PureComponent {
             <h2>Ready to export</h2>
             <p>
               Ready to export {this.props.sessionsToExport.length} session{this.props.sessionsToExport.length > 1 && ('s')} to {destination}.
-                    Ensure this is the correct destination before continuing.
             </p>
           </div>
           <div className="session-export-content__footer">

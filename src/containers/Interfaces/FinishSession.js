@@ -11,19 +11,13 @@ import { getRemoteProtocolId } from '../../selectors/protocol';
 import { ExportSessionsOverlay } from '../Setup';
 import Scroller from '../../components/Scroller';
 
-const ExportSection = ({ defaultServer, children }) => (
+const ExportSection = ({ children }) => (
   <div className="finish-session-interface__section finish-session-interface__section--export">
     <div>
-      <h2>Data Upload</h2>
-      { defaultServer ?
-        (<p>
-          Upload this interview to {defaultServer.name} <br />
-          <small>{defaultServer.secureServiceUrl}</small>
-        </p>) :
-        (<p>
-          Click upload to pair with a computer running Server, and transfer this interview.
-        </p>)
-      }
+      <h2>Data Export</h2>
+      <p>
+        Export this interview to a file, or to a computer running Server.
+      </p>
     </div>
     <div className="finish-session-interface__section--buttons">
       { children }
@@ -46,7 +40,7 @@ class FinishSession extends Component {
     return (
       <ExportSection defaultServer={defaultServer}>
         <Button onClick={this.handleOpenExport}>
-          Upload
+          Export
         </Button>
       </ExportSection>
     );
@@ -56,22 +50,6 @@ class FinishSession extends Component {
     const { defaultServer } = this.props;
     return defaultServer && defaultServer.secureServiceUrl;
   }
-
-  handleExportError = (additionalInformation) => {
-    const error = new Error(additionalInformation);
-    error.friendlyMessage = 'There was a problem downloading your data.';
-
-    this.props.openDialog({
-      type: 'Error',
-      error,
-      confirmLabel: 'Okay',
-    });
-  }
-
-  handleExport = () => {
-    this.props.bulkFileExportSessions([this.props.sessionId])
-      .catch(err => this.handleExportError(err));
-  };
 
   handleFinishSession = () => {
     if (this.state.deleteAfterFinish) {
@@ -133,20 +111,7 @@ class FinishSession extends Component {
                 interview now.
               </p>
             </div>
-
             { this.exportSection }
-
-            <div className="finish-session-interface__section finish-session-interface__section--download">
-              <div>
-                <h2>Data Export</h2>
-                <p>Export this network as a <code>.graphml</code> file</p>
-              </div>
-              <div>
-                <Button color="platinum" onClick={this.handleExport}>
-                  Export
-                </Button>
-              </div>
-            </div>
             <Toggle
               input={{
                 value: this.state.deleteAfterFinish,
@@ -169,40 +134,32 @@ class FinishSession extends Component {
 }
 
 FinishSession.propTypes = {
-  defaultServer: PropTypes.object,
   endSession: PropTypes.func.isRequired,
-  bulkFileExportSessions: PropTypes.func.isRequired,
   resetSessionExport: PropTypes.func.isRequired,
   openDialog: PropTypes.func.isRequired,
   sessionId: PropTypes.string.isRequired,
 };
 
 FinishSession.defaultProps = {
-  defaultServer: null,
   codebook: {},
   remoteProtocolId: null,
 };
 
 ExportSection.propTypes = {
   children: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.string]).isRequired,
-  defaultServer: PropTypes.object,
 };
 
 ExportSection.defaultProps = {
-  defaultServer: null,
 };
 
 function mapStateToProps(state) {
   return {
     remoteProtocolId: getRemoteProtocolId(state),
     sessionId: state.activeSessionId,
-    defaultServer: state.pairedServer,
   };
 }
 
 const mapDispatchToProps = {
-  bulkServerExportSessions: sessionsActions.bulkServerExportSessions,
-  bulkFileExportSessions: sessionsActions.bulkFileExportSessions,
   resetSessionExport: sessionsActions.sessionExportReset,
   deleteSession: sessionsActions.removeSession,
   endSession: sessionActions.endSession,

@@ -1,6 +1,3 @@
-// import path from 'path';
-// import { isElectron, isCordova } from './Environment';
-// import GraphMLFormatter from './network-exporters/src/formatters/graphml/GraphMLFormatter';
 import FileExportManager from './network-exporters/src/FileExportManager';
 
 const saveDialog = (defaultFileName, extension) => {
@@ -24,7 +21,7 @@ const exportSessions = (sessions, installedProtocols) => {
   // Instantiate file export manager
   // TODO: populate export options from app state.
   const fileExportManager = new FileExportManager({
-    exportGraphML: true,
+    exportGraphML: false,
     exportCSV: true,
   });
 
