@@ -172,7 +172,10 @@ class ExportSessionsOverlay extends PureComponent {
       const sessionData = asExportableNetwork(
         session.network,
         sessionCodebook,
-        { _caseID: session.caseId },
+        {
+          [caseProperty]: session.caseId,
+          _remoteProtocolID: remoteProtocolId,
+        },
       );
 
       return { remoteProtocolId, sessionUUID: sessionId, sessionData };
@@ -204,10 +207,13 @@ class ExportSessionsOverlay extends PureComponent {
       const exportableSessionNetwork = asExportableNetwork(
         this.props.sessions[session].network,
         sessionProtocol.codebook,
+        {
+          [caseProperty]: this.props.sessions[session].caseId,
+          _remoteProtocolID: nameDigest(sessionProtocol.name),
+        },
       );
 
       return {
-        [caseProperty]: this.props.sessions[session].caseId,
         [protocolProperty]: this.props.sessions[session].protocolUID,
         [sessionProperty]: session,
         remoteProtocolId: nameDigest(sessionProtocol.name),

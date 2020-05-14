@@ -3,7 +3,7 @@
 
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import uuidv4 from '../../../utils/uuid';
+import uuid from 'uuid/v4';
 import reducer, { getReducer, actionCreators, actionTypes } from '../sessions';
 import { actionTypes as networkActionTypes, actionCreators as networkActions } from '../network';
 import { actionTypes as installedProtocolsActionTypes } from '../installedProtocols';
@@ -39,7 +39,7 @@ const mockStateWithProtocol = {
 };
 
 jest.mock('../../../utils/uuid');
-uuidv4.mockImplementation(() => mockSessionId);
+uuid.mockImplementation(() => mockSessionId);
 
 describe('sessions', () => {
   describe('reducer', () => {
