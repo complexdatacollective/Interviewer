@@ -1,5 +1,5 @@
 import { omit, map, reduce } from 'lodash';
-import uuidv4 from '../../utils/uuid';
+import uuid from 'uuid/v4';
 import ApiClient from '../../utils/ApiClient';
 import exportSessions from '../../utils/exportSessions';
 import { actionCreators as SessionWorkerActions } from './sessionWorkers';
@@ -340,7 +340,7 @@ const removeEdge = edgeId => (dispatch, getState) => {
 };
 
 const addSession = (caseId, protocolUID) => (dispatch) => {
-  const id = uuidv4();
+  const id = uuid();
 
   dispatch({
     type: ADD_SESSION,

@@ -1,4 +1,4 @@
-import uuidv4 from './uuid';
+import uuid from 'uuid/v4';
 
 export const NodeLabelWorkerName = 'nodeLabelWorker';
 export const supportedWorkers = [NodeLabelWorkerName];
@@ -89,7 +89,7 @@ class WorkerAgent {
     if (this.worker.globalError) {
       return Promise.reject(new Error(`Worker has global error: ${this.worker.globalError.message}`));
     }
-    const messageId = uuidv4();
+    const messageId = uuid();
     const taggedMsg = { ...msg, messageId };
     const promise = new Promise((resolve, reject) => {
       this.worker.workMap[messageId] = { msg: taggedMsg, resolve, reject };
