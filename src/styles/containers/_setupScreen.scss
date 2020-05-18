@@ -1,6 +1,6 @@
 :root {
 
-  --manage-interview-panel-height: 25vh;
+  --manage-interview-panel-height: 10rem;
   --header-height: 25vh;
 
 }
@@ -8,7 +8,7 @@
 @media (max-height: 799px) {
   :root {
     --header-height: 20vh;
-    --manage-interview-panel-height: 20vh;
+    --manage-interview-panel-height: 10rem;
   }
 }
 

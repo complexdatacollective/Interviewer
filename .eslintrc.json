@@ -6,6 +6,7 @@
         "es2020": true,
         "node": true
     },
+    "root": true,
     "parser": "babel-eslint",
     "parserOptions": {
         "ecmaVersion": 2018,
