@@ -1,4 +1,5 @@
 import { omit } from 'lodash';
+import crypto from 'crypto';
 import {
   getEntityAttributes,
   entityAttributesProperty,
@@ -6,6 +7,7 @@ import {
   nodeTypePropertyForWorker,
   primaryKeyPropertyForWorker,
 } from '../ducks/modules/network';
+import { remoteProtocolProperty, sessionProperty, caseProperty, protocolProperty } from './network-exporters/src/utils/reservedAttributes';
 
 /**
  * Internally, 'attributes' are stored with UUID keys, which are meaningless to the end user.
@@ -87,17 +89,32 @@ export const asExportableEgo = (ego, egoDefinition) => ({
 });
 
 /**
+ * Get the remote protocol name for a protocol, which Server uses to uniquely identify it
+ * @param {string} protocolName the name of a protocol
+ */
+export const getRemoteProtocolID = protocolName => protocolName && crypto.createHash('sha256').update(protocolName).digest('hex');
+
+/**
  * Produces a network suitable for export.
  * In particular, transposes variable IDs to names.
- * Also available as a memoized selector; see selectors/interface.
  *
  * @param  {Object} network  the entire network (in redux state)
  * @param  {Object} registry the codebook from a protocol
- * @return {Object} externalNetwork
+ * @return {Object} externalNetwork with sessionVariables
  */
-export const asExportableNetwork = (network = {}, registry = {}, sessionVariables = {}) => {
-  const { nodes = [], edges = [], ego = {} } = network;
-  const { node: nodeRegistry = {}, edge: edgeRegistry = {}, ego: egoRegistry = {} } = registry;
+export const asExportableNetwork = (sessionId, session, codebook, protocol) => {
+  const { network: { nodes = [], edges = [], ego = {} } } = session;
+  const { node: nodeRegistry = {}, edge: edgeRegistry = {}, ego: egoRegistry = {} } = codebook;
+
+  // construct a sessionVariables object that contains required metadata for exporters
+  // Required: caseID, sessionID, and remoteProtocolID
+  const sessionVariables = {
+    [caseProperty]: session.caseId,
+    [sessionProperty]: sessionId,
+    [remoteProtocolProperty]: getRemoteProtocolID(protocol.name),
+    [protocolProperty]: session.protocolUID,
+  };
+
   return ({
     nodes: nodes.map(node => asExportableNode(node, nodeRegistry[node.type])),
     edges: edges.map(edge => asExportableEdge(edge, edgeRegistry[edge.type])),

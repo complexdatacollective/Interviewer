@@ -267,12 +267,12 @@ class ApiClient {
    * @return {Object}
    * @throws {Error}
    */
-  exportSession(protocolId, sessionId, sessionData) {
+  exportSession(remoteProtocolId, sessionId, sessionData) {
     const payload = {
       uuid: sessionId,
       data: sessionData,
     };
-    return this.httpsClient.post(`/protocols/${protocolId}/sessions`, payload, this.authHeader)
+    return this.httpsClient.post(`/protocols/${remoteProtocolId}/sessions`, payload, this.authHeader)
       .then(resp => resp.data)
       .then(json => json.data)
       .catch(handleError);

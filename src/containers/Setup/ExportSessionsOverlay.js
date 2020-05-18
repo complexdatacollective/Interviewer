@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react';
-import crypto from 'crypto';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { forEach, each } from 'lodash';
@@ -16,13 +15,12 @@ import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import Overlay from '../Overlay';
 import { asExportableNetwork } from '../../utils/networkFormat';
 import PairedServerWrapper from '../../components/Setup/PairedServerWrapper';
-import { caseProperty, protocolProperty, sessionProperty } from '../../utils/network-exporters/src/utils/reservedAttributes';
 
 /**
  * The remote protocol ID on any instance of Server is the hex-encoded sha256 of its [unique] name.
  * Server will need to know this ID when we export/import session data.
  */
-const nameDigest = name => name && crypto.createHash('sha256').update(name).digest('hex');
+
 
 class ExportSessionsOverlay extends PureComponent {
   constructor(props) {
@@ -165,19 +163,14 @@ class ExportSessionsOverlay extends PureComponent {
       const session = this.props.sessions[sessionId];
       const sessionProtocolUID = session.protocolUID;
       const sessionCodebook = this.props.installedProtocols[sessionProtocolUID].codebook;
-      const sessionProtocolName = this.props.installedProtocols[sessionProtocolUID].name;
-      const remoteProtocolId = nameDigest(sessionProtocolName);
+      const sessionProtocol = this.props.installedProtocols[sessionProtocolUID];
 
-      const sessionData = asExportableNetwork(
-        session.network,
+      return asExportableNetwork(
+        sessionId,
+        session,
         sessionCodebook,
-        {
-          [caseProperty]: session.caseId,
-          _remoteProtocolID: remoteProtocolId,
-        },
+        sessionProtocol,
       );
-
-      return { remoteProtocolId, sessionUUID: sessionId, sessionData };
     }))
       .then(() => { this.setState({ exportFinished: true }); });
   }
@@ -203,21 +196,12 @@ class ExportSessionsOverlay extends PureComponent {
       const sessionProtocol =
         this.props.installedProtocols[this.props.sessions[session].protocolUID];
 
-      const exportableSessionNetwork = asExportableNetwork(
-        this.props.sessions[session].network,
+      return asExportableNetwork(
+        session,
+        this.props.sessions[session],
         sessionProtocol.codebook,
-        {
-          [caseProperty]: this.props.sessions[session].caseId,
-          _remoteProtocolID: nameDigest(sessionProtocol.name),
-        },
+        sessionProtocol,
       );
-
-      return {
-        [protocolProperty]: this.props.sessions[session].protocolUID,
-        [sessionProperty]: session,
-        remoteProtocolId: nameDigest(sessionProtocol.name),
-        ...exportableSessionNetwork,
-      };
     }))
       .then(({ cancelled }) => {
         if (cancelled) {

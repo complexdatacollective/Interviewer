@@ -5,7 +5,7 @@ import exportSessions from '../../utils/exportSessions';
 import { actionCreators as SessionWorkerActions } from './sessionWorkers';
 import { actionTypes as installedProtocolsActionTypes } from './installedProtocols';
 import networkReducer, { actionTypes as networkActionTypes, actionCreators as networkActions, entityPrimaryKeyProperty } from './network';
-import { sessionProperty } from '../../utils/network-exporters/src/utils/reservedAttributes';
+import { sessionProperty, remoteProtocolProperty } from '../../utils/network-exporters/src/utils/reservedAttributes';
 
 const ADD_SESSION = 'ADD_SESSION';
 const LOAD_SESSION = 'LOAD_SESSION';
@@ -87,8 +87,8 @@ const getReducer = network =>
         const newObj = {
           ...state,
         };
-        map(action.sessionIDs, (session) => {
-          newObj[session.sessionUUID].exportStatus = 'exporting';
+        map(action.sessionIDs, (sessionID) => {
+          newObj[sessionID].exportStatus = 'exporting';
         });
 
         return {
@@ -410,7 +410,7 @@ const sessionExportFailed = (id, error) => ({
 
 const bulkFileExportSessions = sessionList => (dispatch, getState) => {
   dispatch(sessionExportStart(
-    sessionList.map(session => ({ sessionUUID: session[sessionProperty] })),
+    sessionList.map(session => (session.sessionVariables[sessionProperty])),
   ));
 
   const { installedProtocols } = getState();
@@ -422,10 +422,12 @@ const bulkFileExportSessions = sessionList => (dispatch, getState) => {
         return { cancelled };
       }
 
-      return sessionList.map(session => dispatch(sessionExportSucceeded(session[sessionProperty])));
+      return sessionList.map(session =>
+        dispatch(sessionExportSucceeded(session.sessionVariables[sessionProperty])));
     })
     .catch(err =>
-      sessionList.map(session => dispatch(sessionExportFailed(session[sessionProperty], err))),
+      sessionList.map(session =>
+        dispatch(sessionExportFailed(session.sessionVariables[sessionProperty], err))),
     );
 };
 
@@ -438,14 +440,19 @@ const bulkServerExportSessions = sessionList => (dispatch, getState) => {
 
     // Use reduce to create a promise sequence.
     return client.addTrustedCert().then(() => {
-      dispatch(sessionExportStart(sessionList));
+      dispatch(sessionExportStart(
+        sessionList.map(session => (session.sessionVariables[sessionProperty])),
+      ));
+
+      console.log(sessionList);
+      debugger;
       return sessionList.reduce(
         (previousSession, nextSession) =>
           previousSession
             .then(
               () => client.exportSession(
-                nextSession.remoteProtocolId,
-                nextSession.sessionUUID,
+                nextSession.sessionVariables[remoteProtocolProperty],
+                nextSession.sessionUUID[sessionProperty],
                 nextSession.sessionData,
               ).then((data) => {
                 // return of session export
