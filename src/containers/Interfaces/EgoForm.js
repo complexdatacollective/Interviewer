@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { clamp } from 'lodash';
 import { connect } from 'react-redux';
-import { submit, isValid } from 'redux-form';
+import { submit, isValid, isDirty } from 'redux-form';
 import ReactMarkdown from 'react-markdown';
 import { isIOS } from '../../utils/Environment';
 import { ProgressBar, Scroller } from '../../components';
@@ -42,13 +42,14 @@ class EgoForm extends Component {
     const {
       isFirstStage,
       isFormValid,
+      isFormDirty,
       openDialog,
     } = this.props;
 
     const isBackwards = direction < 0;
 
     if (!isFirstStage && isBackwards && !isFormValid) {
-      openDialog(confirmDialog)
+      new Promise(resolve => resolve((isFormDirty ? openDialog(confirmDialog) : true)))
         .then(this.handleConfirmNavigation);
       return;
     }
@@ -149,6 +150,7 @@ function mapStateToProps(state, props) {
   const ego = getNetworkEgo(state);
   const formName = getFormName(props.stageIndex);
   const isFormValid = isValid(formName)(state);
+  const isFormDirty = isDirty(formName)(state);
   const { isFirstStage } = getSessionProgress(state);
 
   return {
@@ -156,6 +158,7 @@ function mapStateToProps(state, props) {
     introductionPanel: props.stage.introductionPanel,
     ego,
     isFormValid,
+    isFormDirty,
     formName,
     isFirstStage,
   };
