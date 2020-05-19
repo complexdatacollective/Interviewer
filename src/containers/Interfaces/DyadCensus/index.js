@@ -4,8 +4,8 @@ import { compose } from 'recompose';
 import PropTypes from 'prop-types';
 import { get } from 'lodash';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Button } from '@codaco/ui';
-import RadioGroup from '@codaco/ui/lib/components/Fields/RadioGroup';
+import ToggleButton from '@codaco/ui/lib/components/Fields/ToggleButton';
+import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
 import withPrompt from '../../../behaviours/withPrompt';
 import { entityPrimaryKeyProperty } from '../../../ducks/modules/network';
 import { makeNetworkNodesForType as makeGetNodes } from '../../../selectors/interface';
@@ -15,42 +15,48 @@ import ProgressBar from '../../../components/ProgressBar';
 import PromptSwiper from '../../PromptSwiper';
 import Node from '../../../containers/Node';
 import useSteps from './useSteps';
-import useEdgeState from './useEdgeState';
+import useNetworkEdgeState from './useEdgeState';
 
-const transition = {
-  duration: 1,
+const animationOffset = '200%;';
+
+const getVariants = () => {
+  const duration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
+  const delay = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
+
+  const transition = {
+    duration,
+    delay,
+    when: 'afterChildren',
+  };
+
+  const pairVariants = {
+    in: {
+      translateY: '0%',
+      opacity: 1,
+      position: 'relative',
+      transition,
+    },
+    initial: animateForwards => ({
+      translateY: animateForwards ? animationOffset : `-${animationOffset}`,
+      opacity: 0,
+      position: 'absolute',
+      transition,
+    }),
+    exit: animateForwards => ({
+      translateY: !animateForwards ? animationOffset : `-${animationOffset}`,
+      opacity: 0,
+      position: 'absolute',
+      transition,
+    }),
+  };
+
+  const edgeVariants = {
+    show: { opacity: 1, transition: { duration } },
+    hide: { opacity: 0, transition: { duration } },
+  };
+
+  return { edgeVariants, pairVariants };
 };
-
-const variants = {
-  in: {
-    translateY: '0%',
-    opacity: 1,
-    position: 'static',
-    transition,
-  },
-  initial: isForwards => ({
-    translateY: isForwards ? '100%' : '-100%',
-    opacity: 0,
-    position: 'absolute',
-    transition,
-  }),
-  exit: isForwards => ({
-    translateY: !isForwards ? '100%' : '-100%',
-    opacity: 0,
-    position: 'absolute',
-    transition,
-  }),
-};
-
-const edgeVariants = {
-  show: { opacity: 1 },
-  hide: { opacity: 0 },
-};
-
-const options = [
-  { value: false, label: 'no' },
-  { value: true, label: 'yes' },
-];
 
 /**
   * Dyad Census Interface
@@ -71,45 +77,29 @@ const DyadCensus = ({
 }) => {
   const steps = Array(stage.prompts.length).fill(pairs.length);
 
+  console.log(pairs);
+
   const [state, nextStep, previousStep] = useSteps(
     steps,
     promptIndex || 0,
     { onComplete, dispatch },
   );
 
-  const [edgeState, setEdgeState, updateNetwork] = useEdgeState(
+  const getNode = id =>
+    nodes.find(node => node[entityPrimaryKeyProperty] === id);
+
+  const getPair = () => get(pairs, state.step, null);
+
+  const [edgeState, setEdge] = useNetworkEdgeState(
+    edges,
+    getPair(),
     prompt.edge, // TODO: createEdge?
     { dispatch },
     [promptIndex, state.step],
   );
 
-  // TODO: extract these getters into single function, possible useEdgeState
-  const getCurrentPair = () => pairs[state.step];
-  const getNode = id =>
-    nodes.find(node => node[entityPrimaryKeyProperty] === id);
-
-  const getEdgeInNetwork = () => {
-    const [a, b] = getCurrentPair();
-
-    const edge = edges.find(({ from, to, type }) => (
-      type === prompt.edge &&
-      ((from === a && to === b) || (to === b && from === a))
-    ));
-
-    return edge;
-  };
-
-  const getHasEdgeInNetwork = () =>
-    !!getEdgeInNetwork();
-
   const getHasEdge = () => {
-    // Have we set a manual value? If so return that
     if (edgeState !== null) { return edgeState; }
-
-    const hasEdgeInNetwork = getHasEdgeInNetwork();
-
-    // If we haven't set a value, and an edge exists, consider this a 'yes';
-    if (hasEdgeInNetwork) { return true; }
 
     // If we've visited this step previously (progress), and no edge exists consider
     // this an implicit 'no'
@@ -123,7 +113,8 @@ const DyadCensus = ({
 
   const next = () => {
     // validate
-    updateNetwork(getCurrentPair(), getEdgeInNetwork());
+
+    // go to next step
     nextStep();
   };
 
@@ -141,14 +132,18 @@ const DyadCensus = ({
     registerBeforeNext(beforeNext);
   }, [beforeNext]);
 
-  const handleChange = setEdgeState;
+  const handleChange = nextValue =>
+    () => {
+      setEdge(nextValue);
+      // nextStep();
+    };
 
-  const handleConfirm = next;
-
-  const pair = getCurrentPair();
+  const pair = getPair();
   const fromNode = getNode(pair[0]);
   const toNode = getNode(pair[1]);
   const isForwards = state.direction !== 'backward'; // .i.e. default to true
+
+  const { edgeVariants, pairVariants } = getVariants();
 
   return (
     <div className="interface dyad-interface">
@@ -162,12 +157,12 @@ const DyadCensus = ({
       </div>
       <div className="interface__main">
         <div className="dyad-interface__pairs">
-          <AnimatePresence custom={isForwards}>
+          <AnimatePresence custom={[isForwards, getHasEdge()]}>
             <motion.div
               className="dyad-interface__pair"
               key={`${promptIndex}_${state.step}`}
               custom={isForwards}
-              variants={variants}
+              variants={pairVariants}
               initial="initial"
               animate="in"
               exit="exit"
@@ -183,21 +178,24 @@ const DyadCensus = ({
                 />
                 <Node {...toNode} />
               </div>
-              <RadioGroup
+              <ToggleButton
                 input={{
-                  onChange: handleChange,
+                  onChange: handleChange(true),
                   value: getHasEdge(),
                 }}
-                options={options}
+                label="Yes"
               />
-
-              <Button
-                onClick={handleConfirm}
-              >Confirm</Button>
+              <ToggleButton
+                input={{
+                  onChange: handleChange(false),
+                  value: !getHasEdge() && getHasEdge() !== null,
+                }}
+                label="No"
+              />
             </motion.div>
           </AnimatePresence>
         </div>
-        <div>
+        <div className="dyad-interface__progress">
           <h6 className="progress-container__status-text">
             <strong>{state.step + 1}</strong> of <strong>{pairs.length}</strong>
           </h6>
