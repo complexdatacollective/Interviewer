@@ -12,6 +12,7 @@ const useSteps = (
   const [state, setState] = useState({
     progress: null, // max step reached
     step: 0,
+    direction: 'forward',
   });
 
   useEffect(() => {
@@ -19,6 +20,7 @@ const useSteps = (
       ...s,
       progress: null, // max step reached
       step: 0,
+      direction: 'forward',
     }));
   }, [prompt]);
 
@@ -47,6 +49,7 @@ const useSteps = (
       ...s,
       step: nextStep,
       progress: nextProgress,
+      direction: 'forward',
     }));
   };
 
@@ -66,6 +69,7 @@ const useSteps = (
     setState(s => ({
       ...s,
       step: nextStep,
+      direction: 'backward',
     }));
   };
 

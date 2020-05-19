@@ -2,24 +2,49 @@ import React, { useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import PropTypes from 'prop-types';
+import { get } from 'lodash';
 import { AnimatePresence, motion } from 'framer-motion';
-import cx from 'classnames';
 import { Button } from '@codaco/ui';
 import RadioGroup from '@codaco/ui/lib/components/Fields/RadioGroup';
 import withPrompt from '../../../behaviours/withPrompt';
-import { actionCreators as sessionsActions } from '../../../ducks/modules/sessions';
 import { entityPrimaryKeyProperty } from '../../../ducks/modules/network';
 import { makeNetworkNodesForType as makeGetNodes } from '../../../selectors/interface';
 import { getNetworkEdges as getEdges } from '../../../selectors/network';
+import { getProtocolCodebook } from '../../../selectors/protocol';
 import ProgressBar from '../../../components/ProgressBar';
 import PromptSwiper from '../../PromptSwiper';
-import useSteps, { compareSteps } from './useSteps';
+import Node from '../../../containers/Node';
+import useSteps from './useSteps';
 import useEdgeState from './useEdgeState';
 
+const transition = {
+  duration: 1,
+};
+
 const variants = {
-  initial: { translateX: '100%', opacity: 0, position: 'absolute', top: 0, left: 0 },
-  enter: { translateX: '0%', opacity: 1 },
-  exit: { translateX: '-100%', opacity: 0 },
+  in: {
+    translateY: '0%',
+    opacity: 1,
+    position: 'static',
+    transition,
+  },
+  initial: isForwards => ({
+    translateY: isForwards ? '100%' : '-100%',
+    opacity: 0,
+    position: 'absolute',
+    transition,
+  }),
+  exit: isForwards => ({
+    translateY: !isForwards ? '100%' : '-100%',
+    opacity: 0,
+    position: 'absolute',
+    transition,
+  }),
+};
+
+const edgeVariants = {
+  show: { opacity: 1 },
+  hide: { opacity: 0 },
 };
 
 const options = [
@@ -39,8 +64,9 @@ const DyadCensus = ({
   promptForward,
   stage,
   pairs,
-  // nodes,
+  nodes,
   edges,
+  edgeColor,
   dispatch,
 }) => {
   const steps = Array(stage.prompts.length).fill(pairs.length);
@@ -59,6 +85,8 @@ const DyadCensus = ({
 
   // TODO: extract these getters into single function, possible useEdgeState
   const getCurrentPair = () => pairs[state.step];
+  const getNode = id =>
+    nodes.find(node => node[entityPrimaryKeyProperty] === id);
 
   const getEdgeInNetwork = () => {
     const [a, b] = getCurrentPair();
@@ -117,8 +145,13 @@ const DyadCensus = ({
 
   const handleConfirm = next;
 
+  const pair = getCurrentPair();
+  const fromNode = getNode(pair[0]);
+  const toNode = getNode(pair[1]);
+  const isForwards = state.direction !== 'backward'; // .i.e. default to true
+
   return (
-    <div className="interface">
+    <div className="interface dyad-interface">
       <div className="interface__prompt">
         <PromptSwiper
           forward={promptForward}
@@ -128,19 +161,28 @@ const DyadCensus = ({
         />
       </div>
       <div className="interface__main">
-        <div
-          style={{
-            position: 'relative',
-          }}
-        >
-          <AnimatePresence>
+        <div className="dyad-interface__pairs">
+          <AnimatePresence custom={isForwards}>
             <motion.div
+              className="dyad-interface__pair"
               key={`${promptIndex}_${state.step}`}
+              custom={isForwards}
               variants={variants}
               initial="initial"
-              animate="enter"
+              animate="in"
               exit="exit"
             >
+              <div className="dyad-interface__nodes">
+                <Node {...fromNode} />
+                <motion.div
+                  className="dyad-interface__edge"
+                  style={{ backgroundColor: `var(--${edgeColor})` }}
+                  variants={edgeVariants}
+                  initial="hide"
+                  animate={getHasEdge() ? 'show' : 'hide'}
+                />
+                <Node {...toNode} />
+              </div>
               <RadioGroup
                 input={{
                   onChange: handleChange,
@@ -183,14 +225,11 @@ const makeMapStateToProps = () => {
   const mapStateToProps = (state, props) => {
     const nodes = getNodes(state, props);
     const edges = getEdges(state, props);
+    const codebook = getProtocolCodebook(state, props);
     const nodeIds = nodes.map(node => node[entityPrimaryKeyProperty]);
 
-    // const pairs = nodeIds.flatMap(
-    //   id =>
-    //     nodeIds
-    //       .filter(alterId => alterId !== id)
-    //       .map(alterId => ([id, alterId])),
-    // );
+    const edgeColor = get(codebook, ['edge', props.prompt.edge, 'color']);
+
     // mutally exclusive only
     const pairs = nodeIds.reduce(
       ({ result, pool }, id) => {
@@ -214,6 +253,7 @@ const makeMapStateToProps = () => {
       pairs,
       nodes,
       edges,
+      edgeColor,
     };
   };
 

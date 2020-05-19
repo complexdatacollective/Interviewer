@@ -1,0 +1,32 @@
+.dyad-interface {
+  &__pairs {
+    position: relative;
+    width: 100%;
+    min-height: 50px;
+  }
+
+  &__pair {
+    left: 0;
+    top: 0;
+    width: 100%;
+    background: var(--light-background);
+    padding: unit(1) unit(4) unit(2);
+  }
+
+  &__nodes {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .node {
+      background: var(--light-background);
+      border-radius: 50%;
+    }
+  }
+
+  &__edge {
+    height: 0.5rem;
+    width: 10rem;
+    margin: 0 -1rem;
+  }
+}
