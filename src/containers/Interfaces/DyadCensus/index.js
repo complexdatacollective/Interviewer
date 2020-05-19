@@ -188,20 +188,22 @@ const DyadCensus = ({
                 />
                 <Node {...toNode} />
               </div>
-              <ToggleButton
-                input={{
-                  onChange: handleChange(true),
-                  value: !!getHasEdge(),
-                }}
-                label="Yes"
-              />
-              <ToggleButton
-                input={{
-                  onChange: handleChange(false),
-                  value: !getHasEdge() && getHasEdge() !== null,
-                }}
-                label="No"
-              />
+              <div className="dyad-interface__options">
+                <ToggleButton
+                  input={{
+                    onChange: handleChange(true),
+                    value: !!getHasEdge(),
+                  }}
+                  label="Yes"
+                />
+                <ToggleButton
+                  input={{
+                    onChange: handleChange(false),
+                    value: !getHasEdge() && getHasEdge() !== null,
+                  }}
+                  label="No"
+                />
+              </div>
             </motion.div>
           </AnimatePresence>
         </div>
