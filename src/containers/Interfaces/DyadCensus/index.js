@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import PropTypes from 'prop-types';
@@ -20,33 +20,38 @@ import useNetworkEdgeState from './useEdgeState';
 const animationOffset = '200%;';
 
 const getVariants = () => {
+  const slowDuration = getCSSVariableAsNumber('--animation-duration-slow-ms') / 1000;
   const duration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
   const delay = getCSSVariableAsNumber('--animation-duration-slow-ms') / 1000;
 
-  const transition = {
-    duration,
-    delay,
+  const pairTransition = {
+    duration: slowDuration,
     when: 'afterChildren',
   };
 
   const pairVariants = {
-    in: {
+    in: ([, shouldDelay]) => ({
       translateY: '0%',
       opacity: 1,
-      position: 'relative',
-      transition,
-    },
-    initial: isForwards => ({
+      position: 'static',
+      transition: {
+        ...pairTransition,
+        ...(shouldDelay ? { delay } : {}),
+      },
+    }),
+    initial: ([isForwards]) => ({
       translateY: isForwards ? animationOffset : `-${animationOffset}`,
       opacity: 0,
       position: 'absolute',
-      transition,
     }),
-    exit: isForwards => ({
+    exit: ([isForwards, shouldDelay]) => ({
       translateY: !isForwards ? animationOffset : `-${animationOffset}`,
       opacity: 0,
       position: 'absolute',
-      transition,
+      transition: {
+        ...pairTransition,
+        ...(shouldDelay ? { delay } : {}),
+      },
     }),
   };
 
@@ -88,7 +93,7 @@ const DyadCensus = ({
 
   const getPair = () => get(pairs, state.step, null);
 
-  const [edgeState, setEdge, isTouched] = useNetworkEdgeState(
+  const [edgeState, setEdge, isTouched, isChanged] = useNetworkEdgeState(
     edges,
     getPair(),
     prompt.edge, // TODO: createEdge?
@@ -99,7 +104,7 @@ const DyadCensus = ({
   // Auto advance
   useEffect(() => {
     if (!isTouched) { return; }
-    nextStep();
+    nextStep(!isChanged);
   }, [isTouched]);
 
   const getHasEdge = () => {
@@ -119,13 +124,13 @@ const DyadCensus = ({
     // validate
 
     // go to next step
-    nextStep();
+    nextStep(true);
   };
 
   // TODO: Should this also receive an onComplete method?
   const beforeNext = useCallback((direction) => {
     if (direction < 0) {
-      previousStep();
+      previousStep(true);
       return;
     }
 
@@ -148,6 +153,8 @@ const DyadCensus = ({
 
   const { edgeVariants, pairVariants } = getVariants();
 
+  const shouldDelay = !state.fast;
+
   return (
     <div className="interface dyad-interface">
       <div className="interface__prompt">
@@ -160,11 +167,11 @@ const DyadCensus = ({
       </div>
       <div className="interface__main">
         <div className="dyad-interface__pairs">
-          <AnimatePresence custom={isForwards}>
+          <AnimatePresence custom={[isForwards, shouldDelay]}>
             <motion.div
               className="dyad-interface__pair"
               key={`${promptIndex}_${state.step}`}
-              custom={isForwards}
+              custom={[isForwards, shouldDelay]}
               variants={pairVariants}
               initial="initial"
               animate="in"
