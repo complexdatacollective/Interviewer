@@ -28,10 +28,13 @@ const useEdgeState = (
     getEdgeInNetwork(edges, pair, edgeType),
   );
 
+  const [isTouched, setIsTouched] = useState(false);
+
   const setEdge = (hasEdge = true) => {
     const edge = getEdgeInNetwork(edges, pair, edgeType);
 
     setEdgeState(hasEdge);
+    setIsTouched(true);
 
     if (hasEdge) {
       if (!edge) {
@@ -47,9 +50,10 @@ const useEdgeState = (
   // we are internally keeping track of the edge state.
   useEffect(() => {
     setEdgeState(getEdgeInNetwork(edges, pair, edgeType));
+    setIsTouched(false);
   }, [...deps]);
 
-  return [edgeState, setEdge];
+  return [edgeState, setEdge, isTouched];
 };
 
 export default useEdgeState;

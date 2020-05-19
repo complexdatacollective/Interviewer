@@ -21,7 +21,7 @@ const animationOffset = '200%;';
 
 const getVariants = () => {
   const duration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
-  const delay = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
+  const delay = getCSSVariableAsNumber('--animation-duration-slow-ms') / 1000;
 
   const transition = {
     duration,
@@ -36,14 +36,14 @@ const getVariants = () => {
       position: 'relative',
       transition,
     },
-    initial: animateForwards => ({
-      translateY: animateForwards ? animationOffset : `-${animationOffset}`,
+    initial: isForwards => ({
+      translateY: isForwards ? animationOffset : `-${animationOffset}`,
       opacity: 0,
       position: 'absolute',
       transition,
     }),
-    exit: animateForwards => ({
-      translateY: !animateForwards ? animationOffset : `-${animationOffset}`,
+    exit: isForwards => ({
+      translateY: !isForwards ? animationOffset : `-${animationOffset}`,
       opacity: 0,
       position: 'absolute',
       transition,
@@ -77,8 +77,6 @@ const DyadCensus = ({
 }) => {
   const steps = Array(stage.prompts.length).fill(pairs.length);
 
-  console.log(pairs);
-
   const [state, nextStep, previousStep] = useSteps(
     steps,
     promptIndex || 0,
@@ -90,13 +88,19 @@ const DyadCensus = ({
 
   const getPair = () => get(pairs, state.step, null);
 
-  const [edgeState, setEdge] = useNetworkEdgeState(
+  const [edgeState, setEdge, isTouched] = useNetworkEdgeState(
     edges,
     getPair(),
     prompt.edge, // TODO: createEdge?
     { dispatch },
     [promptIndex, state.step],
   );
+
+  // Auto advance
+  useEffect(() => {
+    if (!isTouched) { return; }
+    nextStep();
+  }, [isTouched]);
 
   const getHasEdge = () => {
     if (edgeState !== null) { return edgeState; }
@@ -135,7 +139,6 @@ const DyadCensus = ({
   const handleChange = nextValue =>
     () => {
       setEdge(nextValue);
-      // nextStep();
     };
 
   const pair = getPair();
@@ -157,7 +160,7 @@ const DyadCensus = ({
       </div>
       <div className="interface__main">
         <div className="dyad-interface__pairs">
-          <AnimatePresence custom={[isForwards, getHasEdge()]}>
+          <AnimatePresence custom={isForwards}>
             <motion.div
               className="dyad-interface__pair"
               key={`${promptIndex}_${state.step}`}
@@ -181,7 +184,7 @@ const DyadCensus = ({
               <ToggleButton
                 input={{
                   onChange: handleChange(true),
-                  value: getHasEdge(),
+                  value: !!getHasEdge(),
                 }}
                 label="Yes"
               />
