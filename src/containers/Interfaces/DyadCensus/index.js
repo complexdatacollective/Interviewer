@@ -83,9 +83,9 @@ const DyadCensus = ({
 
   const [state, nextStep, previousStep] = useSteps(
     steps,
-    promptIndex || 0,
-    { onComplete, dispatch },
   );
+
+  console.log({ state });
 
   const getNode = id =>
     nodes.find(node => node[entityPrimaryKeyProperty] === id);

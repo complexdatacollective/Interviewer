@@ -1,75 +1,81 @@
 import { useState, useEffect } from 'react';
 import { actionCreators as sessionsActions } from '../../../ducks/modules/sessions';
 
+const getSubStep = (steps, nextStep) => {
+  const [r] = steps.reduce(([result, target], step, index) => {
+    if (step > target && result === null) {
+      return [{ step: target, of: index }];
+    }
+
+    if (step <= target) {
+      return [result, target - step];
+    }
+
+    return [result, target];
+  }, [null, nextStep]);
+
+  return r;
+};
+
 const useSteps = (
   steps = [], // map of steps per prompt, e.g. [3, 2, 1]
-  prompt,
-  { onComplete, dispatch },
 ) => {
-  const promptSteps = steps[prompt];
-  const promptCount = steps.length;
+  const totalSteps = steps.reduce((count, step) => count + step, 0);
 
   const [state, setState] = useState({
     progress: null, // max step reached
     step: 0,
+    totalStep: 0,
     direction: 'forward',
+    isFirstStep: true,
+    isLastStep: false,
+    isStart: true,
+    isEnd: false,
   });
 
-  useEffect(() => {
-    setState(s => ({
-      ...s,
-      progress: null, // max step reached
-      step: 0,
-      direction: 'forward',
-    }));
-  }, [prompt]);
-
-  const updatePrompt = (nextIndex) => {
-    if (nextIndex !== prompt) {
-      dispatch(sessionsActions.updatePrompt(nextIndex));
-    }
-  };
-
   const next = () => {
-    const nextStep = state.step + 1;
+    const nextStep = state.totalStep + 1;
 
-    if (nextStep > promptSteps - 1 && prompt >= promptCount - 1) {
-      onComplete();
-      return;
-    }
-
-    if (nextStep > promptSteps - 1) {
-      updatePrompt(prompt + 1);
+    if (nextStep >= totalSteps) {
+      console.log('end!', totalSteps);
       return;
     }
 
     const nextProgress = nextStep > state.progress ? nextStep : state.progress;
+    const substep = getSubStep(steps, nextStep);
 
     setState(s => ({
       ...s,
-      step: nextStep,
-      progress: nextProgress,
+      step: substep.step,
+      totalStep: nextStep,
+      totalProgress: nextProgress,
       direction: 'forward',
+      isFirstStep: substep.step === 0,
+      isLastStep: substep.of - 1 >= substep.step,
+      isStart: nextStep === 0,
+      isEnd: nextStep === totalSteps - 1,
     }));
   };
 
   const previous = () => {
-    const nextStep = state.step - 1;
-
-    if (nextStep < 0 && prompt === 0) {
-      onComplete();
-      return;
-    }
+    const nextStep = state.totalStep - 1;
 
     if (nextStep < 0) {
-      updatePrompt(prompt - 1);
+      console.log('end! 0');
       return;
     }
+
+    const substep = getSubStep(steps, nextStep);
 
     setState(s => ({
       ...s,
-      step: nextStep,
+      step: substep.step,
+      totalStep: nextStep,
       direction: 'backward',
+      isFirstStep: substep.step === 0,
+      isLastStep: substep.of - 1 >= substep.step,
+      isStart: nextStep === 0,
+      isEnd: nextStep === totalSteps - 1,
     }));
   };
 
