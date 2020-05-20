@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { actionCreators as sessionsActions } from '../../../ducks/modules/sessions';
 
 const getSubStep = (steps, nextStep) => {
   const [r] = steps.reduce(([result, target], step, index) => {
@@ -38,7 +37,6 @@ const useSteps = (
     const nextStep = state.step + 1;
 
     if (nextStep >= totalSteps) {
-      console.log('end!', totalSteps);
       return;
     }
 
@@ -53,7 +51,7 @@ const useSteps = (
       stage: substep.stage,
       direction: 'forward',
       isStageStart: substep.step === 0,
-      isStageEnd: substep.stage - 1 >= substep.step,
+      isStageEnd: substep.step >= steps[substep.stage] - 1,
       isStart: nextStep === 0,
       isEnd: nextStep === totalSteps - 1,
     }));
@@ -63,7 +61,6 @@ const useSteps = (
     const nextStep = state.step - 1;
 
     if (nextStep < 0) {
-      console.log('end! 0');
       return;
     }
 
@@ -76,7 +73,7 @@ const useSteps = (
       stage: substep.stage,
       direction: 'backward',
       isStageStart: substep.step === 0,
-      isStageEnd: substep.stage - 1 >= substep.step,
+      isStageEnd: substep.step >= steps[substep.stage] - 1,
       isStart: nextStep === 0,
       isEnd: nextStep === totalSteps - 1,
     }));

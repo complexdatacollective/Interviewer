@@ -10,6 +10,7 @@ import { entityPrimaryKeyProperty } from '../../../ducks/modules/network';
 import { makeNetworkNodesForType as makeGetNodes } from '../../../selectors/interface';
 import { getNetworkEdges as getEdges } from '../../../selectors/network';
 import { getProtocolCodebook } from '../../../selectors/protocol';
+import { actionCreators as sessionsActions } from '../../../ducks/modules/sessions';
 import ProgressBar from '../../../components/ProgressBar';
 import PromptSwiper from '../../PromptSwiper';
 import Node from '../../../containers/Node';
@@ -85,8 +86,6 @@ const DyadCensus = ({
     steps,
   );
 
-  console.log({ state });
-
   const getNode = id =>
     nodes.find(node => node[entityPrimaryKeyProperty] === id);
 
@@ -100,8 +99,56 @@ const DyadCensus = ({
     [promptIndex, state.step],
   );
 
+  const next = () => {
+    // validate
+
+    // go to next step
+    if (state.isEnd) {
+      onComplete();
+      return;
+    }
+
+    if (state.isStageEnd) {
+      dispatch(sessionsActions.updatePrompt(promptIndex + 1));
+    }
+
+    // TODO: chheck state in here
+    nextStep();
+  };
+
+  const back = () => {
+    // validate
+
+    // go to next step
+    if (state.isStart) {
+      onComplete();
+      return;
+    }
+
+    if (state.isStageStart) {
+      dispatch(sessionsActions.updatePrompt(promptIndex - 1));
+    }
+
+    // TODO: chheck state in here
+    previousStep();
+  };
+
+  // TODO: Should this also receive an onComplete method?
+  const beforeNext = useCallback((direction) => {
+    if (direction < 0) {
+      back();
+      return;
+    }
+
+    next();
+  }, [previousStep, next]);
+
+  useEffect(() => {
+    registerBeforeNext(beforeNext);
+  }, [beforeNext]);
+
   // Auto advance
-  useAutoAdvance(nextStep, isTouched, isChanged);
+  useAutoAdvance(next, isTouched, isChanged);
 
   const getHasEdge = () => {
     if (edgeState !== null) { return edgeState; }
@@ -115,27 +162,6 @@ const DyadCensus = ({
     // Otherwise consider this blank
     return null;
   };
-
-  const next = () => {
-    // validate
-
-    // go to next step
-    nextStep(true);
-  };
-
-  // TODO: Should this also receive an onComplete method?
-  const beforeNext = useCallback((direction) => {
-    if (direction < 0) {
-      previousStep(true);
-      return;
-    }
-
-    next();
-  }, [previousStep, next]);
-
-  useEffect(() => {
-    registerBeforeNext(beforeNext);
-  }, [beforeNext]);
 
   const handleChange = nextValue =>
     () => {

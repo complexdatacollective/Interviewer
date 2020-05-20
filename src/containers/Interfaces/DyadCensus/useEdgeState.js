@@ -36,7 +36,7 @@ const useEdgeState = (
 
     setEdgeState(hasEdge);
     setIsTouched(true);
-    setIsChanged(hasEdge !== !!edge);
+    setIsChanged(hasEdge !== !!edge); // TODO: This needs to work for 'No'
 
     if (hasEdge) {
       if (!edge) {
