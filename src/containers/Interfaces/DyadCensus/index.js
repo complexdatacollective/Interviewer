@@ -59,13 +59,7 @@ const getVariants = () => {
     hide: { opacity: 0, transition: { duration } },
   };
 
-  const optionVariants = {
-    initial: { opacity: 0, translateX: '0%', transition: { duration } },
-    show: { opacity: 1, translateX: '-50%', transition: { duration } },
-    hide: { opacity: 0, translateX: '-100%', transition: { duration } },
-  };
-
-  return { edgeVariants, pairVariants, optionVariants };
+  return { edgeVariants, pairVariants };
 };
 
 /**
@@ -155,7 +149,7 @@ const DyadCensus = ({
   const toNode = getNode(pair[1]);
   const isForwards = state.direction !== 'backward'; // .i.e. default to true
 
-  const { edgeVariants, pairVariants, optionVariants } = getVariants();
+  const { edgeVariants, pairVariants } = getVariants();
 
   return (
     <div className="interface dyad-interface">
@@ -198,33 +192,21 @@ const DyadCensus = ({
             </AnimatePresence>
           </div>
           <div className="dyad-interface__choice">
-            <AnimatePresence
-              custom={[isForwards]}
-              initial={false}
-            >
-              <motion.div
-                key={`${promptIndex}_${state.step}_options`}
-                className="dyad-interface__options"
-                variants={optionVariants}
-                initial="initial"
-                animate="show"
-                exit="hide"
-              >
-                <div className="dyad-interface__yes">
-                  <Button
-                    onClick={handleChange(true)}
-                    selected={!!getHasEdge()}
-                  >Yes</Button>
-                </div>
-                <div className="dyad-interface__no">
-                  <Button
-                    onClick={handleChange(false)}
-                    selected={!getHasEdge() && getHasEdge() !== null}
-                    className="no"
-                  >No</Button>
-                </div>
-              </motion.div>
-            </AnimatePresence>
+            <div className="dyad-interface__options">
+              <div className="dyad-interface__yes">
+                <Button
+                  onClick={handleChange(true)}
+                  selected={!!getHasEdge()}
+                >Yes</Button>
+              </div>
+              <div className="dyad-interface__no">
+                <Button
+                  onClick={handleChange(false)}
+                  selected={!getHasEdge() && getHasEdge() !== null}
+                  className="no"
+                >No</Button>
+              </div>
+            </div>
             <div className="dyad-interface__progress">
               <h6 className="progress-container__status-text">
                 <strong>{state.step + 1}</strong> of <strong>{pairs.length}</strong>
