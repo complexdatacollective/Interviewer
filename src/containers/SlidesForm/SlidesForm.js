@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { submit, isValid } from 'redux-form';
+import { submit, isValid, isDirty } from 'redux-form';
 import ReactMarkdown from 'react-markdown';
 import Swiper from 'react-id-swiper';
 import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
@@ -31,6 +31,7 @@ const SlidesForm = (props) => {
     onComplete,
     openDialog,
     getIsFormValid,
+    getIsFormDirty,
     updateItem,
   } = props;
 
@@ -82,6 +83,11 @@ const SlidesForm = (props) => {
     return getIsFormValid(formName);
   };
 
+  const isFormDirty = () => {
+    const formName = getFormName(getItemIndex());
+    return getIsFormDirty(formName);
+  };
+
   /**
    * Called by ProtocolScreen before navigating away from this stage
    *
@@ -102,7 +108,7 @@ const SlidesForm = (props) => {
     }
 
     if (direction < 0 && !isFormValid()) {
-      openDialog(confirmDialog)
+      new Promise(resolve => resolve(isFormDirty() ? openDialog(confirmDialog) : true))
         .then(handleConfirmBack);
       return;
     }
@@ -222,10 +228,13 @@ SlidesForm.defaultProps = {
 const mapStateToProps = (state, props) => {
   const getIsFormValid = formName =>
     isValid(formName)(state);
+  const getIsFormDirty = formName =>
+    isDirty(formName)(state);
 
   return {
     form: props.stage.form,
     getIsFormValid,
+    getIsFormDirty,
   };
 };
 

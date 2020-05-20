@@ -49,7 +49,7 @@ class EgoForm extends Component {
     const isBackwards = direction < 0;
 
     if (!isFirstStage && isBackwards && !isFormValid) {
-      new Promise(resolve => resolve((isFormDirty ? openDialog(confirmDialog) : true)))
+      new Promise(resolve => resolve(isFormDirty ? openDialog(confirmDialog) : true))
         .then(this.handleConfirmNavigation);
       return;
     }
