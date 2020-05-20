@@ -4,7 +4,7 @@ import { actionCreators as sessionsActions } from '../../../ducks/modules/sessio
 const getSubStep = (steps, nextStep) => {
   const [r] = steps.reduce(([result, target], step, index) => {
     if (step > target && result === null) {
-      return [{ step: target, of: index }];
+      return [{ step: target, stage: index }];
     }
 
     if (step <= target) {
@@ -25,16 +25,17 @@ const useSteps = (
   const [state, setState] = useState({
     progress: null, // max step reached
     step: 0,
-    totalStep: 0,
+    substep: 0,
+    stage: 0,
     direction: 'forward',
-    isFirstStep: true,
-    isLastStep: false,
+    isStageStart: true,
+    isStageEnd: false,
     isStart: true,
     isEnd: false,
   });
 
   const next = () => {
-    const nextStep = state.totalStep + 1;
+    const nextStep = state.step + 1;
 
     if (nextStep >= totalSteps) {
       console.log('end!', totalSteps);
@@ -46,19 +47,20 @@ const useSteps = (
 
     setState(s => ({
       ...s,
-      step: substep.step,
-      totalStep: nextStep,
-      totalProgress: nextProgress,
+      step: nextStep,
+      progress: nextProgress,
+      substep: substep.step,
+      stage: substep.stage,
       direction: 'forward',
-      isFirstStep: substep.step === 0,
-      isLastStep: substep.of - 1 >= substep.step,
+      isStageStart: substep.step === 0,
+      isStageEnd: substep.stage - 1 >= substep.step,
       isStart: nextStep === 0,
       isEnd: nextStep === totalSteps - 1,
     }));
   };
 
   const previous = () => {
-    const nextStep = state.totalStep - 1;
+    const nextStep = state.step - 1;
 
     if (nextStep < 0) {
       console.log('end! 0');
@@ -69,11 +71,12 @@ const useSteps = (
 
     setState(s => ({
       ...s,
-      step: substep.step,
-      totalStep: nextStep,
+      step: nextStep,
+      substep: substep.step,
+      stage: substep.stage,
       direction: 'backward',
-      isFirstStep: substep.step === 0,
-      isLastStep: substep.of - 1 >= substep.step,
+      isStageStart: substep.step === 0,
+      isStageEnd: substep.stage - 1 >= substep.step,
       isStart: nextStep === 0,
       isEnd: nextStep === totalSteps - 1,
     }));

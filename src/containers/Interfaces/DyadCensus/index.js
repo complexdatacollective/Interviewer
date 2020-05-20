@@ -90,7 +90,7 @@ const DyadCensus = ({
   const getNode = id =>
     nodes.find(node => node[entityPrimaryKeyProperty] === id);
 
-  const getPair = () => get(pairs, state.step, null);
+  const getPair = () => get(pairs, state.substep, null);
 
   const [edgeState, setEdge, isTouched, isChanged] = useNetworkEdgeState(
     edges,
@@ -209,7 +209,7 @@ const DyadCensus = ({
             </div>
             <div className="dyad-interface__progress">
               <h6 className="progress-container__status-text">
-                <strong>{state.step + 1}</strong> of <strong>{pairs.length}</strong>
+                <strong>{state.substep + 1}</strong> of <strong>{pairs.length}</strong>
               </h6>
               <ProgressBar orientation="horizontal" percentProgress={((state.step + 1) / pairs.length) * 100} />
             </div>
