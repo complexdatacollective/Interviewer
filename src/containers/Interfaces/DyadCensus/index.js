@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import PropTypes from 'prop-types';
@@ -16,6 +16,7 @@ import PromptSwiper from '../../PromptSwiper';
 import Node from '../../../containers/Node';
 import useSteps from './useSteps';
 import useNetworkEdgeState from './useEdgeState';
+import Button from './Button';
 
 const animationOffset = '200%;';
 
@@ -189,20 +190,14 @@ const DyadCensus = ({
                 <Node {...toNode} />
               </div>
               <div className="dyad-interface__options">
-                <ToggleButton
-                  input={{
-                    onChange: handleChange(true),
-                    value: !!getHasEdge(),
-                  }}
-                  label="Yes"
-                />
-                <ToggleButton
-                  input={{
-                    onChange: handleChange(false),
-                    value: !getHasEdge() && getHasEdge() !== null,
-                  }}
-                  label="No"
-                />
+                <Button
+                  onClick={handleChange(true)}
+                  selected={!!getHasEdge()}
+                >Yes</Button>
+                <Button
+                  onClick={handleChange(false)}
+                  selected={!getHasEdge() && getHasEdge() !== null}
+                >No</Button>
               </div>
             </motion.div>
           </AnimatePresence>

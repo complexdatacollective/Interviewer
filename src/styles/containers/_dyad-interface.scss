@@ -45,16 +45,6 @@
     align-items: center;
     padding: 6rem 0 0;
 
-    .form-field-togglebutton {
-      &__checkbox {
-        width: 12rem;
-        height: 12rem;
-        font-size: 2.5rem;
-      }
-      &:first-child {
-        margin-right: 6rem;
-      }
-    }
   }
 
   &__progress {
@@ -63,5 +53,18 @@
     left: 50%;;
     transform: translateX(-50%);
     width: 25vw;
+  }
+
+  &__button {
+    background: var(--light-background);
+    border-radius: var(--border-radius);
+    padding: 3rem;
+    font-size: 2.5rem;
+    cursor: pointer;
+    user-select: none;
+
+    &:first-child {
+      margin-right: 6rem;
+    }
   }
 }
