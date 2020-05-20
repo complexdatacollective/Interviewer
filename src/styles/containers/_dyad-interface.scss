@@ -9,6 +9,8 @@
   }
 }
 
+$choice-padding: 2rem;
+
 .dyad-interface {
   &__layout {
     position: absolute;
@@ -25,17 +27,19 @@
   &__pairs {
     position: relative;
     flex: 1 1 auto;
+    width: 100%;
   }
 
   &__choice {
     background: var(--light-background);
     border-radius: var(--border-radius);
-    padding: 10rem 3rem 3rem;
+    padding: calc(7rem + #{$choice-padding}) $choice-padding $choice-padding;
     display: flex;
     flex-direction: column;
-    min-width: 50vw;
+    min-width: 30vw;
     flex-grow: 0;
     position: relative;
+    overflow: hidden;
   }
 
   &__pair {
@@ -63,17 +67,29 @@
     justify-content: center;
     align-items: center;
     position: absolute;
-    top: 3rem;
+    top: $choice-padding;
     left: 50%;
     transform: translateX(-50%);
   }
 
   &__yes {
-    margin-right: 2rem;
+    margin-right: 4rem;
     @include recolor-toggle(var(--color-kiwi));
   }
 
   &__no {
     @include recolor-toggle(var(--color-tomato));
+  }
+
+  &__progress {
+    padding-top: 1rem;
+
+    .progress-bar {
+      background-color: var(--transparent-light);
+    }
+
+    .progress-container__status-text {
+      text-align: center;
+    }
   }
 }

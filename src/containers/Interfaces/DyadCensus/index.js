@@ -30,9 +30,9 @@ const getVariants = () => {
     when: 'afterChildren',
   };
 
-  const translateUp = `${animationTarget - animationOffset}px`;
-  const translateDown = `${animationTarget + animationOffset}px`;
-  const translateTarget = `${animationTarget}px`;
+  const translateUp = `${animationTarget - animationOffset}%`;
+  const translateDown = `${animationTarget + animationOffset}%`;
+  const translateTarget = `${animationTarget}%`;
 
   const pairVariants = {
     show: () => ({
