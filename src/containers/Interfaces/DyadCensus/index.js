@@ -17,37 +17,42 @@ import useSteps from './useSteps';
 import useNetworkEdgeState from './useEdgeState';
 import Button from './Button';
 
-const animationOffset = '200%;';
+const animationOffset = 200;
+const animationTarget = -50;
 
 const getVariants = () => {
   const slowDuration = getCSSVariableAsNumber('--animation-duration-slow-ms') / 1000;
   const duration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
-  const delay = getCSSVariableAsNumber('--animation-duration-slow-ms') / 1000;
+  const delay = getCSSVariableAsNumber('--animation-duration-slow-ms') / 500;
 
   const pairTransition = {
     duration: slowDuration,
     when: 'afterChildren',
   };
 
+  const translateUp = `${animationTarget - animationOffset}px`;
+  const translateDown = `${animationTarget + animationOffset}px`;
+  const translateTarget = `${animationTarget}px`;
+
   const pairVariants = {
     in: ([, shouldDelay]) => ({
-      translateY: '0%',
+      translateY: translateTarget,
+      translateX: '-50%',
       opacity: 1,
-      position: 'static',
       transition: {
         ...pairTransition,
         ...(shouldDelay ? { delay } : {}),
       },
     }),
     initial: ([isForwards]) => ({
-      translateY: isForwards ? animationOffset : `-${animationOffset}`,
+      translateY: isForwards ? translateDown : translateUp,
+      translateX: '-50%',
       opacity: 0,
-      position: 'absolute',
     }),
     exit: ([isForwards, shouldDelay]) => ({
-      translateY: !isForwards ? animationOffset : `-${animationOffset}`,
+      translateY: !isForwards ? translateDown : translateUp,
+      translateX: '-50%',
       opacity: 0,
-      position: 'absolute',
       transition: {
         ...pairTransition,
         ...(shouldDelay ? { delay } : {}),
@@ -166,46 +171,53 @@ const DyadCensus = ({
         />
       </div>
       <div className="interface__main">
-        <div className="dyad-interface__pairs">
-          <AnimatePresence custom={[isForwards, shouldDelay]}>
-            <motion.div
-              className="dyad-interface__pair"
-              key={`${promptIndex}_${state.step}`}
+        <div className="dyad-interface__layout">
+          <div className="dyad-interface__pairs">
+            <AnimatePresence
               custom={[isForwards, shouldDelay]}
-              variants={pairVariants}
-              initial="initial"
-              animate="in"
-              exit="exit"
+              initial={false}
             >
-              <div className="dyad-interface__nodes">
-                <Node {...fromNode} />
-                <motion.div
-                  className="dyad-interface__edge"
-                  style={{ backgroundColor: `var(--${edgeColor})` }}
-                  variants={edgeVariants}
-                  initial="hide"
-                  animate={getHasEdge() ? 'show' : 'hide'}
-                />
-                <Node {...toNode} />
-              </div>
-              <div className="dyad-interface__options">
-                <Button
-                  onClick={handleChange(true)}
-                  selected={!!getHasEdge()}
-                >Yes</Button>
-                <Button
-                  onClick={handleChange(false)}
-                  selected={!getHasEdge() && getHasEdge() !== null}
-                >No</Button>
-              </div>
-            </motion.div>
-          </AnimatePresence>
-        </div>
-        <div className="dyad-interface__progress">
-          <h6 className="progress-container__status-text">
-            <strong>{state.step + 1}</strong> of <strong>{pairs.length}</strong>
-          </h6>
-          <ProgressBar orientation="horizontal" percentProgress={((state.step + 1) / pairs.length) * 100} />
+              <motion.div
+                className="dyad-interface__pair"
+                key={`${promptIndex}_${state.step}`}
+                custom={[isForwards, shouldDelay]}
+                variants={pairVariants}
+                initial="initial"
+                animate="in"
+                exit="exit"
+              >
+                <div className="dyad-interface__nodes">
+                  <Node {...fromNode} />
+                  <motion.div
+                    className="dyad-interface__edge"
+                    style={{ backgroundColor: `var(--${edgeColor})` }}
+                    variants={edgeVariants}
+                    initial="hide"
+                    animate={getHasEdge() ? 'show' : 'hide'}
+                  />
+                  <Node {...toNode} />
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+          <div className="dyad-interface__choice">
+            <div className="dyad-interface__options">
+              <Button
+                onClick={handleChange(true)}
+                selected={!!getHasEdge()}
+              >Yes</Button>
+              <Button
+                onClick={handleChange(false)}
+                selected={!getHasEdge() && getHasEdge() !== null}
+              >No</Button>
+            </div>
+            <div className="dyad-interface__progress">
+              <h6 className="progress-container__status-text">
+                <strong>{state.step + 1}</strong> of <strong>{pairs.length}</strong>
+              </h6>
+              <ProgressBar orientation="horizontal" percentProgress={((state.step + 1) / pairs.length) * 100} />
+            </div>
+          </div>
         </div>
       </div>
     </div>

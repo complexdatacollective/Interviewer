@@ -1,41 +1,48 @@
 .dyad-interface {
-  // container of 'cards'
-  &__pairs {
-    position: relative;
-    width: 100%;
-    min-height: 50px;
-  }
-
-  // pair 'card'
-  &__pair {
-    left: 0;
-    top: 0;
-    width: 100%;
-    // background: var(--light-background);
-    // border-radius: var(--border-radius);
-    margin-top: calc(var(--base-node-size) * .5);
-    padding: calc(var(--base-node-size) * .5) 0 0;
-  }
-
-  &__nodes {
+  &__layout {
     position: absolute;
     top: 0;
-    left: 50%;
+    left: 0;
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    transform: translate(-50%, -50%);
+    flex-direction: column;
+  }
 
-    .node {
-      background: var(--light-background);
-      border-radius: 50%;
-    }
+  &__pairs {
+    position: relative;
+    flex: 1 1 auto;
+  }
+
+  &__choice {
+    background: var(--light-background);
+    border-radius: var(--border-radius);
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    min-width: 50vw;
+    flex-grow: 0;
+  }
+
+  &__pair {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateY(-50%) translateX(-50%);
+  }
+
+  &__nodes {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   &__edge {
     height: 0.5rem;
     z-index: 1;
-    width: 6rem;
+    width: 10rem;
     margin: 0 -1rem;
   }
 
@@ -43,28 +50,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 6rem 0 0;
 
-  }
-
-  &__progress {
-    position: absolute;
-    bottom: 0;
-    left: 50%;;
-    transform: translateX(-50%);
-    width: 25vw;
-  }
-
-  &__button {
-    background: var(--light-background);
-    border-radius: var(--border-radius);
-    padding: 3rem;
-    font-size: 2.5rem;
-    cursor: pointer;
-    user-select: none;
-
-    &:first-child {
-      margin-right: 6rem;
+    .form-field-togglebutton {
+      &:first-child {
+        margin-right: 2rem;
+      }
     }
   }
 }
