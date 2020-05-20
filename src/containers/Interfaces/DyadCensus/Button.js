@@ -1,28 +1,20 @@
 import React from 'react';
-import cx from 'classnames';
 import PropTypes from 'prop-types';
+import ToggleButton from '@codaco/ui/lib/components/Fields/ToggleButton';
 
 const Button = ({
   onClick,
   children,
   selected,
-}) => {
-  const classes = cx(
-    'dyad-interface__button',
-    {
-      'dyad-interface__button--selected': selected,
-    },
-  );
-
-  return (
-    <div
-      className={classes}
-      onClick={onClick}
-    >
-      {children}
-    </div>
-  );
-};
+}) => (
+  <ToggleButton
+    input={{
+      onChange: onClick,
+      value: selected,
+    }}
+    label={children}
+  />
+);
 
 Button.propTypes = {
   children: PropTypes.node.isRequired,

@@ -4,7 +4,6 @@ import { compose } from 'recompose';
 import PropTypes from 'prop-types';
 import { get } from 'lodash';
 import { AnimatePresence, motion } from 'framer-motion';
-import ToggleButton from '@codaco/ui/lib/components/Fields/ToggleButton';
 import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
 import withPrompt from '../../../behaviours/withPrompt';
 import { entityPrimaryKeyProperty } from '../../../ducks/modules/network';
