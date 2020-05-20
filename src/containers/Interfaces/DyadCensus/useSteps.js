@@ -13,7 +13,6 @@ const useSteps = (
     progress: null, // max step reached
     step: 0,
     direction: 'forward',
-    fast: false,
   });
 
   useEffect(() => {
@@ -22,7 +21,6 @@ const useSteps = (
       progress: null, // max step reached
       step: 0,
       direction: 'forward',
-      fast: false,
     }));
   }, [prompt]);
 
@@ -32,7 +30,7 @@ const useSteps = (
     }
   };
 
-  const next = (fast = false) => {
+  const next = () => {
     const nextStep = state.step + 1;
 
     if (nextStep > promptSteps - 1 && prompt >= promptCount - 1) {
@@ -52,11 +50,10 @@ const useSteps = (
       step: nextStep,
       progress: nextProgress,
       direction: 'forward',
-      fast,
     }));
   };
 
-  const previous = (fast = false) => {
+  const previous = () => {
     const nextStep = state.step - 1;
 
     if (nextStep < 0 && prompt === 0) {
@@ -73,7 +70,6 @@ const useSteps = (
       ...s,
       step: nextStep,
       direction: 'backward',
-      fast,
     }));
   };
 

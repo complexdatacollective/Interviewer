@@ -1,3 +1,14 @@
+@mixin recolor-toggle($color) {
+  .form-field-togglebutton__checkbox {
+    &::before {
+      border-color: $color;
+    }
+    &::after {
+      background-color: $color;
+    }
+  }
+}
+
 .dyad-interface {
   &__layout {
     position: absolute;
@@ -19,11 +30,12 @@
   &__choice {
     background: var(--light-background);
     border-radius: var(--border-radius);
-    padding: 3rem;
+    padding: 10rem 3rem 3rem;
     display: flex;
     flex-direction: column;
     min-width: 50vw;
     flex-grow: 0;
+    position: relative;
   }
 
   &__pair {
@@ -50,11 +62,18 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    position: absolute;
+    top: 3rem;
+    left: 50%;
+    transform: translateX(-50%);
+  }
 
-    .form-field-togglebutton {
-      &:first-child {
-        margin-right: 2rem;
-      }
-    }
+  &__yes {
+    margin-right: 2rem;
+    @include recolor-toggle(var(--color-kiwi));
+  }
+
+  &__no {
+    @include recolor-toggle(var(--color-tomato));
   }
 }

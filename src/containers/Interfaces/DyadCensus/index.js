@@ -15,6 +15,7 @@ import PromptSwiper from '../../PromptSwiper';
 import Node from '../../../containers/Node';
 import useSteps from './useSteps';
 import useNetworkEdgeState from './useEdgeState';
+import useAutoAdvance from './useAutoAdvance';
 import Button from './Button';
 
 const animationOffset = 200;
@@ -23,7 +24,6 @@ const animationTarget = -50;
 const getVariants = () => {
   const slowDuration = getCSSVariableAsNumber('--animation-duration-slow-ms') / 1000;
   const duration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
-  const delay = getCSSVariableAsNumber('--animation-duration-slow-ms') / 500;
 
   const pairTransition = {
     duration: slowDuration,
@@ -35,28 +35,22 @@ const getVariants = () => {
   const translateTarget = `${animationTarget}px`;
 
   const pairVariants = {
-    in: ([, shouldDelay]) => ({
+    show: () => ({
       translateY: translateTarget,
       translateX: '-50%',
       opacity: 1,
-      transition: {
-        ...pairTransition,
-        ...(shouldDelay ? { delay } : {}),
-      },
+      transition: pairTransition,
     }),
     initial: ([isForwards]) => ({
       translateY: isForwards ? translateDown : translateUp,
       translateX: '-50%',
       opacity: 0,
     }),
-    exit: ([isForwards, shouldDelay]) => ({
+    hide: ([isForwards]) => ({
       translateY: !isForwards ? translateDown : translateUp,
       translateX: '-50%',
       opacity: 0,
-      transition: {
-        ...pairTransition,
-        ...(shouldDelay ? { delay } : {}),
-      },
+      transition: pairTransition,
     }),
   };
 
@@ -65,7 +59,13 @@ const getVariants = () => {
     hide: { opacity: 0, transition: { duration } },
   };
 
-  return { edgeVariants, pairVariants };
+  const optionVariants = {
+    initial: { opacity: 0, translateX: '0%', transition: { duration } },
+    show: { opacity: 1, translateX: '-50%', transition: { duration } },
+    hide: { opacity: 0, translateX: '-100%', transition: { duration } },
+  };
+
+  return { edgeVariants, pairVariants, optionVariants };
 };
 
 /**
@@ -107,10 +107,7 @@ const DyadCensus = ({
   );
 
   // Auto advance
-  useEffect(() => {
-    if (!isTouched) { return; }
-    nextStep(!isChanged);
-  }, [isTouched]);
+  useAutoAdvance(nextStep, isTouched, isChanged);
 
   const getHasEdge = () => {
     if (edgeState !== null) { return edgeState; }
@@ -148,7 +145,9 @@ const DyadCensus = ({
 
   const handleChange = nextValue =>
     () => {
-      setEdge(nextValue);
+      if (!isTouched) {
+        setEdge(nextValue);
+      }
     };
 
   const pair = getPair();
@@ -156,9 +155,7 @@ const DyadCensus = ({
   const toNode = getNode(pair[1]);
   const isForwards = state.direction !== 'backward'; // .i.e. default to true
 
-  const { edgeVariants, pairVariants } = getVariants();
-
-  const shouldDelay = !state.fast;
+  const { edgeVariants, pairVariants, optionVariants } = getVariants();
 
   return (
     <div className="interface dyad-interface">
@@ -174,17 +171,17 @@ const DyadCensus = ({
         <div className="dyad-interface__layout">
           <div className="dyad-interface__pairs">
             <AnimatePresence
-              custom={[isForwards, shouldDelay]}
+              custom={[isForwards]}
               initial={false}
             >
               <motion.div
                 className="dyad-interface__pair"
                 key={`${promptIndex}_${state.step}`}
-                custom={[isForwards, shouldDelay]}
+                custom={[isForwards]}
                 variants={pairVariants}
                 initial="initial"
-                animate="in"
-                exit="exit"
+                animate="show"
+                exit="hide"
               >
                 <div className="dyad-interface__nodes">
                   <Node {...fromNode} />
@@ -201,16 +198,33 @@ const DyadCensus = ({
             </AnimatePresence>
           </div>
           <div className="dyad-interface__choice">
-            <div className="dyad-interface__options">
-              <Button
-                onClick={handleChange(true)}
-                selected={!!getHasEdge()}
-              >Yes</Button>
-              <Button
-                onClick={handleChange(false)}
-                selected={!getHasEdge() && getHasEdge() !== null}
-              >No</Button>
-            </div>
+            <AnimatePresence
+              custom={[isForwards]}
+              initial={false}
+            >
+              <motion.div
+                key={`${promptIndex}_${state.step}_options`}
+                className="dyad-interface__options"
+                variants={optionVariants}
+                initial="initial"
+                animate="show"
+                exit="hide"
+              >
+                <div className="dyad-interface__yes">
+                  <Button
+                    onClick={handleChange(true)}
+                    selected={!!getHasEdge()}
+                  >Yes</Button>
+                </div>
+                <div className="dyad-interface__no">
+                  <Button
+                    onClick={handleChange(false)}
+                    selected={!getHasEdge() && getHasEdge() !== null}
+                    className="no"
+                  >No</Button>
+                </div>
+              </motion.div>
+            </AnimatePresence>
             <div className="dyad-interface__progress">
               <h6 className="progress-container__status-text">
                 <strong>{state.step + 1}</strong> of <strong>{pairs.length}</strong>
