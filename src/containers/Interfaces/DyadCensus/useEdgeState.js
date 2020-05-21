@@ -18,11 +18,12 @@ const getEdgeInNetwork = (edges, pair, edgeType) => {
 };
 
 const useEdgeState = (
+  dispatch,
   edges,
-  pair,
   edgeType,
-  { dispatch },
-  deps,
+  pair,
+  step,
+  progress,
 ) => {
   const [edgeState, setEdgeState] = useState(
     getEdgeInNetwork(edges, pair, edgeType),
@@ -31,20 +32,38 @@ const useEdgeState = (
   const [isTouched, setIsTouched] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
 
+  const getHasEdge = () => {
+    // Either we set a value for this or it already has an edge
+    if (edgeState !== null) { return !!edgeState; }
+
+    // If we've visited this step previously (progress), and no edge exists consider
+    // this an implicit 'no'
+    if (progress > step) {
+      return false;
+    }
+
+    // Otherwise consider this blank
+    return null;
+  };
+
   const setEdge = (hasEdge = true) => {
-    const edge = getEdgeInNetwork(edges, pair, edgeType);
+    const existingEdge = getEdgeInNetwork(edges, pair, edgeType);
 
     setEdgeState(hasEdge);
+    console.log({
+      hasEdge,
+      getHasEdge: getHasEdge(),
+    });
+    setIsChanged(getHasEdge() !== hasEdge);
     setIsTouched(true);
-    setIsChanged(hasEdge !== !!edge); // TODO: This needs to work for 'No'
 
     if (hasEdge) {
-      if (!edge) {
+      if (!existingEdge) {
         dispatch(sessionsActions.addEdge({ from: pair[0], to: pair[1], type: edgeType }));
       }
     } else {
-      if (!edge) { return; }
-      dispatch(sessionsActions.removeEdge(edge[entityPrimaryKeyProperty]));
+      if (!existingEdge) { return; }
+      dispatch(sessionsActions.removeEdge(existingEdge[entityPrimaryKeyProperty]));
     }
   };
 
@@ -54,9 +73,9 @@ const useEdgeState = (
     setEdgeState(getEdgeInNetwork(edges, pair, edgeType));
     setIsTouched(false);
     setIsChanged(false);
-  }, [...deps]);
+  }, [step]);
 
-  return [edgeState, setEdge, isTouched, isChanged];
+  return [getHasEdge(), setEdge, isTouched, isChanged];
 };
 
 export default useEdgeState;

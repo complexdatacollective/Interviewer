@@ -90,13 +90,15 @@ const DyadCensus = ({
     nodes.find(node => node[entityPrimaryKeyProperty] === id);
 
   const getPair = () => get(pairs, state.substep, null);
+  const pair = getPair();
 
-  const [edgeState, setEdge, isTouched, isChanged] = useNetworkEdgeState(
+  const [hasEdge, setEdge, isTouched, isChanged] = useNetworkEdgeState(
+    dispatch,
     edges,
-    getPair(),
     prompt.edge, // TODO: createEdge?
-    { dispatch },
-    [promptIndex, state.step],
+    pair,
+    state.step,
+    state.progress,
   );
 
   const next = () => {
@@ -117,8 +119,6 @@ const DyadCensus = ({
   };
 
   const back = () => {
-    // validate
-
     // go to next step
     if (state.isStart) {
       onComplete();
@@ -129,7 +129,7 @@ const DyadCensus = ({
       dispatch(sessionsActions.updatePrompt(promptIndex - 1));
     }
 
-    // TODO: chheck state in here
+    // TODO: check state in here
     previousStep();
   };
 
@@ -141,40 +141,25 @@ const DyadCensus = ({
     }
 
     next();
-  }, [previousStep, next]);
+  }, [back, next]);
 
   useEffect(() => {
     registerBeforeNext(beforeNext);
   }, [beforeNext]);
 
-  // Auto advance
   useAutoAdvance(next, isTouched, isChanged);
-
-  const getHasEdge = () => {
-    if (edgeState !== null) { return edgeState; }
-
-    // If we've visited this step previously (progress), and no edge exists consider
-    // this an implicit 'no'
-    if (state.progress > state.step) {
-      return false;
-    }
-
-    // Otherwise consider this blank
-    return null;
-  };
 
   const handleChange = nextValue =>
     () => {
-      if (!isTouched) {
-        setEdge(nextValue);
-      }
+      // 'debounce' clicks, one click (isTouched) should start auto-advance
+      // so ignore further clicks
+      if (isTouched) { return; }
+      setEdge(nextValue);
     };
 
-  const pair = getPair();
   const fromNode = getNode(pair[0]);
   const toNode = getNode(pair[1]);
   const isForwards = state.direction !== 'backward'; // .i.e. default to true
-
   const { edgeVariants, pairVariants } = getVariants();
 
   return (
@@ -210,7 +195,7 @@ const DyadCensus = ({
                     style={{ backgroundColor: `var(--${edgeColor})` }}
                     variants={edgeVariants}
                     initial="hide"
-                    animate={getHasEdge() ? 'show' : 'hide'}
+                    animate={hasEdge ? 'show' : 'hide'}
                   />
                   <Node {...toNode} />
                 </div>
@@ -222,13 +207,13 @@ const DyadCensus = ({
               <div className="dyad-interface__yes">
                 <Button
                   onClick={handleChange(true)}
-                  selected={!!getHasEdge()}
+                  selected={hasEdge}
                 >Yes</Button>
               </div>
               <div className="dyad-interface__no">
                 <Button
                   onClick={handleChange(false)}
-                  selected={!getHasEdge() && getHasEdge() !== null}
+                  selected={!hasEdge && hasEdge !== null}
                   className="no"
                 >No</Button>
               </div>
