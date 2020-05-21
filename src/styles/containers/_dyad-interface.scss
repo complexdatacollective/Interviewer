@@ -3,6 +3,7 @@
     &::before {
       border-color: $color;
     }
+
     &::after {
       background-color: $color;
     }
@@ -73,8 +74,8 @@ $choice-padding: 2rem;
   }
 
   &__yes {
-    margin-right: 4rem;
     @include recolor-toggle(var(--color-kiwi));
+    margin-right: 4rem;
   }
 
   &__no {

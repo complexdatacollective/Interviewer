@@ -26,3 +26,6 @@ export const getPairs = (nodes) => {
 
   return pairs;
 };
+
+export const getNode = (nodes, id) =>
+  nodes.find(node => node[entityPrimaryKeyProperty] === id);

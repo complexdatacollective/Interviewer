@@ -5,22 +5,18 @@ import PropTypes from 'prop-types';
 import { get } from 'lodash';
 import { AnimatePresence } from 'framer-motion';
 import withPrompt from '../../../behaviours/withPrompt';
-import { entityPrimaryKeyProperty } from '../../../ducks/modules/network';
 import { makeNetworkNodesForType as makeGetNodes } from '../../../selectors/interface';
 import { getNetworkEdges as getEdges } from '../../../selectors/network';
 import { getProtocolCodebook } from '../../../selectors/protocol';
 import { actionCreators as sessionsActions } from '../../../ducks/modules/sessions';
 import ProgressBar from '../../../components/ProgressBar';
 import PromptSwiper from '../../PromptSwiper';
-import { getPairs } from './selectors';
+import { getNode, getPairs } from './helpers';
 import useSteps from './useSteps';
 import useNetworkEdgeState from './useEdgeState';
 import useAutoAdvance from './useAutoAdvance';
 import Pair from './Pair';
 import Button from './Button';
-
-const getNode = (nodes, id) =>
-  nodes.find(node => node[entityPrimaryKeyProperty] === id);
 
 /**
   * Dyad Census Interface
@@ -53,7 +49,7 @@ const DyadCensus = ({
   const [hasEdge, setEdge, isTouched, isChanged] = useNetworkEdgeState(
     dispatch,
     edges,
-    prompt.edge, // TODO: createEdge?
+    prompt.createEdge,
     pair,
     state.step,
     state.progress,
@@ -189,7 +185,7 @@ const makeMapStateToProps = () => {
     const nodes = getNodes(state, props);
     const edges = getEdges(state, props);
     const codebook = getProtocolCodebook(state, props);
-    const edgeColor = get(codebook, ['edge', props.prompt.edge, 'color']);
+    const edgeColor = get(codebook, ['edge', props.prompt.createEdge, 'color']);
     const pairs = getPairs(nodes);
 
     return {

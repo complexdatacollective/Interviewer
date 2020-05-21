@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
 import { entityPrimaryKeyProperty } from '../../../../ducks/modules/network';
-import { getPairs } from '../selectors';
+import { getPairs } from '../helpers';
 
 describe('getPairs()', () => {
   it('given a list of nodes it generates a list of all non-directional (e.g. unique) pairs', () => {

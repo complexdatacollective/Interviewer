@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 const getSubStep = (steps, nextStep) => {
   const [r] = steps.reduce(([result, target], step, index) => {
