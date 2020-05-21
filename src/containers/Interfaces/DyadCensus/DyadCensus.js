@@ -43,7 +43,7 @@ const DyadCensus = ({
   edgeColor,
   dispatch,
 }) => {
-  const [isIntro, setIsIntro] = useState(true);
+  const [isIntroduction, setIsIntroduction] = useState(true);
   const [isForwards, setForwards] = useState(true);
   // Number of pairs times number of prompts e.g. `[3, 3, 3]`
   const steps = Array(stage.prompts.length).fill(pairs.length);
@@ -68,8 +68,8 @@ const DyadCensus = ({
   const next = () => {
     setForwards(true);
 
-    if (isIntro) {
-      setIsIntro(false);
+    if (isIntroduction) {
+      setIsIntroduction(false);
       return;
     }
 
@@ -93,8 +93,8 @@ const DyadCensus = ({
     setForwards(false);
 
     // go to next step
-    if (state.isStart && !isIntro) {
-      setIsIntro(true);
+    if (state.isStart && !isIntroduction) {
+      setIsIntroduction(true);
       return;
     }
 
@@ -148,7 +148,7 @@ const DyadCensus = ({
         className="interface__prompt"
         variants={fadeVariants}
         initial="hide"
-        animate={!isIntro ? 'show' : 'hide'}
+        animate={!isIntroduction ? 'show' : 'hide'}
       >
         <PromptSwiper
           forward={promptForward}
@@ -164,7 +164,7 @@ const DyadCensus = ({
               custom={[isForwards]}
               initial={false}
             >
-              { isIntro &&
+              { isIntroduction &&
                 <motion.div
                   className="dyad-interface__introduction"
                   custom={[isForwards]}
@@ -181,7 +181,7 @@ const DyadCensus = ({
                   />
                 </motion.div>
               }
-              { !isIntro &&
+              { !isIntroduction &&
                 <Pair
                   key={`${promptIndex}_${state.step}`}
                   edgeColor={edgeColor}
@@ -197,7 +197,7 @@ const DyadCensus = ({
             className="dyad-interface__choice"
             variants={fadeVariants}
             initial="hide"
-            animate={!isIntro ? 'show' : 'hide'}
+            animate={!isIntroduction ? 'show' : 'hide'}
           >
             <div className="dyad-interface__options">
               <div className="dyad-interface__yes">
