@@ -13,6 +13,18 @@
 $choice-padding: 2rem;
 
 .dyad-interface {
+  &__introduction {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    background: var(--light-background);
+    border-radius: var(--border-radius);
+    padding: $choice-padding;
+    min-width: 50vw;
+    text-align: center;
+  }
+
   &__layout {
     position: absolute;
     top: 0;

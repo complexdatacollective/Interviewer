@@ -7,9 +7,8 @@ import Node from '../../../containers/Node';
 const animationOffset = 200;
 const animationTarget = -50;
 
-export const getVariants = () => {
+export const getPairVariants = () => {
   const slowDuration = getCSSVariableAsNumber('--animation-duration-slow-ms') / 1000;
-  const duration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
 
   const pairTransition = {
     duration: slowDuration,
@@ -20,7 +19,7 @@ export const getVariants = () => {
   const translateDown = `${animationTarget + animationOffset}%`;
   const translateTarget = `${animationTarget}%`;
 
-  const pairVariants = {
+  return {
     show: () => ({
       translateY: translateTarget,
       translateX: '-50%',
@@ -39,13 +38,15 @@ export const getVariants = () => {
       transition: pairTransition,
     }),
   };
+};
 
-  const edgeVariants = {
+export const getEdgeVariants = () => {
+  const duration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
+
+  return {
     show: { opacity: 1, transition: { duration } },
     hide: { opacity: 0, transition: { duration } },
   };
-
-  return { edgeVariants, pairVariants };
 };
 
 const Pair = ({
@@ -55,7 +56,8 @@ const Pair = ({
   hasEdge,
   animateForwards,
 }) => {
-  const { pairVariants, edgeVariants } = getVariants();
+  const pairVariants = getPairVariants();
+  const edgeVariants = getEdgeVariants();
 
   return (
     <motion.div

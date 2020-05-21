@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import PropTypes from 'prop-types';
 import { get } from 'lodash';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import withPrompt from '../../../behaviours/withPrompt';
 import { makeNetworkNodesForType as makeGetNodes } from '../../../selectors/interface';
 import { getNetworkEdges as getEdges } from '../../../selectors/network';
@@ -15,8 +15,13 @@ import { getNode, getPairs } from './helpers';
 import useSteps from './useSteps';
 import useNetworkEdgeState from './useEdgeState';
 import useAutoAdvance from './useAutoAdvance';
-import Pair from './Pair';
+import Pair, { getPairVariants } from './Pair';
 import Button from './Button';
+
+const fadeVariants = {
+  show: { opacity: 1 },
+  hide: { opacity: 0 },
+};
 
 /**
   * Dyad Census Interface
@@ -35,6 +40,8 @@ const DyadCensus = ({
   edgeColor,
   dispatch,
 }) => {
+  const [isIntro, setIsIntro] = useState(true);
+  const [isForwards, setForwards] = useState(true);
   // Number of pairs times number of prompts e.g. `[3, 3, 3]`
   const steps = Array(stage.prompts.length).fill(pairs.length);
   const [state, nextStep, previousStep] = useSteps(steps);
@@ -44,7 +51,7 @@ const DyadCensus = ({
   const pair = get(pairs, state.substep, null);
   const fromNode = getNode(nodes, pair[0]);
   const toNode = getNode(nodes, pair[1]);
-  const isForwards = state.direction !== 'backward'; // .i.e. default to true
+  // const isForwards = state.direction !== 'backward'; // .i.e. default to true
 
   const [hasEdge, setEdge, isTouched, isChanged] = useNetworkEdgeState(
     dispatch,
@@ -56,6 +63,13 @@ const DyadCensus = ({
   );
 
   const next = () => {
+    setForwards(true);
+
+    if (isIntro) {
+      setIsIntro(false);
+      return;
+    }
+
     // validate
 
     // go to next step
@@ -73,6 +87,14 @@ const DyadCensus = ({
   };
 
   const back = () => {
+    setForwards(false);
+
+    // go to next step
+    if (state.isStart && !isIntro) {
+      setIsIntro(true);
+      return;
+    }
+
     // go to next step
     if (state.isStart) {
       onComplete();
@@ -111,16 +133,27 @@ const DyadCensus = ({
       setEdge(nextValue);
     };
 
+          // <ReactMarkdown
+            // source={stage.introductionPanel.text}
+            // allowedTypes={ALLOWED_MARKDOWN_TAGS}
+            // renderers={defaultMarkdownRenderers}
+          // />
+
   return (
     <div className="interface dyad-interface">
-      <div className="interface__prompt">
+      <motion.div
+        className="interface__prompt"
+        variants={fadeVariants}
+        initial="hide"
+        animate={!isIntro ? 'show' : 'hide'}
+      >
         <PromptSwiper
           forward={promptForward}
           backward={promptBackward}
           prompt={prompt}
           prompts={stage.prompts}
         />
-      </div>
+      </motion.div>
       <div className="interface__main">
         <div className="dyad-interface__layout">
           <div className="dyad-interface__pairs">
@@ -128,17 +161,36 @@ const DyadCensus = ({
               custom={[isForwards]}
               initial={false}
             >
-              <Pair
-                key={`${promptIndex}_${state.step}`}
-                edgeColor={edgeColor}
-                hasEdge={hasEdge}
-                animateForwards={isForwards}
-                fromNode={fromNode}
-                toNode={toNode}
-              />
+              { isIntro &&
+                <motion.div
+                  className="dyad-interface__introduction"
+                  custom={[isForwards]}
+                  variants={getPairVariants()}
+                  initial="initial"
+                  animate="show"
+                  exit="hide"
+                >
+                  <h1>{stage.introductionPanel.title}</h1>
+                </motion.div>
+              }
+              { !isIntro &&
+                <Pair
+                  key={`${promptIndex}_${state.step}`}
+                  edgeColor={edgeColor}
+                  hasEdge={hasEdge}
+                  animateForwards={isForwards}
+                  fromNode={fromNode}
+                  toNode={toNode}
+                />
+              }
             </AnimatePresence>
           </div>
-          <div className="dyad-interface__choice">
+          <motion.div
+            className="dyad-interface__choice"
+            variants={fadeVariants}
+            initial="hide"
+            animate={!isIntro ? 'show' : 'hide'}
+          >
             <div className="dyad-interface__options">
               <div className="dyad-interface__yes">
                 <Button
@@ -160,7 +212,7 @@ const DyadCensus = ({
               </h6>
               <ProgressBar orientation="horizontal" percentProgress={((state.step + 1) / pairs.length) * 100} />
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </div>
