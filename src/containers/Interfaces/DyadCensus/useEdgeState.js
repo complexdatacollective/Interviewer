@@ -50,10 +50,6 @@ const useEdgeState = (
     const existingEdge = getEdgeInNetwork(edges, pair, edgeType);
 
     setEdgeState(hasEdge);
-    console.log({
-      hasEdge,
-      getHasEdge: getHasEdge(),
-    });
     setIsChanged(getHasEdge() !== hasEdge);
     setIsTouched(true);
 
