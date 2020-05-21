@@ -26,6 +26,8 @@ const fadeVariants = {
   hide: { opacity: 0 },
 };
 
+const canSkip = false;
+
 /**
   * Dyad Census Interface
   */
@@ -73,7 +75,10 @@ const DyadCensus = ({
       return;
     }
 
-    // validate
+    // check value has been set
+    if (!canSkip && hasEdge === null) {
+      return;
+    }
 
     // go to next step
     if (state.isEnd) {
