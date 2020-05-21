@@ -12,6 +12,7 @@ import { getProtocolCodebook } from '../../../selectors/protocol';
 import { actionCreators as sessionsActions } from '../../../ducks/modules/sessions';
 import ProgressBar from '../../../components/ProgressBar';
 import PromptSwiper from '../../PromptSwiper';
+import { getPairs } from './selectors';
 import useSteps from './useSteps';
 import useNetworkEdgeState from './useEdgeState';
 import useAutoAdvance from './useAutoAdvance';
@@ -188,28 +189,8 @@ const makeMapStateToProps = () => {
     const nodes = getNodes(state, props);
     const edges = getEdges(state, props);
     const codebook = getProtocolCodebook(state, props);
-    const nodeIds = nodes.map(node => node[entityPrimaryKeyProperty]);
-
     const edgeColor = get(codebook, ['edge', props.prompt.edge, 'color']);
-
-    // mutally exclusive only
-    const pairs = nodeIds.reduce(
-      ({ result, pool }, id) => {
-        const nextPool = pool.filter(alterId => alterId !== id);
-
-        if (nextPool.length === 0) {
-          return result;
-        }
-
-        const newPairs = nextPool.map(alterId => ([id, alterId]));
-
-        return {
-          result: [...result, ...newPairs],
-          pool: nextPool,
-        };
-      },
-      { pool: nodeIds, result: [] },
-    );
+    const pairs = getPairs(nodes);
 
     return {
       pairs,
