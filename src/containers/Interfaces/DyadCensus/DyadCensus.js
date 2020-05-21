@@ -4,6 +4,9 @@ import { compose } from 'recompose';
 import PropTypes from 'prop-types';
 import { get } from 'lodash';
 import { AnimatePresence, motion } from 'framer-motion';
+import ReactMarkdown from 'react-markdown';
+import defaultMarkdownRenderers from '../../../utils/markdownRenderers';
+import { ALLOWED_MARKDOWN_TAGS } from '../../../config';
 import withPrompt from '../../../behaviours/withPrompt';
 import { makeNetworkNodesForType as makeGetNodes } from '../../../selectors/interface';
 import { getNetworkEdges as getEdges } from '../../../selectors/network';
@@ -171,6 +174,11 @@ const DyadCensus = ({
                   exit="hide"
                 >
                   <h1>{stage.introductionPanel.title}</h1>
+                  <ReactMarkdown
+                    source={stage.introductionPanel.text}
+                    allowedTypes={ALLOWED_MARKDOWN_TAGS}
+                    renderers={defaultMarkdownRenderers}
+                  />
                 </motion.div>
               }
               { !isIntro &&
