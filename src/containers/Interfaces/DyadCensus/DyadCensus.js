@@ -208,7 +208,7 @@ const DyadCensus = ({
               <div className="dyad-interface__yes">
                 <Button
                   onClick={handleChange(true)}
-                  selected={hasEdge}
+                  selected={!!hasEdge && hasEdge !== null}
                 >Yes</Button>
               </div>
               <div className="dyad-interface__no">
