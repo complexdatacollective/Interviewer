@@ -15,7 +15,7 @@ import { actionCreators as sessionsActions } from '../../../ducks/modules/sessio
 import { actionCreators as navigateActions } from '../../../ducks/modules/navigate';
 import ProgressBar from '../../../components/ProgressBar';
 import PromptSwiper from '../../PromptSwiper';
-import { getNodes, getPairs } from './helpers';
+import { getPairs, getNodePair } from './helpers';
 import useSteps from './useSteps';
 import useNetworkEdgeState from './useEdgeState';
 import useAutoAdvance from './useAutoAdvance';
@@ -54,7 +54,7 @@ const DyadCensus = ({
   const [stepsState, nextStep, previousStep] = useSteps(steps);
 
   const pair = get(pairs, stepsState.substep, null);
-  const [fromNode, toNode] = getNodes(nodes, pair);
+  const [fromNode, toNode] = getNodePair(nodes, pair);
 
   const [hasEdge, setEdge, isTouched, isChanged] = useNetworkEdgeState(
     dispatch,
