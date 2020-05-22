@@ -14,7 +14,7 @@ import { getProtocolCodebook } from '../../../selectors/protocol';
 import { actionCreators as sessionsActions } from '../../../ducks/modules/sessions';
 import ProgressBar from '../../../components/ProgressBar';
 import PromptSwiper from '../../PromptSwiper';
-import { getNode, getPairs } from './helpers';
+import { getNodes, getPairs } from './helpers';
 import useSteps from './useSteps';
 import useNetworkEdgeState from './useEdgeState';
 import useAutoAdvance from './useAutoAdvance';
@@ -47,28 +47,32 @@ const DyadCensus = ({
 }) => {
   const [isIntroduction, setIsIntroduction] = useState(true);
   const [isForwards, setForwards] = useState(true);
+
   // Number of pairs times number of prompts e.g. `[3, 3, 3]`
-  const steps = Array(stage.prompts.length).fill(pairs.length);
-  const [state, nextStep, previousStep] = useSteps(steps);
+  const steps = Array(stage.prompts.length).fill(get(pairs, 'length', 0));
+  const [stepsState, nextStep, previousStep] = useSteps(steps);
 
-  if (pairs.length === 0) { return null; }
+  console.log(stepsState);
 
-  const pair = get(pairs, state.substep, null);
-  const fromNode = getNode(nodes, pair[0]);
-  const toNode = getNode(nodes, pair[1]);
-  // const isForwards = state.direction !== 'backward'; // .i.e. default to true
+  const pair = get(pairs, stepsState.substep, null);
+  const [fromNode, toNode] = getNodes(nodes, pair);
 
   const [hasEdge, setEdge, isTouched, isChanged] = useNetworkEdgeState(
     dispatch,
     edges,
     prompt.createEdge,
     pair,
-    state.step,
-    state.progress,
+    stepsState.step,
+    stepsState.progress,
   );
 
   const next = () => {
     setForwards(true);
+
+    if (isIntroduction && stepsState.isEnd) {
+      console.log('bye!');
+      return;
+    }
 
     if (isIntroduction) {
       setIsIntroduction(false);
@@ -81,12 +85,12 @@ const DyadCensus = ({
     }
 
     // go to next step
-    if (state.isEnd) {
+    if (stepsState.isEnd) {
       onComplete();
       return;
     }
 
-    if (state.isStageEnd) {
+    if (stepsState.isStageEnd) {
       dispatch(sessionsActions.updatePrompt(promptIndex + 1));
     }
 
@@ -98,18 +102,18 @@ const DyadCensus = ({
     setForwards(false);
 
     // go to next step
-    if (state.isStart && !isIntroduction) {
+    if (stepsState.isStart && !isIntroduction) {
       setIsIntroduction(true);
       return;
     }
 
     // go to next step
-    if (state.isStart) {
+    if (stepsState.isStart) {
       onComplete();
       return;
     }
 
-    if (state.isStageStart) {
+    if (stepsState.isStageStart) {
       dispatch(sessionsActions.updatePrompt(promptIndex - 1));
     }
 
@@ -140,12 +144,6 @@ const DyadCensus = ({
       if (isTouched) { return; }
       setEdge(nextValue);
     };
-
-          // <ReactMarkdown
-            // source={stage.introductionPanel.text}
-            // allowedTypes={ALLOWED_MARKDOWN_TAGS}
-            // renderers={defaultMarkdownRenderers}
-          // />
 
   return (
     <div className="interface dyad-interface">
@@ -188,7 +186,7 @@ const DyadCensus = ({
               }
               { !isIntroduction &&
                 <Pair
-                  key={`${promptIndex}_${state.step}`}
+                  key={`${promptIndex}_${stepsState.step}`}
                   edgeColor={edgeColor}
                   hasEdge={hasEdge}
                   animateForwards={isForwards}
@@ -221,9 +219,9 @@ const DyadCensus = ({
             </div>
             <div className="dyad-interface__progress">
               <h6 className="progress-container__status-text">
-                <strong>{state.substep + 1}</strong> of <strong>{pairs.length}</strong>
+                <strong>{stepsState.substep + 1}</strong> of <strong>{pairs.length}</strong>
               </h6>
-              <ProgressBar orientation="horizontal" percentProgress={((state.step + 1) / pairs.length) * 100} />
+              <ProgressBar orientation="horizontal" percentProgress={((stepsState.step + 1) / pairs.length) * 100} />
             </div>
           </motion.div>
         </div>

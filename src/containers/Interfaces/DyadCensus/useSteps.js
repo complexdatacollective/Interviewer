@@ -16,22 +16,44 @@ const getSubStep = (steps, nextStep) => {
   return r;
 };
 
+const updateState = ({
+  step,
+  substep,
+  stage,
+  direction,
+}) =>
+  state => ({
+    ...state,
+    step,
+    progress: step > state.progress ? step : state.progress,
+    substep,
+    stage,
+    direction,
+    isStageStart: substep === 0,
+    isStageEnd: substep >= state.steps[stage] - 1,
+    isStart: step === 0,
+    isEnd: step >= state.totalSteps - 1,
+  });
+
 const useSteps = (
   steps = [], // map of steps per prompt, e.g. [3, 2, 1]
 ) => {
   const totalSteps = steps.reduce((count, step) => count + step, 0);
 
-  const [state, setState] = useState({
-    progress: null, // max step reached
-    step: 0,
-    substep: 0,
-    stage: 0,
-    direction: 'forward',
-    isStageStart: true,
-    isStageEnd: false,
-    isStart: true,
-    isEnd: false,
-  });
+  const initialValues = {
+    steps,
+    totalSteps,
+    progress: null,
+  };
+
+  const [state, setState] = useState(
+    updateState({
+      step: 0,
+      substep: 0,
+      stage: 0,
+      direction: 'forward',
+    })(initialValues),
+  );
 
   const next = () => {
     const nextStep = state.step + 1;
@@ -40,20 +62,13 @@ const useSteps = (
       return;
     }
 
-    const nextProgress = nextStep > state.progress ? nextStep : state.progress;
     const substep = getSubStep(steps, nextStep);
 
-    setState(s => ({
-      ...s,
+    setState(updateState({
       step: nextStep,
-      progress: nextProgress,
       substep: substep.step,
       stage: substep.stage,
       direction: 'forward',
-      isStageStart: substep.step === 0,
-      isStageEnd: substep.step >= steps[substep.stage] - 1,
-      isStart: nextStep === 0,
-      isEnd: nextStep === totalSteps - 1,
     }));
   };
 
@@ -66,16 +81,11 @@ const useSteps = (
 
     const substep = getSubStep(steps, nextStep);
 
-    setState(s => ({
-      ...s,
+    setState(updateState({
       step: nextStep,
       substep: substep.step,
       stage: substep.stage,
       direction: 'backward',
-      isStageStart: substep.step === 0,
-      isStageEnd: substep.step >= steps[substep.stage] - 1,
-      isStart: nextStep === 0,
-      isEnd: nextStep === totalSteps - 1,
     }));
   };
 

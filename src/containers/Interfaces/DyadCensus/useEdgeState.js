@@ -5,6 +5,7 @@ import { entityPrimaryKeyProperty } from '../../../ducks/modules/network';
 // TODO: This can just redux actions now
 
 const getEdgeInNetwork = (edges, pair, edgeType) => {
+  if (!pair) { return null; }
   const [a, b] = pair;
 
   const edge = edges.find(({ from, to, type }) => (
@@ -33,6 +34,8 @@ const useEdgeState = (
   const [isChanged, setIsChanged] = useState(false);
 
   const getHasEdge = () => {
+    if (!pair) { return null; }
+
     // Either we set a value for this or it already has an edge
     if (edgeState !== null) { return !!edgeState; }
 
@@ -47,6 +50,8 @@ const useEdgeState = (
   };
 
   const setEdge = (hasEdge = true) => {
+    if (!pair) { return; }
+
     const existingEdge = getEdgeInNetwork(edges, pair, edgeType);
 
     setEdgeState(hasEdge);
