@@ -12,6 +12,7 @@ import { makeNetworkNodesForType as makeGetNodes } from '../../../selectors/inte
 import { getNetworkEdges as getEdges } from '../../../selectors/network';
 import { getProtocolCodebook } from '../../../selectors/protocol';
 import { actionCreators as sessionsActions } from '../../../ducks/modules/sessions';
+import { actionCreators as navigateActions } from '../../../ducks/modules/navigate';
 import ProgressBar from '../../../components/ProgressBar';
 import PromptSwiper from '../../PromptSwiper';
 import { getNodes, getPairs } from './helpers';
@@ -52,8 +53,6 @@ const DyadCensus = ({
   const steps = Array(stage.prompts.length).fill(get(pairs, 'length', 0));
   const [stepsState, nextStep, previousStep] = useSteps(steps);
 
-  console.log(stepsState);
-
   const pair = get(pairs, stepsState.substep, null);
   const [fromNode, toNode] = getNodes(nodes, pair);
 
@@ -62,19 +61,22 @@ const DyadCensus = ({
     edges,
     prompt.createEdge,
     pair,
-    stepsState.step,
-    stepsState.progress,
+    stepsState.isCompletedStep,
+    [stepsState.step],
   );
 
   const next = () => {
     setForwards(true);
 
-    if (isIntroduction && stepsState.isEnd) {
-      console.log('bye!');
-      return;
-    }
-
     if (isIntroduction) {
+      // If we're on the introduction and also at the end of steps,
+      // then there are no pairs and we should go to the next stage.
+      // In this case 'onComplete()', would take us to the next prompt
+      // which is going to be empty (still no pairs!).
+      if (stepsState.isEnd) {
+        dispatch(navigateActions.goToNextStage());
+        return;
+      }
       setIsIntroduction(false);
       return;
     }

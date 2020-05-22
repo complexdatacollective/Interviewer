@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react';
 import { actionCreators as sessionsActions } from '../../../ducks/modules/sessions';
 import { entityPrimaryKeyProperty } from '../../../ducks/modules/network';
 
-// TODO: This can just redux actions now
-
 const getEdgeInNetwork = (edges, pair, edgeType) => {
   if (!pair) { return null; }
   const [a, b] = pair;
@@ -18,13 +16,29 @@ const getEdgeInNetwork = (edges, pair, edgeType) => {
   return edge;
 };
 
+/**
+ * Manages a virtual edge state between the current pair,
+ * taking into account where we are in the 'steps', and the
+ * actual state of the edge in the network.
+ *
+ * The latest Redux version would allow the removal of
+ * dispatch, and the passed in state (edges, edgeType).
+ *
+ * @param {function} dispatch - Redux dispatcher
+ * @param {array} edges - List of all the edges relavent to this stage
+ * @param {string} edgeState - Type of edge relevant to this prompt
+ * @param {array} pair - Pair of node ids in format `[a, b]`
+ * @param {boolean} isCompletedStep - If this step has been completed, we
+ * infer that no edge means that the participant selected 'no'
+ * @param {array} deps - If these deps are changed, reset
+ */
 const useEdgeState = (
   dispatch,
   edges,
   edgeType,
   pair,
-  step,
-  progress,
+  isCompletedStep,
+  deps,
 ) => {
   const [edgeState, setEdgeState] = useState(
     getEdgeInNetwork(edges, pair, edgeType),
@@ -39,9 +53,9 @@ const useEdgeState = (
     // Either we set a value for this or it already has an edge
     if (edgeState !== null) { return !!edgeState; }
 
-    // If we've visited this step previously (progress), and no edge exists consider
-    // this an implicit 'no'
-    if (progress > step) {
+    // If we've visited this step previously, and no edge
+    // exists consider this an implicit 'no'
+    if (isCompletedStep) {
       return false;
     }
 
@@ -74,7 +88,7 @@ const useEdgeState = (
     setEdgeState(getEdgeInNetwork(edges, pair, edgeType));
     setIsTouched(false);
     setIsChanged(false);
-  }, [step]);
+  }, deps);
 
   return [getHasEdge(), setEdge, isTouched, isChanged];
 };
