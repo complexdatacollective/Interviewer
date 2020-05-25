@@ -86,44 +86,32 @@ const DyadCensus = ({
       return;
     }
 
-    // go to next step
-    if (stepsState.isEnd) {
-      onComplete();
-      return;
-    }
-
     if (stepsState.isStageEnd) {
-      dispatch(sessionsActions.updatePrompt(promptIndex + 1));
+      dispatch(navigateActions.goToNext());
     }
 
-    // TODO: chheck state in here
+    if (stepsState.isEnd) { return; }
+
     nextStep();
   };
 
   const back = () => {
     setForwards(false);
 
-    // go to next step
     if (stepsState.isStart && !isIntroduction) {
       setIsIntroduction(true);
       return;
     }
 
-    // go to next step
-    if (stepsState.isStart) {
-      onComplete();
-      return;
-    }
-
     if (stepsState.isStageStart) {
-      dispatch(sessionsActions.updatePrompt(promptIndex - 1));
+      dispatch(navigateActions.goToNext(-1));
     }
 
-    // TODO: check state in here
+    if (stepsState.isStart) { return; }
+
     previousStep();
   };
 
-  // TODO: Should this also receive an onComplete method?
   const beforeNext = useCallback((direction) => {
     if (direction < 0) {
       back();

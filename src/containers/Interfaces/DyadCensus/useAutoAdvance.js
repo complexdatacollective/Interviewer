@@ -10,9 +10,12 @@ import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
  * @param {boolean} isTouched - Whether or not an option has been selected
  * @param {boolean} isChanged - Whether or not the option has changed value
  */
-const useAutoAdvance = (next, isTouched, isChanged) => {
+const useAutoAdvance = (_next, isTouched, isChanged) => {
   const timer = useRef();
+  const next = useRef();
   const delay = getCSSVariableAsNumber('--animation-duration-standard-ms');
+
+  next.current = _next;
 
   // Auto advance
   useEffect(() => {
@@ -20,9 +23,9 @@ const useAutoAdvance = (next, isTouched, isChanged) => {
       if (timer.current) { clearTimeout(timer.current); }
 
       if (isChanged) {
-        timer.current = setTimeout(next, delay);
+        timer.current = setTimeout(next.current, delay);
       } else {
-        next();
+        next.current();
       }
     }
 
