@@ -221,9 +221,9 @@ const DyadCensus = ({
             </div>
             <div className="dyad-interface__progress">
               <h6 className="progress-container__status-text">
-                <strong>{stepsState.substep + 1}</strong> of <strong>{pairs.length}</strong>
+                <strong>{stepsState.step + 1}</strong> of <strong>{stepsState.totalSteps}</strong>
               </h6>
-              <ProgressBar orientation="horizontal" percentProgress={((stepsState.substep + 1) / pairs.length) * 100} />
+              <ProgressBar orientation="horizontal" percentProgress={((stepsState.step + 1) / stepsState.totalSteps) * 100} />
             </div>
           </motion.div>
         </div>
