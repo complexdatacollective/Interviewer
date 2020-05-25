@@ -11,7 +11,6 @@ import withPrompt from '../../../behaviours/withPrompt';
 import { makeNetworkNodesForType as makeGetNodes } from '../../../selectors/interface';
 import { getNetworkEdges as getEdges } from '../../../selectors/network';
 import { getProtocolCodebook } from '../../../selectors/protocol';
-import { actionCreators as sessionsActions } from '../../../ducks/modules/sessions';
 import { actionCreators as navigateActions } from '../../../ducks/modules/navigate';
 import ProgressBar from '../../../components/ProgressBar';
 import PromptSwiper from '../../PromptSwiper';
@@ -33,7 +32,6 @@ const canSkip = false;
   * Dyad Census Interface
   */
 const DyadCensus = ({
-  onComplete,
   registerBeforeNext,
   promptId: promptIndex, // TODO: what is going on here?
   prompt,
