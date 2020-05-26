@@ -11,6 +11,7 @@ const ADD_SESSION = 'ADD_SESSION';
 const LOAD_SESSION = 'LOAD_SESSION';
 const UPDATE_PROMPT = 'UPDATE_PROMPT';
 const UPDATE_STAGE = 'UPDATE_STAGE';
+const UPDATE_CASE_ID = 'UPDATE_CASE_ID';
 const REMOVE_SESSION = 'REMOVE_SESSION';
 const EXPORT_SESSIONS_START = 'EXPORT_SESSIONS_START';
 const EXPORT_SESSIONS_RESET = 'EXPORT_SESSIONS_RESET';
@@ -60,6 +61,7 @@ const getReducer = network =>
             promptIndex: 0,
             stageIndex: 0,
             caseId: action.caseId,
+            createdAt: Date.now(),
             network: network(state.network, action),
           }),
         };
@@ -79,6 +81,14 @@ const getReducer = network =>
           [action.sessionId]: withTimestamp({
             ...state[action.sessionId],
             stageIndex: action.stageIndex,
+          }),
+        };
+      case UPDATE_CASE_ID:
+        return {
+          ...state,
+          [action.sessionId]: withTimestamp({
+            ...state[action.sessionId],
+            caseId: action.caseId,
           }),
         };
       case REMOVE_SESSION:
@@ -353,6 +363,16 @@ const addSession = (caseId, protocolUID) => (dispatch) => {
     .then(() => id);
 };
 
+const updateCaseId = caseId => (dispatch, getState) => {
+  const { activeSessionId } = getState();
+
+  dispatch({
+    type: UPDATE_CASE_ID,
+    sessionId: activeSessionId,
+    caseId,
+  });
+};
+
 const loadSession = () => (dispatch) => {
   dispatch({
     type: LOAD_SESSION,
@@ -486,6 +506,7 @@ const actionCreators = {
   loadSession,
   updatePrompt,
   updateStage,
+  updateCaseId,
   removeSession,
   sessionExportStart,
   sessionExportSucceeded,
@@ -500,6 +521,7 @@ const actionTypes = {
   LOAD_SESSION,
   UPDATE_PROMPT,
   UPDATE_STAGE,
+  UPDATE_CASE_ID,
   REMOVE_SESSION,
   EXPORT_SESSION_FAILED,
   EXPORT_SESSIONS_START,

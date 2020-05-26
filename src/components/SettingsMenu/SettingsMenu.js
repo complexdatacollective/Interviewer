@@ -5,11 +5,13 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { getCSSVariableAsNumber, getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
+import { getActiveSession } from '../../selectors/session';
 import Scroller from '../Scroller';
 import VisualPreferences from './Sections/VisualPreferences';
 import DeveloperTools from './Sections/DeveloperTools';
 import About from './Sections/About';
 import Pairing from './Sections/Pairing';
+import SessionInformation from './Sections/SessionInformation';
 import ExportOptions from './Sections/ExportOptions';
 import CloseButton from '../CloseButton';
 
@@ -17,6 +19,7 @@ const SettingsMenu = (props) => {
   const {
     closeMenu,
     settingsMenuOpen,
+    isActiveSession,
   } = props;
 
   const baseAnimationDuration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
@@ -26,6 +29,7 @@ const SettingsMenu = (props) => {
     'Visual Preferences': VisualPreferences,
     'Data Export Options': ExportOptions,
     Pairing,
+    ...(isActiveSession && { 'Session Information': SessionInformation }),
     'Developer Options': DeveloperTools,
     About,
   };
@@ -179,6 +183,7 @@ const SettingsMenu = (props) => {
 };
 
 const mapStateToProps = state => ({
+  isActiveSession: !!getActiveSession(state),
   settingsMenuOpen: state.ui.settingsMenuOpen,
 });
 
