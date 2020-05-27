@@ -1,5 +1,5 @@
 import { reject, find, isMatch, omit, keys, get } from 'lodash';
-import uuidv4 from '../../utils/uuid';
+import uuid from 'uuid/v4';
 
 /*
  * For actionCreators see `src/ducks/modules/sessions`
@@ -31,7 +31,7 @@ const ADD_SESSION = 'ADD_SESSION';
 // Initial network model structure
 const getInitialState = () => ({
   ego: {
-    [entityPrimaryKeyProperty]: uuidv4(),
+    [entityPrimaryKeyProperty]: uuid(),
     [entityAttributesProperty]: {},
   },
   nodes: [],
@@ -81,7 +81,7 @@ export const getEntityAttributes = node => node[entityAttributesProperty] || {};
 const formatNodeAttributes = (modelData, attributeData) => ({
   ...omit(modelData, 'promptId'),
   [entityPrimaryKeyProperty]:
-    modelData[entityPrimaryKeyProperty] || uuidv4(),
+    modelData[entityPrimaryKeyProperty] || uuid(),
   [entityAttributesProperty]: {
     ...modelData[entityAttributesProperty],
     ...attributeData,
@@ -99,7 +99,7 @@ const formatNodeAttributes = (modelData, attributeData) => ({
 const formatEdgeAttributes = (modelData, attributeData) => ({
   ...modelData,
   [entityPrimaryKeyProperty]:
-    modelData[entityPrimaryKeyProperty] || uuidv4(),
+    modelData[entityPrimaryKeyProperty] || uuid(),
   [entityAttributesProperty]: {
     ...modelData[entityAttributesProperty],
     ...attributeData,

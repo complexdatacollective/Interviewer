@@ -1,19 +1,19 @@
 /* eslint-env jest */
 /* eslint-disable @codaco/spellcheck/spell-checker */
-
+import uuid from 'uuid/v4';
 import reducer,
 { actionTypes,
   actionCreators,
   entityPrimaryKeyProperty as PK,
   entityAttributesProperty,
 } from '../network';
-import uuidv4 from '../../../utils/uuid';
 
-jest.mock('../../../utils/uuid');
+
+jest.mock('uuid');
 
 const mockState = {
   ego: {
-    [PK]: uuidv4(),
+    [PK]: uuid(),
   },
   nodes: [],
   edges: [],
