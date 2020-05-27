@@ -3,6 +3,7 @@ import NameGenerator from './stage--NameGenerator.png';
 import NameGeneratorQuickAdd from './stage--NameGeneratorQuickAdd.png';
 import NameGeneratorList from './stage--NameGeneratorList.png';
 import NameGeneratorAutoComplete from './stage--NameGeneratorAutoComplete.png';
+import DyadCensus from './stage--DyadCensus.png';
 import OrdinalBin from './stage--OrdinalBin.png';
 import Sociogram from './stage--Sociogram.png';
 import Narrative from './stage--Narrative.png';
@@ -18,6 +19,7 @@ export default {
   NameGeneratorQuickAdd,
   NameGeneratorList,
   NameGeneratorAutoComplete,
+  DyadCensus,
   Narrative,
   Information,
   OrdinalBin,
