@@ -57,7 +57,7 @@ class FinishSession extends Component {
         type: 'Warning',
         title: 'Finish and delete?',
         confirmLabel: 'Finish and delete',
-        onConfirm: () => this.props.endSession(this.state.deleteAfterFinish),
+        onConfirm: () => this.props.endSession(this.state.deleteAfterFinish, true),
         message: (
           <React.Fragment>
             <p>
@@ -70,7 +70,7 @@ class FinishSession extends Component {
         ),
       });
     } else {
-      this.props.endSession(this.state.deleteAfterFinish);
+      this.props.endSession(this.state.deleteAfterFinish, true);
     }
   };
 

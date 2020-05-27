@@ -13,7 +13,7 @@ import { ServerAddressForm, DiscoveredServerList } from '../../components/Setup'
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import Overlay from '../Overlay';
-import { asExportableNetwork } from '../../utils/networkFormat';
+import { asNetworkWithSessionVariables } from '../../utils/networkFormat';
 import PairedServerWrapper from '../../components/Setup/PairedServerWrapper';
 
 /**
@@ -162,13 +162,11 @@ class ExportSessionsOverlay extends PureComponent {
     this.props.bulkServerExportSessions(sessionList.map((sessionId) => {
       const session = this.props.sessions[sessionId];
       const sessionProtocolUID = session.protocolUID;
-      const sessionCodebook = this.props.installedProtocols[sessionProtocolUID].codebook;
       const sessionProtocol = this.props.installedProtocols[sessionProtocolUID];
 
-      return asExportableNetwork(
+      return asNetworkWithSessionVariables(
         sessionId,
         session,
-        sessionCodebook,
         sessionProtocol,
       );
     }))
@@ -196,10 +194,9 @@ class ExportSessionsOverlay extends PureComponent {
       const sessionProtocol =
         this.props.installedProtocols[this.props.sessions[session].protocolUID];
 
-      return asExportableNetwork(
+      return asNetworkWithSessionVariables(
         session,
         this.props.sessions[session],
-        sessionProtocol.codebook,
         sessionProtocol,
       );
     }))

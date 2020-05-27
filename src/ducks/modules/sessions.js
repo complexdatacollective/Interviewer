@@ -8,6 +8,7 @@ import networkReducer, { actionTypes as networkActionTypes, actionCreators as ne
 import { sessionProperty, remoteProtocolProperty } from '../../utils/network-exporters/src/utils/reservedAttributes';
 
 const ADD_SESSION = 'ADD_SESSION';
+const FINISH_SESSION = 'FINISH_SESSION';
 const LOAD_SESSION = 'LOAD_SESSION';
 const UPDATE_PROMPT = 'UPDATE_PROMPT';
 const UPDATE_STAGE = 'UPDATE_STAGE';
@@ -61,6 +62,15 @@ const getReducer = network =>
             stageIndex: 0,
             caseId: action.caseId,
             network: network(state.network, action),
+            startedAt: Date.now(),
+          }),
+        };
+      case FINISH_SESSION:
+        return {
+          ...state,
+          [action.sessionId]: withTimestamp({
+            ...state[action.sessionId],
+            finishedAt: Date.now(),
           }),
         };
       case LOAD_SESSION:
@@ -388,6 +398,11 @@ function removeSession(id) {
   };
 }
 
+const finishSession = id => ({
+  type: FINISH_SESSION,
+  sessionId: id,
+});
+
 const sessionExportStart = sessionIDs => ({
   type: EXPORT_SESSIONS_START,
   sessionIDs,
@@ -444,8 +459,6 @@ const bulkServerExportSessions = sessionList => (dispatch, getState) => {
         sessionList.map(session => (session.sessionVariables[sessionProperty])),
       ));
 
-      console.log(sessionList);
-      debugger;
       return sessionList.reduce(
         (previousSession, nextSession) =>
           previousSession
@@ -494,6 +507,7 @@ const actionCreators = {
   updatePrompt,
   updateStage,
   removeSession,
+  finishSession,
   sessionExportStart,
   sessionExportSucceeded,
   sessionExportReset,
@@ -504,6 +518,7 @@ const actionCreators = {
 
 const actionTypes = {
   ADD_SESSION,
+  FINISH_SESSION,
   LOAD_SESSION,
   UPDATE_PROMPT,
   UPDATE_STAGE,
