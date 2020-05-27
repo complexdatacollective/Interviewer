@@ -41,16 +41,8 @@
   }
 
   &--preview {
-    .app-settings {
+    .session-panel {
       pointer-events: none;
-    }
-
-    .protocol {
-      .timeline {
-        .progress-bar {
-          pointer-events: none;
-        }
-      }
     }
   }
 }
