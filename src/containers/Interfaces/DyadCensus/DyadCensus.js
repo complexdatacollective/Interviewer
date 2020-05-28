@@ -27,21 +27,13 @@ const fadeVariants = {
   hide: { opacity: 0 },
 };
 
-const translateChoiceDown = '120%';
-const translateChoiceUp = '0%';
-
 const choiceVariants = {
-  initial: ([isForwards]) => ({
-    opacity: 0,
-    translateX: '-50%',
-    translateY: !isForwards ? translateChoiceUp : translateChoiceDown,
-  }),
   show: { opacity: 1, translateY: '0%', translateX: '-50%', transition: { delay: 0.25 } },
-  hide: ([isForwards]) => ({
+  hide: {
     opacity: 0,
     translateX: '-50%',
-    translateY: isForwards ? translateChoiceUp : translateChoiceDown,
-  }),
+    translateY: '120%',
+  },
 };
 
 const introVariants = {
@@ -228,13 +220,12 @@ const DyadCensus = ({
                   </AnimatePresence>
                 </div>
                 <div className="dyad-interface__choices">
-                  <AnimatePresence custom={[isForwards]}>
+                  <AnimatePresence>
                     <motion.div
                       key={stepsState.step}
-                      custom={[isForwards]}
                       className={choiceClasses}
                       variants={choiceVariants}
-                      initial="initial"
+                      initial="hide"
                       animate="show"
                       exit="hide"
                     >
