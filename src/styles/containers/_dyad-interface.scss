@@ -10,6 +10,29 @@
   }
 }
 
+@keyframes shake {
+  10%,
+  90% {
+    transform: translate3d(-0.1rem, 0, 0);
+  }
+
+  20%,
+  80% {
+    transform: translate3d(0.2rem, 0, 0);
+  }
+
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-0.4rem, 0, 0);
+  }
+
+  40%,
+  60% {
+    transform: translate3d(0.4rem, 0, 0);
+  }
+}
+
 $choice-padding: 2rem;
 
 .dyad-interface {
@@ -62,6 +85,13 @@ $choice-padding: 2rem;
     border-radius: var(--border-radius);
     overflow: hidden;
     text-align: center;
+    margin-bottom: 1.25rem;
+
+    &--invalid {
+      outline: 0.5rem solid var(--error);
+      outline-offset: 0.75rem;
+      animation: shake 0.82s cubic-bezier(.36, .07, .19, .97) both;
+    }
   }
 
   &__pair {
