@@ -18,12 +18,22 @@ import { getPairs, getNodePair } from './helpers';
 import useSteps from './useSteps';
 import useNetworkEdgeState from './useEdgeState';
 import useAutoAdvance from './useAutoAdvance';
-import Pair, { getPairVariants } from './Pair';
+import Pair from './Pair';
 import Button from './Button';
 
 const fadeVariants = {
   show: { opacity: 1 },
   hide: { opacity: 0 },
+};
+
+const choiceVariants = {
+  show: { opacity: 1, translateY: '0%', transition: { delay: 0.25 } },
+  hide: { opacity: 0, translateY: '120%' },
+};
+
+const introVariants = {
+  show: { opacity: 1, scale: 1 },
+  hide: { opacity: 0, scale: 0 },
 };
 
 const canSkip = false;
@@ -135,85 +145,96 @@ const DyadCensus = ({
 
   return (
     <div className="interface dyad-interface">
-      <motion.div
-        className="interface__prompt"
-        variants={fadeVariants}
-        initial="hide"
-        animate={!isIntroduction ? 'show' : 'hide'}
+      <AnimatePresence
+        initial={false}
+        exitBeforeEnter
       >
-        <PromptSwiper
-          forward={promptForward}
-          backward={promptBackward}
-          prompt={prompt}
-          prompts={stage.prompts}
-        />
-      </motion.div>
-      <div className="interface__main">
-        <div className="dyad-interface__layout">
-          <div className="dyad-interface__pairs">
-            <AnimatePresence
-              custom={[isForwards]}
-              initial={false}
-            >
-              { isIntroduction &&
-                <motion.div
-                  className="dyad-interface__introduction"
-                  custom={[isForwards]}
-                  variants={getPairVariants()}
-                  initial="initial"
-                  animate="show"
-                  exit="hide"
-                >
-                  <h1>{stage.introductionPanel.title}</h1>
-                  <ReactMarkdown
-                    source={stage.introductionPanel.text}
-                    allowedTypes={ALLOWED_MARKDOWN_TAGS}
-                    renderers={defaultMarkdownRenderers}
-                  />
-                </motion.div>
-              }
-              { !isIntroduction &&
-                <Pair
-                  key={`${promptIndex}_${stepsState.step}`}
-                  edgeColor={edgeColor}
-                  hasEdge={hasEdge}
-                  animateForwards={isForwards}
-                  fromNode={fromNode}
-                  toNode={toNode}
-                />
-              }
-            </AnimatePresence>
-          </div>
+        { isIntroduction &&
+        <motion.div
+          className="dyad-interface__introduction"
+          variants={introVariants}
+          initial="hide"
+          exit="hide"
+          animate="show"
+          key="intro"
+        >
+          <h1>{stage.introductionPanel.title}</h1>
+          <ReactMarkdown
+            source={stage.introductionPanel.text}
+            allowedTypes={ALLOWED_MARKDOWN_TAGS}
+            renderers={defaultMarkdownRenderers}
+          />
+        </motion.div>
+        }
+        { !isIntroduction &&
           <motion.div
-            className="dyad-interface__choice"
+            key="content"
             variants={fadeVariants}
             initial="hide"
-            animate={!isIntroduction ? 'show' : 'hide'}
+            exit="hide"
+            animate="show"
+            className="dyad-interface__wrapper"
           >
-            <div className="dyad-interface__options">
-              <div className="dyad-interface__yes">
-                <Button
-                  onClick={handleChange(true)}
-                  selected={!!hasEdge && hasEdge !== null}
-                >Yes</Button>
+            <motion.div
+              className="interface__prompt"
+              variants={fadeVariants}
+              initial="hide"
+              animate={!isIntroduction ? 'show' : 'hide'}
+            >
+              <PromptSwiper
+                forward={promptForward}
+                backward={promptBackward}
+                prompt={prompt}
+                prompts={stage.prompts}
+              />
+            </motion.div>
+            <div className="interface__main">
+              <div className="dyad-interface__layout">
+                <div className="dyad-interface__pairs">
+                  <AnimatePresence
+                    custom={[isForwards]}
+                    initial={false}
+                  >
+                    <Pair
+                      key={`${promptIndex}_${stepsState.step}`}
+                      edgeColor={edgeColor}
+                      hasEdge={hasEdge}
+                      animateForwards={isForwards}
+                      fromNode={fromNode}
+                      toNode={toNode}
+                    />
+                  </AnimatePresence>
+                </div>
+                <motion.div
+                  className="dyad-interface__choice"
+                  variants={choiceVariants}
+                  initial="hide"
+                  animate={!isIntroduction ? 'show' : 'hide'}
+                >
+                  <div className="dyad-interface__progress">
+                    <ProgressBar orientation="horizontal" percentProgress={((stepsState.step + 1) / stepsState.totalSteps) * 100} />
+                  </div>
+                  <div className="dyad-interface__options">
+                    <div className="dyad-interface__yes">
+                      <Button
+                        onClick={handleChange(true)}
+                        selected={!!hasEdge && hasEdge !== null}
+                      >Yes</Button>
+                    </div>
+                    <div className="dyad-interface__no">
+                      <Button
+                        onClick={handleChange(false)}
+                        selected={!hasEdge && hasEdge !== null}
+                        className="no"
+                      >No</Button>
+                    </div>
+                  </div>
+                </motion.div>
               </div>
-              <div className="dyad-interface__no">
-                <Button
-                  onClick={handleChange(false)}
-                  selected={!hasEdge && hasEdge !== null}
-                  className="no"
-                >No</Button>
-              </div>
-            </div>
-            <div className="dyad-interface__progress">
-              <h6 className="progress-container__status-text">
-                <strong>{stepsState.step + 1}</strong> of <strong>{stepsState.totalSteps}</strong>
-              </h6>
-              <ProgressBar orientation="horizontal" percentProgress={((stepsState.step + 1) / stepsState.totalSteps) * 100} />
             </div>
           </motion.div>
-        </div>
-      </div>
+        }
+      </AnimatePresence>
     </div>
   );
 };

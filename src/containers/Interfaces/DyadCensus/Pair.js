@@ -30,6 +30,7 @@ export const getPairVariants = () => {
       translateY: isForwards ? translateDown : translateUp,
       translateX: '-50%',
       opacity: 0,
+      transition: pairTransition,
     }),
     hide: ([isForwards]) => ({
       translateY: !isForwards ? translateDown : translateUp,
@@ -37,15 +38,6 @@ export const getPairVariants = () => {
       opacity: 0,
       transition: pairTransition,
     }),
-  };
-};
-
-export const getEdgeVariants = () => {
-  const duration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
-
-  return {
-    show: { opacity: 1, transition: { duration } },
-    hide: { opacity: 0, transition: { duration } },
   };
 };
 
@@ -57,7 +49,10 @@ const Pair = ({
   animateForwards,
 }) => {
   const pairVariants = getPairVariants();
-  const edgeVariants = getEdgeVariants();
+  const edgeVariants = {
+    show: { backgroundPosition: 'right bottom' },
+    hide: { backgroundPosition: 'left bottom' },
+  };
 
   return (
     <motion.div
@@ -75,7 +70,7 @@ const Pair = ({
           style={{ backgroundColor: `var(--${edgeColor})` }}
           variants={edgeVariants}
           initial="hide"
-          animate={hasEdge ? 'show' : 'hide'}
+          animate={!hasEdge ? 'show' : 'hide'}
         />
         <Node {...toNode} />
       </div>

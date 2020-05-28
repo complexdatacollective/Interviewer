@@ -13,11 +13,19 @@
 $choice-padding: 2rem;
 
 .dyad-interface {
+  justify-content: center;
+  align-items: center;
+
+  &__wrapper {
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
   &__introduction {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translateY(-50%) translateX(-50%);
+    max-height: 100%;
     background: var(--light-background);
     border-radius: var(--border-radius);
     padding: $choice-padding;
@@ -41,18 +49,19 @@ $choice-padding: 2rem;
     position: relative;
     flex: 1 1 auto;
     width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   &__choice {
     background: var(--light-background);
-    border-radius: var(--border-radius);
-    padding: calc(7rem + #{$choice-padding}) $choice-padding $choice-padding;
     display: flex;
     flex-direction: column;
-    min-width: 30vw;
-    flex-grow: 0;
-    position: relative;
+    flex: 0 0 auto;
+    border-radius: var(--border-radius);
     overflow: hidden;
+    text-align: center;
   }
 
   &__pair {
@@ -73,16 +82,16 @@ $choice-padding: 2rem;
     z-index: 1;
     width: 10rem;
     margin: 0 -1rem;
+    background: linear-gradient(to right, transparent 50%, var(--background) 50%);
+    background-size: 200% 100%;
+    transition: background var(--animation-duration-standard) var(--animation-easing);
   }
 
   &__options {
     display: flex;
     justify-content: center;
     align-items: center;
-    position: absolute;
-    top: $choice-padding;
-    left: 50%;
-    transform: translateX(-50%);
+    padding: unit(2) unit(4);
   }
 
   &__yes {
@@ -95,7 +104,8 @@ $choice-padding: 2rem;
   }
 
   &__progress {
-    padding-top: 1rem;
+    padding: unit(4);
+    background: var(--color-slate-blue);
 
     .progress-bar {
       background-color: var(--transparent-light);
