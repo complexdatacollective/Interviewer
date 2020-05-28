@@ -107,7 +107,8 @@
                 "discoverability",
                 "scrollable",
                 "draggable",
-                "dyad"
+                "dyad",
+                "Dyad"
              ],
              "skipIfMatch": [
                 "http(s)?://[^s]*",
