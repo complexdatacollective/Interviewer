@@ -19,10 +19,10 @@ class ImageReporter {
 
   onTestResult(test, testResult, aggregateResults) {
     if (testResult.numFailingTests && testResult.failureMessage.match(/different from snapshot/)) {
-      const files = fs.readdirSync(`${process.env.rootDir}/__tests__/__image_snapshots__/__diff_output__/`);
+      const files = fs.readdirSync('../__tests__/__image_snapshots__/__diff_output__/');
       files.forEach((value) => {
         console.log('value', value);
-        imgbbUploader(IMGBB_API_KEY, `${process.env.rootDir}/__tests__/__image_snapshots__/__diff_output__/${value}`)
+        imgbbUploader(IMGBB_API_KEY, `../__tests__/__image_snapshots__/__diff_output__/${value}`)
           .then(response => {
             console.log(chalk.red.bold(`Uploaded image diff file to ${response.url}`));
           })
