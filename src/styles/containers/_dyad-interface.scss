@@ -13,23 +13,23 @@
 @keyframes shake {
   10%,
   90% {
-    transform: translate3d(-0.1rem, 0, 0);
+    transform: translate3d(calc(-50% - 0.1rem), 0, 0);
   }
 
   20%,
   80% {
-    transform: translate3d(0.2rem, 0, 0);
+    transform: translate3d(calc(-50% + 0.2rem), 0, 0);
   }
 
   30%,
   50%,
   70% {
-    transform: translate3d(-0.4rem, 0, 0);
+    transform: translate3d(calc(-50% - 0.4rem), 0, 0);
   }
 
   40%,
   60% {
-    transform: translate3d(0.4rem, 0, 0);
+    transform: translate3d(calc(-50% + 0.4rem), 0, 0);
   }
 }
 
@@ -88,18 +88,29 @@ $choice-padding: 2rem;
 
   &__pairs {
     position: relative;
-    flex: 1 1 auto;
+    flex-grow: 1;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
   }
 
+  &__choices {
+    flex-grow: 0;
+    flex-basis: 16.5rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
   &__choice {
+    position: absolute;
+    top: 0;
+    left: 50%;
     background: var(--light-background);
     display: flex;
     flex-direction: column;
-    flex: 0 0 auto;
     border-radius: var(--border-radius);
     overflow: hidden;
     text-align: center;
@@ -128,7 +139,7 @@ $choice-padding: 2rem;
   &__edge {
     height: 0.5rem;
     z-index: 1;
-    width: 10rem;
+    width: 11rem;
     margin: 0 -1rem;
     background: linear-gradient(to right, transparent 50%, var(--background) 50%);
     background-size: 200% 100%;
