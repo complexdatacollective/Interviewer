@@ -154,7 +154,7 @@ const DyadCensus = ({
   );
 
   return (
-    <div className="interface dyad-interface">
+    <div className="dyad-interface">
       <AnimatePresence
         initial={false}
         exitBeforeEnter
@@ -186,7 +186,7 @@ const DyadCensus = ({
             className="dyad-interface__wrapper"
           >
             <motion.div
-              className="interface__prompt"
+              className="dyad-interface__prompt"
               variants={fadeVariants}
               initial="hide"
               animate={!isIntroduction ? 'show' : 'hide'}
@@ -198,7 +198,7 @@ const DyadCensus = ({
                 prompts={stage.prompts}
               />
             </motion.div>
-            <div className="interface__main">
+            <div className="dyad-interface__main">
               <div className="dyad-interface__layout">
                 <div className="dyad-interface__pairs">
                   <AnimatePresence
