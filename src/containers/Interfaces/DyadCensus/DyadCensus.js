@@ -189,19 +189,14 @@ const DyadCensus = ({
             animate="show"
             className="dyad-interface__wrapper"
           >
-            <motion.div
-              className="dyad-interface__prompt"
-              variants={fadeVariants}
-              initial="hide"
-              animate={!isIntroduction ? 'show' : 'hide'}
-            >
+            <div className="dyad-interface__prompt">
               <PromptSwiper
                 forward={promptForward}
                 backward={promptBackward}
                 prompt={prompt}
                 prompts={stage.prompts}
               />
-            </motion.div>
+            </div>
             <div className="dyad-interface__main">
               <div className="dyad-interface__layout">
                 <div className="dyad-interface__pairs">
