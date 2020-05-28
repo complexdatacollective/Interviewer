@@ -178,7 +178,7 @@ const DyadCensus = ({
         }
         { !isIntroduction &&
           <motion.div
-            key="content"
+            key={promptIndex}
             variants={fadeVariants}
             initial="hide"
             exit="hide"
