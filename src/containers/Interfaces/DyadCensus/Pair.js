@@ -1,17 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
-import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
 import Node from '../../../containers/Node';
 
 const animationOffset = 200;
 const animationTarget = -50;
 
 export const getPairVariants = () => {
-  const slowDuration = getCSSVariableAsNumber('--animation-duration-slow-ms') / 1000;
 
   const pairTransition = {
-    duration: slowDuration,
+    duration: 0.5,
+    delay: 0.35,
     when: 'afterChildren',
   };
 

@@ -147,7 +147,7 @@ $choice-padding: 2rem;
   }
 
   &__yes {
-    @include recolor-toggle(var(--color-kiwi));
+    @include recolor-toggle(var(--primary));
     margin-right: 4rem;
   }
 

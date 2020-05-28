@@ -23,13 +23,13 @@ import Pair from './Pair';
 import Button from './Button';
 
 const fadeVariants = {
-  show: { opacity: 1 },
-  hide: { opacity: 0 },
+  show: { opacity: 1, transition: { duration: 0.5 } },
+  hide: { opacity: 0, transition: { duration: 0.5 } },
 };
 
 const optionsVariants = {
-  show: { opacity: 1, transition: { delay: 0.25 } },
-  hide: { opacity: 0, transiton: { duration: 0.25 } },
+  show: { opacity: 1, transition: { delay: 0.35, duration: 0.25 } },
+  hide: { opacity: 0, transition: { delay: 0.35, duration: 0.25 } },
 };
 
 const choiceVariants = {
@@ -183,7 +183,7 @@ const DyadCensus = ({
         }
         { !isIntroduction &&
           <motion.div
-            key={promptIndex}
+            key="content"
             variants={fadeVariants}
             initial="hide"
             exit="hide"
@@ -198,61 +198,70 @@ const DyadCensus = ({
                 prompts={stage.prompts}
               />
             </div>
-            <div className="dyad-interface__main">
-              <div className="dyad-interface__layout">
-                <div className="dyad-interface__pairs">
-                  <AnimatePresence
-                    custom={[isForwards]}
-                    initial={false}
-                  >
-                    <Pair
-                      key={`${promptIndex}_${stepsState.step}`}
-                      edgeColor={edgeColor}
-                      hasEdge={hasEdge}
-                      animateForwards={isForwards}
-                      fromNode={fromNode}
-                      toNode={toNode}
-                    />
-                  </AnimatePresence>
-                </div>
-                <motion.div
-                  className={choiceClasses}
-                  variants={choiceVariants}
-                  initial="hide"
-                  animate="show"
-                >
-                  <div className="dyad-interface__progress">
-                    <ProgressBar orientation="horizontal" percentProgress={((stepsState.substep + 1) / stepsState.steps[stepsState.stage]) * 100} />
-                  </div>
-                  <div className="dyad-interface__options">
-                    <AnimatePresence>
-                      <motion.div
-                        key={stepsState.step}
-                        className="dyad-interface__options-step"
-                        variants={optionsVariants}
-                        initial="hide"
-                        animate="show"
-                        exit="hide"
-                      >
-                        <div className="dyad-interface__yes">
-                          <Button
-                            onClick={handleChange(true)}
-                            selected={!!hasEdge && hasEdge !== null}
-                          >Yes</Button>
-                        </div>
-                        <div className="dyad-interface__no">
-                          <Button
-                            onClick={handleChange(false)}
-                            selected={!hasEdge && hasEdge !== null}
-                            className="no"
-                          >No</Button>
-                        </div>
-                      </motion.div>
+            <AnimatePresence exitBeforeEnter>
+              <motion.div
+                className="dyad-interface__main"
+                key={promptIndex}
+                variants={fadeVariants}
+                initial="hide"
+                exit="hide"
+                animate="show"
+              >
+                <div className="dyad-interface__layout">
+                  <div className="dyad-interface__pairs">
+                    <AnimatePresence
+                      custom={[isForwards]}
+                      initial={false}
+                    >
+                      <Pair
+                        key={`${promptIndex}_${stepsState.step}`}
+                        edgeColor={edgeColor}
+                        hasEdge={hasEdge}
+                        animateForwards={isForwards}
+                        fromNode={fromNode}
+                        toNode={toNode}
+                      />
                     </AnimatePresence>
                   </div>
-                </motion.div>
-              </div>
-            </div>
+                  <motion.div
+                    className={choiceClasses}
+                    variants={choiceVariants}
+                    initial="hide"
+                    animate="show"
+                  >
+                    <div className="dyad-interface__progress">
+                      <ProgressBar orientation="horizontal" percentProgress={((stepsState.substep + 1) / stepsState.steps[stepsState.stage]) * 100} />
+                    </div>
+                    <div className="dyad-interface__options">
+                      <AnimatePresence exitBeforeEnter>
+                        <motion.div
+                          key={stepsState.step}
+                          className="dyad-interface__options-step"
+                          variants={optionsVariants}
+                          initial="hide"
+                          animate="show"
+                          exit="hide"
+                        >
+                          <div className="dyad-interface__yes">
+                            <Button
+                              onClick={handleChange(true)}
+                              selected={!!hasEdge && hasEdge !== null}
+                            >Yes</Button>
+                          </div>
+                          <div className="dyad-interface__no">
+                            <Button
+                              onClick={handleChange(false)}
+                              selected={!hasEdge && hasEdge !== null}
+                              className="no"
+                            >No</Button>
+                          </div>
+                        </motion.div>
+                      </AnimatePresence>
+                    </div>
+                  </motion.div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
           </motion.div>
         }
       </AnimatePresence>
