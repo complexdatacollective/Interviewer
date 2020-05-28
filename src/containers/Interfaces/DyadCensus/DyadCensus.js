@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import PropTypes from 'prop-types';
 import { get } from 'lodash';
+import cx from 'classnames';
 import { AnimatePresence, motion } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import defaultMarkdownRenderers from '../../../utils/markdownRenderers';
@@ -56,6 +57,7 @@ const DyadCensus = ({
 }) => {
   const [isIntroduction, setIsIntroduction] = useState(true);
   const [isForwards, setForwards] = useState(true);
+  const [isValid, setIsValid] = useState(true);
 
   // Number of pairs times number of prompts e.g. `[3, 3, 3]`
   const steps = Array(stage.prompts.length).fill(get(pairs, 'length', 0));
@@ -75,6 +77,7 @@ const DyadCensus = ({
 
   const next = () => {
     setForwards(true);
+    setIsValid(true);
 
     if (isIntroduction) {
       // If we're on the introduction and also at the end of steps,
@@ -91,6 +94,7 @@ const DyadCensus = ({
 
     // check value has been set
     if (!canSkip && hasEdge === null) {
+      setIsValid(false);
       return;
     }
 
@@ -105,6 +109,7 @@ const DyadCensus = ({
 
   const back = () => {
     setForwards(false);
+    setIsValid(true);
 
     if (stepsState.isStart && !isIntroduction) {
       setIsIntroduction(true);
@@ -143,8 +148,13 @@ const DyadCensus = ({
       setEdge(nextValue);
     };
 
+  const choiceClasses = cx(
+    'dyad-interface__choice',
+    { 'dyad-interface__choice--invalid': !isValid },
+  );
+
   return (
-    <div className="interface dyad-interface">
+    <div className="dyad-interface">
       <AnimatePresence
         initial={false}
         exitBeforeEnter
@@ -176,7 +186,7 @@ const DyadCensus = ({
             className="dyad-interface__wrapper"
           >
             <motion.div
-              className="interface__prompt"
+              className="dyad-interface__prompt"
               variants={fadeVariants}
               initial="hide"
               animate={!isIntroduction ? 'show' : 'hide'}
@@ -188,7 +198,7 @@ const DyadCensus = ({
                 prompts={stage.prompts}
               />
             </motion.div>
-            <div className="interface__main">
+            <div className="dyad-interface__main">
               <div className="dyad-interface__layout">
                 <div className="dyad-interface__pairs">
                   <AnimatePresence
@@ -206,7 +216,7 @@ const DyadCensus = ({
                   </AnimatePresence>
                 </div>
                 <motion.div
-                  className="dyad-interface__choice"
+                  className={choiceClasses}
                   variants={choiceVariants}
                   initial="hide"
                   animate={!isIntroduction ? 'show' : 'hide'}

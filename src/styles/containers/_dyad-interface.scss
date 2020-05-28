@@ -36,6 +36,12 @@
 $choice-padding: 2rem;
 
 .dyad-interface {
+  @include interface-centering;
+  height: 100%;
+  padding: 1rem 0 2rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 
@@ -45,6 +51,18 @@ $choice-padding: 2rem;
     display: flex;
     flex-direction: column;
     width: 100%;
+  }
+
+  &__prompt {
+    @include interface-prompt;
+  }
+
+  &__main {
+    position: relative;
+    flex: 1 auto;
+    height: 100%;
+    margin-top: 1rem;
+    min-height: 0;
   }
 
   &__introduction {
