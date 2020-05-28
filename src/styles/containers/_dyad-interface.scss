@@ -13,23 +13,23 @@
 @keyframes shake {
   10%,
   90% {
-    transform: translate3d(calc(-50% - 0.1rem), 0, 0);
+    transform: translate3d(-.1rem, 0, 0);
   }
 
   20%,
   80% {
-    transform: translate3d(calc(-50% + 0.2rem), 0, 0);
+    transform: translate3d(+.2rem, 0, 0);
   }
 
   30%,
   50%,
   70% {
-    transform: translate3d(calc(-50% - 0.4rem), 0, 0);
+    transform: translate3d(-.4rem, 0, 0);
   }
 
   40%,
   60% {
-    transform: translate3d(calc(-50% + 0.4rem), 0, 0);
+    transform: translate3d(+.4rem, 0, 0);
   }
 }
 
@@ -95,22 +95,11 @@ $choice-padding: 2rem;
     align-items: center;
   }
 
-  &__choices {
-    flex-grow: 0;
-    flex-basis: 16.5rem;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-  }
-
   &__choice {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    background: var(--light-background);
+    flex-grow: 0;
     display: flex;
     flex-direction: column;
+    background: var(--light-background);
     border-radius: var(--border-radius);
     overflow: hidden;
     text-align: center;
