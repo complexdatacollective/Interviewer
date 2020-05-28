@@ -6,8 +6,8 @@
   "author": "Complex Data Collective",
   "private": true,
   "engines": {
-    "node": "12.8.0",
-    "npm": "6.10.2"
+    "node": "12.17.0",
+    "npm": "6.14.4"
   },
   "scripts": {
     "pack": "electron-builder --dir",
@@ -78,7 +78,7 @@
     "csvtojson": "^2.0.8",
     "detect-port": "1.1.0",
     "dotenv": "4.0.0",
-    "electron": "^5.0.9",
+    "electron": "^8.3.0",
     "electron-builder": "^21.2.0",
     "electron-installer-dmg": "^3.0.0",
     "electron-log": "^3.0.7",
@@ -112,7 +112,7 @@
     "jest": "^25.1.0",
     "jest-image-snapshot": "^2.9.0",
     "json-loader": "0.5.4",
-    "jszip": "^3.2.2",
+    "jszip": "^3.4.0",
     "lodash": "^4.17.11",
     "mdns": "^2.5.1",
     "mini-css-extract-plugin": "^0.8.0",
