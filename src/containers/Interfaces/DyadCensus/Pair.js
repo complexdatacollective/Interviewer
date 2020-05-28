@@ -20,16 +20,16 @@ export const getPairVariants = () => {
   const translateTarget = `${animationTarget}%`;
 
   return {
-    show: () => ({
-      translateY: translateTarget,
-      translateX: '-50%',
-      opacity: 1,
-      transition: pairTransition,
-    }),
     initial: ([isForwards]) => ({
       translateY: isForwards ? translateDown : translateUp,
       translateX: '-50%',
       opacity: 0,
+      transition: pairTransition,
+    }),
+    show: () => ({
+      translateY: translateTarget,
+      translateX: '-50%',
+      opacity: 1,
       transition: pairTransition,
     }),
     hide: ([isForwards]) => ({
@@ -49,6 +49,7 @@ const Pair = ({
   animateForwards,
 }) => {
   const pairVariants = getPairVariants();
+
   const edgeVariants = {
     show: { backgroundPosition: 'right bottom' },
     hide: { backgroundPosition: 'left bottom' },
