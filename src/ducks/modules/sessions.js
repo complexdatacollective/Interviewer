@@ -11,6 +11,7 @@ const ADD_SESSION = 'ADD_SESSION';
 const LOAD_SESSION = 'LOAD_SESSION';
 const UPDATE_PROMPT = 'UPDATE_PROMPT';
 const UPDATE_STAGE = 'UPDATE_STAGE';
+const UPDATE_STAGE_STATE = 'UPDATE_STAGE_STATE';
 const REMOVE_SESSION = 'REMOVE_SESSION';
 const EXPORT_SESSIONS_START = 'EXPORT_SESSIONS_START';
 const EXPORT_SESSIONS_RESET = 'EXPORT_SESSIONS_RESET';
@@ -81,6 +82,20 @@ const getReducer = network =>
             stageIndex: action.stageIndex,
           }),
         };
+      case UPDATE_STAGE_STATE: {
+        const session = state[action.sessionId];
+
+        return {
+          ...state,
+          [action.sessionId]: withTimestamp({
+            ...session,
+            stages: {
+              ...session.stages,
+              [action.stage]: action.state,
+            },
+          }),
+        };
+      }
       case REMOVE_SESSION:
         return omit(state, [action.sessionId]);
       case EXPORT_SESSIONS_START: {
@@ -380,6 +395,26 @@ const updateStage = stageIndex => (dispatch, getState) => {
     stageIndex,
   });
 };
+
+const withSessionId = action =>
+  (dispatch, getState) => {
+    const { activeSessionId: sessionId } = getState();
+
+    dispatch({
+      ...action,
+      sessionId,
+    });
+  };
+
+const updateStageState = (stageState) =>
+  (dispatch, getState) => {
+    const { activeSessionId: sessionId } = getState();
+
+    dispatch(withSessionId({
+      stage: null,
+      state: stageState,
+    }));
+  };
 
 function removeSession(id) {
   return {

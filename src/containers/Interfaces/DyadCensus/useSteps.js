@@ -18,7 +18,7 @@ const getSubStep = (steps, nextStep) => {
 };
 
 /* state reducer for steps state */
-const updateState = ({
+const stateReducer = ({
   step,
   substep,
   stage,
@@ -61,7 +61,7 @@ const useSteps = (
   };
 
   const [state, setState] = useState(
-    updateState({
+    stateReducer({
       step: 0,
       substep: 0,
       stage: 0,
@@ -78,7 +78,7 @@ const useSteps = (
 
     const substep = getSubStep(steps, nextStep);
 
-    setState(updateState({
+    setState(stateReducer({
       step: nextStep,
       substep: substep.step,
       stage: substep.stage,
