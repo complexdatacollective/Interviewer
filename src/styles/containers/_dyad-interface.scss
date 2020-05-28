@@ -147,6 +147,10 @@ $choice-padding: 2rem;
   }
 
   &__options {
+    height: 9.5rem;
+  }
+
+  &__options-step {
     display: flex;
     justify-content: center;
     align-items: center;

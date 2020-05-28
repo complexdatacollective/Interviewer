@@ -27,13 +27,14 @@ const fadeVariants = {
   hide: { opacity: 0 },
 };
 
+const optionsVariants = {
+  show: { opacity: 1, transition: { delay: 0.25 } },
+  hide: { opacity: 0, transiton: { duration: 0.25 } },
+};
+
 const choiceVariants = {
   show: { opacity: 1, translateY: '0%', translateX: '-50%', transition: { delay: 0.25 } },
-  hide: {
-    opacity: 0,
-    translateX: '-50%',
-    translateY: '120%',
-  },
+  hide: { opacity: 0, translateX: '-50%', translateY: '120%' },
 };
 
 const introVariants = {
@@ -215,35 +216,42 @@ const DyadCensus = ({
                   </AnimatePresence>
                 </div>
                 <div className="dyad-interface__choices">
-                  <AnimatePresence>
-                    <motion.div
-                      key={stepsState.step}
-                      className={choiceClasses}
-                      variants={choiceVariants}
-                      initial="hide"
-                      animate="show"
-                      exit="hide"
-                    >
-                      <div className="dyad-interface__progress">
-                        <ProgressBar orientation="horizontal" percentProgress={((stepsState.substep + 1) / stepsState.steps[stepsState.stage]) * 100} />
-                      </div>
-                      <div className="dyad-interface__options">
-                        <div className="dyad-interface__yes">
-                          <Button
-                            onClick={handleChange(true)}
-                            selected={!!hasEdge && hasEdge !== null}
-                          >Yes</Button>
-                        </div>
-                        <div className="dyad-interface__no">
-                          <Button
-                            onClick={handleChange(false)}
-                            selected={!hasEdge && hasEdge !== null}
-                            className="no"
-                          >No</Button>
-                        </div>
-                      </div>
-                    </motion.div>
-                  </AnimatePresence>
+                  <motion.div
+                    className={choiceClasses}
+                    variants={choiceVariants}
+                    initial="hide"
+                    animate="show"
+                  >
+                    <div className="dyad-interface__progress">
+                      <ProgressBar orientation="horizontal" percentProgress={((stepsState.substep + 1) / stepsState.steps[stepsState.stage]) * 100} />
+                    </div>
+                    <div className="dyad-interface__options">
+                      <AnimatePresence>
+                        <motion.div
+                          key={stepsState.step}
+                          className="dyad-interface__options-step"
+                          variants={optionsVariants}
+                          initial="hide"
+                          animate="show"
+                          exit="hide"
+                        >
+                          <div className="dyad-interface__yes">
+                            <Button
+                              onClick={handleChange(true)}
+                              selected={!!hasEdge && hasEdge !== null}
+                            >Yes</Button>
+                          </div>
+                          <div className="dyad-interface__no">
+                            <Button
+                              onClick={handleChange(false)}
+                              selected={!hasEdge && hasEdge !== null}
+                              className="no"
+                            >No</Button>
+                          </div>
+                        </motion.div>
+                      </AnimatePresence>
+                    </div>
+                  </motion.div>
                 </div>
               </div>
             </div>

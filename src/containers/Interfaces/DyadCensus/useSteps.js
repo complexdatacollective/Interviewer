@@ -95,7 +95,7 @@ const useSteps = (
 
     const substep = getSubStep(steps, nextStep);
 
-    setState(updateState({
+    setState(stateReducer({
       step: nextStep,
       substep: substep.step,
       stage: substep.stage,
