@@ -22,6 +22,7 @@ class ImageReporter {
     if (testResult.numFailingTests && testResult.failureMessage.match(/different from snapshot/)) {
       const imagePath = path.resolve(process.cwd(), 'integration-tests/__tests__/__image_snapshots__/__diff_output__/');
       const files = fs.readdirSync(imagePath);
+      console.log('image snapshots', files, imagePath);
       files.forEach((value) => {
         console.log('value', imagePath, value, path.resolve(imagePath, value));
         imgbbUploader(IMGBB_API_KEY, path.resolve(imagePath, value))
