@@ -28,7 +28,7 @@ const fadeVariants = {
 };
 
 const translateChoiceDown = '120%';
-const translateChoiceUp = '-120%';
+const translateChoiceUp = '0%';
 
 const choiceVariants = {
   initial: ([isForwards]) => ({
