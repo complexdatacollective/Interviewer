@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import fakeDialog from 'spectron-fake-dialog';
+import { dialogAddon as fakeDialog } from 'spectron-dialog-addon';
 import { timing } from '../config';
 import {
   makeTestingApp,

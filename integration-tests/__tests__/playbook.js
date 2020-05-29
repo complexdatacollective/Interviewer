@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
 import path from 'path';
-import fakeDialog from 'spectron-fake-dialog';
+import { dialogAddon as fakeDialog } from 'spectron-dialog-addon';
 import { timing, paths, mockProtocol } from '../config';
 import getData from '../getData';
 import { forceClick } from './helpers';
