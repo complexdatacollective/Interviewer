@@ -107,7 +107,7 @@
     "http-proxy-middleware": "0.17.3",
     "i": "^0.3.6",
     "icon-gen": "^1.2.3",
-    "jest": "^25.1.0",
+    "jest": "^26.0.1",
     "jest-image-snapshot": "^2.9.0",
     "json-loader": "0.5.4",
     "jszip": "^3.2.2",

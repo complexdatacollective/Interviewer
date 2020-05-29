@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-const rfs = require.requireActual('fs');
+const rfs = jest.requireActual('fs');
 
 const fs = jest.genMockFromModule('fs');
 
