@@ -88,6 +88,11 @@ const SlidesForm = (props) => {
     return getIsFormDirty(formName);
   };
 
+  const confirmIfChanged = () => {
+    if (!isFormDirty()) { return Promise.resolve(true); }
+    return openDialog(confirmDialog);
+  };
+
   /**
    * Called by ProtocolScreen before navigating away from this stage
    *
@@ -108,7 +113,7 @@ const SlidesForm = (props) => {
     }
 
     if (direction < 0 && !isFormValid()) {
-      new Promise(resolve => resolve(isFormDirty() ? openDialog(confirmDialog) : true))
+      confirmIfChanged()
         .then(handleConfirmBack);
       return;
     }

@@ -42,14 +42,12 @@ class EgoForm extends Component {
     const {
       isFirstStage,
       isFormValid,
-      isFormDirty,
-      openDialog,
     } = this.props;
 
     const isBackwards = direction < 0;
 
     if (!isFirstStage && isBackwards && !isFormValid) {
-      new Promise(resolve => resolve(isFormDirty ? openDialog(confirmDialog) : true))
+      this.confirmIfChanged()
         .then(this.handleConfirmNavigation);
       return;
     }
@@ -59,6 +57,11 @@ class EgoForm extends Component {
 
   submitForm = () => {
     this.props.submitForm(this.props.formName);
+  };
+
+  confirmIfChanged = () => {
+    if (!this.props.isFormDirty()) { return Promise.resolve(true); }
+    return this.props.openDialog(confirmDialog);
   };
 
   handleConfirmNavigation = (confirm) => {
@@ -150,7 +153,7 @@ function mapStateToProps(state, props) {
   const ego = getNetworkEgo(state);
   const formName = getFormName(props.stageIndex);
   const isFormValid = isValid(formName)(state);
-  const isFormDirty = isDirty(formName)(state);
+  const isFormDirty = () => isDirty(formName)(state);
   const { isFirstStage } = getSessionProgress(state);
 
   return {
