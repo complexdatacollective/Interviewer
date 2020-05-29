@@ -6,14 +6,13 @@ import Node from '../../../containers/Node';
 const animationOffset = 200;
 const animationTarget = -50;
 
+const pairTransition = {
+  duration: 0.5,
+  delay: 0.35,
+  when: 'afterChildren',
+};
+
 export const getPairVariants = () => {
-
-  const pairTransition = {
-    duration: 0.5,
-    delay: 0.35,
-    when: 'afterChildren',
-  };
-
   const translateUp = `${animationTarget - animationOffset}%`;
   const translateDown = `${animationTarget + animationOffset}%`;
   const translateTarget = `${animationTarget}%`;
@@ -23,19 +22,16 @@ export const getPairVariants = () => {
       translateY: isForwards ? translateDown : translateUp,
       translateX: '-50%',
       opacity: 0,
-      transition: pairTransition,
     }),
     show: () => ({
       translateY: translateTarget,
       translateX: '-50%',
       opacity: 1,
-      transition: pairTransition,
     }),
     hide: ([isForwards]) => ({
       translateY: !isForwards ? translateDown : translateUp,
       translateX: '-50%',
       opacity: 0,
-      transition: pairTransition,
     }),
   };
 };
@@ -59,6 +55,7 @@ const Pair = ({
       className="dyad-interface__pair"
       custom={[animateForwards]}
       variants={pairVariants}
+      transition={pairTransition}
       initial="initial"
       animate="show"
       exit="hide"

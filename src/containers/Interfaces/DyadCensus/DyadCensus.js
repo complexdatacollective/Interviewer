@@ -11,6 +11,7 @@ import { ALLOWED_MARKDOWN_TAGS } from '../../../config';
 import withPrompt from '../../../behaviours/withPrompt';
 import { makeNetworkNodesForType as makeGetNodes } from '../../../selectors/interface';
 import { getNetworkEdges as getEdges } from '../../../selectors/network';
+import { getStageState } from '../../../selectors/session';
 import { getProtocolCodebook } from '../../../selectors/protocol';
 import { actionCreators as navigateActions } from '../../../ducks/modules/navigate';
 import ProgressBar from '../../../components/ProgressBar';
@@ -59,6 +60,7 @@ const DyadCensus = ({
   edges,
   edgeColor,
   dispatch,
+  stageState,
 }) => {
   const [isIntroduction, setIsIntroduction] = useState(true);
   const [isForwards, setForwards] = useState(true);
@@ -74,9 +76,10 @@ const DyadCensus = ({
   const [hasEdge, setEdge, isTouched, isChanged] = useNetworkEdgeState(
     dispatch,
     edges,
-    prompt.createEdge,
+    prompt.createEdge, // Type of edge to create
     pair,
-    stepsState.isCompletedStep,
+    promptIndex,
+    stageState,
     [stepsState.step],
   );
 
@@ -230,7 +233,7 @@ const DyadCensus = ({
                     animate="show"
                   >
                     <div className="dyad-interface__progress">
-                      <ProgressBar orientation="horizontal" percentProgress={((stepsState.substep + 1) / stepsState.steps[stepsState.stage]) * 100} />
+                      <ProgressBar orientation="horizontal" percentProgress={((stepsState.substep + 1) / stepsState.steps[stepsState.prompt]) * 100} />
                     </div>
                     <div className="dyad-interface__options">
                       <AnimatePresence exitBeforeEnter>
@@ -289,12 +292,14 @@ const makeMapStateToProps = () => {
     const codebook = getProtocolCodebook(state, props);
     const edgeColor = get(codebook, ['edge', props.prompt.createEdge, 'color']);
     const pairs = getPairs(nodes);
+    const stageState = getStageState(state);
 
     return {
       pairs,
       nodes,
       edges,
       edgeColor,
+      stageState,
     };
   };
 

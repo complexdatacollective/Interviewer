@@ -16,6 +16,35 @@ const getEdgeInNetwork = (edges, pair, edgeType) => {
   return edge;
 };
 
+export const matchEntry = (prompt, pair) =>
+  ([p, a, b]) => (
+    (p === prompt && a === pair[0] && b === pair[1]) ||
+    (p === prompt && b === pair[0] && a === pair[1])
+  );
+
+export const getIsPreviouslyAnsweredNo = (state, prompt, pair) => {
+  if (!state || pair.length !== 2) { return false; }
+
+  const answer = state
+    .find(matchEntry(prompt, pair));
+
+  if (answer && answer[3] === false) {
+    return true;
+  }
+
+  return false;
+};
+
+export const stageStateReducer = (state = [], { pair, prompt, value }) => {
+  const newState = [
+    // Remove existing entry, if it exists
+    ...state.filter(item => !matchEntry(prompt, pair)(item)),
+    [prompt, ...pair, value],
+  ];
+
+  return newState;
+};
+
 /**
  * Manages a virtual edge state between the current pair,
  * taking into account where we are in the 'steps', and the
@@ -37,7 +66,8 @@ const useEdgeState = (
   edges,
   edgeType,
   pair,
-  isCompletedStep,
+  promptIndex,
+  stageState,
   deps,
 ) => {
   const [edgeState, setEdgeState] = useState(
@@ -53,9 +83,8 @@ const useEdgeState = (
     // Either we set a value for this or it already has an edge
     if (edgeState !== null) { return !!edgeState; }
 
-    // If we've visited this step previously, and no edge
-    // exists consider this an implicit 'no'
-    if (isCompletedStep) {
+    // Check if this pair was marked as no before
+    if (getIsPreviouslyAnsweredNo(stageState, promptIndex, pair)) {
       return false;
     }
 
@@ -63,23 +92,27 @@ const useEdgeState = (
     return null;
   };
 
-  const setEdge = (hasEdge = true) => {
+  const setEdge = (value = true) => {
     if (!pair) { return; }
 
     const existingEdge = getEdgeInNetwork(edges, pair, edgeType);
 
-    setEdgeState(hasEdge);
-    setIsChanged(getHasEdge() !== hasEdge);
+    setEdgeState(value);
+    setIsChanged(getHasEdge() !== value);
     setIsTouched(true);
 
-    if (hasEdge) {
-      if (!existingEdge) {
-        dispatch(sessionsActions.addEdge({ from: pair[0], to: pair[1], type: edgeType }));
-      }
-    } else {
-      if (!existingEdge) { return; }
+    const addEdge = value && !existingEdge;
+    const removeEdge = !value && existingEdge;
+
+    const newStageState = stageStateReducer(stageState, { pair, prompt: promptIndex, value });
+
+    if (addEdge) {
+      dispatch(sessionsActions.addEdge({ from: pair[0], to: pair[1], type: edgeType }));
+    } else if (removeEdge) {
       dispatch(sessionsActions.removeEdge(existingEdge[entityPrimaryKeyProperty]));
     }
+
+    dispatch(sessionsActions.updateStageState(newStageState));
   };
 
   // we're only going to reset manually (when deps change), because

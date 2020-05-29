@@ -91,7 +91,7 @@ const getReducer = network =>
             ...session,
             stages: {
               ...session.stages,
-              [action.stage]: action.state,
+              [action.stageIndex]: action.state,
             },
           }),
         };
@@ -406,13 +406,15 @@ const withSessionId = action =>
     });
   };
 
-const updateStageState = (stageState) =>
+const updateStageState = state =>
   (dispatch, getState) => {
-    const { activeSessionId: sessionId } = getState();
+    const { activeSessionId, sessions } = getState();
+    const stageIndex = sessions[activeSessionId].stageIndex;
 
     dispatch(withSessionId({
-      stage: null,
-      state: stageState,
+      type: UPDATE_STAGE_STATE,
+      stageIndex,
+      state,
     }));
   };
 
@@ -521,6 +523,7 @@ const actionCreators = {
   loadSession,
   updatePrompt,
   updateStage,
+  updateStageState,
   removeSession,
   sessionExportStart,
   sessionExportSucceeded,
@@ -535,6 +538,7 @@ const actionTypes = {
   LOAD_SESSION,
   UPDATE_PROMPT,
   UPDATE_STAGE,
+  UPDATE_STAGE_STATE,
   REMOVE_SESSION,
   EXPORT_SESSION_FAILED,
   EXPORT_SESSIONS_START,
