@@ -3,7 +3,7 @@ import { createEpicMiddleware } from 'redux-observable';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { actionTypes as dialogActionTypes } from '../dialogs';
-import { actionCreators as importProtocolActions, actionTypes as importProtocolActionTypes  } from '../importProtocol';
+import { actionCreators as importProtocolActions, actionTypes as importProtocolActionTypes } from '../importProtocol';
 import { actionCreators as serverActions, actionTypes as serverActionTypes } from '../pairedServer';
 import { epics as errorsEpic } from '../errors';
 
