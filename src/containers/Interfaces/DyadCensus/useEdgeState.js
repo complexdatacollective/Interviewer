@@ -36,8 +36,8 @@ export const getIsPreviouslyAnsweredNo = (state, prompt, pair) => {
 };
 
 export const stageStateReducer = (state = [], { pair, prompt, value }) => {
+  // Remove existing entry, if it exists, and add new one on the end
   const newState = [
-    // Remove existing entry, if it exists
     ...state.filter(item => !matchEntry(prompt, pair)(item)),
     [prompt, ...pair, value],
   ];
@@ -47,18 +47,17 @@ export const stageStateReducer = (state = [], { pair, prompt, value }) => {
 
 /**
  * Manages a virtual edge state between the current pair,
- * taking into account where we are in the 'steps', and the
+ * taking into account where we are in the stage, and the
  * actual state of the edge in the network.
  *
  * The latest Redux version would allow the removal of
- * dispatch, and the passed in state (edges, edgeType).
+ * dispatch, and the passed in state (edges, edgeType, stageState).
  *
  * @param {function} dispatch - Redux dispatcher
  * @param {array} edges - List of all the edges relavent to this stage
  * @param {string} edgeState - Type of edge relevant to this prompt
  * @param {array} pair - Pair of node ids in format `[a, b]`
- * @param {boolean} isCompletedStep - If this step has been completed, we
- * infer that no edge means that the participant selected 'no'
+ * @param {boolean} stageState - Tracked choices in redux state
  * @param {array} deps - If these deps are changed, reset
  */
 const useEdgeState = (
