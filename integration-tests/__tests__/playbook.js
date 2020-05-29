@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
 import path from 'path';
-import { dialogAddon as fakeDialog } from 'spectron-dialog-addon';
+import dialogAddon from 'spectron-dialog-addon';
 import { timing, paths, mockProtocol } from '../config';
 import getData from '../getData';
 import { forceClick } from './helpers';
@@ -14,7 +14,7 @@ export const loadProtocolFromFile = async (app, filename) => {
   const mockProtocolPath = path.join(paths.dataDir, filename);
   const mockFilenames = [mockProtocolPath];
 
-  await fakeDialog.mock([{ method: 'showOpenDialog', value: mockFilenames }]);
+  await dialogAddon.mock([{ method: 'showOpenDialog', value: mockFilenames }]);
   await app.client.isVisible('.getting-started');
   await app.client.click('[name=add-a-protocol]');
   await app.client.waitForVisible('.protocol-import-dialog__tabs');
