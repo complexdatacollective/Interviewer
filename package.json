@@ -46,7 +46,7 @@
     "type": "git"
   },
   "devDependencies": {
-    "@babel/core": "^7.8.3",
+    "@babel/core": "^7.10.1",
     "@babel/plugin-proposal-class-properties": "^7.7.4",
     "@babel/plugin-proposal-json-strings": "^7.7.4",
     "@babel/plugin-syntax-dynamic-import": "^7.7.4",
@@ -109,6 +109,7 @@
     "http-proxy-middleware": "0.17.3",
     "i": "^0.3.6",
     "icon-gen": "^1.2.3",
+    "imgbb-uploader": "^1.0.3",
     "jest": "^25.1.0",
     "jest-image-snapshot": "^2.9.0",
     "json-loader": "0.5.4",
@@ -252,7 +253,8 @@
       "<rootDir>[/\\\\](www|docs|node_modules|scripts|test)[/\\\\]",
       "<rootDir>/src/utils/network-exporters",
       "<rootDir>/src/utils/networkQuery",
-      "<rootDir>/integration-tests"
+      "<rootDir>/integration-tests",
+      "<rootDir>/platforms"
     ],
     "testEnvironment": "node",
     "testURL": "http://localhost",
