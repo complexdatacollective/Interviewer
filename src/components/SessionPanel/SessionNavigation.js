@@ -39,7 +39,7 @@ const SessionNavigation = (props) => {
       <motion.div
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
-        className="session-navigation__button"
+        className="session-navigation__button session-navigation__button--menu"
         onClick={() => {
           setShowSubMenu(true);
           setExpanded(true);
