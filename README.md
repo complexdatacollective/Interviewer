@@ -14,7 +14,7 @@ React Scripts
 
 ## Node/NPM Version
 
-This project currently requires version `12.8.0` of node, and version `6.10.2` of npm. These are the only supported versions for this project.
+This project currently requires version `12.14.1` of node, and version `6.13.4` of npm. These are the only supported versions for this project.
 
 As a convenience, the repository contains a `.node-version` file that enables convinient use of a node environment manager.
 
@@ -38,7 +38,7 @@ Once you've completed `npm install`, you will need to rebuild MDNS with the Elec
 
 ```
 cd node_modules\mdns
-node-gyp rebuild --target=5.0.9 --arch=x64 --dist-url=https://atom.io/download/electron
+npx node-gyp rebuild --target=9.0.0 --arch=x64 --dist-url=https://atom.io/download/electron
 ```
 
 `target` must match the electron version installed by npm

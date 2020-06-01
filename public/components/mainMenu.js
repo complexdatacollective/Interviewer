@@ -34,11 +34,12 @@ const MenuTemplate = (window) => {
           message: 'Destroy all application files and data?',
           detail: 'This includes all application settings, imported protocols, and interview data.',
           buttons: ['Reset Data', 'Cancel'],
-        }, (response) => {
-          if (response === 0) {
-            window.webContents.send('RESET_STATE');
-          }
-        });
+        })
+          .then(({ response }) => {
+            if (response === 0) {
+              window.webContents.send('RESET_STATE');
+            }
+          });
       },
     },
     { type: 'separator' },
