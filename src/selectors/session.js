@@ -13,6 +13,13 @@ const stageIndexForCurrentSession = state => currentStageIndex(currentPathname(s
 export const getActiveSession = state =>
   state.activeSessionId && state.sessions[state.activeSessionId];
 
+export const getStageState = (state) => {
+  const session = getActiveSession(state);
+  if (!session) { return undefined; }
+  const stageIndex = session.stageIndex;
+  return get(session, ['stages', stageIndex], undefined);
+};
+
 export const getCaseId = createDeepEqualSelector(
   getActiveSession,
   session => (session && session.caseId),

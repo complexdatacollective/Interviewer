@@ -4,6 +4,11 @@ const loadDevTools = require('./components/loadDevTools');
 const appManager = require('./components/appManager');
 const { commonName } = require('secure-comms-api/sslConfig.js');
 
+// For now, MDNS is not context aware so we need to use this.
+// See here for details: https://github.com/electron/electron/issues/18397
+// TODO: remove this before upgrading electron again.
+app.allowRendererProcessReuse = false;
+
 protocol.registerSchemesAsPrivileged([{
   scheme: 'asset',
   privileges: {

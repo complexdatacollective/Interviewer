@@ -40,6 +40,16 @@ const checkExistingSession = (dispatch, state, currentName) => {
     })));
   }
 
+  if (existingIndex) {
+    return new Promise((resolve) => dispatch(dialogActions.openDialog({
+      type: 'Notice',
+      title: 'Update protocol installation',
+      confirmLabel: 'Continue',
+      onConfirm: () => resolve(existingIndex),
+      message: 'This protocol is already installed and will be updated.',
+    })));
+  }
+
   return Promise.resolve(existingIndex);
 }
 

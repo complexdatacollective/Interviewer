@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
 import path from 'path';
-import fakeDialog from 'spectron-fake-dialog';
+import dialogAddon from 'spectron-dialog-addon';
 import { timing, paths, mockProtocol } from '../config';
 import getData from '../getData';
 import { forceClick } from './helpers';
@@ -10,15 +10,19 @@ import { forceClick } from './helpers';
  * common tasks for using protocols
  */
 
-export const loadProtocolFromFile = async (app, filename) => {
+export const loadProtocolFromFile = async (app, filename, repeat = false) => {
   const mockProtocolPath = path.join(paths.dataDir, filename);
   const mockFilenames = [mockProtocolPath];
 
-  await fakeDialog.mock([{ method: 'showOpenDialog', value: mockFilenames }]);
+  await dialogAddon.mock([{ method: 'showOpenDialog', value: { filePaths: mockFilenames } }]);
   await app.client.isVisible('.getting-started');
   await app.client.click('[name=add-a-protocol]');
   await app.client.waitForVisible('.protocol-import-dialog__tabs');
   await app.client.click('.tab=Local file');
+  if (repeat) {
+    await app.client.waitForVisible('h2=Update protocol installation');
+    await app.client.click('button=Continue');
+  }
   await app.client.waitForVisible('h4=Protocol imported successfully!');
   await app.client.click('button=Continue');
   await app.client.pause(timing.medium);
@@ -34,6 +38,14 @@ export const loadMockProtocolAsFile = async (app) => {
     .then(([, filename]) => {
       console.info(`loading protocol at "${filename}".`);
       return loadProtocolFromFile(app, filename);
+    });
+};
+
+export const loadMockProtocolAsFileAgain = async (app) => {
+  await getData(mockProtocol)
+    .then(([, filename]) => {
+      console.info(`loading protocol at "${filename}".`);
+      return loadProtocolFromFile(app, filename, true);
     });
 };
 

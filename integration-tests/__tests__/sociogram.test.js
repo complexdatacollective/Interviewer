@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import fakeDialog from 'spectron-fake-dialog';
+import dialogAddon from 'spectron-dialog-addon';
 import {
   makeTestingApp,
   startApps,
@@ -21,7 +21,7 @@ import {
 const app = makeTestingApp('Network-Canvas');
 
 const setupApp = async () => {
-  await fakeDialog.apply(app);
+  await dialogAddon.apply(app);
   await startApps(app);
 };
 
