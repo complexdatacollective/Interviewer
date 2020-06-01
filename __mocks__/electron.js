@@ -1,8 +1,8 @@
 /* eslint-env jest */
 
 const dialog = {
-  showMessageBox: jest.fn(),
-  showOpenDialog: jest.fn(),
+  showMessageBox: jest.fn().mockImplementation(() => Promise.resolve('response')),
+  showOpenDialog: jest.fn().mockImplementation(() => Promise.resolve('response')),
 };
 
 const app = {

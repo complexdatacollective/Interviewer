@@ -3,15 +3,9 @@ import FileExportManager from './network-exporters/src/FileExportManager';
 const saveDialog = (defaultFileName, extension) => {
   const { dialog } = window.require('electron').remote;
 
-  return new Promise((resolve) => {
-    dialog.showSaveDialog({
-      filters: [{ name: extension, extensions: [extension] }],
-      defaultPath: defaultFileName,
-    }, (filename) => {
-      if (filename === undefined) resolve({ cancelled: true });
-
-      resolve({ cancelled: false, filename });
-    });
+  return dialog.showSaveDialog({
+    filters: [{ name: extension, extensions: [extension] }],
+    defaultPath: defaultFileName,
   });
 };
 
@@ -28,11 +22,14 @@ const exportSessions = (sessions, installedProtocols) => {
   // TODO: can we show the save dialog when the file is ready to be written instead?
   const defaultFileName = 'networkCanvasExport.zip';
   return saveDialog(defaultFileName, 'zip')
-    .then(({ cancelled, filename }) => {
-      if (cancelled) { return { cancelled }; }
+    .then(({ canceled, filePath }) => {
+      if (canceled) { return { cancelled: canceled }; }
 
-      return fileExportManager.exportSessions(sessions, installedProtocols, filename)
-        .then(() => shell.showItemInFolder(filename));
+      return fileExportManager.exportSessions(sessions, installedProtocols, filePath)
+        .then(() => {
+          shell.showItemInFolder(filePath);
+          return { cancelled: canceled, filePath };
+        });
     });
 };
 

@@ -4,7 +4,7 @@ branches:
   only:
     - master
 node_js:
-  - "12.8.0"
+  - "12.14.1"
 addons:
   apt:
     packages:
