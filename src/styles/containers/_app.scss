@@ -41,8 +41,9 @@
   }
 
   &--preview {
-    .session-panel {
+    .session-navigation__button--menu {
       pointer-events: none;
+      display: none;
     }
   }
 }
