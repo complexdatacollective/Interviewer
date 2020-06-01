@@ -63,12 +63,15 @@ const useSteps = (
   };
 
   const [state, setState] = useState(
-    stateReducer({
-      step: 0,
-      substep: 0,
-      stage: 0,
-      direction: 'forward',
-    })(initialValues),
+    stateReducer(
+      initialValues,
+      {
+        step: 0,
+        substep: 0,
+        stage: 0,
+        direction: 'forward',
+      },
+    ),
   );
 
   const next = () => {
@@ -80,12 +83,15 @@ const useSteps = (
 
     const substep = getSubStep(steps, nextStep);
 
-    setState(stateReducer({
-      step: nextStep,
-      substep: substep.step,
-      stage: substep.stage,
-      direction: 'forward',
-    }));
+    setState(stateReducer(
+      state,
+      {
+        step: nextStep,
+        substep: substep.step,
+        stage: substep.stage,
+        direction: 'forward',
+      },
+    ));
   };
 
   const previous = () => {
@@ -97,12 +103,15 @@ const useSteps = (
 
     const substep = getSubStep(steps, nextStep);
 
-    setState(stateReducer({
-      step: nextStep,
-      substep: substep.step,
-      stage: substep.stage,
-      direction: 'backward',
-    }));
+    setState(stateReducer(
+      state,
+      {
+        step: nextStep,
+        substep: substep.step,
+        stage: substep.stage,
+        direction: 'backward',
+      },
+    ));
   };
 
   return [state, next, previous];
