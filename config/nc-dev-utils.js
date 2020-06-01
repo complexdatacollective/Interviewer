@@ -25,9 +25,9 @@ const logPlatformInfo = () => {
     console.log(chalk.yellow('Content will only run in an', process.env.NC_TARGET_PLATFORM, 'device or emulator'));
   } else if (isTargetingElectron) {
     console.log(chalk.green('Targeting Electron'));
-    console.log(chalk.yellow('Content will only run in electron: `npm run electron:dev`'));
+    console.log(chalk.yellow('Content will only run in electron: `npm run dev:electron`'));
   } else {
-    console.log(chalk.cyan('Live mobile dev also available: `npm run [android|ios]:dev`'));
+    console.log(chalk.cyan('Live mobile dev also available: `npm run dev:[android|ios]`'));
   }
 };
 

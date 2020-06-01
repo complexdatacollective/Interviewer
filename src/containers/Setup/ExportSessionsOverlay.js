@@ -159,7 +159,7 @@ class ExportSessionsOverlay extends PureComponent {
     return <p>{errorMessage}</p>;
   }
 
-  export(sessionList) {
+  export = (sessionList) => {
     this.setState({ showExportProgress: true, exportFinished: false });
     this.props.bulkServerExportSessions(sessionList.map((sessionId) => {
       const session = this.props.sessions[sessionId];
