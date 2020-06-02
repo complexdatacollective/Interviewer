@@ -25,7 +25,7 @@ const SessionInformation = (props) => {
 
   const renderSummaryEntities = (type) => {
     if (sessionNetwork[type].length === 0) {
-      return '';
+      return (<h6>No {type} in this interview.</h6>);
     }
 
     const networkEntitiesByType = countBy(sessionNetwork[type], 'type');

@@ -14,7 +14,7 @@ import CloseButton from '../CloseButton';
 import SessionInformation from './SessionInformation';
 
 const choiceVariants = {
-  show: { opacity: 1, translateY: '0%', transition: { type: 'spring', damping: 15, stiffness: 100, delay: 0.2 } },
+  show: { opacity: 1, translateY: '0%', transition: { type: 'spring', damping: 15, stiffness: 200, delay: 0.25 } },
   hide: { opacity: 0, translateY: '100%', transition: { duration: 0.3 } },
 };
 
