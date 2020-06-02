@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'recompose';
-import { connect } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getCSSVariableAsNumber, getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
 import { DropObstacle } from '../../behaviours/DragAndDrop';
-import { getActiveSession } from '../../selectors/session';
 import StagesMenu from '../StagesMenu/StagesMenu';
 import SubMenu from './SubMenu';
 import BackgroundDimmer from '../BackgroundDimmer';
@@ -40,7 +38,7 @@ const SessionPanel = React.forwardRef((props, ref) => {
         { expanded && (<BackgroundDimmer clickHandler={resetMenuState} ><CloseButton onClick={() => setExpanded(false)} className="close-button-wrapper" /></BackgroundDimmer>)}
       </AnimatePresence>
       <AnimatePresence>
-        { (expanded && showSubMenu && props.isActiveSession) && (
+        { (expanded && showSubMenu) && (
           <motion.div
             className="session-info-panel"
             variants={choiceVariants}
@@ -76,11 +74,6 @@ const SessionPanel = React.forwardRef((props, ref) => {
   );
 });
 
-
-const mapStateToProps = state => ({
-  isActiveSession: !!getActiveSession(state),
-});
-
 SessionPanel.propTypes = {
   onClickNext: PropTypes.func.isRequired,
   onClickBack: PropTypes.func.isRequired,
@@ -90,6 +83,5 @@ SessionPanel.propTypes = {
 export { SessionPanel };
 
 export default compose(
-  connect(mapStateToProps, null),
   DropObstacle,
 )(SessionPanel);
