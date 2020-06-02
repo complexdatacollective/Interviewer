@@ -60,6 +60,7 @@ describe('sessions', () => {
       expect(newState).toEqual({
         a: {
           caseId: 'case1',
+          createdAt: now,
           network: {
             ego: {
               _uid: 'session-1',
@@ -86,6 +87,22 @@ describe('sessions', () => {
 
       expect(newState[mockSessionId]).toEqual(expect.objectContaining({
         caseID: undefined,
+        network: { edges: [], ego: {}, nodes: [] },
+        protocolUID: undefined,
+      }));
+    });
+
+    it('should handle UPDATE_CASE_ID', () => {
+      const newState = reducer(mockStateWithSession,
+        {
+          type: actionTypes.UPDATE_CASE_ID,
+          sessionId: mockSessionId,
+          caseId: 'case2',
+        },
+      );
+
+      expect(newState[mockSessionId]).toEqual(expect.objectContaining({
+        caseId: 'case2',
         network: { edges: [], ego: {}, nodes: [] },
         protocolUID: undefined,
       }));
