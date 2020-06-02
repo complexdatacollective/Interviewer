@@ -123,13 +123,19 @@ $choice-padding: 2rem;
     display: flex;
     justify-content: center;
     align-items: center;
+
+    .node {
+      position: relative;
+      z-index: 2;
+    }
   }
 
   &__edge {
+    position: relative;
     height: 0.5rem;
     z-index: 1;
     width: 11rem;
-    margin: 0 -1rem;
+    margin: 0 -1.5rem;
     background: linear-gradient(to right, transparent 50%, var(--background) 50%);
     background-size: 200% 100%;
     transition: background var(--animation-duration-standard) var(--animation-easing);
