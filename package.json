@@ -109,7 +109,7 @@
     "icon-gen": "^1.2.3",
     "imgbb-uploader": "^1.0.3",
     "jest": "^26.0.1",
-    "jest-image-snapshot": "^2.9.0",
+    "jest-image-snapshot": "^4.0.2",
     "json-loader": "0.5.4",
     "jszip": "^3.2.2",
     "lodash": "^4.17.11",
