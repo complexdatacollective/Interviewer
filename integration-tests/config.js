@@ -7,9 +7,9 @@ const { DEVELOPMENT_PROTOCOL_URL } = require('../src/config');
 
 // in ms
 const timing = {
-  long: 1000,
-  medium: 500,
-  short: 250,
+  long: 3000,
+  medium: 1500,
+  short: 500,
 };
 
 const testSizes = {
