@@ -28,10 +28,12 @@ class ExportSessionsOverlay extends PureComponent {
     this.state = {
       selectedServer: null, // set when user selects/enters a server to pair with
       previousSelectedServer: null, // selectedServer clone to populate manual inputs
-      exportMode: 'server', // used to switch between tabbed views
+      exportMode: 'download', // used to switch between tabbed views
       deleteAfterExport: false, //  determines if successfully uploaded sessions should be removed.
       showExportProgress: false, // Weather to show the SessionExportStatusList
       exportFinished: false,
+      showDownloadProgress: false,
+      downloadFinished: false,
     };
   }
 
@@ -66,8 +68,13 @@ class ExportSessionsOverlay extends PureComponent {
       return foundSession;
     };
 
-    if (this.sessionsAreExportable) {
-      if (this.state.showExportProgress) {
+    const exportFunc = this.state.exportMode === 'server' ? this.export : this.exportToFile;
+    const progress = this.state.exportMode === 'server' ? this.state.showExportProgress : this.state.showDownloadProgress;
+    const finished = this.state.exportMode === 'server' ? this.state.exportFinished : this.state.downloadFinished;
+    const errorMessage = this.state.exportMode === 'server' ? 'This session is not exportable: it is not associated with any Server.' : 'This session is not exportable.';
+
+    if (this.sessionsAreExportable || this.state.exportMode === 'download') {
+      if (progress) {
         return (
           <div className="session-export-content">
             <div className="session-export-content__container">
@@ -76,7 +83,7 @@ class ExportSessionsOverlay extends PureComponent {
                 deleteWhenFinished={this.state.deleteAfterExport}
               />
             </div>
-            { this.state.exportFinished &&
+            { finished &&
             <div className="session-export-content__footer">
               { !this.props.activeSession && successfullyExportedSession() &&
                 <Toggle
@@ -117,9 +124,31 @@ class ExportSessionsOverlay extends PureComponent {
           </div>
         );
       }
+      const destination = this.state.exportMode === 'server' ? this.props.pairedServer.name : 'file';
+      const tabContent = (
+        <React.Fragment>
+          <div>
+            <h2>Ready to export</h2>
+            <p>
+              Ready to export {this.props.sessionsToExport.length} session{this.props.sessionsToExport.length > 1 && ('s')} to {destination}.
+            </p>
+          </div>
+          <div className="session-export-content__footer">
+            <div className="session-export-content__footer--actions">
+              <Button onClick={() => exportFunc(this.props.sessionsToExport)}>
+                Export
+              </Button>
+            </div>
+          </div>
+        </React.Fragment>);
+      const serverWrapper = (
+        <PairedServerWrapper className="server-setup__card" data={this.props.pairedServer} isPaired>
+          {tabContent}
+        </PairedServerWrapper>);
       return (
         <div className="session-export-content">
           <div className="session-export-content__container">
+<<<<<<< HEAD:src/containers/ExportSessions/ExportSessionsOverlay.js
             <div>
               <h2>Ready to export</h2>
               <p>
@@ -134,18 +163,20 @@ class ExportSessionsOverlay extends PureComponent {
                 </Button>
               </div>
             </div>
+=======
+            {this.state.exportMode === 'server' ? serverWrapper : <div className="session-export-content__to-file">{tabContent}</div>}
+>>>>>>> master:src/containers/Setup/ExportSessionsOverlay.js
           </div>
         </div>
       );
     }
 
-    return <p>This session is not exportable: it is not associated with any Server.</p>;
+    return <p>{errorMessage}</p>;
   }
 
-  export(sessionList) {
+  export = (sessionList) => {
     this.setState({ showExportProgress: true, exportFinished: false });
-
-    this.props.bulkExportSessions(sessionList.map((sessionId) => {
+    this.props.bulkServerExportSessions(sessionList.map((sessionId) => {
       const session = this.props.sessions[sessionId];
       const sessionProtocolUID = session.protocolUID;
       const sessionCodebook = this.props.installedProtocols[sessionProtocolUID].codebook;
@@ -155,7 +186,10 @@ class ExportSessionsOverlay extends PureComponent {
       const sessionData = asExportableNetwork(
         session.network,
         sessionCodebook,
-        { _caseID: session.caseId },
+        {
+          [caseProperty]: session.caseId,
+          _remoteProtocolID: remoteProtocolId,
+        },
       );
 
       return { remoteProtocolId, sessionUUID: sessionId, sessionData };
@@ -178,6 +212,44 @@ class ExportSessionsOverlay extends PureComponent {
     });
   }
 
+  exportToFile = (exportedSessions) => {
+    this.setState({ showDownloadProgress: true, downloadFinished: false });
+    this.props.bulkFileExportSessions(exportedSessions.map((session) => {
+      const sessionProtocol =
+        this.props.installedProtocols[this.props.sessions[session].protocolUID];
+
+      const exportableSessionNetwork = asExportableNetwork(
+        this.props.sessions[session].network,
+        sessionProtocol.codebook,
+        {
+          [caseProperty]: this.props.sessions[session].caseId,
+          _remoteProtocolID: nameDigest(sessionProtocol.name),
+        },
+      );
+
+      return {
+        [protocolProperty]: this.props.sessions[session].protocolUID,
+        [sessionProperty]: session,
+        remoteProtocolId: nameDigest(sessionProtocol.name),
+        ...exportableSessionNetwork,
+      };
+    }))
+      .then(({ cancelled }) => {
+        if (cancelled) {
+          return this.setState({ showDownloadProgress: false });
+        }
+        return this.setState({ downloadFinished: true });
+      })
+      .catch(err => this.handleExportError(err));
+  };
+
+  switchTab = (exportMode) => {
+    if (exportMode === this.state.exportMode) return;
+
+    this.setState({ exportMode, showDownloadProgress: false, showExportProgress: false });
+    this.props.sessionExportReset();
+  }
+
   contentAreas() {
     const {
       manualEntry,
@@ -196,8 +268,8 @@ class ExportSessionsOverlay extends PureComponent {
       content = (
         <ProtocolUrlForm />
       );
-    // If we are paired, show the server list.
-    } else if (pairedServer) {
+    // If we are paired, show the server list, or exporting to file, show the session list
+    } else if (exportMode === 'download' || pairedServer) {
       content = this.exportSection;
 
     // If user has requested manual entry show the form
@@ -243,19 +315,13 @@ class ExportSessionsOverlay extends PureComponent {
       <div className="session-export-overlay__tabs">
         <div
           className={cx('tab', { 'tab--selected': this.state.exportMode === 'server' })}
-          onClick={() => this.setState({ exportMode: 'server' })}
+          onClick={() => this.switchTab('server')}
         >
           Upload to Server
         </div>
         <div
-          className="tab"
-          onClick={() => {
-            this.props.openDialog({
-              type: 'Notice',
-              title: 'Not yet available',
-              message: "This feature is not yet available. If you need to export an interview as a file, please use the 'finish session' screen from within the interview.",
-            });
-          }}
+          className={cx('tab', { 'tab--selected': this.state.exportMode === 'download' })}
+          onClick={() => this.switchTab('download')}
         >
           Export to File
         </div>
@@ -297,7 +363,9 @@ ExportSessionsOverlay.propTypes = {
   removeSession: PropTypes.func.isRequired,
   sessionsToExport: PropTypes.array.isRequired,
   openDialog: PropTypes.func.isRequired,
-  bulkExportSessions: PropTypes.func.isRequired,
+  bulkServerExportSessions: PropTypes.func.isRequired,
+  bulkFileExportSessions: PropTypes.func.isRequired,
+  sessionExportReset: PropTypes.func.isRequired,
   activeSession: PropTypes.string,
   pairedServer: PropTypes.shape({
     pairingServiceUrl: PropTypes.string.isRequired,
@@ -313,7 +381,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  bulkExportSessions: bindActionCreators(sessionsActions.bulkExportSessions, dispatch),
+  bulkServerExportSessions: bindActionCreators(sessionsActions.bulkServerExportSessions, dispatch),
+  bulkFileExportSessions: bindActionCreators(sessionsActions.bulkFileExportSessions, dispatch),
+  sessionExportReset: bindActionCreators(sessionsActions.sessionExportReset, dispatch),
   removeSession: bindActionCreators(sessionsActions.removeSession, dispatch),
   openDialog: bindActionCreators(dialogActions.openDialog, dispatch),
 });

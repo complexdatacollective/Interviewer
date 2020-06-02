@@ -3,7 +3,7 @@
 
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import uuidv4 from '../../../utils/uuid';
+import uuid from 'uuid/v4';
 import reducer, { getReducer, actionCreators, actionTypes } from '../sessions';
 import { actionTypes as networkActionTypes, actionCreators as networkActions } from '../network';
 import { actionTypes as installedProtocolsActionTypes } from '../installedProtocols';
@@ -38,8 +38,8 @@ const mockStateWithProtocol = {
   },
 };
 
-jest.mock('../../../utils/uuid');
-uuidv4.mockImplementation(() => mockSessionId);
+jest.mock('uuid/v4');
+uuid.mockImplementation(() => mockSessionId);
 
 describe('sessions', () => {
   describe('reducer', () => {
@@ -60,6 +60,7 @@ describe('sessions', () => {
       expect(newState).toEqual({
         a: {
           caseId: 'case1',
+          createdAt: now,
           network: {
             ego: {
               _uid: 'session-1',
@@ -86,6 +87,22 @@ describe('sessions', () => {
 
       expect(newState[mockSessionId]).toEqual(expect.objectContaining({
         caseID: undefined,
+        network: { edges: [], ego: {}, nodes: [] },
+        protocolUID: undefined,
+      }));
+    });
+
+    it('should handle UPDATE_CASE_ID', () => {
+      const newState = reducer(mockStateWithSession,
+        {
+          type: actionTypes.UPDATE_CASE_ID,
+          sessionId: mockSessionId,
+          caseId: 'case2',
+        },
+      );
+
+      expect(newState[mockSessionId]).toEqual(expect.objectContaining({
+        caseId: 'case2',
         network: { edges: [], ego: {}, nodes: [] },
         protocolUID: undefined,
       }));

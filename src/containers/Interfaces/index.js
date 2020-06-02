@@ -14,6 +14,7 @@ import Narrative from './Narrative';
 import AlterForm from './AlterForm';
 import EgoForm from './EgoForm';
 import AlterEdgeForm from './AlterEdgeForm';
+import DyadCensus from './DyadCensus';
 import FinishSession from './FinishSession';
 
 import { StageType } from '../../protocol-consts';
@@ -31,6 +32,7 @@ const interfaces = {
   [StageType.AlterForm]: AlterForm,
   [StageType.EgoForm]: EgoForm,
   [StageType.AlterEdgeForm]: AlterEdgeForm,
+  [StageType.DyadCensus]: DyadCensus,
   FinishSession,
 };
 
@@ -59,6 +61,7 @@ export {
   AlterForm,
   EgoForm,
   AlterEdgeForm,
+  DyadCensus,
 };
 
 export default getInterface;

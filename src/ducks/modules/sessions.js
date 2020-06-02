@@ -1,14 +1,18 @@
 import { omit, map, reduce } from 'lodash';
-import uuidv4 from '../../utils/uuid';
+import uuid from 'uuid/v4';
 import ApiClient from '../../utils/ApiClient';
+import exportSessions from '../../utils/exportSessions';
 import { actionCreators as SessionWorkerActions } from './sessionWorkers';
 import { actionTypes as installedProtocolsActionTypes } from './installedProtocols';
 import networkReducer, { actionTypes as networkActionTypes, actionCreators as networkActions, entityPrimaryKeyProperty } from './network';
+import { sessionProperty } from '../../utils/network-exporters/src/utils/reservedAttributes';
 
 const ADD_SESSION = 'ADD_SESSION';
 const LOAD_SESSION = 'LOAD_SESSION';
 const UPDATE_PROMPT = 'UPDATE_PROMPT';
 const UPDATE_STAGE = 'UPDATE_STAGE';
+const UPDATE_CASE_ID = 'UPDATE_CASE_ID';
+const UPDATE_STAGE_STATE = 'UPDATE_STAGE_STATE';
 const REMOVE_SESSION = 'REMOVE_SESSION';
 const EXPORT_SESSIONS_START = 'EXPORT_SESSIONS_START';
 const EXPORT_SESSIONS_RESET = 'EXPORT_SESSIONS_RESET';
@@ -58,6 +62,7 @@ const getReducer = network =>
             promptIndex: 0,
             stageIndex: 0,
             caseId: action.caseId,
+            createdAt: Date.now(),
             network: network(state.network, action),
           }),
         };
@@ -79,13 +84,34 @@ const getReducer = network =>
             stageIndex: action.stageIndex,
           }),
         };
+      case UPDATE_CASE_ID:
+        return {
+          ...state,
+          [action.sessionId]: withTimestamp({
+            ...state[action.sessionId],
+            caseId: action.caseId,
+          }),
+        };
+      case UPDATE_STAGE_STATE: {
+        const session = state[action.sessionId];
+
+        return {
+          ...state,
+          [action.sessionId]: withTimestamp({
+            ...session,
+            stages: {
+              ...session.stages,
+              [action.stageIndex]: action.state,
+            },
+          }),
+        };
+      }
       case REMOVE_SESSION:
         return omit(state, [action.sessionId]);
       case EXPORT_SESSIONS_START: {
         const newObj = {
           ...state,
         };
-
         map(action.sessionIDs, (session) => {
           newObj[session.sessionUUID].exportStatus = 'exporting';
         });
@@ -339,7 +365,7 @@ const removeEdge = edgeId => (dispatch, getState) => {
 };
 
 const addSession = (caseId, protocolUID) => (dispatch) => {
-  const id = uuidv4();
+  const id = uuid();
 
   dispatch({
     type: ADD_SESSION,
@@ -350,6 +376,16 @@ const addSession = (caseId, protocolUID) => (dispatch) => {
 
   return dispatch(SessionWorkerActions.initializeSessionWorkersThunk(protocolUID))
     .then(() => id);
+};
+
+const updateCaseId = caseId => (dispatch, getState) => {
+  const { activeSessionId } = getState();
+
+  dispatch({
+    type: UPDATE_CASE_ID,
+    sessionId: activeSessionId,
+    caseId,
+  });
 };
 
 const loadSession = () => (dispatch) => {
@@ -380,6 +416,28 @@ const updateStage = stageIndex => (dispatch, getState) => {
   });
 };
 
+const withSessionId = action =>
+  (dispatch, getState) => {
+    const { activeSessionId: sessionId } = getState();
+
+    dispatch({
+      ...action,
+      sessionId,
+    });
+  };
+
+const updateStageState = state =>
+  (dispatch, getState) => {
+    const { activeSessionId, sessions } = getState();
+    const stageIndex = sessions[activeSessionId].stageIndex;
+
+    dispatch(withSessionId({
+      type: UPDATE_STAGE_STATE,
+      stageIndex,
+      state,
+    }));
+  };
+
 function removeSession(id) {
   return {
     type: REMOVE_SESSION,
@@ -407,7 +465,28 @@ const sessionExportFailed = (id, error) => ({
   sessionId: id,
 });
 
-const bulkExportSessions = sessionList => (dispatch, getState) => {
+const bulkFileExportSessions = sessionList => (dispatch, getState) => {
+  dispatch(sessionExportStart(
+    sessionList.map(session => ({ sessionUUID: session[sessionProperty] })),
+  ));
+
+  const { installedProtocols } = getState();
+
+  return exportSessions(sessionList, installedProtocols)
+    .then(({ cancelled }) => {
+      if (cancelled) {
+        dispatch(sessionExportReset());
+        return { cancelled };
+      }
+
+      return sessionList.map(session => dispatch(sessionExportSucceeded(session[sessionProperty])));
+    })
+    .catch(err =>
+      sessionList.map(session => dispatch(sessionExportFailed(session[sessionProperty], err))),
+    );
+};
+
+const bulkServerExportSessions = sessionList => (dispatch, getState) => {
   const pairedServer = getState().pairedServer;
 
   if (pairedServer) {
@@ -464,11 +543,15 @@ const actionCreators = {
   loadSession,
   updatePrompt,
   updateStage,
+  updateCaseId,
+  updateStageState,
   removeSession,
   sessionExportStart,
+  sessionExportSucceeded,
   sessionExportReset,
   sessionExportFailed,
-  bulkExportSessions,
+  bulkServerExportSessions,
+  bulkFileExportSessions,
 };
 
 const actionTypes = {
@@ -476,6 +559,8 @@ const actionTypes = {
   LOAD_SESSION,
   UPDATE_PROMPT,
   UPDATE_STAGE,
+  UPDATE_CASE_ID,
+  UPDATE_STAGE_STATE,
   REMOVE_SESSION,
   EXPORT_SESSION_FAILED,
   EXPORT_SESSIONS_START,

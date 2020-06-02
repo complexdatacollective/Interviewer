@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import fakeDialog from 'spectron-fake-dialog';
+import dialogAddon from 'spectron-dialog-addon';
 import { timing } from '../config';
 import {
   makeTestingApp,
@@ -9,12 +9,16 @@ import {
   forceClick,
   matchImageSnapshot,
 } from './helpers';
-import { loadProtocolFromNetwork, loadMockProtocolAsFile } from './playbook';
+import {
+  loadProtocolFromNetwork,
+  loadMockProtocolAsFile,
+  loadMockProtocolAsFileAgain,
+} from './playbook';
 
 const app = makeTestingApp('Network-Canvas');
 
 const setup = async () => {
-  await fakeDialog.apply(app);
+  await dialogAddon.apply(app);
   await startApps(app);
 };
 
@@ -41,8 +45,11 @@ describe('Start screen', () => {
     await matchImageSnapshot(app);
   });
 
+  it('communicates when protocol already loaded', async () => {
+    await loadMockProtocolAsFileAgain(app);
+  });
+
   it('lists loaded protocols, and allows delete', async () => {
-    await loadMockProtocolAsFile(app);
     await app.client.waitForVisible('[data-clickable="start-interview"]');
     await app.client.click('.protocol-card__delete');
     await app.client.pause(timing.medium);

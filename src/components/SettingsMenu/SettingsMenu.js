@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { getCSSVariableAsNumber, getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
+import { getActiveSession } from '../../selectors/session';
 import Scroller from '../Scroller';
 import BackgroundDimmer from '../BackgroundDimmer';
 import VisualPreferences from './Sections/VisualPreferences';
@@ -179,6 +180,7 @@ const SettingsMenu = (props) => {
 };
 
 const mapStateToProps = state => ({
+  isActiveSession: !!getActiveSession(state),
   settingsMenuOpen: state.ui.settingsMenuOpen,
 });
 

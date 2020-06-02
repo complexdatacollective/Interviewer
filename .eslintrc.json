@@ -3,12 +3,13 @@
     "env": {
         "browser": true,
         "commonjs": true,
-        "es6": true,
+        "es2020": true,
         "node": true
     },
+    "root": true,
     "parser": "babel-eslint",
     "parserOptions": {
-        "ecmaVersion": 7,
+        "ecmaVersion": 2018,
         "ecmaFeatures": {
             "jsx": true,
             "spread": true,
@@ -106,7 +107,9 @@
                 "discoverability",
                 "scrollable",
                 "draggable",
-                "hostname"
+                "hostname",
+                "dyad",
+                "Dyad"
              ],
              "skipIfMatch": [
                 "http(s)?://[^s]*",

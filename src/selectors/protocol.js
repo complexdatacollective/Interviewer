@@ -1,13 +1,13 @@
 import crypto from 'crypto';
+import uuid from 'uuid/v4';
 import { createSelector } from 'reselect';
 import { createDeepEqualSelector } from './utils';
 import { isPreview } from '../utils/Environment';
 import { getActiveSession } from './session';
-import uuidv4 from '../utils/uuid';
 
 const DefaultFinishStage = {
   // `id` is used as component key; must be unique from user input
-  id: uuidv4(),
+  id: uuid(),
   type: 'FinishSession',
   label: 'Finish Interview',
 };
@@ -30,6 +30,11 @@ export const getCurrentSessionProtocol = createSelector(
     }
     return protocols[session.protocolUID];
   },
+);
+
+export const getActiveProtocolName = createSelector(
+  getActiveProtocol,
+  protocol => protocol && protocol.name,
 );
 
 export const getAssetManifest = createSelector(

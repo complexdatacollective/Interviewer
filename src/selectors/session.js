@@ -29,6 +29,13 @@ export const getLastActiveSession = (state) => {
   };
 };
 
+export const getStageState = (state) => {
+  const session = getActiveSession(state);
+  if (!session) { return undefined; }
+  const stageIndex = session.stageIndex;
+  return get(session, ['stages', stageIndex], undefined);
+};
+
 export const getCaseId = createDeepEqualSelector(
   getActiveSession,
   session => (session && session.caseId),
@@ -69,6 +76,8 @@ export const getSessionProgress = (state) => {
   const isLastStage = currentStage === stageCount - 1;
   // includes finish screen if present
   const isLastScreen = currentStage === screenCount - 1;
+  const createdAt = session.createdAt;
+  const lastExportedAt = session.lastExportedAt;
 
   return {
     currentStage,
@@ -84,6 +93,8 @@ export const getSessionProgress = (state) => {
     stageProgress,
     promptProgress,
     percentProgress,
+    createdAt,
+    lastExportedAt,
   };
 };
 
