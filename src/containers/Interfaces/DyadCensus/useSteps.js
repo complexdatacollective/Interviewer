@@ -18,31 +18,29 @@ const getSubStep = (steps, nextStep) => {
 };
 
 // state reducer for steps state
-const stateReducer = (
-  state,
-  {
-    step,
-    substep,
-    stage,
-    direction,
-  },
-) => {
-  const progress = step > state.progress ? step : state.progress;
+const stateReducer = ({
+  step,
+  substep,
+  stage,
+  direction,
+}) =>
+  (state) => {
+    const progress = step > state.progress ? step : state.progress;
 
-  return ({
-    ...state,
-    step,
-    progress,
-    substep,
-    stage,
-    direction,
-    isCompletedStep: progress > step,
-    isStageStart: substep === 0,
-    isStageEnd: substep >= state.steps[stage] - 1,
-    isStart: step === 0,
-    isEnd: step >= state.totalSteps - 1,
-  });
-};
+    return ({
+      ...state,
+      step,
+      progress,
+      substep,
+      stage,
+      direction,
+      isCompletedStep: progress > step,
+      isStageStart: substep === 0,
+      isStageEnd: substep >= state.steps[stage] - 1,
+      isStart: step === 0,
+      isEnd: step >= state.totalSteps - 1,
+    });
+  };
 
 /**
  * Models 'substeps' in prompts, which allows us to keep track
@@ -63,15 +61,12 @@ const useSteps = (
   };
 
   const [state, setState] = useState(
-    stateReducer(
-      initialValues,
-      {
-        step: 0,
-        substep: 0,
-        stage: 0,
-        direction: 'forward',
-      },
-    ),
+    stateReducer({
+      step: 0,
+      substep: 0,
+      stage: 0,
+      direction: 'forward',
+    })(initialValues),
   );
 
   const next = () => {
@@ -83,15 +78,12 @@ const useSteps = (
 
     const substep = getSubStep(steps, nextStep);
 
-    setState(stateReducer(
-      state,
-      {
-        step: nextStep,
-        substep: substep.step,
-        stage: substep.stage,
-        direction: 'forward',
-      },
-    ));
+    setState(stateReducer({
+      step: nextStep,
+      substep: substep.step,
+      stage: substep.stage,
+      direction: 'forward',
+    }));
   };
 
   const previous = () => {
@@ -103,15 +95,12 @@ const useSteps = (
 
     const substep = getSubStep(steps, nextStep);
 
-    setState(stateReducer(
-      state,
-      {
-        step: nextStep,
-        substep: substep.step,
-        stage: substep.stage,
-        direction: 'backward',
-      },
-    ));
+    setState(stateReducer({
+      step: nextStep,
+      substep: substep.step,
+      stage: substep.stage,
+      direction: 'backward',
+    }));
   };
 
   return [state, next, previous];
