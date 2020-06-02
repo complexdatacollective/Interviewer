@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { countBy } from 'lodash';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import { Text } from '@codaco/ui/lib/components/Fields';
 import { Node, Icon, Button } from '@codaco/ui';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { getCaseId, getSessionProgress } from '../../selectors/session';
@@ -10,6 +9,7 @@ import { getActiveProtocolName, getProtocolCodebook } from '../../selectors/prot
 import { getNetwork } from '../../selectors/network';
 import { Scroller } from '..';
 import { Overlay } from '../../containers/Overlay';
+import { Form } from '../../containers';
 
 const elapsedTime = timestamp => timestamp && new Date(Date.now() - timestamp).toISOString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, '$1');
 
@@ -57,10 +57,9 @@ const SessionInformation = (props) => {
     });
   };
 
-  const [newCaseID, setNewCaseID] = useState(caseId);
   const [showCaseIDRename, setShowCaseIDRename] = useState(false);
 
-  const handleChangeCaseID = () => {
+  const handleChangeCaseID = ({ newCaseID }) => {
     setCaseId(newCaseID);
     setShowCaseIDRename(false);
   };
@@ -75,21 +74,32 @@ const SessionInformation = (props) => {
         <p>
           Enter a new case ID for this interview.
         </p>
-        <Text
-          input={{
-            value: newCaseID,
-            onChange: e => setNewCaseID(e.target.value),
-          }}
-          meta={{
-            invalid: 'this is a thing',
-            touched: true,
-          }}
+        <Form
+          className="case-id-form"
+          form="case-id-form"
+          formName="case-id-form"
           autoFocus
-          name="caseId"
-        />
-        <Button onClick={handleChangeCaseID}>
-          Change Case ID
-        </Button>
+          onSubmit={handleChangeCaseID}
+          fields={[
+            {
+              label: null,
+              name: 'newCaseID',
+              component: 'Text',
+              placeholder: 'Enter a unique case ID',
+              validation: {
+                required: true,
+                maxLength: 30,
+              },
+            },
+          ]}
+          initialValues={{
+            newCaseID: caseId,
+          }}
+        >
+          <Button aria-label="Submit" type="submit">
+            Update Case ID
+          </Button>
+        </Form>
       </Overlay>
       <Scroller>
         <section>
@@ -98,7 +108,7 @@ const SessionInformation = (props) => {
         </section>
         <section>
           <h4>Case ID</h4>
-          <h2 className="case-id" onClick={() => setShowCaseIDRename(true)}>{caseId} <Icon name="edit" /></h2>
+          <h2 className="case-id">{caseId} <Button size="small" icon="edit" color="platinum--dark" onClick={() => setShowCaseIDRename(true)}>Edit</Button></h2>
         </section>
         <section>
           <h4>Nodes</h4>
