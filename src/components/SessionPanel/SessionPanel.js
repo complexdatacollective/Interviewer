@@ -1,14 +1,22 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'recompose';
+import { connect } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getCSSVariableAsNumber, getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
 import { DropObstacle } from '../../behaviours/DragAndDrop';
+import { getActiveSession } from '../../selectors/session';
 import StagesMenu from '../StagesMenu/StagesMenu';
 import SubMenu from './SubMenu';
 import BackgroundDimmer from '../BackgroundDimmer';
 import SessionNavigation from './SessionNavigation';
 import CloseButton from '../CloseButton';
+import SessionInformation from './SessionInformation';
+
+const choiceVariants = {
+  show: { opacity: 1, translateY: '0%', transition: { type: 'spring', duration: 0.15, delay: 0.2 } },
+  hide: { opacity: 0, translateY: '50%', transition: { duration: 0.3 } },
+};
 
 const SessionPanel = React.forwardRef((props, ref) => {
   const [expanded, setExpanded] = useState(false);
@@ -30,6 +38,19 @@ const SessionPanel = React.forwardRef((props, ref) => {
     <React.Fragment>
       <AnimatePresence>
         { expanded && (<BackgroundDimmer clickHandler={resetMenuState} ><CloseButton onClick={() => setExpanded(false)} className="close-button-wrapper" /></BackgroundDimmer>)}
+      </AnimatePresence>
+      <AnimatePresence>
+        { (expanded && showSubMenu && props.isActiveSession) && (
+          <motion.div
+            className="session-info-panel"
+            variants={choiceVariants}
+            initial="hide"
+            animate="show"
+            exit="hide"
+          >
+            <SessionInformation />
+          </motion.div>
+        )}
       </AnimatePresence>
       <div className="session-panel-drop-obstacle" ref={ref} />
       <motion.div
@@ -55,6 +76,11 @@ const SessionPanel = React.forwardRef((props, ref) => {
   );
 });
 
+
+const mapStateToProps = state => ({
+  isActiveSession: !!getActiveSession(state),
+});
+
 SessionPanel.propTypes = {
   onClickNext: PropTypes.func.isRequired,
   onClickBack: PropTypes.func.isRequired,
@@ -64,5 +90,6 @@ SessionPanel.propTypes = {
 export { SessionPanel };
 
 export default compose(
+  connect(mapStateToProps, null),
   DropObstacle,
 )(SessionPanel);
