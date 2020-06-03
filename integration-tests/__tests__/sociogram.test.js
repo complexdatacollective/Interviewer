@@ -17,15 +17,13 @@ import {
   getSociogramCenter,
 } from './playbook-development-protocol';
 
-const app = makeTestingApp('Network-Canvas');
+let app;
 
-const setupApp = async () => {
-  await startApps(app);
+const setup = async () => {
+  app = await makeTestingApp('Network-Canvas');
 };
 
-const teardownApp = async () => {
-  await stopApps(app);
-};
+beforeAll(setup);
 
 const setupTest = async () => {
   await app.client.url('#/reset');
@@ -41,9 +39,7 @@ const setupTest = async () => {
 };
 
 describe('Sociogram', () => {
-  beforeAll(setupApp);
   beforeAll(setupTest);
-  afterAll(teardownApp);
 
   it('Can place nodes', async () => {
     // const size = await app.client.getViewportSize();

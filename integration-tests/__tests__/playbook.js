@@ -18,16 +18,18 @@ export const loadProtocolFromFile = async (app, filename, repeat = false) => {
   await app.client.isVisible('.getting-started');
   await app.client.click('[name=add-a-protocol]');
   await app.client.waitForVisible('.protocol-import-dialog__tabs');
+  await app.client.pause(timing.short);
   await app.client.click('.tab=Local file');
   if (repeat) {
     await app.client.waitForVisible('h2=Update protocol installation');
     await app.client.click('button=Continue');
   }
+  await app.client.pause(timing.medium);
   await app.client.waitForVisible('h4=Protocol imported successfully!');
   await app.client.click('button=Continue');
-  await app.client.pause(timing.medium);
-  await app.client.click('.overlay__close');
-  await app.client.waitForExist('.modal', timing.long, true);
+  await app.client.pause(timing.long);
+  await forceClick(app, '.overlay__close');
+  await app.client.waitForExist('.modal', timing.long, true); // e.g. not exist
 };
 
 /**

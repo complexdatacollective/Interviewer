@@ -6,9 +6,8 @@ import path from 'path';
 import { kebabCase, get } from 'lodash';
 import { getAppConfiguration, defaultImageSnaphotConfig, timing, testSizes } from '../config';
 
-const pluralize = f => (...apps) => Promise.all(apps.map(app => f(app)));
-
 let appSize = 'not-set';
+let _app; // eslint-disable-line
 
 export const resizeApp = async (app, size = 'wide') => {
   const dimensions = get(testSizes, size);
@@ -16,57 +15,31 @@ export const resizeApp = async (app, size = 'wide') => {
   console.info(`resize to: ${dimensions[0]}x${dimensions[1]}`);
   appSize = `${dimensions[0]}x${dimensions[1]}`;
   await app.browserWindow.setSize(dimensions[0], dimensions[1]);
-  await app.client.url('#/reset');
-  await app.client.pause(timing.medium);
+  app.client.url('#/reset');
+  app.client.pause(timing.medium);
 };
 
-// const forEachSize = (app, sizes, tests) => {
-//   sizes.forEach((size) => {
-//     const [width, height] = get(testSizes, size);
-
-//     describe(`${width}x${height}`, () => {
-//       beforeAll(resizeApp(app, size));
-
-//       tests();
-//     });
-//   });
-// };
-
-export const makeTestingApp = () => {
+export const makeTestingApp = async () => {
+  if (_app) {
+    // await _app.client.reloadSession();
+    return _app;
+  }
   const appConfiguration = getAppConfiguration();
-  const app = new Application(appConfiguration);
-  dialogAddon.apply(app);
-  return app;
+  _app = new Application(appConfiguration);
+  dialogAddon.apply(_app);
+  await _app.start();
+  await _app.client.waitUntilWindowLoaded();
+  await _app.client.pause(timing.medium);
+  await resizeApp(_app);
+  return _app;
 };
 
-export const startApp = async (app) => {
-  await app.start();
-  await app.client.waitUntilWindowLoaded();
-  await app.client.pause(timing.medium);
-  await resizeApp(app);
-};
-
-export const startApps = pluralize(startApp);
-
-export const stopApp = async (app) => {
-  if (app && app.isRunning()) {
-    return app.stop().catch(() => {});
+export const stopApp = async () => {
+  if (_app && _app.isRunning()) {
+    return _app.stop().catch(() => {});
   }
   return Promise.resolve();
 };
-
-export const stopApps = pluralize(stopApp);
-
-export const resetApp = async (app) => {
-  await app.client.execute(() => {
-    window.localStorage.clear();
-  });
-  app.webContents.reload();
-  await app.client.waitUntilWindowLoaded();
-  await app.client.pause(timing.medium);
-};
-
-export const resetApps = pluralize(resetApp);
 
 /**
  * Clicks on element using dom apis.
@@ -74,12 +47,12 @@ export const resetApps = pluralize(resetApp);
  * Useful when websocketio refuses to click on an element
  * that it considers 'unclickable'.
  *
- * @param {object} _app Spectron app object
+ * @param {object} app Spectron app object
  * @param {string} _selector querySelector
  */
-export const forceClick = async (_app, _selector) => {
-  await _app.client.waitForVisible(_selector);
-  await _app.client.execute((selector) => {
+export const forceClick = async (app, _selector) => {
+  await app.client.waitForVisible(_selector);
+  await app.client.execute((selector) => {
     window.document.querySelector(selector).click();
   }, _selector);
 };

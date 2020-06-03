@@ -3,8 +3,6 @@
 import { timing } from '../config';
 import {
   makeTestingApp,
-  startApps,
-  stopApps,
   forceClick,
   matchImageSnapshot,
 } from './helpers';
@@ -14,24 +12,15 @@ import {
   loadMockProtocolAsFileAgain,
 } from './playbook';
 
-const app = makeTestingApp('Network-Canvas');
+let app;
 
 const setup = async () => {
-  await startApps(app);
+  app = await makeTestingApp('Network-Canvas');
 };
 
-const teardown = async () => {
-  await stopApps(app);
-};
+beforeAll(setup);
 
 describe('Start screen', () => {
-  beforeAll(setup);
-  afterAll(teardown);
-
-  // it.only('does nothing', async () => {
-  //   await app.client.pause(10000);
-  // });
-
   it('on first load it shows no protocols installed', async () => {
     await app.client.waitForVisible('h1=No interview protocols installed');
     await app.client.pause(timing.medium);
