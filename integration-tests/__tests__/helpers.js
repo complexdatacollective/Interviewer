@@ -61,7 +61,7 @@ export const resetApp = async (app) => {
   await app.client.execute(() => {
     window.localStorage.clear();
   });
-  await app.webContents.reload();
+  app.webContents.reload();
   await app.client.waitUntilWindowLoaded();
   await app.client.pause(timing.medium);
 };

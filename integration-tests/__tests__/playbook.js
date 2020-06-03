@@ -14,7 +14,7 @@ export const loadProtocolFromFile = async (app, filename, repeat = false) => {
   const mockProtocolPath = path.join(paths.dataDir, filename);
   const mockFilenames = [mockProtocolPath];
 
-  await dialogAddon.mock([{ method: 'showOpenDialog', value: { filePaths: mockFilenames } }]);
+  dialogAddon.mock([{ method: 'showOpenDialog', value: { filePaths: mockFilenames } }]);
   await app.client.isVisible('.getting-started');
   await app.client.click('[name=add-a-protocol]');
   await app.client.waitForVisible('.protocol-import-dialog__tabs');
