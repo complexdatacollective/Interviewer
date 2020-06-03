@@ -45,6 +45,7 @@ const getAppConfiguration = () => {
 
     return {
       path: electron,
+      waitTimeout: 20000, // Timeout for waitUntil* methods
       webdriverOptions: {
         baseUrl: devServerURI,
         deprecationWarnings: false,
