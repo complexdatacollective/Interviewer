@@ -20,7 +20,7 @@ const setup = async () => {
 
 beforeAll(setup);
 
-describe('Start screen', () => {
+describe.skip('Start screen', () => {
   it('on first load it shows no protocols installed', async () => {
     await app.client.waitForVisible('h1=No interview protocols installed');
     await app.client.pause(timing.medium);
