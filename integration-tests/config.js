@@ -66,6 +66,7 @@ const getAppConfiguration = () => {
   return {
     path: electron,
     chromeDriverArgs: ['no-sandbox', 'headless', 'disable-dev-shm-usage'],
+    waitTimeout: 20000, // Timeout for waitUntil* methods
     webdriverOptions: {
       baseUrl: devServerURI,
       deprecationWarnings: false,
