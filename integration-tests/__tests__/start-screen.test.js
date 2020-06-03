@@ -1,6 +1,5 @@
 /* eslint-env jest */
 
-import dialogAddon from 'spectron-dialog-addon';
 import { timing } from '../config';
 import {
   makeTestingApp,
@@ -18,7 +17,6 @@ import {
 const app = makeTestingApp('Network-Canvas');
 
 const setup = async () => {
-  await dialogAddon.apply(app);
   await startApps(app);
 };
 

@@ -1,6 +1,7 @@
 /* eslint-env jest */
 
 import { Application } from 'spectron';
+import dialogAddon from 'spectron-dialog-addon';
 import path from 'path';
 import { kebabCase, get } from 'lodash';
 import { getAppConfiguration, defaultImageSnaphotConfig, timing, testSizes } from '../config';
@@ -33,7 +34,9 @@ export const resizeApp = async (app, size = 'wide') => {
 
 export const makeTestingApp = () => {
   const appConfiguration = getAppConfiguration();
-  return new Application(appConfiguration);
+  const app = new Application(appConfiguration);
+  dialogAddon.apply(app);
+  return app;
 };
 
 export const startApp = async (app) => {
