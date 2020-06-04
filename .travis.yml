@@ -26,7 +26,7 @@ jobs:
       script: npm run lint -- --max-warnings 0 &&
         npm run sass-lint -- --max-warnings 0 &&
         npm run test &&
-        npm run build
+        node scripts/build.js
     - script: npm run build:ci &&
         xvfb-run --server-args="-screen 0 1441x901x24" -a npm run test:integration:ci
 
