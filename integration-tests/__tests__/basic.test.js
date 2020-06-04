@@ -30,7 +30,7 @@ beforeAll(setup);
 const setupTest = async () => {
 };
 
-describe('Name generator', () => {
+describe.skip('Basic', () => {
   // beforeAll(setupApp);
   // beforeAll(setupTest);
   // afterAll(teardownApp);

@@ -9,14 +9,18 @@ import { getAppConfiguration, defaultImageSnaphotConfig, timing, testSizes } fro
 let appSize = 'not-set';
 let _app; // eslint-disable-line
 
+export const resetApp = async (app) => {
+  await app.client.url('#/reset');
+  await app.client.pause(timing.long);
+};
+
 export const resizeApp = async (app, size = 'wide') => {
   const dimensions = get(testSizes, size);
   if (!dimensions) { return; }
   console.info(`resize to: ${dimensions[0]}x${dimensions[1]}`);
   appSize = `${dimensions[0]}x${dimensions[1]}`;
   await app.browserWindow.setSize(dimensions[0], dimensions[1]);
-  app.client.url('#/reset');
-  app.client.pause(timing.medium);
+  await resetApp(app);
 };
 
 export const makeTestingApp = async () => {

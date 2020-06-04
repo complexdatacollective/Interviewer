@@ -14,7 +14,7 @@ export const loadProtocolFromFile = async (app, filename, repeat = false) => {
   const mockProtocolPath = path.join(paths.dataDir, filename);
   const mockFilenames = [mockProtocolPath];
 
-  dialogAddon.mock([{ method: 'showOpenDialog', value: { filePaths: mockFilenames } }]);
+  dialogAddon.mock([{ method: 'showOpenDialog', value: { canceled: false, filePaths: mockFilenames } }]);
   await app.client.isVisible('.getting-started');
   await app.client.click('[name=add-a-protocol]');
   await app.client.waitForVisible('.protocol-import-dialog__tabs');
@@ -46,34 +46,23 @@ export const loadMockProtocolAsFile = async (app) => {
 export const loadMockProtocolAsFileAgain = async (app) => {
   await getData(mockProtocol)
     .then(([, filename]) => {
-      console.info(`loading protocol at "${filename}".`);
+      console.info(`loading protocol at "${filename}" (again).`);
       return loadProtocolFromFile(app, filename, true);
     });
 };
 
-export const loadProtocolFromNetwork = async (app, url = mockProtocol) => {
-  await app.client.isVisible('.getting-started');
-  await app.client.click('[name=add-a-protocol]');
-  await app.client.waitForVisible('.protocol-import-dialog__tabs');
-  await app.client.click('.tab=From URL');
-  await app.client.pause(timing.medium);
-  await app.client.setValue('input[name=protocol_url]', url);
-  await app.client.click('button=Import');
-  await app.client.waitForVisible('h4=Protocol imported successfully!', 120000); // 2 minutes
-  await app.client.click('button=Continue');
-  await app.client.waitForExist('.modal', timing.long, true); // wait for not exist
-};
-
 export const startInterview = async (app, caseId = 'test') => {
   await app.client.click('[data-clickable="start-interview"]');
+  await app.client.waitForVisible('input[name=case_id]');
   await app.client.setValue('input[name=case_id]', caseId);
   await app.client.click('button=Start interview');
-  await app.client.waitForVisible('.protocol');
+  await app.client.waitForExist('.protocol');
 };
 
 export const goToStage = async (app, stageId) => {
   console.log('Going to stage ', stageId);
   if (!stageId) { throw Error('goToStage() requires a stageId'); }
+  await app.client.waitForVisible('.session-navigation__progress-bar');
   await app.client.click('.session-navigation__progress-bar');
   await app.client.waitForVisible('.stages-menu');
   await app.client.pause(timing.long); // Added to give menu stagger animation time to complete
