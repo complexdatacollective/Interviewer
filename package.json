@@ -11,12 +11,10 @@
   },
   "scripts": {
     "pack": "electron-builder --dir",
-    "start": "node scripts/start.js",
     "start:android": "cross-env NC_TARGET_PLATFORM=android npm start",
     "start:electron": "cross-env NC_TARGET_PLATFORM=electron npm start",
     "start:ios": "cross-env NC_TARGET_PLATFORM=ios npm start",
     "start:integration": "cross-env NC_TARGET_PLATFORM=electron REACT_APP_NO_FULLSCREEN=true REACT_APP_NO_PERSIST=true npm start",
-    "build": "node scripts/build.js",
     "build:android": "cross-env NC_TARGET_PLATFORM=android npm run build && cordova prepare android",
     "build:electron": "cross-env NC_TARGET_PLATFORM=electron npm run build",
     "build:ci": "cross-env NC_TARGET_PLATFORM=electron REACT_APP_NO_FULLSCREEN=true REACT_APP_NO_PERSIST=true npm run build",
