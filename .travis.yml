@@ -25,8 +25,12 @@ jobs:
     - stage: test
       script: npm run lint -- --max-warnings 0 &&
         npm run sass-lint -- --max-warnings 0 &&
-        npm run test &&
-        node scripts/build.js
-    - script: npm run build:ci &&
-        xvfb-run --server-args="-screen 0 1441x901x24" -a npm run test:integration:ci
+        npm run test
+    - stage: build
+      script:
+        npm run test:integration:ci
+    - stage: integration_tests
+      script: |
+        find ./integration-tests/__tests__/*.test.js -maxdepth 1 -type f -exec basename {} \; |\
+        xargs -n 1 -I % xvfb-run --server-args="-screen 0 1441x901x24" -a npm run test:integration:ci -- %
 
