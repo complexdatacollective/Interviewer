@@ -28,7 +28,7 @@ jobs:
         npm run test
     - stage: build
       script:
-        npm run test:integration:ci
+        npm run build:ci
     - stage: integration_tests
       script: |
         find ./integration-tests/__tests__/*.test.js -maxdepth 1 -type f -exec basename {} \; |\
