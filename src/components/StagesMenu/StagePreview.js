@@ -1,16 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { withHandlers, compose } from 'recompose';
-import { push } from 'react-router-redux';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { get } from 'lodash';
 import { motion } from 'framer-motion';
 import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
-import { isStageSkipped } from '../../selectors/skip-logic';
 import timelineImages from '../../images/timeline';
-import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { currentStageIndex } from '../../utils/matchSessionPath';
 
 const getTimelineImage = type =>
@@ -76,49 +72,18 @@ const stagePreviewHandlers = withHandlers({
   handleOpenStage: props =>
     () => {
       const {
-        sessionId,
         item: { index: stageIndex },
-        openStage,
-        isSkipped,
-        openDialog,
+        onStageSelect,
+        setExpanded,
       } = props;
 
-      const performOpen = () => {
-        const path = sessionId ? `/session/${sessionId}/${stageIndex}` : '/';
-        openStage(path);
-        props.setExpanded(false);
-      };
-
-      if (isSkipped(stageIndex)) {
-        openDialog({
-          type: 'Warning',
-          title: 'Show this stage?',
-          confirmLabel: 'Show Stage',
-          onConfirm: () => performOpen(),
-          message: (
-            <p>
-              Your skip logic settings would normally prevent this stage from being shown in this
-              interview. Do you want to show it anyway?
-            </p>
-          ),
-        });
-      } else {
-        performOpen();
-      }
+      onStageSelect(stageIndex);
+      setExpanded(false);
     },
 });
 
 const mapStateToProps = state => ({
   currentStageIndex: currentStageIndex(state.router.location.pathname),
-  sessionId: state.activeSessionId,
-  isSkipped: index => isStageSkipped(index)(state),
-});
-
-const mapDispatchToProps = dispatch => ({
-  openStage: (path) => {
-    dispatch(push(path));
-  },
-  openDialog: bindActionCreators(dialogActions.openDialog, dispatch),
 });
 
 StagePreview.propTypes = {
@@ -129,7 +94,7 @@ StagePreview.propTypes = {
 };
 
 export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(mapStateToProps),
   stagePreviewHandlers,
 )(StagePreview);
 

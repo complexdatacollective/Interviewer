@@ -61,6 +61,7 @@ const DyadCensus = ({
   edgeColor,
   dispatch,
   stageState,
+  onComplete,
 }) => {
   const [isIntroduction, setIsIntroduction] = useState(true);
   const [isForwards, setForwards] = useState(true);
@@ -133,7 +134,12 @@ const DyadCensus = ({
     previousStep();
   };
 
-  const beforeNext = useCallback((direction) => {
+  const beforeNext = useCallback((direction, index = -1) => {
+    if (index !== -1) {
+      onComplete();
+      return;
+    }
+
     if (direction < 0) {
       back();
       return;

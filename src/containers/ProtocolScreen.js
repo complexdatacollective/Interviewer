@@ -9,11 +9,14 @@ import { Timeline } from '../components';
 import { Stage as StageTransition } from '../components/Transition';
 import Stage from './Stage';
 import { getSessionProgress } from '../selectors/session';
+import { isStageSkipped } from '../selectors/skip-logic';
 import { getProtocolStages } from '../selectors/protocol';
 import { actionCreators as navigateActions } from '../ducks/modules/navigate';
+import { actionCreators as dialogActions } from '../ducks/modules/dialogs';
 
 const initialState = {
   pendingDirection: 1,
+  pendingStage: -1,
 };
 
 const childFactoryCreator = stageBackward =>
@@ -35,12 +38,14 @@ class Protocol extends Component {
 
   onComplete = () => {
     const pendingDirection = this.state.pendingDirection;
+    const pendingStage = this.state.pendingStage;
 
+    const navigate = (pendingStage === -1) ?
+      () => this.props.goToNext(pendingDirection) :
+      () => this.goToStage(pendingStage);
     this.setState(
       { ...initialState },
-      () => {
-        this.props.goToNext(pendingDirection);
-      },
+      navigate,
     );
   };
 
@@ -62,16 +67,52 @@ class Protocol extends Component {
     }
 
     this.setState(
-      { pendingDirection: direction },
+      { pendingStage: -1, pendingDirection: direction },
       () => beforeNext(direction),
     );
   };
+
+  goToStage = (index) => {
+    if (this.props.isSkipped(index)) {
+      this.props.openDialog({
+        type: 'Warning',
+        title: 'Show this stage?',
+        confirmLabel: 'Show Stage',
+        onConfirm: () => this.props.goToStage(index),
+        message: (
+          <p>
+            Your skip logic settings would normally prevent this stage from being shown in this
+            interview. Do you want to show it anyway?
+          </p>
+        ),
+      });
+    } else {
+      this.props.goToStage(index);
+    }
+  }
 
   handleClickNext = () =>
     this.goToNext();
 
   handleClickBack = () =>
     this.goToNext(-1);
+
+  handleStageSelect = (index) => {
+    if (index === this.props.stageIndex) return;
+
+    const beforeNext = get(this.beforeNext, this.props.stage.id);
+
+    if (!beforeNext) {
+      this.goToStage(index);
+      return;
+    }
+
+    const direction = (this.props.stageIndex > index) ? -1 : 1;
+    this.setState(
+      { pendingStage: index, pendingDirection: direction },
+      () => beforeNext(direction, index),
+    );
+  }
 
   render() {
     const {
@@ -98,6 +139,7 @@ class Protocol extends Component {
             id="TIMELINE"
             onClickBack={this.handleClickBack}
             onClickNext={this.handleClickNext}
+            onStageSelect={this.handleStageSelect}
             percentProgress={percentProgress}
           />
         </Fade>
@@ -147,6 +189,7 @@ function mapStateToProps(state, ownProps) {
   const { percentProgress, currentPrompt } = getSessionProgress(state);
 
   return {
+    isSkipped: index => isStageSkipped(index)(state),
     isSessionLoaded: !!state.activeSessionId,
     pathPrefix: `/session/${sessionId}`,
     percentProgress,
@@ -158,6 +201,8 @@ function mapStateToProps(state, ownProps) {
 
 const mapDispatchToProps = {
   goToNext: navigateActions.goToNext,
+  goToStage: navigateActions.goToStage,
+  openDialog: dialogActions.openDialog,
 };
 
 const withStore = connect(mapStateToProps, mapDispatchToProps);

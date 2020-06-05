@@ -38,6 +38,7 @@ const SlidesForm = (props) => {
   const getFormName = useGetFormName(stage);
 
   const [pendingDirection, setPendingDirection] = useState(null);
+  const [pendingStage, setPendingStage] = useState(-1);
   const [activeIndex, setActiveIndex] = useState(0);
   const [swiper, updateSwiper] = useState(null);
 
@@ -69,8 +70,8 @@ const SlidesForm = (props) => {
     submitFormRedux(getFormName(getItemIndex()));
   };
 
-  const handleConfirmBack = (confirm) => {
-    if (confirm) {
+  const handleConfirmBack = (confirmed) => {
+    if (confirmed) {
       previousItem();
       return;
     }
@@ -97,10 +98,29 @@ const SlidesForm = (props) => {
    * Called by ProtocolScreen before navigating away from this stage
    *
    * If this `beforeNext` method is defined on an interfaces, the
-   * navigation will be blocked until `onContinue()` is
+   * navigation will be blocked until `onComplete()` is
    * called, which allows async events to happen such as form submission.
    */
-  const beforeNext = (direction) => {
+  const beforeNext = (direction, index = -1) => {
+    const isPendingStageChange = (index !== -1);
+    if (isPendingStageChange) {
+      if (isFormValid() && isFormDirty()) {
+        setPendingStage(index);
+        submitForm(); // submit and handleUpdate will complete
+      } else {
+        confirmIfChanged()
+          .then((confirmed) => {
+            if (confirmed) {
+              onComplete(); // show next stage and lose changes
+              return;
+            }
+            submitForm(); // submit so errors will display
+          });
+      }
+      return;
+    }
+
+    setPendingStage(index);
     // Determine if we should leave the stage.
     if (shouldContinue(direction)) {
       onComplete();
@@ -118,6 +138,7 @@ const SlidesForm = (props) => {
       return;
     }
 
+    setPendingStage(index);
     setPendingDirection(direction);
     submitForm();
   };
@@ -142,16 +163,17 @@ const SlidesForm = (props) => {
     parentClass,
   );
 
-  const isComplete = (direction) => {
+  const isComplete = (direction, stageIndex) => {
     if (isIntroScreen() && direction < 0) { return true; }
     if (isLastItem() && direction > 0) { return true; }
+    if (stageIndex !== -1) { return true; }
     return false;
   };
 
   const handleUpdate = (...update) => {
     updateItem(...update);
 
-    if (isComplete(pendingDirection)) {
+    if (isComplete(pendingDirection, pendingStage)) {
       onComplete();
       return;
     }
