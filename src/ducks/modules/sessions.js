@@ -364,14 +364,20 @@ const removeEdge = edgeId => (dispatch, getState) => {
   });
 };
 
-const addSession = (caseId, protocolUID) => (dispatch) => {
+const addSession = (caseId, protocolUID) => (dispatch, getState) => {
   const id = uuid();
+
+  const { installedProtocols } = getState();
+  const activeProtocol = installedProtocols[protocolUID];
+  const egoRegistry = activeProtocol.codebook.ego;
+  const egoAttributeData = getDefaultAttributesForEntityType(egoRegistry.variables);
 
   dispatch({
     type: ADD_SESSION,
     sessionId: id,
     caseId,
     protocolUID,
+    egoAttributeData, // initial values for ego
   });
 
   return dispatch(SessionWorkerActions.initializeSessionWorkersThunk(protocolUID))
