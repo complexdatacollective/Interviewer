@@ -1,34 +1,29 @@
 /* eslint-env jest */
 
-import dialogAddon from 'spectron-dialog-addon';
-import { timing } from '../config';
+import { timing, mockProtocol } from '../config';
 import {
   makeTestingApp,
-  startApps,
-  stopApps,
   forceClick,
   matchImageSnapshot,
 } from './helpers';
-import { loadProtocolFromNetwork, loadMockProtocolAsFile } from './playbook';
+import {
+  loadMockProtocolAsFile,
+  loadMockProtocolAsFileAgain,
+} from './playbook';
 
-const app = makeTestingApp('Network-Canvas');
+let app;
 
 const setup = async () => {
-  await dialogAddon.apply(app);
-  await startApps(app);
+  app = await makeTestingApp('Network-Canvas');
 };
 
-const teardown = async () => {
-  await stopApps(app);
-};
+beforeAll(setup);
 
 describe('Start screen', () => {
-  beforeAll(setup);
-  afterAll(teardown);
-
-  // it.only('does nothing', async () => {
-  //   await app.client.pause(10000);
-  // });
+  beforeEach(() => {
+    app.client.url('#/reset');
+    app.client.pause(timing.long);
+  });
 
   it('on first load it shows no protocols installed', async () => {
     await app.client.waitForVisible('h1=No interview protocols installed');
@@ -41,21 +36,41 @@ describe('Start screen', () => {
     await matchImageSnapshot(app);
   });
 
+  it('communicates when protocol already loaded', async () => {
+    await loadMockProtocolAsFile(app);
+    await loadMockProtocolAsFileAgain(app);
+    await matchImageSnapshot(app);
+  });
+
   it('lists loaded protocols, and allows delete', async () => {
+    await matchImageSnapshot(app);
     await loadMockProtocolAsFile(app);
     await app.client.waitForVisible('[data-clickable="start-interview"]');
     await app.client.click('.protocol-card__delete');
     await app.client.pause(timing.medium);
     await app.client.click('button=Delete protocol');
     await app.client.waitForVisible('h1=No interview protocols installed');
+    await matchImageSnapshot(app);
   });
 
   it('can load a protocol from url', async () => {
-    await loadProtocolFromNetwork(app);
+    await matchImageSnapshot(app);
+    await app.client.isVisible('.getting-started');
+    await app.client.click('[name=add-a-protocol]');
+    await app.client.waitForVisible('.protocol-import-dialog__tabs');
+    await app.client.click('.tab=From URL');
+    await matchImageSnapshot(app);
+    await app.client.waitForVisible('input[name=protocol_url]');
+    await app.client.setValue('input[name=protocol_url]', mockProtocol);
+    await app.client.click('button=Import');
+    await app.client.waitForVisible('h4=Protocol imported successfully!', 120000); // 2 minutes
+    await app.client.click('button=Continue');
+    await app.client.waitForExist('.modal', timing.long, true); // wait for not exist
     await matchImageSnapshot(app);
   });
 
   it('can reset state', async () => {
+    await matchImageSnapshot(app);
     await app.client.click('svg[name=settings]');
     await app.client.pause(timing.medium);
     await app.client.waitForVisible('li[data-name="Developer Options"]');
@@ -68,6 +83,7 @@ describe('Start screen', () => {
     await app.client.pause(timing.medium);
     await app.client.click('button=Continue');
     await app.client.waitForVisible('h1=No interview protocols installed');
-    await app.client.waitForExist('.modal', timing.long, true); // wait for not exist
+    // await app.client.waitForExist('.modal', timing.long, true); // wait for not exist
+    await matchImageSnapshot(app);
   });
 });

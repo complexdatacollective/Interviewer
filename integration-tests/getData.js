@@ -19,7 +19,10 @@ const getData = url =>
   new Promise((resolve) => {
     const [fullPath, fileName] = getDataFileName(url);
 
+    console.log(`getData ${url} -> ${fileName}`);
+
     if (fs.existsSync(fullPath)) {
+      console.log(`getData  ${fileName} in cache`);
       resolve([fullPath, fileName]);
       return;
     }
@@ -27,6 +30,7 @@ const getData = url =>
     const writeStream = fs.createWriteStream(fullPath);
 
     writeStream.on('close', () => {
+      console.log(`getData fetched  ${fileName} from network`);
       resolve([fullPath, fileName]);
     });
 

@@ -1,9 +1,9 @@
 module.exports = {
-  setupFilesAfterEnv: ['<rootDir>/setup.js'],
+  setupFilesAfterEnv: ['./setup.js'],
   testMatch: ['**/?(*.)+(spec|test).[jt]s?(x)'],
   transformIgnorePatterns: [
     'node_modules/(?!(\@codaco\/ui)/)',
   ],
   bail: true,
-  reporters: ['default', '<rootDir>/scripts/image-reporter.js'],
+  reporters: ['default', './scripts/image-reporter.js'],
 };

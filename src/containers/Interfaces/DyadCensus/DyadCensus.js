@@ -233,7 +233,7 @@ const DyadCensus = ({
                     animate="show"
                   >
                     <div className="dyad-interface__progress">
-                      <ProgressBar orientation="horizontal" percentProgress={((stepsState.substep + 1) / stepsState.steps[stepsState.prompt]) * 100} />
+                      <ProgressBar orientation="horizontal" percentProgress={((stepsState.substep + 1) / stepsState.steps[stepsState.stage]) * 100} />
                     </div>
                     <div className="dyad-interface__options">
                       <AnimatePresence exitBeforeEnter>

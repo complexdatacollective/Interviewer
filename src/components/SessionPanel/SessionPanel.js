@@ -9,6 +9,12 @@ import SubMenu from './SubMenu';
 import BackgroundDimmer from '../BackgroundDimmer';
 import SessionNavigation from './SessionNavigation';
 import CloseButton from '../CloseButton';
+import SessionInformation from './SessionInformation';
+
+const choiceVariants = {
+  show: { opacity: 1, translateY: '0%', transition: { type: 'spring', damping: 15, stiffness: 200, delay: 0.25 } },
+  hide: { opacity: 0, translateY: '100%', transition: { duration: 0.3 } },
+};
 
 const SessionPanel = React.forwardRef((props, ref) => {
   const [expanded, setExpanded] = useState(false);
@@ -30,6 +36,19 @@ const SessionPanel = React.forwardRef((props, ref) => {
     <React.Fragment>
       <AnimatePresence>
         { expanded && (<BackgroundDimmer clickHandler={resetMenuState} ><CloseButton onClick={() => setExpanded(false)} className="close-button-wrapper" /></BackgroundDimmer>)}
+      </AnimatePresence>
+      <AnimatePresence>
+        { (expanded && showSubMenu) && (
+          <motion.div
+            className="session-info-panel"
+            variants={choiceVariants}
+            initial="hide"
+            animate="show"
+            exit="hide"
+          >
+            <SessionInformation />
+          </motion.div>
+        )}
       </AnimatePresence>
       <div className="session-panel-drop-obstacle" ref={ref} />
       <motion.div

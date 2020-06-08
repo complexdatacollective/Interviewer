@@ -5,28 +5,19 @@ branches:
     - master
 node_js:
   - "12.14.1"
-addons:
-  apt:
-    packages:
-      - libavahi-compat-libdnssd-dev xvfb libxtst6 libxss1 libgtk2.0-0 libnss3 libasound2 libgconf-2-4 lftp
-services:
-  - xvfb
 cache:
   directories:
     - node_modules # NPM packages
-    - integration-tests/.data # integration test downloads
 
 install:
   - npm install
 jobs:
   include:
-    - stage: prepare cache
-      script: node integration-tests/scripts/get-development-protocol.js
+    - stage: lint
+      script: npm run lint -- --max-warnings 0 && npm run sass-lint -- --max-warnings 0
     - stage: test
-      script: npm run lint -- --max-warnings 0 &&
-        npm run sass-lint -- --max-warnings 0 &&
-        npm run test &&
-        npm run build
-    - script: npm run build:ci &&
-        xvfb-run --server-args="-screen 0 1441x901x24" -a npm run test:integration:ci
+      script: npm run test
+    - stage: build
+      script: npm run build:electron
+
 

@@ -136,6 +136,7 @@ Form.propTypes = {
   className: PropTypes.string,
   tooltip: PropTypes.string,
   submitButton: PropTypes.object,
+  initialValues: PropTypes.object,
 };
 
 Form.defaultProps = {
@@ -143,6 +144,7 @@ Form.defaultProps = {
   autoPopulate: null,
   className: null,
   tooltip: 'none',
+  initialValues: null,
   submitButton: <button type="submit" key="submit" aria-label="Submit" hidden />,
   // redux wants a "submit" button in order to enable submit with an enter key, even if hidden
 };
@@ -157,6 +159,7 @@ function makeMapStateToProps() {
         values: getFormValues(props.form)(state),
       },
       fields: rehydrateFields(state, props),
+      initialValues: props.initialValues,
     };
   };
 }

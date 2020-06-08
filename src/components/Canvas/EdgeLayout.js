@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Edge } from '../';
+import Edge from '../Edge';
 
 const viewBoxScale = 100;
 

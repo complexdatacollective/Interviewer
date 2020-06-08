@@ -11,8 +11,8 @@ const importLocalProtocol = () => {
   if (isCordova()) {
     window.chooser.getFile()
       .then((file) => {
-        if (file.uri) {
-          store.dispatch(protocolActions.importProtocolFromFile(file.uri));
+        if (file && file.uri) {
+          store.dispatch(protocolActions.importProtocolFromFile(file.uri, file.name));
         }
       });
   }

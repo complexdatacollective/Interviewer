@@ -41,16 +41,9 @@
   }
 
   &--preview {
-    .app-settings {
+    .session-navigation__button--menu {
       pointer-events: none;
-    }
-
-    .protocol {
-      .timeline {
-        .progress-bar {
-          pointer-events: none;
-        }
-      }
+      display: none;
     }
   }
 }

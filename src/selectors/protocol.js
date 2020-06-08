@@ -32,6 +32,11 @@ export const getActiveProtocol = createSelector(
   },
 );
 
+export const getActiveProtocolName = createSelector(
+  getActiveProtocol,
+  protocol => protocol && protocol.name,
+);
+
 export const getAssetManifest = createSelector(
   getActiveProtocol,
   protocol => protocol.assetManifest,

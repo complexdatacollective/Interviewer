@@ -33,7 +33,7 @@ class NewSessionOverlay extends Component {
           placeholder: 'Enter a unique case ID',
           validation: {
             required: true,
-            maxLength: 20,
+            maxLength: 30,
           },
         },
       ],

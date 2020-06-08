@@ -18,31 +18,29 @@ const getSubStep = (steps, nextStep) => {
 };
 
 // state reducer for steps state
-const stateReducer = (
-  state,
-  {
-    step,
-    substep,
-    stage,
-    direction,
-  },
-) => {
-  const progress = step > state.progress ? step : state.progress;
+const stateReducer = ({
+  step,
+  substep,
+  stage,
+  direction,
+}) =>
+  (state) => {
+    const progress = step > state.progress ? step : state.progress;
 
-  return ({
-    ...state,
-    step,
-    progress,
-    substep,
-    stage,
-    direction,
-    isCompletedStep: progress > step,
-    isStageStart: substep === 0,
-    isStageEnd: substep >= state.steps[stage] - 1,
-    isStart: step === 0,
-    isEnd: step >= state.totalSteps - 1,
-  });
-};
+    return ({
+      ...state,
+      step,
+      progress,
+      substep,
+      stage,
+      direction,
+      isCompletedStep: progress > step,
+      isStageStart: substep === 0,
+      isStageEnd: substep >= state.steps[stage] - 1,
+      isStart: step === 0,
+      isEnd: step >= state.totalSteps - 1,
+    });
+  };
 
 /**
  * Models 'substeps' in prompts, which allows us to keep track
