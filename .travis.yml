@@ -14,11 +14,10 @@ install:
 jobs:
   include:
     - stage: lint
-      script: npm run lint -- --max-warnings 0 &&
-      npm run sass-lint -- --max-warnings 0
+      script: npm run lint -- --max-warnings 0 && npm run sass-lint -- --max-warnings 0
     - stage: test
       script: npm run test
-    - stage: build (Electron)
+    - stage: build
       script: npm run build:electron
 
 
