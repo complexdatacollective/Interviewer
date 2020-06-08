@@ -28,7 +28,7 @@ steps:
   displayName: 'Install Node.js'
 - script: npm --add-python-to-path install --global windows-build-tools
   displayName: Install windows-build-tools
-  target: Windows
+  target: windows
 - bash: |
     sudo apt-get install libavahi-compat-libdnssd-dev
   displayName: Install MDNS dependencies
