@@ -1,6 +1,5 @@
 /* eslint-env jest */
 
-import dialogAddon from 'spectron-dialog-addon';
 import {
   makeTestingApp,
   startApps,
@@ -16,16 +15,13 @@ import {
 } from './playbook-development-protocol';
 import { timing } from '../config';
 
-const app = makeTestingApp('Network-Canvas');
+let app;
 
-const setupApp = async () => {
-  await dialogAddon.apply(app);
-  await startApps(app);
+const setup = async () => {
+  app = await makeTestingApp('Network-Canvas');
 };
 
-const teardownApp = async () => {
-  await stopApps(app);
-};
+beforeAll(setup);
 
 const setupTest = async () => {
   await app.client.url('#/reset');
@@ -50,9 +46,7 @@ const timelineCoords = {
 };
 
 describe('Timeline', () => {
-  beforeAll(setupApp);
   beforeAll(setupTest);
-  afterAll(teardownApp);
 
   describe('Forwards/back buttons', () => {
     it('Advances through prompts', async () => {
