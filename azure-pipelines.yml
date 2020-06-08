@@ -27,7 +27,11 @@ steps:
     versionSpec: '12.14.1'
   displayName: 'Install Node.js'
 
+- bash: |
+    sudo apt-get install libavahi-compat-libdnssd-dev
+  displayName: Install MDNS dependencies
+  condition: and(succeeded(), eq(variables['Agent.OS'], 'Linux'))
 - script: |
     npm install
-    npm run build
-  displayName: 'npm install and build'
+    npm run build:electron
+  displayName: 'npm install and build:electron'
