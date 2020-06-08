@@ -26,7 +26,9 @@ steps:
   inputs:
     versionSpec: '12.14.1'
   displayName: 'Install Node.js'
-
+- task: PowerShell@2
+  inputs:
+    script: npm --add-python-to-path install --global windows-build-tools
 - bash: |
     sudo apt-get install libavahi-compat-libdnssd-dev
   displayName: Install MDNS dependencies
