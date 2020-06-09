@@ -7,9 +7,9 @@ const { DEVELOPMENT_PROTOCOL_URL } = require('../src/config');
 
 // in ms
 const timing = {
-  long: 1000,
-  medium: 500,
-  short: 250,
+  long: 3000,
+  medium: 1500,
+  short: 500,
 };
 
 const testSizes = {
@@ -45,6 +45,7 @@ const getAppConfiguration = () => {
 
     return {
       path: electron,
+      waitTimeout: 20000, // Timeout for waitUntil* methods
       webdriverOptions: {
         baseUrl: devServerURI,
         deprecationWarnings: false,
@@ -65,6 +66,7 @@ const getAppConfiguration = () => {
   return {
     path: electron,
     chromeDriverArgs: ['no-sandbox', 'headless', 'disable-dev-shm-usage'],
+    waitTimeout: 20000, // Timeout for waitUntil* methods
     webdriverOptions: {
       baseUrl: devServerURI,
       deprecationWarnings: false,
