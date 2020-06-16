@@ -10,7 +10,7 @@ class NewSessionOverlay extends Component {
     super(props);
 
     this.state = {
-      caseID: '',
+      caseId: '',
     };
 
     this.overlay = React.createRef();

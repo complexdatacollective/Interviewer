@@ -105,7 +105,6 @@ const formatEdgeAttributes = (modelData, attributeData) => ({
     ...attributeData,
   },
   type: modelData.type,
-  itemType: modelData.itemType,
 });
 
 const addEdge = (state, action) => ({

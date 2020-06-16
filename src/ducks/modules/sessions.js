@@ -122,8 +122,8 @@ const getReducer = network =>
         const newObj = {
           ...state,
         };
-        map(action.sessionIDs, (sessionID) => {
-          newObj[sessionID].exportStatus = 'exporting';
+        map(action.sessionIds, (sessionId) => {
+          newObj[sessionId].exportStatus = 'exporting';
         });
 
         return {
@@ -460,9 +460,9 @@ const finishSession = id => ({
   sessionId: id,
 });
 
-const sessionExportStart = sessionIDs => ({
+const sessionExportStart = sessionIds => ({
   type: EXPORT_SESSIONS_START,
-  sessionIDs,
+  sessionIds,
 });
 
 const sessionExportReset = () => ({

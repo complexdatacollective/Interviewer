@@ -79,8 +79,8 @@ export const getRemoteProtocolID = protocolName => protocolName && crypto.create
  */
 export const asNetworkWithSessionVariables = (sessionId, session, protocol) => {
   // Required:
-  // caseID,
-  // sessionID,
+  // caseId,
+  // sessionId,
   // remoteProtocolID - used to lookup protocol on server
   // protocol name
   // interview start and finish, or 'unknown'
