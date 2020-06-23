@@ -19,7 +19,7 @@ import { remoteProtocolProperty, sessionProperty, caseProperty, ncProtocolProper
  *
  * @private
  */
-const getEntityAttributesWithNamesResolved = (entity, entityVariables,
+export const getEntityAttributesWithNamesResolved = (entity, entityVariables,
   ignoreExternalProps = false) => {
   if (!entityVariables) {
     return {};
@@ -83,16 +83,19 @@ export const asNetworkWithSessionVariables = (sessionId, session, protocol) => {
   // sessionId,
   // remoteProtocolID - used to lookup protocol on server
   // protocol name
-  // interview start and finish, or 'unknown'
+  // interview start and finish. If not available dont include
   // export date
+
   const sessionVariables = {
     [caseProperty]: session.caseId,
     [sessionProperty]: sessionId,
     [remoteProtocolProperty]: getRemoteProtocolID(protocol.name),
     [ncProtocolName]: protocol.name,
     [ncProtocolProperty]: session.protocolUID,
-    [sessionStartTimeProperty]: session.startedAt ? new Date(session.startedAt).toISOString() : 'unknown',
-    [sessionFinishTimeProperty]: session.finishedAt ? new Date(session.finishedAt).toISOString() : 'unknown',
+    ...(session.startedAt && { [sessionStartTimeProperty]:
+      new Date(session.startedAt).toISOString() }),
+    ...(session.finishedAt && { [sessionFinishTimeProperty]:
+      new Date(session.finishedAt).toISOString() }),
     [sessionExportTimeProperty]: new Date().toISOString(),
   };
 

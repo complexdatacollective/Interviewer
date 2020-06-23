@@ -7,48 +7,15 @@ import { Toggle } from '@codaco/ui/lib/components/Fields';
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
-import { getRemoteProtocolId } from '../../selectors/protocol';
-import { ExportSessionsOverlay } from '../Setup';
 import Scroller from '../../components/Scroller';
-
-const ExportSection = ({ children }) => (
-  <div className="finish-session-interface__section finish-session-interface__section--export">
-    <div>
-      <h2>Data Export</h2>
-      <p>
-        Export this interview to a file, or to a computer running Server.
-      </p>
-    </div>
-    <div className="finish-session-interface__section--buttons">
-      { children }
-    </div>
-  </div>
-);
 
 class FinishSession extends Component {
   constructor() {
     super();
     this.state = {
-      downloadDataAdditionalInfo: '',
       showExportSessionOverlay: false,
       deleteAfterFinish: false,
     };
-  }
-
-  get exportSection() {
-    const { defaultServer } = this.props;
-    return (
-      <ExportSection defaultServer={defaultServer}>
-        <Button onClick={this.handleOpenExport}>
-          Export
-        </Button>
-      </ExportSection>
-    );
-  }
-
-  get exportUrl() {
-    const { defaultServer } = this.props;
-    return defaultServer && defaultServer.secureServiceUrl;
   }
 
   handleFinishSession = () => {
@@ -76,29 +43,9 @@ class FinishSession extends Component {
 
   handleToggleDelete = () =>
     this.setState({ deleteAfterFinish: !this.state.deleteAfterFinish });
-
-  handleOpenExport = () => {
-    this.setState({
-      showExportSessionOverlay: true,
-    });
-  }
-
-  handleCloseExport = () => {
-    this.setState({
-      showExportSessionOverlay: false,
-    });
-    this.props.resetSessionExport();
-  }
-
   render() {
     return (
       <div className="interface finish-session-interface">
-        <ExportSessionsOverlay
-          show={this.state.showExportSessionOverlay}
-          key={this.state.showExportSessionOverlay}
-          onClose={this.handleCloseExport}
-          sessionsToExport={[this.props.sessionId]}
-        />
         <div className="finish-session-interface__frame">
           <h1 className="finish-session-interface__title type--title-1">
             Finish Interview
@@ -111,7 +58,6 @@ class FinishSession extends Component {
                 interview now.
               </p>
             </div>
-            { this.exportSection }
             <Toggle
               input={{
                 value: this.state.deleteAfterFinish,
@@ -135,37 +81,15 @@ class FinishSession extends Component {
 
 FinishSession.propTypes = {
   endSession: PropTypes.func.isRequired,
-  resetSessionExport: PropTypes.func.isRequired,
   openDialog: PropTypes.func.isRequired,
-  sessionId: PropTypes.string.isRequired,
 };
-
-FinishSession.defaultProps = {
-  codebook: {},
-  remoteProtocolId: null,
-};
-
-ExportSection.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.string]).isRequired,
-};
-
-ExportSection.defaultProps = {
-};
-
-function mapStateToProps(state) {
-  return {
-    remoteProtocolId: getRemoteProtocolId(state),
-    sessionId: state.activeSessionId,
-  };
-}
 
 const mapDispatchToProps = {
-  resetSessionExport: sessionsActions.sessionExportReset,
   deleteSession: sessionsActions.removeSession,
   endSession: sessionActions.endSession,
   openDialog: dialogActions.openDialog,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(FinishSession);
+export default connect(null, mapDispatchToProps)(FinishSession);
 
 export { FinishSession as UnconnectedFinishSession };

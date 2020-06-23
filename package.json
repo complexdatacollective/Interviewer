@@ -109,6 +109,7 @@
     "jest": "^26.0.1",
     "jest-image-snapshot": "^4.0.2",
     "json-loader": "0.5.4",
+    "jssha": "^3.1.0",
     "jszip": "^3.2.2",
     "lodash": "^4.17.11",
     "mdns": "^2.5.1",
