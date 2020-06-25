@@ -38,15 +38,26 @@ class EgoForm extends Component {
     this.props.registerBeforeNext(this.beforeNext);
   }
 
-  beforeNext = (direction) => {
+  beforeNext = (direction, index = -1) => {
     const {
       isFirstStage,
       isFormValid,
     } = this.props;
 
+    const isPendingStageChange = (index !== -1);
     const isBackwards = direction < 0;
 
-    if (!isFirstStage && isBackwards && !isFormValid) {
+    if (isPendingStageChange) {
+      if (isFormValid()) {
+        this.submitForm();
+      } else {
+        this.confirmIfChanged()
+          .then(this.handleConfirmNavigation);
+      }
+      return;
+    }
+
+    if (!isFirstStage && isBackwards && !isFormValid()) {
       this.confirmIfChanged()
         .then(this.handleConfirmNavigation);
       return;
@@ -152,7 +163,7 @@ EgoForm.defaultProps = {
 function mapStateToProps(state, props) {
   const ego = getNetworkEgo(state);
   const formName = getFormName(props.stageIndex);
-  const isFormValid = isValid(formName)(state);
+  const isFormValid = () => isValid(formName)(state);
   const isFormDirty = () => isDirty(formName)(state);
   const { isFirstStage } = getSessionProgress(state);
 

@@ -30,7 +30,7 @@ const SessionPanel = React.forwardRef((props, ref) => {
 
   const menuContent = showSubMenu ?
     <SubMenu setShowSubMenu={setShowSubMenu} setExpanded={setExpanded} key="sub-menu" />
-    : <StagesMenu setExpanded={setExpanded} key="stages-menu" />;
+    : <StagesMenu setExpanded={setExpanded} onStageSelect={props.onStageSelect} key="stages-menu" />;
 
   return (
     <React.Fragment>
@@ -75,6 +75,7 @@ const SessionPanel = React.forwardRef((props, ref) => {
 });
 
 SessionPanel.propTypes = {
+  onStageSelect: PropTypes.func.isRequired,
   onClickNext: PropTypes.func.isRequired,
   onClickBack: PropTypes.func.isRequired,
   percentProgress: PropTypes.number.isRequired,
