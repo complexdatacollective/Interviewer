@@ -18,7 +18,7 @@ const exportSessions = (sessions, installedProtocols) => {
     exportGraphML: true,
     exportCSV: false,
     globalOptions: {
-      unifyNetworks: true,
+      unifyNetworks: false,
     },
   });
 
