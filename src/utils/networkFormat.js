@@ -81,7 +81,7 @@ export const asNetworkWithSessionVariables = (sessionId, session, protocol) => {
   // Required:
   // caseId,
   // sessionId,
-  // remoteProtocolID - used to lookup protocol on server
+  // remoteProtocolID - format Server uniquely identifies protocols by
   // protocol name
   // interview start and finish. If not available dont include
   // export date

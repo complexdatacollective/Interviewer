@@ -16,7 +16,10 @@ const exportSessions = (sessions, installedProtocols) => {
   // TODO: populate export options from app state.
   const fileExportManager = new FileExportManager({
     exportGraphML: true,
-    exportCSV: true,
+    exportCSV: false,
+    globalOptions: {
+      unifyNetworks: true,
+    },
   });
 
   // TODO: can we show the save dialog when the file is ready to be written instead?
