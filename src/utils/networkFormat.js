@@ -7,7 +7,16 @@ import {
   nodeTypePropertyForWorker,
   primaryKeyPropertyForWorker,
 } from '../ducks/modules/network';
-import { remoteProtocolProperty, sessionProperty, caseProperty, ncProtocolProperty, ncProtocolName, sessionStartTimeProperty, sessionFinishTimeProperty, sessionExportTimeProperty } from './network-exporters/src/utils/reservedAttributes';
+import {
+  remoteProtocolProperty,
+  sessionProperty,
+  caseProperty,
+  protocolProperty,
+  protocolName,
+  sessionStartTimeProperty,
+  sessionFinishTimeProperty,
+  sessionExportTimeProperty,
+} from './network-exporters/src/utils/reservedAttributes';
 
 /**
  * Internally, 'attributes' are stored with UUID keys, which are meaningless to the end user.
@@ -69,9 +78,9 @@ export const getNodeWithIdAttributes = (node, nodeVariables) => {
 
 /**
  * Get the remote protocol name for a protocol, which Server uses to uniquely identify it
- * @param {string} protocolName the name of a protocol
+ * @param {string} name the name of a protocol
  */
-export const getRemoteProtocolID = protocolName => protocolName && crypto.createHash('sha256').update(protocolName).digest('hex');
+export const getRemoteProtocolID = name => name && crypto.createHash('sha256').update(name).digest('hex');
 
 /**
  * Creates an object containing all required session metadata for export
@@ -90,8 +99,8 @@ export const asNetworkWithSessionVariables = (sessionId, session, protocol) => {
     [caseProperty]: session.caseId,
     [sessionProperty]: sessionId,
     [remoteProtocolProperty]: getRemoteProtocolID(protocol.name),
-    [ncProtocolName]: protocol.name,
-    [ncProtocolProperty]: session.protocolUID,
+    [protocolName]: protocol.name,
+    [protocolProperty]: session.protocolUID,
     ...(session.startedAt && { [sessionStartTimeProperty]:
       new Date(session.startedAt).toISOString() }),
     ...(session.finishedAt && { [sessionFinishTimeProperty]:

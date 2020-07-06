@@ -60,7 +60,7 @@ describe('sessions', () => {
       expect(newState).toEqual({
         a: {
           caseId: 'case1',
-          createdAt: now,
+          startedAt: now,
           network: {
             ego: {
               _uid: 'session-1',

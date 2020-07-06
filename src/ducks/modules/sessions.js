@@ -63,7 +63,6 @@ const getReducer = network =>
             promptIndex: 0,
             stageIndex: 0,
             caseId: action.caseId,
-            createdAt: Date.now(),
             network: network(state.network, action),
             startedAt: Date.now(),
           }),

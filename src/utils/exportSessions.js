@@ -15,10 +15,10 @@ const exportSessions = (sessions, installedProtocols) => {
   // Instantiate file export manager
   // TODO: populate export options from app state.
   const fileExportManager = new FileExportManager({
-    exportGraphML: true,
-    exportCSV: false,
+    exportGraphML: false,
+    exportCSV: true,
     globalOptions: {
-      unifyNetworks: false,
+      unifyNetworks: true,
     },
   });
 

@@ -104,7 +104,7 @@ const SessionInformation = (props) => {
       <Scroller>
         <section>
           <h4>Interview Duration</h4>
-          <h1 className="session-duration">{sessionProgress.createdAt ? elapsedTime(sessionProgress.createdAt) : 'Unknown'}</h1>
+          <h1 className="session-duration">{sessionProgress.startedAt ? elapsedTime(sessionProgress.startedAt) : 'Unknown'}</h1>
         </section>
         <section>
           <h4>Case ID</h4>
