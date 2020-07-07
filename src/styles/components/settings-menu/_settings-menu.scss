@@ -81,24 +81,19 @@
         display: flex;
         margin-bottom: 2rem;
 
-        .form-field-container {
-          flex: 0 1 7rem;
-          margin: 0;
-          display: flex;
-          justify-content: flex-end;
-          align-items: flex-start;
-        }
+        >.form-field-container {
+          .form-field-toggle {
+            margin-left: 2rem;
+          }
 
-        .form-field-toggle {
-          margin-left: 2rem;
+          .form-field {
+            padding: 0 2rem 0 0;
+            background: transparent;
+            width: auto;
+          }
         }
-
 
         .form-field {
-          padding: 0 2rem 0 0;
-          background: transparent;
-          width: auto;
-
           button {
             width: 12rem;
           }
@@ -107,6 +102,21 @@
         &--wide {
           display: flex;
           flex-direction: column;
+        }
+
+        &--sub-item {
+          .form-field-container {
+            margin: 0;
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-start;
+            flex-direction: column;
+
+            .form-field-text {
+              width: 100%;
+            }
+          }
+
         }
 
       }

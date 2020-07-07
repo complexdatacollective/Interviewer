@@ -3,22 +3,21 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { motion } from 'framer-motion';
-import { Toggle } from '@codaco/ui/lib/components/Fields';
+import { Button } from '@codaco/ui';
+import { Toggle, Number } from '@codaco/ui/lib/components/Fields';
 import { actionCreators as deviceSettingsActions } from '../../../ducks/modules/deviceSettings';
 import TabItemVariants from './TabItemVariants';
 
 const ExportOptions = (props) => {
   const {
-    exportOptions: {
-      exportGraphML = true,
-      exportCSV = false,
-      globalOptions: {
-        unifyNetworks = false,
-        useScreenLayoutCoordinates = true,
-        screenLayoutHeight = 1920,
-        screenLayoutWidth = 1080,
-      },
-    },
+    exportGraphML,
+    exportCSV,
+    unifyNetworks,
+    useScreenLayoutCoordinates,
+    screenLayoutHeight,
+    screenLayoutWidth,
+    toggleSetting,
+    updateSetting,
   } = props;
 
   return (
@@ -27,13 +26,17 @@ const ExportOptions = (props) => {
         <Toggle
           input={{
             value: exportGraphML,
-            onChange: (value) => {
-              console.log('change', value);
+            onChange: () => {
+              // When turing off, if the other format is off, enable it
+              if (exportGraphML && !exportCSV) {
+                toggleSetting('exportCSV');
+              }
+              toggleSetting('exportGraphML');
             },
           }}
         />
         <div>
-          <h2>Export GraphML</h2>
+          <h2>Export GraphML Files</h2>
           <p>
             GraphML is the main file format used by Network Canvas. GraphML files can be used
             to manually import your data into Server, and can be opened by many other pieces
@@ -45,13 +48,17 @@ const ExportOptions = (props) => {
         <Toggle
           input={{
             value: exportCSV,
-            onChange: (value) => {
-              console.log('change', value);
+            onChange: () => {
+              // When turing off, if the other format is off, enable it
+              if (exportCSV && !exportGraphML) {
+                toggleSetting('exportGraphML');
+              }
+              toggleSetting('exportCSV');
             },
           }}
         />
         <div>
-          <h2>Export CSV</h2>
+          <h2>Export CSV Files</h2>
           <p>
             CSV is a widely used format for storing network data, but this wider compatibility
             comes at the expense of robustness. If you enable this format, your networks will
@@ -65,18 +72,16 @@ const ExportOptions = (props) => {
         <Toggle
           input={{
             value: unifyNetworks,
-            onChange: (value) => {
-              console.log('change', value);
-            },
+            onChange: () => toggleSetting('unifyNetworks'),
           }}
         />
         <div>
-          <h2>Unify Networks</h2>
+          <h2>Merge Sessions</h2>
           <p>
           If you enable this option, exporting multiple sessions at the same time will cause
-          them to be merged into a single file. In the case of CSV export, you will receive
-          one of each type of file, with all entities across all the sessions you have
-          exported. In the case of GraphML you will receive a single GraphML file with
+          them to be merged into a single file, on a per-protocol basis. In the case of CSV
+          export, you will receive one of each type of file for each protocol. In the case
+          of GraphML you will receive a single GraphML file with
           multiple <code>graph</code> elements. Please note that most software does not yet
           support multiple graphs in a single GraphML file.
           </p>
@@ -86,9 +91,7 @@ const ExportOptions = (props) => {
         <Toggle
           input={{
             value: useScreenLayoutCoordinates,
-            onChange: (value) => {
-              console.log('change', value);
-            },
+            onChange: () => toggleSetting('useScreenLayoutCoordinates'),
           }}
         />
         <div>
@@ -97,9 +100,56 @@ const ExportOptions = (props) => {
           By default Network Canvas exports sociogram node coordinates as normalized X/Y
           values (a number between 0 and 1 for each axis, with the origin in the top
           left). If you prefer, you can enable this option to instead store coordinates as
-          screen space pixel values. Please note that this function assumes that the
-          sociogram was created while the app was running in full screen mode.
+          screen space pixel values.
           </p>
+          { useScreenLayoutCoordinates && (
+            <motion.article variants={TabItemVariants} className="settings-element--sub-item">
+              <div>
+                <h3>Screen Size</h3>
+                <p>
+                  When computing screen layout coordinates, the following screen pixel size
+                  will be used.
+                </p>
+              </div>
+              <Number
+                label="Width (pixels)"
+                input={{
+                  value: screenLayoutWidth,
+                  onChange: e => updateSetting('screenLayoutWidth', e),
+                  validation: {
+                    required: true,
+                    minValue: 1,
+                  },
+                }}
+                name="screenLayoutWidth"
+              />
+              <Number
+                label="Height (pixels)"
+                input={{
+                  value: screenLayoutHeight,
+                  onChange: e => updateSetting('screenLayoutHeight', e),
+                  validation: {
+                    required: true,
+                    minValue: 1,
+                  },
+                }}
+                name="screenLayoutHeight"
+              />
+              <Button
+                size="small"
+                disabled={
+                  screenLayoutHeight === window.screen.height &&
+                  screenLayoutWidth === window.screen.width
+                }
+                onClick={() => {
+                  updateSetting('screenLayoutHeight', window.screen.height);
+                  updateSetting('screenLayoutWidth', window.screen.width);
+                }}
+              >
+                Reset to device fullscreen resolution
+              </Button>
+            </motion.article>
+          )}
         </div>
       </motion.article>
     </React.Fragment>
@@ -107,22 +157,27 @@ const ExportOptions = (props) => {
 };
 
 const mapDispatchToProps = dispatch => ({
+  toggleSetting: setting => dispatch(deviceSettingsActions.toggleSetting(setting)),
   updateSetting: (setting, value) => dispatch(deviceSettingsActions.setSetting(setting, value)),
 });
 
 const mapStateToProps = state => ({
-  exportOptions: state.deviceSettings.exportOptions,
+  exportGraphML: state.deviceSettings.exportGraphML,
+  exportCSV: state.deviceSettings.exportCSV,
+  unifyNetworks: state.deviceSettings.unifyNetworks,
+  useScreenLayoutCoordinates: state.deviceSettings.useScreenLayoutCoordinates,
+  screenLayoutWidth: state.deviceSettings.screenLayoutWidth,
+  screenLayoutHeight: state.deviceSettings.screenLayoutHeight,
 });
 
 ExportOptions.propTypes = {
-  exportOptions: PropTypes.object,
-  // updateSetting: PropTypes.func.isRequired,
-};
-
-ExportOptions.defaultProps = {
-  exportOptions: {
-    globalOptions: {},
-  },
+  exportGraphML: PropTypes.bool.isRequired,
+  exportCSV: PropTypes.bool.isRequired,
+  unifyNetworks: PropTypes.bool.isRequired,
+  useScreenLayoutCoordinates: PropTypes.bool.isRequired,
+  screenLayoutWidth: PropTypes.number.isRequired,
+  screenLayoutHeight: PropTypes.number.isRequired,
+  toggleSetting: PropTypes.func.isRequired,
 };
 
 export default compose(
