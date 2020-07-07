@@ -484,9 +484,27 @@ const bulkFileExportSessions = sessionList => (dispatch, getState) => {
     sessionList.map(session => (session.sessionVariables[sessionProperty])),
   ));
 
-  const { installedProtocols } = getState();
+  const { installedProtocols, deviceSettings: {
+    exportGraphML,
+    exportCSV,
+    unifyNetworks,
+    useScreenLayoutCoordinates,
+    screenLayoutHeight,
+    screenLayoutWidth,
+  } } = getState();
 
-  return exportSessions(sessionList, installedProtocols)
+  const exportOptions = {
+    exportGraphML,
+    exportCSV,
+    globalOptions: {
+      unifyNetworks,
+      useScreenLayoutCoordinates,
+      screenLayoutHeight,
+      screenLayoutWidth,
+    },
+  };
+
+  return exportSessions(exportOptions, sessionList, installedProtocols)
     .then(({ cancelled }) => {
       if (cancelled) {
         dispatch(sessionExportReset());

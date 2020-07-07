@@ -9,18 +9,12 @@ const saveDialog = (defaultFileName, extension) => {
   });
 };
 
-const exportSessions = (sessions, installedProtocols) => {
+const exportSessions = (exportOptions, sessions, installedProtocols) => {
   const { shell } = window.require('electron');
 
   // Instantiate file export manager
   // TODO: populate export options from app state.
-  const fileExportManager = new FileExportManager({
-    exportGraphML: true,
-    exportCSV: true,
-    globalOptions: {
-      unifyNetworks: true,
-    },
-  });
+  const fileExportManager = new FileExportManager(exportOptions);
 
   // TODO: can we show the save dialog when the file is ready to be written instead?
   const defaultFileName = 'networkCanvasExport.zip';
