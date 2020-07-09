@@ -1,6 +1,7 @@
 /* eslint-env jest */
 
 jest.mock('electron');
+jest.mock('electron-log');
 jest.mock('fs');
 jest.mock('redux-logger');
 jest.mock('../../src/utils/Environment');
