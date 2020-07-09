@@ -505,15 +505,9 @@ const bulkFileExportSessions = sessionList => (dispatch, getState) => {
   };
 
   return exportSessions(exportOptions, sessionList, installedProtocols)
-    .then(({ cancelled }) => {
-      if (cancelled) {
-        dispatch(sessionExportReset());
-        return { cancelled };
-      }
-
-      return sessionList.map(session =>
-        dispatch(sessionExportSucceeded(session.sessionVariables[sessionProperty])));
-    })
+    .then(() =>
+      sessionList.map(session =>
+        dispatch(sessionExportSucceeded(session.sessionVariables[sessionProperty]))))
     .catch(err =>
       sessionList.map(session =>
         dispatch(sessionExportFailed(session.sessionVariables[sessionProperty], err))),

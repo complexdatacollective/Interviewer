@@ -1,6 +1,6 @@
 /* eslint-disable global-require */
 /* global FileWriter, FileError, cordova */
-
+import { Writable } from 'stream';
 import { trimChars } from 'lodash/fp';
 import environments from './environments';
 import inEnvironment from './Environment';
@@ -17,10 +17,10 @@ const resolveOrRejectWith = (resolve, reject) => (err, ...args) => {
   }
 };
 
-const splitUrl = (targetPath) => {
+export const splitUrl = (targetPath) => {
   const pathParts = trimPath(targetPath).split('/');
   const baseDirectory = `${pathParts.slice(0, -1).join('/')}/`;
-  const directory = `${pathParts.slice(-1)}/`;
+  const directory = `${pathParts.slice(-1)}`;
   return [baseDirectory, directory];
 };
 
@@ -44,6 +44,32 @@ const userDataPath = inEnvironment((environment) => {
   throw new Error(`userDataPath() not available on platform ${environment}`);
 });
 
+export const getFileNativePath = inEnvironment((environment) => {
+  if (environment === environments.CORDOVA) {
+    return filePath => new Promise((resolve, reject) => {
+      window.resolveLocalFileSystemURL(filePath, (fileEntry) => {
+        resolve(fileEntry.toURL());
+      }, error => reject(error));
+    });
+  }
+
+  throw new Error(`getFileNativePath() not available on platform ${environment}`);
+});
+
+const tempDataPath = inEnvironment((environment) => {
+  if (environment === environments.ELECTRON) {
+    const electron = window.require('electron');
+
+    return () => (electron.app || electron.remote.app).getPath('temp');
+  }
+
+  if (environment === environments.CORDOVA) {
+    return () => cordova.file.cacheDirectory;
+  }
+
+  throw new Error(`userDataPath() not available on platform ${environment}`);
+});
+
 const appPath = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
     const electron = require('electron');
@@ -58,10 +84,24 @@ const appPath = inEnvironment((environment) => {
   throw new Error(`appDataPath() not available on platform ${environment}`);
 });
 
+const getFileEntry = (filename, fileSystem) => new Promise((resolve, reject) => {
+  fileSystem.root.getFile(filename, { create: true, exclusive: false },
+    fileEntry => resolve(fileEntry),
+    err => reject(err),
+  );
+});
+
+
+export const getTempFileSystem = () => new Promise((resolve, reject) => {
+  window.resolveLocalFileSystemURL(cordova.file.cacheDirectory, (dirEntry) => {
+    resolve(dirEntry);
+  }, error => reject(error));
+});
+
 const resolveFileSystemUrl = inEnvironment((environment) => {
   if (environment === environments.CORDOVA) {
-    return path =>
-      new Promise((resolve, reject) => window.resolveLocalFileSystemURL(path, resolve, reject));
+    return path => new Promise((resolve, reject) =>
+      window.resolveLocalFileSystemURL(path, resolve, reject));
   }
 
   throw new Error(`resolveFileSystemUrl() not available on platform ${environment}`);
@@ -137,12 +177,19 @@ const readFileAsDataUrl = inEnvironment((environment) => {
   throw new Error(`readFileAsDataUrl() not available on platform ${environment}`);
 });
 
-const makeFileWriter = fileEntry =>
+export const makeFileWriter = fileEntry =>
   new Promise((resolve, reject) => {
     fileEntry.createWriter(resolve, reject);
   });
 
-const newFile = (directoryEntry, filename) =>
+export const createReader = fileEntry => new Promise((resolve, reject) => {
+  fileEntry.file(
+    file => resolve(file),
+    err => reject(err),
+  );
+});
+
+export const newFile = (directoryEntry, filename) =>
   new Promise((resolve, reject) => {
     directoryEntry.getFile(filename, { create: true }, resolve, reject);
   });
@@ -252,13 +299,16 @@ const rename = inEnvironment((environment) => {
 
 const removeDirectory = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const rimraf = require('rimraf');
+    const fs = require('fs');
 
     return targetPath =>
       new Promise((resolve, reject) => {
         try {
-          if (!targetPath.includes(userDataPath())) { reject('Path not in userDataPath'); return; }
-          rimraf(targetPath, resolve);
+          if (
+            !targetPath.includes(userDataPath()) &&
+            !targetPath.includes(tempDataPath())
+          ) { reject('Attempted to remove path outside of safe directories!'); return; }
+          fs.rmdir(targetPath, { recursive: true }, resolve);
         } catch (error) {
           if (error.code !== 'EEXISTS') { reject(error); }
           throw error;
@@ -448,6 +498,128 @@ const writeStream = inEnvironment((environment) => {
   throw new Error(`writeStream() not available on platform ${environment}`);
 });
 
+// Objective here is to abstract fs.createWriteStream.
+// Needs to return a writeable stream.
+export const createWriteStream = inEnvironment((environment) => {
+  if (environment === environments.ELECTRON) {
+    const fs = require('fs');
+
+    return destination =>
+      new Promise((resolve, reject) => {
+        try {
+          const ws = fs.createWriteStream(destination);
+          resolve(ws);
+        } catch (error) {
+          reject(error);
+        }
+      });
+  }
+
+  if (environment === environments.CORDOVA) {
+    /**
+     * Provides a pseudo-streaming mechanism for writing files.
+     * Passes each chunk to a fileWriter, and on writeend, continues with the next chunk.
+     * The file can be written to as long as its readyState is not WRITING.
+     *
+     * The goal here is to reduce the memory footprint on mobile as much as possible, but we
+     * have to buffer each chunk sent temporarily, since the native stream may not write all bytes.
+     * Still, we provide as much backpressure to JSZip's stream as possible (with `pause`).
+     *
+     * @param  {string} destUrl filePath to write to
+     * @param  {StreamHelper} stream A JSZip "internal" stream of type "arraybuffer" or "uint8array"
+     *                               (see [JSZip docs]{@link https://stuk.github.io/jszip/documentation/api_zipobject/internal_stream.html})
+     * @private
+     */
+    return (destUrl) => {
+      const [baseDirectory, filename] = splitUrl(destUrl);
+      return new Promise((resolve, reject) => {
+        resolveFileSystemUrl(baseDirectory)
+          .then(directoryEntry => newFile(directoryEntry, filename))
+          .then(makeFileWriter)
+          .then((fileWriter) => {
+            let bufferedChunkBytes = new Uint8Array();
+            // Needed to calculate bytesWritten since not provided by Cordova
+            let previousFileWriterLength = 0;
+            // We won't know how many bytes we need to write until we're done
+            // This flag lets writeend handler know not to expect any more
+            // let reachedEndOfInputStream = false;
+
+            const handleError = (err) => {
+              console.error(err); // eslint-disable-line no-console
+              // if (stream) {
+              //   stream.pause();
+              // }
+              if (fileWriter && fileWriter.readyState === FileWriter.WRITING) {
+                fileWriter.abort();
+              }
+              reject(err);
+            };
+
+            const writeChunk = (chunkByteArray) => {
+              previousFileWriterLength = fileWriter.length;
+              const byteLength = chunkByteArray.byteLength;
+              const data = chunkByteArray.slice(0, byteLength);
+              try {
+                // fileWriter.write documents a blob arg, but called with a blob,
+                // it will read the blob to an arraybuffer and then re-call itself.
+                fileWriter.write(data.buffer);
+              } catch (err) {
+                handleError(err);
+              }
+            };
+
+            const onChunkWritten = () => {
+              const bytesWritten = fileWriter.length - previousFileWriterLength;
+              bufferedChunkBytes = bufferedChunkBytes.slice(bytesWritten);
+              if (fileWriter.error) {
+                // already handled by onerror; ignore here
+              } else if (bufferedChunkBytes.length) {
+                writeChunk(bufferedChunkBytes);
+              }
+            };
+
+            const onChunkReceived = (chunkByteArray) => {
+              bufferedChunkBytes = concatTypedArrays(bufferedChunkBytes, chunkByteArray);
+              // Despite pausing, we may receive additional chunks before previous has completed,
+              // in which case we wait until the current write ends.
+              if (fileWriter.readyState !== FileWriter.WRITING) {
+                writeChunk(chunkByteArray);
+              }
+            };
+
+            fileWriter.onwriteend = onChunkWritten; // eslint-disable-line no-param-reassign
+            fileWriter.onerror = handleError; // eslint-disable-line no-param-reassign
+
+            // // Readable stream.
+            // stream
+            //   .on('error', handleError)
+            //   .on('data', onChunkReceived)
+            //   .on('end', () => {
+            //     if (bufferedChunkBytes.length === 0) {
+            //       resolve(destUrl);
+            //     } else {
+            //       reachedEndOfInputStream = true;
+            //     }
+            //   })
+            //   .resume();
+
+            const ws = new Writable({
+              // Implementing write function
+              write(chunk, encoding, callback) {
+                // Defining string
+                onChunkReceived(chunk);
+                callback();
+              },
+            });
+            resolve(ws);
+          });
+      });
+    };
+  }
+
+  throw new Error(`writeStream() not available on platform ${environment}`);
+});
+
 // FIXME: this implies that it will recursively create directories, but if targetPath's parent
 //        doesn't already exist, this will error on both platforms
 const ensurePathExists = inEnvironment((environment) => {
@@ -509,11 +681,14 @@ const makeTmpDirCopy = inEnvironment((environment) => {
 });
 
 export {
+  getFileEntry,
   userDataPath,
+  tempDataPath,
   appPath,
   getNestedPaths,
   ensurePathExists,
   makeTmpDirCopy,
+  createDirectory,
   rename,
   removeDirectory,
   readFile,
