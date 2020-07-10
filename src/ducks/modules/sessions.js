@@ -1,11 +1,9 @@
-import { omit, map, reduce } from 'lodash';
+import { omit, reduce } from 'lodash';
 import uuid from 'uuid/v4';
-import ApiClient from '../../utils/ApiClient';
-import exportSessions from '../../utils/exportSessions';
 import { actionCreators as SessionWorkerActions } from './sessionWorkers';
 import { actionTypes as installedProtocolsActionTypes } from './installedProtocols';
 import networkReducer, { actionTypes as networkActionTypes, actionCreators as networkActions, entityPrimaryKeyProperty } from './network';
-import { sessionProperty, remoteProtocolProperty } from '../../utils/network-exporters/src/utils/reservedAttributes';
+
 
 const ADD_SESSION = 'ADD_SESSION';
 const FINISH_SESSION = 'FINISH_SESSION';
@@ -15,10 +13,6 @@ const UPDATE_STAGE = 'UPDATE_STAGE';
 const UPDATE_CASE_ID = 'UPDATE_CASE_ID';
 const UPDATE_STAGE_STATE = 'UPDATE_STAGE_STATE';
 const REMOVE_SESSION = 'REMOVE_SESSION';
-const EXPORT_SESSIONS_START = 'EXPORT_SESSIONS_START';
-const EXPORT_SESSIONS_RESET = 'EXPORT_SESSIONS_RESET';
-const EXPORT_SESSION_FAILED = 'EXPORT_SESSION_FAILED';
-const EXPORT_SESSION_SUCCEEDED = 'EXPORT_SESSION_SUCCEEDED';
 
 const initialState = {};
 
@@ -117,51 +111,6 @@ const getReducer = network =>
       }
       case REMOVE_SESSION:
         return omit(state, [action.sessionId]);
-      case EXPORT_SESSIONS_START: {
-        const newObj = {
-          ...state,
-        };
-        map(action.sessionIds, (sessionId) => {
-          newObj[sessionId].exportStatus = 'exporting';
-        });
-
-        return {
-          ...state,
-          ...newObj,
-        };
-      }
-      case EXPORT_SESSIONS_RESET: {
-        const newObj = {
-          ...state,
-        };
-
-        map(state, (session, sessionUUID) => {
-          newObj[sessionUUID].exportStatus = null;
-          newObj[sessionUUID].exportError = null;
-        });
-        return {
-          ...state,
-          ...newObj,
-        };
-      }
-      case EXPORT_SESSION_SUCCEEDED:
-        return {
-          ...state,
-          [action.sessionId]: withTimestamp({
-            ...state[action.sessionId],
-            lastExportedAt: Date.now(),
-            exportStatus: 'finished',
-          }),
-        };
-      case EXPORT_SESSION_FAILED:
-        return {
-          ...state,
-          [action.sessionId]: withTimestamp({
-            ...state[action.sessionId],
-            exportStatus: 'error',
-            exportError: action.error,
-          }),
-        };
       default:
         return state;
     }
@@ -459,105 +408,6 @@ const finishSession = id => ({
   sessionId: id,
 });
 
-const sessionExportStart = sessionIds => ({
-  type: EXPORT_SESSIONS_START,
-  sessionIds,
-});
-
-const sessionExportReset = () => ({
-  type: EXPORT_SESSIONS_RESET,
-});
-
-const sessionExportSucceeded = id => ({
-  type: EXPORT_SESSION_SUCCEEDED,
-  sessionId: id,
-});
-
-const sessionExportFailed = (id, error) => ({
-  type: EXPORT_SESSION_FAILED,
-  error,
-  sessionId: id,
-});
-
-const bulkFileExportSessions = sessionList => (dispatch, getState) => {
-  dispatch(sessionExportStart(
-    sessionList.map(session => (session.sessionVariables[sessionProperty])),
-  ));
-
-  const { installedProtocols, deviceSettings: {
-    exportGraphML,
-    exportCSV,
-    unifyNetworks,
-    useScreenLayoutCoordinates,
-    screenLayoutHeight,
-    screenLayoutWidth,
-  } } = getState();
-
-  const exportOptions = {
-    exportGraphML,
-    exportCSV,
-    globalOptions: {
-      unifyNetworks,
-      useScreenLayoutCoordinates,
-      screenLayoutHeight,
-      screenLayoutWidth,
-    },
-  };
-
-  return exportSessions(exportOptions, sessionList, installedProtocols)
-    .then(() =>
-      sessionList.map(session =>
-        dispatch(sessionExportSucceeded(session.sessionVariables[sessionProperty]))))
-    .catch(err =>
-      sessionList.map(session =>
-        dispatch(sessionExportFailed(session.sessionVariables[sessionProperty], err))),
-    );
-};
-
-const bulkServerExportSessions = sessionList => (dispatch, getState) => {
-  const pairedServer = getState().pairedServer;
-
-  if (pairedServer) {
-    const client = new ApiClient(pairedServer);
-    let results = [];
-
-    // Use reduce to create a promise sequence.
-    return client.addTrustedCert().then(() => {
-      dispatch(sessionExportStart(
-        sessionList.map(session => (session.sessionVariables[sessionProperty])),
-      ));
-
-      return sessionList.reduce(
-        (previousSession, nextSession) =>
-          previousSession
-            .then(
-              () => client.exportSession(
-                nextSession.sessionVariables[remoteProtocolProperty],
-                nextSession.sessionUUID[sessionProperty],
-                nextSession.sessionData,
-              ).then((data) => {
-                // return of session export
-                dispatch(sessionExportSucceeded(nextSession.sessionUUID));
-
-                results = [...results, {
-                  sessionUUID: nextSession.sessionUUID,
-                  response: data,
-                }];
-              }).catch((error) => {
-                // session export failed...
-                dispatch(sessionExportFailed(nextSession.sessionUUID, error));
-                results = [...results, {
-                  sessionUUID: nextSession.sessionUUID,
-                  response: error,
-                }];
-              }),
-            ), Promise.resolve(),
-      );
-    }).then(() => results);
-  }
-  return Promise.reject(new Error('No paired server available'));
-};
-
 const actionCreators = {
   addNode,
   batchAddNodes,
@@ -578,12 +428,6 @@ const actionCreators = {
   updateStageState,
   removeSession,
   finishSession,
-  sessionExportStart,
-  sessionExportSucceeded,
-  sessionExportReset,
-  sessionExportFailed,
-  bulkServerExportSessions,
-  bulkFileExportSessions,
 };
 
 const actionTypes = {
@@ -595,9 +439,6 @@ const actionTypes = {
   UPDATE_CASE_ID,
   UPDATE_STAGE_STATE,
   REMOVE_SESSION,
-  EXPORT_SESSION_FAILED,
-  EXPORT_SESSIONS_START,
-  EXPORT_SESSIONS_RESET,
 };
 
 export {

@@ -88,8 +88,6 @@ class SessionListContainer extends Component {
               showExportSessionsOverlay: false,
               selectedSessions: [],
             });
-
-            this.props.resetSessionExport();
           }}
           sessionsToExport={this.state.selectedSessions}
         />
@@ -189,7 +187,6 @@ SessionListContainer.propTypes = {
   removeSession: PropTypes.func.isRequired,
   sessions: PropTypes.object.isRequired,
   openDialog: PropTypes.func.isRequired,
-  resetSessionExport: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -202,7 +199,6 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     removeSession: bindActionCreators(sessionsActions.removeSession, dispatch),
-    resetSessionExport: bindActionCreators(sessionsActions.sessionExportReset, dispatch),
     openDialog: bindActionCreators(dialogActions.openDialog, dispatch),
   };
 }

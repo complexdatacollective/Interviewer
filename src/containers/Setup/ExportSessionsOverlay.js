@@ -10,6 +10,7 @@ import ProtocolUrlForm from './ProtocolUrlForm';
 import ServerPairing from './ServerPairing';
 import SessionExportStatusList from './SessionExportStatusList';
 import { ServerAddressForm, DiscoveredServerList } from '../../components/Setup';
+import { actionCreators as exportActions } from '../../ducks/modules/exportProcess';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import Overlay from '../Overlay';
@@ -159,7 +160,7 @@ class ExportSessionsOverlay extends PureComponent {
 
   export = (sessionList) => {
     this.setState({ showExportProgress: true, exportFinished: false });
-    this.props.bulkServerExportSessions(sessionList.map((sessionId) => {
+    this.props.exportToServer(sessionList.map((sessionId) => {
       const session = this.props.sessions[sessionId];
       const sessionProtocolUID = session.protocolUID;
       const sessionProtocol = this.props.installedProtocols[sessionProtocolUID];
@@ -190,7 +191,7 @@ class ExportSessionsOverlay extends PureComponent {
 
   exportToFile = (exportedSessions) => {
     this.setState({ showDownloadProgress: true, downloadFinished: false });
-    this.props.bulkFileExportSessions(exportedSessions.map((session) => {
+    this.props.exportToFile(exportedSessions.map((session) => {
       const sessionProtocol =
         this.props.installedProtocols[this.props.sessions[session].protocolUID];
 
@@ -199,14 +200,7 @@ class ExportSessionsOverlay extends PureComponent {
         this.props.sessions[session],
         sessionProtocol,
       );
-    }))
-      .then(({ cancelled }) => {
-        if (cancelled) {
-          return this.setState({ showDownloadProgress: false });
-        }
-        return this.setState({ downloadFinished: true });
-      })
-      .catch(err => this.handleExportError(err));
+    }));
   };
 
   switchTab = (exportMode) => {
@@ -329,8 +323,8 @@ ExportSessionsOverlay.propTypes = {
   removeSession: PropTypes.func.isRequired,
   sessionsToExport: PropTypes.array.isRequired,
   openDialog: PropTypes.func.isRequired,
-  bulkServerExportSessions: PropTypes.func.isRequired,
-  bulkFileExportSessions: PropTypes.func.isRequired,
+  exportToServer: PropTypes.func.isRequired,
+  exportToFile: PropTypes.func.isRequired,
   sessionExportReset: PropTypes.func.isRequired,
   activeSession: PropTypes.string,
   pairedServer: PropTypes.shape({
@@ -347,9 +341,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  bulkServerExportSessions: bindActionCreators(sessionsActions.bulkServerExportSessions, dispatch),
-  bulkFileExportSessions: bindActionCreators(sessionsActions.bulkFileExportSessions, dispatch),
-  sessionExportReset: bindActionCreators(sessionsActions.sessionExportReset, dispatch),
+  exportToServer: bindActionCreators(exportActions.exportToServer, dispatch),
+  exportToFile: bindActionCreators(exportActions.exportToFile, dispatch),
+  sessionExportReset: bindActionCreators(exportActions.sessionExportFinish, dispatch),
   removeSession: bindActionCreators(sessionsActions.removeSession, dispatch),
   openDialog: bindActionCreators(dialogActions.openDialog, dispatch),
 });
