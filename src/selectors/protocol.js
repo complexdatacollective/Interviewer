@@ -33,7 +33,7 @@ export const getCurrentSessionProtocol = createSelector(
 );
 
 export const getActiveProtocolName = createSelector(
-  getActiveProtocol,
+  getCurrentSessionProtocol,
   protocol => protocol && protocol.name,
 );
 

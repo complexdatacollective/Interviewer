@@ -141,14 +141,9 @@ class ExportSessionsOverlay extends PureComponent {
             </div>
           </div>
         </React.Fragment>);
-      const serverWrapper = (
-        <PairedServerWrapper className="server-setup__card" data={this.props.pairedServer} isPaired>
-          {tabContent}
-        </PairedServerWrapper>);
       return (
         <div className="session-export-content">
           <div className="session-export-content__container">
-<<<<<<< HEAD:src/containers/ExportSessions/ExportSessionsOverlay.js
             <div>
               <h2>Ready to export</h2>
               <p>
@@ -163,9 +158,6 @@ class ExportSessionsOverlay extends PureComponent {
                 </Button>
               </div>
             </div>
-=======
-            {this.state.exportMode === 'server' ? serverWrapper : <div className="session-export-content__to-file">{tabContent}</div>}
->>>>>>> master:src/containers/Setup/ExportSessionsOverlay.js
           </div>
         </div>
       );
