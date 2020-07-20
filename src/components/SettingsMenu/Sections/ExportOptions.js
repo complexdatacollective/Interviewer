@@ -97,18 +97,18 @@ const ExportOptions = (props) => {
         <div>
           <h2>Use Screen Layout Coordinates</h2>
           <p>
-          By default Network Canvas exports sociogram node coordinates as normalized X/Y
-          values (a number between 0 and 1 for each axis, with the origin in the top
-          left). If you prefer, you can enable this option to instead store coordinates as
-          screen space pixel values.
+            By default Network Canvas exports sociogram node coordinates as normalized X/Y
+            values (a number between 0 and 1 for each axis, with the origin in the top
+            left). Enabling this option will store coordinates as screen space pixel values,
+            with the same origin.
           </p>
           { useScreenLayoutCoordinates && (
             <motion.article variants={TabItemVariants} className="settings-element--sub-item">
               <div>
                 <h3>Screen Size</h3>
                 <p>
-                  When computing screen layout coordinates, the following screen pixel size
-                  will be used.
+                  When computing screen layout coordinates, the following screen size (in
+                  pixels) will be used.
                 </p>
               </div>
               <Number

@@ -2,21 +2,24 @@ import { sessionProperty, remoteProtocolProperty } from '../../utils/network-exp
 import ApiClient from '../../utils/ApiClient';
 import FileExportManager from '../../utils/network-exporters/src/FileExportManager';
 
+const SESSION_EXPORT_RESET = 'SESSION_EXPORT_RESET';
 const SESSION_EXPORT_START = 'SESSION_EXPORT_START';
 const SESSION_EXPORT_UPDATE = 'SESSION_EXPORT_UPDATE';
 const SESSION_EXPORT_FINISH = 'SESSION_EXPORT_FINISH';
 const SESSION_EXPORT_ERROR = 'SESSION_EXPORT_ERROR';
+const SESSION_EXPORT_FATAL_ERROR = 'SESSION_EXPORT_FATAL_ERROR';
 
 
 export const initialState = {
   statusText: null,
   progress: 0,
   errors: [],
+  fatalError: false,
 };
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    case SESSION_EXPORT_FINISH:
+    case SESSION_EXPORT_RESET:
       return initialState;
     case SESSION_EXPORT_START:
       return {
@@ -25,6 +28,7 @@ export default function reducer(state = initialState, action = {}) {
         progress: 1,
       };
     case SESSION_EXPORT_UPDATE:
+    case SESSION_EXPORT_FINISH:
       return {
         ...state,
         statusText: action.statusText,
@@ -38,17 +42,28 @@ export default function reducer(state = initialState, action = {}) {
           action.error,
         ],
       };
+    case SESSION_EXPORT_FATAL_ERROR:
+      return {
+        ...state,
+        fatalError: action.error,
+      };
     default:
       return state;
   }
 }
 
+const sessionExportReset = () => ({
+  type: SESSION_EXPORT_RESET,
+});
+
 const sessionExportStart = () => ({
   type: SESSION_EXPORT_START,
 });
 
-const sessionExportFinish = () => ({
+const sessionExportFinish = (statusText, progress) => ({
   type: SESSION_EXPORT_FINISH,
+  statusText,
+  progress,
 });
 
 const sessionExportUpdate = (statusText, progress) => ({
@@ -59,6 +74,11 @@ const sessionExportUpdate = (statusText, progress) => ({
 
 const sessionExportError = error => ({
   type: SESSION_EXPORT_ERROR,
+  error,
+});
+
+const sessionExportFatalError = error => ({
+  type: SESSION_EXPORT_FATAL_ERROR,
   error,
 });
 
@@ -86,32 +106,29 @@ const exportToFile = sessionList => (dispatch, getState) => {
     },
   };
 
-  let fileExportManager;
+  const fileExportManager = new FileExportManager(exportOptions);
 
-  // Instantiate file export manager and bind events
-  try {
-    fileExportManager = new FileExportManager(exportOptions);
+  fileExportManager.on('begin', () => {
+    dispatch(sessionExportStart());
+  });
 
-    fileExportManager.on('begin', () => {
-      dispatch(sessionExportStart());
-    });
+  fileExportManager.on('update', ({ statusText, progress }) => {
+    dispatch(sessionExportUpdate(statusText, progress));
+  });
 
-    fileExportManager.on('update', ({ statusText, progress }) => {
-      dispatch(sessionExportUpdate(statusText, progress));
-    });
+  fileExportManager.on('error', (error) => {
+    dispatch(sessionExportError(error));
+  });
 
-    fileExportManager.on('error', (error) => {
-      dispatch(sessionExportError(error));
-    });
+  fileExportManager.on('finished', ({ statusText, progress }) => {
+    dispatch(sessionExportFinish(statusText, progress));
+  });
 
-    fileExportManager.on('finished', () => {
-      dispatch(sessionExportFinish());
-    });
-
-    fileExportManager.exportSessions(sessionList, installedProtocols);
-  } catch (error) {
-    dispatch(sessionExportError({ error }));
-  }
+  const exportPromise = fileExportManager.exportSessions(sessionList, installedProtocols);
+  exportPromise.catch((error) => {
+    dispatch(sessionExportFatalError(error));
+  });
+  return exportPromise;
 };
 
 const exportToServer = sessionList => (dispatch, getState) => {
@@ -159,10 +176,12 @@ const exportToServer = sessionList => (dispatch, getState) => {
 };
 
 const actionCreators = {
+  sessionExportReset,
   sessionExportStart,
   sessionExportFinish,
   sessionExportUpdate,
   sessionExportError,
+  sessionExportFatalError,
   exportToFile,
   exportToServer,
 };
@@ -172,6 +191,7 @@ const actionTypes = {
   SESSION_EXPORT_FINISH,
   SESSION_EXPORT_UPDATE,
   SESSION_EXPORT_ERROR,
+  SESSION_EXPORT_FATAL_ERROR,
 };
 
 export {
