@@ -29,9 +29,9 @@ class ExportProgressOverlay extends Component {
     const iconName = errors.length > 0 ? 'warning' : 'tick';
 
     const renderErrors = () => {
-      const errorList = errors.map((error, index) => (<li key={index}><Icon name="warning" /> {error.message}</li>));
+      const errorList = errors.map((error, index) => (<li key={index}><Icon name="warning" /> {error}</li>));
       return (
-        <React.Fragment>
+        <div className="export-progress-overlay__content" ref={this.contentRef}>
           <h2>Export finished with errors.</h2>
           <p>
             Your export completed, but non-fatal errors were encountered during the process. This
@@ -39,11 +39,11 @@ class ExportProgressOverlay extends Component {
             Review the details of these errors below, and ensure that you check the data you
             received.
           </p>
-          <h4>Errors:</h4>
+          <strong>Errors:</strong>
           <Scroller>
             <ul className="error-list">{errorList}</ul>
           </Scroller>
-        </React.Fragment>
+        </div>
       );
     };
 
@@ -64,9 +64,7 @@ class ExportProgressOverlay extends Component {
               <Spinner />
             )}
           </div>
-          <div className="export-progress-overlay__content" ref={this.contentRef}>
-            { errors.length > 0 && progress === 100 ? renderErrors() : renderStatus()}
-          </div>
+          { errors.length > 0 && progress === 100 ? renderErrors() : renderStatus()}
         </div>
         <div className="export-progress-footer">
           { progress === 100 ? (

@@ -61,7 +61,6 @@
     "babel-eslint": "^9.0.0",
     "babel-jest": "^25.1.0",
     "babel-loader": "^8.0.6",
-    "bluebird": "^3.5.2",
     "buffer": "^5.2.1",
     "case-sensitive-paths-webpack-plugin": "2.1.1",
     "chalk": "1.1.3",

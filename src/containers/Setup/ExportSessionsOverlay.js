@@ -27,7 +27,7 @@ class ExportSessionsOverlay extends PureComponent {
     this.state = {
       selectedServer: null, // set when user selects/enters a server to pair with
       previousSelectedServer: null, // selectedServer clone to populate manual inputs
-      exportMode: 'download', // used to switch between tabbed views
+      exportMode: 'server', // used to switch between tabbed views
     };
 
     this.abortController = null;

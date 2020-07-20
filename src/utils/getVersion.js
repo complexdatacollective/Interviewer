@@ -1,5 +1,4 @@
 /* eslint-disable */
-import Promise from 'bluebird';
 import { isElectron, isCordova } from '../utils/Environment';
 
 const getVersion = () => {

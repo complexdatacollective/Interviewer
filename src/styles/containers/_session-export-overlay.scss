@@ -110,21 +110,8 @@
     }
   }
 
-  &__content {
-    align-items: center;
-    display: flex;
-
-    .progress-container {
-      // height: 15rem;
-      // display: flex;
-      // align-items: center;
-      // justify-content: center;
-    }
-
-    .scrollable {
-      padding: unit(2) 0;
-      height: 100%;
-    }
+  .progress-container {
+    align-self: center;
 
     .progress-bar {
       width: 20rem;
@@ -135,6 +122,13 @@
       &__filler {
         background: var(--primary);
       }
+    }
+  }
+
+  &__content {
+    .scrollable {
+      padding: unit(2) 0;
+      max-height: 10rem;
     }
   }
 }
