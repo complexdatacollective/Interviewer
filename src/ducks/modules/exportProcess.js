@@ -127,35 +127,38 @@ const exportToFile = sessionList => (dispatch, getState) => {
   exportPromise.catch((error) => {
     dispatch(sessionExportFatalError(error));
   });
+
   return exportPromise;
 };
 
-const exportToServer = sessionList => async (dispatch, getState) => {
+const exportToServer = sessionList => (dispatch, getState) => {
   const pairedServer = getState().pairedServer;
 
-  if (pairedServer) {
-    const client = new ApiClient(pairedServer);
+  const client = new ApiClient(pairedServer);
+  client.addTrustedCert();
 
-    client.on('begin', () => {
-      dispatch(sessionExportStart());
-    });
+  client.on('begin', () => {
+    dispatch(sessionExportStart());
+  });
 
-    client.on('update', ({ statusText, progress }) => {
-      dispatch(sessionExportUpdate(statusText, progress));
-    });
+  client.on('update', ({ statusText, progress }) => {
+    dispatch(sessionExportUpdate(statusText, progress));
+  });
 
-    client.on('error', (error) => {
-      dispatch(sessionExportError(error));
-    });
+  client.on('error', (error) => {
+    dispatch(sessionExportError(error));
+  });
 
-    client.on('finished', ({ statusText, progress }) => {
-      dispatch(sessionExportFinish(statusText, progress));
-    });
+  client.on('finished', ({ statusText, progress }) => {
+    dispatch(sessionExportFinish(statusText, progress));
+  });
 
-    await client.addTrustedCert();
+  const exportPromise = client.exportSessions(sessionList);
+  exportPromise.catch((error) => {
+    dispatch(sessionExportFatalError(error));
+  });
 
-    await client.exportSessions(sessionList);
-  }
+  return exportPromise;
 };
 
 const actionCreators = {

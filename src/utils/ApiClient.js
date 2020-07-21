@@ -4,6 +4,7 @@ import EventEmitter from 'eventemitter3';
 import { isString } from 'lodash';
 import { decrypt, deriveSecretKeyBytes, encrypt, fromHex, toHex } from 'secure-comms-api/cipher';
 import { isCordova, isElectron } from '../utils/Environment';
+import UserCancelledExport from './network-exporters/src/errors/UserCancelledExport';
 
 
 const ProgressMessages = {
@@ -12,8 +13,8 @@ const ProgressMessages = {
     statusText: 'Starting export...',
   },
   ExportSession: (sessionExportCount, sessionExportTotal) => ({
-    progress: 10 + ((95 - 10) * sessionExportCount / (sessionExportTotal + 1)),
-    statusText: `Uploading ${sessionExportCount} of ${sessionExportTotal} sessions...`,
+    progress: 10 + ((95 - 10) * sessionExportCount / (sessionExportTotal)),
+    statusText: `Uploaded ${sessionExportCount} of ${sessionExportTotal} sessions...`,
   }),
   Finished: {
     progress: 100,
@@ -96,6 +97,7 @@ class ApiClient {
     let pairedServer;
 
     this.events = new EventEmitter();
+    this.cancelled = false;
 
     if (isString(pairingUrlOrPairedServer)) {
       // We have a pairing URL
@@ -111,8 +113,6 @@ class ApiClient {
       this.pairingClient = axios.create({
         baseURL: pairingUrl.replace(/\/$/, ''),
         headers: defaultHeaders,
-        // This timeout governs the time before the user clicks 'pair with device' in Server.
-        // timeout: 15000,
       });
     }
 
@@ -185,7 +185,12 @@ class ApiClient {
     if (!this.pairedServer) {
       return null;
     }
-    return { auth: { username: this.pairedServer.deviceId } };
+    return {
+      auth: {
+        username: this.pairedServer.deviceId,
+      },
+      cancelToken: this.cancelTokenSource.token,
+    };
   }
 
   /**
@@ -315,36 +320,62 @@ class ApiClient {
       .then(json => json.data);
   }
 
-  async exportSessions(sessionList) {
-    this.emit('begin', ProgressMessages.BeginExport);
+  exportSessions(sessionList) {
+    let cancelled = false;
 
-    await sessionList.reduce(async (previousPromise, nextSession, index) => {
-      this.emit('update', ProgressMessages.ExportSession(index + 1, sessionList.length));
+    this.emit('begin', ProgressMessages.BeginExport);
+    const exportPromise = sessionList.reduce(async (previousPromise, nextSession, index) => {
       await previousPromise;
 
-      return this.exportSession(nextSession).catch((error) => {
-        if (axios.isCancel(error)) {
-          return;
-        }
-        // Handle errors from the response
-        if (error.response) {
-          if (error.response.data.status === ApiErrorStatus) {
-            const formattedError = apiError({
-              ...error.response.data,
-              code: error.response.status,
-            });
-            this.emit('error', `${formattedError.message}: ${formattedError.friendlyMessage}`);
+      return this.exportSession(nextSession)
+        .catch((error) => {
+          if (axios.isCancel(error)) {
             return;
           }
+          // Handle errors from the response
+          if (error.response) {
+            if (error.response.data.status === ApiErrorStatus) {
+              const formattedError = apiError({
+                ...error.response.data,
+                code: error.response.status,
+              });
+              this.emit('error', `${formattedError.message}: ${formattedError.friendlyMessage}`);
+              return;
+            }
+          }
+          // Handle errors with the request
+          if (error.request) {
+            this.emit('error', ProgressMessages.NoResponseMessage);
+          }
+        }).then(() => {
+          if (!cancelled) {
+            this.emit('update', ProgressMessages.ExportSession(index + 1, sessionList.length));
+          }
+          Promise.resolve();
+        });
+    }, Promise.resolve())
+      .then(() => {
+        if (cancelled) {
+          throw new UserCancelledExport();
         }
-        // Handle errors with the request
-        if (error.request) {
-          this.emit('error', ProgressMessages.NoResponseMessage);
-        }
-      });
-    }, Promise.resolve());
 
-    this.emit('finished', ProgressMessages.Finished);
+        this.emit('finished', ProgressMessages.Finished);
+        Promise.resolve();
+      }).catch((err) => {
+        // We don't throw if this is an error from user cancelling
+        if (err instanceof UserCancelledExport) {
+          return;
+        }
+
+        throw err;
+      });
+
+    exportPromise.abort = () => {
+      cancelled = true;
+      this.cancelAll();
+    };
+
+    return exportPromise;
   }
 }
 

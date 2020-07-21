@@ -97,22 +97,6 @@ class ExportSessionsOverlay extends PureComponent {
       </div>
     );
   }
-
-  exportToServer = (sessionList) => {
-    this.props.exportToServer(sessionList.map((sessionId) => {
-      const session = this.props.sessions[sessionId];
-      const sessionProtocolUID = session.protocolUID;
-      const sessionProtocol = this.props.installedProtocols[sessionProtocolUID];
-
-      return asNetworkWithSessionVariables(
-        sessionId,
-        session,
-        sessionProtocol,
-      );
-    }))
-      .then(() => { this.setState({ exportFinished: true }); });
-  }
-
   pairWithServer = (server) => {
     this.setState({ selectedServer: server });
   }
@@ -127,6 +111,23 @@ class ExportSessionsOverlay extends PureComponent {
       confirmLabel: 'Okay',
     });
   }
+
+  exportToServer = (sessionList) => {
+    const exportPromise = this.props.exportToServer(sessionList.map((sessionId) => {
+      const session = this.props.sessions[sessionId];
+      const sessionProtocolUID = session.protocolUID;
+      const sessionProtocol = this.props.installedProtocols[sessionProtocolUID];
+
+      return asNetworkWithSessionVariables(
+        sessionId,
+        session,
+        sessionProtocol,
+      );
+    }));
+
+    this.abortController = exportPromise.abort;
+  }
+
 
   exportToFile = (exportedSessions) => {
     const exportPromise = this.props.exportToFile(exportedSessions.map((session) => {

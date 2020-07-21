@@ -34,6 +34,7 @@
     background: var(--background);
     border-radius: var(--border-radius);
     margin-top: 1rem;
+    padding: 1.2rem;
 
     code {
       background: var(--color-slate-blue);
@@ -59,10 +60,6 @@
 .session-export-content {
   display: flex;
   flex-direction: column;
-}
-
-.file-export, .server-card-wrapper {
-  padding: unit(2) unit(4);
 }
 
 .file-export {
@@ -128,7 +125,7 @@
   &__content {
     .scrollable {
       padding: unit(2) 0;
-      max-height: 10rem;
+      max-height: 15rem;
     }
   }
 }
@@ -136,6 +133,5 @@
 .export-progress-footer {
   display: flex;
   justify-content: flex-end;
-  padding: unit(2) unit(4);
 }
 
