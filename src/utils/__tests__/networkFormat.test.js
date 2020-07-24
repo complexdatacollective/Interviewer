@@ -2,11 +2,8 @@
 /* eslint-disable @codaco/spellcheck/spell-checker */
 
 import {
-  asExportableNode,
   asWorkerAgentEntity,
   asWorkerAgentEdge,
-  asExportableEgo,
-  asExportableEdge,
 } from '../networkFormat';
 
 import {
@@ -74,72 +71,5 @@ describe('asWorkerAgentEdge', () => {
 
   it('returns a user-friendly edge type', () => {
     expect(asWorkerAgentEntity(edgeInNetwork, edgeTypeDefinition)[nodeTypePropertyForWorker]).toEqual('friend');
-  });
-});
-
-describe('asExportableNode', () => {
-  const nodeInNetwork = {
-    attributes: {
-      1234: 'userProp1value',
-    },
-    [entityPrimaryKeyProperty]: 'node1',
-    stageId: 42,
-  };
-
-  const nodeTypeDefinition = {
-    name: 'person',
-    variables: {
-      1234: { name: 'userProp1' },
-    },
-  };
-
-  it('transposes type and attributes', () => {
-    const exportNode = asExportableNode(nodeInNetwork, nodeTypeDefinition);
-    expect(exportNode.attributes.userProp1).toEqual('userProp1value');
-    expect(exportNode.type).toEqual('person');
-  });
-});
-
-describe('asExportableEdge', () => {
-  const edgeInNetwork = {
-    from: 'node1',
-    to: 'node2',
-    type: '1234',
-    [entityPrimaryKeyProperty]: 'edge1',
-    attributes: {
-      1234: 'userProp1value',
-    },
-  };
-
-  const edgeTypeDefinition = {
-    name: 'friend',
-    variables: {
-      1234: { name: 'userProp1' },
-    },
-  };
-
-  it('transposes type and attributes', () => {
-    const exportEdge = asExportableEdge(edgeInNetwork, edgeTypeDefinition);
-    expect(exportEdge.attributes.userProp1).toEqual('userProp1value');
-    expect(exportEdge.type).toEqual('friend');
-  });
-});
-
-describe('asExportableEgo', () => {
-  const egoInNetwork = {
-    attributes: {
-      1234: 'userProp1value',
-    },
-  };
-
-  const egoTypeDefinition = {
-    variables: {
-      1234: { name: 'userProp1' },
-    },
-  };
-
-  it('transposes type and attributes', () => {
-    const exportEgo = asExportableEgo(egoInNetwork, egoTypeDefinition);
-    expect(exportEgo.attributes.userProp1).toEqual('userProp1value');
   });
 });
