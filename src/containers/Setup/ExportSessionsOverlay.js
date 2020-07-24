@@ -15,12 +15,6 @@ import { asNetworkWithSessionVariables } from '../../utils/networkFormat';
 import PairedServerWrapper from '../../components/Setup/PairedServerWrapper';
 import ExportProgressOverlay from './ExportProgressOverlay';
 
-/**
- * The remote protocol ID on any instance of Server is the hex-encoded sha256 of its [unique] name.
- * Server will need to know this ID when we export/import session data.
- */
-
-
 class ExportSessionsOverlay extends PureComponent {
   constructor(props) {
     super(props);
@@ -128,7 +122,6 @@ class ExportSessionsOverlay extends PureComponent {
     this.abortController = exportPromise.abort;
   }
 
-
   exportToFile = (exportedSessions) => {
     const exportPromise = this.props.exportToFile(exportedSessions.map((session) => {
       const sessionProtocol =
@@ -142,7 +135,6 @@ class ExportSessionsOverlay extends PureComponent {
     }));
 
     this.abortController = exportPromise.abort;
-    // exportPromise.catch(error => console.log('caught here', error));
   };
 
   switchTab = (exportMode) => {
@@ -287,7 +279,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   exportToServer: bindActionCreators(exportActions.exportToServer, dispatch),
   exportToFile: bindActionCreators(exportActions.exportToFile, dispatch),
-  sessionExportReset: bindActionCreators(exportActions.sessionExportFinish, dispatch),
+  sessionExportReset: bindActionCreators(exportActions.sessionExportReset, dispatch),
   removeSession: bindActionCreators(sessionsActions.removeSession, dispatch),
   openDialog: bindActionCreators(dialogActions.openDialog, dispatch),
 });
