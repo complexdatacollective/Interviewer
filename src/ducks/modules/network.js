@@ -92,6 +92,13 @@ const formatNodeAttributes = (modelData, attributeData) => ({
   itemType: modelData.itemType,
 });
 
+const formatEgoAttributes = (modelData, attributeData) => ({
+  ...modelData,
+  [entityAttributesProperty]: {
+    ...attributeData,
+  },
+});
+
 /**
  * Correctly construct the edge object based on a
  * edge-like object, and an key-value attributes object
@@ -286,10 +293,17 @@ export default function reducer(state = getInitialState(), action = {}) {
     }
     case REMOVE_EDGE:
       return removeEdge(state, action.edgeId);
-    case ADD_SESSION:
+    case ADD_SESSION: {
+      const initialState = getInitialState();
+
       return {
-        ...getInitialState(),
+        ...initialState,
+        ego: formatEgoAttributes(
+          initialState.ego,
+          action.egoAttributeData,
+        ),
       };
+    }
     default:
       return state;
   }

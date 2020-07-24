@@ -15,6 +15,7 @@ const StagesMenu = (props) => {
     currentStageIndex,
     stages,
     setExpanded,
+    onStageSelect,
   } = props;
 
   const [filter, setFilter] = useState('');
@@ -143,6 +144,7 @@ const StagesMenu = (props) => {
         className="stages-menu__preview-wrapper"
       >
         <StagePreview
+          onStageSelect={onStageSelect}
           item={item}
           index={index}
           active={isActive}

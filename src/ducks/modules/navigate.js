@@ -135,6 +135,7 @@ const actionCreators = {
   goToNextStage,
   goToNextPrompt,
   goToNext,
+  goToStage,
 };
 
 export {
