@@ -1,15 +1,17 @@
+import { VariableType } from './utils/network-exporters/src/utils/protocol-consts';
+
 // String consts used by protocol files
 // Note: these values are no longer used to produce JSON schemas; the schemas must
 // be kept in sync manually.
 
 // Docs: https://github.com/codaco/Network-Canvas/wiki/protocol.json#variable-registry
-const Entity = Object.freeze({
+export const Entity = Object.freeze({
   edge: 'edge',
   node: 'node',
 });
 
 // Docs: https://github.com/codaco/Network-Canvas/wiki/Skip-Logic
-const FilterJoin = Object.freeze({
+export const FilterJoin = Object.freeze({
   OR: 'OR',
   AND: 'AND',
 });
@@ -17,7 +19,7 @@ const FilterJoin = Object.freeze({
 // Docs: https://github.com/codaco/Network-Canvas/wiki/Skip-Logic
 // TODO: expected to match https://github.com/codaco/networkQuery/blob/master/predicate.js;
 //       could support node syntax there, or introduce babel-node here.
-const FilterOptionsOperator = Object.freeze({
+export const FilterOptionsOperator = Object.freeze({
   EXISTS: 'EXISTS',
   NOT_EXISTS: 'NOT_EXISTS',
   EXACTLY: 'EXACTLY',
@@ -29,7 +31,7 @@ const FilterOptionsOperator = Object.freeze({
 });
 
 // Docs: https://github.com/codaco/Network-Canvas/wiki/Input-Types
-const FormComponent = Object.freeze({
+export const FormComponent = Object.freeze({
   Checkbox: 'Checkbox',
   CheckboxGroup: 'CheckboxGroup',
   Number: 'Number',
@@ -46,32 +48,32 @@ const FormComponent = Object.freeze({
 });
 
 // Docs: https://github.com/codaco/Network-Canvas/wiki/Information-Interface#content-types
-const InformationContentType = Object.freeze({
+export const InformationContentType = Object.freeze({
   text: 'text',
   asset: 'asset',
 });
 
-const AssetType = Object.freeze({
+export const AssetType = Object.freeze({
   image: 'image',
   video: 'video',
   audio: 'audio',
 });
 
 // Docs: https://github.com/codaco/Network-Canvas/wiki/Skip-Logic#skip-logic-api
-const RuleType = Object.freeze({
+export const RuleType = Object.freeze({
   alter: 'alter',
   ego: 'ego',
   edge: 'edge',
 });
 
 // Docs: https://github.com/codaco/Network-Canvas/wiki/Skip-Logic
-const SkipLogicAction = Object.freeze({
+export const SkipLogicAction = Object.freeze({
   SHOW: 'SHOW',
   SKIP: 'SKIP',
 });
 
 // Docs: https://github.com/codaco/Network-Canvas/wiki/Skip-Logic
-const SkipLogicOperator = Object.freeze({
+export const SkipLogicOperator = Object.freeze({
   ANY: 'ANY',
   NONE: 'NONE',
   EXACTLY: 'EXACTLY',
@@ -83,7 +85,7 @@ const SkipLogicOperator = Object.freeze({
 });
 
 // Docs: https://github.com/codaco/Network-Canvas/wiki#interfaces
-const StageType = Object.freeze({
+export const StageType = Object.freeze({
   NameGenerator: 'NameGenerator',
   NameGeneratorQuickAdd: 'NameGeneratorQuickAdd',
   NameGeneratorList: 'NameGeneratorList',
@@ -99,17 +101,9 @@ const StageType = Object.freeze({
   DyadCensus: 'DyadCensus',
 });
 
+// VariableTYpe imported from network-exporters submodule
 // Docs: https://github.com/codaco/Network-Canvas/wiki/Variable-Types
-const VariableType = Object.freeze({
-  boolean: 'boolean',
-  text: 'text',
-  number: 'number',
-  datetime: 'datetime',
-  ordinal: 'ordinal',
-  categorical: 'categorical',
-  layout: 'layout',
-  location: 'location',
-});
+
 
 const enumValueMaps = Object.freeze({
   Entity,
@@ -130,8 +124,8 @@ const enums = Object.entries(enumValueMaps).reduce((acc, [key, map]) => {
   return acc;
 }, {});
 
-// module syntax for node script compatibility
-module.exports = {
+
+export default {
   ...enumValueMaps,
   ...enums,
 };

@@ -6,6 +6,7 @@ import { isEmpty, get } from 'lodash';
 import { Button } from '@codaco/ui';
 import { Toggle } from '@codaco/ui/lib/components/Fields';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
+import { actionCreators as exportActions } from '../../ducks/modules/exportProcess';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { FilterableListWrapper, SessionList, NodeBin } from '../../components';
 import { entityAttributesProperty } from '../../ducks/modules/network';
@@ -69,7 +70,7 @@ class SessionListContainer extends Component {
   isSelected = uuid => this.state.selectedSessions.includes(uuid);
 
   render() {
-    const { installedProtocols, sessions } = this.props;
+    const { installedProtocols, sessions, sessionExportReset } = this.props;
     // Display most recent first, and filter out any session that doesn't have a protocol
     const sessionList = Object.keys(sessions)
       .map(key => ({ uuid: key, [entityAttributesProperty]: sessions[key] }));
@@ -89,7 +90,7 @@ class SessionListContainer extends Component {
               selectedSessions: [],
             });
 
-            this.props.resetSessionExport();
+            sessionExportReset();
           }}
           sessionsToExport={this.state.selectedSessions}
         />
@@ -189,7 +190,6 @@ SessionListContainer.propTypes = {
   removeSession: PropTypes.func.isRequired,
   sessions: PropTypes.object.isRequired,
   openDialog: PropTypes.func.isRequired,
-  resetSessionExport: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -202,7 +202,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     removeSession: bindActionCreators(sessionsActions.removeSession, dispatch),
-    resetSessionExport: bindActionCreators(sessionsActions.sessionExportReset, dispatch),
+    sessionExportReset: bindActionCreators(exportActions.sessionExportReset, dispatch),
     openDialog: bindActionCreators(dialogActions.openDialog, dispatch),
   };
 }

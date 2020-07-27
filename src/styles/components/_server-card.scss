@@ -37,4 +37,11 @@
     margin: 0 unit(2) 0 0;
   }
 
+  .server-card-container {
+    justify-content: space-between;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
 }

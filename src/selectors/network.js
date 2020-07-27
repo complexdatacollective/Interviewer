@@ -1,8 +1,8 @@
 import { findKey, find } from 'lodash';
-import { getActiveSession, getCaseId } from './session';
+import { getActiveSession } from './session';
 import { createDeepEqualSelector } from './utils';
 import { getProtocolCodebook } from './protocol';
-import { asExportableNetwork, asWorkerAgentNetwork } from '../utils/networkFormat';
+import { asWorkerAgentNetwork } from '../utils/networkFormat';
 import { getEntityAttributes } from '../ducks/modules/network';
 import customFilter from '../utils/networkQuery/filter';
 
@@ -38,13 +38,6 @@ export const getNetworkEgo = createDeepEqualSelector(
 export const getNetworkEdges = createDeepEqualSelector(
   getFilteredNetwork,
   network => network.edges,
-);
-
-export const getExportableNetwork = createDeepEqualSelector(
-  getNetwork,
-  (state, props) => getProtocolCodebook(state, props),
-  (state, props) => getCaseId(state, props),
-  (network, registry, _caseID) => asExportableNetwork(network, registry, { _caseID }),
 );
 
 export const getWorkerNetwork = createDeepEqualSelector(
