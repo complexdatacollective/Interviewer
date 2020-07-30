@@ -29,7 +29,7 @@ class Updater {
       detail: `Version ${updateInfo.releaseName} is available.\n\nRelease notes are available at:\n${releasesUrl}\n\nClick 'Download and Restart' to fetch this update and install it. Ensure you have exported or backed up any important data before continuing.`,
       buttons: ['Download and Restart', 'Cancel'],
     })
-      .then((response) => {
+      .then(({ response }) => {
         if (response === 0) {
           autoUpdater.downloadUpdate();
         }
