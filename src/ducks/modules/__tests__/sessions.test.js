@@ -23,7 +23,7 @@ const mockSessionId = 'session-1';
 const mockStateWithSession = {
   ...mockState,
   [mockSessionId]: {
-    caseID: undefined,
+    caseId: undefined,
     protocolUID: undefined,
     network: { ego: {}, nodes: [], edges: [] },
   },
@@ -32,7 +32,7 @@ const mockStateWithSession = {
 const mockStateWithProtocol = {
   ...mockState,
   [mockSessionId]: {
-    caseID: undefined,
+    caseId: undefined,
     protocolUID: '1234',
     network: { ego: {}, nodes: [], edges: [] },
   },
@@ -60,7 +60,7 @@ describe('sessions', () => {
       expect(newState).toEqual({
         a: {
           caseId: 'case1',
-          createdAt: now,
+          startedAt: now,
           network: {
             ego: {
               _uid: 'session-1',
@@ -86,7 +86,7 @@ describe('sessions', () => {
       );
 
       expect(newState[mockSessionId]).toEqual(expect.objectContaining({
-        caseID: undefined,
+        caseId: undefined,
         network: { edges: [], ego: {}, nodes: [] },
         protocolUID: undefined,
       }));
@@ -130,7 +130,7 @@ describe('sessions', () => {
       );
 
       expect(newState[mockSessionId]).toEqual(expect.objectContaining({
-        caseID: undefined,
+        caseId: undefined,
         network: { edges: [], ego: {}, nodes: [] },
         protocolUID: undefined,
         promptIndex: 2,

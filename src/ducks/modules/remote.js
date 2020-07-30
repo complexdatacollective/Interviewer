@@ -10,7 +10,7 @@ import { actionCreators as sessionActions } from './sessions';
  */
 
 /**
- * show a specific stage for a provided protcol
+ * show a specific stage for a provided protocol
  * 0. RESET
  * 1. IMPORT_PROTOCOL_COMPLETE
  * 2. ADD_SESSION

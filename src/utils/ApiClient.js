@@ -1,15 +1,30 @@
 /* globals cordova */
 import axios from 'axios';
+import EventEmitter from 'eventemitter3';
 import { isString } from 'lodash';
 import { decrypt, deriveSecretKeyBytes, encrypt, fromHex, toHex } from 'secure-comms-api/cipher';
-
 import { isCordova, isElectron } from '../utils/Environment';
+import UserCancelledExport from './network-exporters/src/errors/UserCancelledExport';
+
+
+const ProgressMessages = {
+  BeginExport: {
+    progress: 0,
+    statusText: 'Starting export...',
+  },
+  ExportSession: (sessionExportCount, sessionExportTotal) => ({
+    progress: 10 + ((95 - 10) * sessionExportCount / (sessionExportTotal)),
+    statusText: `Uploaded ${sessionExportCount} of ${sessionExportTotal} sessions...`,
+  }),
+  Finished: {
+    progress: 100,
+    statusText: 'Export finished.',
+  },
+  UnexpectedResponseMessage: 'Unexpected Response',
+  NoResponseMessage: 'Server could not be reached',
+};
 
 const ApiErrorStatus = 'error';
-
-// Error message to display when there's no usable message from server
-const UnexpectedResponseMessage = 'Unexpected Response';
-const NoResponseMessage = 'Server could not be reached';
 
 const defaultHeaders = {
   'Content-Type': 'application/json',
@@ -25,7 +40,8 @@ const apiError = (respJson) => {
     error.code = respJson.code;
     error.stack = null;
   }
-  throw error;
+
+  return error;
 };
 
 const handleError = (err) => {
@@ -35,13 +51,14 @@ const handleError = (err) => {
   // Handle errors from the response
   if (err.response) {
     if (err.response.data.status === ApiErrorStatus) {
-      return apiError({ ...err.response.data, code: err.response.status });
+      throw apiError({ ...err.response.data, code: err.response.status });
     }
   }
   // Handle errors with the request
   if (err.request) {
-    throw new Error(NoResponseMessage);
+    throw new Error(ProgressMessages.NoResponseMessage);
   }
+
   throw err;
 };
 
@@ -79,6 +96,9 @@ class ApiClient {
     let pairingUrl;
     let pairedServer;
 
+    this.events = new EventEmitter();
+    this.cancelled = false;
+
     if (isString(pairingUrlOrPairedServer)) {
       // We have a pairing URL
       pairingUrl = pairingUrlOrPairedServer;
@@ -93,8 +113,6 @@ class ApiClient {
       this.pairingClient = axios.create({
         baseURL: pairingUrl.replace(/\/$/, ''),
         headers: defaultHeaders,
-        // This timeout governs the time before the user clicks 'pair with device' in Server.
-        // timeout: 15000,
       });
     }
 
@@ -113,6 +131,22 @@ class ApiClient {
     }
   }
 
+  on = (...args) => {
+    this.events.on(...args);
+  }
+
+  emit(event, payload) {
+    if (!event) {
+      return;
+    }
+
+    this.events.emit(event, payload);
+  }
+
+  removeAllListeners = () => {
+    this.events.removeAllListeners();
+  }
+
   /**
    * @description Call this to add add the paired server's SSL certificate to the trust store.
    * Calling this method without initializing the ApiClient with a paired server is an error.
@@ -127,13 +161,12 @@ class ApiClient {
       return Promise.reject('No secure client available');
     }
 
-
     if (isCordova()) {
       return this.httpsClient.acceptCertificate().catch(handleError);
     } else if (isElectron()) {
       return new Promise((resolve, reject) => {
         if (!this.pairedServer || !this.pairedServer.sslCertificate) {
-          reject(new Error('No trusted Server cert available'));
+          reject(new Error('No trusted Server certificate available'));
           return;
         }
         const { ipcRenderer } = require('electron'); // eslint-disable-line global-require
@@ -152,7 +185,12 @@ class ApiClient {
     if (!this.pairedServer) {
       return null;
     }
-    return { auth: { username: this.pairedServer.deviceId } };
+    return {
+      auth: {
+        username: this.pairedServer.deviceId,
+      },
+      cancelToken: this.cancelTokenSource.token,
+    };
   }
 
   /**
@@ -214,7 +252,7 @@ class ApiClient {
       .then(JSON.parse)
       .then((decryptedData) => {
         if (!decryptedData.device || !decryptedData.device.id) {
-          throw new Error(UnexpectedResponseMessage);
+          throw new Error(ProgressMessages.UnexpectedResponseMessage);
         }
         const device = decryptedData.device;
         device.secret = secretHex;
@@ -260,22 +298,84 @@ class ApiClient {
 
   /**
    * @async
-   * @param {string} protocolId ID of the protocol this session belongs to
-   *                            (a sha256 digest of the protocol name, as hex)
    * @param {Object} sessionData
-   * @param {String} sessionData.uuid (required)
    * @return {Object}
    * @throws {Error}
    */
-  exportSession(protocolId, sessionId, sessionData) {
+  exportSession(sessionData) {
+    const {
+      sessionVariables: {
+        sessionId,
+        remoteProtocolID,
+      },
+    } = sessionData;
+
     const payload = {
       uuid: sessionId,
       data: sessionData,
     };
-    return this.httpsClient.post(`/protocols/${protocolId}/sessions`, payload, this.authHeader)
+
+    return this.httpsClient.post(`/protocols/${remoteProtocolID}/sessions`, payload, this.authHeader)
       .then(resp => resp.data)
-      .then(json => json.data)
-      .catch(handleError);
+      .then(json => json.data);
+  }
+
+  exportSessions(sessionList) {
+    let cancelled = false;
+
+    this.emit('begin', ProgressMessages.BeginExport);
+    const exportPromise = sessionList.reduce(async (previousPromise, nextSession, index) => {
+      await previousPromise;
+
+      return this.exportSession(nextSession)
+        .catch((error) => {
+          if (axios.isCancel(error)) {
+            return;
+          }
+          // Handle errors from the response
+          if (error.response) {
+            if (error.response.data.status === ApiErrorStatus) {
+              const formattedError = apiError({
+                ...error.response.data,
+                code: error.response.status,
+              });
+              this.emit('error', `${formattedError.message}: ${formattedError.friendlyMessage}`);
+              return;
+            }
+          }
+          // Handle errors with the request
+          if (error.request) {
+            this.emit('error', ProgressMessages.NoResponseMessage);
+          }
+        }).then(() => {
+          if (!cancelled) {
+            this.emit('update', ProgressMessages.ExportSession(index + 1, sessionList.length));
+          }
+          Promise.resolve();
+        });
+    }, Promise.resolve())
+      .then(() => {
+        if (cancelled) {
+          throw new UserCancelledExport();
+        }
+
+        this.emit('finished', ProgressMessages.Finished);
+        Promise.resolve();
+      }).catch((err) => {
+        // We don't throw if this is an error from user cancelling
+        if (err instanceof UserCancelledExport) {
+          return;
+        }
+
+        throw err;
+      });
+
+    exportPromise.abort = () => {
+      cancelled = true;
+      this.cancelAll();
+    };
+
+    return exportPromise;
   }
 }
 

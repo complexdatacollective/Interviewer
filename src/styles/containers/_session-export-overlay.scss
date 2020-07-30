@@ -26,23 +26,15 @@
       }
     }
   }
-
-  .dialog__additional-box {
-    height: auto;
-  }
-
-  .dialog__main-content {
-    flex-grow: unset;
-  }
 }
 
 
 .session-export {
   &__content {
     background: var(--background);
-    padding: 2rem;
     border-radius: var(--border-radius);
     margin-top: 1rem;
+    padding: 1.2rem;
 
     code {
       background: var(--color-slate-blue);
@@ -66,74 +58,80 @@
 }
 
 .session-export-content {
+  display: flex;
+  flex-direction: column;
+}
 
-  &__container {
-    display: flex;
-  }
-
+.file-export {
   &__footer {
-
-    .form-field-container {
-      margin-bottom: 0;
-    }
-
-    &--actions {
-      display: flex;
-      flex-direction: row-reverse;
-      justify-content: space-between;
-    }
-  }
-
-  &__to-file {
-    width: 100%;
+    display: flex;
+    justify-content: flex-end;
   }
 }
 
-.session-export-status-list {
-  max-height: 22rem;
-  padding: 2rem 0;
+.export-progress-overlay {
+  display: flex;
+  flex: 1 0 auto;
+  max-height: 30rem;
 
-  .session-export-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1rem;
+  .error-list {
+    margin: 0;
+    padding: 0;
 
-    &--to-delete {
-      text-decoration: line-through;
-      filter: grayscale(100%);
-    }
+    li {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      margin: 0.75rem;
 
-    &__icon {
-      flex-basis: 5rem;
-      padding: 1.5rem;
-
-      svg {
-        height: 100%;
-        width: 100%;
-      }
-
-      .spinner {
-        --circle-size: 0.5rem;
-      }
-    }
-
-    &__content {
-      h4 {
-        margin: .5rem 0;
-      }
-
-      .info-box {
-        font-size: 0.9rem;
-      }
-
-      .error-box {
-        font-size: 0.9rem;
-        background: var(--error);
-        color: var(--text-light);
-        padding: 0.5rem;
-        border-radius: var(--border-radius);
+      .icon {
+        height: unit(3);
+        width: unit(3);
+        margin-right: unit(2);
       }
     }
   }
+
+  &__icon {
+    --circle-size: 1.5rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 0 0 auto;
+    padding: unit(4);
+
+    .icon {
+      height: 6rem;
+      width: 6rem;
+    }
+  }
+
+  .progress-container {
+    align-self: center;
+
+    .progress-bar {
+      width: 20rem;
+      height: 1.5rem;
+      background: var(--color-platinum);
+      margin-bottom: unit(1);
+
+      &__filler {
+        background: var(--primary);
+      }
+    }
+  }
+
+  &__content {
+    .scrollable {
+      padding: unit(2) 0;
+      max-height: 15rem;
+    }
+  }
+}
+
+.export-progress-footer {
+  display: flex;
+  justify-content: flex-end;
 }
 

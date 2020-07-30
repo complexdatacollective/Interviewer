@@ -6,7 +6,7 @@ import Swiper from 'react-id-swiper';
 import { size, map } from 'lodash';
 import { Icon } from '@codaco/ui';
 import { NewSessionOverlay, ProtocolCard } from '../../components/Setup';
-import { actionCreators as sessionActions } from '../../ducks/modules/sessions';
+import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { actionCreators as importProtocolActions } from '../../ducks/modules/importProtocol';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
@@ -124,8 +124,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    addSession: bindActionCreators(sessionActions.addSession, dispatch),
-    loadSession: bindActionCreators(sessionActions.loadSession, dispatch),
+    addSession: bindActionCreators(sessionsActions.addSession, dispatch),
+    loadSession: bindActionCreators(sessionsActions.loadSession, dispatch),
     openDialog: bindActionCreators(dialogActions.openDialog, dispatch),
     importProtocolFromURI:
       bindActionCreators(importProtocolActions.importProtocolFromURI, dispatch),

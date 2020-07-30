@@ -3,12 +3,17 @@ import reducer, { actionCreators, actionTypes } from '../deviceSettings';
 
 const initialState = {
   description: 'Unknown device',
-  exportFormat: 'graphml',
-  useFullScreenForms: false,
-  useDynamicScaling: undefined,
+  exportCSV: false,
+  exportGraphML: true,
   interfaceScale: 100,
+  screenLayoutHeight: 0,
+  screenLayoutWidth: 0,
   showScrollbars: false,
   startFullScreen: true,
+  unifyNetworks: false,
+  useDynamicScaling: undefined,
+  useFullScreenForms: false,
+  useScreenLayoutCoordinates: true,
 };
 const mockDescription = 'My Android Tablet';
 const mockSettingToToggle = 'useDynamicScaling';

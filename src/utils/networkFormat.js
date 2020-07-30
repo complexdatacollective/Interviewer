@@ -1,4 +1,5 @@
 import { omit } from 'lodash';
+import crypto from 'crypto';
 import {
   getEntityAttributes,
   entityAttributesProperty,
@@ -6,6 +7,16 @@ import {
   nodeTypePropertyForWorker,
   primaryKeyPropertyForWorker,
 } from '../ducks/modules/network';
+import {
+  remoteProtocolProperty,
+  sessionProperty,
+  caseProperty,
+  protocolProperty,
+  protocolName,
+  sessionStartTimeProperty,
+  sessionFinishTimeProperty,
+  sessionExportTimeProperty,
+} from './network-exporters/src/utils/reservedAttributes';
 
 /**
  * Internally, 'attributes' are stored with UUID keys, which are meaningless to the end user.
@@ -17,7 +28,7 @@ import {
  *
  * @private
  */
-const getEntityAttributesWithNamesResolved = (entity, entityVariables,
+export const getEntityAttributesWithNamesResolved = (entity, entityVariables,
   ignoreExternalProps = false) => {
   if (!entityVariables) {
     return {};
@@ -66,42 +77,39 @@ export const getNodeWithIdAttributes = (node, nodeVariables) => {
 };
 
 /**
- * Transposes attribute and type IDs to names for export.
- * Unlike `asWorkerAgentEntity()`, this does not flatten attributes.
+ * Get the remote protocol name for a protocol, which Server uses to uniquely identify it
+ * @param {string} name the name of a protocol
  */
-export const asExportableNode = (node, nodeTypeDefinition) => ({
-  ...node,
-  type: nodeTypeDefinition.name,
-  attributes: getEntityAttributesWithNamesResolved(node, (nodeTypeDefinition || {}).variables),
-});
-
-export const asExportableEdge = (edge, edgeTypeDefinition) => ({
-  ...edge,
-  type: edgeTypeDefinition && edgeTypeDefinition.name,
-  attributes: getEntityAttributesWithNamesResolved(edge, (edgeTypeDefinition || {}).variables),
-});
-
-export const asExportableEgo = (ego, egoDefinition) => ({
-  ...ego,
-  attributes: getEntityAttributesWithNamesResolved(ego, (egoDefinition || {}).variables),
-});
+export const getRemoteProtocolID = name => name && crypto.createHash('sha256').update(name).digest('hex');
 
 /**
- * Produces a network suitable for export.
- * In particular, transposes variable IDs to names.
- * Also available as a memoized selector; see selectors/interface.
- *
- * @param  {Object} network  the entire network (in redux state)
- * @param  {Object} registry the codebook from a protocol
- * @return {Object} externalNetwork
+ * Creates an object containing all required session metadata for export
+ * and appends it to the session
  */
-export const asExportableNetwork = (network = {}, registry = {}, sessionVariables = {}) => {
-  const { nodes = [], edges = [], ego = {} } = network;
-  const { node: nodeRegistry = {}, edge: edgeRegistry = {}, ego: egoRegistry = {} } = registry;
+export const asNetworkWithSessionVariables = (sessionId, session, protocol) => {
+  // Required:
+  // caseId,
+  // sessionId,
+  // remoteProtocolID - format Server uniquely identifies protocols by
+  // protocol name
+  // interview start and finish. If not available dont include
+  // export date
+
+  const sessionVariables = {
+    [caseProperty]: session.caseId,
+    [sessionProperty]: sessionId,
+    [remoteProtocolProperty]: getRemoteProtocolID(protocol.name),
+    [protocolName]: protocol.name,
+    [protocolProperty]: session.protocolUID,
+    ...(session.startedAt && { [sessionStartTimeProperty]:
+      new Date(session.startedAt).toISOString() }),
+    ...(session.finishedAt && { [sessionFinishTimeProperty]:
+      new Date(session.finishedAt).toISOString() }),
+    [sessionExportTimeProperty]: new Date().toISOString(),
+  };
+
   return ({
-    nodes: nodes.map(node => asExportableNode(node, nodeRegistry[node.type])),
-    edges: edges.map(edge => asExportableEdge(edge, edgeRegistry[edge.type])),
-    ego: asExportableEgo(ego, egoRegistry),
+    ...session.network,
     sessionVariables,
   });
 };

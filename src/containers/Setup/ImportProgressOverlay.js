@@ -25,7 +25,7 @@ class ImportProgressOverlay extends Component {
   }
 
   handleUpdateCaseID(value) {
-    this.setState({ caseID: value });
+    this.setState({ caseId: value });
   }
 
 

@@ -18,7 +18,12 @@ const initialState = {
   startFullScreen: shouldStartFullScreen(),
 
   // Export Options
-  exportFormat: 'graphml',
+  exportGraphML: true,
+  exportCSV: false,
+  unifyNetworks: false,
+  useScreenLayoutCoordinates: true,
+  screenLayoutHeight: window.screen.height,
+  screenLayoutWidth: window.screen.width,
 };
 
 // This provides additional default state based on information unavailable before 'deviceready'.
