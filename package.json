@@ -49,14 +49,14 @@
     "@babel/plugin-proposal-json-strings": "^7.7.4",
     "@babel/plugin-syntax-dynamic-import": "^7.7.4",
     "@babel/plugin-syntax-import-meta": "^7.7.4",
-    "@babel/preset-env": "^7.10.2",
+    "@babel/preset-env": "^7.10.4",
     "@babel/preset-react": "^7.10.1",
     "@codaco/eslint-plugin-spellcheck": "0.0.14",
     "@codaco/ui": "^3.4.1",
     "@zippytech/sorty": "^2.0.0",
     "ajv": "^6.5.4",
     "animejs": "^2.2.0",
-    "autoprefixer": "^9.8.0",
+    "autoprefixer": "^9.8.5",
     "axios": "^0.18.0",
     "babel-eslint": "^9.0.0",
     "babel-jest": "^25.1.0",
@@ -75,7 +75,7 @@
     "csvtojson": "^2.0.8",
     "detect-port": "1.1.0",
     "dotenv": "4.0.0",
-    "electron": "^9.0.0",
+    "electron": "^9.1.2",
     "electron-builder": "^22.7.0",
     "electron-log": "^4.2.2",
     "electron-updater": "^4.1.2",
@@ -226,9 +226,9 @@
     ]
   },
   "browserslist": [
-    "Electron 9.0.0",
-    "ChromeAndroid >= 83",
-    "iOS >= 13.4"
+    "Electron 9.1.2",
+    "ChromeAndroid >= 84",
+    "iOS >= 13.6"
   ],
   "jest": {
     "collectCoverageFrom": [

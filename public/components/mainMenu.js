@@ -19,6 +19,7 @@ if (!process.env.TEST) {
 
 const MenuTemplate = (window) => {
   const appMenu = [
+    { role: 'about' },
     {
       label: 'Settings...',
       click: () => window.webContents.send('OPEN_SETTINGS_MENU'),
@@ -26,21 +27,6 @@ const MenuTemplate = (window) => {
     {
       label: 'Check for updates...',
       click: () => updater.checkForUpdates(),
-    },
-    {
-      label: 'Reset Data...',
-      click: () => {
-        dialog.showMessageBox({
-          message: 'Destroy all application files and data?',
-          detail: 'This includes all application settings, imported protocols, and interview data.',
-          buttons: ['Reset Data', 'Cancel'],
-        })
-          .then(({ response }) => {
-            if (response === 0) {
-              window.webContents.send('RESET_STATE');
-            }
-          });
-      },
     },
     { type: 'separator' },
     { role: 'quit' },
@@ -58,7 +44,6 @@ const MenuTemplate = (window) => {
           label: 'Exit Current Interview',
           click: () => window.webContents.send('EXIT_INTERVIEW'),
         },
-        { type: 'separator' },
       ],
     },
     {
@@ -74,16 +59,34 @@ const MenuTemplate = (window) => {
     {
       label: 'View',
       submenu: [
+        { role: 'reload' },
+        { role: 'forcereload' },
+        { type: 'separator' },
         { role: 'resetzoom' },
+        { type: 'separator' },
         { role: 'togglefullscreen' },
       ],
     },
     {
       label: 'Develop',
       submenu: [
-        { role: 'reload' },
-        { role: 'forcereload' },
         { role: 'toggledevtools' },
+        { type: 'separator' },
+        {
+          label: 'Reset App Data...',
+          click: () => {
+            dialog.showMessageBox({
+              message: 'Destroy all application files and data?',
+              detail: 'This includes all application settings, imported protocols, and interview data.',
+              buttons: ['Reset Data', 'Cancel'],
+            })
+              .then(({ response }) => {
+                if (response === 0) {
+                  window.webContents.send('RESET_STATE');
+                }
+              });
+          },
+        },
       ],
     },
     {

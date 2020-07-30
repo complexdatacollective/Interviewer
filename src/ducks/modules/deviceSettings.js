@@ -21,7 +21,7 @@ const initialState = {
   exportGraphML: true,
   exportCSV: false,
   unifyNetworks: false,
-  useScreenLayoutCoordinates: true,
+  useScreenLayoutCoordinates: false,
   screenLayoutHeight: window.screen.height,
   screenLayoutWidth: window.screen.width,
 };

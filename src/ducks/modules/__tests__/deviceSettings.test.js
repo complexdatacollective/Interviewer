@@ -13,7 +13,7 @@ const initialState = {
   unifyNetworks: false,
   useDynamicScaling: undefined,
   useFullScreenForms: false,
-  useScreenLayoutCoordinates: true,
+  useScreenLayoutCoordinates: false,
 };
 const mockDescription = 'My Android Tablet';
 const mockSettingToToggle = 'useDynamicScaling';
