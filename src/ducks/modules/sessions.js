@@ -57,7 +57,7 @@ const getReducer = network =>
             promptIndex: 0,
             stageIndex: 0,
             caseId: action.caseId,
-            network: network(state.network, action),
+            network: action.network ? action.network : network(state.network, action),
             startedAt: Date.now(),
           }),
         };
@@ -322,7 +322,7 @@ const removeEdge = edgeId => (dispatch, getState) => {
   });
 };
 
-const addSession = (caseId, protocolUID) => (dispatch, getState) => {
+const addSession = (caseId, protocolUID, sessionNetwork) => (dispatch, getState) => {
   const id = uuid();
 
   const { installedProtocols } = getState();
@@ -333,6 +333,7 @@ const addSession = (caseId, protocolUID) => (dispatch, getState) => {
   dispatch({
     type: ADD_SESSION,
     sessionId: id,
+    ...(sessionNetwork && { network: sessionNetwork }),
     caseId,
     protocolUID,
     egoAttributeData, // initial values for ego
