@@ -12,7 +12,8 @@ import {
   ProtocolScreen,
 } from './containers';
 
-import { SetupScreen } from './containers/Setup';
+
+const SetupScreen = () => (<h1>Hello</h1>);
 
 function mapStateToProps(state) {
   return {
