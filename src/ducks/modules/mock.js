@@ -27,12 +27,18 @@ const mockValue = (variable) => {
       return [faker.random.arrayElement(variable.options).value];
     case 'layout':
       return { x: mockCoord(), y: mockCoord() };
-    default: {
+    case 'text': {
       if (variable.name.toLowerCase() === 'name' || variable.name.toLowerCase().includes('name')) {
         return faker.name.findName();
       }
+
+      if (variable.component && variable.component === 'TextArea') {
+        return faker.lorem.paragraph();
+      }
       return faker.random.word();
     }
+    default:
+      return faker.random.word();
   }
 };
 
