@@ -23,7 +23,7 @@ const DeveloperTools = (props) => {
     generateMockSessions,
   } = props;
 
-  const [sessionCount, setSessionCount] = useState(1);
+  const [sessionCount, setSessionCount] = useState(10);
   const [selectedProtocol, setSelectedProtocol] = useState('');
 
   return (

@@ -17,6 +17,10 @@ const mockValue = (variable) => {
       return faker.random.boolean();
     case 'number':
       return faker.random.number({ min: 20, max: 100 });
+    case 'scalar':
+      return faker.random.number({ min: 0, max: 1, precision: 0.001 });
+    case 'datetime':
+      return faker.date.recent().toISOString().slice(0, 10);
     case 'ordinal':
       return faker.random.arrayElement(variable.options).value;
     case 'categorical':
@@ -24,7 +28,7 @@ const mockValue = (variable) => {
     case 'layout':
       return { x: mockCoord(), y: mockCoord() };
     default: {
-      if (variable.name === 'name' || variable.name.includes('name')) {
+      if (variable.name.toLowerCase() === 'name' || variable.name.toLowerCase().includes('name')) {
         return faker.name.findName();
       }
       return faker.random.word();
@@ -32,7 +36,7 @@ const mockValue = (variable) => {
   }
 };
 
-const makeEntity = (typeID, variables, promptAttributes) => {
+const makeEntity = (typeID, variables = {}, promptAttributes = {}) => {
   const mockAttributes = Object.entries(variables).reduce(
     (acc, [variableId, variable]) => {
       if (!has(promptAttributes, variableId)) {
@@ -60,6 +64,7 @@ const makeEntity = (typeID, variables, promptAttributes) => {
 const makeNetwork = (protocol) => {
   const codebookNodeTypes = Object.keys(protocol.codebook.node);
   const codebookEdgeTypes = Object.keys(protocol.codebook.edge);
+
   // Generate nodes
   const nodes = [];
   const networkMaxNodes = 20;
@@ -81,7 +86,7 @@ const makeNetwork = (protocol) => {
   const networkMaxEdges = 20;
   const networkMinEdges = 1;
   // eslint-disable-next-line no-bitwise
-  const pickNodeUid = () => nodes[~~(Math.random() * nodes.length)][entityPrimaryKeyProperty];
+  const pickNodeUid = () => nodes[~~(Math.random() * (nodes.length - 1))][entityPrimaryKeyProperty];
 
   codebookEdgeTypes.forEach((edgeType) => {
     const edgesOfThisType =
