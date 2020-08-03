@@ -54,7 +54,8 @@ const SessionPanel = React.forwardRef((props, ref) => {
       <motion.div
         className="session-panel"
         key="session-panel"
-        layoutTransition={{
+        layout
+        transition={{
           duration: baseAnimationDuration,
           easing: baseAnimationEasing,
         }}

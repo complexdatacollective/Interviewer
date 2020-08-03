@@ -117,13 +117,6 @@ const StagesMenu = (props) => {
     }
   };
 
-  const positionTransition = {
-    type: 'spring',
-    damping: 200,
-    stiffness: 1200,
-    velocity: 200,
-  };
-
   const onFilterChange = event => setFilter(event.target.value || '');
 
   const filteredStageList = stages.filter(
@@ -140,7 +133,7 @@ const StagesMenu = (props) => {
         animate="expanded"
         exit="filtered"
         key={item.id}
-        positionTransition={positionTransition}
+        layout
         className="stages-menu__preview-wrapper"
       >
         <StagePreview
