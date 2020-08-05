@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
+import { Scroller as UIScroller } from '@codaco/ui/lib/components';
 import { connect } from 'react-redux';
-import cx from 'classnames';
 import PropTypes from 'prop-types';
 
 class Scroller extends Component {
@@ -29,14 +29,14 @@ class Scroller extends Component {
     } = this.props;
 
     return (
-      <div
-        className={cx('scrollable', { 'scrollable--show-scrollbars': showScrollbars }, className)}
+      <UIScroller
+        className={className}
+        showScrollbars={showScrollbars}
         onScroll={this.handleScroll}
-        style={{ scrollBehavior: useSmoothScrolling ? 'smooth' : 'unset' }}
-        ref={this.scrollable}
+        useSmoothScrolling={useSmoothScrolling}
       >
         {children}
-      </div>
+      </UIScroller>
     );
   }
 }

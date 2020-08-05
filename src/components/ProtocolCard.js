@@ -1,20 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import cx from 'classnames';
 import { connect } from 'react-redux';
-import { Icon } from '@codaco/ui';
-import { Scroller } from '.';
+import { ProtocolCard as UIProtocolCard } from '@codaco/ui/lib/components/Cards';
 import { actionCreators as dialogActions } from '../ducks/modules/dialogs';
 import { APP_SUPPORTED_SCHEMA_VERSIONS, APP_SCHEMA_VERSION } from '../config';
-
-const formatDate = timestamp => timestamp && new Date(timestamp).toLocaleString(undefined, { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' });
 
 const ProtocolCard = (props) => {
   const {
     attributes,
-    protocolUID,
     onClickHandler,
     openDialog,
+    condensed,
   } = props;
 
   const {
@@ -89,65 +85,42 @@ const ProtocolCard = (props) => {
     });
   };
 
-  const modifierClasses = cx(
-    'protocol-card',
-    { 'protocol-card--info': !isObsoleteProtocol() && isOutdatedProtocol() },
-    { 'protocol-card--error': isObsoleteProtocol() },
-  );
-
-  const renderCardIcon = () => {
-    if (isOutdatedProtocol()) {
-      return (
-        <div className="status-icon status-icon__info" onClick={(e) => { e.stopPropagation(); handleSchemaOutdatedInfo(); }}>
-          <Icon name="info" />
-        </div>
-      );
-    }
-
+  const handleStatusClick = () => {
     if (isObsoleteProtocol()) {
-      return (
-        <div className="status-icon status-icon__error" onClick={(e) => { e.stopPropagation(); handleSchemaObsoleteInfo(); }}>
-          <Icon name="error" />
-        </div>
-      );
+      handleSchemaObsoleteInfo();
+      return;
     }
 
-    return ('');
+    handleSchemaOutdatedInfo();
   };
 
+  console.log('protocolcard', props);
   return (
-    <div className={modifierClasses} onClick={() => onClickHandler(protocolUID)}>
-      <div className="protocol-card__icon-section">
-        <div className="protocol-icon">
-          <Icon name="protocol-card" />
-        </div>
-        {renderCardIcon()}
-        <div className="protocol-meta">
-          <h6>Installed: {formatDate(installationDate)}</h6>
-          <h6>Last Modified: {formatDate(lastModified)}</h6>
-          <h6>Schema Version: {schemaVersion}</h6>
-        </div>
-      </div>
-      <div className="protocol-card__main-section">
-        <h2 className="protocol-name">{name}</h2>
-        <Scroller className="protocol-description">
-          { description || (<em>No protocol description.</em>) }
-        </Scroller>
-      </div>
-    </div>
+    <UIProtocolCard
+      schemaVersion={schemaVersion}
+      lastModified={lastModified}
+      installationDate={installationDate}
+      name={name}
+      condensed={condensed}
+      description={description}
+      isOutdated={isOutdatedProtocol()}
+      isObsolete={isObsoleteProtocol()}
+      onStatusClickHandler={() => handleStatusClick}
+      onClickHandler={onClickHandler}
+    />
   );
 };
 
 ProtocolCard.defaultProps = {
-  className: '',
   onClickHandler: () => {},
   description: null,
+  condensed: false,
 };
 
 ProtocolCard.propTypes = {
   onClickHandler: PropTypes.func,
   openDialog: PropTypes.func.isRequired,
-  isSelected: PropTypes.bool.isRequired,
+  condensed: PropTypes.bool,
   attributes: PropTypes.shape({
     schemaVersion: PropTypes.number.isRequired,
     lastModified: PropTypes.string.isRequired,
@@ -155,20 +128,12 @@ ProtocolCard.propTypes = {
     name: PropTypes.string.isRequired,
     description: PropTypes.string,
   }).isRequired,
-  protocolUID: PropTypes.string.isRequired,
 
 };
-
-function mapStateToProps(state) {
-  return {
-    isSelected: uuid => state.selectedSessions && state.selectedSessions.includes(uuid),
-    installedProtocols: state.installedProtocols,
-  };
-}
 
 const mapDispatchToProps = {
   openDialog: dialogActions.openDialog,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProtocolCard);
+export default connect(null, mapDispatchToProps)(ProtocolCard);
 

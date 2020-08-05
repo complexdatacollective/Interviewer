@@ -1,8 +1,10 @@
 import React, { PureComponent } from 'react';
+import { motion } from 'framer-motion';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
+import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
 import cx from 'classnames';
 import 'swiper/css/swiper.css';
 import { actionCreators as deviceSettingsActions } from '../ducks/modules/deviceSettings';
@@ -66,19 +68,36 @@ class App extends PureComponent {
 
   render() {
     const { children } = this.props;
+
+    const list = {
+      visible: {
+        opacity: 1,
+        transition: {
+          when: 'beforeChildren',
+        },
+      },
+      hidden: {
+        opacity: 0,
+      },
+    };
+
     return (
-      <div className={cx({
-        app: true,
-        'app--electron': isElectron(),
-        'app--windows': isWindows(),
-        // eslint-disable-next-line @codaco/spellcheck/spell-checker
-        'app--macos': isMacOS(),
-        // eslint-disable-next-line @codaco/spellcheck/spell-checker
-        'app--ios': isIOS(),
-        'app-android': isAndroid(),
-        'app--linux': isLinux(),
-        'app--preview': isPreview(),
-      })}
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={list}
+        className={cx({
+          app: true,
+          'app--electron': isElectron(),
+          'app--windows': isWindows(),
+          // eslint-disable-next-line @codaco/spellcheck/spell-checker
+          'app--macos': isMacOS(),
+          // eslint-disable-next-line @codaco/spellcheck/spell-checker
+          'app--ios': isIOS(),
+          'app-android': isAndroid(),
+          'app--linux': isLinux(),
+          'app--preview': isPreview(),
+        })}
       >
         <div className="electron-titlebar" />
         <div
@@ -91,7 +110,7 @@ class App extends PureComponent {
           { children }
         </div>
         <DialogManager />
-      </div>
+      </motion.div>
     );
   }
 }

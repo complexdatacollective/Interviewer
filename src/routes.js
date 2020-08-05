@@ -11,9 +11,7 @@ import {
   LoadParamsRoute,
   ProtocolScreen,
 } from './containers';
-
-
-const SetupScreen = () => (<h1>Hello</h1>);
+import { StartScreen } from './containers/StartScreen';
 
 function mapStateToProps(state) {
   return {
@@ -45,9 +43,9 @@ export default () => (
     <SetupRequiredRoute exact path="/session" component={ProtocolScreen} />
     <LoadParamsRoute path="/session/:sessionId/:stageIndex" component={ProtocolScreen} />
     <LoadParamsRoute path="/session/:sessionId" component={ProtocolScreen} />
-    <LoadParamsRoute path="/reset" shouldReset component={Redirect} to={{ pathname: '/setup' }} />
-    <Route path="/setup" component={SetupScreen} />
-    <Redirect to={{ pathname: '/setup' }} />
+    <LoadParamsRoute path="/reset" shouldReset component={Redirect} to={{ pathname: '/start' }} />
+    <Route path="/start" component={StartScreen} />
+    <Redirect to={{ pathname: '/start' }} />
   </Switch>
 );
 

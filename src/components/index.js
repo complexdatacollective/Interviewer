@@ -1,4 +1,5 @@
 export { default as Card } from './Card';
+export { default as ProtocolCard } from './ProtocolCard';
 export { default as SessionCard } from './SessionCard';
 export { default as CardList } from './CardList';
 export { default as FilterableListWrapper } from './FilterableListWrapper';
