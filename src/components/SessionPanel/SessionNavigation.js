@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Icon } from '@codaco/ui';
+import { Icon, ProgressBar } from '@codaco/ui';
 import { motion, useInvertedScale } from 'framer-motion';
-import { ProgressBar } from '..';
 
 const SessionNavigation = (props) => {
   const {

@@ -2,22 +2,20 @@ import React from 'react';
 import { motion, AnimateSharedLayout } from 'framer-motion';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Button, GraphicButton } from '@codaco/ui';
+import { Scroller, Button, GraphicButton } from '@codaco/ui';
+import { ProtocolCard } from '../../components/Cards';
 import NCLogo from '../../images/NC-Round.svg';
-import { ProtocolCard, Scroller } from '../../components';
+import {
+  ResumeSessionSection,
+  // NewInterviewSection,
+  // FooterNavigation,
+  // ProtocolsOverlay,
+  // SessionsOverlay,
+} from '.';
+
 import Switch from './Switch';
 
-
-const ActionButton = props => {
-  return (
-    <div className="action-button">
-      { props.children }
-    </div>
-  );
-};
-
 const StartScreen = (props) => {
-
   const springy = {
     visible: {
       opacity: 1,
@@ -224,13 +222,7 @@ const StartScreen = (props) => {
               </div>
             </main>
           </motion.section>
-          <motion.section className="start-screen-section sessions-section">
-            <main>
-              <header>
-                <h2>Interview Sessions</h2>
-              </header>
-            </main>
-          </motion.section>
+          <ResumeSessionSection />
           <motion.section className="start-screen-section server-section">
             <main>
               <header>

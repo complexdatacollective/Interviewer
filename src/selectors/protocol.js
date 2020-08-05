@@ -21,7 +21,7 @@ const nameDigest = name => name && crypto.createHash('sha256').update(name).dige
 
 export const getInstalledProtocols = state => state.installedProtocols;
 
-export const getActiveProtocol = createSelector(
+export const getCurrentSessionProtocol = createSelector(
   (state, props) => getActiveSession(state, props),
   getInstalledProtocols,
   (session, protocols) => {
@@ -33,23 +33,23 @@ export const getActiveProtocol = createSelector(
 );
 
 export const getActiveProtocolName = createSelector(
-  getActiveProtocol,
+  getCurrentSessionProtocol,
   protocol => protocol && protocol.name,
 );
 
 export const getAssetManifest = createSelector(
-  getActiveProtocol,
+  getCurrentSessionProtocol,
   protocol => protocol.assetManifest,
 );
 
 
 export const getProtocolCodebook = createSelector(
-  getActiveProtocol,
+  getCurrentSessionProtocol,
   protocol => protocol.codebook,
 );
 
 export const getRemoteProtocolId = createDeepEqualSelector(
-  getActiveProtocol,
+  getCurrentSessionProtocol,
   protocol => nameDigest(protocol.name) || null,
 );
 
@@ -61,6 +61,6 @@ const withFinishStage = (stages = []) => {
 };
 
 export const getProtocolStages = createSelector(
-  getActiveProtocol,
+  getCurrentSessionProtocol,
   protocol => withFinishStage(protocol.stages),
 );

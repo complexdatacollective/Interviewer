@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { ProgressBar } from '@codaco/ui';
 import { submit, isValid, isDirty } from 'redux-form';
 import ReactMarkdown from 'react-markdown';
 import Swiper from 'react-id-swiper';
 import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
 import useGetFormName from '../../hooks/useGetFormName';
-import { ProgressBar } from '../../components';
+
 import defaultMarkdownRenderers from '../../utils/markdownRenderers';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { ALLOWED_MARKDOWN_TAGS } from '../../config';
