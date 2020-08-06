@@ -51,6 +51,7 @@
   border-radius: 0 0 0.75rem 0.75rem;
   backdrop-filter: blur(5rem);
   background: rgba(58, 58, 117, 0.44);
+  transform-origin: top;
 
   &__content {
     display: flex;

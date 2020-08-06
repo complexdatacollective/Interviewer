@@ -29,7 +29,7 @@ const NewInterviewSection = (props) => {
             />
           </div>
           <div className="content-area__other">
-            <h4>Select other Protocol...</h4>
+            <h4>Select Other Protocol...</h4>
             <Scroller>
               <ProtocolCard
                 condensed

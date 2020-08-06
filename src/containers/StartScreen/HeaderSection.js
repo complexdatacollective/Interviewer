@@ -9,16 +9,46 @@ const HeaderSection = (props) => {
   // const {
   // } = props;
 
-  const opacity = {
+  const springy = {
     visible: {
       opacity: 1,
+      scale: 1,
       transition: {
-        delay: 0.5,
+        type: 'spring',
         when: 'beforeChildren',
+        delayChildren: 2,
       },
     },
     hidden: {
-      when: 'afterChildren',
+      opacity: 0,
+      scale: 0.5,
+      transition: {
+        type: 'spring',
+        when: 'afterChildren',
+      },
+    },
+  };
+
+  const opacity = {
+    visible: {
+      opacity: 1,
+    },
+    hidden: {
+      opacity: 0,
+    },
+  };
+
+  const start = {
+    visible: {
+      height: 'auto',
+      opacity: 1,
+      transition: {
+        type: 'spring',
+        delay: 1,
+      },
+    },
+    hidden: {
+      height: 0,
       opacity: 0,
     },
   };
@@ -27,7 +57,11 @@ const HeaderSection = (props) => {
 
   return (
     <React.Fragment>
-      <motion.header className="start-screen-section start-screen-header">
+      <motion.header
+        variants={springy}
+        layout
+        className="start-screen-section start-screen-header"
+      >
         <div className="start-screen-header__wrapper">
           <div className="header-mark">
             <h1>Network Canvas</h1>
@@ -41,24 +75,21 @@ const HeaderSection = (props) => {
       </motion.header>
       <motion.section
         layout
+        initial="hidden"
+        variants={start}
         className="start-screen-section welcome-section"
       >
-        <AnimatePresence>
+        <AnimatePresence initial={false}>
           { showWelcome && (
             <motion.div
               initial="hidden"
               exit="hidden"
-              animate="visible"
               variants={opacity}
               layout
               className="welcome-section__content"
             >
               <main>
-                <h2>Welcome to Network Canvas!</h2>
-                <p className="lead">
-                  Thank you for taking the time to explore our software. For feedback and
-                  support, please visit <a href="https://networkcanvas.com">networkcanvas.com</a>.
-                </p>
+                <h2>Getting Started</h2>
                 <div className="welcome-item">
                   <div className="welcome-item__action">
                     <Button color="primary">Watch overview video</Button>
@@ -101,7 +132,7 @@ const HeaderSection = (props) => {
         <motion.footer layout>
           <Switch
             className="welcome-header__header-toggle"
-            label="Show welcome message"
+            label="Show getting started"
             on={showWelcome}
             onChange={() => setShowWelcome(!showWelcome)}
           />
