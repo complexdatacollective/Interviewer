@@ -2,18 +2,17 @@ import React from 'react';
 import { motion, AnimateSharedLayout } from 'framer-motion';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Scroller, Button, GraphicButton } from '@codaco/ui';
+import { GraphicButton } from '@codaco/ui';
+import { Scroller } from '../../components';
 import { ProtocolCard } from '../../components/Cards';
-import NCLogo from '../../images/NC-Round.svg';
+
 import {
   ResumeSessionSection,
-  // NewInterviewSection,
+  HeaderSection,
   // FooterNavigation,
   // ProtocolsOverlay,
   // SessionsOverlay,
 } from '.';
-
-import Switch from './Switch';
 
 const StartScreen = (props) => {
   const springy = {
@@ -55,79 +54,13 @@ const StartScreen = (props) => {
           animate="visible"
           variants={opacity}
         >
-          <motion.header variants={springy} className="start-screen-section start-screen-header">
-            <div className="start-screen-header__wrapper">
-              <div className="header-mark">
-                <h1>Network Canvas</h1>
-                <h4>Simplifying complex network data collection.</h4>
-              </div>
-              <div className="header-brand">
-                <img src={NCLogo} className="header-logo" alt="Network Canvas" />
-              </div>
-            </div>
-            <div className="version-string">5.2.0</div>
-          </motion.header>
-          <motion.section variants={springy} className="start-screen-section welcome-section">
-            <div className="welcome-section__content">
-              <main>
-                <h2>Welcome to Network Canvas!</h2>
-                <p className="lead">
-                  Thank you for taking the time to explore our software. For feedback and
-                  support, please visit <a href="https://networkcanvas.com">networkcanvas.com</a>.
-                </p>
-                <div className="welcome-item">
-                  <div className="welcome-item__action">
-                    <Button color="primary">Watch overview video</Button>
-                  </div>
-                  <div className="welcome-item__description">
-                    <p>
-                  If this is your first
-                  time using Network Canvas, please consider taking a moment to watch
-                  the overview video below. It will introduce you to the key concepts
-                  of the Network Canvas project.
-                    </p>
-                  </div>
-                </div>
-                <div className="welcome-item">
-                  <div className="welcome-item__action">
-                    <Button color="sea-serpent">Visit documentation website</Button>
-                  </div>
-                  <div className="welcome-item__description">
-                    <p>
-                  For further detailed information, tutorials, videos, and information about
-                  collaboration, please visit our documentation website.
-                    </p>
-                  </div>
-                </div>
-                <div className="welcome-item">
-                  <div className="welcome-item__action">
-                    <Button color="mustard">Install sample protocol</Button>
-                  </div>
-                  <div className="welcome-item__description">
-                    <p>
-                  To get started right away, install one or more interview protocols
-                  onto this device. For convenience, we have created a sample interview
-                  protocol on the theme of &quot;public health&quot; research.
-                    </p>
-                  </div>
-                </div>
-              </main>
-            </div>
-            <footer>
-              <Switch
-                className="welcome-header__header-toggle"
-                label="Show welcome message"
-                on
-                onChange={() => console.log('clicked')}
-              />
-            </footer>
-          </motion.section>
-          <motion.section variants={springy} className="start-screen-section interview-section">
+          <HeaderSection />
+          <motion.section variants={springy} layout className="start-screen-section interview-section">
             <main className="interview-section__start-new">
               <div className="content-area">
                 <div className="content-area__last-used">
                   <header>
-                    <h2>Start an Interview</h2>
+                    <h2>New Interview...</h2>
                   </header>
                   <ProtocolCard
                     attributes={{
@@ -140,7 +73,7 @@ const StartScreen = (props) => {
                   />
                 </div>
                 <div className="content-area__other">
-                  <h4>Other protocols...</h4>
+                  <h4>Select other Protocol...</h4>
                   <Scroller>
                     <ProtocolCard
                       condensed
@@ -223,7 +156,7 @@ const StartScreen = (props) => {
             </main>
           </motion.section>
           <ResumeSessionSection />
-          <motion.section className="start-screen-section server-section">
+          <motion.section layout className="start-screen-section server-section">
             <main>
               <header>
                 <h2>Server</h2>

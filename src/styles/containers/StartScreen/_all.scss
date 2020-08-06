@@ -58,13 +58,14 @@
 
     .welcome-item {
       display: flex;
+      flex-direction: row-reverse;
       align-items: center;
       justify-content: center;
 
       &__action {
         flex: 0 0 20rem;
         display: flex;
-        margin-right: unit(1);
+        margin-left: unit(1);
 
         > .button {
           flex: 1;
@@ -75,7 +76,7 @@
 
   footer {
     display: flex;
-    justify-content: flex-end;
+    padding: unit(2) unit(4);
   }
 }
 
@@ -152,7 +153,7 @@
     align-items: center;
 
     .header-brand {
-      flex: 0 0 unit(22);
+      flex: 0 0 unit(18);
       z-index: var(--z-global-ui);
 
       img {
