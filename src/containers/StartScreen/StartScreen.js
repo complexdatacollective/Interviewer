@@ -11,6 +11,7 @@ import {
   // ProtocolsOverlay,
   // SessionsOverlay,
 } from '.';
+import { SettingsMenuButton } from '../../components/SettingsMenu';
 
 const StartScreen = (props) => {
 

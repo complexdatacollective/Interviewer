@@ -17,8 +17,10 @@
   position: absolute;
   top: 0;
 
+
+
   &__container {
-    padding: unit(2) unit(12) unit(8);
+    padding: unit(2) unit(8) unit(8);
   }
 }
 
@@ -48,14 +50,16 @@
 .welcome-section {
   margin-top: 0;
   color: var(--white);
-  border-radius: 0 0 0.75rem 0.75rem;
   backdrop-filter: blur(5rem);
   background: rgba(58, 58, 117, 0.44);
-  transform-origin: top;
+  width: 100%;
 
   &__content {
     display: flex;
-    padding: unit(4) unit(6) 0;
+
+    > main {
+      padding: 0 unit(4) unit(2);
+    }
 
     .welcome-item {
       display: flex;
@@ -78,6 +82,11 @@
   footer {
     display: flex;
     padding: unit(2) unit(4);
+    justify-content: space-between;
+
+    > .switch {
+      transform: scale(0.8);
+    }
   }
 }
 
@@ -135,26 +144,29 @@
 }
 
 .start-screen-header {
-  background: var(--color-cyber-grape);
+  background: transparent;
   color: var(--white);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   position: relative;
-  height: 9rem;
   margin: unit(4) auto;
-  overflow: visible;
+  overflow: hidden;
 
-  border-radius: 0.75rem 0.75rem 0 0;
+  border-radius: var(--border-radius);
   margin-bottom: 0;
 
   &__wrapper {
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 100%;
+    padding: unit(1);
+    background: var(--color-cyber-grape);
 
     .header-brand {
-      flex: 0 0 unit(18);
+      flex: 0 0 unit(12);
       z-index: var(--z-global-ui);
 
       img {
@@ -163,7 +175,7 @@
     }
 
     .header-mark {
-      flex: 1 0 auto;
+      flex: 0 0 auto;
       margin-right: unit(2);
 
       h1 {
@@ -184,7 +196,7 @@
   .version-string {
     position: absolute;
     right: unit(2);
-    bottom: unit(2);
+    top: unit(2);
     font-weight: bolder;
     font-size: 0.64rem;
     letter-spacing: .15em;

@@ -87,7 +87,7 @@ const NewInterviewSection = (props) => {
       </main>
       <main className="interview-section__install-section">
         <header>
-          <h2>Install New Protocol</h2>
+          <h2>Import a Protocol</h2>
         </header>
         <div className="content-buttons">
           <GraphicButton

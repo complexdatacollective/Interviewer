@@ -2,11 +2,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: var(--light-background);
+  background: var(--color-slate-blue);
   border-radius: 50%;
-  padding: 1.5rem;
-  width: 6rem;
-  height: 6rem;
+  padding: 0.5rem;
+  width: 3rem;
+  height: 3rem;
   cursor: pointer;
 
   &__button {

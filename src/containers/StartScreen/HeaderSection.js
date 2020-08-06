@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Button } from '@codaco/ui';
 import Switch from './Switch';
 import NCLogo from '../../images/NC-Round.svg';
+import { SettingsMenuButton } from '../../components/SettingsMenu';
 
 const HeaderSection = (props) => {
   // const {
@@ -16,7 +17,7 @@ const HeaderSection = (props) => {
       transition: {
         type: 'spring',
         when: 'beforeChildren',
-        delayChildren: 2,
+        delayChildren: 0.25,
       },
     },
     hidden: {
@@ -29,22 +30,12 @@ const HeaderSection = (props) => {
     },
   };
 
-  const opacity = {
-    visible: {
-      opacity: 1,
-    },
-    hidden: {
-      opacity: 0,
-    },
-  };
-
   const start = {
     visible: {
       height: 'auto',
       opacity: 1,
       transition: {
         type: 'spring',
-        delay: 1,
       },
     },
     hidden: {
@@ -56,35 +47,37 @@ const HeaderSection = (props) => {
   const [showWelcome, setShowWelcome] = useState(true);
 
   return (
-    <React.Fragment>
-      <motion.header
-        variants={springy}
-        layout
-        className="start-screen-section start-screen-header"
-      >
-        <div className="start-screen-header__wrapper">
-          <div className="header-mark">
-            <h1>Network Canvas</h1>
-            <h4>Simplifying complex network data collection.</h4>
-          </div>
-          <div className="header-brand">
-            <img src={NCLogo} className="header-logo" alt="Network Canvas" />
-          </div>
+    <motion.div variants={springy} layout className="start-screen-section start-screen-header">
+      <motion.div layout className="start-screen-header__wrapper">
+        <div className="header-mark">
+          <h1>Network Canvas</h1>
+          <h4>Simplifying complex network data collection.</h4>
+        </div>
+        <div className="header-brand">
+          <img src={NCLogo} className="header-logo" alt="Network Canvas" />
         </div>
         <div className="version-string">5.2.0</div>
-      </motion.header>
+      </motion.div>
       <motion.section
         layout
         initial="hidden"
-        variants={start}
-        className="start-screen-section welcome-section"
+        className="welcome-section"
       >
+        <motion.footer layout>
+          <Switch
+            className="welcome-header__header-toggle"
+            label="Show getting started"
+            on={showWelcome}
+            onChange={() => setShowWelcome(!showWelcome)}
+          />
+          <SettingsMenuButton />
+        </motion.footer>
         <AnimatePresence initial={false}>
           { showWelcome && (
             <motion.div
               initial="hidden"
               exit="hidden"
-              variants={opacity}
+              variants={start}
               layout
               className="welcome-section__content"
             >
@@ -129,16 +122,8 @@ const HeaderSection = (props) => {
             </motion.div>
           )}
         </AnimatePresence>
-        <motion.footer layout>
-          <Switch
-            className="welcome-header__header-toggle"
-            label="Show getting started"
-            on={showWelcome}
-            onChange={() => setShowWelcome(!showWelcome)}
-          />
-        </motion.footer>
       </motion.section>
-    </React.Fragment>
+    </motion.div>
   );
 };
 
