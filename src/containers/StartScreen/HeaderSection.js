@@ -9,6 +9,20 @@ const HeaderSection = (props) => {
   // const {
   // } = props;
 
+  const opacity = {
+    visible: {
+      opacity: 1,
+      transition: {
+        delay: 0.5,
+        when: 'beforeChildren',
+      },
+    },
+    hidden: {
+      when: 'afterChildren',
+      opacity: 0,
+    },
+  };
+
   const [showWelcome, setShowWelcome] = useState(true);
 
   return (
@@ -32,13 +46,11 @@ const HeaderSection = (props) => {
         <AnimatePresence>
           { showWelcome && (
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              initial="hidden"
+              exit="hidden"
+              animate="visible"
+              variants={opacity}
               layout
-              transition={{
-                duration: 0.15,
-              }}
               className="welcome-section__content"
             >
               <main>

@@ -1,9 +1,9 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { connect } from 'react-redux';
 import { SessionCard } from '../../components/Cards';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
 import { getLastActiveSession } from '../../selectors/session';
+import { Section } from '.';
 
 const NewInterviewSection = (props) => {
   const {
@@ -15,7 +15,7 @@ const NewInterviewSection = (props) => {
   const ResumeOtherSessionLabel = `+${Object.keys(sessions).length - 1} Other Interview${Object.keys(sessions).length - 1 > 1 ? 's' : ''}...`;
 
   return (
-    <motion.section layout className="start-screen-section resume-section">
+    <Section className="start-screen-section resume-section">
       <main className="resume-section__content">
         <header>
           <h2>Resume Last Interview</h2>
@@ -33,7 +33,7 @@ const NewInterviewSection = (props) => {
           </aside>
         )}
       </main>
-    </motion.section>
+    </Section>
   );
 };
 
