@@ -1,90 +1,73 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { AnimatePresence } from 'framer-motion';
 import { GraphicButton } from '@codaco/ui';
-import { getLastActiveSession } from '../../selectors/session';
 import { Section } from '.';
 import { Scroller } from '../../components';
 import { ProtocolCard } from '../../components/Cards';
 
 const NewInterviewSection = (props) => {
-  // const {
-  // } = props;
+  const {
+    installedProtocols,
+  } = props;
 
   return (
     <Section className="start-screen-section interview-section">
-      <main className="interview-section__start-new">
-        <div className="content-area">
-          <div className="content-area__last-used">
-            <header>
-              <h2>New Interview...</h2>
-            </header>
-            <ProtocolCard
-              attributes={{
-                schemaVersion: 5,
-                lastModified: new Date(),
-                installationDate: new Date(),
-                name: 'Development Protocol',
-                description: 'This is the development protocol',
-              }}
-            />
-          </div>
-          <div className="content-area__other">
-            <h4>Select Other Protocol...</h4>
-            <Scroller>
-              <ProtocolCard
-                condensed
-                attributes={{
-                  schemaVersion: 5,
-                  lastModified: new Date(),
-                  installationDate: new Date(),
-                  name: 'Development Protocol',
-                  description: 'This is the development protocol',
-                }}
-              />
-              <ProtocolCard
-                condensed
-                attributes={{
-                  schemaVersion: 5,
-                  lastModified: new Date(),
-                  installationDate: new Date(),
-                  name: 'Development Protocol',
-                  description: 'This is the development protocol',
-                }}
-              />
-              <ProtocolCard
-                condensed
-                attributes={{
-                  schemaVersion: 5,
-                  lastModified: new Date(),
-                  installationDate: new Date(),
-                  name: 'Development Protocol',
-                  description: 'This is the development protocol',
-                }}
-              />
-              <ProtocolCard
-                condensed
-                attributes={{
-                  schemaVersion: 5,
-                  lastModified: new Date(),
-                  installationDate: new Date(),
-                  name: 'Development Protocol',
-                  description: 'This is the development protocol',
-                }}
-              />
-              <ProtocolCard
-                condensed
-                attributes={{
-                  schemaVersion: 5,
-                  lastModified: new Date(),
-                  installationDate: new Date(),
-                  name: 'Development Protocol',
-                  description: 'This is the development protocol',
-                }}
-              />
-            </Scroller>
-          </div>
-        </div>
-      </main>
+      <AnimatePresence>
+        {
+          Object.keys(installedProtocols).length > 0 && (
+            <main className="interview-section__start-new">
+              <div className="content-area">
+                <div className="content-area__last-used">
+                  <header>
+                    <h2>New Interview...</h2>
+                  </header>
+                  <ProtocolCard
+                    attributes={{
+                      schemaVersion: 5,
+                      lastModified: new Date(),
+                      installationDate: new Date(),
+                      name: 'Development Protocol',
+                      description: 'This is the development protocol',
+                    }}
+                  />
+                </div>
+                <div className="content-area__other">
+                  <h4>Select Other Protocol...</h4>
+                  <Scroller>
+                    <AnimatePresence>
+                      {
+                        Object.keys(installedProtocols).map((protocolUID) => {
+                          const {
+                            schemaVersion,
+                            lastModified,
+                            installationDate,
+                            name,
+                            description,
+                          } = installedProtocols[protocolUID];
+
+                          return (
+                            <ProtocolCard
+                              condensed
+                              attributes={{
+                                schemaVersion,
+                                lastModified,
+                                installationDate,
+                                name,
+                                description,
+                              }}
+                            />
+                          );
+                        })
+                      }
+                    </AnimatePresence>
+                  </Scroller>
+                </div>
+              </div>
+            </main>
+          )
+        }
+      </AnimatePresence>
       <main className="interview-section__install-section">
         <header>
           <h2>Import a Protocol</h2>
@@ -122,14 +105,12 @@ NewInterviewSection.defaultProps = {
 
 function mapStateToProps(state) {
   return {
-    sessions: state.sessions,
-    lastActiveSession: getLastActiveSession(state),
+    installedProtocols: state.installedProtocols,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    showSessionsOverlay: () => dispatch(uiActions.update({ showSessionsOverlay: true })),
   };
 }
 

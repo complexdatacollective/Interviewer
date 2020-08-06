@@ -17,6 +17,9 @@ const initialState = {
   showScrollbars: false,
   startFullScreen: shouldStartFullScreen(),
 
+  // Start screen
+  showGettingStarted: true,
+
   // Export Options
   exportGraphML: true,
   exportCSV: false,

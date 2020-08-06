@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import uuid from 'uuid';
@@ -11,11 +11,6 @@ const Switch = ({
   onChange,
 }) => {
   const id = useRef(uuid());
-
-  // const [on, setIsOn] = useState(false);
-
-  // const onChange = () =>
-  //   setIsOn(v => !v);
 
   const classes = cx(
     'switch',

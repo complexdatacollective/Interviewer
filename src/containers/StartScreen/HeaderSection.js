@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { connect } from 'react-redux';
 import { Button } from '@codaco/ui';
 import Switch from './Switch';
 import NCLogo from '../../images/NC-Round.svg';
+import { actionCreators as deviceSettingsActions } from '../../ducks/modules/deviceSettings';
 import { SettingsMenuButton } from '../../components/SettingsMenu';
 
 const HeaderSection = (props) => {
-  // const {
-  // } = props;
+  const {
+    showGettingStarted,
+    toggleShowGettingStarted,
+  } = props;
 
   const springy = {
     visible: {
@@ -44,8 +47,6 @@ const HeaderSection = (props) => {
     },
   };
 
-  const [showWelcome, setShowWelcome] = useState(true);
-
   return (
     <motion.div variants={springy} layout className="start-screen-section start-screen-header">
       <motion.div layout className="start-screen-header__wrapper">
@@ -67,13 +68,13 @@ const HeaderSection = (props) => {
           <Switch
             className="welcome-header__header-toggle"
             label="Show getting started"
-            on={showWelcome}
-            onChange={() => setShowWelcome(!showWelcome)}
+            on={showGettingStarted}
+            onChange={toggleShowGettingStarted}
           />
           <SettingsMenuButton />
         </motion.footer>
         <AnimatePresence initial={false}>
-          { showWelcome && (
+          { showGettingStarted && (
             <motion.div
               initial="hidden"
               exit="hidden"
@@ -135,11 +136,13 @@ HeaderSection.defaultProps = {
 
 function mapStateToProps(state) {
   return {
+    showGettingStarted: state.deviceSettings.showGettingStarted,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
+    toggleShowGettingStarted: () => dispatch(deviceSettingsActions.toggleSetting('showGettingStarted')),
   };
 }
 

@@ -15,6 +15,10 @@ export const getActiveSession = state =>
   state.activeSessionId && state.sessions[state.activeSessionId];
 
 export const getLastActiveSession = (state) => {
+  if (Object.keys(state.sessions).length === 0) {
+    return {};
+  }
+
   const sessionsCollection = values(mapValues(state.sessions, (session, uuid) => ({
     sessionUUID: uuid,
     ...session,
