@@ -1,6 +1,6 @@
 {
   "name": "network-canvas",
-  "version": "5.1.0",
+  "version": "5.2.0",
   "productName": "Network Canvas",
   "description": "Simplifying complex network data collection.",
   "author": "Complex Data Collective",
@@ -173,10 +173,12 @@
   },
   "dependencies": {
     "@codaco/ui": "^3.0.5",
-    "cordova-android": "^8.0.0",
-    "cordova-ios": "^5.0.1",
+    "cordova-android": "^9.0.0",
+    "cordova-ios": "^6.1.0",
     "cordova-plugin-add-swift-support": "^2.0.2",
     "cordova-plugin-app-version": "^0.1.9",
+    "cordova-plugin-appcenter-analytics": "~0.5.1",
+    "cordova-plugin-appcenter-crashes": "^0.5.1",
     "cordova-plugin-chooser": "^1.2.5",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-file": "^5.0.0",
@@ -184,7 +186,7 @@
     "cordova-plugin-keyboard": "^1.2.0",
     "cordova-plugin-network-canvas-client": "./cordova-plugin-network-canvas-client",
     "cordova-plugin-whitelist": "^1.3.3",
-    "cordova-plugin-wkwebview-engine": "^1.1.4",
+    "cordova-plugin-wkwebview-engine": "^1.2.1",
     "cordova-plugin-x-socialsharing": "^5.6.2",
     "cordova-plugin-zeroconf": "^1.4.1",
     "swiper": "^5.2.1",
@@ -272,7 +274,8 @@
       "cordova-plugin-x-socialsharing": {
         "ANDROID_SUPPORT_V4_VERSION": "24.1.1+"
       },
-      "cordova-plugin-zeroconf": {}
+      "cordova-plugin-zeroconf": {},
+      "cordova-plugin-appcenter-analytics": {}
     }
   }
 }
