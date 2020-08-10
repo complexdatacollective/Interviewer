@@ -37,6 +37,7 @@
     <platform name="ios">
         <preference name="APP_SECRET" value="7ce1b50f-c410-490a-8c30-09640e10e5b4" />
         <preference name="CodePushDeploymentKey" value="aY4GBekogJLpqE-OCqGJMpjtik9_IuWwwdaNb" />
+        <preference name="WKWebViewOnly" value="true" />
         <allow-navigation href="*" />
         <allow-navigation href="*" />
         <allow-intent href="itms:*" />
@@ -79,7 +80,7 @@
     <plugin name="cordova-plugin-zeroconf" spec="^1.4.1" />
     <plugin name="cordova-plugin-wkwebview-engine" spec="^1.1.4" />
     <plugin name="cordova-plugin-appcenter-analytics" spec="~0.5.1" />
-    <engine name="android" spec="latest" />
-    <engine name="ios" spec="latest" />
     <plugin name="cordova-plugin-file" spec="6.0.2" />
+    <engine name="android" spec="^9.0.0" />
+    <engine name="ios" spec="^5.1.1" />
 </widget>

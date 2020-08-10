@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
-        id="cordova-plugin-network-canvas-client" version="0.0.1">
+        id="cordova-plugin-network-canvas-client" version="0.0.2">
     <name>Network Canvas Client</name>
     <description>Cordova Plugin for Network Canvas API clients</description>
     <license>GPL-3.0-or-later</license>
     <keywords>social network,sna,visualization,research,public health,network canvas</keywords>
-    <dependency id="cordova-plugin-file" version="^5.0.0" />
+    <dependency id="cordova-plugin-file" version="^6.0.0" />
     <js-module src="www/client.js" name="client">
         <clobbers target="cordova.plugins.NetworkCanvasClient" />
     </js-module>

@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-network-canvas-client",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Cordova Plugin for Network Canvas API clients",
   "keywords": [
     "social",
@@ -17,7 +17,7 @@
   "license": "GPL-3.0-or-later",
   "engines": {
     "cordovaDependencies": {
-        "0.0.1": { "cordova-plugin-file": "^5.0.0"}
+        "0.0.2": { "cordova-plugin-file": "^6.0.0"}
     }
   }
 }

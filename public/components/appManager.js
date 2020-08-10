@@ -3,6 +3,7 @@ const path = require('path');
 const windowManager = require('./windowManager');
 const registerAssetProtocol = require('./assetProtocol').registerProtocol;
 const { openDialog } = require('./dialogs');
+const getUpdater = require('./Updater');
 
 function getFileFromArgs(argv) {
   if (argv.length >= 2) {
@@ -97,6 +98,7 @@ const appManager = {
   },
   start: function start() {
     registerAssetProtocol();
+    getUpdater();
 
     return windowManager
       .getWindow();

@@ -1,12 +1,8 @@
 /* eslint-disable class-methods-use-this */
-
+const { ipcMain } = require('electron');
 const { autoUpdater } = require('electron-updater');
-const { dialog } = require('electron');
+const windowManager = require('./windowManager');
 const log = require('./log');
-
-global.silentUpdates = false;
-
-const releasesUrl = 'https://github.com/codaco/Network-Canvas/releases';
 
 class Updater {
   constructor() {
@@ -14,7 +10,9 @@ class Updater {
   }
 
   setup() {
-    autoUpdater.autoDownload = false;
+    ipcMain.on('check-for-updates', this.checkForUpdates);
+    ipcMain.on('download-update', this.onDownloadUpdate);
+
     autoUpdater.on('error', this.onError);
     autoUpdater.on('update-available', this.onUpdateAvailable);
     autoUpdater.on('update-downloaded', this.onUpdateDownloaded);
@@ -22,63 +20,34 @@ class Updater {
   }
 
   onUpdateAvailable(updateInfo) {
-    dialog.showMessageBox({
-      type: 'question',
-      title: 'Update Available',
-      message: 'Do you want update now?',
-      detail: `Version ${updateInfo.releaseName} is available.\n\nRelease notes are available at:\n${releasesUrl}\n\nClick 'Download and Restart' to fetch this update and install it. Ensure you have exported or backed up any important data before continuing.`,
-      buttons: ['Download and Restart', 'Cancel'],
-    },
-    (buttonIndex) => {
-      if (buttonIndex === 0) {
-        autoUpdater.downloadUpdate();
-      }
-    });
+    log.info('onUpdateAvailable', updateInfo);
+    windowManager.getWindow().then(window => window.webContents.send('UPDATE_AVAILABLE'));
+  }
+
+  onDownloadUpdate() {
+    log.info('onDownloadUpdate.');
+    autoUpdater.downloadUpdate();
   }
 
   onUpdateNotAvailable() {
-    if (global.silentUpdates) {
-      log.info('No updates available (did not notify user).');
-      return;
-    }
-
-    dialog.showMessageBox({
-      title: 'No Updates Available',
-      message: 'Network Canvas is up-to-date.',
-    });
+    log.info('No updates available.');
+    windowManager.getWindow().then(window => window.webContents.send('UPDATE_UNAVAILABLE'));
   }
 
   onUpdateDownloaded() {
-    dialog.showMessageBox({
-      title: 'Install Update',
-      message: 'Download Complete',
-      detail: 'Your update is ready to install. You must now restart the app and install the update.',
-      buttons: ['Restart'],
-    },
-    () => setImmediate(() => autoUpdater.quitAndInstall()));
+    log.info('Update pending.');
+    windowManager.getWindow().then(window => window.webContents.send('UPDATE_PENDING'));
   }
 
   onError(error) {
     const detail = error ? (error.stack || error).toString() : 'An unknown error occurred';
 
     log.error(detail);
-
-    if (global.silentUpdates) {
-      log.info('Update Error (Did not notify user)');
-      return;
-    }
-
-    dialog.showMessageBox({
-      title: 'Error',
-      message: 'Download Complete',
-      detail: 'There was an error checking for updates. You may need to update this app manually.',
-      buttons: ['Okay'],
-    });
+    windowManager.getWindow().then(window => window.webContents.send('UPDATE_ERROR', detail));
   }
 
-  checkForUpdates(silent = false) {
-    global.silentUpdates = !!silent;
-
+  checkForUpdates() {
+    log.info('checkForUpdates');
     autoUpdater.checkForUpdates();
   }
 }

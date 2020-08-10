@@ -10,10 +10,12 @@ import { Spinner } from '@codaco/ui';
 import initFileOpener from './utils/initFileOpener';
 import { history, store, persistor } from './ducks/store';
 import { actionCreators as deviceActions } from './ducks/modules/deviceSettings';
+import { actionCreators as updateActions } from './ducks/modules/update';
 import App from './containers/App';
 import { isCordova, isElectron, getEnv } from './utils/Environment';
 import AppRouter from './routes';
 import remote from './utils/remote';
+import { ipcRenderer} from 'electron';
 
 // This prevents user from being able to drop a file anywhere on the app
 document.addEventListener('drop', (e) => {
@@ -42,6 +44,70 @@ const Persist = ({ persistor, children }) => {
 const startApp = () => {
   store.dispatch(deviceActions.deviceReady());
 
+  if (isCordova()) {
+    // This method let's the codepush plugin know that an update succeeded
+    codePush.notifyApplicationReady();
+
+    const onError = (error) => {
+      store.dispatch(updateActions.setUpdateError(error))
+    };
+
+    codePush.checkForUpdate((remotePackage) => {
+        if (!remotePackage) {
+          setUpdateStatus('unavailable');
+          store.dispatch(updateActions.setUpdateUnavailable());
+          return;
+        }
+
+        if (remotePackage.failedInstall) {
+          store.dispatch(updateActions.setUpdateError('thingy'));
+          return;
+        }
+
+        if (store.getState().sessions.length > 0) {
+          store.dispatch(updateActions.setUpdateBlocked());
+          return;
+        }
+
+        remotePackage.download((localPackage) => {
+          localPackage.install(() => {
+            store.dispatch(updateActions.setUpdatePending());
+          }, onError);
+        }, onError);
+    }, onError);
+
+  }
+
+  if (isElectron()) {
+    ipcRenderer.on('RESET_STATE', () => {
+      store.dispatch(push('/reset'));
+    });
+
+    ipcRenderer.on('UPDATE_AVAILABLE', () => {
+      if (store.getState().sessions.length > 0) {
+        store.dispatch(updateActions.setUpdateBlocked());
+      }
+
+      ipcRenderer.send('download-update');
+    });
+
+    ipcRenderer.on('UPDATE_PENDING', () => {
+      store.dispatch(updateActions.setUpdatePending());
+    });
+
+    ipcRenderer.on('UPDATE_UNAVAILABLE', () => {
+      store.dispatch(updateActions.setUpdateUnavailable());
+    });
+
+    ipcRenderer.on('UPDATE_ERROR', (detail) => {
+      console.log('got update availalble');
+      store.dispatch(updateActions.setUpdateError(detail));
+    });
+
+    // Tell the update process to check for updates
+    ipcRenderer.send('check-for-updates');
+  }
+
   ReactDOM.render(
     <Provider store={store}>
       <Persist persistor={persistor}>
@@ -60,10 +126,6 @@ if (isElectron()) {
   const { webFrame, ipcRenderer } = window.require('electron'); // eslint-disable-line global-require
   webFrame.setVisualZoomLevelLimits(1, 1); // Prevents pinch-to-zoom
   remote.init();
-
-  ipcRenderer.on('RESET_STATE', () => {
-    store.dispatch(push('/reset'));
-  });
 }
 
 secureCommsReady.then(() => {

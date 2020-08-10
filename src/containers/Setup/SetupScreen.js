@@ -11,6 +11,7 @@ import projectLogo from '../../images/project-logo.svg';
 import betaProjectLogo from '../../images/project-logo-beta.svg';
 import downArrow from '../../images/down-arrow.svg';
 import { ProtocolList, ProtocolImportOverlay, SessionListContainer, ImportProgressOverlay } from '.';
+import { UpdateBanner } from '../../components';
 
 /**
   * Setup screen
@@ -56,6 +57,7 @@ class Setup extends Component {
         />
         <div className={setupClassnames}>
           <div className="setup__header">
+            <UpdateBanner />
             <img src={isIOS() ? projectLogo : betaProjectLogo} className="logo setup__header--logo" alt="Network Canvas" />
           </div>
           <main className="setup__main">

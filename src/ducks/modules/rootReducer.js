@@ -11,6 +11,7 @@ import installedProtocols from './installedProtocols';
 import dialogs from './dialogs';
 import search from './search';
 import ui from './ui';
+import update from './update';
 import pairedServer from './pairedServer';
 import { actionTypes as resetActionTypes } from './reset';
 
@@ -26,6 +27,7 @@ const appReducer = combineReducers({
   dialogs,
   search,
   ui,
+  update,
   pairedServer,
 });
 
