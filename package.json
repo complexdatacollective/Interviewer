@@ -173,6 +173,7 @@
   },
   "dependencies": {
     "@codaco/ui": "^3.0.5",
+    "code-push": "^3.0.1",
     "cordova-android": "^9.0.0",
     "cordova-ios": "^6.1.0",
     "cordova-plugin-add-swift-support": "^2.0.2",
@@ -180,8 +181,10 @@
     "cordova-plugin-appcenter-analytics": "~0.5.1",
     "cordova-plugin-appcenter-crashes": "^0.5.1",
     "cordova-plugin-chooser": "^1.2.5",
+    "cordova-plugin-code-push": "^1.13.0",
     "cordova-plugin-device": "^2.0.2",
-    "cordova-plugin-file": "^5.0.0",
+    "cordova-plugin-dialogs": "^2.0.2",
+    "cordova-plugin-file": "6.0.2",
     "cordova-plugin-file-transfer": "^1.7.1",
     "cordova-plugin-keyboard": "^1.2.0",
     "cordova-plugin-network-canvas-client": "./cordova-plugin-network-canvas-client",
@@ -264,7 +267,6 @@
     "plugins": {
       "cordova-plugin-app-version": {},
       "cordova-plugin-wkwebview-engine": {},
-      "cordova-plugin-file": {},
       "cordova-plugin-file-transfer": {},
       "cordova-plugin-whitelist": {},
       "cordova-plugin-device": {},
@@ -275,7 +277,8 @@
         "ANDROID_SUPPORT_V4_VERSION": "24.1.1+"
       },
       "cordova-plugin-zeroconf": {},
-      "cordova-plugin-appcenter-analytics": {}
+      "cordova-plugin-appcenter-analytics": {},
+      "cordova-plugin-file": {}
     }
   }
 }
