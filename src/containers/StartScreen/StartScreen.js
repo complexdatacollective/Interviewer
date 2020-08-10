@@ -8,14 +8,12 @@ import {
   ResumeSessionSection,
   HeaderSection,
   InterviewSection,
+  ServerSection,
   // ProtocolsOverlay,
   // SessionsOverlay,
 } from '.';
-import { SettingsMenuButton } from '../../components/SettingsMenu';
 
 const StartScreen = (props) => {
-
-
   const opacity = {
     visible: {
       opacity: 1,
@@ -41,13 +39,7 @@ const StartScreen = (props) => {
           <HeaderSection />
           <InterviewSection />
           <ResumeSessionSection />
-          <motion.section layout className="start-screen-section server-section">
-            <main>
-              <header>
-                <h2>Server</h2>
-              </header>
-            </main>
-          </motion.section>
+          <ServerSection />
         </motion.div>
       </AnimateSharedLayout>
     </div>

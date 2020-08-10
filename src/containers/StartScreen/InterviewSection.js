@@ -6,7 +6,7 @@ import { Section } from '.';
 import { Scroller } from '../../components';
 import { ProtocolCard } from '../../components/Cards';
 
-const NewInterviewSection = (props) => {
+const InterviewSection = (props) => {
   const {
     installedProtocols,
   } = props;
@@ -48,6 +48,7 @@ const NewInterviewSection = (props) => {
 
                           return (
                             <ProtocolCard
+                              key={protocolUID}
                               condensed
                               attributes={{
                                 schemaVersion,
@@ -97,10 +98,10 @@ const NewInterviewSection = (props) => {
   );
 };
 
-NewInterviewSection.propTypes = {
+InterviewSection.propTypes = {
 };
 
-NewInterviewSection.defaultProps = {
+InterviewSection.defaultProps = {
 };
 
 function mapStateToProps(state) {
@@ -114,6 +115,6 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewInterviewSection);
+export default connect(mapStateToProps, mapDispatchToProps)(InterviewSection);
 
-export { NewInterviewSection as UnconnectedNewInterviewSection };
+export { InterviewSection as UnconnectedInterviewSection };

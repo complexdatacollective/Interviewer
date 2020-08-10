@@ -100,14 +100,13 @@
 
       &__last-used {
         padding: unit(4) unit(2) unit(4) unit(6);
-        flex: 1 1 auto;
+        flex: 1 0 auto;
       }
 
       &__other {
-        flex: 1 0 50%;
+        flex: 0 1 50%;
+        width: 50%;
         background: var(--color-slate-blue);
-        /* border-radius: var(--border-radius); */
-        /* height: 100%; */
         color: white;
         display: flex;
         flex-direction: column;
