@@ -61,6 +61,7 @@ class Setup extends Component {
           }
           <div className="setup__header">
             <img src={isIOS() ? projectLogo : betaProjectLogo} className="logo setup__header--logo" alt="Network Canvas" />
+            <a href="5.1.0/index.html">Switch version</a>
           </div>
           <main className="setup__main">
             <ProtocolList />

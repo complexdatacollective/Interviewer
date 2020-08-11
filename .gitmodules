@@ -10,3 +10,6 @@
 [submodule "src/utils/network-exporters"]
 	path = src/utils/network-exporters
 	url = https://github.com/codaco/network-exporters
+[submodule "cores/5.1.0"]
+	path = cores/5.1.0
+	url = https://github.com/codaco/network-canvas.git

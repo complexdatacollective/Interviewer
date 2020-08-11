@@ -49,11 +49,6 @@ function createWindow() {
       shell.openExternal(newUrl);
     });
 
-    // For now, any navigation off the SPA is unneeded
-    mainWindow.webContents.on('will-navigate', (evt) => {
-      evt.preventDefault();
-    });
-
     if (process.env.NODE_ENV === 'development' && !process.env.TEST) {
       mainWindow.openDevTools();
     }
