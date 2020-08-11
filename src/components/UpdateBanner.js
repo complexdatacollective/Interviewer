@@ -10,7 +10,6 @@ import { openExternalLink } from './ExternalLink';
 const UpdateBanner = (props) => {
   const {
     updateStatus,
-    updateError,
     dismissed,
     dismiss,
   } = props;
@@ -56,21 +55,16 @@ const UpdateBanner = (props) => {
       );
     }
 
-    if (updateStatus === 'error') {
-      // eslint-disable-next-line no-console
-      console.log('Update error:', updateError);
-    }
-
-    return null;
+    return false;
   };
 
-  if (!updateStatus || updateStatus === 'unavailable') {
+  if (!updateStatus || updateStatus === 'unavailable' || updateStatus === 'error') {
     return null;
   }
 
   const bgColor = () => {
     if (updateStatus === 'blocked') {
-      return 'tomato';
+      return 'var(--color-neon-coral)';
     }
 
     if (updateStatus === 'error') {
@@ -81,7 +75,7 @@ const UpdateBanner = (props) => {
       return 'var(--primary)';
     }
 
-    return 'tomato';
+    return 'var(--color-neon-coral)';
   };
 
   return (
@@ -98,9 +92,8 @@ const UpdateBanner = (props) => {
             textAlign: 'center',
             position: 'absolute',
             top: '-2rem',
-            padding: '2.6rem 1.2rem 0.6rem 1.2rem',
+            padding: '2.6rem 2.4rem 1.2rem 1.2rem',
             fontSize: '0.8rem',
-            fontWeight: '900',
             borderRadius: '0 0 3.75rem 3.75rem',
             boxShadow: '0 0 4rem 0 var(--modal-window-box-shadow)',
           }}
@@ -116,9 +109,12 @@ const UpdateBanner = (props) => {
   );
 };
 
+UpdateBanner.defaultProps = {
+  updateStatus: null,
+};
+
 UpdateBanner.propTypes = {
-  updateStatus: PropTypes.string.isRequired,
-  updateError: PropTypes.string.isRequired,
+  updateStatus: PropTypes.string,
   dismissed: PropTypes.bool.isRequired,
   dismiss: PropTypes.func.isRequired,
 };

@@ -73,18 +73,6 @@ const startApp = () => {
           }, onError);
         }, onError);
     }, onError);
-
-    setTimeout(() => {
-      store.dispatch(updateActions.setUpdateBlocked());
-    }, 8000);
-
-    setTimeout(() => {
-      store.dispatch(updateActions.setUpdatePending());
-    }, 5000);
-
-    setTimeout(() => {
-      store.dispatch(updateActions.setUpdateError('thingy'));
-    }, 2000);
   }
 
   if (isElectron()) {
