@@ -62,7 +62,7 @@ const startApp = () => {
           return;
         }
 
-        if (store.getState().sessions.length > 0) {
+        if (Object.keys(store.getState().sessions).length > 0) {
           store.dispatch(updateActions.setUpdateBlocked());
           return;
         }
@@ -88,17 +88,21 @@ const startApp = () => {
   }
 
   if (isElectron()) {
-    const { ipcRenderer} = requre('electron');
+    const { ipcRenderer} = require('electron');
 
     ipcRenderer.on('RESET_STATE', () => {
       store.dispatch(push('/reset'));
     });
 
     ipcRenderer.on('UPDATE_AVAILABLE', () => {
-      if (store.getState().sessions.length > 0) {
+      console.log('update available...', store.getState().sessions);
+      if (Object.keys(store.getState().sessions).length > 0) {
+        console.log()
         store.dispatch(updateActions.setUpdateBlocked());
+        return;
       }
 
+      console.log('about to request update download');
       ipcRenderer.send('download-update');
     });
 
@@ -111,7 +115,6 @@ const startApp = () => {
     });
 
     ipcRenderer.on('UPDATE_ERROR', (detail) => {
-      console.log('got update availalble');
       store.dispatch(updateActions.setUpdateError(detail));
     });
 

@@ -81,6 +81,7 @@
     <plugin name="cordova-plugin-wkwebview-engine" spec="^1.1.4" />
     <plugin name="cordova-plugin-appcenter-analytics" spec="~0.5.1" />
     <plugin name="cordova-plugin-file" spec="6.0.2" />
+    <plugin name="cordova-plugin-inappbrowser" spec="^4.0.0" />
     <engine name="android" spec="^9.0.0" />
     <engine name="ios" spec="^5.1.1" />
 </widget>

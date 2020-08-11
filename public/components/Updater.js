@@ -7,6 +7,18 @@ const log = require('./log');
 class Updater {
   constructor() {
     this.setup();
+
+    setTimeout(() => {
+      windowManager.getWindow().then(window => window.webContents.send('UPDATE_AVAILABLE'));
+    }, 8000);
+
+    setTimeout(() => {
+      windowManager.getWindow().then(window => window.webContents.send('UPDATE_PENDING'));
+    }, 5000);
+
+    setTimeout(() => {
+      windowManager.getWindow().then(window => window.webContents.send('UPDATE_ERROR', 'thingy'));
+    }, 2000);
   }
 
   setup() {

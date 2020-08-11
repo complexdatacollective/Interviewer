@@ -17,12 +17,13 @@ const renameProtocol = (previousUuid, currentUuid) => {
   .then(() => rename(currentDir, previousDir));
 }
 
+export const hasUnexportedSessions = (sessions) => findKey(sessions,
+  session => session.protocolUID === existingIndex && !session.lastExportedAt);
+
 const checkExistingSession = (dispatch, state, currentName) => {
   const existingIndex = findKey(state.installedProtocols,
     protocol => protocol.name === currentName);
-  const unExportedSession = findKey(state.sessions,
-    session => session.protocolUID === existingIndex && !session.lastExportedAt);
-  if (unExportedSession) {
+  if (hasUnexportedSessions(state.sessions)) {
     const message = 'This protocol is already installed, and in-progress sessions using it have not yet been exported. Please export or delete these sessions before attempting to overwrite the protocol.';
     return Promise.reject(message);
   }
