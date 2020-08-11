@@ -1,6 +1,7 @@
 const UPDATE_BLOCKED = Symbol('UPDATE/UPDATE_BLOCKED');
 const UPDATE_PENDING = Symbol('UPDATE/UPDATE_PENDING');
 const UPDATE_UNAVAILABLE = Symbol('UPDATE/UPDATE_UNAVAILABLE');
+const DISMISS = Symbol('UPDATE/DISMISS');
 const ERROR = Symbol('UPDATE/ERROR');
 const RESET = Symbol('UPDATE/RESET');
 
@@ -14,6 +15,7 @@ const STATES = {
 const initialState = {
   status: null,
   error: null,
+  dismissed: false,
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -34,6 +36,11 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...initialState,
         status: STATES.pending,
+      };
+    case DISMISS:
+      return {
+        ...state,
+        dismissed: true,
       };
     case ERROR:
       return {
@@ -58,6 +65,10 @@ const setUpdateUnavailable = () => ({
   type: UPDATE_UNAVAILABLE,
 });
 
+const setUpdateDismissed = () => ({
+  type: DISMISS,
+});
+
 const setUpdateError = error => ({
   type: ERROR,
   error,
@@ -71,6 +82,7 @@ const actionCreators = {
   setUpdateBlocked,
   setUpdatePending,
   setUpdateUnavailable,
+  setUpdateDismissed,
   setUpdateError,
 };
 

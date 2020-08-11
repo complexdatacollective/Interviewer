@@ -15,7 +15,6 @@ import App from './containers/App';
 import { isCordova, isElectron, getEnv } from './utils/Environment';
 import AppRouter from './routes';
 import remote from './utils/remote';
-import { ipcRenderer} from 'electron';
 
 // This prevents user from being able to drop a file anywhere on the app
 document.addEventListener('drop', (e) => {
@@ -54,7 +53,6 @@ const startApp = () => {
 
     codePush.checkForUpdate((remotePackage) => {
         if (!remotePackage) {
-          setUpdateStatus('unavailable');
           store.dispatch(updateActions.setUpdateUnavailable());
           return;
         }
@@ -76,9 +74,22 @@ const startApp = () => {
         }, onError);
     }, onError);
 
+    setTimeout(() => {
+      store.dispatch(updateActions.setUpdateBlocked());
+    }, 8000);
+
+    setTimeout(() => {
+      store.dispatch(updateActions.setUpdatePending());
+    }, 5000);
+
+    setTimeout(() => {
+      store.dispatch(updateActions.setUpdateError('thingy'));
+    }, 2000);
   }
 
   if (isElectron()) {
+    const { ipcRenderer} = requre('electron');
+
     ipcRenderer.on('RESET_STATE', () => {
       store.dispatch(push('/reset'));
     });
