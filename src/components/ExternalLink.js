@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import { isElectron } from '../utils/Environment';
 
 export const openExternalLink = (href) => {
@@ -11,7 +10,7 @@ export const openExternalLink = (href) => {
     return false;
   }
 
-  window.open(href, '_system');
+  window.cordova.InAppBrowser.open(href, '_system');
   return false;
 };
 

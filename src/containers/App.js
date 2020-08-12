@@ -102,10 +102,6 @@ class App extends PureComponent {
             to the stable version as soon as possible, to benefit from continued support, bug fixes,
             and new features.
           </p>
-          <p>
-            We would like to extend our sincere thanks for your support
-            during the first chapter of the development of this software!
-          </p>
         </React.Fragment>
       ),
     });
