@@ -4,13 +4,16 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import cx from 'classnames';
+import { Button } from '@codaco/ui';
 import 'swiper/css/swiper.css';
 import { actionCreators as deviceSettingsActions } from '../ducks/modules/deviceSettings';
+import { actionCreators as dialogActions } from '../ducks/modules/dialogs';
 import '../styles/main.scss';
 import { isElectron, isCordova, isWindows, isMacOS, isLinux, isPreview, getEnv } from '../utils/Environment';
 import DialogManager from '../components/DialogManager';
 import MainMenu from '../containers/MainMenu';
 import SettingsMenuButton from '../components/MainMenu/SettingsMenuButton';
+import { openExternalLink } from '../components/ExternalLink';
 
 /**
   * Main app container.
@@ -67,6 +70,46 @@ class App extends PureComponent {
 
   render() {
     const { children } = this.props;
+
+    this.props.openDialog({
+      type: 'Notice',
+      title: 'Please upgrade to continue receiving support',
+      canCancel: false,
+      message: (
+        <React.Fragment>
+          <p>
+            Our initial development period has come to an end, and we are pleased to announce
+            the release of the first stable versions of Network Canvas, Architect,
+            and Server. Following this release, the version of the software that you are using
+            is no longer supported.
+          </p>
+          <p>
+            The stable releases include many new fixes and features collected from feedback
+            you have provided. Please visit our documentation website for information about
+            how to update.
+          </p>
+          <p>
+            <Button
+              color="sea-serpent"
+              onClick={() => openExternalLink('https://documentation.networkcanvas.com/docs/technical-documentation/updating-from-beta/')}
+            >
+              Visit documentation website
+            </Button>
+          </p>
+          <p>
+            In the meantime, you can continue to use this version of the software
+            in order to export any data, or conclude any work. We strongly encourage you to update
+            to the stable version as soon as possible, to benefit from continued support, bug fixes,
+            and new features.
+          </p>
+          <p>
+            We would like to extend our sincere thanks for your support
+            during the first chapter of the development of this software!
+          </p>
+        </React.Fragment>
+      ),
+    });
+
     return (
       <div className={cx({
         app: true,
@@ -100,6 +143,7 @@ App.propTypes = {
   useDynamicScaling: PropTypes.bool.isRequired,
   startFullScreen: PropTypes.bool.isRequired,
   setStartFullScreen: PropTypes.func.isRequired,
+  openDialog: PropTypes.func.isRequired,
 };
 
 App.defaultProps = {
@@ -108,6 +152,7 @@ App.defaultProps = {
 
 const mapDispatchToProps = dispatch => ({
   setStartFullScreen: value => dispatch(deviceSettingsActions.setSetting('startFullScreen', value)),
+  openDialog: config => dispatch(dialogActions.openDialog(config)),
 });
 
 function mapStateToProps(state) {
