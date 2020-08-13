@@ -1,8 +1,5 @@
 dist: xenial
 language: node_js
-branches:
-  only:
-    - master
 node_js:
   - "12.8.0"
 addons:
