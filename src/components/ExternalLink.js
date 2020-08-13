@@ -10,7 +10,7 @@ export const openExternalLink = (href) => {
     return false;
   }
 
-  window.cordova.InAppBrowser.open(href, '_system');
+  window.cordova.InAppBrowser.open(href, '_system', 'location=yes');
   return false;
 };
 
