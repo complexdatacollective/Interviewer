@@ -219,7 +219,7 @@
     "publish": [
       {
         "provider": "github",
-        "owner": "codaco",
+        "owner": "complexdatacollective",
         "repo": "network-canvas"
       }
     ]
