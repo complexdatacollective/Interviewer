@@ -4,18 +4,26 @@ branches:
   only:
     - master
 node_js:
-  - "12.14.1"
+  - "12.8.0"
+addons:
+  apt:
+    packages:
+      - libavahi-compat-libdnssd-dev
+services:
+  - xvfb
 cache:
   directories:
     - node_modules # NPM packages
+    - integration-tests/.data # integration test downloads
 
 install:
   - npm install
 jobs:
   include:
-    - stage: lint
-      script: npm run lint -- --max-warnings 0 && npm run sass-lint -- --max-warnings 0
+    - stage: prepare cache
+      script: node integration-tests/scripts/get-development-protocol.js
     - stage: test
-      script: npm run test
-    - stage: build
-      script: npm run build:electron
+      script: npm run lint -- --max-warnings 0 &&
+        npm run sass-lint -- --max-warnings 0 &&
+        npm run test &&
+        npm run build
