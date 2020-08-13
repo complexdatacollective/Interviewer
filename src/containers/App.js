@@ -80,13 +80,9 @@ class App extends PureComponent {
           <p>
             Our initial development period has come to an end, and we are pleased to announce
             the release of the first stable versions of Network Canvas, Architect,
-            and Server. Following this release, the version of the software that you are using
-            is no longer supported.
-          </p>
-          <p>
-            The stable releases include many new fixes and features collected from feedback
-            you have provided. Please visit our documentation website for information about
-            how to update.
+            and Server. Since stable versions are now available, the version of the software
+            that you are currently using is no longer supported. Please visit our
+            documentation website for information about how to update to the new versions.
           </p>
           <p>
             <Button
@@ -98,9 +94,9 @@ class App extends PureComponent {
           </p>
           <p>
             In the meantime, you can continue to use this version of the software
-            in order to export any data, or conclude any work. We strongly encourage you to update
-            to the stable version as soon as possible, to benefit from continued support, bug fixes,
-            and new features.
+            in order to export data, or conclude any in-progress work. The stable releases include
+            many new fixes and features collected from feedback you have provided, and we strongly
+            encourage you to update to them as soon as possible.
           </p>
         </React.Fragment>
       ),
