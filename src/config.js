@@ -3,7 +3,7 @@ const APP_SCHEMA_VERSION = 3;
 
 const APP_SUPPORTED_SCHEMA_VERSIONS = ['1.0.0', 1, 2, 3];
 
-const DEVELOPMENT_PROTOCOL_URL = 'https://github.com/codaco/development-protocol/releases/download/20200114183127-668b15b/Development.netcanvas';
+const DEVELOPMENT_PROTOCOL_URL = 'https://github.com/complexdatacollective/development-protocol/releases/download/20200114183127-668b15b/Development.netcanvas';
 
 const ALLOWED_MARKDOWN_TAGS = [
   'break',

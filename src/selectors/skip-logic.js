@@ -46,7 +46,7 @@ export const isStageSkipped = index => createSelector(
     // skipLogic.action === SKIP <- always skip the stage
     // Allows for a quick way to disable a stage by setting SKIP if, and then
     // not defining rules.
-    // Should be changed with https://github.com/codaco/Architect/issues/517
+    // Should be changed with https://github.com/complexdatacollective/Architect/issues/517
     if (!logic.filter.rules || !logic.filter.rules.length === 0) {
       console.warn('Encountered skip logic with no rules defined at index', index); // eslint-disable-line no-console
       return !!skipOnMatch;

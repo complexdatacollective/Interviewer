@@ -110,4 +110,4 @@ parseJobs(jobs);
 const warn = (msg) => { console.warn(require('chalk').yellow(msg)); }; // eslint-disable-line
 warn('Warning: *.ico output for Windows may be corrupted.');
 warn('You should re-export from another editor.');
-warn('Issue: https://github.com/codaco/Network-Canvas/issues/602');
+warn('Issue: https://github.com/complexdatacollective/Network-Canvas/issues/602');
