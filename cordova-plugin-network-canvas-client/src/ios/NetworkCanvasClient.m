@@ -5,7 +5,7 @@
 //  This plugin requires the Cordova File Plugin:
 //  https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-file/
 //
-//  See LICENSE file at project root or https://github.com/codaco/Network-Canvas/blob/master/LICENSE
+//  See LICENSE file at project root or https://github.com/complexdatacollective/Network-Canvas/blob/master/LICENSE
 //
 
 #import "NetworkCanvasClient.h"

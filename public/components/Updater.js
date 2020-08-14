@@ -6,7 +6,7 @@ const log = require('./log');
 
 global.silentUpdates = false;
 
-const releasesUrl = 'https://github.com/codaco/Network-Canvas/releases';
+const releasesUrl = 'https://github.com/complexdatacollective/Network-Canvas/releases';
 
 class Updater {
   constructor() {
