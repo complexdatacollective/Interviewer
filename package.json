@@ -1,6 +1,6 @@
 {
   "name": "network-canvas",
-  "version": "5.2.0",
+  "version": "6.0.0",
   "productName": "Network Canvas",
   "description": "Simplifying complex network data collection.",
   "author": "Complex Data Collective",
@@ -34,9 +34,9 @@
     "generate-icons": "node scripts/generate-app-icons.js",
     "dist:android": "npm run build:android && cordova build android --release",
     "dist:ios": "npm run build:ios && cordova build ios --release --buildFlag='-UseModernBuildSystem=0' --developmentTeam=85EZ69PQHJ --target=\"iPad-Pro--12-9-inch---3rd-generation-, 13.1\"",
-    "dist:linux": "npm run build:electron && electron-builder -l --publish=always",
-    "dist:mac": "npm run build:electron && electron-builder -m --publish=always",
-    "dist:win": "npm run build:electron && electron-builder -w --publish=always",
+    "dist:linux": "npm run build:electron && electron-builder -l",
+    "dist:mac": "npm run build:electron && electron-builder -m",
+    "dist:win": "npm run build:electron && electron-builder -w",
     "bump": "sh scripts/bump",
     "preflight": "npm run lint -- --max-warnings 0 && npm run sass-lint -- --max-warnings 0 && npm test -- --coverage"
   },
@@ -75,7 +75,7 @@
     "csvtojson": "^2.0.8",
     "detect-port": "1.1.0",
     "dotenv": "4.0.0",
-    "electron": "^9.1.2",
+    "electron": "^9.2.0",
     "electron-builder": "^22.7.0",
     "electron-log": "^4.2.2",
     "electron-updater": "^4.1.2",
@@ -150,7 +150,7 @@
     "sass-lint": "^1.12.1",
     "sass-loader": "^6.0.6",
     "sass-svg": "^1.0.1",
-    "secure-comms-api": "git+https://github.com/codaco/secure-comms-api.git",
+    "secure-comms-api": "git+https://github.com/complexdatacollective/secure-comms-api.git",
     "sockjs-client": "^1.3.0",
     "spectron": "^11.0.0",
     "spectron-dialog-addon": "^1.0.1",
@@ -199,7 +199,7 @@
     "extraResources": [
       "./build-resources/externals/**"
     ],
-    "appId": "Network-Canvas",
+    "appId": "Network-Canvas-6",
     "afterSign": "./build-resources/scripts/afterSignHook.js",
     "directories": {
       "buildResources": "build-resources",
@@ -220,13 +220,13 @@
     "publish": [
       {
         "provider": "github",
-        "owner": "codaco",
+        "owner": "complexdatacollective",
         "repo": "network-canvas"
       }
     ]
   },
   "browserslist": [
-    "Electron 9.1.2",
+    "Electron 9.2.0",
     "ChromeAndroid >= 84",
     "iOS >= 13.6"
   ],

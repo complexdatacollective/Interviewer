@@ -4,20 +4,20 @@ import { VariableType } from './utils/network-exporters/src/utils/protocol-const
 // Note: these values are no longer used to produce JSON schemas; the schemas must
 // be kept in sync manually.
 
-// Docs: https://github.com/codaco/Network-Canvas/wiki/protocol.json#variable-registry
+// Docs: https://github.com/complexdatacollective/Network-Canvas/wiki/protocol.json#variable-registry
 export const Entity = Object.freeze({
   edge: 'edge',
   node: 'node',
 });
 
-// Docs: https://github.com/codaco/Network-Canvas/wiki/Skip-Logic
+// Docs: https://github.com/complexdatacollective/Network-Canvas/wiki/Skip-Logic
 export const FilterJoin = Object.freeze({
   OR: 'OR',
   AND: 'AND',
 });
 
-// Docs: https://github.com/codaco/Network-Canvas/wiki/Skip-Logic
-// TODO: expected to match https://github.com/codaco/networkQuery/blob/master/predicate.js;
+// Docs: https://github.com/complexdatacollective/Network-Canvas/wiki/Skip-Logic
+// TODO: expected to match https://github.com/complexdatacollective/networkQuery/blob/master/predicate.js;
 //       could support node syntax there, or introduce babel-node here.
 export const FilterOptionsOperator = Object.freeze({
   EXISTS: 'EXISTS',
@@ -30,7 +30,7 @@ export const FilterOptionsOperator = Object.freeze({
   LESS_THAN_OR_EQUAL: 'LESS_THAN_OR_EQUAL',
 });
 
-// Docs: https://github.com/codaco/Network-Canvas/wiki/Input-Types
+// Docs: https://github.com/complexdatacollective/Network-Canvas/wiki/Input-Types
 export const FormComponent = Object.freeze({
   Checkbox: 'Checkbox',
   CheckboxGroup: 'CheckboxGroup',
@@ -47,7 +47,7 @@ export const FormComponent = Object.freeze({
   RelativeDatePicker: 'RelativeDatePicker',
 });
 
-// Docs: https://github.com/codaco/Network-Canvas/wiki/Information-Interface#content-types
+// Docs: https://github.com/complexdatacollective/Network-Canvas/wiki/Information-Interface#content-types
 export const InformationContentType = Object.freeze({
   text: 'text',
   asset: 'asset',
@@ -59,20 +59,20 @@ export const AssetType = Object.freeze({
   audio: 'audio',
 });
 
-// Docs: https://github.com/codaco/Network-Canvas/wiki/Skip-Logic#skip-logic-api
+// Docs: https://github.com/complexdatacollective/Network-Canvas/wiki/Skip-Logic#skip-logic-api
 export const RuleType = Object.freeze({
   alter: 'alter',
   ego: 'ego',
   edge: 'edge',
 });
 
-// Docs: https://github.com/codaco/Network-Canvas/wiki/Skip-Logic
+// Docs: https://github.com/complexdatacollective/Network-Canvas/wiki/Skip-Logic
 export const SkipLogicAction = Object.freeze({
   SHOW: 'SHOW',
   SKIP: 'SKIP',
 });
 
-// Docs: https://github.com/codaco/Network-Canvas/wiki/Skip-Logic
+// Docs: https://github.com/complexdatacollective/Network-Canvas/wiki/Skip-Logic
 export const SkipLogicOperator = Object.freeze({
   ANY: 'ANY',
   NONE: 'NONE',
@@ -84,7 +84,7 @@ export const SkipLogicOperator = Object.freeze({
   LESS_THAN_OR_EQUAL: 'LESS_THAN_OR_EQUAL',
 });
 
-// Docs: https://github.com/codaco/Network-Canvas/wiki#interfaces
+// Docs: https://github.com/complexdatacollective/Network-Canvas/wiki#interfaces
 export const StageType = Object.freeze({
   NameGenerator: 'NameGenerator',
   NameGeneratorQuickAdd: 'NameGeneratorQuickAdd',
@@ -102,7 +102,7 @@ export const StageType = Object.freeze({
 });
 
 // VariableTYpe imported from network-exporters submodule
-// Docs: https://github.com/codaco/Network-Canvas/wiki/Variable-Types
+// Docs: https://github.com/complexdatacollective/Network-Canvas/wiki/Variable-Types
 
 
 const enumValueMaps = Object.freeze({

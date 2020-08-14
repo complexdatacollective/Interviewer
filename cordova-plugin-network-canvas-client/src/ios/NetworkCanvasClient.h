@@ -2,7 +2,7 @@
 //  NetworkCanvasClient.h
 //  NetworkCanvas
 //
-//  See LICENSE file at project root or https://github.com/codaco/Network-Canvas/blob/master/LICENSE
+//  See LICENSE file at project root or https://github.com/complexdatacollective/Network-Canvas/blob/master/LICENSE
 //
 
 #import <Cordova/CDV.h>
