@@ -5,6 +5,10 @@ branches:
     - master
 node_js:
   - "12.14.1"
+addons:
+  apt:
+    packages:
+      - libavahi-compat-libdnssd-dev
 cache:
   directories:
     - node_modules # NPM packages
@@ -19,5 +23,3 @@ jobs:
       script: npm run test
     - stage: build
       script: npm run build:electron
-
-
