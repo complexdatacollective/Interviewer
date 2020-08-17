@@ -64,7 +64,7 @@ class ServerDiscoverer {
           };
         };
 
-        this.browser = mdns.createBrowser({ name: 'network-canvas', protocol: 'tcp' });
+        this.browser = mdns.createBrowser({ name: 'nc-server-6', protocol: 'tcp' });
         this.browser.on('serviceUp', service => this.emitAnnouncement(normalizeService(service)));
         this.browser.on('serviceDown', service => this.emitRemoval(normalizeService(service)));
         this.browser.on('error', error => this.emitErrorMessage(error));
@@ -77,7 +77,7 @@ class ServerDiscoverer {
     if (isCordova()) {
       this.zeroconf = window.cordova.plugins.zeroconf;
       try {
-        this.zeroconf.watch('_network-canvas._tcp.', 'local.', (result) => {
+        this.zeroconf.watch('_nc-server-6._tcp.', 'local.', (result) => {
           const action = result.action;
           // Normalize the service object to match the mdns node module (above)
           const normalizeService = service => (

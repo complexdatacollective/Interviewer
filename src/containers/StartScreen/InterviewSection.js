@@ -9,7 +9,10 @@ import { ProtocolCard } from '../../components/Cards';
 const InterviewSection = (props) => {
   const {
     installedProtocols,
+    pairedServer
   } = props;
+
+  const otherProtocols = Object.keys(installedProtocols).slice(1);
 
   return (
     <Section className="start-screen-section interview-section">
@@ -20,7 +23,7 @@ const InterviewSection = (props) => {
               <div className="content-area">
                 <div className="content-area__last-used">
                   <header>
-                    <h2>New Interview...</h2>
+                    <h2>Start an Interview...</h2>
                   </header>
                   <ProtocolCard
                     attributes={{
@@ -32,38 +35,42 @@ const InterviewSection = (props) => {
                     }}
                   />
                 </div>
-                <div className="content-area__other">
-                  <h4>Select Other Protocol...</h4>
-                  <Scroller>
-                    <AnimatePresence>
-                      {
-                        Object.keys(installedProtocols).map((protocolUID) => {
-                          const {
-                            schemaVersion,
-                            lastModified,
-                            installationDate,
-                            name,
-                            description,
-                          } = installedProtocols[protocolUID];
-
-                          return (
-                            <ProtocolCard
-                              key={protocolUID}
-                              condensed
-                              attributes={{
+                {
+                  otherProtocols.length > 0 && (
+                    <div className="content-area__other">
+                      <h4>Use Other Protocol...</h4>
+                      <Scroller>
+                        <AnimatePresence>
+                          {
+                            Object.keys(otherProtocols).map((protocolUID) => {
+                              const {
                                 schemaVersion,
                                 lastModified,
                                 installationDate,
                                 name,
                                 description,
-                              }}
-                            />
-                          );
-                        })
-                      }
-                    </AnimatePresence>
-                  </Scroller>
-                </div>
+                              } = installedProtocols[protocolUID];
+
+                              return (
+                                <ProtocolCard
+                                  key={protocolUID}
+                                  condensed
+                                  attributes={{
+                                    schemaVersion,
+                                    lastModified,
+                                    installationDate,
+                                    name,
+                                    description,
+                                  }}
+                                />
+                              );
+                            })
+                          }
+                        </AnimatePresence>
+                      </Scroller>
+                    </div>
+                  )
+                }
               </div>
             </main>
           )
@@ -86,12 +93,16 @@ const InterviewSection = (props) => {
             <h3>Import</h3>
             <h2>From File</h2>
           </GraphicButton>
-          <GraphicButton
-            color="mustard"
-          >
-            <h3>Import</h3>
-            <h2>From Server</h2>
-          </GraphicButton>
+          {
+            pairedServer && (
+              <GraphicButton
+                color="mustard"
+              >
+                <h3>Import</h3>
+                <h2>From Server</h2>
+              </GraphicButton>
+            )
+          }
         </div>
       </main>
     </Section>
@@ -107,6 +118,7 @@ InterviewSection.defaultProps = {
 function mapStateToProps(state) {
   return {
     installedProtocols: state.installedProtocols,
+    paredServer: state.pairedServer,
   };
 }
 

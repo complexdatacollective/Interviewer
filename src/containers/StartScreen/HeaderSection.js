@@ -6,6 +6,7 @@ import Switch from './Switch';
 import NCLogo from '../../images/NC-Round.svg';
 import { actionCreators as deviceSettingsActions } from '../../ducks/modules/deviceSettings';
 import { SettingsMenuButton } from '../../components/SettingsMenu';
+import { Checkbox } from '@codaco/ui/lib/components/Fields';
 
 const HeaderSection = (props) => {
   const {
@@ -48,7 +49,8 @@ const HeaderSection = (props) => {
   };
 
   return (
-    <motion.div variants={springy} layout className="start-screen-section start-screen-header">
+    <React.Fragment>
+<motion.div variants={springy} layout className="start-screen-section start-screen-header">
       <motion.div layout className="start-screen-header__wrapper">
         <div className="header-mark">
           <h1>Network Canvas</h1>
@@ -58,73 +60,79 @@ const HeaderSection = (props) => {
           <img src={NCLogo} className="header-logo" alt="Network Canvas" />
         </div>
         <div className="version-string">5.2.0</div>
-      </motion.div>
-      <motion.section
-        layout
-        initial="hidden"
-        className="welcome-section"
-      >
         <motion.footer layout>
-          <Switch
-            className="welcome-header__header-toggle"
-            label="Show getting started"
-            on={showGettingStarted}
-            onChange={toggleShowGettingStarted}
-          />
           <SettingsMenuButton />
         </motion.footer>
-        <AnimatePresence initial={false}>
-          { showGettingStarted && (
-            <motion.div
-              initial="hidden"
-              exit="hidden"
-              variants={start}
-              layout
-              className="welcome-section__content"
-            >
-              <main>
-                <h2>Getting Started</h2>
-                <div className="welcome-item">
-                  <div className="welcome-item__action">
-                    <Button color="primary">Watch overview video</Button>
-                  </div>
-                  <div className="welcome-item__description">
-                    <p>
-                      If this is your first time using Network Canvas, please consider taking
-                      a moment to watch our overview video. It will introduce you to the key
-                      concepts of the Network Canvas project.
-                    </p>
-                  </div>
-                </div>
-                <div className="welcome-item">
-                  <div className="welcome-item__action">
-                    <Button color="sea-serpent">Visit documentation website</Button>
-                  </div>
-                  <div className="welcome-item__description">
-                    <p>
-                      For further detailed information, tutorials, videos, and information about
-                      collaboration, please visit our documentation website.
-                    </p>
-                  </div>
-                </div>
-                <div className="welcome-item">
-                  <div className="welcome-item__action">
-                    <Button color="mustard">Install sample protocol</Button>
-                  </div>
-                  <div className="welcome-item__description">
-                    <p>
-                  To get started right away, install one or more interview protocols
-                  onto this device. For convenience, we have created a sample interview
-                  protocol on the theme of &quot;public health&quot; research.
-                    </p>
-                  </div>
-                </div>
-              </main>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.section>
+      </motion.div>
     </motion.div>
+    <AnimatePresence initial={false}>
+      { showGettingStarted && (
+    <motion.section
+    layout
+    initial="hidden"
+    className="start-screen-section welcome-section"
+  >
+
+        <motion.div
+          initial="hidden"
+          exit="hidden"
+          variants={start}
+          layout
+          className="welcome-section__content"
+        >
+          <main>
+            <h2>Getting Started</h2>
+            <div className="welcome-item">
+              <div className="welcome-item__action">
+                <Button color="primary">Watch overview video</Button>
+              </div>
+              <div className="welcome-item__description">
+                <p>
+                  If this is your first time using Network Canvas, please consider taking
+                  a moment to watch our overview video. It will introduce you to the key
+                  concepts of the Network Canvas project.
+                </p>
+              </div>
+            </div>
+            <div className="welcome-item">
+              <div className="welcome-item__action">
+                <Button color="sea-serpent">Visit documentation website</Button>
+              </div>
+              <div className="welcome-item__description">
+                <p>
+                  For further detailed information, tutorials, videos, and information about
+                  collaboration, please visit our documentation website.
+                </p>
+              </div>
+            </div>
+            <div className="welcome-item">
+              <div className="welcome-item__action">
+                <Button color="mustard">Install sample protocol</Button>
+              </div>
+              <div className="welcome-item__description">
+                <p>
+              To get started right away, install one or more interview protocols
+              onto this device. For convenience, we have created a sample interview
+              protocol on the theme of &quot;public health&quot; research.
+                </p>
+              </div>
+            </div>
+          </main>
+        </motion.div>
+        <motion.footer layout>
+          <Checkbox
+            className="welcome-header__header-toggle"
+            label="Show 'getting started' card"
+            input={{
+              checked: showGettingStarted
+            }}
+            onChange={toggleShowGettingStarted}
+          />
+        </motion.footer>
+  </motion.section>
+                          )}
+                          </AnimatePresence>
+    </React.Fragment>
   );
 };
 

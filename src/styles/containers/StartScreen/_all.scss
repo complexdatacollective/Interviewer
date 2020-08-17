@@ -50,15 +50,13 @@
 .welcome-section {
   margin-top: 0;
   color: var(--white);
-  backdrop-filter: blur(5rem);
-  background: rgba(58, 58, 117, 0.44);
   width: 100%;
 
   &__content {
     display: flex;
 
     > main {
-      padding: 0 unit(4) unit(2);
+      padding: 0 unit(6) unit(2);
     }
 
     .welcome-item {
@@ -81,7 +79,7 @@
 
   footer {
     display: flex;
-    padding: unit(2) unit(4);
+    padding: unit(2) unit(6);
     justify-content: space-between;
 
     > .switch {
@@ -101,6 +99,10 @@
       &__last-used {
         padding: unit(4) unit(2) unit(4) unit(6);
         flex: 1 0 auto;
+
+        > .protocol-card {
+          max-width: 35rem;
+        }
       }
 
       &__other {
@@ -130,6 +132,11 @@
 
     > .content-buttons {
       display: flex;
+      justify-content: space-around;
+
+      > .graphic-button {
+        max-width: 20rem;
+      }
 
 
       > :first-child {
@@ -144,8 +151,8 @@
 }
 
 .start-screen-header {
-  background: transparent;
   color: var(--white);
+  background: var(--color-cyber-grape);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -153,17 +160,14 @@
   position: relative;
   margin: unit(4) auto;
   overflow: hidden;
-
   border-radius: var(--border-radius);
-  margin-bottom: 0;
 
   &__wrapper {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-    padding: unit(1);
-    background: var(--color-cyber-grape);
+    padding: unit(4);
 
     .header-brand {
       flex: 0 0 unit(12);
@@ -268,3 +272,45 @@
 }
 
 
+
+.server-section {
+  &__main {
+    padding: 0 !important;
+
+    .content-area {
+      display: flex;
+      flex-direction: column;
+
+      &__discover {
+        background: var(--color-slate-blue);
+        color: white;
+        display: flex;
+        flex-direction: column;
+        padding: unit(4) unit(6);
+
+        > h4 {
+          margin-top: 0;
+          margin-bottom: 0.6rem;
+        }
+
+        .discovered-server-list {
+          .server-list {
+            &--error {
+              background: tomato;
+              padding: unit(2);
+              display: flex;
+
+              .error__icon {
+                flex: 0 0 15rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+              }
+            }
+          }
+        }
+      }
+    }
+
+  }
+}

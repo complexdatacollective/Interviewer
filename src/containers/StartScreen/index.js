@@ -5,3 +5,4 @@ export { default as InterviewSection } from './InterviewSection';
 export { default as HeaderSection } from './HeaderSection';
 export { default as ServerSection } from './ServerSection';
 export { default as Switch } from './Switch';
+export { default as DiscoveredServerList } from './DiscoveredServerList';

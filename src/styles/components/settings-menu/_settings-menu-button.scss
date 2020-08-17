@@ -1,26 +1,5 @@
 .settings-menu-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: var(--color-slate-blue);
-  border-radius: 50%;
-  padding: 0.5rem;
-  width: 3rem;
-  height: 3rem;
-  cursor: pointer;
-
-  &__button {
-    height: 6rem;
-    width: 6rem;
-    border-radius: 100%;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    svg {
-      height: 2.5rem;
-      width: 2.5rem;
-    }
-  }
+  position: absolute;
+  bottom: unit(2);
+  right: unit(2);
 }

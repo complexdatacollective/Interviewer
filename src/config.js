@@ -1,7 +1,7 @@
 // Target protocol schema version. Used to determine compatibility & migration
 const APP_SCHEMA_VERSION = 4;
 
-const APP_SUPPORTED_SCHEMA_VERSIONS = ['1.0.0', 1, 2, 3, 4];
+const APP_SUPPORTED_SCHEMA_VERSIONS = [4];
 
 const DEVELOPMENT_PROTOCOL_URL = 'https://github.com/complexdatacollective/development-protocol/releases/download/20200706150517-1d7fd6b/Development.netcanvas';
 

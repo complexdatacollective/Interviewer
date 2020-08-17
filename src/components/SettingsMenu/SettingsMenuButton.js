@@ -5,12 +5,14 @@ import { compose } from 'recompose';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
 
 const SettingsMenuButton = props => (
-  <Button
-    color="slate-blue"
-    size="small"
-    icon="settings"
-    onClick={props.openSettingsMenu}
-  >Settings</Button>
+  <div className="settings-menu-button">
+    <Button
+      color="slate-blue"
+      size="small"
+      icon="settings"
+      onClick={props.openSettingsMenu}
+    >Settings</Button>
+  </div>
 );
 
 const mapDispatchToProps = dispatch => ({

@@ -10,7 +10,7 @@ import epics from './middleware/epics';
 import rootReducer from './modules/rootReducer';
 
 const persistConfig = {
-  key: 'networkCanvas',
+  key: 'networkCanvas6',
   storage,
   whitelist: [
     'deviceSettings',
