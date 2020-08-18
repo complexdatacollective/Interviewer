@@ -9,6 +9,7 @@ import { actionCreators as deviceSettingsActions } from '../../ducks/modules/dev
 import { actionCreators as protocolActions } from '../../ducks/modules/importProtocol';
 import { SettingsMenuButton } from '../../components/SettingsMenu';
 import { openExternalLink } from '../../components/ExternalLink';
+import Switch from './Switch';
 
 const HeaderSection = (props) => {
   const {
@@ -57,8 +58,16 @@ const HeaderSection = (props) => {
             layout
           >
             <motion.section className="start-screen-section welcome-section">
+              <Switch
+                className="welcome-header__header-toggle"
+                label="Show 'getting started' card"
+                on={showGettingStarted}
+                onChange={toggleShowGettingStarted}
+              />
               <main>
-                <h2>Getting Started</h2>
+                <header>
+                  <h2>Getting Started</h2>
+                </header>
                 <div className="welcome-description">
                   <p>
                     If this is your first time using Network Canvas, please consider taking
@@ -76,7 +85,12 @@ const HeaderSection = (props) => {
                   </p>
                 </div>
                 <div className="welcome-actions">
-                  <Button color="primary">Watch overview video</Button>
+                  <Button
+                    color="primary"
+                    onClick={() => openExternalLink('https://www.youtube.com/watch?v=XzfE6j-LnII')}
+                  >
+                    Watch overview video
+                  </Button>
                   <Button
                     color="sea-serpent"
                     onClick={() => openExternalLink('https://documentation.networkcanvas.com')}
@@ -91,16 +105,6 @@ const HeaderSection = (props) => {
                   </Button>
                 </div>
               </main>
-              <motion.footer layout>
-                <Checkbox
-                  className="welcome-header__header-toggle"
-                  label="Show 'getting started' card"
-                  input={{
-                    checked: showGettingStarted,
-                  }}
-                  onChange={toggleShowGettingStarted}
-                />
-              </motion.footer>
             </motion.section>
           </motion.div>
         )}

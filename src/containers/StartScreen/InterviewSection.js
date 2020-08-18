@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { GraphicButton, Button } from '@codaco/ui';
 import { Section } from '.';
 import { Scroller } from '../../components';
@@ -25,14 +25,13 @@ const InterviewSection = (props) => {
       <AnimatePresence>
         {
           Object.keys(installedProtocols).length > 0 && (
-            <React.Fragment>
-              <header className="interview-section__manage-protocols">
-                <h2>Start an Interview</h2>
-                <Button color="slate-blue" size="small">Manage Protocols...</Button>
-              </header>
+            <motion.div layout>
               <main className="interview-section__start-new">
                 <div className="content-area">
                   <div className="content-area__last-used">
+                    <header>
+                      <h2>Start an Interview</h2>
+                    </header>
                     <ProtocolCard
                       attributes={{
                         schemaVersion: lastProtocol.schemaVersion,
@@ -83,7 +82,7 @@ const InterviewSection = (props) => {
                   }
                 </div>
               </main>
-            </React.Fragment>
+            </motion.div>
           )
         }
       </AnimatePresence>
@@ -117,6 +116,9 @@ const InterviewSection = (props) => {
           }
         </div>
       </main>
+      <footer className="interview-section__manage-protocols">
+        <Button color="slate-blue">Manage Protocols...</Button>
+      </footer>
     </Section>
   );
 };

@@ -11,7 +11,7 @@ const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
-const { reactBundleTarget } = require('./nc-dev-utils');
+const { reactBundleTarget, isTargetingElectron } = require('./nc-dev-utils');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
@@ -82,6 +82,20 @@ const getStyleLoaders = (preProcessor) => {
   return loaders;
 };
 
+const resolveAlias = {
+  // Use the UMD version of React Markdown, so that we can keep building for
+  // electron-renderer and running other browsers
+  'react-markdown': require.resolve('react-markdown/umd/react-markdown.js'),
+};
+if (!isTargetingElectron) {
+  resolveAlias.electron = `${paths.appSrc}/utils/electron-shim`;
+}
+
+if (isTargetingElectron) {
+  // Force node version of jszip for electron target
+  resolveAlias.jszip = require.resolve('jszip/lib/index.js');
+}
+
 // This is the production configuration.
 // It compiles slowly and is focused on producing a fast and minimal bundle.
 // The development configuration is different and lives in a separate file.
@@ -122,14 +136,7 @@ module.exports = {
     // `web` extension prefixes have been added for better support
     // for React Native Web.
     extensions: ['.web.js', '.js', '.json', '.web.jsx', '.jsx'],
-    alias: {
-      // Use the UMD version of React Markdown, so that we can keep building for
-      // electron-renderer and running other browsers
-      'react-markdown': require.resolve('react-markdown/umd/react-markdown.js'),
-      // Support React Native Web
-      // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
-      'react-native': 'react-native-web',
-    },
+    alias: resolveAlias,
     plugins: [
       // Prevents users from importing files from outside of src/ (or node_modules/).
       // This often causes confusion because we only process files within src/ with babel.

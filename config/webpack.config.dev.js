@@ -33,6 +33,11 @@ if (!isTargetingElectron) {
   resolveAlias.electron = `${paths.appSrc}/utils/electron-shim`;
 }
 
+if (isTargetingElectron) {
+  // Force node version of jszip for electron target
+  resolveAlias.jszip = require.resolve('jszip/lib/index.js');
+}
+
 // This is the development configuration.
 // It is focused on developer experience and fast rebuilds.
 // The production configuration is different and lives in a separate file.
@@ -99,11 +104,7 @@ module.exports = {
     // `web` extension prefixes have been added for better support
     // for React Native Web.
     extensions: ['.web.js', '.js', '.json', '.web.jsx', '.jsx'],
-    alias: {
-      // Support React Native Web
-      // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
-      'react-native': 'react-native-web',
-    },
+    alias: resolveAlias,
     plugins: [
       // Prevents users from importing files from outside of src/ (or node_modules/).
       // This often causes confusion because we only process files within src/ with babel.
