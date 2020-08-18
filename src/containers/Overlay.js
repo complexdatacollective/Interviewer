@@ -1,62 +1,42 @@
 import React from 'react';
 import cx from 'classnames';
-import anime from 'animejs';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Modal } from '@codaco/ui';
-import { getCSSVariableAsNumber, getCSSVariableAsObject } from '@codaco/ui/lib/utils/CSSVariables';
 import { CloseButton } from '../components';
 
 /**
  * Renders a modal window.
  */
 
-class Overlay extends React.Component {
-  constructor(props) {
-    super(props);
-    this.contentRef = React.createRef();
-  }
+const Overlay = (props) => {
+  const {
+    children,
+    onClose,
+    onBlur,
+    show,
+    title,
+    useFullScreenForms,
+    forceDisableFullScreen,
+    className,
+  } = props;
 
-  scrollContentsToTop = () => {
-    if (this.contentRef.current) {
-      anime({
-        targets: this.contentRef.current,
-        scrollTop: 0,
-        duration: getCSSVariableAsNumber('--animation-duration-slow-ms'),
-        easing: getCSSVariableAsObject('--animation-easing-js'),
-      });
-    }
-  }
-
-  render() {
-    const {
-      children,
-      onClose,
-      onBlur,
-      show,
-      title,
-      useFullScreenForms,
-      forceDisableFullScreen,
-      className,
-    } = this.props;
-
-    return (
-      <Modal show={show} onBlur={onBlur}>
-        <div className={cx('overlay', { 'overlay--fullscreen': !forceDisableFullScreen && useFullScreenForms }, className)}>
-          { title && (
-            <div className="overlay__title">
-              <h1>{title}</h1>
-            </div>
-          )}
-          <div className="overlay__content" ref={this.contentRef}>
-            {children}
+  return (
+    <Modal show={show} onBlur={onBlur}>
+      <div className={cx('overlay', { 'overlay--fullscreen': !forceDisableFullScreen && useFullScreenForms }, className)}>
+        { title && (
+          <div className="overlay__title">
+            <h1>{title}</h1>
           </div>
-          <CloseButton className="overlay__close" onClick={onClose} />
+        )}
+        <div className="overlay__content">
+          {children}
         </div>
-      </Modal>
-    );
-  }
-}
+        <CloseButton className="overlay__close" onClick={onClose} />
+      </div>
+    </Modal>
+  );
+};
 
 Overlay.propTypes = {
   onClose: PropTypes.func,
@@ -86,4 +66,4 @@ export {
 const mapStateToProps = state =>
   ({ useFullScreenForms: state.deviceSettings.useFullScreenForms });
 
-export default connect(mapStateToProps, null, null, { withRef: true })(Overlay);
+export default connect(mapStateToProps)(Overlay);

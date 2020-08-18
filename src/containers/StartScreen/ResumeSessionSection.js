@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { AnimatePresence } from 'framer-motion';
 import { SessionCard } from '../../components/Cards';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
 import { getLastActiveSession } from '../../selectors/session';
 import { Section } from '.';
-import { AnimatePresence } from 'framer-motion';
 
 const NewInterviewSection = (props) => {
   const {

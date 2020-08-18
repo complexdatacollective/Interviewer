@@ -1,36 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Icon, Spinner, Scroller } from '@codaco/ui';
 import { ServerCard as UIServerCard } from '@codaco/ui/lib/components/Cards';
 import ServerDiscoverer from '../../utils/serverDiscoverer';
-import { AnimatePresence } from 'framer-motion';
 
 
 const ServerCard = (props) => {
   const {
-    data
+    name,
+    address,
   } = props;
 
-  const {
-    name,
-    addresses
-  } = data;
-
-  const onClickLoadSession = (event) => {
-    event.preventDefault();
-    setSession(sessionUUID);
+  const handleServerCardClick = () => {
+    console.log('start pairing with ', address);
   };
 
   return (
-    <UIServerCard
-      caseId={caseId}
-      startedAt={startedAt}
-      updatedAt={updatedAt}
-      protocolName={protocol.name}
-      progress={progress}
-      onClickHandler={onClickLoadSession}
-    />
+    <motion.div
+      enter={{ scale: 1 }}
+      exit={{ scale: 0 }}
+    >
+      <UIServerCard
+        name={name}
+        address={address}
+        onClickHandler={handleServerCardClick}
+      />
+    </motion.div>
   );
 };
 
@@ -64,9 +61,7 @@ const DiscoveredServerList = () => {
     });
 
     serverDiscoverer.on('SERVER_REMOVED', (response) => {
-      this.setState(prevState => ({
-        servers: prevState.servers.filter(item => (item.name !== response.name)),
-      }));
+      updateServerList(prevState => prevState.filter(item => (item.name !== response.name)));
     });
 
     serverDiscoverer.on('SERVER_ERROR', (error) => {
@@ -99,6 +94,7 @@ const DiscoveredServerList = () => {
     )
   }
 
+  console.log('serverlist', serverList);
   if (serverList.length > 0) {
     return (
       <div className="discovered-server-list">
@@ -108,8 +104,8 @@ const DiscoveredServerList = () => {
               serverList.map(server => (
                 <ServerCard
                   key={server.pairingServiceUrl}
-                  data={server}
-                  selectServer={selectServer}
+                  name={server.name}
+                  address={server.pairingServiceUrl}
                 />
               ))
             }

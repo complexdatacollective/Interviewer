@@ -1,78 +1,93 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { AnimatePresence } from 'framer-motion';
-import { GraphicButton } from '@codaco/ui';
+import { GraphicButton, Button } from '@codaco/ui';
 import { Section } from '.';
 import { Scroller } from '../../components';
 import { ProtocolCard } from '../../components/Cards';
+import { actionCreators as uiActions } from '../../ducks/modules/ui';
+import ProtocolUrlForm from './ProtocolUrlForm';
 
 const InterviewSection = (props) => {
   const {
     installedProtocols,
-    pairedServer
+    pairedServer,
+    showProtocolUrlForm,
+    toggleShowProtocolUrlForm,
   } = props;
 
   const otherProtocols = Object.keys(installedProtocols).slice(1);
-
+  const lastProtocol = installedProtocols[Object.keys(installedProtocols)[0]];
+  console.log('pther', otherProtocols, installedProtocols);
   return (
     <Section className="start-screen-section interview-section">
+      <ProtocolUrlForm show={showProtocolUrlForm} handleClose={toggleShowProtocolUrlForm} />
       <AnimatePresence>
         {
           Object.keys(installedProtocols).length > 0 && (
-            <main className="interview-section__start-new">
-              <div className="content-area">
-                <div className="content-area__last-used">
-                  <header>
-                    <h2>Start an Interview...</h2>
-                  </header>
-                  <ProtocolCard
-                    attributes={{
-                      schemaVersion: 5,
-                      lastModified: new Date(),
-                      installationDate: new Date(),
-                      name: 'Development Protocol',
-                      description: 'This is the development protocol',
-                    }}
-                  />
-                </div>
-                {
-                  otherProtocols.length > 0 && (
-                    <div className="content-area__other">
-                      <h4>Use Other Protocol...</h4>
-                      <Scroller>
-                        <AnimatePresence>
-                          {
-                            Object.keys(otherProtocols).map((protocolUID) => {
-                              const {
-                                schemaVersion,
-                                lastModified,
-                                installationDate,
-                                name,
-                                description,
-                              } = installedProtocols[protocolUID];
-
-                              return (
-                                <ProtocolCard
-                                  key={protocolUID}
-                                  condensed
-                                  attributes={{
-                                    schemaVersion,
-                                    lastModified,
-                                    installationDate,
-                                    name,
-                                    description,
-                                  }}
-                                />
-                              );
-                            })
-                          }
-                        </AnimatePresence>
-                      </Scroller>
+            <React.Fragment>
+              <main className="interview-section__start-new">
+                <div className="content-area">
+                  <div className="content-area__last-used">
+                    <header>
+                      <h2>Start an Interview</h2>
+                    </header>
+                    <div className="last-used-wrapper">
+                      <ProtocolCard
+                        attributes={{
+                          schemaVersion: lastProtocol.schemaVersion,
+                          lastModified: lastProtocol.lastModified,
+                          installationDate: lastProtocol.installationDate,
+                          name: lastProtocol.name,
+                          description: lastProtocol.description,
+                        }}
+                      />
                     </div>
-                  )
-                }
-              </div>
-            </main>
+                  </div>
+                  {
+                    Object.keys(otherProtocols).length > 0 && (
+                      <div className="content-area__other">
+                        <h4>Use Other Protocol</h4>
+                        <Scroller>
+                          <AnimatePresence>
+                            {
+                              otherProtocols.map((protocol, protocolUID) => {
+                                const {
+                                  schemaVersion,
+                                  lastModified,
+                                  installationDate,
+                                  name,
+                                  description,
+                                } = installedProtocols[protocol];
+
+                                console.log('protocol', protocol, installedProtocols[protocol]);
+
+                                return (
+                                  <ProtocolCard
+                                    key={protocolUID}
+                                    condensed
+                                    attributes={{
+                                      schemaVersion,
+                                      lastModified,
+                                      installationDate,
+                                      name,
+                                      description,
+                                    }}
+                                  />
+                                );
+                              })
+                            }
+                          </AnimatePresence>
+                        </Scroller>
+                      </div>
+                    )
+                  }
+                </div>
+              </main>
+              <footer className="interview-section__manage-protocols">
+                <Button>Manage Protocols...</Button>
+              </footer>
+            </React.Fragment>
           )
         }
       </AnimatePresence>
@@ -83,6 +98,7 @@ const InterviewSection = (props) => {
         <div className="content-buttons">
           <GraphicButton
             color="sea-green"
+            onClick={toggleShowProtocolUrlForm}
           >
             <h3>Import</h3>
             <h2>From URL</h2>
@@ -119,11 +135,13 @@ function mapStateToProps(state) {
   return {
     installedProtocols: state.installedProtocols,
     paredServer: state.pairedServer,
+    showProtocolUrlForm: state.ui.showProtocolUrlForm,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
+    toggleShowProtocolUrlForm: () => dispatch(uiActions.toggle('showProtocolUrlForm')),
   };
 }
 

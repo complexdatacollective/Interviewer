@@ -18,3 +18,4 @@ export { default as BackgroundImage } from './BackgroundImage';
 export { default as Timeline } from './SessionPanel/SessionPanel';
 export { default as CategoricalItem } from './CategoricalItem';
 export { default as CloseButton } from './CloseButton';
+export { default as ExternalLink } from './ExternalLink';

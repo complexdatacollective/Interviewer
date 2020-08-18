@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { AnimatePresence } from 'framer-motion';
-import { GraphicButton } from '@codaco/ui';
+import { GraphicButton, Button } from '@codaco/ui';
 import { Section, DiscoveredServerList } from '.';
 import { Scroller } from '../../components';
 import { ProtocolCard } from '../../components/Cards';
@@ -21,6 +21,9 @@ const ServerSection = (props) => {
             <DiscoveredServerList />
           </div>
           <div className="content-area__buttons">
+            <Button color="platinum">Enter manual conection details</Button>
+            <Button color="neon-coral">Unpair</Button>
+            <Button>Fetch Protocol</Button>
           </div>
         </div>
       </main>
