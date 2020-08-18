@@ -59,50 +59,36 @@ const HeaderSection = (props) => {
             <motion.section className="start-screen-section welcome-section">
               <main>
                 <h2>Getting Started</h2>
-                <div className="welcome-item">
-                  <div className="welcome-item__action">
-                    <Button color="primary">Watch overview video</Button>
-                  </div>
-                  <div className="welcome-item__description">
-                    <p>
-                      If this is your first time using Network Canvas, please consider taking
-                      a moment to watch our overview video. It will introduce you to the key
-                      concepts of the Network Canvas project.
-                    </p>
-                  </div>
+                <div className="welcome-description">
+                  <p>
+                    If this is your first time using Network Canvas, please consider taking
+                    a moment to watch our overview video. It will introduce you to the key
+                    concepts of the Network Canvas project.
+                  </p>
+                  <p>
+                    For further detailed information, tutorials, videos, and information about
+                    collaboration, please visit our documentation website.
+                  </p>
+                  <p>
+                To get started right away, install one or more interview protocols
+                onto this device. For convenience, we have created a sample interview
+                protocol on the theme of &quot;public health&quot; research.
+                  </p>
                 </div>
-                <div className="welcome-item">
-                  <div className="welcome-item__action">
-                    <Button
-                      color="sea-serpent"
-                      onClick={() => openExternalLink('https://documentation.networkcanvas.com')}
-                    >
-                      Visit documentation website
-                    </Button>
-                  </div>
-                  <div className="welcome-item__description">
-                    <p>
-                      For further detailed information, tutorials, videos, and information about
-                      collaboration, please visit our documentation website.
-                    </p>
-                  </div>
-                </div>
-                <div className="welcome-item">
-                  <div className="welcome-item__action">
-                    <Button
-                      color="mustard"
-                      onClick={() => importProtocolFromURI('https://documentation.networkcanvas.com/protocols/Public%20Health%20Demo%20Protocol.netcanvas')}
-                    >
-                      Install sample protocol
-                    </Button>
-                  </div>
-                  <div className="welcome-item__description">
-                    <p>
-                  To get started right away, install one or more interview protocols
-                  onto this device. For convenience, we have created a sample interview
-                  protocol on the theme of &quot;public health&quot; research.
-                    </p>
-                  </div>
+                <div className="welcome-actions">
+                  <Button color="primary">Watch overview video</Button>
+                  <Button
+                    color="sea-serpent"
+                    onClick={() => openExternalLink('https://documentation.networkcanvas.com')}
+                  >
+                    Visit documentation website
+                  </Button>
+                  <Button
+                    color="mustard"
+                    onClick={() => importProtocolFromURI('https://documentation.networkcanvas.com/protocols/Public%20Health%20Demo%20Protocol.netcanvas')}
+                  >
+                    Install sample protocol
+                  </Button>
                 </div>
               </main>
               <motion.footer layout>

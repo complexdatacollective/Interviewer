@@ -134,7 +134,6 @@ const protocolNameFromFilename = (filename) => {
 const catchError = error => Promise.reject(error);
 
 const importProtocolFromURI = (uri, usePairedServer) => (dispatch, getState) => {
-  console.log('import url', uri, usePairedServer);
   let pairedServer;
   let protocolUid;
   let previousUid;
