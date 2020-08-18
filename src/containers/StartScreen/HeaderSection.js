@@ -19,9 +19,10 @@ const HeaderSection = (props) => {
 
   const start = {
     visible: {
-      height: 'auto',
+      height: '100%',
       opacity: 1,
       transition: {
+        delay: 1,
         type: 'spring',
       },
     },
@@ -50,14 +51,12 @@ const HeaderSection = (props) => {
       </Section>
       <AnimatePresence>
         { showGettingStarted && (
-          <Section className="start-screen-section welcome-section">
-            <motion.div
-              initial="hidden"
-              exit="hidden"
-              variants={start}
-              layout
-              className="welcome-section__content"
-            >
+          <motion.div
+            exit="hidden"
+            variants={start}
+            layout
+          >
+            <motion.section className="start-screen-section welcome-section">
               <main>
                 <h2>Getting Started</h2>
                 <div className="welcome-item">
@@ -106,18 +105,18 @@ const HeaderSection = (props) => {
                   </div>
                 </div>
               </main>
-            </motion.div>
-            <motion.footer layout>
-              <Checkbox
-                className="welcome-header__header-toggle"
-                label="Show 'getting started' card"
-                input={{
-                  checked: showGettingStarted,
-                }}
-                onChange={toggleShowGettingStarted}
-              />
-            </motion.footer>
-          </Section>
+              <motion.footer layout>
+                <Checkbox
+                  className="welcome-header__header-toggle"
+                  label="Show 'getting started' card"
+                  input={{
+                    checked: showGettingStarted,
+                  }}
+                  onChange={toggleShowGettingStarted}
+                />
+              </motion.footer>
+            </motion.section>
+          </motion.div>
         )}
       </AnimatePresence>
     </React.Fragment>

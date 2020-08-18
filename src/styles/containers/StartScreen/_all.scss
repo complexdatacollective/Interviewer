@@ -50,35 +50,32 @@
   background: var(--color-cyber-grape);
   width: 100%;
 
-  &__content {
+  > main {
+    padding: unit(4) unit(6);
+  }
+
+  .welcome-item {
     display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: center;
 
-    > main {
-      padding: unit(4) unit(6);
-    }
-
-    .welcome-item {
+    &__action {
+      flex: 0 0 25rem;
       display: flex;
-      flex-direction: row-reverse;
-      align-items: center;
-      justify-content: center;
+      margin-left: unit(2);
 
-      &__action {
-        flex: 0 0 20rem;
-        display: flex;
-        margin-left: unit(1);
-
-        > .button {
-          flex: 1;
-        }
+      > .button {
+        flex: 1;
       }
     }
   }
 
   footer {
     display: flex;
-    padding: unit(4) unit(6);
+    padding: unit(2) unit(6);
     justify-content: space-between;
+    background: var(--color-slate-blue--dark);
 
     > .switch {
       transform: scale(0.8);
@@ -91,7 +88,14 @@
   &__manage-protocols {
     background: var(--color-slate-blue--dark);
     padding: unit(2) unit(6);
-    text-align: right;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--color-white);
+
+    h2 {
+      margin: 0;
+    }
   }
 
   &__start-new {
@@ -104,16 +108,9 @@
         padding: unit(4) unit(6);
         flex: 1 1 auto;
 
-        .last-used-wrapper {
-          display: flex;
-          flex: 1;
-          justify-content: center;
-          align-items: center;
-
-          > .protocol-card {
-            margin: 0;
-            max-width: 35rem;
-          }
+        > .protocol-card {
+          margin: 0;
+          max-width: 35rem;
         }
       }
 
@@ -146,6 +143,7 @@
 
   &__install-section {
     background: var(--color-platinum);
+    padding: unit(4) unit(6);
 
     > .content-buttons {
       display: flex;

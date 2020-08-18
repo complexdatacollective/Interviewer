@@ -26,23 +26,22 @@ const InterviewSection = (props) => {
         {
           Object.keys(installedProtocols).length > 0 && (
             <React.Fragment>
+              <header className="interview-section__manage-protocols">
+                <h2>Start an Interview</h2>
+                <Button color="slate-blue" size="small">Manage Protocols...</Button>
+              </header>
               <main className="interview-section__start-new">
                 <div className="content-area">
                   <div className="content-area__last-used">
-                    <header>
-                      <h2>Start an Interview</h2>
-                    </header>
-                    <div className="last-used-wrapper">
-                      <ProtocolCard
-                        attributes={{
-                          schemaVersion: lastProtocol.schemaVersion,
-                          lastModified: lastProtocol.lastModified,
-                          installationDate: lastProtocol.installationDate,
-                          name: lastProtocol.name,
-                          description: lastProtocol.description,
-                        }}
-                      />
-                    </div>
+                    <ProtocolCard
+                      attributes={{
+                        schemaVersion: lastProtocol.schemaVersion,
+                        lastModified: lastProtocol.lastModified,
+                        installationDate: lastProtocol.installationDate,
+                        name: lastProtocol.name,
+                        description: lastProtocol.description,
+                      }}
+                    />
                   </div>
                   {
                     Object.keys(otherProtocols).length > 0 && (
@@ -84,9 +83,6 @@ const InterviewSection = (props) => {
                   }
                 </div>
               </main>
-              <footer className="interview-section__manage-protocols">
-                <Button>Manage Protocols...</Button>
-              </footer>
             </React.Fragment>
           )
         }
