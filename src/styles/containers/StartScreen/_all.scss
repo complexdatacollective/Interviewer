@@ -64,7 +64,7 @@
   }
 
   > main {
-    padding: unit(4) unit(6);
+    padding: unit(6);
   }
 
   .welcome-description {
@@ -75,7 +75,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-top: unit(2);
+    padding-top: unit(4);
 
     > .button {
       flex: 1;

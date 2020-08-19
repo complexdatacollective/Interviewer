@@ -2,34 +2,45 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button } from '@codaco/ui';
+import { isValid } from 'redux-form';
 import { Overlay } from '../../containers/Overlay';
 import { actionCreators as protocolActions } from '../../ducks/modules/importProtocol';
 import Form from '../Form';
+import { required, validateUrl } from '../../utils/Validations';
 
-const formConfig = {
-  formName: 'setup',
-  fields: [
-    {
-      label: 'Protocol URL',
-      name: 'protocol_url',
-      component: 'Text',
-      placeholder: 'Enter a valid URL...',
-      required: true,
-    },
-  ],
-};
+const FORM_NAME = 'import_protocol_url';
 
-const initialValues = {
-  protocol_url: 'https://',
-};
-
-const ProtocolUrlForm = ({ show, importProtocolFromURI, handleClose }) => {
+const ProtocolUrlForm = ({
+  show,
+  importProtocolFromURI,
+  handleClose,
+  submittable,
+}) => {
   const onClickImportRemoteProtocol = (fields) => {
-    console.log('onclick', fields, importProtocolFromURI);
     if (fields) {
-      importProtocolFromURI(fields.protocol_url);
-      handleClose();
+      importProtocolFromURI(fields.protocol_url).then(() => {
+        handleClose();
+      }, () => {
+        // Keep dialog open so user can retry after error.
+      });
     }
+  };
+
+  const formConfig = {
+    formName: FORM_NAME,
+    fields: [
+      {
+        label: 'Protocol URL',
+        name: 'protocol_url',
+        component: 'Text',
+        placeholder: 'Enter a valid URL...',
+        validate: [required('Please enter a URL here.'), validateUrl()],
+      },
+    ],
+  };
+
+  const initialValues = {
+    protocol_url: 'https://',
   };
 
   return (
@@ -47,10 +58,11 @@ const ProtocolUrlForm = ({ show, importProtocolFromURI, handleClose }) => {
           form={formConfig.formName}
           onSubmit={onClickImportRemoteProtocol}
           initialValues={initialValues}
+          autoFocus
           {...formConfig}
         >
           <div className="protocol-import--footer">
-            <Button aria-label="Submit" type="submit">
+            <Button aria-label="Submit" type="submit" disabled={!submittable}>
               Import
             </Button>
           </div>
@@ -74,6 +86,10 @@ const mapDispatchToProps = dispatch => ({
   importProtocolFromURI: uri => dispatch(protocolActions.importProtocolFromURI(uri)),
 });
 
+const mapStateToProps = state => ({
+  submittable: isValid(FORM_NAME)(state),
+});
+
 export { ProtocolUrlForm };
 
-export default connect(null, mapDispatchToProps)(ProtocolUrlForm);
+export default connect(mapStateToProps, mapDispatchToProps)(ProtocolUrlForm);

@@ -144,46 +144,52 @@ const importProtocolFromURI = (uri, usePairedServer) => (dispatch, getState) => 
     pairedServer = getState().pairedServer;
   }
 
-  dispatch(checkExistingProtocolAction());
-  return checkExistingProtocol(dispatch, getState(), protocolName)
-    .then((existingUid) => {
-      previousUid = existingUid;
-      dispatch(importProtocolStartAction());
-      dispatch(downloadProtocolAction());
-      return downloadProtocol(uri, pairedServer);
-    })
-    .then((tempLocation) => {
-      if (getState().importProtocol.step === 0) return cancelledImport();
-      dispatch(extractProtocolAction());
-      return extractProtocol(tempLocation);
-    }, catchError)
-    .then((protocolLocation) => {
-      protocolUid = protocolLocation;
-      if (getState().importProtocol.step === 0) return cancelledImport();
-      dispatch(parseProtocolAction());
-      return parseProtocol(protocolLocation, protocolName);
-    }, catchError)
-    .then((protocolContent) => {
-      if (getState().importProtocol.step === 0) return cancelledImport();
-      if (previousUid) {
-        return moveToExistingProtocol(previousUid, protocolContent);
-      }
-      return protocolContent;
-    })
-    .then((protocolContent) => {
-      if (getState().importProtocol.step === 0) return cancelledImport();
-      return dispatch(importProtocolCompleteAction(protocolContent));
-    }, catchError)
-    .catch(
-      (error) => {
-        if (protocolUid) cleanUpProtocol(protocolUid); // attempt to clean up files
-        if (error instanceof CancellationError) {
-          dispatch(resetImportAction());
-        } else {
-          dispatch(importProtocolFailedAction(error));
+  return new Promise((resolve, reject) => {
+    dispatch(checkExistingProtocolAction());
+
+    checkExistingProtocol(dispatch, getState(), protocolName)
+      .then((existingUid) => {
+        previousUid = existingUid;
+        dispatch(importProtocolStartAction());
+        dispatch(downloadProtocolAction());
+        return downloadProtocol(uri, pairedServer);
+      })
+      .then((tempLocation) => {
+        if (getState().importProtocol.step === 0) return cancelledImport();
+        dispatch(extractProtocolAction());
+        return extractProtocol(tempLocation);
+      }, catchError)
+      .then((protocolLocation) => {
+        protocolUid = protocolLocation;
+        if (getState().importProtocol.step === 0) return cancelledImport();
+        dispatch(parseProtocolAction());
+        return parseProtocol(protocolLocation, protocolName);
+      }, catchError)
+      .then((protocolContent) => {
+        if (getState().importProtocol.step === 0) return cancelledImport();
+        if (previousUid) {
+          return moveToExistingProtocol(previousUid, protocolContent);
         }
-      },
-    );
+        return protocolContent;
+      })
+      .then((protocolContent) => {
+        if (getState().importProtocol.step === 0) return cancelledImport();
+        dispatch(importProtocolCompleteAction(protocolContent));
+        resolve();
+      }, catchError)
+      .catch(
+        (error) => {
+          if (protocolUid) cleanUpProtocol(protocolUid); // attempt to clean up files
+          if (error instanceof CancellationError) {
+            dispatch(resetImportAction());
+          } else {
+            dispatch(importProtocolFailedAction(error));
+          }
+
+          reject();
+        },
+      );
+  });
 };
 
 const importProtocolFromFile = (filePath, name) => (dispatch, getState) => {
