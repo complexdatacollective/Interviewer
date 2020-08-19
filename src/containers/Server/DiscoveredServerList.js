@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Icon, Spinner, Scroller } from '@codaco/ui';
 import { ServerCard as UIServerCard } from '@codaco/ui/lib/components/Cards';
@@ -64,9 +62,9 @@ const DiscoveredServerList = () => {
       updateServerList(prevState => prevState.filter(item => (item.name !== response.name)));
     });
 
-    serverDiscoverer.on('SERVER_ERROR', (error) => {
-      console.log('server_error', error);
-      setError(error);
+    serverDiscoverer.on('SERVER_ERROR', (serverError) => {
+      console.log('server_error', serverError);
+      setError(serverError);
     });
 
     serverDiscoverer.init();
@@ -91,7 +89,7 @@ const DiscoveredServerList = () => {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   console.log('serverlist', serverList);
@@ -123,7 +121,7 @@ const DiscoveredServerList = () => {
       </div>
     </div>
   );
-}
+};
 
 DiscoveredServerList.defaultProps = {
 };

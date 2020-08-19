@@ -2,7 +2,6 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { connect } from 'react-redux';
 import { Button } from '@codaco/ui';
-import { Checkbox } from '@codaco/ui/lib/components/Fields';
 import { Section } from '.';
 import NCLogo from '../../images/NC-Round.svg';
 import { actionCreators as deviceSettingsActions } from '../../ducks/modules/deviceSettings';
@@ -79,9 +78,9 @@ const HeaderSection = (props) => {
                     collaboration, please visit our documentation website.
                   </p>
                   <p>
-                To get started right away, install one or more interview protocols
-                onto this device. For convenience, we have created a sample interview
-                protocol on the theme of &quot;public health&quot; research.
+                    To get started right away, install one or more interview protocols
+                    onto this device. For convenience, we have created a sample interview
+                    protocol on the theme of &quot;public health&quot; research.
                   </p>
                 </div>
                 <div className="welcome-actions">

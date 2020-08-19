@@ -21,7 +21,7 @@ const ProgressMessages = {
     statusText: 'Export finished.',
   },
   UnexpectedResponseMessage: 'Unexpected Response',
-  NoResponseMessage: 'Server could not be reached',
+  NoResponseMessage: 'Server could not be reached at the address you provided. Check your networking settings on this device, and on the computer running Server and try again. Consult our documentation on pairing for detailed information on this topic.',
 };
 
 const ApiErrorStatus = 'error';

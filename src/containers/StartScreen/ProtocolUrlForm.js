@@ -16,7 +16,7 @@ const ProtocolUrlForm = ({
   handleClose,
   submittable,
 }) => {
-  const onClickImportRemoteProtocol = (fields) => {
+  const handleSubmit = (fields) => {
     if (fields) {
       importProtocolFromURI(fields.protocol_url).then(() => {
         handleClose();
@@ -44,31 +44,29 @@ const ProtocolUrlForm = ({
   };
 
   return (
-    <React.Fragment>
-      <Overlay
-        show={show}
-        onClose={handleClose}
-        title="Import Protocol from URL"
+    <Overlay
+      show={show}
+      onClose={handleClose}
+      title="Import Protocol from URL"
+    >
+      <p>
+        Enter the full URL to a protocol file below, including <code>http://</code> or <code>https://</code> at the start.
+      </p>
+      <Form
+        className="protocol-url-form"
+        form={formConfig.formName}
+        onSubmit={handleSubmit}
+        initialValues={initialValues}
+        autoFocus
+        {...formConfig}
       >
-        <p>
-          Enter the full URL to a protocol file below, including <code>http://</code> or <code>https://</code> at the start.
-        </p>
-        <Form
-          className="protocol-url-form"
-          form={formConfig.formName}
-          onSubmit={onClickImportRemoteProtocol}
-          initialValues={initialValues}
-          autoFocus
-          {...formConfig}
-        >
-          <div className="protocol-import--footer">
-            <Button aria-label="Submit" type="submit" disabled={!submittable}>
-              Import
-            </Button>
-          </div>
-        </Form>
-      </Overlay>
-    </React.Fragment>
+        <div className="protocol-import--footer">
+          <Button aria-label="Submit" type="submit" disabled={!submittable}>
+            Import
+          </Button>
+        </div>
+      </Form>
+    </Overlay>
   );
 };
 

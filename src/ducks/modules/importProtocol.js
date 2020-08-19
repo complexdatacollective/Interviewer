@@ -175,7 +175,7 @@ const importProtocolFromURI = (uri, usePairedServer) => (dispatch, getState) => 
       .then((protocolContent) => {
         if (getState().importProtocol.step === 0) return cancelledImport();
         dispatch(importProtocolCompleteAction(protocolContent));
-        resolve();
+        return resolve();
       }, catchError)
       .catch(
         (error) => {

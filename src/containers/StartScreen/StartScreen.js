@@ -1,19 +1,15 @@
 import React from 'react';
 import { motion, AnimateSharedLayout } from 'framer-motion';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-
 
 import {
   ResumeSessionSection,
   HeaderSection,
   InterviewSection,
   ServerSection,
-  // ProtocolsOverlay,
-  // SessionsOverlay,
 } from '.';
 
-const StartScreen = (props) => {
+const StartScreen = () => {
   const opacity = {
     visible: {
       opacity: 1,
@@ -57,9 +53,7 @@ const mapDispatchToProps = {
 
 };
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-  };
-};
+const mapStateToProps = () => ({
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(StartScreen);

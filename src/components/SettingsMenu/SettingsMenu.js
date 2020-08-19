@@ -31,6 +31,26 @@ const SettingsMenu = (props) => {
     About,
   };
 
+  const baseVariants = {
+    show: {
+      opacity: 1,
+      transition: {
+        when: 'beforeChildren',
+        staggerChildren: 0.07,
+        duration: baseAnimationDuration,
+        easing: baseAnimationEasing,
+      },
+    },
+    hide: {
+      opacity: 0,
+      transition: {
+        when: 'afterChildren',
+        duration: baseAnimationDuration,
+        easing: baseAnimationEasing,
+      },
+    },
+  };
+
   const variants = {
     show: {
       x: '0%',
@@ -150,11 +170,15 @@ const SettingsMenu = (props) => {
       { settingsMenuOpen && (
         <motion.div
           className="settings-menu"
+          variants={baseVariants}
           animate="show"
-          exit="hide"
           initial="hide"
+          exit="hide"
         >
-          <article className="settings-menu__wrapper">
+          <motion.article
+            variants={baseVariants}
+            className="settings-menu__wrapper"
+          >
             <motion.nav
               variants={variants}
             >
@@ -171,7 +195,7 @@ const SettingsMenu = (props) => {
               { renderTabs }
               {/* </AnimatePresence> */}
             </motion.section>
-          </article>
+          </motion.article>
         </motion.div>
       )}
     </AnimatePresence>

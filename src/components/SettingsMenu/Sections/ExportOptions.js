@@ -64,7 +64,7 @@ const ExportOptions = (props) => {
             comes at the expense of robustness. If you enable this format, your networks will
             be exported as an <strong>attribute list file</strong> for each node type,
             an <strong>edge list file</strong> for each edge type, and an <strong>ego attribute
-            file</strong> that also contains session data.
+              file</strong> that also contains session data.
           </p>
         </div>
       </motion.article>
@@ -78,12 +78,12 @@ const ExportOptions = (props) => {
         <div>
           <h2>Merge Sessions</h2>
           <p>
-          If you enable this option, exporting multiple sessions at the same time will cause
-          them to be merged into a single file, on a per-protocol basis. In the case of CSV
-          export, you will receive one of each type of file for each protocol. In the case
-          of GraphML you will receive a single GraphML file with
-          multiple <code>graph</code> elements. Please note that most software does not yet
-          support multiple graphs in a single GraphML file.
+            If you enable this option, exporting multiple sessions at the same time will cause
+            them to be merged into a single file, on a per-protocol basis. In the case of CSV
+            export, you will receive one of each type of file for each protocol. In the case
+            of GraphML you will receive a single GraphML file with
+            multiple <code>graph</code> elements. Please note that most software does not yet
+            support multiple graphs in a single GraphML file.
           </p>
         </div>
       </motion.article>

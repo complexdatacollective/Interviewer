@@ -108,7 +108,8 @@
                 "scrollable",
                 "draggable",
                 "dyad",
-                "Dyad"
+                "Dyad",
+                "hostname"
              ],
              "skipIfMatch": [
                 "http(s)?://[^s]*",
