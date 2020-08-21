@@ -1,5 +1,5 @@
 /* globals device */
-import { isCordova, isElectron, isWindows } from './Environment';
+import { isCordova, isElectron } from './Environment';
 
 const versioned = name => `${name} - ${device.version || '?'}`;
 
@@ -77,14 +77,9 @@ const deviceDescription = () => {
 // Disable dynamic scaling on android because vmin is resized by software keyboard
 const shouldUseDynamicScaling = () => !isCordova();
 
-// Everything apart from Windows should start fullscreen. Windows full screen UI
-// is too confusing for users.
-const shouldStartFullScreen = () => !isWindows();
-
 export default deviceDescription;
 
 export {
   deviceDescription,
   shouldUseDynamicScaling,
-  shouldStartFullScreen,
 };

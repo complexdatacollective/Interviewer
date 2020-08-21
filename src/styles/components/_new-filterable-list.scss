@@ -1,0 +1,82 @@
+.new-filterable-list {
+  --transparent-background: #{transparentize(rgb(0, 0, 0), 0.8)};
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: var(--border-radius);
+  background: var(--transparent-background);
+
+  .card-list {
+    padding-bottom: 0;
+    padding-top: 1rem;
+  }
+
+  &__header {
+    display: flex;
+    flex: 0 1 auto;
+    align-items: center;
+    align-content: space-evenly;
+    justify-content: space-between;
+
+    &-section {
+
+      &--sort {
+        // display: flex;
+        overflow-x: auto;
+        flex: 1 1;
+        $opaque: rgba(0, 0, 0, 1);
+        $distance: unit(2);
+        -webkit-mask-image: linear-gradient(90deg, transparent, $opaque unit(2), $opaque calc(100% - #{unit(2)}), transparent 100%);
+
+        .scroll-container {
+          white-space: nowrap;
+          padding: unit(2);
+        }
+      }
+
+      &--filter {
+        flex: 0 0 auto;
+        padding-left: unit(2);
+      }
+
+      button {
+        margin: 0 1rem;
+      }
+
+      h4 {
+        display: inline;
+      }
+
+      .form-field-container {
+        display: inline-block;
+        margin: 0 1rem;
+      }
+
+      input {
+        margin-bottom: 0;
+      }
+
+      &__filter {
+        width: 13rem;
+
+        input {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+
+  &__main {
+    flex: 1 0;
+    display: flex;
+    flex-direction: column;
+
+    >.scrollable {
+      padding: unit(2) 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+  }
+}

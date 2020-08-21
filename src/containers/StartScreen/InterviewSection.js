@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Section } from '.';
-import { Scroller } from '../../components';
 import { ProtocolCard, SessionCard } from '../../components/Cards';
 import { actionCreators as sessionActions } from '../../ducks/modules/sessions';
 import { getLastActiveSession } from '../../selectors/session';
 import NewSessionOverlay from './NewSessionOverlay';
 import StackButton from '../../components/StackButton';
+import ResumeSessionOverlay from './ResumeSessionOverlay';
 
 const InterviewSection = (props) => {
   const {
@@ -79,7 +79,11 @@ const InterviewSection = (props) => {
                           cardColor="var(--color-platinum)"
                           insetColor="var(--color-slate-blue--dark)"
                         >
-                          <h3>+3 Sessions</h3>
+                          <h4>
+                            {
+                              (Object.keys(installedProtocols).length - 1) > 1 ? `+${Object.keys(sessions).length - 1} Protocols` : `+${Object.keys(sessions).length - 1} Protocol`
+                            }
+                          </h4>
                         </StackButton>
                       </div>
                     )
@@ -90,7 +94,7 @@ const InterviewSection = (props) => {
           )
         }
         { Object.keys(sessions).length > 0 && (
-          <motion.div  key="resume-section" layout>
+          <motion.div key="resume-section" layout>
             <main className="interview-section__resume-section">
               <div className="content-area">
                 <div className="content-area__last-session">
@@ -110,12 +114,17 @@ const InterviewSection = (props) => {
                       cardColor="var(--color-platinum)"
                       insetColor="var(--color-platinum--dark)"
                     >
-                      <h3>+3 Sessions</h3>
+                      <h4>
+                        {
+                          (Object.keys(sessions).length - 1) > 1 ? `+${Object.keys(sessions).length - 1} Interviews` : `+${Object.keys(sessions).length - 1} Interview`
+                        }
+                      </h4>
                     </StackButton>
                   </div>
                 )}
               </div>
             </main>
+            <ResumeSessionOverlay />
           </motion.div>
         )}
       </AnimatePresence>

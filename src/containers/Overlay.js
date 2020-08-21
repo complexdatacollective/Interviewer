@@ -24,17 +24,17 @@ const Overlay = (props) => {
 
   return (
     <Modal show={show} onBlur={onBlur}>
-      <div className={cx('overlay', { 'overlay--fullscreen': !forceDisableFullScreen && useFullScreenForms }, className)}>
+      <motion.div layout className={cx('overlay', { 'overlay--fullscreen': !forceDisableFullScreen && useFullScreenForms }, className)}>
         { title && (
           <div className="overlay__title">
             <h1>{title}</h1>
           </div>
         )}
-        <div className="overlay__content">
+        <motion.div layout className="overlay__content">
           {children}
-        </div>
+        </motion.div>
         <CloseButton className="overlay__close" onClick={onClose} />
-      </div>
+      </motion.div>
     </Modal>
   );
 };
