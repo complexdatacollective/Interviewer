@@ -3,9 +3,9 @@ import { motion, AnimateSharedLayout } from 'framer-motion';
 import { connect } from 'react-redux';
 
 import {
-  ResumeSessionSection,
   HeaderSection,
   InterviewSection,
+  ImportSection,
   ServerSection,
 } from '.';
 
@@ -34,7 +34,7 @@ const StartScreen = () => {
         >
           <HeaderSection />
           <InterviewSection />
-          <ResumeSessionSection />
+          <ImportSection />
           <ServerSection />
         </motion.div>
       </AnimateSharedLayout>

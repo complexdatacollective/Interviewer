@@ -7,21 +7,21 @@ import { PairingCodeLength } from 'secure-comms-api/pairingCodeConfig';
 import ApiClient from '../../utils/ApiClient';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { actionCreators as pairedServerActions } from '../../ducks/modules/pairedServer';
-import { Overlay } from '../Overlay';
 import PairingCodeInput from './PairingCodeInput';
+import { addSecureApiUrlToServer } from '../../utils/serverAddressing';
 
 const initialState = {
   loading: false,
   pairingCode: null,
   pairingRequestSalt: null,
   pairingRequestId: null,
+  submittable: false,
 };
 
 const PairingCodeDialog = (props) => {
   const {
-    show,
     server,
-    handleClose,
+    handleCancel,
     handleSuccess,
     openDialog,
     setPairedServer,
@@ -33,20 +33,27 @@ const PairingCodeDialog = (props) => {
     pairingCode,
     pairingRequestSalt,
     pairingRequestId,
+    submittable,
   }, setState,
   ] = useState(initialState);
 
-  const [submittable, setSubmittable] = useState(true);
-
-  let apiClient;
+  const apiClient = new ApiClient(server.pairingServiceUrl);
 
   const handleError = (error) => {
     openDialog({
       type: 'Error',
       error,
       confirmLabel: 'Okay',
-      onConfirm: handleClose,
+      onConfirm: handleCancel,
     });
+  };
+
+  const setPairingCode = (currentCode) => {
+    setState(prevState => ({
+      ...prevState,
+      pairingCode: currentCode,
+      submittable: currentCode.length === PairingCodeLength,
+    }));
   };
 
   const requestPairingCode = () => {
@@ -74,13 +81,13 @@ const PairingCodeDialog = (props) => {
     apiClient.confirmPairing(pairingCode, pairingRequestId, pairingRequestSalt, deviceName)
       .then((pairingInfo) => {
         const device = pairingInfo.device;
-        const server = addSecureApiUrlToServer({
+        const pairedServer = addSecureApiUrlToServer({
           ...props.server,
           securePort: pairingInfo.securePort,
           sslCertificate: pairingInfo.sslCertificate,
         });
         setState({ ...initialState });
-        setPairedServer(server, device.id, device.secret);
+        setPairedServer(pairedServer, device.id, device.secret);
       })
       .then(() => handleSuccess())
       .catch(err => handleError(err));
@@ -96,10 +103,7 @@ const PairingCodeDialog = (props) => {
   };
 
   useEffect(() => {
-    if (server) {
-      apiClient = new ApiClient(server.pairingServiceUrl);
-      requestPairingCode();
-    }
+    requestPairingCode();
 
     return () => {
       if (apiClient) {
@@ -109,72 +113,66 @@ const PairingCodeDialog = (props) => {
   }, [server]);
 
   return (
-    <Overlay title="Enter a Pairing Code" show={show} onClose={handleClose}>
-      <form
-        onSubmit={(evt) => {
-          evt.preventDefault();
-          // if (submittable) {
-          //   document.activeElement.blur(); // attempt to hide soft keyboard on tablet
-          //   this.setState({ submittable: false });
-
-          // }
-          // completePairing(pairingCode);
-        }}
-      >
-        <p>
-          You must pair this device with this Server before you can securely exchange data.
-          This is a one-off process that allows your devices to identify each other.
-        </p>
-        {
-          loading &&
-          <React.Fragment>
-            <strong>
+    <React.Fragment>
+      {
+        loading ?
+          <div className="pairing-form pairing-form--loading">
+            <p>
               Please acknowledge the pairing request within the Server app to continue.
-            </strong>
-            <div className="pairing-form__loading">
-              <Spinner small />
+            </p>
+            <div className="spinner-wrapper">
+              <Spinner />
             </div>
-          </React.Fragment>
-        }
-
-        { !loading &&
-          <React.Fragment>
-            <strong>
-              Please type the code shown on the Server setup screen into the box below
-            </strong>
-            <fieldset className="pairing-form__fields">
-              <PairingCodeInput
-                charCount={PairingCodeLength}
-                setPairingCode={completePairing}
-                // ref={this.inputRef}
-              />
-              <div className="protocol-import--footer">
-                <div>
-                  <Button color="platinum" type="button" onClick={handleClose}>
-                    Cancel
-                  </Button>
-                  <Button className="button button--primary pairing-form__submit" disabled={!submittable} type="submit">
-                    Submit Pairing Code
-                  </Button>
+          </div> :
+          <div className="pairing-form pairing-form--code-entry">
+            <p>
+              Please type the code shown on the Server setup screen into the box below.
+            </p>
+            <form
+              onSubmit={(evt) => {
+                evt.preventDefault();
+                if (submittable) {
+                  document.activeElement.blur(); // attempt to hide soft keyboard on tablet
+                  setState(prevState => ({
+                    ...prevState,
+                    submittable: false,
+                  }));
+                }
+                completePairing(pairingCode);
+              }}
+            >
+              <fieldset className="pairing-form__fields">
+                <PairingCodeInput
+                  charCount={PairingCodeLength}
+                  setPairingCode={setPairingCode}
+                  // ref={this.inputRef}
+                />
+                <div className="pairing-form__footer">
+                  <a
+                    // onClick={() => this.inputRef.current.clearForm()}
+                    className="pairing-code-clear"
+                  >
+                    Clear
+                  </a>
+                  <div className="pairing-form-buttons">
+                    <Button color="platinum" type="button" onClick={handleCancel}>
+                      Cancel
+                    </Button>
+                    <Button className="button button--primary pairing-form__submit" disabled={!submittable} type="submit">
+                      Submit Pairing Code
+                    </Button>
+                  </div>
                 </div>
-                <a
-                  // onClick={() => this.inputRef.current.clearForm()}
-                  className="pairing-code-input__clear pairing-code-input__clear--small"
-                >
-                  Clear
-                </a>
-              </div>
-
-            </fieldset>
-          </React.Fragment>
-        }
-      </form>
-    </Overlay>
+              </fieldset>
+            </form>
+          </div>
+      }
+    </React.Fragment>
   );
 };
 
 PairingCodeDialog.propTypes = {
-  handleClose: PropTypes.func.isRequired,
+  handleCancel: PropTypes.func.isRequired,
   handleSuccess: PropTypes.func.isRequired,
 };
 
@@ -185,7 +183,6 @@ PairingCodeDialog.defaultProps = {
 };
 
 const mapStateToProps = state => ({
-  // show: !!state.ui.showPairingCodeDialog,
   deviceName: state.deviceSettings.description,
 });
 

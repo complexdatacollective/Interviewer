@@ -1,6 +1,7 @@
 import React from 'react';
 import cx from 'classnames';
 import { connect } from 'react-redux';
+import { motion } from 'framer-motion';
 import PropTypes from 'prop-types';
 import { Modal } from '@codaco/ui';
 import { CloseButton } from '../components';
@@ -44,7 +45,7 @@ Overlay.propTypes = {
   title: PropTypes.string,
   show: PropTypes.bool,
   children: PropTypes.any,
-  useFullScreenForms: PropTypes.bool.isRequired,
+  useFullScreenForms: PropTypes.bool,
   forceDisableFullScreen: PropTypes.bool,
   className: PropTypes.string,
 };
@@ -57,6 +58,7 @@ Overlay.defaultProps = {
   show: false,
   children: null,
   forceDisableFullScreen: false,
+  useFullScreenForms: false,
 };
 
 export {

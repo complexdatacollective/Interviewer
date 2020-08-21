@@ -60,7 +60,7 @@ const ProtocolUrlForm = ({
         autoFocus
         {...formConfig}
       >
-        <div className="protocol-import--footer">
+        <div className="protocol-url-form__footer">
           <Button aria-label="Submit" type="submit" disabled={!submittable}>
             Import
           </Button>

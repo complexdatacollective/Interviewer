@@ -31,6 +31,8 @@ const SessionCard = (props) => {
     setSession(sessionUUID);
   };
 
+  console.log('sessioncard', props);
+
   return (
     <UISessionCard
       caseId={caseId}
@@ -53,6 +55,7 @@ SessionCard.defaultProps = {
 };
 
 const mapStateToProps = (state, props) => {
+  console.log('mmm', state, props);
   const session = state.sessions[props.sessionUUID];
   const protocol = get(state.installedProtocols, [session.protocolUID]);
 
