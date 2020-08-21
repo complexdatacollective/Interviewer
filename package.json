@@ -34,9 +34,9 @@
     "generate-icons": "node scripts/generate-app-icons.js",
     "dist:android": "npm run build:android && cordova build android --release",
     "dist:ios": "npm run build:ios && cordova build ios --release --buildFlag='-UseModernBuildSystem=0' --developmentTeam=85EZ69PQHJ --target=\"iPad-Pro--12-9-inch---3rd-generation-, 13.1\"",
-    "dist:linux": "npm run build:electron && electron-builder -l --publish=always",
-    "dist:mac": "npm run build:electron && electron-builder -m --publish=always",
-    "dist:win": "npm run build:electron && electron-builder -w --publish=always",
+    "dist:linux": "npm run build:electron && electron-builder -l",
+    "dist:mac": "npm run build:electron && electron-builder -m",
+    "dist:win": "npm run build:electron && electron-builder -w",
     "bump": "sh scripts/bump",
     "preflight": "npm run lint -- --max-warnings 0 && npm run sass-lint -- --max-warnings 0 && npm test -- --coverage"
   },
