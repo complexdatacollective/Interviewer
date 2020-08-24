@@ -18,7 +18,7 @@ const fifo = ({ createdIndex }) => createdIndex;
  * at: `codebook.node[nodeType]variables`
  * TODO: Use variable registry to respect variable type?
  */
-const sortOrder = (sortConfig = [], codebook = {}) => { // eslint-disable-line
+const sortOrder = (sortConfig = [], codebook = {}, attributePath = entityAttributesProperty) => { // eslint-disable-line
   // '*' is a special prop to sort by the order in which nodes were added to the network
   const isFifoLifo = rule => rule.property === '*';
 
@@ -36,13 +36,15 @@ const sortOrder = (sortConfig = [], codebook = {}) => { // eslint-disable-line
       ));
   }
 
+  const rulePath = rule => (attributePath ? `${attributePath}.${rule.property}` : rule.property);
+
   /**
    * Returns a list of sorted items
    * @param {array} items - A list of items (nodes) to be sorted
    */
   return items => orderBy(
     items,
-    sortRules.map(rule => `${entityAttributesProperty}.${rule.property}`),
+    sortRules.map(rulePath),
     orders,
   );
 };

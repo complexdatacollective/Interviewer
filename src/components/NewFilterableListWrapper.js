@@ -1,21 +1,19 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { get } from 'lodash';
+import objectHash from 'object-hash';
+import { motion, AnimatePresence } from 'framer-motion';
 import PropTypes from 'prop-types';
 import { Button } from '@codaco/ui';
 import { Text } from '@codaco/ui/lib/components/Fields';
 import Scroller from './Scroller';
 import { entityAttributesProperty } from '../ducks/modules/network';
 import sortOrder from '../utils/sortOrder';
-import { selectable } from '../behaviours';
-import {
-  DragSource,
-} from '../behaviours/DragAndDrop';
 
 const NewFilterableListWrapper = (props) => {
   const {
     items,
+    propertyPath,
     ItemComponent,
-    itemProperties,
     initialSortProperty,
     initialSortDirection,
     sortableProperties,
@@ -39,7 +37,7 @@ const NewFilterableListWrapper = (props) => {
   const sortedItems = sortOrder([{
     property: sortProperty,
     direction: sortAscending ? 'asc' : 'desc',
-  }])(items);
+  }], {}, propertyPath)(items);
 
   const getFilteredAndSortedItemList = () => {
     if (!filterTerm) { return sortedItems; }
@@ -48,7 +46,9 @@ const NewFilterableListWrapper = (props) => {
 
     return sortedItems.filter(
       (item) => {
-        const itemAttributes = Object.values(item[entityAttributesProperty]);
+        const itemAttributes =
+          propertyPath ? Object.values(get(item, propertyPath, {}))
+            : Object.values(item);
         // Include in filtered list if any of the attribute property values
         // include the filter value
         return itemAttributes.some(
@@ -98,14 +98,21 @@ const NewFilterableListWrapper = (props) => {
       </header>
       <main className="new-filterable-list__main">
         <Scroller>
-          {
-            getFilteredAndSortedItemList().map((item, index) => {
-              const EnhancedItem = DragSource(selectable(ItemComponent));
-              return (
-                <EnhancedItem {...item} {...itemProperties} key={index} />
-              );
-            })
-          }
+          <AnimatePresence>
+            {
+              getFilteredAndSortedItemList().map((item, index) => (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0 }}
+                  key={objectHash(item)}
+                  layout
+                >
+                  <ItemComponent {...item} />
+                </motion.div>
+              ))
+            }
+          </AnimatePresence>
         </Scroller>
       </main>
     </motion.div>
@@ -114,8 +121,8 @@ const NewFilterableListWrapper = (props) => {
 
 NewFilterableListWrapper.propTypes = {
   ItemComponent: PropTypes.elementType.isRequired,
-  itemProperties: PropTypes.object,
   items: PropTypes.array.isRequired,
+  propertyPath: PropTypes.string,
   initialSortProperty: PropTypes.string.isRequired,
   initialSortDirection: PropTypes.oneOf(['asc', 'desc']),
   sortableProperties: PropTypes.array,
@@ -123,7 +130,7 @@ NewFilterableListWrapper.propTypes = {
 
 NewFilterableListWrapper.defaultProps = {
   initialSortDirection: 'asc',
-  itemProperties: null,
+  propertyPath: entityAttributesProperty,
   sortableProperties: [],
 };
 

@@ -2,12 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { isEmpty } from 'lodash';
+import { isEmpty, get } from 'lodash';
+import { SessionCard } from '@codaco/ui/lib/components/Cards';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { NewFilterableListWrapper } from '../../components';
-import { SessionCard } from '../../components/Cards';
+
 import { Overlay } from '../Overlay';
+import { entityAttributesProperty } from '../../ducks/modules/network';
 
 const oneBasedIndex = i => parseInt(i || 0, 10) + 1;
 
@@ -23,14 +25,28 @@ const emptyView = (
   </div>
 );
 
-const SessionList = ({ sessions }) => {
+const SessionList = ({ sessions, installedProtocols }) => {
   if (isEmpty(sessions)) {
     return emptyView;
   }
 
-  const newSessions = [...Object.keys(sessions)].map(sessionUUID => ({
-    sessionUUID,
-  }));
+  const newSessions = [...Object.keys(sessions)].map((sessionUUID) => {
+    const session = sessions[sessionUUID];
+    const protocol = get(installedProtocols, [session.protocolUID]);
+
+    const progress = Math.round(
+      (oneBasedIndex(session.stageIndex) / oneBasedIndex(protocol.stages.length)) * 100,
+    );
+
+    return {
+      caseId: session.caseId,
+      startedAt: session.startedAt,
+      updatedAt: session.updatedAt,
+      protocolName: protocol.name,
+      progress,
+      onClickHandler: () => console.log('cleek'),
+    };
+  });
 
   return (
     <Overlay
@@ -41,6 +57,13 @@ const SessionList = ({ sessions }) => {
       <NewFilterableListWrapper
         ItemComponent={SessionCard}
         items={newSessions}
+        // itemPropertyFormatter={item => ({
+        //   ...item,
+        //   [entityAttributesProperty]: {
+        //     ...item,
+        //   },
+        // })}
+        propertyPath={null}
         initialSortProperty="updatedAt"
         initialSortDirection="desc"
         sortableProperties={[
@@ -69,6 +92,7 @@ SessionList.propTypes = {
 function mapStateToProps(state) {
   return {
     sessions: state.sessions,
+    installedProtocols: state.installedProtocols,
   };
 }
 
