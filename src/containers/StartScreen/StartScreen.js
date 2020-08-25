@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion, AnimateSharedLayout } from 'framer-motion';
 import { connect } from 'react-redux';
-
+import { Redirect } from 'react-router-dom';
 import {
   HeaderSection,
   InterviewSection,
@@ -9,7 +9,11 @@ import {
   ServerSection,
 } from '.';
 
-const StartScreen = () => {
+
+const StartScreen = ({
+  activeSessionId,
+  sessions,
+}) => {
   const opacity = {
     visible: {
       opacity: 1,
@@ -22,6 +26,14 @@ const StartScreen = () => {
       opacity: 0,
     },
   };
+
+  if (activeSessionId) {
+    console.log('a', activeSessionId, sessions);
+    const stageIndex = sessions[activeSessionId].stageIndex;
+    const pathname = `/session/${activeSessionId}/${stageIndex}`;
+    console.log('active', activeSessionId, stageIndex, pathname);
+    return (<Redirect to={{ pathname: `${pathname}` }} />);
+  }
 
   return (
     <div className="start-screen">
@@ -53,7 +65,10 @@ const mapDispatchToProps = {
 
 };
 
-const mapStateToProps = () => ({
+const mapStateToProps = state => ({
+  activeSessionId: state.activeSessionId,
+  sessions: state.sessions,
+
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(StartScreen);

@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import { actionCreators as resetActions } from './reset';
 import { actionCreators as importProtocolActions } from './importProtocol';
 import { actionCreators as sessionActions } from './sessions';

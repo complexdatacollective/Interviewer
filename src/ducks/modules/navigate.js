@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import { isStageSkipped } from '../../selectors/skip-logic';
 import { getSessionPath, getSessionProgress } from '../../selectors/session';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';

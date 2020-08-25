@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withHandlers, compose } from 'recompose';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import { motion } from 'framer-motion';
 import { Button } from '@codaco/ui/lib/components';
 import { Number } from '@codaco/ui/lib/components/Fields';

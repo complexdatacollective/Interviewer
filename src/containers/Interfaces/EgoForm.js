@@ -184,7 +184,7 @@ const mapDispatchToProps = {
   openDialog: dialogActions.openDialog,
 };
 
-const withStore = connect(mapStateToProps, mapDispatchToProps, null, { withRef: true });
+const withStore = connect(mapStateToProps, mapDispatchToProps);
 
 export { EgoForm };
 

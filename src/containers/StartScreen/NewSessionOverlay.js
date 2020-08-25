@@ -43,7 +43,6 @@ class NewSessionOverlay extends Component {
       <Overlay
         show={show}
         title="Enter a Case ID"
-        ref={this.overlay}
         onClose={onClose}
         forceDisableFullScreen
       >
