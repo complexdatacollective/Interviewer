@@ -36,7 +36,7 @@ const ServerSection = (props) => {
           </div>
           <div className="content-area__buttons">
             { !pairedServer ? (
-              <Button color="platinum" onClick={toggleShowServerAddressForm}>Provide manual connection details</Button>
+              <Button color="platinum" onClick={toggleShowServerAddressForm}>Provide manual connection details...</Button>
             ) : [
               <Button color="mustard--dark">Unpair</Button>,
               <Button color="platinum">Fetch Protocol</Button>,

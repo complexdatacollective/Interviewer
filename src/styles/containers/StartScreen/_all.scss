@@ -88,12 +88,10 @@
 
 .interview-section {
   &__manage-protocols {
-    background: #cccccc;
     padding: unit(2) unit(6);
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    color: var(--color-white);
 
     h2 {
       margin: 0;
@@ -103,7 +101,7 @@
   &__start-new {
     padding: 0 !important;
     background: var(--color-panel-grey);
-
+    color: var(--text-dark);
     .content-area {
       display: flex;
 
@@ -121,8 +119,7 @@
         flex: 0 1 40%;
         display: flex;
         flex-direction: column;
-        padding: unit(4) unit(6);
-        background: #ccc;
+        margin-top: 1.8rem;
 
         .stack-button {
           h4 {
@@ -135,8 +132,8 @@
 
   &__resume-section {
     padding: 0 !important;
-    background: var(--color-slate-blue);
-    color: var(--color-white);
+    background: #cccccc;
+    color: var(--text-dark);
 
     .content-area {
       display: flex;
@@ -155,21 +152,27 @@
         flex: 0 1 40%;
         display: flex;
         flex-direction: column;
-        padding: unit(4) unit(6);
-        background: #555bbc;
+        margin-top: 1.8rem;
+
+        .stack-button {
+          h4 {
+            color: var(--text-dark);
+          }
+        }
       }
     }
   }
 }
 
 .import-section {
+  background: var(--color-slate-blue);
+
   &__manage-protocols {
-    background: #cccccc;
+    background: var(--color-slate-blue--dark);
     padding: unit(2) unit(6);
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    color: var(--color-white);
 
     h2 {
       margin: 0;
@@ -177,8 +180,8 @@
   }
 
   &__install-section {
-    background: var(--color-panel-grey);
     padding: unit(4) unit(6);
+    color: var(--color-white);
 
     > .content-buttons {
       display: flex;
@@ -479,9 +482,7 @@
   justify-content: center;
   flex-direction: column;
   color: white;
-  padding: unit(2);
   height: 100%;
-  border-radius: 0.75rem;
   cursor: pointer;
 
   &__label {

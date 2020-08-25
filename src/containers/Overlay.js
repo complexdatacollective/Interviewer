@@ -1,7 +1,6 @@
 import React from 'react';
 import cx from 'classnames';
 import { connect } from 'react-redux';
-import { motion } from 'framer-motion';
 import PropTypes from 'prop-types';
 import { Modal } from '@codaco/ui';
 import { CloseButton } from '../components';

@@ -4,10 +4,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Section } from '.';
 import { ProtocolCard, SessionCard } from '../../components/Cards';
 import { actionCreators as sessionActions } from '../../ducks/modules/sessions';
+import { actionCreators as uiActions } from '../../ducks/modules/ui';
 import { getLastActiveSession } from '../../selectors/session';
 import NewSessionOverlay from './NewSessionOverlay';
 import StackButton from '../../components/StackButton';
-import ResumeSessionOverlay from './ResumeSessionOverlay';
+import ResumeSessionPicker from './ResumeSessionPicker';
 
 const InterviewSection = (props) => {
   const {
@@ -15,6 +16,8 @@ const InterviewSection = (props) => {
     sessions,
     lastActiveSession,
     addSession,
+    showResumeSessionPicker,
+    toggleShowResumeSessionPicker,
   } = props;
 
   const lastActiveProtocol = {
@@ -81,7 +84,7 @@ const InterviewSection = (props) => {
                         >
                           <h4>
                             {
-                              (Object.keys(installedProtocols).length - 1) > 1 ? `+${Object.keys(sessions).length - 1} Protocols` : `+${Object.keys(sessions).length - 1} Protocol`
+                              (Object.keys(installedProtocols).length - 1) > 1 ? `+${Object.keys(installedProtocols).length - 1} Protocols` : `+${Object.keys(installedProtocols).length - 1} Protocol`
                             }
                           </h4>
                         </StackButton>
@@ -90,6 +93,11 @@ const InterviewSection = (props) => {
                   }
                 </div>
               </main>
+              <NewSessionOverlay
+                handleSubmit={handleCreateSession}
+                onClose={handleCloseOverlay}
+                show={showNewSessionOverlay}
+              />
             </motion.div>
           )
         }
@@ -113,6 +121,7 @@ const InterviewSection = (props) => {
                       label="Resume other interview"
                       cardColor="var(--color-platinum)"
                       insetColor="var(--color-platinum--dark)"
+                      clickHandler={toggleShowResumeSessionPicker}
                     >
                       <h4>
                         {
@@ -124,15 +133,13 @@ const InterviewSection = (props) => {
                 )}
               </div>
             </main>
-            <ResumeSessionOverlay />
+            <ResumeSessionPicker
+              show={showResumeSessionPicker}
+              onClose={toggleShowResumeSessionPicker}
+            />
           </motion.div>
         )}
       </AnimatePresence>
-      <NewSessionOverlay
-        handleSubmit={handleCreateSession}
-        onClose={handleCloseOverlay}
-        show={showNewSessionOverlay}
-      />
     </Section>
   );
 };
@@ -147,6 +154,8 @@ function mapStateToProps(state) {
   return {
     installedProtocols: state.installedProtocols,
     showProtocolUrlForm: state.ui.showProtocolUrlForm,
+    showNewSessionOverlay: state.ui.showNewSessionOverlay,
+    showResumeSessionPicker: state.ui.showResumeSessionPicker,
     sessions: state.sessions,
     lastActiveSession: getLastActiveSession(state),
   };
@@ -155,6 +164,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     addSession: (caseId, protocol) => dispatch(sessionActions.addSession(caseId, protocol)),
+    toggleShowResumeSessionPicker: () => dispatch(uiActions.toggle('showResumeSessionPicker')),
   };
 }
 

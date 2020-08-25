@@ -71,8 +71,11 @@
     flex: 1 0;
     display: flex;
     flex-direction: column;
+    height: 60vh;
 
-    >.scrollable {
+    >.test {
+      height: 100%;
+      overflow-y: auto;
       padding: unit(2) 0;
       display: grid;
       grid-template-columns: 1fr 1fr;

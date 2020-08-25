@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { get } from 'lodash';
 import objectHash from 'object-hash';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, AnimateSharedLayout } from 'framer-motion';
 import PropTypes from 'prop-types';
 import { Button } from '@codaco/ui';
 import { Text } from '@codaco/ui/lib/components/Fields';
-import Scroller from './Scroller';
 import { entityAttributesProperty } from '../ducks/modules/network';
 import sortOrder from '../utils/sortOrder';
 
@@ -58,8 +57,41 @@ const NewFilterableListWrapper = (props) => {
     );
   };
 
+  const containerVariants = {
+    visible: {
+      opacity: 1,
+      transition: {
+        when: 'beforeChildren',
+        staggerChildren: 0.1,
+      },
+    },
+    hidden: {
+      opacity: 0,
+      transition: {
+        when: 'afterChildren',
+      },
+    },
+  };
+
+  const itemVariants = {
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: 'spring',
+      },
+    },
+    hidden: {
+      opacity: 0,
+      y: 25,
+      transition: {
+        type: 'spring',
+      },
+    },
+  };
+
   return (
-    <motion.div
+    <div
       className="new-filterable-list"
     >
       <header className="new-filterable-list__header">
@@ -97,25 +129,31 @@ const NewFilterableListWrapper = (props) => {
         </section>
       </header>
       <main className="new-filterable-list__main">
-        <Scroller>
-          <AnimatePresence>
-            {
-              getFilteredAndSortedItemList().map((item, index) => (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0 }}
-                  key={objectHash(item)}
-                  layout
-                >
-                  <ItemComponent {...item} />
-                </motion.div>
-              ))
-            }
-          </AnimatePresence>
-        </Scroller>
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="test"
+        >
+          <AnimateSharedLayout>
+            <AnimatePresence>
+              {
+                getFilteredAndSortedItemList().map(item => (
+                  <motion.div
+                    variants={itemVariants}
+                    key={objectHash(item)}
+                    layout
+                  >
+                    <ItemComponent {...item} />
+                  </motion.div>
+                ))
+              }
+            </AnimatePresence>
+          </AnimateSharedLayout>
+
+        </motion.div>
       </main>
-    </motion.div>
+    </div>
   );
 };
 

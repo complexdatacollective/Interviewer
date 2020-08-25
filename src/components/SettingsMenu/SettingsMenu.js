@@ -20,7 +20,7 @@ const SettingsMenu = (props) => {
     settingsMenuOpen,
   } = props;
 
-  const baseAnimationDuration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
+  const getAnimationDuration = variable => getCSSVariableAsNumber(variable) / 1000;
   const baseAnimationEasing = getCSSVariableAsString('--animation-easing-json');
 
   const tabs = {
@@ -37,7 +37,7 @@ const SettingsMenu = (props) => {
       transition: {
         when: 'beforeChildren',
         staggerChildren: 0.07,
-        duration: baseAnimationDuration,
+        duration: getAnimationDuration('--animation-duration-very-fast-ms'),
         easing: baseAnimationEasing,
       },
     },
@@ -45,7 +45,7 @@ const SettingsMenu = (props) => {
       opacity: 0,
       transition: {
         when: 'afterChildren',
-        duration: baseAnimationDuration,
+        duration: getAnimationDuration('--animation-duration-very-fast-ms'),
         easing: baseAnimationEasing,
       },
     },
@@ -56,8 +56,8 @@ const SettingsMenu = (props) => {
       x: '0%',
       transition: {
         when: 'beforeChildren',
-        staggerChildren: 0.07,
-        duration: baseAnimationDuration,
+        staggerChildren: 0.2,
+        duration: getAnimationDuration('--animation-duration-standard-ms'),
         easing: baseAnimationEasing,
       },
     },
@@ -67,7 +67,7 @@ const SettingsMenu = (props) => {
         when: 'afterChildren',
         staggerChildren: 0.05,
         staggerDirection: -1,
-        duration: baseAnimationDuration,
+        duration: getAnimationDuration('--animation-duration-standard-ms'),
         easing: baseAnimationEasing,
       },
     },
@@ -75,18 +75,17 @@ const SettingsMenu = (props) => {
 
   const navVariants = {
     show: {
-      y: '0%',
+      x: '0%',
       opacity: 1,
       transition: {
-        duration: baseAnimationDuration,
-        easing: baseAnimationEasing,
+        type: 'spring',
       },
     },
     hide: {
-      y: '20%',
+      x: '-10%',
       opacity: 0,
       transition: {
-        duration: baseAnimationDuration,
+        duration: getAnimationDuration('--animation-duration-very-fast-ms'),
         easing: baseAnimationEasing,
       },
     },
@@ -97,8 +96,8 @@ const SettingsMenu = (props) => {
       opacity: 1,
       transition: {
         when: 'beforeChildren',
-        duration: baseAnimationDuration,
-        delay: baseAnimationDuration,
+        duration: getAnimationDuration('--animation-duration-very-fast-ms'),
+        delay: getAnimationDuration('--animation-duration-standard-ms'),
         easing: baseAnimationEasing,
       },
     },
@@ -106,7 +105,7 @@ const SettingsMenu = (props) => {
       opacity: 0,
       transition: {
         when: 'afterChildren',
-        duration: baseAnimationDuration,
+        duration: getAnimationDuration('--animation-duration-standard-ms'),
         easing: baseAnimationEasing,
       },
     },
@@ -116,17 +115,17 @@ const SettingsMenu = (props) => {
     hidden: {
       opacity: 0,
       transition: {
-        staggerChildren: 0.05,
+        staggerChildren: 0.1,
         staggerDirection: -1,
-        duration: baseAnimationDuration,
+        duration: getAnimationDuration('--animation-duration-very-fast-ms'),
       },
     },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.05,
+        staggerChildren: 0.1,
         delayChildren: 0.2,
-        duration: baseAnimationDuration,
+        duration: getAnimationDuration('--animation-duration-very-fast-ms'),
       },
     },
   };

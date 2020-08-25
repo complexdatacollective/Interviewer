@@ -25,7 +25,7 @@ const emptyView = (
   </div>
 );
 
-const SessionList = ({ sessions, installedProtocols }) => {
+const ResumeSessionPicker = ({ show, onClose, sessions, installedProtocols }) => {
   if (isEmpty(sessions)) {
     return emptyView;
   }
@@ -50,19 +50,13 @@ const SessionList = ({ sessions, installedProtocols }) => {
 
   return (
     <Overlay
-      show
-      onClose={() => {}}
+      show={show}
+      onClose={onClose}
       title="Select an Interview to Resume"
     >
       <NewFilterableListWrapper
         ItemComponent={SessionCard}
         items={newSessions}
-        // itemPropertyFormatter={item => ({
-        //   ...item,
-        //   [entityAttributesProperty]: {
-        //     ...item,
-        //   },
-        // })}
         propertyPath={null}
         initialSortProperty="updatedAt"
         initialSortDirection="desc"
@@ -85,7 +79,7 @@ const SessionList = ({ sessions, installedProtocols }) => {
   );
 };
 
-SessionList.propTypes = {
+ResumeSessionPicker.propTypes = {
   sessions: PropTypes.object.isRequired,
 };
 
@@ -101,4 +95,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SessionList);
+export default connect(mapStateToProps, mapDispatchToProps)(ResumeSessionPicker);

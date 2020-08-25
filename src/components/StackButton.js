@@ -34,9 +34,10 @@ const StackOfCards = ({ children, ...rest }) => (
   </motion.div>
 );
 
-const StackButton = ({ cardColor, insetColor, label, children }) => (
+const StackButton = ({ cardColor, insetColor, label, children, clickHandler }) => (
   <motion.div
     className="stack-button"
+    onClick={clickHandler}
   >
     <h4 className="stack-button__label">{label}</h4>
     <StackOfCards cardColor={cardColor} insetColor={insetColor}>
