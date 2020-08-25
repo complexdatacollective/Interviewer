@@ -22,17 +22,13 @@ function mapStateToProps(state) {
 // If there is an activeSessionId, redirect to it
 let SetupRequiredRoute = (
   { component: Component, sessionId, ...rest },
-) => {
-  console.log('setuprequiredroute', sessionId);
-  return (
-    sessionId ? (
-      <Redirect to={{ pathname: `/session/${sessionId}/0` }} {...rest} />
-    ) : (
-      <Redirect to={{ pathname: '/setup' }} />
-    )
-  );
-};
-
+) => (
+  sessionId ? (
+    <Redirect to={{ pathname: `/session/${sessionId}/0` }} {...rest} />
+  ) : (
+    <Redirect to={{ pathname: '/setup' }} />
+  )
+);
 
 SetupRequiredRoute.propTypes = {
   component: PropTypes.func.isRequired,
@@ -41,34 +37,14 @@ SetupRequiredRoute.propTypes = {
 
 SetupRequiredRoute = connect(mapStateToProps)(SetupRequiredRoute);
 
-const Test = ({
-  activeSessionId,
-}) => {
-  console.log('its alive', activeSessionId);
-  return (
-    <Switch dirty={activeSessionId}>
-      <SetupRequiredRoute exact path="/session" component={ProtocolScreen} />
-      <LoadParamsRoute path="/session/:sessionId/:stageIndex" component={ProtocolScreen} />
-      <LoadParamsRoute path="/session/:sessionId" component={ProtocolScreen} />
-      <LoadParamsRoute path="/reset" shouldReset component={Redirect} to={{ pathname: '/start' }} />
-      <Route path="/start" component={StartScreen} />
-      <Redirect to={{ pathname: '/start' }} />
-    </Switch>
-  );
-};
-
-const Test2 = connect(mapStateToProps)(Test);
-
-export default Test2;
-
-// export default () => (
-//   <Switch>
-//     <SetupRequiredRoute exact path="/session" component={ProtocolScreen} />
-//     <LoadParamsRoute path="/session/:sessionId/:stageIndex" component={ProtocolScreen} />
-//     <LoadParamsRoute path="/session/:sessionId" component={ProtocolScreen} />
-//     <LoadParamsRoute path="/reset" shouldReset component={Redirect} to={{ pathname: '/start' }} />
-//     <Route path="/start" component={StartScreen} />
-//     <Redirect to={{ pathname: '/start' }} />
-//   </Switch>
-// );
+export default () => (
+  <Switch>
+    <SetupRequiredRoute exact path="/session" component={ProtocolScreen} />
+    <LoadParamsRoute path="/session/:sessionId/:stageIndex" component={ProtocolScreen} />
+    <LoadParamsRoute path="/session/:sessionId" component={ProtocolScreen} />
+    <LoadParamsRoute path="/reset" shouldReset component={Redirect} to={{ pathname: '/start' }} />
+    <Route path="/start" component={StartScreen} />
+    <Redirect to={{ pathname: '/start' }} />
+  </Switch>
+);
 

@@ -96,9 +96,11 @@ const SessionInformation = (props) => {
             newCaseID: caseId,
           }}
         >
-          <Button aria-label="Submit" type="submit">
-            Update Case ID
-          </Button>
+          <div className="case-id-form__footer">
+            <Button aria-label="Submit" type="submit">
+              Update Case ID
+            </Button>
+          </div>
         </Form>
       </Overlay>
       <Scroller>

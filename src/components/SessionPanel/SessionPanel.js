@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'recompose';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, AnimateSharedLayout } from 'framer-motion';
 import { getCSSVariableAsNumber, getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
 import { DropObstacle } from '../../behaviours/DragAndDrop';
 import StagesMenu from '../StagesMenu/StagesMenu';
@@ -33,7 +33,7 @@ const SessionPanel = React.forwardRef((props, ref) => {
     : <StagesMenu setExpanded={setExpanded} onStageSelect={props.onStageSelect} key="stages-menu" />;
 
   return (
-    <React.Fragment>
+    <AnimateSharedLayout>
       <AnimatePresence>
         { expanded && (<BackgroundDimmer clickHandler={resetMenuState} ><CloseButton onClick={() => setExpanded(false)} className="close-button-wrapper" /></BackgroundDimmer>)}
       </AnimatePresence>
@@ -71,7 +71,7 @@ const SessionPanel = React.forwardRef((props, ref) => {
           />
         ) }
       </motion.div>
-    </React.Fragment>
+    </AnimateSharedLayout>
   );
 });
 

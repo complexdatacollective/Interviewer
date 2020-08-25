@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Icon, ProgressBar } from '@codaco/ui';
-import { motion, useInvertedScale } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 const SessionNavigation = (props) => {
   const {
@@ -9,11 +9,8 @@ const SessionNavigation = (props) => {
     onClickNext,
     percentProgress,
     setExpanded,
-
     setShowSubMenu,
   } = props;
-
-  const { scaleX, scaleY } = useInvertedScale();
 
   const variants = {
     normal: {
@@ -32,8 +29,7 @@ const SessionNavigation = (props) => {
       exit="expanded"
       animate="normal"
       className="session-navigation"
-      useInvertedScale
-      style={{ scaleX, scaleY }}
+      layout
     >
       <motion.div
         whileHover={{ scale: 1.1 }}

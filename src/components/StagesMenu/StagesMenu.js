@@ -2,7 +2,7 @@ import React, { useState, useRef, useLayoutEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Text } from '@codaco/ui/lib/components/Fields';
 import { connect } from 'react-redux';
-import { motion, useInvertedScale, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { compose } from 'recompose';
 import { getCSSVariableAsNumber, getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
 import { getProtocolStages } from '../../selectors/protocol';
@@ -20,7 +20,6 @@ const StagesMenu = (props) => {
 
   const [filter, setFilter] = useState('');
   const [imageLoaded, updateImageLoaded] = useState(false);
-  const { scaleX, scaleY } = useInvertedScale();
   const scrollerRef = useRef(null);
 
   const baseAnimationDuration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
@@ -50,7 +49,7 @@ const StagesMenu = (props) => {
      * that are currently visible.
      * */
 
-    const delayScale = 0.075;
+    const delayScale = 0.1;
 
     // Active index 0, current index less than 8: animate first 8 items.
     if (
@@ -88,7 +87,7 @@ const StagesMenu = (props) => {
       x: 0,
       opacity: 1,
       transition: {
-        delay: calculateDelay(currentItemIndex),
+        delay: calculateDelay(currentItemIndex) + 0.25,
         duration: baseAnimationDuration,
         easing: baseAnimationEasing,
       },
@@ -133,7 +132,6 @@ const StagesMenu = (props) => {
         animate="expanded"
         exit="filtered"
         key={item.id}
-        layout
         className="stages-menu__preview-wrapper"
       >
         <StagePreview
@@ -178,7 +176,7 @@ const StagesMenu = (props) => {
       variants={variants}
       initial="normal"
       animate="expanded"
-      style={{ scaleX, scaleY }}
+      layout
     >
       <article className="stages-menu__wrapper">
         {renderMenuItems.length > 0 ? (

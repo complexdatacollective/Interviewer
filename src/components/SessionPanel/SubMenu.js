@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from '@codaco/ui';
 import { connect } from 'react-redux';
-import { motion, useInvertedScale } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { compose } from 'recompose';
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
@@ -14,8 +14,6 @@ const SubMenu = (props) => {
     openSettingsMenu,
     endSession,
   } = props;
-
-  const { scaleX, scaleY } = useInvertedScale();
 
   const variants = {
     show: {
@@ -51,10 +49,10 @@ const SubMenu = (props) => {
       className="sub-menu"
       animate="show"
       initial="hide"
-      style={{ scaleX, scaleY }}
+      layout
       key="sub-menu"
     >
-      <article className="sub-menu__wrapper">
+      <motion.article layout className="sub-menu__wrapper">
         <h1>Menu</h1>
         <div className="sub-menu__items">
           <motion.div
@@ -83,7 +81,7 @@ const SubMenu = (props) => {
             Exit Interview
           </div>
         </motion.div>
-      </article>
+      </motion.article>
 
     </motion.div>
   );
