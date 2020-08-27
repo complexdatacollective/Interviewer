@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Icon, Spinner, Scroller } from '@codaco/ui';
+import useOnlineStatus from '../../hooks/useOnlineStatus';
+import { Icon, Spinner, Scroller, Button } from '@codaco/ui';
 import { ServerCard as UIServerCard } from '@codaco/ui/lib/components/Cards';
+import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import ServerDiscoverer from '../../utils/serverDiscoverer';
-
 
 const ServerCard = (props) => {
   const {
@@ -32,11 +34,15 @@ const ServerCard = (props) => {
 /**
  * Displays a list of available servers discovered via MDNS.
  */
-const DiscoveredServerList = () => {
+const DiscoveredServerList = ({
+  openDialog,
+}) => {
+  const onlineStatus = useOnlineStatus();
   const [serverList, updateServerList] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    console.log('server discoverer use effect', onlineStatus);
     const serverDiscoverer = new ServerDiscoverer();
 
     // Bind events
@@ -72,20 +78,55 @@ const DiscoveredServerList = () => {
     return () => {
       serverDiscoverer.removeAllListeners();
     };
-  }, []);
+  }, [onlineStatus]);
 
+  const showErrorDialog = () => {
+    const errorObject = new Error(error);
+    errorObject.friendlyMessage = 'The automatic Server discovery feature could not be used. Consult the error message below for further information. Contact the Network Canvas project team for help with this error.';
+    openDialog({
+      type: 'Error',
+      title: 'Automatic Server discovery unavailable',
+      error: errorObject,
+      confirmLabel: 'Okay',
+    });
+  };
+
+  if (!onlineStatus) {
+    return (
+      <div className="discovered-server-list discovered-server-list--offline">
+        <div className="server-list server-list--offline">
+          <div className="error__icon">
+            <Icon name="info" />
+          </div>
+          <div className="error__description">
+            <h4>You don&apos;t seem to have a network connection.</h4>
+            <p>
+              Pairing with Server, fetching protocols from Server, and uploading data, all
+              require an active network connection. Check your device is connected to your
+              network, and try again.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (error) {
-    console.log('error', error);
     return (
-      <div className="discovered-server-list">
-        <div className="server-list--error">
+      <div className="discovered-server-list discovered-server-list--error">
+        <div className="server-list server-list--error">
           <div className="error__icon">
             <Icon name="error" />
           </div>
           <div className="error__description">
-            <h4>Automatic server discovery unavailable</h4>
-            <p>{error}</p>
+            <h4>We couldn&apos;t enable automatic discovery.</h4>
+            <p>
+              There was a problem enabling the automatic Server discovery
+              feature of Network Canvas. You can still pair with your computer
+              running Server by entering manual connection details using the
+              button below.
+            </p>
+            <Button size="small" onClick={showErrorDialog} color="neon-coral">Show error details</Button>
           </div>
         </div>
       </div>
@@ -129,4 +170,12 @@ DiscoveredServerList.defaultProps = {
 DiscoveredServerList.propTypes = {
 };
 
-export default DiscoveredServerList;
+const mapDispatchToProps = {
+  openDialog: dialogActions.openDialog,
+};
+
+const mapStateToProps = state => ({
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(DiscoveredServerList);
+

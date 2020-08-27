@@ -50,8 +50,9 @@ const NewFilterableListWrapper = (props) => {
             : Object.values(item);
         // Include in filtered list if any of the attribute property values
         // include the filter value
+        console.log('some', item);
         return itemAttributes.some(
-          property => property.toString().toLowerCase().includes(normalizedFilterTerm),
+          property => property && property.toString().toLowerCase().includes(normalizedFilterTerm),
         );
       },
     );
@@ -89,6 +90,8 @@ const NewFilterableListWrapper = (props) => {
       },
     },
   };
+
+  const sortedAndFilteredList = getFilteredAndSortedItemList();
 
   return (
     <div
@@ -133,12 +136,12 @@ const NewFilterableListWrapper = (props) => {
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="test"
+          className="filterable-list-scroller"
         >
           <AnimateSharedLayout>
             <AnimatePresence>
               {
-                getFilteredAndSortedItemList().map(item => (
+                sortedAndFilteredList.length > 0 && sortedAndFilteredList.map(item => (
                   <motion.div
                     variants={itemVariants}
                     key={objectHash(item)}

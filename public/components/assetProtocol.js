@@ -18,10 +18,6 @@ const registerProtocol = () =>
       const filePath = err ? userDataFilePath : appFilePath;
       callback({ path: filePath });
     });
-  }, (error) => {
-    if (error) {
-      console.error('Failed to register protocol');
-    }
   });
 
 exports.registerProtocol = registerProtocol;

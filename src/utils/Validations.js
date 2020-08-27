@@ -58,7 +58,7 @@ export const maxSelected = max =>
     (!value || coerceArray(value).length > max ? `You must choose a maximum of ${max} option(s)` : undefined);
 
 export default {
-  required,
+  required: () => required(),
   minLength,
   maxLength,
   minValue,

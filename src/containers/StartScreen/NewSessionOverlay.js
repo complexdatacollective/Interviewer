@@ -1,75 +1,63 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from '@codaco/ui';
 import Overlay from '../../containers/Overlay';
 import { Form } from '../../containers';
+import { required, maxLength } from '../../utils/Validations';
 
 
-class NewSessionOverlay extends Component {
-  constructor(props) {
-    super(props);
+const NewSessionOverlay = ({
+  handleSubmit,
+  show,
+  onClose,
+}) => {
+  const formConfig = {
+    formName: 'case-id-form',
+    fields: [
+      {
+        label: null,
+        name: 'case_id',
+        component: 'Text',
+        placeholder: 'Enter a unique case ID',
+        validate: [required('You must enter a case ID before you can continue.'), maxLength(30)],
+      },
+    ],
+  };
 
-    this.state = {
-      caseID: '',
-    };
+  const onSubmitForm = (fields) => {
+    handleSubmit(fields.case_id);
+  };
 
-    this.overlay = React.createRef();
-  }
-
-  onSubmitForm = (fields) => {
-    this.props.handleSubmit(fields.case_id);
-  }
-
-  render() {
-    const { show, onClose } = this.props;
-
-    const formConfig = {
-      formName: 'case-id-form',
-      fields: [
-        {
-          label: null,
-          name: 'case_id',
-          component: 'Text',
-          placeholder: 'Enter a unique case ID',
-          validation: {
-            required: true,
-            maxLength: 30,
-          },
-        },
-      ],
-    };
-
-    return (
-      <Overlay
-        show={show}
-        title="Enter a Case ID"
-        onClose={onClose}
-        forceDisableFullScreen
-      >
-        <div className="case-id-form">
-          <p>
-            Before the interview begins, enter a case ID.
-            This will be shown on the resume interview screen to help you quickly
-            identify this session.
-          </p>
-          <Form
-            className="case-id-form__form"
-            form={formConfig.formName}
-            autoFocus
-            onSubmit={this.onSubmitForm}
-            {...formConfig}
-          >
-            <div className="case-id-form__footer">
-              <Button aria-label="Submit" type="submit">
-                Start interview
-              </Button>
-            </div>
-          </Form>
-        </div>
-      </Overlay>
-    );
-  }
-}
+  return (
+    <Overlay
+      show={show}
+      title="Enter a Case ID"
+      onClose={onClose}
+      forceDisableFullScreen
+    >
+      <div className="case-id-form">
+        <p>
+          Before the interview begins, enter a case ID.
+          This will be shown on the resume interview screen to help you quickly
+          identify this session.
+        </p>
+        <Form
+          className="case-id-form__form"
+          form={formConfig.formName}
+          autoFocus
+          onSubmit={onSubmitForm}
+          {...formConfig}
+        >
+          <div className="case-id-form__footer">
+            <Button aria-label="Submit" type="submit">
+              Start interview
+            </Button>
+          </div>
+        </Form>
+      </div>
+    </Overlay>
+  );
+};
 
 NewSessionOverlay.propTypes = {
   show: PropTypes.bool,

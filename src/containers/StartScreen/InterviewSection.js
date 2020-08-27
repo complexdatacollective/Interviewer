@@ -9,6 +9,7 @@ import { getLastActiveSession } from '../../selectors/session';
 import NewSessionOverlay from './NewSessionOverlay';
 import StackButton from '../../components/StackButton';
 import ResumeSessionPicker from './ResumeSessionPicker';
+import StartInterviewPicker from './StartInterviewPicker';
 
 const InterviewSection = (props) => {
   const {
@@ -17,7 +18,8 @@ const InterviewSection = (props) => {
     lastActiveSession,
     addSession,
     showResumeSessionPicker,
-    toggleShowResumeSessionPicker,
+    showStartInterviewPicker,
+    toggleUIOverlay,
   } = props;
 
   const lastActiveProtocol = {
@@ -59,7 +61,7 @@ const InterviewSection = (props) => {
                 <div className="content-area">
                   <div className="content-area__last-used">
                     <header>
-                      <h2>Start an Interview</h2>
+                      <h2>Start a New Interview</h2>
                     </header>
                     <ProtocolCard
                       onClickHandler={
@@ -78,13 +80,14 @@ const InterviewSection = (props) => {
                     Object.keys(installedProtocols).length > 1 && (
                       <div className="content-area__other">
                         <StackButton
-                          label="Select other protocol"
+                          label="Select different protocol"
                           cardColor="var(--color-platinum)"
                           insetColor="var(--color-slate-blue--dark)"
+                          clickHandler={() => toggleUIOverlay('showStartInterviewPicker')}
                         >
                           <h4>
                             {
-                              (Object.keys(installedProtocols).length - 1) > 1 ? `+${Object.keys(installedProtocols).length - 1} Protocols` : `+${Object.keys(installedProtocols).length - 1} Protocol`
+                              (Object.keys(installedProtocols).length - 1) > 1 ? `+${Object.keys(installedProtocols).length - 1} Other Protocols` : `+${Object.keys(installedProtocols).length - 1} Other Protocol`
                             }
                           </h4>
                         </StackButton>
@@ -93,6 +96,10 @@ const InterviewSection = (props) => {
                   }
                 </div>
               </main>
+              <StartInterviewPicker
+                show={showStartInterviewPicker}
+                onClose={() => toggleUIOverlay('showStartInterviewPicker')}
+              />
               <NewSessionOverlay
                 handleSubmit={handleCreateSession}
                 onClose={handleCloseOverlay}
@@ -107,7 +114,7 @@ const InterviewSection = (props) => {
               <div className="content-area">
                 <div className="content-area__last-session">
                   <header>
-                    <h2>Resume last Interview</h2>
+                    <h2>Resume an Interview</h2>
                   </header>
                   <SessionCard
                     onClickHandler={sessionCardClickHandler}
@@ -121,11 +128,11 @@ const InterviewSection = (props) => {
                       label="Resume other interview"
                       cardColor="var(--color-platinum)"
                       insetColor="var(--color-platinum--dark)"
-                      clickHandler={toggleShowResumeSessionPicker}
+                      clickHandler={() => toggleUIOverlay('showResumeSessionPicker')}
                     >
                       <h4>
                         {
-                          (Object.keys(sessions).length - 1) > 1 ? `+${Object.keys(sessions).length - 1} Interviews` : `+${Object.keys(sessions).length - 1} Interview`
+                          (Object.keys(sessions).length - 1) > 1 ? `+${Object.keys(sessions).length - 1} Other Interviews` : `+${Object.keys(sessions).length - 1} Other Interview`
                         }
                       </h4>
                     </StackButton>
@@ -135,7 +142,7 @@ const InterviewSection = (props) => {
             </main>
             <ResumeSessionPicker
               show={showResumeSessionPicker}
-              onClose={toggleShowResumeSessionPicker}
+              onClose={() => toggleUIOverlay('showResumeSessionPicker')}
             />
           </motion.div>
         )}
@@ -154,8 +161,8 @@ function mapStateToProps(state) {
   return {
     installedProtocols: state.installedProtocols,
     showProtocolUrlForm: state.ui.showProtocolUrlForm,
-    showNewSessionOverlay: state.ui.showNewSessionOverlay,
     showResumeSessionPicker: state.ui.showResumeSessionPicker,
+    showStartInterviewPicker: state.ui.showStartInterviewPicker,
     sessions: state.sessions,
     lastActiveSession: getLastActiveSession(state),
   };
@@ -164,7 +171,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     addSession: (caseId, protocol) => dispatch(sessionActions.addSession(caseId, protocol)),
-    toggleShowResumeSessionPicker: () => dispatch(uiActions.toggle('showResumeSessionPicker')),
+    toggleUIOverlay: overlay => dispatch(uiActions.toggle(overlay)),
   };
 }
 

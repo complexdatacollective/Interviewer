@@ -6,6 +6,7 @@ import { Section } from '.';
 import DiscoveredServerList from '../Server/DiscoveredServerList';
 import ServerAddressForm from './ServerAddressForm';
 import { ExternalLink } from '../../components';
+import useOnlineStatus from '../../hooks/useOnlineStatus';
 
 const ServerSection = (props) => {
   const {
@@ -13,6 +14,8 @@ const ServerSection = (props) => {
     toggleShowServerAddressForm,
     pairedServer,
   } = props;
+
+  const onlineStatus = useOnlineStatus();
 
   return (
     <Section className="start-screen-section server-section">
@@ -36,10 +39,10 @@ const ServerSection = (props) => {
           </div>
           <div className="content-area__buttons">
             { !pairedServer ? (
-              <Button color="platinum" onClick={toggleShowServerAddressForm}>Provide manual connection details...</Button>
+              <Button disabled={!onlineStatus} color="platinum" onClick={toggleShowServerAddressForm}>Provide manual connection details...</Button>
             ) : [
               <Button color="mustard--dark">Unpair</Button>,
-              <Button color="platinum">Fetch Protocol</Button>,
+              <Button disabled={!onlineStatus} color="platinum">Fetch Protocol</Button>,
             ]
             }
           </div>

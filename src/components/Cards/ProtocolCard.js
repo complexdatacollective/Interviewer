@@ -123,7 +123,7 @@ ProtocolCard.propTypes = {
   attributes: PropTypes.shape({
     schemaVersion: PropTypes.number.isRequired,
     lastModified: PropTypes.string.isRequired,
-    installationDate: PropTypes.string,
+    installationDate: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
     description: PropTypes.string,
   }).isRequired,

@@ -5,6 +5,7 @@ import { GraphicButton, Button } from '@codaco/ui';
 import { Section } from '.';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
 import ProtocolUrlForm from './ProtocolUrlForm';
+import importLocalProtocol from '../../utils/protocol/importLocalProtocol';
 
 const ImportSection = (props) => {
   const {
@@ -33,6 +34,7 @@ const ImportSection = (props) => {
             <GraphicButton
               key="protocol-file"
               color="slate-blue--dark"
+              onClick={importLocalProtocol}
             >
               <h3>Import</h3>
               <h2>From File</h2>

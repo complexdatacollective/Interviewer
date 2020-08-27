@@ -85,19 +85,26 @@ export default function reducer(state = initialState, action = {}) {
     case IMPORT_PROTOCOL_COMPLETE: {
       const newProtocol = action.protocolData;
 
-      // If the protocol name (which is the true UID of protocol) already exists, overwrite.
+      // If the protocol name (which is the true UID of protocol) already exists,
+      // overwrite. We only get here after user has confirmed.
       const existingIndex = findKey(state, protocol => protocol.name === newProtocol.name);
 
       if (existingIndex) {
         return {
           ...state,
-          [existingIndex]: omit(newProtocol, 'uid'),
+          [existingIndex]: {
+            ...omit(newProtocol, 'uid'),
+            installationDate: Date.now(),
+          },
         };
       }
 
       return {
         ...state,
-        [newProtocol.uid]: omit(newProtocol, 'uid'),
+        [newProtocol.uid]: {
+          ...omit(newProtocol, 'uid'),
+          installationDate: Date.now(),
+        },
       };
     }
     default:

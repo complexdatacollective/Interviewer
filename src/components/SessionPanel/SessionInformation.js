@@ -10,6 +10,7 @@ import { getNetwork } from '../../selectors/network';
 import { Scroller } from '..';
 import { Overlay } from '../../containers/Overlay';
 import { Form } from '../../containers';
+import useInterval from '../../hooks/useInterval';
 
 const elapsedTime = timestamp => timestamp && new Date(Date.now() - timestamp).toISOString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, '$1');
 
@@ -56,6 +57,14 @@ const SessionInformation = (props) => {
       );
     });
   };
+
+  const [interviewDuration, setInterviewDuration] = useState(sessionProgress.startedAt ? elapsedTime(sessionProgress.startedAt) : 'Unknown');
+
+  if (sessionProgress.startedAt) {
+    useInterval(() => {
+      setInterviewDuration(elapsedTime(sessionProgress.startedAt));
+    }, 1000);
+  }
 
   const [showCaseIDRename, setShowCaseIDRename] = useState(false);
 
@@ -106,7 +115,7 @@ const SessionInformation = (props) => {
       <Scroller>
         <section>
           <h4>Interview Duration</h4>
-          <h1 className="session-duration">{sessionProgress.startedAt ? elapsedTime(sessionProgress.startedAt) : 'Unknown'}</h1>
+          <h1 className="session-duration">{interviewDuration}</h1>
         </section>
         <section>
           <h4>Case ID</h4>
