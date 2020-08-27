@@ -1,30 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { AnimatePresence, motion } from 'framer-motion';
-import useOnlineStatus from '../../hooks/useOnlineStatus';
-import { Icon, Spinner, Scroller, Button } from '@codaco/ui';
 import { ServerCard as UIServerCard } from '@codaco/ui/lib/components/Cards';
+import { Icon, Spinner, Scroller, Button } from '@codaco/ui';
+import useOnlineStatus from '../../hooks/useOnlineStatus';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import ServerDiscoverer from '../../utils/serverDiscoverer';
 
 const ServerCard = (props) => {
   const {
     name,
-    address,
+    host,
+    addresses,
+    pairingServiceUrl,
   } = props;
 
   const handleServerCardClick = () => {
-    console.log('start pairing with ', address);
+    console.log('start pairing with ', pairingServiceUrl);
   };
 
   return (
     <motion.div
       enter={{ scale: 1 }}
       exit={{ scale: 0 }}
+      layout
     >
       <UIServerCard
         name={name}
-        address={address}
+        host={host}
+        addresses={addresses}
         onClickHandler={handleServerCardClick}
       />
     </motion.div>
@@ -42,7 +46,9 @@ const DiscoveredServerList = ({
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    console.log('server discoverer use effect', onlineStatus);
+    // When online status changes, useEffect is called. Reset any previous errors
+    setError(null);
+
     const serverDiscoverer = new ServerDiscoverer();
 
     // Bind events
@@ -52,16 +58,18 @@ const DiscoveredServerList = ({
 
     serverDiscoverer.on('SERVER_ANNOUNCED', (response) => {
       if (!response.name) { return; }
+      updateServerList((prevState) => {
+        // Detect if we already have a service with this name
+        const serverIndex = prevState.findIndex(server => response.name === server.name);
 
-      const servers = serverList.slice();
-      // Detect if we already have a service with this name
-      const serverIndex = serverList.findIndex(server => response.name === server.name);
-      if (serverIndex === -1) {
-        servers.push(response);
-      } else {
-        servers[serverIndex] = response;
-      }
-      updateServerList(servers);
+        if (serverIndex !== -1) {
+          const newArray = [...prevState];
+          newArray[serverIndex] = response;
+          return newArray;
+        }
+
+        return [...prevState, response];
+      });
     });
 
     serverDiscoverer.on('SERVER_REMOVED', (response) => {
@@ -69,7 +77,6 @@ const DiscoveredServerList = ({
     });
 
     serverDiscoverer.on('SERVER_ERROR', (serverError) => {
-      console.log('server_error', serverError);
       setError(serverError);
     });
 
@@ -133,33 +140,23 @@ const DiscoveredServerList = ({
     );
   }
 
-  console.log('serverlist', serverList);
-  if (serverList.length > 0) {
-    return (
-      <div className="discovered-server-list">
-        <Scroller className="discovered-server-list__content">
-          <AnimatePresence>
-            {
-              serverList.map(server => (
-                <ServerCard
-                  key={server.pairingServiceUrl}
-                  name={server.name}
-                  address={server.pairingServiceUrl}
-                />
-              ))
-            }
-          </AnimatePresence>
-        </Scroller>
-      </div>
-    );
-  }
-
   return (
     <div className="discovered-server-list">
-      <div className="server-list--placeholder">
-        <h4>Listening for nearby Servers...</h4>
-        <Spinner small />
-      </div>
+      <header>
+        <Spinner small /><h4>Looking for nearby Servers...</h4>
+      </header>
+      <Scroller className="discovered-server-list__content">
+        <AnimatePresence>
+          {
+            serverList.map(server => (
+              <ServerCard
+                key={server.pairingServiceUrl}
+                {...server}
+              />
+            ))
+          }
+        </AnimatePresence>
+      </Scroller>
     </div>
   );
 };

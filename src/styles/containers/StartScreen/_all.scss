@@ -342,8 +342,6 @@
       }
 
       &__discover {
-        display: flex;
-        flex-direction: column;
         padding: unit(4) unit(6);
 
         > h4 {
@@ -352,15 +350,55 @@
         }
 
         .discovered-server-list {
-          background: #ccc;
-          padding: unit(2) unit(4);
+          background: var(--color-slate-blue);
           border-radius: var(--border-radius);
           max-height: 30rem;
           display: flex;
+          flex-direction: column;
+          justify-content: center;
+          overflow: hidden;
 
+          &--offline,
           &--error {
+            background: #ccc;
+          }
 
+          header {
+            width: 100%;
+            display: flex;
+            background: var(--color-slate-blue--dark);
+            color: var(--color-white);
+            align-items: center;
+            padding: unit(1) unit(2);
 
+            .spinner--small {
+              --circle-size: 0.5rem;
+              margin-right: unit(2);
+            }
+          }
+
+          .scrollable {
+            display: flex;
+            flex-wrap: wrap;
+            padding: unit(2) 0;
+
+            > * {
+              width: 50%;
+            }
+
+            &:empty {
+              display: flex;
+
+              &::after {
+                width: 100%;
+                height: 10rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                color: var(--color-white);
+                content: 'No Servers found.';
+              }
+            }
           }
 
           .server-list {
@@ -368,6 +406,7 @@
 
             &--error,
             &--offline {
+              padding: unit(2);
 
               .error__icon {
                 flex: 0 0 10rem;
@@ -504,16 +543,16 @@
 
 
   .stack-of-cards {
-    width: 13rem;
-    height: 9rem;
+    width: 16rem;
+    height: 11rem;
     display: flex;
     align-items: flex-end;
     position: relative;
 
     .mock-card {
       position: absolute;
-      width: 12rem;
-      height: 8rem;
+      width: 15rem;
+      height: 10rem;
       border-radius: var(--border-radius);
       background: var(--color-slate-blue--dark);
       box-shadow: 0.2rem 0.2rem 0.5rem rgba(0, 0, 0, 0.3);
@@ -522,11 +561,7 @@
 
       .main {
         width: 100%;
-        height: 5rem;
-      }
-
-      &--one {
-
+        height: 7rem;
       }
 
       &--two {
