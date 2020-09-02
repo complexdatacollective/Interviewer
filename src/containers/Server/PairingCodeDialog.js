@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -36,6 +36,8 @@ const PairingCodeDialog = (props) => {
     submittable,
   }, setState,
   ] = useState(initialState);
+
+  const inputRef = useRef();
 
   const apiClient = new ApiClient(server.pairingServiceUrl);
 
@@ -145,11 +147,11 @@ const PairingCodeDialog = (props) => {
                 <PairingCodeInput
                   charCount={PairingCodeLength}
                   setPairingCode={setPairingCode}
-                  // ref={this.inputRef}
+                  ref={inputRef}
                 />
                 <div className="pairing-form__footer">
                   <a
-                    // onClick={() => this.inputRef.current.clearForm()}
+                    onClick={() => inputRef.current.clearForm()}
                     className="pairing-code-clear"
                   >
                     Clear

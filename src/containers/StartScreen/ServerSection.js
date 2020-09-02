@@ -1,5 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import cx from 'classnames';
 import { Button } from '@codaco/ui';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
 import { Section } from '.';
@@ -7,19 +9,60 @@ import DiscoveredServerList from '../Server/DiscoveredServerList';
 import ServerAddressForm from './ServerAddressForm';
 import { ExternalLink } from '../../components';
 import useOnlineStatus from '../../hooks/useOnlineStatus';
+import { ServerCard } from '../../components/Cards';
+import { openExternalLink } from '../../components/ExternalLink';
+import useServerConnectionStatus from '../../hooks/useServerConnectionStatus';
 
-const ServerSection = (props) => {
-  const {
-    showServerAddressForm,
-    toggleShowServerAddressForm,
-    pairedServer,
-  } = props;
-
+const ServerSection = ({
+  showServerAddressForm,
+  toggleShowServerAddressForm,
+  pairedServer,
+}) => {
   const onlineStatus = useOnlineStatus();
+  const pairedServerConnection = useServerConnectionStatus(pairedServer);
+
+  const renderServerStatus = () => {
+    if (!onlineStatus) {
+      return (
+        <p>
+          Your device does not appear to have an active network connection so
+          it cannot communicate with Server. Connect to a network, and try again.
+        </p>
+      );
+    }
+
+    if (pairedServerConnection !== 'ok') {
+      return (
+        <React.Fragment>
+          <p>
+            This device could not communicate with your paired Server. Fetching
+            protocols and uploading data have been disabled. Check Server is
+            open on your remote computer, and that your network is configured
+            correctly. Use the button below for more troubleshooting information.
+          </p>
+          <Button size="small" color="neon-coral" onClick={() => openExternalLink('https://documentation.networkcanvas.com/docs/key-concepts/pairing/#troubleshooting')}>More Information</Button>
+        </React.Fragment>
+      );
+    }
+
+    return (
+      <p>Connection to Server established. Data upload and protocol fetching are available.</p>
+    );
+  };
+
+  const serverStatusClasses = cx(
+    'server-status',
+    { 'server-status--caution': !onlineStatus },
+    { 'server-status--error': pairedServerConnection !== 'ok' },
+    { 'server-status--ok': onlineStatus && pairedServerConnection === 'ok' },
+  );
 
   return (
     <Section className="start-screen-section server-section">
-      <ServerAddressForm show={showServerAddressForm} handleClose={toggleShowServerAddressForm} />
+      <ServerAddressForm
+        show={showServerAddressForm}
+        handleClose={toggleShowServerAddressForm}
+      />
       <main className="server-section__main">
         <div className="content-area">
           <div className="content-area__discover">
@@ -35,15 +78,30 @@ const ServerSection = (props) => {
                 </p>
                 <DiscoveredServerList />
               </React.Fragment>
-            ) : (<h1>Server Card</h1>)}
+            ) : (
+              <div className="paired-server-wrapper">
+                <ServerCard
+                  name={pairedServer.name}
+                  host={pairedServer.host}
+                  addresses={pairedServer.addresses}
+                  disabled={!onlineStatus || pairedServerConnection !== 'ok'}
+                />
+                <div className={serverStatusClasses}>
+                  <div className="server-status__indicator">
+                    <div className="indicator" />
+                  </div>
+                  <div className="server-status__text">
+                    { renderServerStatus() }
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
           <div className="content-area__buttons">
             { !pairedServer ? (
               <Button disabled={!onlineStatus} color="platinum" onClick={toggleShowServerAddressForm}>Provide manual connection details...</Button>
-            ) : [
-              <Button color="mustard--dark">Unpair</Button>,
-              <Button disabled={!onlineStatus} color="platinum">Fetch Protocol</Button>,
-            ]
+            ) :
+              (<Button key="unpair" color="platinum">Unpair</Button>)
             }
           </div>
         </div>
@@ -61,6 +119,7 @@ ServerSection.defaultProps = {
 function mapStateToProps(state) {
   return {
     pairedServer: state.pairedServer,
+    pairedServerConnection: state.pairedServerConnection,
     showServerAddressForm: state.ui.showServerAddressForm,
   };
 }

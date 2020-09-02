@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { connect } from 'react-redux';
 import { Button } from '@codaco/ui';
@@ -9,6 +9,7 @@ import { actionCreators as protocolActions } from '../../ducks/modules/importPro
 import { SettingsMenuButton } from '../../components/SettingsMenu';
 import { openExternalLink } from '../../components/ExternalLink';
 import Switch from './Switch';
+import getVersion from '../../utils/getVersion';
 
 const HeaderSection = (props) => {
   const {
@@ -16,6 +17,10 @@ const HeaderSection = (props) => {
     toggleShowGettingStarted,
     importProtocolFromURI,
   } = props;
+
+  const [appVersion, setAppVersion] = useState('0.0.0');
+
+  getVersion().then(version => setAppVersion(version));
 
   const start = {
     visible: {
@@ -43,7 +48,7 @@ const HeaderSection = (props) => {
           <div className="header-brand">
             <img src={NCLogo} className="header-logo" alt="Network Canvas" />
           </div>
-          <div className="version-string">5.2.0</div>
+          <div className="version-string">{appVersion}</div>
           <motion.footer layout>
             <SettingsMenuButton />
           </motion.footer>

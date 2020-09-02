@@ -6,6 +6,8 @@ import { Section } from '.';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
 import ProtocolUrlForm from './ProtocolUrlForm';
 import importLocalProtocol from '../../utils/protocol/importLocalProtocol';
+import useOnlineStatus from '../../hooks/useOnlineStatus';
+import useServerConnectionStatus from '../../hooks/useServerConnectionStatus';
 
 const ImportSection = (props) => {
   const {
@@ -15,48 +17,61 @@ const ImportSection = (props) => {
     showProtocolUrlForm,
   } = props;
 
+  const onlineStatus = useOnlineStatus();
+  const pairedServerConnection = useServerConnectionStatus(pairedServer);
+  console.log('import', onlineStatus, pairedServerConnection);
   return (
     <Section className="start-screen-section import-section">
-      <main className="import-section__install-section">
-        <header>
+      <motion.main layout className="import-section__install-section">
+        <motion.header layout>
           <h2>Import a Protocol</h2>
-        </header>
+        </motion.header>
         <motion.div layout className="content-buttons">
-          <AnimatePresence>
-            <GraphicButton
-              key="protocol-url"
-              color="sea-green"
-              onClick={toggleShowProtocolUrlForm}
-            >
-              <h3>Import</h3>
-              <h2>From URL</h2>
-            </GraphicButton>
-            <GraphicButton
-              key="protocol-file"
-              color="slate-blue--dark"
-              onClick={importLocalProtocol}
-            >
-              <h3>Import</h3>
-              <h2>From File</h2>
-            </GraphicButton>
+          <AnimatePresence initial={false}>
             {
-              pairedServer && (
-                <GraphicButton
-                  key="protocol-server"
-                  color="mustard"
+              onlineStatus && (
+                <motion.div
+                  key="one"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
                 >
-                  <h3>Import</h3>
-                  <h2>From Server</h2>
-                </GraphicButton>
+                  <GraphicButton
+                    key="protocol-url"
+                    color="sea-green"
+                    onClick={toggleShowProtocolUrlForm}
+                  >
+                    <h3>Import</h3>
+                    <h2>From URL</h2>
+                  </GraphicButton>
+                </motion.div>
+              )
+            }
+            {
+              onlineStatus && pairedServerConnection === 'ok' && (
+                <motion.div
+                  key="two"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  <GraphicButton
+                    key="protocol-server"
+                    color="mustard"
+                  >
+                    <h3>Import</h3>
+                    <h2>From Server</h2>
+                  </GraphicButton>
+                </motion.div>
               )
             }
           </AnimatePresence>
         </motion.div>
-      </main>
+      </motion.main>
       { Object.keys(installedProtocols).length > 0 && (
-        <footer className="import-section__manage-protocols">
-          <Button color="platinum">Manage Protocols...</Button>
-        </footer>
+        <motion.footer layout className="import-section__manage-protocols">
+          <Button color="platinum">Manage Installed Protocols...</Button>
+        </motion.footer>
       )}
       <ProtocolUrlForm show={showProtocolUrlForm} handleClose={toggleShowProtocolUrlForm} />
     </Section>

@@ -1,39 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { AnimatePresence, motion } from 'framer-motion';
-import { ServerCard as UIServerCard } from '@codaco/ui/lib/components/Cards';
+import { AnimatePresence } from 'framer-motion';
 import { Icon, Spinner, Scroller, Button } from '@codaco/ui';
 import useOnlineStatus from '../../hooks/useOnlineStatus';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import ServerDiscoverer from '../../utils/serverDiscoverer';
-
-const ServerCard = (props) => {
-  const {
-    name,
-    host,
-    addresses,
-    pairingServiceUrl,
-  } = props;
-
-  const handleServerCardClick = () => {
-    console.log('start pairing with ', pairingServiceUrl);
-  };
-
-  return (
-    <motion.div
-      enter={{ scale: 1 }}
-      exit={{ scale: 0 }}
-      layout
-    >
-      <UIServerCard
-        name={name}
-        host={host}
-        addresses={addresses}
-        onClickHandler={handleServerCardClick}
-      />
-    </motion.div>
-  );
-};
+import { ServerCard } from '../../components/Cards';
+import { ServerAddressForm } from '../StartScreen/ServerAddressForm';
 
 /**
  * Displays a list of available servers discovered via MDNS.
@@ -42,12 +15,20 @@ const DiscoveredServerList = ({
   openDialog,
 }) => {
   const onlineStatus = useOnlineStatus();
-  const [serverList, updateServerList] = useState([]);
+
+  const [availableServers, updateAvailableServers] = useState([]);
+  const [selectedServer, setSelectedServer] = useState(null);
   const [error, setError] = useState(null);
 
+  const [showServerAddressForm, setShowServerAddressForm] = useState(false);
+
+  const handlePairingCardClick = (server) => {
+    setSelectedServer(server);
+    setShowServerAddressForm(true);
+  };
+
   useEffect(() => {
-    // When online status changes, useEffect is called. Reset any previous errors
-    setError(null);
+    setError(null); // Reset existing errors when onlineStatus changes
 
     const serverDiscoverer = new ServerDiscoverer();
 
@@ -58,7 +39,7 @@ const DiscoveredServerList = ({
 
     serverDiscoverer.on('SERVER_ANNOUNCED', (response) => {
       if (!response.name) { return; }
-      updateServerList((prevState) => {
+      updateAvailableServers((prevState) => {
         // Detect if we already have a service with this name
         const serverIndex = prevState.findIndex(server => response.name === server.name);
 
@@ -73,7 +54,7 @@ const DiscoveredServerList = ({
     });
 
     serverDiscoverer.on('SERVER_REMOVED', (response) => {
-      updateServerList(prevState => prevState.filter(item => (item.name !== response.name)));
+      updateAvailableServers(prevState => prevState.filter(item => (item.name !== response.name)));
     });
 
     serverDiscoverer.on('SERVER_ERROR', (serverError) => {
@@ -148,15 +129,21 @@ const DiscoveredServerList = ({
       <Scroller className="discovered-server-list__content">
         <AnimatePresence>
           {
-            serverList.map(server => (
+            availableServers.map(server => (
               <ServerCard
-                key={server.pairingServiceUrl}
+                key={server.name}
+                handleServerCardClick={() => handlePairingCardClick(server)}
                 {...server}
               />
             ))
           }
         </AnimatePresence>
       </Scroller>
+      <ServerAddressForm
+        server={selectedServer}
+        show={showServerAddressForm}
+        handleClose={() => setShowServerAddressForm(false)}
+      />
     </div>
   );
 };
@@ -171,8 +158,5 @@ const mapDispatchToProps = {
   openDialog: dialogActions.openDialog,
 };
 
-const mapStateToProps = state => ({
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(DiscoveredServerList);
+export default connect(null, mapDispatchToProps)(DiscoveredServerList);
 

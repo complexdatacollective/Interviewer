@@ -50,7 +50,6 @@ const NewFilterableListWrapper = (props) => {
             : Object.values(item);
         // Include in filtered list if any of the attribute property values
         // include the filter value
-        console.log('some', item);
         return itemAttributes.some(
           property => property && property.toString().toLowerCase().includes(normalizedFilterTerm),
         );

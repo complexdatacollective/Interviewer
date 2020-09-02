@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { submit, isValid } from 'redux-form';
 import { connect } from 'react-redux';
@@ -47,28 +47,19 @@ const ServerAddressForm = ({
   submittable,
   openDialog,
   submitForm,
+  server,
 }) => {
   const [showPairingCodeDialog, setShowPairingCodeDialog] = useState(false);
-  const [selectedServer, setSelectedServer] = useState(null);
+  const [selectedServer, setSelectedServer] = useState(server);
 
   const handleSubmit = (values) => {
     const serverWithPairingUrl = addPairingUrlToService({
+      host: values.serverAddress,
       addresses: [values.serverAddress],
       port: values.serverPort,
     });
 
     setSelectedServer(serverWithPairingUrl);
-
-    if (serverWithPairingUrl.pairingServiceUrl) {
-      // Now show the pairing key
-      setShowPairingCodeDialog(true);
-    } else {
-      openDialog({
-        type: 'Error',
-        error: 'Pairing request failed. An error occurred while attempting to send the pairing request.',
-        confirmLabel: 'Okay',
-      });
-    }
   };
 
   const formConfig = {
@@ -92,8 +83,7 @@ const ServerAddressForm = ({
   };
 
   const initialValues = {
-    serverPort: 51001,
-    serverAddress: 'localhost',
+    serverPort: 61001,
   };
 
   const RenderPairingForm = () => (
@@ -137,6 +127,25 @@ const ServerAddressForm = ({
     />
   );
 
+  useEffect(() => {
+    setSelectedServer(server);
+    if (selectedServer && !selectedServer.pairingServiceUrl) {
+      openDialog({
+        type: 'Error',
+        error: 'Pairing request failed. An error occurred while attempting to send the pairing request.',
+        confirmLabel: 'Okay',
+      });
+
+      return;
+    }
+
+    if (selectedServer) {
+      // We have a selectedServer with a pairingServiceUrl
+      // Now show the pairing key dialog
+      setShowPairingCodeDialog(true);
+    }
+  }, [server, selectedServer]);
+
   return (
     <React.Fragment>
       <Overlay
@@ -154,11 +163,13 @@ const ServerAddressForm = ({
 
 ServerAddressForm.defaultProps = {
   show: false,
+  server: null,
 };
 
 ServerAddressForm.propTypes = {
   handleClose: PropTypes.func.isRequired,
   show: PropTypes.bool,
+  server: PropTypes.object,
 };
 
 const mapDispatchToProps = {

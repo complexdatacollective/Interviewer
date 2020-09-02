@@ -377,6 +377,20 @@ class ApiClient {
 
     return exportPromise;
   }
+
+  /**
+   * Check the status of the connection to Server
+   */
+  requestHeartbeat() {
+    if (!this.httpsClient) {
+      return Promise.reject('No secure client available');
+    }
+
+    return this.httpsClient.get('/protocols', { ...this.authHeader, cancelToken: this.cancelTokenSource.token })
+      .then(resp => resp.data)
+      .then(json => json.data)
+      .catch(err => handleError(err));
+  }
 }
 
 export default ApiClient;

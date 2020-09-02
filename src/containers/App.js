@@ -69,7 +69,7 @@ const App = ({
         win.removeAllListeners();
       }
     };
-  }, []);
+  }, [win]);
 
   setFontSize();
 

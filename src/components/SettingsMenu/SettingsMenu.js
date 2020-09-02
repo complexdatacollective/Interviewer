@@ -36,7 +36,7 @@ const SettingsMenu = (props) => {
       opacity: 1,
       transition: {
         when: 'beforeChildren',
-        staggerChildren: 0.07,
+        staggerChildren: 0.1,
         duration: getAnimationDuration('--animation-duration-very-fast-ms'),
         easing: baseAnimationEasing,
       },
@@ -56,7 +56,7 @@ const SettingsMenu = (props) => {
       x: '0%',
       transition: {
         when: 'beforeChildren',
-        staggerChildren: 0.2,
+        staggerChildren: 0.1,
         duration: getAnimationDuration('--animation-duration-standard-ms'),
         easing: baseAnimationEasing,
       },
@@ -75,14 +75,15 @@ const SettingsMenu = (props) => {
 
   const navVariants = {
     show: {
-      x: '0%',
+      y: '0%',
       opacity: 1,
       transition: {
-        type: 'spring',
+        duration: getAnimationDuration('--animation-duration-very-fast-ms'),
+        easing: baseAnimationEasing,
       },
     },
     hide: {
-      x: '-10%',
+      y: '-10%',
       opacity: 0,
       transition: {
         duration: getAnimationDuration('--animation-duration-very-fast-ms'),
