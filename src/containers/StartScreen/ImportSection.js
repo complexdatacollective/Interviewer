@@ -19,7 +19,7 @@ const ImportSection = (props) => {
 
   const onlineStatus = useOnlineStatus();
   const pairedServerConnection = useServerConnectionStatus(pairedServer);
-  console.log('import', onlineStatus, pairedServerConnection);
+
   return (
     <Section className="start-screen-section import-section">
       <motion.main layout className="import-section__install-section">
@@ -31,13 +31,14 @@ const ImportSection = (props) => {
             {
               onlineStatus && (
                 <motion.div
-                  key="one"
+                  key="protocol-url"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
+                  style={{ width: '100%', height: '100%' }}
+                  layout
                 >
                   <GraphicButton
-                    key="protocol-url"
                     color="sea-green"
                     onClick={toggleShowProtocolUrlForm}
                   >
@@ -47,16 +48,33 @@ const ImportSection = (props) => {
                 </motion.div>
               )
             }
+            <motion.div
+              key="protocol-file"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              style={{ width: '100%', height: '100%' }}
+              layout
+            >
+              <GraphicButton
+                color="slate-blue--dark"
+                onClick={importLocalProtocol}
+              >
+                <h3>Import</h3>
+                <h2>From File</h2>
+              </GraphicButton>
+            </motion.div>
             {
               onlineStatus && pairedServerConnection === 'ok' && (
                 <motion.div
-                  key="two"
+                  key="protocol-server"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
+                  style={{ width: '100%', height: '100%' }}
+                  layout
                 >
                   <GraphicButton
-                    key="protocol-server"
                     color="mustard"
                   >
                     <h3>Import</h3>

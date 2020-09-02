@@ -20,13 +20,10 @@ const useServerConnectionStatus = (pairedServer) => {
    * changes.
    */
   useEffect(() => {
-    console.log('use effect', pairedServer);
-
     if (!pairedServer) {
       setConnectionStatus('waiting');
       return;
     }
-
 
     apiClient.addTrustedCert().then(() => {
       getServerConnectionStatus(apiClient)

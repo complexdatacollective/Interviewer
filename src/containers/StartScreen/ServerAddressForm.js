@@ -53,11 +53,14 @@ const ServerAddressForm = ({
   const [selectedServer, setSelectedServer] = useState(server);
 
   const handleSubmit = (values) => {
+    console.log('handlesubvmit', values);
     const serverWithPairingUrl = addPairingUrlToService({
       host: values.serverAddress,
       addresses: [values.serverAddress],
       port: values.serverPort,
     });
+
+    console.log('withpairing', serverWithPairingUrl);
 
     setSelectedServer(serverWithPairingUrl);
   };
@@ -128,7 +131,12 @@ const ServerAddressForm = ({
   );
 
   useEffect(() => {
-    setSelectedServer(server);
+    // This component is passed a server object when triggered by clicking a ServerCard
+    // If the server prop is set, use it.
+    if (server) {
+      setSelectedServer(server);
+    }
+
     if (selectedServer && !selectedServer.pairingServiceUrl) {
       openDialog({
         type: 'Error',

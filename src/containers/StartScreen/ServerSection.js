@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { Button } from '@codaco/ui';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
+import { actionCreators as serverActions } from '../../ducks/modules/pairedServer';
+import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { Section } from '.';
 import DiscoveredServerList from '../Server/DiscoveredServerList';
 import ServerAddressForm from './ServerAddressForm';
@@ -17,16 +19,34 @@ const ServerSection = ({
   showServerAddressForm,
   toggleShowServerAddressForm,
   pairedServer,
+  openDialog,
+  unpairServer,
 }) => {
   const onlineStatus = useOnlineStatus();
   const pairedServerConnection = useServerConnectionStatus(pairedServer);
+
+  const handleUnpairRequest = () => {
+    openDialog({
+      type: 'Warning',
+      title: 'Unpair from Server?',
+      confirmLabel: 'Unpair',
+      onConfirm: unpairServer,
+      message: (
+        <p>
+          This will remove the connection to your computer running Server. You
+          will not be able to upload data or fetch protocols. Are you sure you want to continue?
+        </p>
+      ),
+    });
+  };
 
   const renderServerStatus = () => {
     if (!onlineStatus) {
       return (
         <p>
           Your device does not appear to have an active network connection so
-          it cannot communicate with Server. Connect to a network, and try again.
+          it cannot communicate with Server. Fetching protocols and uploading
+          data are unavailable. Connect to a network, and try again.
         </p>
       );
     }
@@ -76,6 +96,10 @@ const ServerSection = ({
                   This is a one-off process that allows your devices to identify each other. Visit
                   our <ExternalLink href="https://documentation.networkcanvas.com/docs/key-concepts/pairing/">documentation article</ExternalLink> on pairing to learn more.
                 </p>
+                <p>
+                  To begin, open Server on a computer connected to the same network as this device.
+                  When the device appears below, click its card to start the pairing process.
+                </p>
                 <DiscoveredServerList />
               </React.Fragment>
             ) : (
@@ -101,7 +125,7 @@ const ServerSection = ({
             { !pairedServer ? (
               <Button disabled={!onlineStatus} color="platinum" onClick={toggleShowServerAddressForm}>Provide manual connection details...</Button>
             ) :
-              (<Button key="unpair" color="platinum">Unpair</Button>)
+              (<Button key="unpair" color="platinum" onClick={handleUnpairRequest}>Unpair</Button>)
             }
           </div>
         </div>
@@ -127,6 +151,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     toggleShowServerAddressForm: () => dispatch(uiActions.toggle('showServerAddressForm')),
+    openDialog: dialog => dispatch(dialogActions.openDialog(dialog)),
+    unpairServer: () => dispatch(serverActions.unpairServer()),
   };
 }
 
