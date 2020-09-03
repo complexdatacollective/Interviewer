@@ -25,7 +25,7 @@ const ProtocolCard = (props) => {
     schemaVersion !== APP_SCHEMA_VERSION &&
     APP_SUPPORTED_SCHEMA_VERSIONS.includes(schemaVersion);
 
-  const isObsoleteProtocol = () => false; // To be implemented in future, as needed.
+  const isObsoleteProtocol = () => !APP_SUPPORTED_SCHEMA_VERSIONS.includes(schemaVersion);
 
   const handleSchemaOutdatedInfo = () => {
     openDialog({
@@ -104,14 +104,14 @@ const ProtocolCard = (props) => {
       description={description}
       isOutdated={isOutdatedProtocol()}
       isObsolete={isObsoleteProtocol()}
-      onStatusClickHandler={() => handleStatusClick}
+      onStatusClickHandler={handleStatusClick}
       onClickHandler={onClickHandler}
     />
   );
 };
 
 ProtocolCard.defaultProps = {
-  onClickHandler: () => {},
+  onClickHandler: undefined,
   description: null,
   condensed: false,
 };
@@ -123,7 +123,7 @@ ProtocolCard.propTypes = {
   attributes: PropTypes.shape({
     schemaVersion: PropTypes.number.isRequired,
     lastModified: PropTypes.string.isRequired,
-    installationDate: PropTypes.number.isRequired,
+    installationDate: PropTypes.number,
     name: PropTypes.string.isRequired,
     description: PropTypes.string,
   }).isRequired,
@@ -135,4 +135,3 @@ const mapDispatchToProps = {
 };
 
 export default connect(null, mapDispatchToProps)(ProtocolCard);
-

@@ -25,11 +25,9 @@ const StartInterviewPicker = ({
     addSession(caseId, selectedProtocol);
     handleCloseNewSessionOverlay();
     onClose();
-    return true;
   };
 
   const handleProtocolCardClick = (protocolUID) => {
-    console.log('handleprotocolcardclick', protocolUID);
     setShowNewSessionOverlay(true);
     setSelectedProtocol(protocolUID);
   };

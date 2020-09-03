@@ -53,14 +53,11 @@ const ServerAddressForm = ({
   const [selectedServer, setSelectedServer] = useState(server);
 
   const handleSubmit = (values) => {
-    console.log('handlesubvmit', values);
     const serverWithPairingUrl = addPairingUrlToService({
       host: values.serverAddress,
       addresses: [values.serverAddress],
       port: values.serverPort,
     });
-
-    console.log('withpairing', serverWithPairingUrl);
 
     setSelectedServer(serverWithPairingUrl);
   };

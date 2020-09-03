@@ -1,5 +1,6 @@
 import React from 'react';
 import cx from 'classnames';
+import { motion } from 'framer-motion';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Modal } from '@codaco/ui';
@@ -21,19 +22,21 @@ const Overlay = (props) => {
     className,
   } = props;
 
+  if (!show) { return false; }
+
   return (
     <Modal show={show} onBlur={onBlur}>
-      <div className={cx('overlay', { 'overlay--fullscreen': !forceDisableFullScreen && useFullScreenForms }, className)}>
+      <motion.div layout className={cx('overlay', { 'overlay--fullscreen': !forceDisableFullScreen && useFullScreenForms }, className)}>
         { title && (
           <div className="overlay__title">
             <h1>{title}</h1>
           </div>
         )}
-        <div className="overlay__content">
+        <motion.div layout className="overlay__content">
           {children}
-        </div>
+        </motion.div>
         <CloseButton className="overlay__close" onClick={onClose} />
-      </div>
+      </motion.div>
     </Modal>
   );
 };

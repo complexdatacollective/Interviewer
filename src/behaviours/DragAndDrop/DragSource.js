@@ -1,131 +1,109 @@
 /* eslint-disable react/no-find-dom-node, react/sort-comp */
 
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useRef, useState } from 'react';
 import DragPreview from './DragPreview';
 import DragManager, { VERTICAL_SCROLL } from './DragManager';
 import { actionCreators as actions } from './reducer';
 import store from './store';
 
 const dragSource = WrappedComponent =>
-  class DragSource extends PureComponent {
-    static propTypes = {
-      allowDrag: PropTypes.bool,
-      meta: PropTypes.func,
-      scrollDirection: PropTypes.string,
-    };
+  ({
+    allowDrag = true,
+    meta = () => ({}),
+    scrollDirection = VERTICAL_SCROLL,
+    ...rest
+  }) => {
+    const node = useRef();
+    let dragManager = null;
+    let preview = null;
 
-    static defaultProps = {
-      allowDrag: true,
-      meta: () => ({}),
-      scrollDirection: VERTICAL_SCROLL,
-    };
+    const [isDragging, setIsDragging] = useState(false);
 
-    constructor(props) {
-      super(props);
-
-      this.state = {};
-
-      this.dragManager = null;
-      this.preview = null;
-    }
-
-    componentDidMount() {
-      if (!this.props.allowDrag) { return; }
-
-      this.dragManager = new DragManager({
-        el: this.node,
-        onDragStart: this.onDragStart,
-        onDragMove: this.onDragMove,
-        onDragEnd: this.onDragEnd,
-        scrollDirection: this.props.scrollDirection,
-      });
-    }
-
-    componentWillUnmount() {
-      this.cleanupPreview();
-      this.cleanupDragManager();
-    }
-
-    cleanupDragManager = () => {
-      if (this.dragManager) {
-        this.dragManager.unmount();
-        this.dragManager = null;
+    const cleanupDragManager = () => {
+      if (dragManager) {
+        dragManager.unmount();
+        dragManager = null;
       }
     };
 
-    cleanupPreview = () => {
-      if (this.preview) {
-        this.preview.cleanup();
-        this.preview = null;
+    const cleanupPreview = () => {
+      if (preview) {
+        preview.cleanup();
+        preview = null;
       }
-    }
+    };
 
-    createPreview = () => {
-      const draggablePreview = new DragPreview(this.node);
+    const createPreview = () => {
+      const draggablePreview = new DragPreview(node.current);
+      preview = draggablePreview;
+    };
 
-      this.preview = draggablePreview;
-    }
-
-    updatePreview = ({ x, y }) => {
-      if (this.preview) {
-        this.preview.position({ x, y });
+    const updatePreview = ({ x, y }) => {
+      if (preview) {
+        preview.position({ x, y });
       }
-    }
+    };
 
-    setValidMove = (valid) => {
-      this.preview.setValidMove(valid);
-    }
+    const setValidMove = (valid) => {
+      preview.setValidMove(valid);
+    };
 
-    onDragStart = (movement) => {
-      this.createPreview();
+    const onDragStart = (movement) => {
+      createPreview();
 
       store.dispatch(
         actions.dragStart({
           ...movement,
-          meta: this.props.meta(),
+          meta: meta(),
         }),
       );
 
-      this.setState({ isDragging: true }); // TODO: Should this be handled in a manager?
-    }
+      setIsDragging(true);
+    };
 
-    onDragMove = ({ x, y, ...rest }) => {
-      this.updatePreview({ x, y });
+    const onDragMove = ({ x, y, ...other }) => {
+      updatePreview({ x, y });
 
       store.dispatch(
         actions.dragMove({
-          x, y, setValidMove: this.setValidMove, ...rest,
+          x, y, setValidMove, ...other,
         }),
       );
-    }
+    };
 
-    onDragEnd = (movement) => {
-      this.cleanupPreview();
-      this.setState({ isDragging: false });
+    const onDragEnd = (movement) => {
+      cleanupPreview();
+      setIsDragging(false);
 
       store.dispatch(
         actions.dragEnd(movement),
       );
-    }
+    };
 
-    styles = () => (this.state.isDragging ? { visibility: 'hidden' } : {});
+    useEffect(() => {
+      if (!node.current || !allowDrag) { return false; }
 
-    render() {
-      const {
-        allowDrag,
-        meta,
-        ...rest
-      } = this.props;
+      dragManager = new DragManager({
+        el: node.current,
+        onDragStart,
+        onDragMove,
+        onDragEnd,
+        scrollDirection,
+      });
 
-      return (
-        <div style={this.styles()} className="draggable">
-          <div ref={(node) => { this.node = node; }}>
-            <WrappedComponent {...rest} ref={(component) => { this.component = component; }} />
-          </div>
-        </div>
-      );
-    }
+      return () => {
+        cleanupPreview();
+        cleanupDragManager();
+      };
+    }, [node]);
+
+    const styles = () => (isDragging ? { visibility: 'hidden' } : {});
+
+    return (
+      <div style={styles()} className="draggable" ref={node}>
+        <WrappedComponent {...rest} />
+      </div>
+    );
   };
 
 export default dragSource;

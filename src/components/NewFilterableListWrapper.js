@@ -3,7 +3,7 @@ import { get } from 'lodash';
 import objectHash from 'object-hash';
 import { motion, AnimatePresence, AnimateSharedLayout } from 'framer-motion';
 import PropTypes from 'prop-types';
-import { Button } from '@codaco/ui';
+import { Button, Spinner } from '@codaco/ui';
 import { Text } from '@codaco/ui/lib/components/Fields';
 import { entityAttributesProperty } from '../ducks/modules/network';
 import sortOrder from '../utils/sortOrder';
@@ -16,6 +16,7 @@ const NewFilterableListWrapper = (props) => {
     initialSortProperty,
     initialSortDirection,
     sortableProperties,
+    loading,
   } = props;
 
   const [filterTerm, setFilterTerm] = useState(null);
@@ -130,31 +131,41 @@ const NewFilterableListWrapper = (props) => {
           />
         </section>
       </header>
-      <main className="new-filterable-list__main">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="filterable-list-scroller"
-        >
-          <AnimateSharedLayout>
-            <AnimatePresence>
-              {
-                sortedAndFilteredList.length > 0 && sortedAndFilteredList.map(item => (
-                  <motion.div
-                    variants={itemVariants}
-                    key={objectHash(item)}
-                    layout
-                  >
-                    <ItemComponent {...item} />
-                  </motion.div>
-                ))
-              }
-            </AnimatePresence>
-          </AnimateSharedLayout>
+      <motion.main layout className="new-filterable-list__main">
+        {
+          loading ? (
+            <div className="loading-state">
+              <Spinner small />
+              <h4>Loading...</h4>
+            </div>
+          ) : (
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+              className="filterable-list-scroller"
+              layout
+            >
+              <AnimateSharedLayout>
+                <AnimatePresence>
+                  {
+                    sortedAndFilteredList.length > 0 && sortedAndFilteredList.map(item => (
+                      <motion.div
+                        variants={itemVariants}
+                        key={objectHash(item)}
+                        layout
+                      >
+                        <ItemComponent {...item} />
+                      </motion.div>
+                    ))
+                  }
+                </AnimatePresence>
+              </AnimateSharedLayout>
 
-        </motion.div>
-      </main>
+            </motion.div>
+          )
+        }
+      </motion.main>
     </div>
   );
 };
@@ -166,12 +177,14 @@ NewFilterableListWrapper.propTypes = {
   initialSortProperty: PropTypes.string.isRequired,
   initialSortDirection: PropTypes.oneOf(['asc', 'desc']),
   sortableProperties: PropTypes.array,
+  loading: PropTypes.bool,
 };
 
 NewFilterableListWrapper.defaultProps = {
   initialSortDirection: 'asc',
   propertyPath: entityAttributesProperty,
   sortableProperties: [],
+  loading: false,
 };
 
 export default NewFilterableListWrapper;

@@ -29,6 +29,7 @@ $close-button-size: 1rem;
     overflow-x: hidden;
     overflow-y: auto;
     padding: 0 .5rem; // to make scroll bar less jarring
+    padding-bottom: 0.2rem; // Needed so that @clickable elements dont cause scrollbars
   }
 
   &__close {

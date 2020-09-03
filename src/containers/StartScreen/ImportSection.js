@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GraphicButton, Button } from '@codaco/ui';
@@ -8,6 +8,7 @@ import ProtocolUrlForm from './ProtocolUrlForm';
 import importLocalProtocol from '../../utils/protocol/importLocalProtocol';
 import useOnlineStatus from '../../hooks/useOnlineStatus';
 import useServerConnectionStatus from '../../hooks/useServerConnectionStatus';
+import ManageProtocolsOverlay from './ManageProtocolsOverlay';
 
 const ImportSection = (props) => {
   const {
@@ -15,16 +16,19 @@ const ImportSection = (props) => {
     installedProtocols,
     toggleShowProtocolUrlForm,
     showProtocolUrlForm,
+    toggleShowFetchProtocolPicker,
   } = props;
 
   const onlineStatus = useOnlineStatus();
   const pairedServerConnection = useServerConnectionStatus(pairedServer);
 
+  const [showManageProtocolsOverlay, setShowManageProtocolsOverlay] = useState(false);
+
   return (
     <Section className="start-screen-section import-section">
       <motion.main layout className="import-section__install-section">
         <motion.header layout>
-          <h2>Import a Protocol</h2>
+          <h2>Protocols</h2>
         </motion.header>
         <motion.div layout className="content-buttons">
           <AnimatePresence initial={false}>
@@ -76,6 +80,7 @@ const ImportSection = (props) => {
                 >
                   <GraphicButton
                     color="mustard"
+                    onClick={toggleShowFetchProtocolPicker}
                   >
                     <h3>Import</h3>
                     <h2>From Server</h2>
@@ -88,10 +93,14 @@ const ImportSection = (props) => {
       </motion.main>
       { Object.keys(installedProtocols).length > 0 && (
         <motion.footer layout className="import-section__manage-protocols">
-          <Button color="platinum">Manage Installed Protocols...</Button>
+          <Button color="platinum" onClick={() => setShowManageProtocolsOverlay(true)}>Manage Installed Protocols...</Button>
         </motion.footer>
       )}
       <ProtocolUrlForm show={showProtocolUrlForm} handleClose={toggleShowProtocolUrlForm} />
+      <ManageProtocolsOverlay
+        show={showManageProtocolsOverlay}
+        onClose={() => setShowManageProtocolsOverlay(false)}
+      />
     </Section>
   );
 };
@@ -114,6 +123,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     toggleShowProtocolUrlForm: () => dispatch(uiActions.toggle('showProtocolUrlForm')),
+    toggleShowFetchProtocolPicker: () => dispatch(uiActions.toggle('showFetchProtocolPicker')),
   };
 }
 

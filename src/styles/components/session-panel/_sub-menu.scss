@@ -21,7 +21,7 @@
     flex-grow: 1;
   }
 
-  .item {
+  > .item {
     padding: unit(4);
     transition: background var(--animation-duration-fast) var(--animation-easing), font-weight var(--animation-duration-fast) var(--animation-easing);
     cursor: pointer;
@@ -29,6 +29,8 @@
     font-size: 0.8rem;
     letter-spacing: 0.15em;
     text-transform: uppercase;
+    display: flex;
+    align-items: center;
 
     svg {
       &.icon {
