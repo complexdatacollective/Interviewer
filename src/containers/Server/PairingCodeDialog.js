@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { motion } from 'framer-motion';
 import { Button, Spinner } from '@codaco/ui';
 import { PairingCodeLength } from 'secure-comms-api/pairingCodeConfig';
 import ApiClient from '../../utils/ApiClient';
@@ -115,7 +116,7 @@ const PairingCodeDialog = (props) => {
   }, [server]);
 
   return (
-    <React.Fragment>
+    <motion.div>
       {
         loading ?
           <div className="pairing-form pairing-form--loading">
@@ -169,7 +170,7 @@ const PairingCodeDialog = (props) => {
             </form>
           </div>
       }
-    </React.Fragment>
+    </motion.div>
   );
 };
 

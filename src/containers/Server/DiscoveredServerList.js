@@ -111,8 +111,7 @@ const DiscoveredServerList = ({
             <p>
               There was a problem enabling the automatic Server discovery
               feature of Network Canvas. You can still pair with your computer
-              running Server by entering manual connection details using the
-              button below.
+              running Server by entering manual connection details.
             </p>
             <Button size="small" onClick={showErrorDialog} color="neon-coral">Show error details</Button>
           </div>

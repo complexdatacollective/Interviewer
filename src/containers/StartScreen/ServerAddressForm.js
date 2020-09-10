@@ -87,7 +87,7 @@ const ServerAddressForm = ({
   };
 
   const RenderPairingForm = () => (
-    <motion.div layout className="server-address-form">
+    <motion.div className="server-address-form">
       <p>
         If you cannot use automatic Server discovery, you may still be able to pair
         this device with Server by manually entering connection details.
@@ -158,9 +158,7 @@ const ServerAddressForm = ({
         onClose={handleClose}
         title={(showPairingCodeDialog ? 'Pairing...' : 'Manual Server Connection')}
       >
-        <AnimatePresence>
           { showPairingCodeDialog ? renderPairingCode() : RenderPairingForm()}
-        </AnimatePresence>
       </Overlay>
     </React.Fragment>
   );
