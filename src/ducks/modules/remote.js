@@ -2,7 +2,7 @@
 
 import { push } from 'connected-react-router';
 import { actionCreators as resetActions } from './reset';
-import { actionCreators as importProtocolActions } from './importProtocol';
+import { actionCreators as installedProtocolActions } from './installedProtocols';
 import { actionCreators as sessionActions } from './sessions';
 
 /**
@@ -27,8 +27,8 @@ const previewStage = (protocol = {}, stageIndex = 0) =>
     dispatch(resetActions.resetAppState());
 
     // Load protocol
-    dispatch(importProtocolActions.importProtocolComplete(protocol));
-    dispatch(importProtocolActions.resetImportProtocol());
+    dispatch(installedProtocolActions.importProtocolComplete(protocol));
+    dispatch(installedProtocolActions.resetImportProtocol());
 
     // Create session and open specified stage
     return dispatch(sessionActions.addSession(caseId, protocolUID))

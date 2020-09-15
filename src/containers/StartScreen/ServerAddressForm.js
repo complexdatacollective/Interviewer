@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { submit, isValid } from 'redux-form';
 import { connect } from 'react-redux';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Button } from '@codaco/ui';
 import { Form } from '../../containers/';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
@@ -158,7 +158,7 @@ const ServerAddressForm = ({
         onClose={handleClose}
         title={(showPairingCodeDialog ? 'Pairing...' : 'Manual Server Connection')}
       >
-          { showPairingCodeDialog ? renderPairingCode() : RenderPairingForm()}
+        { showPairingCodeDialog ? renderPairingCode() : RenderPairingForm()}
       </Overlay>
     </React.Fragment>
   );

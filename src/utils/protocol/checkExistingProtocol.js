@@ -1,5 +1,6 @@
 import { CancellationError } from 'builder-util-runtime';
 import { findKey } from 'lodash';
+import { store } from '../../ducks/store';
 
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import {
@@ -17,7 +18,10 @@ const renameProtocol = (previousUuid, currentUuid) => {
   .then(() => rename(currentDir, previousDir));
 }
 
-const checkExistingSession = (dispatch, state, currentName) => {
+const checkExistingSession = (currentName) => {
+  const state = store.getState();
+  const dispatch = store.dispatch;
+
   const existingIndex = findKey(state.installedProtocols,
     protocol => protocol.name === currentName);
   const unExportedSession = findKey(state.sessions,

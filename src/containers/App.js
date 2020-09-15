@@ -10,6 +10,7 @@ import { actionCreators as deviceSettingsActions } from '../ducks/modules/device
 import '../styles/main.scss';
 import { isElectron, isCordova, isWindows, isMacOS, isLinux, isPreview, getEnv, isIOS, isAndroid } from '../utils/Environment';
 import DialogManager from '../components/DialogManager';
+import ToastManager from '../components/ToastManager';
 import { SettingsMenu } from '../components/SettingsMenu';
 
 const getElectronWindow = () => {
@@ -114,6 +115,7 @@ const App = ({
         { children }
       </div>
       <DialogManager />
+      <ToastManager />
     </motion.div>
   );
 };

@@ -1,10 +1,12 @@
+import React from 'react';
+import { ProgressBar, Spinner } from '@codaco/ui';
 import { CancellationError } from 'builder-util-runtime';
-
 import { removeDirectory } from '../../utils/filesystem';
 import downloadProtocol from '../../utils/protocol/downloadProtocol';
 import extractProtocol from '../../utils/protocol/extractProtocol';
 import parseProtocol from '../../utils/protocol/parseProtocol';
 import checkExistingProtocol, { moveToExistingProtocol } from '../../utils/protocol/checkExistingProtocol';
+import { actionCreators as toastActions, toastTypes } from './toasts';
 import protocolPath from '../../utils/protocol/protocolPath';
 
 const DOWNLOAD_PROTOCOL = 'DOWNLOAD_PROTOCOL';
@@ -144,25 +146,54 @@ const importProtocolFromURI = (uri, usePairedServer) => (dispatch, getState) => 
     pairedServer = getState().pairedServer;
   }
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     dispatch(checkExistingProtocolAction());
 
     checkExistingProtocol(dispatch, getState(), protocolName)
       .then((existingUid) => {
         previousUid = existingUid;
         dispatch(importProtocolStartAction());
+        dispatch(toastActions.addToast({
+          id: previousUid,
+          type: toastTypes.info,
+          title: 'Importing Protocol...',
+          autoDismiss: false,
+          content: (
+            <React.Fragment>
+              <Spinner small /><ProgressBar orientation="horizontal" percentProgress="10" />
+            </React.Fragment>
+          ),
+        }));
         dispatch(downloadProtocolAction());
         return downloadProtocol(uri, pairedServer);
       })
       .then((tempLocation) => {
         if (getState().importProtocol.step === 0) return cancelledImport();
         dispatch(extractProtocolAction());
+        dispatch(toastActions.updateToast(previousUid, {
+          type: toastTypes.info,
+          title: 'Extracting to temporary storage...',
+          content: (
+            <React.Fragment>
+              <Spinner small /><ProgressBar orientation="horizontal" percentProgress="40" />
+            </React.Fragment>
+          ),
+        }));
         return extractProtocol(tempLocation);
       }, catchError)
       .then((protocolLocation) => {
         protocolUid = protocolLocation;
         if (getState().importProtocol.step === 0) return cancelledImport();
         dispatch(parseProtocolAction());
+        dispatch(toastActions.updateToast(previousUid, {
+          type: toastTypes.info,
+          title: 'Validating protocol...',
+          content: (
+            <React.Fragment>
+              <Spinner small /><ProgressBar orientation="horizontal" percentProgress="80" />
+            </React.Fragment>
+          ),
+        }));
         return parseProtocol(protocolLocation, protocolName);
       }, catchError)
       .then((protocolContent) => {
@@ -175,6 +206,17 @@ const importProtocolFromURI = (uri, usePairedServer) => (dispatch, getState) => 
       .then((protocolContent) => {
         if (getState().importProtocol.step === 0) return cancelledImport();
         dispatch(importProtocolCompleteAction(protocolContent));
+        dispatch(toastActions.removeToast(previousUid));
+        dispatch(toastActions.addToast({
+          type: toastTypes.success,
+          title: 'Finished!',
+          autoDismiss: true,
+          content: (
+            <React.Fragment>
+              <p>Protocol installed successfully.</p>
+            </React.Fragment>
+          ),
+        }));
         return resolve();
       }, catchError)
       .catch(
@@ -185,8 +227,6 @@ const importProtocolFromURI = (uri, usePairedServer) => (dispatch, getState) => 
           } else {
             dispatch(importProtocolFailedAction(error));
           }
-
-          reject();
         },
       );
   });
@@ -198,7 +238,6 @@ const importProtocolFromFile = (filePath, name) => (dispatch, getState) => {
 
   const filename = filenameFromPath(filePath);
   const protocolName = protocolNameFromFilename(name || filename);
-
 
   dispatch(checkExistingProtocolAction());
   return checkExistingProtocol(dispatch, getState(), protocolName)

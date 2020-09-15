@@ -39,7 +39,7 @@ const useServerConnectionStatus = (pairedServer) => {
    *  - succeeded -> check again in 30 seconds
    *  - failed -> check again in 5 seconds
    */
-  const checkInterval = onlineStatus ? 10000 : 5000;
+  const checkInterval = onlineStatus ? 30000 : 5000;
   useInterval(() => {
     if (!pairedServer) {
       setConnectionStatus('waiting');

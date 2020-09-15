@@ -1,3 +1,5 @@
+const PROTOCOL_EXTENSION = '.netcanvas';
+
 // Target protocol schema version. Used to determine compatibility & migration
 const APP_SCHEMA_VERSION = 4;
 
@@ -24,6 +26,7 @@ const ALLOWED_MARKDOWN_PROMPT_TAGS = [
 ];
 
 module.exports = {
+  PROTOCOL_EXTENSION,
   ALLOWED_MARKDOWN_TAGS,
   ALLOWED_MARKDOWN_PROMPT_TAGS,
   APP_SCHEMA_VERSION,

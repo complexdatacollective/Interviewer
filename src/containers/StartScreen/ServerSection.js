@@ -13,7 +13,6 @@ import useOnlineStatus from '../../hooks/useOnlineStatus';
 import { ServerCard } from '../../components/Cards';
 import { openExternalLink } from '../../components/ExternalLink';
 import useServerConnectionStatus from '../../hooks/useServerConnectionStatus';
-import FetchServerProtocolPicker from './FetchServerProtocolPicker';
 
 const ServerSection = ({
   showServerAddressForm,
@@ -21,8 +20,6 @@ const ServerSection = ({
   pairedServer,
   openDialog,
   unpairServer,
-  showFetchProtocolPicker,
-  toggleShowFetchProtocolPicker,
 }) => {
   const onlineStatus = useOnlineStatus();
   const pairedServerConnection = useServerConnectionStatus(pairedServer);
@@ -85,10 +82,6 @@ const ServerSection = ({
         show={showServerAddressForm}
         handleClose={toggleShowServerAddressForm}
       />
-      <FetchServerProtocolPicker
-        show={showFetchProtocolPicker}
-        onClose={toggleShowFetchProtocolPicker}
-      />
       <main className="server-section__main">
         <div className="content-area">
           <div className="content-area__discover">
@@ -115,7 +108,6 @@ const ServerSection = ({
                   host={pairedServer.host}
                   addresses={pairedServer.addresses}
                   disabled={!onlineStatus || pairedServerConnection !== 'ok'}
-                  handleServerCardClick={pairedServerConnection === 'ok' ? toggleShowFetchProtocolPicker : undefined}
                 />
                 <div className={serverStatusClasses}>
                   <div className="server-status__indicator">
@@ -146,14 +138,12 @@ function mapStateToProps(state) {
     pairedServer: state.pairedServer,
     pairedServerConnection: state.pairedServerConnection,
     showServerAddressForm: state.ui.showServerAddressForm,
-    showFetchProtocolPicker: state.ui.showFetchProtocolPicker,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     toggleShowServerAddressForm: () => dispatch(uiActions.toggle('showServerAddressForm')),
-    toggleShowFetchProtocolPicker: () => dispatch(uiActions.toggle('showFetchProtocolPicker')),
     openDialog: dialog => dispatch(dialogActions.openDialog(dialog)),
     unpairServer: () => dispatch(serverActions.unpairServer()),
   };

@@ -5,7 +5,7 @@ import { Button } from '@codaco/ui';
 import { Section } from '.';
 import NCLogo from '../../images/NC-Round.svg';
 import { actionCreators as deviceSettingsActions } from '../../ducks/modules/deviceSettings';
-import { actionCreators as protocolActions } from '../../ducks/modules/importProtocol';
+import { importProtocolFromURI } from '../../utils/protocol/importProtocol';
 import { SettingsMenuButton } from '../../components/SettingsMenu';
 import { openExternalLink } from '../../components/ExternalLink';
 import Switch from './Switch';
@@ -15,7 +15,6 @@ const HeaderSection = (props) => {
   const {
     showGettingStarted,
     toggleShowGettingStarted,
-    importProtocolFromURI,
   } = props;
 
   const [appVersion, setAppVersion] = useState('0.0.0');
@@ -132,7 +131,6 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     toggleShowGettingStarted: () => dispatch(deviceSettingsActions.toggleSetting('showGettingStarted')),
-    importProtocolFromURI: uri => dispatch(protocolActions.importProtocolFromURI(uri)),
   };
 }
 

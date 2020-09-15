@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Button } from '@codaco/ui';
 import { isValid } from 'redux-form';
 import { Overlay } from '../../containers/Overlay';
-import { actionCreators as protocolActions } from '../../ducks/modules/importProtocol';
+import { importProtocolFromURI } from '../../utils/protocol/importProtocol';
 import Form from '../Form';
 import { required, validateUrl } from '../../utils/Validations';
 
@@ -12,9 +12,9 @@ const FORM_NAME = 'import_protocol_url';
 
 const ProtocolUrlForm = ({
   show,
-  importProtocolFromURI,
   handleClose,
   submittable,
+  importProtocol,
 }) => {
   const handleSubmit = (fields) => {
     if (fields) {
@@ -75,13 +75,11 @@ ProtocolUrlForm.defaultProps = {
 };
 
 ProtocolUrlForm.propTypes = {
-  importProtocolFromURI: PropTypes.func.isRequired,
   handleClose: PropTypes.func.isRequired,
   show: PropTypes.bool,
 };
 
 const mapDispatchToProps = dispatch => ({
-  importProtocolFromURI: uri => dispatch(protocolActions.importProtocolFromURI(uri)),
 });
 
 const mapStateToProps = state => ({

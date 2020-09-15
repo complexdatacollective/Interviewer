@@ -5,7 +5,7 @@ import { GraphicButton, Button } from '@codaco/ui';
 import { Section } from '.';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
 import ProtocolUrlForm from './ProtocolUrlForm';
-import importLocalProtocol from '../../utils/protocol/importLocalProtocol';
+import { beginLocalProtocolImport } from '../../utils/protocol/importProtocol';
 import useOnlineStatus from '../../hooks/useOnlineStatus';
 import useServerConnectionStatus from '../../hooks/useServerConnectionStatus';
 import ManageProtocolsOverlay from './ManageProtocolsOverlay';
@@ -62,7 +62,7 @@ const ImportSection = (props) => {
             >
               <GraphicButton
                 color="slate-blue--dark"
-                onClick={importLocalProtocol}
+                onClick={beginLocalProtocolImport}
               >
                 <h3>Import</h3>
                 <h2>From File</h2>

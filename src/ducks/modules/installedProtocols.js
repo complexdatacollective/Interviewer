@@ -1,10 +1,9 @@
 import React, { Fragment } from 'react';
 import { omit, findKey } from 'lodash';
-import { actionTypes as importProtocolActions } from './importProtocol';
 import { actionCreators as dialogActions } from './dialogs';
 import deleteProtocol from '../../utils/protocol/deleteProtocol';
 
-const IMPORT_PROTOCOL_COMPLETE = importProtocolActions.IMPORT_PROTOCOL_COMPLETE;
+const IMPORT_PROTOCOL_COMPLETE = 'IMPORT_PROTOCOL_COMPLETE';
 const DELETE_PROTOCOL = 'INSTALLED_PROTOCOLS/DELETE_PROTOCOL';
 
 const initialState = {};
@@ -33,12 +32,14 @@ const confirmDeleteDialog = {
 
 const hasNonExportedSessionDialog = {
   type: 'Warning',
-  title: 'Non-exported session(s) using protocol',
+  title: 'Interviews using protocol have not been exported',
   message: (
     <Fragment>
-      There are sessions that use this protocol which have not yet been exported.
-      <br /><br />
-      <strong>Deleting this protocol will also delete associated sessions.</strong>
+      <p>
+        There are interview sessions on this device using this protocol that have
+        not yet been exported.
+      </p>
+      <p><strong>Deleting this protocol will also delete these sessions.</strong></p>
     </Fragment>
   ),
   confirmLabel: 'Delete protocol and sessions',
@@ -46,12 +47,11 @@ const hasNonExportedSessionDialog = {
 
 const hasSessionDialog = {
   type: 'Confirm',
-  title: 'Session(s) using protocol',
+  title: 'Interviews using this protocol',
   message: (
     <Fragment>
-      There are sessions that use this protocol.
-      <br /><br />
-      <strong>Deleting this protocol will also delete associated sessions.</strong>
+      <p>There are interview sessions on this device that use this protocol.</p>
+      <p><strong>Deleting this protocol will also delete these sessions.</strong></p>
     </Fragment>
   ),
   confirmLabel: 'Delete protocol and sessions',
@@ -112,6 +112,13 @@ export default function reducer(state = initialState, action = {}) {
   }
 }
 
+function importProtocolCompleteAction(protocolData) {
+  return {
+    type: IMPORT_PROTOCOL_COMPLETE,
+    protocolData,
+  };
+}
+
 const actionTypes = {
   DELETE_PROTOCOL,
   IMPORT_PROTOCOL_COMPLETE,
@@ -119,6 +126,7 @@ const actionTypes = {
 
 const actionCreators = {
   deleteProtocol: deleteProtocolAction,
+  importProtocolCompleteAction,
 };
 
 export {

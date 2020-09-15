@@ -6,10 +6,10 @@ import sessions from './sessions';
 import activeSessionId from './session';
 import activeSessionWorkers from './sessionWorkers';
 import deviceSettings from './deviceSettings';
-import importProtocol from './importProtocol';
 import exportProcess from './exportProcess';
 import installedProtocols from './installedProtocols';
 import dialogs from './dialogs';
+import toasts from './toasts';
 import search from './search';
 import ui from './ui';
 import pairedServer from './pairedServer';
@@ -22,10 +22,10 @@ const appReducer = history => combineReducers({
   activeSessionWorkers,
   sessions,
   deviceSettings,
-  importProtocol,
   exportProcess,
   installedProtocols,
   dialogs,
+  toasts,
   search,
   ui,
   pairedServer,
