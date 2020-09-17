@@ -8,6 +8,8 @@ import {
   ImportSection,
   ServerSection,
 } from '.';
+import WhatsNewSection from './WhatsNewSection';
+import DataExportSection from './DataExportSection';
 
 
 const StartScreen = ({
@@ -43,8 +45,10 @@ const StartScreen = ({
           variants={opacity}
         >
           <HeaderSection />
+          <WhatsNewSection />
           <InterviewSection />
           <ImportSection />
+          <DataExportSection />
           <ServerSection />
         </motion.div>
       </AnimateSharedLayout>

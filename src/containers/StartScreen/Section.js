@@ -11,18 +11,15 @@ const Section = (props) => {
   const springy = {
     visible: {
       opacity: 1,
-      scale: 1,
       transition: {
-        type: 'spring',
+        duration: 1,
         when: 'beforeChildren',
         staggerChildren: 0.5,
       },
     },
     hidden: {
       opacity: 0,
-      scale: 0.5,
       transition: {
-        type: 'spring',
         when: 'afterChildren',
       },
     },

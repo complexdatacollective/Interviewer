@@ -1,18 +1,18 @@
 import React from 'react';
-import { Button } from '@codaco/ui';
+import { motion } from 'framer-motion';
+import { Icon } from '@codaco/ui';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
 
 const SettingsMenuButton = props => (
-  <div className="settings-menu-button">
-    <Button
-      color="slate-blue"
-      size="small"
-      icon="settings"
-      onClick={props.openSettingsMenu}
-    >Settings</Button>
-  </div>
+  <motion.div
+    className="settings-menu-button"
+    onClick={props.openSettingsMenu}
+  >
+    <Icon name="settings" />
+    <h4>Settings</h4>
+  </motion.div>
 );
 
 const mapDispatchToProps = dispatch => ({

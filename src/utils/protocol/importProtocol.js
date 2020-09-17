@@ -1,7 +1,7 @@
 import React from 'react';
 import uuid from 'uuid';
 import { CancellationError } from 'builder-util-runtime';
-import { ProgressBar } from '@codaco/ui';
+import { ProgressBar, Spinner } from '@codaco/ui';
 import { store } from '../../ducks/store';
 import { removeDirectory } from '../../utils/filesystem';
 import { actionCreators as installedProtocolActions } from '../../ducks/modules/installedProtocols';
@@ -36,6 +36,18 @@ const catchError = error => Promise.reject(error);
 const dispatch = store.dispatch;
 const getState = store.getState;
 
+const showCancellationToast = () => {
+  dispatch(toastActions.addToast({
+    type: toastTypes.warning,
+    title: 'Import cancelled',
+    content: (
+      <React.Fragment>
+        <p>You cancelled the import of this protocol.</p>
+      </React.Fragment>
+    ),
+  }));
+}
+
 export const importProtocolFromURI = (uri, usePairedServer) => {
   let cancelled = false; // Top-level cancelled property used to abort promise chain
   let pairedServer;
@@ -55,14 +67,15 @@ export const importProtocolFromURI = (uri, usePairedServer) => {
     id: toastUUID,
     type: toastTypes.info,
     title: 'Importing Protocol...',
+    CustomIcon: (<Spinner small />),
     autoDismiss: false,
     dismissHandler: () => {
-      console.log('dismisshandler');
+      showCancellationToast();
       cancelled = true;
     },
     content: (
       <React.Fragment>
-        <ProgressBar orientation="horizontal" percentProgress="10" />
+        <ProgressBar orientation="horizontal" percentProgress={10} />
       </React.Fragment>
     ),
   }));
@@ -76,7 +89,7 @@ export const importProtocolFromURI = (uri, usePairedServer) => {
           title: 'Downloading Protocol...',
           content: (
             <React.Fragment>
-              <ProgressBar orientation="horizontal" percentProgress="30" />
+              <ProgressBar orientation="horizontal" percentProgress={30} />
             </React.Fragment>
           ),
         }));
@@ -89,7 +102,7 @@ export const importProtocolFromURI = (uri, usePairedServer) => {
           title: 'Extracting to temporary storage...',
           content: (
             <React.Fragment>
-              <ProgressBar orientation="horizontal" percentProgress="40" />
+              <ProgressBar orientation="horizontal" percentProgress={40} />
             </React.Fragment>
           ),
         }));
@@ -103,7 +116,7 @@ export const importProtocolFromURI = (uri, usePairedServer) => {
           title: 'Validating protocol...',
           content: (
             <React.Fragment>
-              <ProgressBar orientation="horizontal" percentProgress="80" />
+              <ProgressBar orientation="horizontal" percentProgress={80} />
             </React.Fragment>
           ),
         }));
@@ -121,6 +134,7 @@ export const importProtocolFromURI = (uri, usePairedServer) => {
 
         // Send the payload to installedProtocols
         dispatch(installedProtocolActions.importProtocolCompleteAction(protocolContent));
+
         // Remove the status toast
         dispatch(toastActions.removeToast(toastUUID));
         dispatch(toastActions.addToast({
@@ -137,16 +151,16 @@ export const importProtocolFromURI = (uri, usePairedServer) => {
       }, catchError)
       .catch(
         (error) => {
-          if (protocolUid) cleanUpProtocol(protocolUid); // attempt to clean up files
+          // Remove the status toast
+          dispatch(toastActions.removeToast(toastUUID));
 
+          // attempt to clean up files
+          if (protocolUid) cleanUpProtocol(protocolUid); 
+
+          // If this wasn't user cancellation, dispatch an error
           if (!(error instanceof CancellationError)) {
-            dispatch({
-              type: 'IMPORT_PROTOCOL_FAILED',
-              error,
-            });
-          }
-
-          return reject(error);
+            dispatch(installedProtocolActions.importProtocolFailedAction(error));
+          }          
         },
       );
   });
@@ -212,10 +226,9 @@ export const importProtocolFromFile = (filePath, name) => {
     .catch(
       (error) => {
         if (protocolUid) cleanUpProtocol(protocolUid); // attempt to clean up files
-        if (error instanceof CancellationError) {
-          dispatch(resetImportAction());
-        } else {
-          dispatch(importProtocolFailedAction(error));
+
+        if (!(error instanceof CancellationError)) {
+          dispatch(installedProtocolActions.importProtocolFailedAction(error));
         }
       },
     );

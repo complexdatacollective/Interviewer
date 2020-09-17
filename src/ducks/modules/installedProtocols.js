@@ -4,6 +4,7 @@ import { actionCreators as dialogActions } from './dialogs';
 import deleteProtocol from '../../utils/protocol/deleteProtocol';
 
 const IMPORT_PROTOCOL_COMPLETE = 'IMPORT_PROTOCOL_COMPLETE';
+const IMPORT_PROTOCOL_FAILED = 'IMPORT_PROTOCOL_FAILED';
 const DELETE_PROTOCOL = 'INSTALLED_PROTOCOLS/DELETE_PROTOCOL';
 
 const initialState = {};
@@ -119,14 +120,23 @@ function importProtocolCompleteAction(protocolData) {
   };
 }
 
+function importProtocolFailedAction(error) {
+  return {
+    type: IMPORT_PROTOCOL_FAILED,
+    error,
+  };
+}
+
 const actionTypes = {
   DELETE_PROTOCOL,
   IMPORT_PROTOCOL_COMPLETE,
+  IMPORT_PROTOCOL_FAILED,
 };
 
 const actionCreators = {
   deleteProtocol: deleteProtocolAction,
   importProtocolCompleteAction,
+  importProtocolFailedAction,
 };
 
 export {

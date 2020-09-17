@@ -48,19 +48,11 @@
   background-image: url('../images/getting-started.svg');
   background-size: 50%;
   background-repeat: no-repeat;
-  background-position: 33rem 0;
+  background-position: 100% 0;
   position: relative;
 
-  .welcome-header {
-    &__header-toggle {
-      position: absolute;
-      right: unit(6);
-      top: unit(4);
-    }
-  }
-
-  > main {
-    padding: unit(6);
+  &__main {
+    padding: 0 unit(6) unit(4);
   }
 
   .welcome-description {
@@ -206,15 +198,38 @@
   overflow: hidden;
   border-radius: var(--border-radius);
 
-  background: transparent;
-  box-shadow: none;
+  .version-string {
+    font-weight: bolder;
+    font-size: 0.64rem;
+    letter-spacing: .15em;
+    align-self: flex-start;
+    margin-left: 0rem;
+    margin-top: 1rem;
+  }
+
+  &__top {
+    display: flex;
+    background: rgb(64, 64, 136);
+    flex: 1;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    padding: unit(2) unit(4);
+
+    .header-toggle {
+      .switch__label {
+        font-size: 0.8rem;
+      }
+    }
+  }
 
   &__wrapper {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-    padding: unit(4);
+    padding: unit(2) unit(4) unit(4);
+    background: linear-gradient(#404088, transparent);
 
     .header-brand {
       flex: 0 0 unit(15);
@@ -244,14 +259,6 @@
     }
   }
 
-  .version-string {
-    position: absolute;
-    right: unit(2);
-    top: unit(2);
-    font-weight: bolder;
-    font-size: 0.64rem;
-    letter-spacing: .15em;
-  }
 }
 
 .action-button {
@@ -363,10 +370,12 @@
           background: var(--color-slate-blue);
           border-radius: var(--border-radius);
           max-height: 30rem;
+          min-height: 25rem;
           display: flex;
           flex-direction: column;
           justify-content: center;
           overflow: hidden;
+          margin-top: unit(2);
 
           &--offline,
           &--error {
@@ -390,10 +399,10 @@
           .scrollable {
             display: flex;
             flex-wrap: wrap;
-            padding: unit(2) 0;
+            padding: unit(2);
 
             > * {
-              width: 50%;
+              max-width: 50%;
             }
 
             &:empty {
@@ -652,5 +661,22 @@
         animation: pulse 2s infinite;
       }
     }
+  }
+}
+
+.whats-new-section {
+  background: var(--color-sea-serpent);
+  color: var(--color-white);
+
+  &__content {
+    padding: unit(4) unit(6);
+  }
+
+  &__footer {
+    background: var(--color-sea-serpent--dark);
+    padding: unit(2) unit(6);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
   }
 }

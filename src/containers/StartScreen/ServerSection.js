@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import cx from 'classnames';
 import { Button } from '@codaco/ui';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
@@ -8,21 +8,22 @@ import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { Section } from '.';
 import DiscoveredServerList from '../Server/DiscoveredServerList';
 import ServerAddressForm from './ServerAddressForm';
-import { ExternalLink } from '../../components';
 import useOnlineStatus from '../../hooks/useOnlineStatus';
 import { ServerCard } from '../../components/Cards';
 import { openExternalLink } from '../../components/ExternalLink';
 import useServerConnectionStatus from '../../hooks/useServerConnectionStatus';
 
-const ServerSection = ({
-  showServerAddressForm,
-  toggleShowServerAddressForm,
-  pairedServer,
-  openDialog,
-  unpairServer,
-}) => {
+const ServerSection = () => {
+  const showServerAddressForm = useSelector(state => state.showServerAddressForm);
+  const pairedServer = useSelector(state => state.pairedServer);
+
   const onlineStatus = useOnlineStatus();
   const pairedServerConnection = useServerConnectionStatus(pairedServer);
+
+  const dispatch = useDispatch();
+  const openDialog = dialog => dispatch(dialogActions.openDialog(dialog));
+  const unpairServer = () => dispatch(serverActions.unpairServer());
+  const toggleShowServerAddressForm = () => dispatch(uiActions.toggle('showServerAddressForm'));
 
   const handleUnpairRequest = () => {
     openDialog({
@@ -91,11 +92,6 @@ const ServerSection = ({
             { !pairedServer ? (
               <React.Fragment>
                 <p>
-                  You must pair this device with this Server before you can securely exchange data.
-                  This is a one-off process that allows your devices to identify each other. Visit
-                  our <ExternalLink href="https://documentation.networkcanvas.com/docs/key-concepts/pairing/">documentation article</ExternalLink> on pairing to learn more.
-                </p>
-                <p>
                   To begin, open Server on a computer connected to the same network as this device.
                   When the device appears below, click its card to start the pairing process.
                 </p>
@@ -121,6 +117,7 @@ const ServerSection = ({
             )}
           </div>
           <div className="content-area__buttons">
+            <Button key="unpair" color="mustard--dark" onClick={() => openExternalLink('https://documentation.networkcanvas.com/docs/key-concepts/pairing/')}>Pairing Documentation</Button>
             { !pairedServer ? (
               <Button disabled={!onlineStatus} color="platinum" onClick={toggleShowServerAddressForm}>Provide manual connection details...</Button>
             ) :
@@ -133,22 +130,4 @@ const ServerSection = ({
   );
 };
 
-function mapStateToProps(state) {
-  return {
-    pairedServer: state.pairedServer,
-    pairedServerConnection: state.pairedServerConnection,
-    showServerAddressForm: state.ui.showServerAddressForm,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    toggleShowServerAddressForm: () => dispatch(uiActions.toggle('showServerAddressForm')),
-    openDialog: dialog => dispatch(dialogActions.openDialog(dialog)),
-    unpairServer: () => dispatch(serverActions.unpairServer()),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ServerSection);
-
-export { ServerSection as UnconnectedServerSection };
+export default ServerSection;

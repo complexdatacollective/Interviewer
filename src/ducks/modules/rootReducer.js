@@ -6,7 +6,6 @@ import sessions from './sessions';
 import activeSessionId from './session';
 import activeSessionWorkers from './sessionWorkers';
 import deviceSettings from './deviceSettings';
-import exportProcess from './exportProcess';
 import installedProtocols from './installedProtocols';
 import dialogs from './dialogs';
 import toasts from './toasts';
@@ -22,7 +21,6 @@ const appReducer = history => combineReducers({
   activeSessionWorkers,
   sessions,
   deviceSettings,
-  exportProcess,
   installedProtocols,
   dialogs,
   toasts,

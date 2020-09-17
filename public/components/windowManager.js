@@ -37,6 +37,7 @@ function createWindow() {
       title: 'Network Canvas',
       webPreferences: {
         nodeIntegration: true,
+        spellcheck: false,
       },
     }, minDimensions, titlebarParameters);
 

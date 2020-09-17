@@ -1,7 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { get } from 'lodash';
 import { SessionCard } from '@codaco/ui/lib/components/Cards';
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
@@ -13,10 +11,14 @@ const oneBasedIndex = i => parseInt(i || 0, 10) + 1;
 const ResumeSessionPicker = ({
   show,
   onClose,
-  sessions,
-  setSession,
-  installedProtocols,
 }) => {
+  const dispatch = useDispatch();
+  const setSession = sessionUID => dispatch(sessionActions.setSession(sessionUID));
+
+  const sessions = useSelector(state => state.sessions);
+  const installedProtocols = useSelector(state => state.installedProtocols);
+
+
   const handleSessionCardClick = (sessionUUID) => {
     setSession(sessionUUID);
     onClose();
@@ -71,19 +73,4 @@ const ResumeSessionPicker = ({
   );
 };
 
-ResumeSessionPicker.propTypes = {
-  sessions: PropTypes.object.isRequired,
-};
-
-function mapStateToProps(state) {
-  return {
-    sessions: state.sessions,
-    installedProtocols: state.installedProtocols,
-  };
-}
-
-const mapDispatchToProps = dispatch => ({
-  setSession: bindActionCreators(sessionActions.setSession, dispatch),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ResumeSessionPicker);
+export default ResumeSessionPicker;

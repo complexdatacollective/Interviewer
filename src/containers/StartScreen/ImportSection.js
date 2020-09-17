@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GraphicButton, Button } from '@codaco/ui';
 import { Section } from '.';
@@ -9,20 +9,23 @@ import { beginLocalProtocolImport } from '../../utils/protocol/importProtocol';
 import useOnlineStatus from '../../hooks/useOnlineStatus';
 import useServerConnectionStatus from '../../hooks/useServerConnectionStatus';
 import ManageProtocolsOverlay from './ManageProtocolsOverlay';
+import urlIcon from '../../images/undraw_new_ideas.svg';
+import localIcon from '../../images/undraw_selecting.svg';
+import serverIcon from '../../images/undraw_file_sync.svg';
+import FetchServerProtocolPicker from './FetchServerProtocolPicker';
 
-const ImportSection = (props) => {
-  const {
-    pairedServer,
-    installedProtocols,
-    toggleShowProtocolUrlForm,
-    showProtocolUrlForm,
-    toggleShowFetchProtocolPicker,
-  } = props;
-
+const ImportSection = () => {
   const onlineStatus = useOnlineStatus();
+  const pairedServer = useSelector(state => state.pairedServer);
   const pairedServerConnection = useServerConnectionStatus(pairedServer);
-
+  const installedProtocols = useSelector(state => state.installedProtocols);
+  const showProtocolUrlForm = useSelector(state => state.ui.showProtocolUrlForm);
+  const showFetchProtocolPicker = useSelector(state => state.ui.showFetchProtocolPicker);
   const [showManageProtocolsOverlay, setShowManageProtocolsOverlay] = useState(false);
+
+  const dispatch = useDispatch();
+  const toggleShowProtocolUrlForm = () => dispatch(uiActions.toggle('showProtocolUrlForm'));
+  const toggleShowFetchProtocolPicker = () => dispatch(uiActions.toggle('showFetchProtocolPicker'));
 
   return (
     <Section className="start-screen-section import-section">
@@ -45,6 +48,9 @@ const ImportSection = (props) => {
                   <GraphicButton
                     color="sea-green"
                     onClick={toggleShowProtocolUrlForm}
+                    graphicSize="13rem"
+                    graphicPosition="0% 2rem"
+                    graphic={urlIcon}
                   >
                     <h3>Import</h3>
                     <h2>From URL</h2>
@@ -63,6 +69,9 @@ const ImportSection = (props) => {
               <GraphicButton
                 color="slate-blue--dark"
                 onClick={beginLocalProtocolImport}
+                graphicPosition="0% 0%"
+                graphicSize="15rem"
+                graphic={localIcon}
               >
                 <h3>Import</h3>
                 <h2>From File</h2>
@@ -81,6 +90,9 @@ const ImportSection = (props) => {
                   <GraphicButton
                     color="mustard"
                     onClick={toggleShowFetchProtocolPicker}
+                    graphicPosition="0rem -2rem"
+                    graphicSize="17rem"
+                    graphic={serverIcon}
                   >
                     <h3>Import</h3>
                     <h2>From Server</h2>
@@ -101,6 +113,10 @@ const ImportSection = (props) => {
         show={showManageProtocolsOverlay}
         onClose={() => setShowManageProtocolsOverlay(false)}
       />
+      <FetchServerProtocolPicker
+        show={showFetchProtocolPicker}
+        onClose={() => toggleShowFetchProtocolPicker()}
+      />
     </Section>
   );
 };
@@ -112,21 +128,4 @@ ImportSection.defaultProps = {
   pairedServer: null,
 };
 
-function mapStateToProps(state) {
-  return {
-    pairedServer: state.pairedServer,
-    installedProtocols: state.installedProtocols,
-    showProtocolUrlForm: state.ui.showProtocolUrlForm,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    toggleShowProtocolUrlForm: () => dispatch(uiActions.toggle('showProtocolUrlForm')),
-    toggleShowFetchProtocolPicker: () => dispatch(uiActions.toggle('showFetchProtocolPicker')),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ImportSection);
-
-export { ImportSection as UnconnectedImportSection };
+export default ImportSection;

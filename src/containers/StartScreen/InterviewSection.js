@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Section } from '.';
 import { ProtocolCard, SessionCard } from '../../components/Cards';
@@ -11,16 +11,17 @@ import StackButton from '../../components/StackButton';
 import ResumeSessionPicker from './ResumeSessionPicker';
 import StartInterviewPicker from './StartInterviewPicker';
 
-const InterviewSection = (props) => {
-  const {
-    installedProtocols,
-    sessions,
-    lastActiveSession,
-    addSession,
-    showResumeSessionPicker,
-    showStartInterviewPicker,
-    toggleUIOverlay,
-  } = props;
+const InterviewSection = () => {
+  const dispatch = useDispatch();
+  const addSession = (caseId, protocol) => dispatch(sessionActions.addSession(caseId, protocol));
+  const toggleUIOverlay = overlay => dispatch(uiActions.toggle(overlay));
+
+  const installedProtocols = useSelector(state => state.installedProtocols);
+  const lastActiveSession = useSelector(state => getLastActiveSession(state));
+  const sessions = useSelector(state => state.sessions);
+  const showResumeSessionPicker = useSelector(state => state.ui.showResumeSessionPicker);
+  const showStartInterviewPicker = useSelector(state => state.ui.showStartInterviewPicker);
+
 
   const lastActiveProtocol = {
     ...installedProtocols[Object.keys(installedProtocols)[0]],
@@ -151,30 +152,4 @@ const InterviewSection = (props) => {
   );
 };
 
-InterviewSection.propTypes = {
-};
-
-InterviewSection.defaultProps = {
-};
-
-function mapStateToProps(state) {
-  return {
-    installedProtocols: state.installedProtocols,
-    showProtocolUrlForm: state.ui.showProtocolUrlForm,
-    showResumeSessionPicker: state.ui.showResumeSessionPicker,
-    showStartInterviewPicker: state.ui.showStartInterviewPicker,
-    sessions: state.sessions,
-    lastActiveSession: getLastActiveSession(state),
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    addSession: (caseId, protocol) => dispatch(sessionActions.addSession(caseId, protocol)),
-    toggleUIOverlay: overlay => dispatch(uiActions.toggle(overlay)),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(InterviewSection);
-
-export { InterviewSection as UnconnectedInterviewSection };
+export default InterviewSection;

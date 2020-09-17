@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
-import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
+import { useSelector, useDispatch } from 'react-redux';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
-import { actionCreators as protocolActions } from '../../ducks/modules/importProtocol';
+import { importProtocolFromURI } from '../../utils/protocol/importProtocol';
 import { NewFilterableListWrapper } from '../../components';
 import { Overlay } from '../Overlay';
 import ApiClient from '../../utils/ApiClient';
@@ -13,15 +12,16 @@ import { ProtocolCard } from '../../components/Cards';
 const FetchServerProtocolPicker = ({
   show,
   onClose,
-  pairedServer,
-  openDialog,
-  importProtocolFromURI,
 }) => {
   const handleProtocolCardClick = (downloadPath) => {
     importProtocolFromURI(downloadPath, true);
   };
 
   const onlineStatus = useOnlineStatus();
+
+  const dispatch = useDispatch();
+  const openDialog = dialog => dispatch(dialogActions.openDialog(dialog));
+  const pairedServer = useSelector(state => state.pairedServer);
 
   const [protocolList, setProtocolList] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -108,16 +108,4 @@ const FetchServerProtocolPicker = ({
   );
 };
 
-function mapStateToProps(state) {
-  return {
-    pairedServer: state.pairedServer,
-  };
-}
-
-const mapDispatchToProps = dispatch => ({
-  addSession: (caseId, protocol) => dispatch(sessionsActions.addSession(caseId, protocol)),
-  openDialog: dialog => dispatch(dialogActions.openDialog(dialog)),
-  importProtocolFromURI: uri => dispatch(protocolActions.importProtocolFromURI(uri, true)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(FetchServerProtocolPicker);
+export default FetchServerProtocolPicker;

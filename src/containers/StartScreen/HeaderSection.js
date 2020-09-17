@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@codaco/ui';
 import { Section } from '.';
 import NCLogo from '../../images/NC-Round.svg';
@@ -11,13 +11,11 @@ import { openExternalLink } from '../../components/ExternalLink';
 import Switch from './Switch';
 import getVersion from '../../utils/getVersion';
 
-const HeaderSection = (props) => {
-  const {
-    showGettingStarted,
-    toggleShowGettingStarted,
-  } = props;
-
+const HeaderSection = () => {
   const [appVersion, setAppVersion] = useState('0.0.0');
+  const showGettingStarted = useSelector(state => state.deviceSettings.showGettingStarted);
+  const dispatch = useDispatch();
+  const toggleShowGettingStarted = () => dispatch(deviceSettingsActions.toggleSetting('showGettingStarted'));
 
   getVersion().then(version => setAppVersion(version));
 
@@ -26,7 +24,7 @@ const HeaderSection = (props) => {
       height: '100%',
       opacity: 1,
       transition: {
-        delay: 1,
+        delay: showGettingStarted ? 0 : 1,
         type: 'spring',
       },
     },
@@ -37,37 +35,35 @@ const HeaderSection = (props) => {
   };
 
   return (
-    <React.Fragment>
-      <Section className="start-screen-section start-screen-header">
-        <motion.div layout className="start-screen-header__wrapper">
-          <div className="header-mark">
-            <h1>Network Canvas</h1>
-            <h4>Simplifying complex network data collection.</h4>
-          </div>
-          <div className="header-brand">
-            <img src={NCLogo} className="header-logo" alt="Network Canvas" />
-          </div>
-          <div className="version-string">{appVersion}</div>
-          <motion.footer layout>
-            <SettingsMenuButton />
-          </motion.footer>
-        </motion.div>
-      </Section>
-      <AnimatePresence>
-        { showGettingStarted && (
-          <motion.div
-            exit="hidden"
-            variants={start}
-            layout
-          >
-            <motion.section className="start-screen-section welcome-section">
-              <Switch
-                className="welcome-header__header-toggle"
-                label="Show 'getting started' card"
-                on={showGettingStarted}
-                onChange={toggleShowGettingStarted}
-              />
-              <main>
+    <Section className="start-screen-section start-screen-header">
+      <motion.header layout className="start-screen-header__top">
+        <SettingsMenuButton />
+        <Switch
+          className="header-toggle"
+          label="Show 'getting started'"
+          on={showGettingStarted}
+          onChange={toggleShowGettingStarted}
+        />
+      </motion.header>
+      <motion.div layout className="start-screen-header__wrapper">
+        <div className="header-mark">
+          <h1>Network Canvas</h1>
+          <h4>Simplifying complex network data collection.</h4>
+        </div>
+        <div className="header-brand">
+          <img src={NCLogo} className="header-logo" alt="Network Canvas" />
+        </div>
+        <div className="version-string">{appVersion}</div>
+      </motion.div>
+      <motion.section className="welcome-section">
+        <AnimatePresence>
+          { showGettingStarted && (
+            <motion.div
+              exit="hidden"
+              variants={start}
+              layout
+            >
+              <main className="welcome-section__main">
                 <header>
                   <h2>Getting Started</h2>
                 </header>
@@ -108,11 +104,11 @@ const HeaderSection = (props) => {
                   </Button>
                 </div>
               </main>
-            </motion.section>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </React.Fragment>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.section>
+    </Section>
   );
 };
 
@@ -122,18 +118,6 @@ HeaderSection.propTypes = {
 HeaderSection.defaultProps = {
 };
 
-function mapStateToProps(state) {
-  return {
-    showGettingStarted: state.deviceSettings.showGettingStarted,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    toggleShowGettingStarted: () => dispatch(deviceSettingsActions.toggleSetting('showGettingStarted')),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(HeaderSection);
+export default HeaderSection;
 
 export { HeaderSection as UnconnectedHeaderSection };

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Button } from '@codaco/ui';
 import { isValid } from 'redux-form';
 import { Overlay } from '../../containers/Overlay';
@@ -13,9 +13,9 @@ const FORM_NAME = 'import_protocol_url';
 const ProtocolUrlForm = ({
   show,
   handleClose,
-  submittable,
-  importProtocol,
 }) => {
+  const submittable = useSelector(state => isValid(FORM_NAME)(state));
+
   const handleSubmit = (fields) => {
     if (fields) {
       importProtocolFromURI(fields.protocol_url).then(() => {
@@ -79,13 +79,4 @@ ProtocolUrlForm.propTypes = {
   show: PropTypes.bool,
 };
 
-const mapDispatchToProps = dispatch => ({
-});
-
-const mapStateToProps = state => ({
-  submittable: isValid(FORM_NAME)(state),
-});
-
-export { ProtocolUrlForm };
-
-export default connect(mapStateToProps, mapDispatchToProps)(ProtocolUrlForm);
+export default ProtocolUrlForm;

@@ -19,6 +19,7 @@ const initialState = {
 
   // Start screen
   showGettingStarted: true,
+  showWhatsNew: false, // Disabled for initial release
 
   // Export Options
   exportGraphML: true,
