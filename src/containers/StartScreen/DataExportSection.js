@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { get } from 'lodash';
 import { motion, AnimatePresence, AnimateSharedLayout } from 'framer-motion';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@codaco/ui';
 import { SessionCard } from '@codaco/ui/lib/components/Cards';
 import { exportToFile, exportToServer } from '../../utils/exportProcess';
@@ -21,6 +21,8 @@ const DataExportSection = () => {
 
   const sessions = useSelector(state => state.sessions);
   const installedProtocols = useSelector(state => state.installedProtocols);
+
+  const dispatch = useDispatch();
 
   const toggleSelectAll = () => {
     if ((Object.keys(sessions).length !== selectedSessions.length)) {
@@ -53,6 +55,7 @@ const DataExportSection = () => {
       caseId,
       startedAt,
       updatedAt,
+      exportedAt,
     } = session;
 
     const protocol = useSelector(state => get(state.installedProtocols, [session.protocolUID]));
@@ -65,6 +68,7 @@ const DataExportSection = () => {
       progress,
       startedAt,
       updatedAt,
+      exportedAt,
       key: sessionUUID,
       protocolName: protocol.name,
       sessionUUID,
@@ -86,61 +90,72 @@ const DataExportSection = () => {
     }));
   };
 
+  const exportSessionsToServer = () => {
+    exportToServer(selectedSessions.map((session) => {
+      const sessionProtocol =
+        installedProtocols[sessions[session].protocolUID];
+
+      return asNetworkWithSessionVariables(
+        session,
+        sessions[session],
+        sessionProtocol,
+      );
+    }));
+  };
+
   return (
-    <AnimateSharedLayout>
-      <Section className="start-screen-section data-export-section">
-        <motion.main layout className="data-export-section__main">
-          <motion.header layout>
-            <h2>Export &amp; Manage Interview Data</h2>
-          </motion.header>
-          <motion.div layout className="content-area">
-            Select one or more interview sessions by tapping then, and then delete or export
-            them using the buttons provided.
-          </motion.div>
-          <NewFilterableListWrapper
-            ItemComponent={SessionCard}
-            items={formattedSessions}
-            propertyPath={null}
-            initialSortProperty="updatedAt"
-            initialSortDirection="desc"
-            sortableProperties={[
-              {
-                label: 'Last Changed',
-                variable: 'updatedAt',
-              },
-              {
-                label: 'Case ID',
-                variable: 'caseId',
-              },
-              {
-                label: 'Progress',
-                variable: 'progress',
-              },
-            ]}
+    <Section className="start-screen-section data-export-section">
+      <motion.main layout className="data-export-section__main">
+        <motion.header layout>
+          <h2>Export &amp; Manage Interview Data</h2>
+        </motion.header>
+        <motion.div layout className="content-area">
+          Select one or more interview sessions by tapping then, and then delete or export
+          them using the buttons provided.
+        </motion.div>
+        <NewFilterableListWrapper
+          ItemComponent={SessionCard}
+          items={formattedSessions}
+          propertyPath={null}
+          initialSortProperty="updatedAt"
+          initialSortDirection="desc"
+          sortableProperties={[
+            {
+              label: 'Last Changed',
+              variable: 'updatedAt',
+            },
+            {
+              label: 'Case ID',
+              variable: 'caseId',
+            },
+            {
+              label: 'Progress',
+              variable: 'progress',
+            },
+          ]}
+        />
+        <motion.div
+          className="selection-status"
+          layout
+        >
+          <Switch
+            className="header-toggle"
+            label="Select all"
+            on={(Object.keys(sessions).length === selectedSessions.length)}
+            onChange={toggleSelectAll}
           />
-          <motion.div
-            className="selection-status"
-            layout
-          >
-            <Switch
-              className="header-toggle"
-              label="Select all"
-              on={(Object.keys(sessions).length === selectedSessions.length)}
-              onChange={toggleSelectAll}
-            />
-            { selectedSessions.length > 0 &&
-              (<span>{ selectedSessions.length} selected session{ selectedSessions.length > 1 ? ('s') : null }.</span>)}
-          </motion.div>
-        </motion.main>
-        <motion.footer layout className="data-export-section__footer">
-          <Button color="neon-coral--dark" onClick={exportSessionsToFile} disabled={selectedSessions.length === 0}>Delete Selected</Button>
-          <div className="action-buttons">
-            { pairedServerConnection === 'ok' && (<Button key="unpair" color="mustard" disabled={pairedServerConnection !== 'ok' || selectedSessions.length === 0}>Export Selected To Server</Button>)}
-            <Button color="platinum" onClick={exportSessionsToFile} disabled={selectedSessions.length === 0}>Export Selected To File</Button>
-          </div>
-        </motion.footer>
-      </Section>
-    </AnimateSharedLayout>
+          { selectedSessions.length > 0 &&
+            (<span>{ selectedSessions.length} selected session{ selectedSessions.length > 1 ? ('s') : null }.</span>)}
+        </motion.div>
+      </motion.main>
+      <motion.footer layout className="data-export-section__footer">
+        <Button color="neon-coral--dark" onClick={exportSessionsToFile} disabled={selectedSessions.length === 0}>Delete Selected</Button>
+        <div className="action-buttons">
+          { pairedServerConnection === 'ok' && (<Button onClick={exportSessionsToServer} color="mustard" disabled={pairedServerConnection !== 'ok' || selectedSessions.length === 0}>Export Selected To Server</Button>)}
+          <Button color="platinum" onClick={exportSessionsToFile} disabled={selectedSessions.length === 0}>Export Selected To File</Button>
+        </div>
+      </motion.footer>
+    </Section>
   );
 };
 

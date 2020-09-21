@@ -94,8 +94,7 @@ const NewFilterableListWrapper = (props) => {
   const sortedAndFilteredList = getFilteredAndSortedItemList();
 
   return (
-    <motion.div
-      layout
+    <div
       className="new-filterable-list"
     >
       <header className="new-filterable-list__header">
@@ -167,7 +166,7 @@ const NewFilterableListWrapper = (props) => {
           )
         }
       </motion.main>
-    </motion.div>
+    </div>
   );
 };
 

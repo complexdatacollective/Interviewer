@@ -42,7 +42,7 @@ const setSession = id => (dispatch, getState) => {
 const endSession = (alsoDelete = false, markAsFinished = false) => (dispatch, getState) => {
   if (markAsFinished) {
     const { activeSessionId } = getState();
-    dispatch(SessionsActions.finishSession(activeSessionId));
+    dispatch(SessionsActions.setSessionFinished(activeSessionId));
   }
 
   dispatch({

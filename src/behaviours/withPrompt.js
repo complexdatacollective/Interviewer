@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
-
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { getPromptIndexForCurrentSession } from '../selectors/session';
 import { getProtocolStages } from '../selectors/protocol';

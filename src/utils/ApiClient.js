@@ -348,6 +348,8 @@ class ApiClient {
             this.emit('error', ProgressMessages.NoResponseMessage);
           }
         }).then(() => {
+          this.emit('session-exported', sessionList[index].sessionVariables.sessionId);
+
           if (!cancelled) {
             this.emit('update', ProgressMessages.ExportSession(index + 1, sessionList.length));
           }

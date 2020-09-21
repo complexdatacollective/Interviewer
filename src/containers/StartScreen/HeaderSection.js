@@ -10,8 +10,11 @@ import { SettingsMenuButton } from '../../components/SettingsMenu';
 import { openExternalLink } from '../../components/ExternalLink';
 import Switch from './Switch';
 import getVersion from '../../utils/getVersion';
+import useOnlineStatus from '../../hooks/useOnlineStatus';
 
 const HeaderSection = () => {
+  const onlineStatus = useOnlineStatus();
+
   const [appVersion, setAppVersion] = useState('0.0.0');
   const showGettingStarted = useSelector(state => state.deviceSettings.showGettingStarted);
   const dispatch = useDispatch();
@@ -87,17 +90,20 @@ const HeaderSection = () => {
                   <Button
                     color="primary"
                     onClick={() => openExternalLink('https://www.youtube.com/watch?v=XzfE6j-LnII')}
+                    disabled={!onlineStatus}
                   >
                     Watch overview video
                   </Button>
                   <Button
                     color="sea-serpent"
                     onClick={() => openExternalLink('https://documentation.networkcanvas.com')}
+                    disabled={!onlineStatus}
                   >
                     Visit documentation website
                   </Button>
                   <Button
                     color="mustard"
+                    disabled={!onlineStatus}
                     onClick={() => importProtocolFromURI('https://documentation.networkcanvas.com/protocols/Public%20Health%20Demo%20Protocol.netcanvas')}
                   >
                     Install sample protocol

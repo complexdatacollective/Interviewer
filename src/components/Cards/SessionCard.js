@@ -28,6 +28,7 @@ const SessionCard = (props) => {
     caseId,
     startedAt,
     updatedAt,
+    exportedAt,
   } = session;
 
   const onClickLoadSession = (event) => {
@@ -40,6 +41,7 @@ const SessionCard = (props) => {
       caseId={caseId}
       startedAt={startedAt}
       updatedAt={updatedAt}
+      exportedAt={exportedAt}
       protocolName={protocol.name}
       progress={progress}
       onClickHandler={onClickLoadSession}
