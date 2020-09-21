@@ -9,7 +9,7 @@ import { beginLocalProtocolImport } from '../../utils/protocol/importProtocol';
 import useOnlineStatus from '../../hooks/useOnlineStatus';
 import useServerConnectionStatus from '../../hooks/useServerConnectionStatus';
 import ManageProtocolsOverlay from './ManageProtocolsOverlay';
-import urlIcon from '../../images/undraw_new_ideas.svg';
+import urlIcon from '../../images/undraw_in_thought.svg';
 import localIcon from '../../images/undraw_selecting.svg';
 import serverIcon from '../../images/undraw_file_sync.svg';
 import FetchServerProtocolPicker from './FetchServerProtocolPicker';
@@ -49,7 +49,7 @@ const ImportSection = () => {
                     color="sea-green"
                     onClick={toggleShowProtocolUrlForm}
                     graphicSize="13rem"
-                    graphicPosition="0% 2rem"
+                    graphicPosition="100% 0%"
                     graphic={urlIcon}
                   >
                     <h3>Import</h3>
@@ -90,8 +90,8 @@ const ImportSection = () => {
                   <GraphicButton
                     color="mustard"
                     onClick={toggleShowFetchProtocolPicker}
-                    graphicPosition="0rem -2rem"
-                    graphicSize="17rem"
+                    graphicPosition="4rem 0rem"
+                    graphicSize="14rem"
                     graphic={serverIcon}
                   >
                     <h3>Import</h3>

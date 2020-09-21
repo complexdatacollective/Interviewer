@@ -41,16 +41,17 @@
       }
 
       button {
-        margin: 0 1rem;
+        margin: 0 unit(1);
       }
 
       h4 {
         display: inline;
+        font-size: 0.8rem;
       }
 
       .form-field-container {
         display: inline-block;
-        margin: 0 1rem;
+        margin: 0 unit(1);
       }
 
       input {
@@ -84,9 +85,11 @@
     .filterable-list-scroller {
       height: 100%;
       overflow-y: auto;
-      padding: unit(2) 0;
+      padding: unit(2);
       display: grid;
       grid-template-columns: 1fr 1fr;
+      row-gap: unit(2);
+      column-gap: unit(2);
 
       &:empty {
         display: flex;

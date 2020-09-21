@@ -87,7 +87,7 @@ const ServerSection = () => {
         <div className="content-area">
           <div className="content-area__discover">
             <header>
-              <h2>Server</h2>
+              <h2>Server Status</h2>
             </header>
             { !pairedServer ? (
               <React.Fragment>
@@ -117,7 +117,7 @@ const ServerSection = () => {
             )}
           </div>
           <div className="content-area__buttons">
-            <Button key="unpair" color="mustard--dark" onClick={() => openExternalLink('https://documentation.networkcanvas.com/docs/key-concepts/pairing/')}>Pairing Documentation</Button>
+            <Button key="unpair" color="mustard--dark" onClick={() => openExternalLink('https://documentation.networkcanvas.com/docs/key-concepts/pairing/')}>View Pairing Documentation</Button>
             { !pairedServer ? (
               <Button disabled={!onlineStatus} color="platinum" onClick={toggleShowServerAddressForm}>Provide manual connection details...</Button>
             ) :

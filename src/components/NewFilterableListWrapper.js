@@ -94,7 +94,8 @@ const NewFilterableListWrapper = (props) => {
   const sortedAndFilteredList = getFilteredAndSortedItemList();
 
   return (
-    <div
+    <motion.div
+      layout
       className="new-filterable-list"
     >
       <header className="new-filterable-list__header">
@@ -152,7 +153,7 @@ const NewFilterableListWrapper = (props) => {
                     sortedAndFilteredList.length > 0 && sortedAndFilteredList.map(item => (
                       <motion.div
                         variants={itemVariants}
-                        key={objectHash(item)}
+                        key={item.key || objectHash(item)}
                         layout
                       >
                         <ItemComponent {...item} />
@@ -166,7 +167,7 @@ const NewFilterableListWrapper = (props) => {
           )
         }
       </motion.main>
-    </div>
+    </motion.div>
   );
 };
 

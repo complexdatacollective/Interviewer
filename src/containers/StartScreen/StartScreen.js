@@ -47,8 +47,8 @@ const StartScreen = ({
           <HeaderSection />
           <WhatsNewSection />
           <InterviewSection />
-          <ImportSection />
           <DataExportSection />
+          <ImportSection />
           <ServerSection />
         </motion.div>
       </AnimateSharedLayout>
