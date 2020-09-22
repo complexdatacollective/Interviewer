@@ -18,8 +18,6 @@ const oneBasedIndex = i => parseInt(i || 0, 10) + 1;
 const DataExportSection = () => {
   const sessions = useSelector(state => state.sessions);
 
-  if (Object.keys(sessions).length === 0) { return null; }
-
   const [selectedSessions, setSelectedSessions] = useState([]);
 
   const pairedServer = useSelector(state => state.pairedServer);
@@ -87,6 +85,8 @@ const DataExportSection = () => {
     const progress = Math.round(
       (oneBasedIndex(session.stageIndex) / oneBasedIndex(protocol.stages.length)) * 100,
     );
+
+    if (Object.keys(sessions).length === 0) { return null; }
 
     return {
       caseId,

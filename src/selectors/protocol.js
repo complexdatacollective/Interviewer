@@ -53,6 +53,7 @@ export const getLastActiveProtocol = (state) => {
   const lastInstalledProtocol = orderBy(protocolsCollection, ['installationDate'], ['desc'])[0];
 
   if (
+    lastActiveSession[entityAttributesProperty] &&
     lastActiveSession[entityAttributesProperty].updatedAt && // Last active session exists
     lastActiveSession[entityAttributesProperty].updatedAt > lastInstalledProtocol.installationDate
   ) {
