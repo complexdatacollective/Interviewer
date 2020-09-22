@@ -161,7 +161,6 @@ const NewFilterableListWrapper = (props) => {
                   }
                 </AnimatePresence>
               </AnimateSharedLayout>
-
             </motion.div>
           )
         }

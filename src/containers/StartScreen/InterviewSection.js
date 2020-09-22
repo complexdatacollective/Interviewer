@@ -6,27 +6,25 @@ import { ProtocolCard, SessionCard } from '../../components/Cards';
 import { actionCreators as sessionActions } from '../../ducks/modules/sessions';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
 import { getLastActiveSession } from '../../selectors/session';
+import { getLastActiveProtocol } from '../../selectors/protocol';
 import NewSessionOverlay from './NewSessionOverlay';
 import StackButton from '../../components/StackButton';
 import ResumeSessionPicker from './ResumeSessionPicker';
 import StartInterviewPicker from './StartInterviewPicker';
 
 const InterviewSection = () => {
+  const installedProtocols = useSelector(state => state.installedProtocols);
+  const sessions = useSelector(state => state.sessions);
+
+  const lastActiveSession = useSelector(state => getLastActiveSession(state));
+  const lastActiveProtocol = useSelector(state => getLastActiveProtocol(state));
+
   const dispatch = useDispatch();
   const addSession = (caseId, protocol) => dispatch(sessionActions.addSession(caseId, protocol));
   const toggleUIOverlay = overlay => dispatch(uiActions.toggle(overlay));
 
-  const installedProtocols = useSelector(state => state.installedProtocols);
-  const lastActiveSession = useSelector(state => getLastActiveSession(state));
-  const sessions = useSelector(state => state.sessions);
   const showResumeSessionPicker = useSelector(state => state.ui.showResumeSessionPicker);
   const showStartInterviewPicker = useSelector(state => state.ui.showStartInterviewPicker);
-
-
-  const lastActiveProtocol = {
-    ...installedProtocols[Object.keys(installedProtocols)[0]],
-    protocolUID: Object.keys(installedProtocols)[0],
-  };
 
   const [showNewSessionOverlay, setShowNewSessionOverlay] = useState(false);
   const [selectedProtocol, setSelectedProtocol] = useState(null);
@@ -45,8 +43,6 @@ const InterviewSection = () => {
     setShowNewSessionOverlay(true);
     setSelectedProtocol(protocolUID);
   };
-
-  const sessionCardClickHandler = () => {};
 
   if (Object.keys(installedProtocols).length === 0 && Object.keys(sessions).length === 0) {
     return null;
@@ -118,7 +114,6 @@ const InterviewSection = () => {
                     <h2>Resume an Interview</h2>
                   </header>
                   <SessionCard
-                    onClickHandler={sessionCardClickHandler}
                     sessionUUID={lastActiveSession.sessionUUID}
                     attributes={lastActiveSession.attributes}
                   />

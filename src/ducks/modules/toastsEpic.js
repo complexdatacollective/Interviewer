@@ -2,14 +2,8 @@
 import React from 'react';
 import { combineEpics } from 'redux-observable';
 import { filter, map } from 'rxjs/operators';
-import { actionCreators as toastActions, toastTypes } from './toasts';
+import { actionCreators as toastActions } from './toasts';
 import { actionTypes as serverActionTypes } from './pairedServer';
-
-/**
- * Online/offline status change
- * Server pairing
- * MAKE SURE THESE DO NOT SHOW WITHIN INTERVIEW
- */
 
 const triggerToastActions = [
   serverActionTypes.SET_SERVER,
@@ -21,13 +15,13 @@ const toastsEpic = action$ => action$.pipe(
     switch (action.type) {
       case serverActionTypes.SET_SERVER: {
         return toastActions.addToast({
-          type: toastTypes.success,
+          type: 'success',
           title: 'Pairing complete!',
-          content: (
-            <React.Fragment>
-              <p>You have successfully paired with Server.</p>
-            </React.Fragment>
-          ),
+          content:
+          (<p>
+            You have successfully paired with Server. You may now fetch protocols
+            and upload data.
+          </p>),
         });
       }
       default:

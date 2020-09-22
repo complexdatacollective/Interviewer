@@ -1,9 +1,11 @@
 import crypto from 'crypto';
 import uuid from 'uuid/v4';
+import { orderBy, values, mapValues } from 'lodash';
 import { createSelector } from 'reselect';
 import { createDeepEqualSelector } from './utils';
 import { isPreview } from '../utils/Environment';
-import { getActiveSession } from './session';
+import { getActiveSession, getLastActiveSession } from './session';
+import { entityAttributesProperty } from '../ducks/modules/network';
 
 const DefaultFinishStage = {
   // `id` is used as component key; must be unique from user input
@@ -31,6 +33,37 @@ export const getCurrentSessionProtocol = createSelector(
     return protocols[session.protocolUID];
   },
 );
+
+// Use the protocol associated with the last active session, unless there is a protocol with
+// an `installationDate` that is more recent.
+export const getLastActiveProtocol = (state) => {
+  const installedProtocols = getInstalledProtocols(state);
+
+  if (Object.keys(installedProtocols).length === 0) {
+    return null;
+  }
+
+  const lastActiveSession = getLastActiveSession(state);
+
+  const protocolsCollection = values(mapValues(installedProtocols, (protocol, protocolUID) => ({
+    protocolUID,
+    ...protocol,
+  })));
+
+  const lastInstalledProtocol = orderBy(protocolsCollection, ['installationDate'], ['desc'])[0];
+
+  if (
+    lastActiveSession[entityAttributesProperty].updatedAt && // Last active session exists
+    lastActiveSession[entityAttributesProperty].updatedAt > lastInstalledProtocol.installationDate
+  ) {
+    return {
+      ...installedProtocols[lastActiveSession[entityAttributesProperty].protocolUID],
+      protocolUID: lastActiveSession[entityAttributesProperty].protocolUID,
+    };
+  }
+
+  return lastInstalledProtocol;
+};
 
 export const getActiveProtocolName = createSelector(
   getCurrentSessionProtocol,

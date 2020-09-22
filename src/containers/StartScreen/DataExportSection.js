@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { get } from 'lodash';
-import { motion, AnimatePresence, AnimateSharedLayout } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@codaco/ui';
 import { SessionCard } from '@codaco/ui/lib/components/Cards';
 import { exportToFile, exportToServer } from '../../utils/exportProcess';
 import { Section } from '.';
+import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
+import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import useServerConnectionStatus from '../../hooks/useServerConnectionStatus';
 import Switch from './Switch';
 import { NewFilterableListWrapper } from '../../components';
@@ -14,15 +16,37 @@ import { asNetworkWithSessionVariables } from '../../utils/networkFormat';
 const oneBasedIndex = i => parseInt(i || 0, 10) + 1;
 
 const DataExportSection = () => {
+  const sessions = useSelector(state => state.sessions);
+
+  if (Object.keys(sessions).length === 0) { return null; }
+
   const [selectedSessions, setSelectedSessions] = useState([]);
 
   const pairedServer = useSelector(state => state.pairedServer);
   const pairedServerConnection = useServerConnectionStatus(pairedServer);
-
-  const sessions = useSelector(state => state.sessions);
   const installedProtocols = useSelector(state => state.installedProtocols);
 
   const dispatch = useDispatch();
+  const deleteSession = id => dispatch(sessionsActions.removeSession(id));
+  const openDialog = dialog => dispatch(dialogActions.openDialog(dialog));
+
+  const handleDeleteSessions = () => {
+    openDialog({
+      type: 'Warning',
+      title: `Delete ${selectedSessions.length} Interview Session${selectedSessions.length > 1 ? 's' : ''}?`,
+      confirmLabel: 'Permanently Delete',
+      onConfirm: () => {
+        selectedSessions.map(session => deleteSession(session));
+        setSelectedSessions([]);
+      },
+      message: (
+        <p>
+          This action will delete the selected interview data and cannot be undone.
+          Are you sure you want to continue?
+        </p>
+      ),
+    });
+  };
 
   const toggleSelectAll = () => {
     if ((Object.keys(sessions).length !== selectedSessions.length)) {
@@ -49,16 +73,17 @@ const DataExportSection = () => {
   };
 
   const formattedSessions = [...Object.keys(sessions)].map((sessionUUID) => {
-    const session = useSelector(state => state.sessions[sessionUUID]);
+    const session = sessions[sessionUUID];
 
     const {
       caseId,
       startedAt,
       updatedAt,
+      finishedAt,
       exportedAt,
     } = session;
 
-    const protocol = useSelector(state => get(state.installedProtocols, [session.protocolUID]));
+    const protocol = get(installedProtocols, [session.protocolUID]);
     const progress = Math.round(
       (oneBasedIndex(session.stageIndex) / oneBasedIndex(protocol.stages.length)) * 100,
     );
@@ -67,6 +92,7 @@ const DataExportSection = () => {
       caseId,
       progress,
       startedAt,
+      finishedAt,
       updatedAt,
       exportedAt,
       key: sessionUUID,
@@ -77,23 +103,11 @@ const DataExportSection = () => {
     };
   });
 
-  const exportSessionsToFile = () => {
-    exportToFile(selectedSessions.map((session) => {
-      const sessionProtocol =
-        installedProtocols[sessions[session].protocolUID];
+  const exportSessions = (toServer = false) => {
+    const exportFunction = toServer ? exportToServer : exportToFile;
 
-      return asNetworkWithSessionVariables(
-        session,
-        sessions[session],
-        sessionProtocol,
-      );
-    }));
-  };
-
-  const exportSessionsToServer = () => {
-    exportToServer(selectedSessions.map((session) => {
-      const sessionProtocol =
-        installedProtocols[sessions[session].protocolUID];
+    exportFunction(selectedSessions.map((session) => {
+      const sessionProtocol = installedProtocols[sessions[session].protocolUID];
 
       return asNetworkWithSessionVariables(
         session,
@@ -110,8 +124,9 @@ const DataExportSection = () => {
           <h2>Export &amp; Manage Interview Data</h2>
         </motion.header>
         <motion.div layout className="content-area">
-          Select one or more interview sessions by tapping then, and then delete or export
-          them using the buttons provided.
+          Select one or more interview sessions by tapping them, and then delete or export
+          using the buttons provided. Remember that you can change export options from the
+          settings menu, which can be opened from the header at the top of this screen.
         </motion.div>
         <NewFilterableListWrapper
           ItemComponent={SessionCard}
@@ -141,7 +156,10 @@ const DataExportSection = () => {
           <Switch
             className="header-toggle"
             label="Select all"
-            on={(Object.keys(sessions).length === selectedSessions.length)}
+            on={
+              Object.keys(sessions).length > 0
+              && (Object.keys(sessions).length === selectedSessions.length)
+            }
             onChange={toggleSelectAll}
           />
           { selectedSessions.length > 0 &&
@@ -149,10 +167,10 @@ const DataExportSection = () => {
         </motion.div>
       </motion.main>
       <motion.footer layout className="data-export-section__footer">
-        <Button color="neon-coral--dark" onClick={exportSessionsToFile} disabled={selectedSessions.length === 0}>Delete Selected</Button>
+        <Button color="neon-coral--dark" onClick={handleDeleteSessions} disabled={selectedSessions.length === 0}>Delete Selected</Button>
         <div className="action-buttons">
-          { pairedServerConnection === 'ok' && (<Button onClick={exportSessionsToServer} color="mustard" disabled={pairedServerConnection !== 'ok' || selectedSessions.length === 0}>Export Selected To Server</Button>)}
-          <Button color="platinum" onClick={exportSessionsToFile} disabled={selectedSessions.length === 0}>Export Selected To File</Button>
+          { pairedServerConnection === 'ok' && (<Button onClick={() => exportSessions(true)} color="mustard" disabled={pairedServerConnection !== 'ok' || selectedSessions.length === 0}>Export Selected To Server</Button>)}
+          <Button color="platinum" onClick={() => exportSessions(false)} disabled={selectedSessions.length === 0}>Export Selected To File</Button>
         </div>
       </motion.footer>
     </Section>

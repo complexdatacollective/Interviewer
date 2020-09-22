@@ -71,16 +71,9 @@ const actionTypes = {
   REMOVE_TOAST,
 };
 
-const toastTypes = {
-  info: 'info',
-  warning: 'warning',
-  success: 'success',
-};
-
 export {
   actionCreators,
   actionTypes,
-  toastTypes,
 };
 
 export default reducer;

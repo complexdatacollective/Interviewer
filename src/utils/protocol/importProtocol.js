@@ -9,7 +9,7 @@ import downloadProtocol from '../../utils/protocol/downloadProtocol';
 import extractProtocol from '../../utils/protocol/extractProtocol';
 import parseProtocol from '../../utils/protocol/parseProtocol';
 import checkExistingProtocol, { moveToExistingProtocol } from '../../utils/protocol/checkExistingProtocol';
-import { actionCreators as toastActions, toastTypes } from '../../ducks/modules/toasts';
+import { actionCreators as toastActions } from '../../ducks/modules/toasts';
 import protocolPath from '../../utils/protocol/protocolPath';
 import { PROTOCOL_EXTENSION } from '../../config';
 import { isCordova, isElectron } from '../../utils/Environment';
@@ -38,7 +38,7 @@ const getState = store.getState;
 
 const showCancellationToast = () => {
   dispatch(toastActions.addToast({
-    type: toastTypes.warning,
+    type: 'warning',
     title: 'Import cancelled',
     content: (
       <React.Fragment>
@@ -65,7 +65,7 @@ export const importProtocolFromURI = (uri, usePairedServer) => {
   // Create a toast to show the status as it updates
   dispatch(toastActions.addToast({
     id: toastUUID,
-    type: toastTypes.info,
+    type: 'info',
     title: 'Importing Protocol...',
     CustomIcon: (<Spinner small />),
     autoDismiss: false,
@@ -138,7 +138,7 @@ export const importProtocolFromURI = (uri, usePairedServer) => {
         // Remove the status toast
         dispatch(toastActions.removeToast(toastUUID));
         dispatch(toastActions.addToast({
-          type: toastTypes.success,
+          type: 'success',
           title: 'Finished!',
           autoDismiss: true,
           content: (
@@ -193,23 +193,58 @@ export const beginLocalProtocolImport = () => {
 
 
 export const importProtocolFromFile = (filePath, name) => {
+  let cancelled = false; // Top-level cancelled property used to abort promise chain
   let protocolUid;
   let previousUid;
 
   const filename = filenameFromPath(filePath);
   const protocolName = protocolNameFromFilename(name || filename);
 
+  const toastUUID = uuid();
+
+  // Create a toast to show the status as it updates
+  dispatch(toastActions.addToast({
+    id: toastUUID,
+    type: 'info',
+    title: 'Importing Protocol...',
+    CustomIcon: (<Spinner small />),
+    autoDismiss: false,
+    dismissHandler: () => {
+      showCancellationToast();
+      cancelled = true;
+    },
+    content: (
+      <React.Fragment>
+        <ProgressBar orientation="horizontal" percentProgress={10} />
+      </React.Fragment>
+    ),
+  }));
+
   return checkExistingProtocol(protocolName)
     .then((existingUid) => {
       previousUid = existingUid;
-      dispatch(importProtocolStartAction());
-      dispatch(extractProtocolAction());
+      dispatch(toastActions.updateToast(toastUUID, {
+        title: 'Extracting to temporary storage...',
+        content: (
+          <React.Fragment>
+            <ProgressBar orientation="horizontal" percentProgress={40} />
+          </React.Fragment>
+        ),
+      }));
       return extractProtocol(filePath);
     })
     .then((protocolLocation) => {
       protocolUid = protocolLocation;
       if (cancelled) return cancelledImport(protocolLocation);
-      dispatch(parseProtocolAction());
+
+      dispatch(toastActions.updateToast(toastUUID, {
+        title: 'Validating protocol...',
+        content: (
+          <React.Fragment>
+            <ProgressBar orientation="horizontal" percentProgress={80} />
+          </React.Fragment>
+        ),
+      }));
       return parseProtocol(protocolLocation, protocolName);
     }, catchError)
     .then((protocolContent) => {
@@ -221,15 +256,35 @@ export const importProtocolFromFile = (filePath, name) => {
     })
     .then((protocolContent) => {
       if (cancelled) return cancelledImport(protocolContent.uid);
-      return dispatch(importProtocolCompleteAction(protocolContent));
+        // Send the payload to installedProtocols
+        dispatch(installedProtocolActions.importProtocolCompleteAction(protocolContent));
+
+        // Remove the status toast
+        dispatch(toastActions.removeToast(toastUUID));
+        dispatch(toastActions.addToast({
+          type: 'success',
+          title: 'Finished!',
+          autoDismiss: true,
+          content: (
+            <React.Fragment>
+              <p>Protocol installed successfully.</p>
+            </React.Fragment>
+          ),
+        }));
+        return Promise.resolve();
     }, catchError)
     .catch(
       (error) => {
-        if (protocolUid) cleanUpProtocol(protocolUid); // attempt to clean up files
+        // Remove the status toast
+        dispatch(toastActions.removeToast(toastUUID));
 
+        // attempt to clean up files
+        if (protocolUid) cleanUpProtocol(protocolUid); 
+
+        // If this wasn't user cancellation, dispatch an error
         if (!(error instanceof CancellationError)) {
           dispatch(installedProtocolActions.importProtocolFailedAction(error));
-        }
+        }          
       },
     );
 };

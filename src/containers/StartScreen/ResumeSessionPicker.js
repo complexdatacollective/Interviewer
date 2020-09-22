@@ -36,6 +36,8 @@ const ResumeSessionPicker = ({
       caseId: session.caseId,
       startedAt: session.startedAt,
       updatedAt: session.updatedAt,
+      finishedAt: session.finishedAt,
+      exportedAt: session.exportedAt,
       protocolName: protocol.name,
       progress,
       onClickHandler: () => handleSessionCardClick(sessionUUID),

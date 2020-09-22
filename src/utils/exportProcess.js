@@ -1,8 +1,9 @@
 import React from 'react';
 import uuid from 'uuid';
+import { batch } from 'react-redux';
 import { ProgressBar, Spinner, Icon } from '@codaco/ui';
 import { store } from '../ducks/store';
-import { actionCreators as toastActions, toastTypes } from '../ducks/modules/toasts';
+import { actionCreators as toastActions } from '../ducks/modules/toasts';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../ducks/modules/dialogs';
 import ApiClient from './ApiClient';
@@ -14,7 +15,7 @@ const getState = store.getState;
 const showExportBeginToast = (id) => {
   dispatch(toastActions.addToast({
     id,
-    type: toastTypes.info,
+    type: 'info',
     title: 'Exporting interviews...',
     CustomIcon: (<Spinner small />),
     autoDismiss: false,
@@ -29,7 +30,7 @@ const showExportBeginToast = (id) => {
 
 const showCancellationToast = () => {
   dispatch(toastActions.addToast({
-    type: toastTypes.warning,
+    type: 'warning',
     title: 'Export cancelled',
     content: (
       <React.Fragment>
@@ -64,6 +65,7 @@ export const exportToFile = (sessionList) => {
   };
 
   const errors = [];
+  const succeeded = [];
   const toastUUID = uuid();
 
   const fileExportManager = new FileExportManager(exportOptions);
@@ -84,6 +86,10 @@ export const exportToFile = (sessionList) => {
     }));
   });
 
+  fileExportManager.on('session-exported', (sessionId) => {
+    succeeded.push(sessionId);
+  });
+
   fileExportManager.on('error', (error) => {
     // If this is the first error, update the toast type to 'warning'
     if (errors.length === 0) {
@@ -97,6 +103,13 @@ export const exportToFile = (sessionList) => {
 
   fileExportManager.on('finished', () => {
     dispatch(toastActions.removeToast(toastUUID));
+
+    if (succeeded.length > 0) {
+      batch(() => {
+        succeeded.forEach(successfulExport =>
+          dispatch(sessionsActions.setSessionExported(successfulExport)));
+      });
+    }
 
     if (errors.length > 0) {
       const errorList = errors.map((error, index) => (<li key={index}><Icon name="warning" /> {error}</li>));
@@ -123,7 +136,7 @@ export const exportToFile = (sessionList) => {
     }
 
     dispatch(toastActions.addToast({
-      type: toastTypes.success,
+      type: 'success',
       title: 'Export Complete!',
       autoDismiss: true,
       content: (
@@ -162,6 +175,7 @@ export const exportToFile = (sessionList) => {
 export const exportToServer = (sessionList) => {
   const toastUUID = uuid();
   const errors = [];
+  const succeeded = [];
 
   const pairedServer = getState().pairedServer;
 
@@ -183,11 +197,9 @@ export const exportToServer = (sessionList) => {
     }));
   });
 
-  client.on('session-exported', sessionId => {
-    console.log('got session-exported', sessionId);
-    dispatch(sessionsActions.setSessionExported(sessionId));
+  client.on('session-exported', (sessionId) => {
+    succeeded.push(sessionId);
   });
-
 
   client.on('error', (error) => {
     // If this is the first error, update the toast type to 'warning'
@@ -196,12 +208,19 @@ export const exportToServer = (sessionList) => {
         type: 'warning',
       }));
     }
-    console.log('error', error);
+
     errors.push(error);
   });
 
   client.on('finished', () => {
     dispatch(toastActions.removeToast(toastUUID));
+
+    if (succeeded.length > 0) {
+      batch(() => {
+        succeeded.forEach(successfulExport =>
+          dispatch(sessionsActions.setSessionExported(successfulExport)));
+      });
+    }
 
     if (errors.length > 0) {
       const errorList = errors.map((error, index) => (<li key={index}><Icon name="warning" /> {error}</li>));
@@ -228,7 +247,7 @@ export const exportToServer = (sessionList) => {
     }
 
     dispatch(toastActions.addToast({
-      type: toastTypes.success,
+      type: 'success',
       title: 'Export Complete!',
       autoDismiss: true,
       content: (

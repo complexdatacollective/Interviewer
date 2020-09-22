@@ -76,10 +76,10 @@ const getReducer = network =>
       case SET_SESSION_EXPORTED:
         return {
           ...state,
-          [action.sessionId]: withTimestamp({
+          [action.sessionId]: {
             ...state[action.sessionId],
             exportedAt: Date.now(),
-          }),
+          },
         };
       case LOAD_SESSION:
         return state;

@@ -1,35 +1,43 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { get } from 'lodash';
 import { SessionCard as UISessionCard } from '@codaco/ui/lib/components/Cards';
 import { useSelector, useDispatch } from 'react-redux';
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
 
 const oneBasedIndex = i => parseInt(i || 0, 10) + 1;
 
-/**
-  * Renders a card with details.
-  */
-const SessionCard = (props) => {
-  const {
-    sessionUUID,
-  } = props;
+const SessionCard = ({
+  sessionUUID,
+}) => {
+  const sessions = useSelector(state => state.sessions);
+  const session = sessions[sessionUUID];
+  const installedProtocols = useSelector(state => state.installedProtocols);
+
+  if (!session) { return null; }
 
   const dispatch = useDispatch();
-  const setSession = session => dispatch(sessionActions.setSession(session));
-
-  const session = useSelector(state => state.sessions[sessionUUID]);
-  const protocol = useSelector(state => get(state.installedProtocols, [session.protocolUID]));
-  const progress = Math.round(
-    (oneBasedIndex(session.stageIndex) / oneBasedIndex(protocol.stages.length)) * 100,
-  );
+  const setSession = sessionUID => dispatch(sessionActions.setSession(sessionUID));
 
   const {
     caseId,
     startedAt,
     updatedAt,
     exportedAt,
+    finishedAt,
+    protocolUID,
+    stageIndex,
   } = session;
+
+  const protocol = installedProtocols[protocolUID];
+
+  const {
+    name,
+    stages,
+  } = protocol;
+
+  const progress = Math.round(
+    (oneBasedIndex(stageIndex) / oneBasedIndex(stages.length)) * 100,
+  );
 
   const onClickLoadSession = (event) => {
     event.preventDefault();
@@ -42,7 +50,8 @@ const SessionCard = (props) => {
       startedAt={startedAt}
       updatedAt={updatedAt}
       exportedAt={exportedAt}
-      protocolName={protocol.name}
+      finishedAt={finishedAt}
+      protocolName={name}
       progress={progress}
       onClickHandler={onClickLoadSession}
     />

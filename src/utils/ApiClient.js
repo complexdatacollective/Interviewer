@@ -328,6 +328,7 @@ class ApiClient {
       await previousPromise;
 
       return this.exportSession(nextSession)
+        .then(() => this.emit('session-exported', sessionList[index].sessionVariables.sessionId))
         .catch((error) => {
           if (axios.isCancel(error)) {
             return;
@@ -348,8 +349,6 @@ class ApiClient {
             this.emit('error', ProgressMessages.NoResponseMessage);
           }
         }).then(() => {
-          this.emit('session-exported', sessionList[index].sessionVariables.sessionId);
-
           if (!cancelled) {
             this.emit('update', ProgressMessages.ExportSession(index + 1, sessionList.length));
           }
