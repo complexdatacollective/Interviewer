@@ -30,8 +30,8 @@ const useAutoAdvance = (_next, isTouched, isChanged) => {
     }
 
     return () => {
-      if (!timer.current) { return; }
-      clearTimeout(timer.current);
+      if (!timer.current) { return () => {}; }
+      return clearTimeout(timer.current);
     };
   }, [isTouched]);
 };

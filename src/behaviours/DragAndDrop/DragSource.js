@@ -81,16 +81,15 @@ const dragSource = WrappedComponent =>
     };
 
     useEffect(() => {
-      if (!node.current || !allowDrag) { return false; }
-
-      dragManager = new DragManager({
-        el: node.current,
-        onDragStart,
-        onDragMove,
-        onDragEnd,
-        scrollDirection,
-      });
-
+      if (node.current && allowDrag) {
+        dragManager = new DragManager({
+          el: node.current,
+          onDragStart,
+          onDragMove,
+          onDragEnd,
+          scrollDirection,
+        });
+      }
       return () => {
         cleanupPreview();
         cleanupDragManager();

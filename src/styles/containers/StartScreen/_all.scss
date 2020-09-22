@@ -362,7 +362,7 @@
 
           &--offline,
           &--error {
-            background: #ccc;
+            min-height: unset;
           }
 
           header {

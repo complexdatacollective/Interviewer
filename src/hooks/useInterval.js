@@ -18,7 +18,7 @@ const useInterval = (callback, delay) => {
       return () => clearInterval(id);
     }
 
-    return true;
+    return () => {};
   }, [delay]);
 };
 
