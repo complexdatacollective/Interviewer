@@ -1,5 +1,6 @@
 @mixin recolor-toggle($color) {
   .form-field-togglebutton__checkbox {
+
     &::before {
       border-color: $color;
     }
@@ -35,7 +36,7 @@
 
 $choice-padding: 2rem;
 
-.dyad-interface {
+.dyad-census {
   @include interface-centering;
   height: 100%;
   padding: 1rem 0 2rem;
@@ -54,7 +55,12 @@ $choice-padding: 2rem;
   }
 
   &__prompt {
-    @include interface-prompt;
+    .prompts__prompt {
+      --prompt-background: var(--light-background);
+    }
+    height: 8rem;
+    width: 100%;
+    display: flex;
   }
 
   &__main {
@@ -103,7 +109,7 @@ $choice-padding: 2rem;
     border-radius: var(--border-radius);
     overflow: hidden;
     text-align: center;
-    margin-bottom: 1.25rem;
+    width: 55rem;
 
     &--invalid {
       outline: 0.5rem solid var(--error);
@@ -150,6 +156,19 @@ $choice-padding: 2rem;
     justify-content: center;
     align-items: center;
     padding: unit(2) unit(4);
+
+    .form-field-togglebutton__checkbox {
+      border-radius: var(--border-radius);
+      width: 12rem;
+    
+      &::before {
+        border-radius: 0.75rem;
+      }
+  
+      &::after {
+        border-radius: 0.75rem;
+      }
+    }
   }
 
   &__yes {
@@ -162,8 +181,9 @@ $choice-padding: 2rem;
   }
 
   &__progress {
-    padding: unit(4);
-    background: var(--color-slate-blue);
+    padding: unit(1) unit(4);
+    width: 42rem;
+    margin: 1rem auto;
 
     .progress-bar {
       background-color: var(--transparent-light);

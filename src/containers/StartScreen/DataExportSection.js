@@ -86,8 +86,6 @@ const DataExportSection = () => {
       (oneBasedIndex(session.stageIndex) / oneBasedIndex(protocol.stages.length)) * 100,
     );
 
-    if (Object.keys(sessions).length === 0) { return null; }
-
     return {
       caseId,
       progress,
@@ -116,6 +114,8 @@ const DataExportSection = () => {
       );
     }));
   };
+
+  if (Object.keys(sessions).length === 0) { return null; }
 
   return (
     <Section className="start-screen-section data-export-section">

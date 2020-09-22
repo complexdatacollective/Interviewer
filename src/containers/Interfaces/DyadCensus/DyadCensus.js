@@ -34,7 +34,7 @@ const optionsVariants = {
 };
 
 const choiceVariants = {
-  show: { opacity: 1, translateY: '0%', transition: { delay: 0.25 } },
+  show: { opacity: 1, translateY: '0%', transition: { delay: 0.25, type: 'spring' } },
   hide: { opacity: 0, translateY: '120%' },
 };
 
@@ -163,19 +163,19 @@ const DyadCensus = ({
     };
 
   const choiceClasses = cx(
-    'dyad-interface__choice',
-    { 'dyad-interface__choice--invalid': !isValid },
+    'dyad-census__choice',
+    { 'dyad-census__choice--invalid': !isValid },
   );
 
   return (
-    <div className="dyad-interface">
+    <div className="dyad-census">
       <AnimatePresence
         initial={false}
         exitBeforeEnter
       >
         { isIntroduction &&
         <motion.div
-          className="dyad-interface__introduction"
+          className="dyad-census__introduction"
           variants={introVariants}
           initial="hide"
           exit="hide"
@@ -197,27 +197,19 @@ const DyadCensus = ({
             initial="hide"
             exit="hide"
             animate="show"
-            className="dyad-interface__wrapper"
+            className="dyad-census__wrapper"
           >
-            <div className="dyad-interface__prompt">
-              <PromptSwiper
-                forward={promptForward}
-                backward={promptBackward}
-                prompt={prompt}
-                prompts={stage.prompts}
-              />
-            </div>
             <AnimatePresence exitBeforeEnter>
               <motion.div
-                className="dyad-interface__main"
+                className="dyad-census__main"
                 key={promptIndex}
                 variants={fadeVariants}
                 initial="hide"
                 exit="hide"
                 animate="show"
               >
-                <div className="dyad-interface__layout">
-                  <div className="dyad-interface__pairs">
+                <div className="dyad-census__layout">
+                  <div className="dyad-census__pairs">
                     <AnimatePresence
                       custom={[isForwards]}
                       initial={false}
@@ -235,29 +227,35 @@ const DyadCensus = ({
                   <motion.div
                     className={choiceClasses}
                     variants={choiceVariants}
+                    layout
                     initial="hide"
                     animate="show"
                   >
-                    <div className="dyad-interface__progress">
-                      <ProgressBar orientation="horizontal" percentProgress={((stepsState.substep + 1) / stepsState.steps[stepsState.stage]) * 100} />
+                    <div className="dyad-census__prompt">
+                      <PromptSwiper
+                        forward={promptForward}
+                        backward={promptBackward}
+                        prompt={prompt}
+                        prompts={stage.prompts}
+                      />
                     </div>
-                    <div className="dyad-interface__options">
+                    <div className="dyad-census__options">
                       <AnimatePresence exitBeforeEnter>
                         <motion.div
                           key={stepsState.step}
-                          className="dyad-interface__options-step"
+                          className="dyad-census__options-step"
                           variants={optionsVariants}
                           initial="hide"
                           animate="show"
                           exit="hide"
                         >
-                          <div className="dyad-interface__yes">
+                          <div className="dyad-census__yes">
                             <Button
                               onClick={handleChange(true)}
                               selected={!!hasEdge && hasEdge !== null}
                             >Yes</Button>
                           </div>
-                          <div className="dyad-interface__no">
+                          <div className="dyad-census__no">
                             <Button
                               onClick={handleChange(false)}
                               selected={!hasEdge && hasEdge !== null}
@@ -266,6 +264,9 @@ const DyadCensus = ({
                           </div>
                         </motion.div>
                       </AnimatePresence>
+                    </div>
+                    <div className="dyad-census__progress">
+                      <ProgressBar orientation="horizontal" percentProgress={((stepsState.substep + 1) / stepsState.steps[stepsState.stage]) * 100} />
                     </div>
                   </motion.div>
                 </div>

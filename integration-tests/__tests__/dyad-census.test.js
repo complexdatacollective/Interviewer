@@ -82,6 +82,6 @@ describe('Dyad Census Interface', () => {
     await timelinePrevious(app);
     await app.client.pause(timing.long);
     await app.client.waitForExist('//div[@class="progress-bar__filler" and style="width: 100%;"]', 500, true);
-    await app.client.waitForExist('//div[@class="dyad-interface__no"]//input[@class="form-field-togglebutton__input" and value="true" and checked]', 500, true);
+    await app.client.waitForExist('//div[@class="dyad-census__no"]//input[@class="form-field-togglebutton__input" and value="true" and checked]', 500, true);
   });
 });

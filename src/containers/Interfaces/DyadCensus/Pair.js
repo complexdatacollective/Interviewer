@@ -52,7 +52,7 @@ const Pair = ({
 
   return (
     <motion.div
-      className="dyad-interface__pair"
+      className="dyad-census__pair"
       custom={[animateForwards]}
       variants={pairVariants}
       transition={pairTransition}
@@ -60,10 +60,10 @@ const Pair = ({
       animate="show"
       exit="hide"
     >
-      <div className="dyad-interface__nodes">
+      <div className="dyad-census__nodes">
         <Node {...fromNode} />
         <motion.div
-          className="dyad-interface__edge"
+          className="dyad-census__edge"
           style={{ backgroundColor: `var(--${edgeColor})` }}
           variants={edgeVariants}
           initial="hide"
