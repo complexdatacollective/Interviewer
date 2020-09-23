@@ -19,7 +19,7 @@ const StartScreen = ({
   const variants = {
     show: {
       opacity: 1,
-      transition: { staggerChildren: 0.3, when: 'beforeChildren' },
+      transition: { staggerChildren: 0.32, when: 'beforeChildren' },
     },
     hide: {
       opacity: 0,

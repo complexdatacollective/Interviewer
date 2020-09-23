@@ -554,16 +554,16 @@
 
 
   .stack-of-cards {
-    width: 16rem;
-    height: 11rem;
+    width: 14rem;
+    height: 9rem;
     display: flex;
     align-items: flex-end;
     position: relative;
 
     .mock-card {
       position: absolute;
-      width: 15rem;
-      height: 10rem;
+      width: 13rem;
+      height: 8rem;
       border-radius: var(--border-radius);
       background: var(--color-slate-blue--dark);
       box-shadow: 0.2rem 0.2rem 0.5rem rgba(0, 0, 0, 0.3);
@@ -572,7 +572,7 @@
 
       .main {
         width: 100%;
-        height: 7rem;
+        height: 5rem;
       }
 
       &--two {

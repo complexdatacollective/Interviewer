@@ -77,7 +77,7 @@ const InterviewSection = () => {
                     Object.keys(installedProtocols).length > 1 && (
                       <div className="content-area__other">
                         <StackButton
-                          label="Select different protocol"
+                          label="Select protocol"
                           cardColor="var(--color-platinum)"
                           insetColor="var(--color-slate-blue--dark)"
                           clickHandler={() => toggleUIOverlay('showStartInterviewPicker')}
@@ -111,7 +111,7 @@ const InterviewSection = () => {
               <div className="content-area">
                 <div className="content-area__last-session">
                   <header>
-                    <h2>Resume an Interview</h2>
+                    <h2>Resume Last Interview</h2>
                   </header>
                   <SessionCard
                     sessionUUID={lastActiveSession.sessionUUID}
@@ -121,7 +121,7 @@ const InterviewSection = () => {
                 { Object.keys(sessions).length > 1 && (
                   <div className="content-area__other">
                     <StackButton
-                      label="Resume other interview"
+                      label="Select interview"
                       cardColor="var(--color-platinum)"
                       insetColor="var(--color-platinum--dark)"
                       clickHandler={() => toggleUIOverlay('showResumeSessionPicker')}

@@ -2,7 +2,7 @@ import React, { useState, useRef, useLayoutEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Text } from '@codaco/ui/lib/components/Fields';
 import { connect } from 'react-redux';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, AnimateSharedLayout } from 'framer-motion';
 import { compose } from 'recompose';
 import { getCSSVariableAsNumber, getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
 import { getProtocolStages } from '../../selectors/protocol';
@@ -25,7 +25,7 @@ const StagesMenu = (props) => {
   const baseAnimationDuration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
   const baseAnimationEasing = getCSSVariableAsString('--animation-easing-json');
 
-  const variants = {
+  const containerVariants = {
     normal: {
       opacity: 0,
       transition: {
@@ -82,12 +82,12 @@ const StagesMenu = (props) => {
     return 0;
   };
 
-  const timelineVariants = {
+  const itemVariants = {
     expanded: currentItemIndex => ({
       x: 0,
       opacity: 1,
       transition: {
-        delay: calculateDelay(currentItemIndex) + 0.25,
+        delay: calculateDelay(currentItemIndex) + 0.5,
         duration: baseAnimationDuration,
         easing: baseAnimationEasing,
       },
@@ -127,11 +127,12 @@ const StagesMenu = (props) => {
     return (
       <motion.div
         custom={index}
-        variants={timelineVariants}
+        variants={itemVariants}
         initial="normal"
         animate="expanded"
         exit="filtered"
         key={item.id}
+        layout
         className="stages-menu__preview-wrapper"
       >
         <StagePreview
@@ -165,6 +166,7 @@ const StagesMenu = (props) => {
 
     if (!filter) {
       const itemHeight = document.getElementsByClassName('stages-menu__preview-wrapper')[0].clientHeight;
+      console.log('calling scrtoll', currentStageIndex, itemHeight);
       scrollToLocation(currentStageIndex * itemHeight, 0.2);
     }
   }, [imageLoaded]);
@@ -173,7 +175,7 @@ const StagesMenu = (props) => {
     <motion.div
       className="stages-menu"
       key="stages-menu"
-      variants={variants}
+      variants={containerVariants}
       initial="normal"
       animate="expanded"
       layout
@@ -181,9 +183,11 @@ const StagesMenu = (props) => {
       <article className="stages-menu__wrapper">
         {renderMenuItems.length > 0 ? (
           <Scroller useSmoothScrolling={false} forwardedRef={scrollerRef}>
-            <AnimatePresence>
-              { renderMenuItems }
-            </AnimatePresence>
+            <AnimateSharedLayout>
+              <AnimatePresence>
+                { renderMenuItems }
+              </AnimatePresence>
+            </AnimateSharedLayout>
           </Scroller>
         ) : (
           <h4>No stages match your filter.</h4>

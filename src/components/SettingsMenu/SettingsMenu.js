@@ -170,6 +170,7 @@ const SettingsMenu = (props) => {
       { settingsMenuOpen && (
         <motion.div
           className="settings-menu"
+          layout
           variants={baseVariants}
           animate="show"
           initial="hide"
@@ -177,17 +178,19 @@ const SettingsMenu = (props) => {
         >
           <motion.article
             variants={baseVariants}
+            layout
             className="settings-menu__wrapper"
           >
             <motion.nav
               variants={variants}
+              layout
             >
               <h1>Settings</h1>
               <ul>
                 { renderNavigation }
               </ul>
             </motion.nav>
-            <motion.section variants={contentVariants}>
+            <motion.section layout variants={contentVariants}>
               <CloseButton onClick={closeMenu} className="close-button-wrapper" />
               {/* The presence animation is temporarily disabled because it breaks
               the tests (possible bug) */}

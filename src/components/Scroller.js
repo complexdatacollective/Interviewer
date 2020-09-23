@@ -34,6 +34,7 @@ class Scroller extends Component {
         showScrollbars={showScrollbars}
         onScroll={this.handleScroll}
         useSmoothScrolling={useSmoothScrolling}
+        forwardedRef={this.scrollable}
       >
         {children}
       </UIScroller>

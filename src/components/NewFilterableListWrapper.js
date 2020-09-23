@@ -7,6 +7,7 @@ import { Button, Spinner } from '@codaco/ui';
 import { Text } from '@codaco/ui/lib/components/Fields';
 import { entityAttributesProperty } from '../ducks/modules/network';
 import sortOrder from '../utils/sortOrder';
+import { Scroller } from '.';
 
 const NewFilterableListWrapper = (props) => {
   const {
@@ -143,28 +144,30 @@ const NewFilterableListWrapper = (props) => {
               <h4>Loading...</h4>
             </motion.div>
           ) : (
-            <motion.div
-              variants={containerVariants}
-              key="filterable-list"
-              initial="hide"
-              animate="show"
-              className="filterable-list-scroller"
-            >
-              <AnimatePresence>
-                {
-                  sortedAndFilteredList.length > 0 && sortedAndFilteredList.map(item => (
-                    <motion.div
-                      variants={itemVariants}
-                      key={item.key || objectHash(item)}
-                      exit="hide"
-                      layout
-                    >
-                      <ItemComponent {...item} />
-                    </motion.div>
-                  ))
-                }
-              </AnimatePresence>
-            </motion.div>
+            <Scroller>
+              <motion.div
+                variants={containerVariants}
+                key="filterable-list"
+                initial="hide"
+                animate="show"
+                className="filterable-list-scroller"
+              >
+                <AnimatePresence>
+                  {
+                    sortedAndFilteredList.length > 0 && sortedAndFilteredList.map(item => (
+                      <motion.div
+                        variants={itemVariants}
+                        key={item.key || objectHash(item)}
+                        exit="hide"
+                        layout
+                      >
+                        <ItemComponent {...item} />
+                      </motion.div>
+                    ))
+                  }
+                </AnimatePresence>
+              </motion.div>
+            </Scroller>
           )
         }
       </motion.main>

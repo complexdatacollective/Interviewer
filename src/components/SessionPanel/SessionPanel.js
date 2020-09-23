@@ -60,16 +60,18 @@ const SessionPanel = React.forwardRef((props, ref) => {
           easing: baseAnimationEasing,
         }}
       >
-        { expanded ? menuContent : (
-          <SessionNavigation
-            onClickNext={props.onClickNext}
-            onClickBack={props.onClickBack}
-            percentProgress={props.percentProgress}
-            setExpanded={setExpanded}
-            setShowSubMenu={setShowSubMenu}
-            key="session-navigation"
-          />
-        ) }
+        <AnimatePresence exitBeforeEnter>
+          { expanded ? menuContent : (
+            <SessionNavigation
+              onClickNext={props.onClickNext}
+              onClickBack={props.onClickBack}
+              percentProgress={props.percentProgress}
+              setExpanded={setExpanded}
+              setShowSubMenu={setShowSubMenu}
+              key="session-navigation"
+            />
+          ) }
+        </AnimatePresence>
       </motion.div>
     </AnimateSharedLayout>
   );

@@ -29,7 +29,6 @@ const HeaderSection = () => {
       height: '100%',
       opacity: 1,
       transition: {
-        duration: 1,
         type: 'spring',
       },
     },
@@ -43,7 +42,7 @@ const HeaderSection = () => {
     show: {
       opacity: 1,
       height: '100%',
-      transition: { when: 'beforeChildren', delay: 0.25, type: 'spring' },
+      transition: { when: 'beforeChildren', type: 'spring' },
     },
     hide: {
       height: 0,
