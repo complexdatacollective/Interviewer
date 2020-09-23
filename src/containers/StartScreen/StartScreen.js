@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, AnimateSharedLayout } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import {
@@ -16,15 +16,12 @@ const StartScreen = ({
   activeSessionId,
   sessions,
 }) => {
-  const opacity = {
-    visible: {
+  const variants = {
+    show: {
       opacity: 1,
-      transition: {
-        when: 'beforeChildren',
-        staggerChildren: 0.15,
-      },
+      transition: { staggerChildren: 0.3, when: 'beforeChildren' },
     },
-    hidden: {
+    hide: {
       opacity: 0,
     },
   };
@@ -37,21 +34,21 @@ const StartScreen = ({
 
   return (
     <div className="start-screen">
-      <AnimateSharedLayout>
-        <motion.div
-          className="start-screen__container"
-          initial="hidden"
-          animate="visible"
-          variants={opacity}
-        >
-          <HeaderSection />
-          <WhatsNewSection />
-          <InterviewSection />
-          <DataExportSection />
-          <ImportSection />
-          <ServerSection />
-        </motion.div>
-      </AnimateSharedLayout>
+      <motion.div
+        className="start-screen__container"
+        variants={variants}
+        animate="show"
+        initial="hide"
+        layout
+        key="start-screen"
+      >
+        <HeaderSection />
+        <WhatsNewSection />
+        <InterviewSection />
+        <DataExportSection />
+        <ImportSection />
+        <ServerSection />
+      </motion.div>
     </div>
   );
 };

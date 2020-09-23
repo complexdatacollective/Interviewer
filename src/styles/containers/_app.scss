@@ -3,6 +3,12 @@
   width: 100%;
 }
 
+// NC specific override for stacking context
+.toast-container {
+  position: absolute;
+  z-index: var(--z-fx);
+}
+
 // container for menus and content
 .app {
 

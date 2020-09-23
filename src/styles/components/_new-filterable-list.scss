@@ -86,10 +86,15 @@
       height: 100%;
       overflow-y: auto;
       padding: unit(2);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      row-gap: unit(2);
-      column-gap: unit(2);
+
+      // Grid would be a better way to display these items, but it
+      // causes distortion with framer-motion's layout prop
+      // display: grid;
+      > * {
+        width: calc(50% - #{unit(2)});
+        float: left;
+        margin: unit(1);
+      }
 
       &:empty {
         display: flex;

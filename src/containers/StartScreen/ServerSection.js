@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import cx from 'classnames';
 import { Button } from '@codaco/ui';
-import { actionCreators as uiActions } from '../../ducks/modules/ui';
 import { actionCreators as serverActions } from '../../ducks/modules/pairedServer';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { Section } from '.';
@@ -14,8 +13,10 @@ import { openExternalLink } from '../../components/ExternalLink';
 import useServerConnectionStatus from '../../hooks/useServerConnectionStatus';
 
 const ServerSection = () => {
-  const showServerAddressForm = useSelector(state => state.showServerAddressForm);
   const pairedServer = useSelector(state => state.pairedServer);
+
+  const [selectedServer, setSelectedServer] = useState(null);
+  const [showServerAddressForm, setShowServerAddressForm] = useState(false);
 
   const onlineStatus = useOnlineStatus();
   const pairedServerConnection = useServerConnectionStatus(pairedServer);
@@ -23,7 +24,6 @@ const ServerSection = () => {
   const dispatch = useDispatch();
   const openDialog = dialog => dispatch(dialogActions.openDialog(dialog));
   const unpairServer = () => dispatch(serverActions.unpairServer());
-  const toggleShowServerAddressForm = () => dispatch(uiActions.toggle('showServerAddressForm'));
 
   const handleUnpairRequest = () => {
     openDialog({
@@ -79,10 +79,6 @@ const ServerSection = () => {
 
   return (
     <Section className="start-screen-section server-section">
-      <ServerAddressForm
-        show={showServerAddressForm}
-        handleClose={toggleShowServerAddressForm}
-      />
       <main className="server-section__main">
         <div className="content-area">
           <div className="content-area__discover">
@@ -95,7 +91,11 @@ const ServerSection = () => {
                   To begin, open Server on a computer connected to the same network as this device.
                   When the device appears below, click its card to start the pairing process.
                 </p>
-                <DiscoveredServerList />
+                <DiscoveredServerList onSelectServer={(server) => {
+                  setSelectedServer(server);
+                  setShowServerAddressForm(true);
+                }}
+                />
               </React.Fragment>
             ) : (
               <div className="paired-server-wrapper">
@@ -117,14 +117,20 @@ const ServerSection = () => {
             )}
           </div>
           <div className="content-area__buttons">
-            <Button color="mustard--dark" onClick={() => openExternalLink('https://documentation.networkcanvas.com/docs/key-concepts/pairing/')}>View Pairing Documentation</Button>
+            <Button color="mustard--dark" disabled={!onlineStatus} onClick={() => openExternalLink('https://documentation.networkcanvas.com/docs/key-concepts/pairing/')}>View Pairing Documentation</Button>
             { !pairedServer ? (
-              <Button disabled={!onlineStatus} color="platinum" onClick={toggleShowServerAddressForm}>Provide manual connection details...</Button>
+              <Button disabled={!onlineStatus} color="platinum" onClick={() => setShowServerAddressForm(true)}>Provide manual connection details...</Button>
             ) :
               (<Button color="platinum" onClick={handleUnpairRequest}>Unpair</Button>)
             }
           </div>
         </div>
+        <ServerAddressForm
+          key={selectedServer}
+          server={selectedServer}
+          show={showServerAddressForm}
+          handleClose={() => { setShowServerAddressForm(false); setSelectedServer(null); }}
+        />
       </main>
     </Section>
   );

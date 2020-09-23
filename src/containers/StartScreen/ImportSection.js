@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { motion, AnimatePresence } from 'framer-motion';
 import { GraphicButton, Button } from '@codaco/ui';
 import { Section } from '.';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
@@ -29,84 +28,55 @@ const ImportSection = () => {
 
   return (
     <Section className="start-screen-section import-section">
-      <motion.main layout className="import-section__install-section">
-        <motion.header layout>
+      <main className="import-section__install-section">
+        <header>
           <h2>Protocols</h2>
-        </motion.header>
-        <motion.div layout className="content-buttons">
-          <AnimatePresence initial={false}>
-            {
-              onlineStatus && (
-                <motion.div
-                  key="protocol-url"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  style={{ width: '100%', height: '100%' }}
-                  layout
-                >
-                  <GraphicButton
-                    color="sea-green"
-                    onClick={toggleShowProtocolUrlForm}
-                    graphicSize="13rem"
-                    graphicPosition="100% 0%"
-                    graphic={urlIcon}
-                  >
-                    <h3>Import</h3>
-                    <h2>From URL</h2>
-                  </GraphicButton>
-                </motion.div>
-              )
-            }
-            <motion.div
-              key="protocol-file"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              style={{ width: '100%', height: '100%' }}
-              layout
-            >
+        </header>
+        <div className="content-buttons">
+          {
+            onlineStatus && (
               <GraphicButton
-                color="slate-blue--dark"
-                onClick={beginLocalProtocolImport}
-                graphicPosition="0% 0%"
-                graphicSize="15rem"
-                graphic={localIcon}
+                color="sea-green"
+                onClick={toggleShowProtocolUrlForm}
+                graphicSize="13rem"
+                graphicPosition="100% 0%"
+                graphic={urlIcon}
               >
                 <h3>Import</h3>
-                <h2>From File</h2>
+                <h2>From URL</h2>
               </GraphicButton>
-            </motion.div>
-            {
-              onlineStatus && pairedServerConnection === 'ok' && (
-                <motion.div
-                  key="protocol-server"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  style={{ width: '100%', height: '100%' }}
-                  layout
-                >
-                  <GraphicButton
-                    color="mustard"
-                    onClick={toggleShowFetchProtocolPicker}
-                    graphicPosition="4rem 0rem"
-                    graphicSize="14rem"
-                    graphic={serverIcon}
-                  >
-                    <h3>Import</h3>
-                    <h2>From Server</h2>
-                  </GraphicButton>
-                </motion.div>
-              )
-            }
-          </AnimatePresence>
-        </motion.div>
-      </motion.main>
+            )
+          }
+          <GraphicButton
+            color="slate-blue--dark"
+            onClick={beginLocalProtocolImport}
+            graphicPosition="0% 0%"
+            graphicSize="15rem"
+            graphic={localIcon}
+          >
+            <h3>Import</h3>
+            <h2>From File</h2>
+          </GraphicButton>
+          {
+            onlineStatus && pairedServerConnection === 'ok' && (
+              <GraphicButton
+                color="mustard"
+                onClick={toggleShowFetchProtocolPicker}
+                graphicPosition="4rem 0rem"
+                graphicSize="14rem"
+                graphic={serverIcon}
+              >
+                <h3>Import</h3>
+                <h2>From Server</h2>
+              </GraphicButton>
+            )
+          }
+        </div>
+      </main>
       { Object.keys(installedProtocols).length > 0 && (
-        <motion.footer layout className="import-section__manage-protocols">
+        <footer className="import-section__manage-protocols">
           <Button color="platinum" onClick={() => setShowManageProtocolsOverlay(true)}>Manage Installed Protocols...</Button>
-        </motion.footer>
+        </footer>
       )}
       <ProtocolUrlForm show={showProtocolUrlForm} handleClose={toggleShowProtocolUrlForm} />
       <ManageProtocolsOverlay

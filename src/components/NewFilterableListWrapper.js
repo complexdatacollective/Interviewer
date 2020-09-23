@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { get } from 'lodash';
 import objectHash from 'object-hash';
-import { motion, AnimatePresence, AnimateSharedLayout } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import PropTypes from 'prop-types';
 import { Button, Spinner } from '@codaco/ui';
 import { Text } from '@codaco/ui/lib/components/Fields';
@@ -59,14 +59,14 @@ const NewFilterableListWrapper = (props) => {
   };
 
   const containerVariants = {
-    visible: {
+    show: {
       opacity: 1,
       transition: {
+        staggerChildren: 0.09,
         when: 'beforeChildren',
-        staggerChildren: 0.1,
       },
     },
-    hidden: {
+    hide: {
       opacity: 0,
       transition: {
         when: 'afterChildren',
@@ -75,14 +75,14 @@ const NewFilterableListWrapper = (props) => {
   };
 
   const itemVariants = {
-    visible: {
+    show: {
       opacity: 1,
       y: 0,
       transition: {
         type: 'spring',
       },
     },
-    hidden: {
+    hide: {
       opacity: 0,
       y: 25,
       transition: {
@@ -134,33 +134,36 @@ const NewFilterableListWrapper = (props) => {
       <motion.main layout className="new-filterable-list__main">
         {
           loading ? (
-            <div className="loading-state">
+            <motion.div
+              className="loading-state"
+              layout
+              key="loader"
+            >
               <Spinner small />
               <h4>Loading...</h4>
-            </div>
+            </motion.div>
           ) : (
             <motion.div
               variants={containerVariants}
-              initial="hidden"
-              animate="visible"
+              key="filterable-list"
+              initial="hide"
+              animate="show"
               className="filterable-list-scroller"
-              layout
             >
-              <AnimateSharedLayout>
-                <AnimatePresence>
-                  {
-                    sortedAndFilteredList.length > 0 && sortedAndFilteredList.map(item => (
-                      <motion.div
-                        variants={itemVariants}
-                        key={item.key || objectHash(item)}
-                        layout
-                      >
-                        <ItemComponent {...item} />
-                      </motion.div>
-                    ))
-                  }
-                </AnimatePresence>
-              </AnimateSharedLayout>
+              <AnimatePresence>
+                {
+                  sortedAndFilteredList.length > 0 && sortedAndFilteredList.map(item => (
+                    <motion.div
+                      variants={itemVariants}
+                      key={item.key || objectHash(item)}
+                      exit="hide"
+                      layout
+                    >
+                      <ItemComponent {...item} />
+                    </motion.div>
+                  ))
+                }
+              </AnimatePresence>
             </motion.div>
           )
         }

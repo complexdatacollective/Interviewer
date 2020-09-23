@@ -13,9 +13,9 @@ const ServerCard = (props) => {
 
   return (
     <motion.div
-      enter={{ scale: 1 }}
+      initial={{ scale: 0 }}
+      animate={{ scale: 1 }}
       exit={{ scale: 0 }}
-      layout
     >
       <UIServerCard
         name={name}

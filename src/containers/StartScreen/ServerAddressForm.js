@@ -50,7 +50,7 @@ const ServerAddressForm = ({
   server,
 }) => {
   const [showPairingCodeDialog, setShowPairingCodeDialog] = useState(false);
-  const [selectedServer, setSelectedServer] = useState(server);
+  const [selectedServer, setSelectedServer] = useState(null);
 
   const handleSubmit = (values) => {
     const serverWithPairingUrl = addPairingUrlToService({
@@ -87,7 +87,7 @@ const ServerAddressForm = ({
   };
 
   const RenderPairingForm = () => (
-    <motion.div className="server-address-form">
+    <motion.div layout className="server-address-form">
       <p>
         If you cannot use automatic Server discovery, you may still be able to pair
         this device with Server by manually entering connection details.

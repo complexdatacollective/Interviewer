@@ -1,30 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { AnimatePresence } from 'framer-motion';
 import { Icon, Spinner, Scroller, Button } from '@codaco/ui';
 import useOnlineStatus from '../../hooks/useOnlineStatus';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import ServerDiscoverer from '../../utils/serverDiscoverer';
 import { ServerCard } from '../../components/Cards';
-import { ServerAddressForm } from '../StartScreen/ServerAddressForm';
 
 /**
  * Displays a list of available servers discovered via MDNS.
  */
 const DiscoveredServerList = ({
-  openDialog,
+  onSelectServer,
 }) => {
   const onlineStatus = useOnlineStatus();
 
   const [availableServers, updateAvailableServers] = useState([]);
-  const [selectedServer, setSelectedServer] = useState(null);
+
   const [error, setError] = useState(null);
 
-  const [showServerAddressForm, setShowServerAddressForm] = useState(false);
+  const dispatch = useDispatch();
+  const openDialog = dialog => dispatch(dialogActions.openDialog(dialog));
 
   const handlePairingCardClick = (server) => {
-    setSelectedServer(server);
-    setShowServerAddressForm(true);
+    onSelectServer(server);
   };
 
   useEffect(() => {
@@ -138,24 +137,9 @@ const DiscoveredServerList = ({
           }
         </AnimatePresence>
       </Scroller>
-      <ServerAddressForm
-        server={selectedServer}
-        show={showServerAddressForm}
-        handleClose={() => setShowServerAddressForm(false)}
-      />
     </div>
   );
 };
 
-DiscoveredServerList.defaultProps = {
-};
-
-DiscoveredServerList.propTypes = {
-};
-
-const mapDispatchToProps = {
-  openDialog: dialogActions.openDialog,
-};
-
-export default connect(null, mapDispatchToProps)(DiscoveredServerList);
+export default DiscoveredServerList;
 

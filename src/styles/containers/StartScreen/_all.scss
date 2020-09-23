@@ -160,6 +160,15 @@
       display: flex;
       justify-content: space-around;
 
+      .graphic-button {
+        max-width: 30rem;
+      }
+
+      > :only-child {
+          max-width: 30rem;
+          margin-left: -50% !important;
+      }
+
       > :first-child {
         margin-right: unit(2);
       }
