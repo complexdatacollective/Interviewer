@@ -24,5 +24,12 @@ exports[`<SlideFormNode /> should render 1`] = `
   nodeIndex={1}
   onUpdate={[Function]}
   stageIndex={1}
+  submitButton={
+    <button
+      aria-label="Submit"
+      hidden={true}
+      type="submit"
+    />
+  }
 />
 `;
