@@ -1,5 +1,5 @@
 .data-export-section {
-  background: linear-gradient(#404088, var(--color-cyber-grape));
+  background: linear-gradient(#404088, var(--color-cyber-grape)); //sass-lint:disable-line no-color-literals
 
   &__main {
     > header {
@@ -9,14 +9,14 @@
     .content-area {
       padding: unit(1) unit(6);
     }
-    
+
     .selection-status {
       margin: unit(2) unit(4);
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-direction: row-reverse;
-      height: unit(6)
+      height: unit(6);
     }
 
     .new-filterable-list {
@@ -25,7 +25,7 @@
 
       &__main {
         max-height: 45vh;
-        min-height: 16rem;    
+        min-height: 16rem;
       }
     }
   }

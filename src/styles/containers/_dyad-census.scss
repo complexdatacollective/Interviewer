@@ -55,12 +55,13 @@ $choice-padding: 2rem;
   }
 
   &__prompt {
-    .prompts__prompt {
-      --prompt-background: var(--light-background);
-    }
     height: 8rem;
     width: 100%;
     display: flex;
+
+    .prompts__prompt {
+      --prompt-background: var(--light-background);
+    }
   }
 
   &__main {
@@ -160,11 +161,11 @@ $choice-padding: 2rem;
       border-radius: var(--border-radius);
       width: 12rem;
       height: 5rem;
-    
+
       &::before {
         border-radius: 0.75rem;
       }
-  
+
       &::after {
         border-radius: 0.75rem;
       }

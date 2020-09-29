@@ -1,5 +1,5 @@
 .import-section {
-  background: linear-gradient(#404088, var(--color-cyber-grape));
+  background: linear-gradient(#404088, var(--color-cyber-grape)); //sass-lint:disable-line no-color-literals
 
   &__manage-protocols {
     background: var(--color-slate-blue);
@@ -25,8 +25,8 @@
       }
 
       > :only-child {
-          max-width: 30rem;
-          margin-left: -50% !important;
+        max-width: 30rem;
+        margin-left: -50% !important; //sass-lint:disable-line no-important
       }
 
       > :first-child {

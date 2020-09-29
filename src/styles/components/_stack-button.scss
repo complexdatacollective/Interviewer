@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  color: white;
+  color: var(--color-white);
   height: 100%;
   cursor: pointer;
 
@@ -38,9 +38,8 @@
       height: 8rem;
       border-radius: var(--border-radius);
       background: var(--color-slate-blue--dark);
-      box-shadow: 0.2rem 0.2rem 0.5rem rgba(0, 0, 0, 0.3);
+      box-shadow: 0.2rem 0.2rem 0.5rem rgba(0, 0, 0, 0.3); //sass-lint:disable-line no-color-literals
       overflow: hidden;
-
 
       .main {
         width: 100%;

@@ -1,5 +1,6 @@
 .interview-section {
-  background: linear-gradient(#404088, var(--color-cyber-grape));
+  background: linear-gradient(#404088, var(--color-cyber-grape)); //sass-lint:disable-line no-color-literals
+
   &__manage-protocols {
     padding: unit(2) unit(6);
     display: flex;
@@ -12,8 +13,6 @@
   }
 
   &__start-new {
-    padding: 0 !important;
-
     .content-area {
       display: flex;
 
@@ -35,8 +34,7 @@
   }
 
   &__resume-section {
-    padding: 0 !important;
-    background: rgba(22, 21, 43, 0.14901960784313725);
+    background: rgba(22, 21, 43, 0.15); //sass-lint:disable-line no-color-literals
 
     .content-area {
       display: flex;
