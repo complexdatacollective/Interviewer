@@ -3,7 +3,7 @@ import { createEpicMiddleware } from 'redux-observable';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { actionTypes as dialogActionTypes } from '../dialogs';
-import { actionCreators as importProtocolActions, actionTypes as importProtocolActionTypes } from '../importProtocol';
+import { actionCreators as installedProtocolActions, actionTypes as installedProtocolActionTypes } from '../installedProtocols';
 import { actionCreators as serverActions, actionTypes as serverActionTypes } from '../pairedServer';
 import { epics as errorsEpic } from '../errors';
 
@@ -36,7 +36,7 @@ describe('errors', () => {
           expect(actionListener).lastCalledWith(
             expect.objectContaining({
               error: mockError,
-              type: importProtocolActionTypes.IMPORT_PROTOCOL_FAILED,
+              type: installedProtocolActionTypes.IMPORT_PROTOCOL_FAILED,
             }),
           );
         })
@@ -54,7 +54,7 @@ describe('errors', () => {
         });
 
       const store = getStore(actionListener);
-      store.dispatch(importProtocolActions.importProtocolFailed(mockError));
+      store.dispatch(installedProtocolActions.importProtocolFailed(mockError));
     });
 
     it('pairingFailed', (done) => {

@@ -21,8 +21,6 @@ export default class DraggablePreview {
     this.node = document.createElement('div');
     this.initialSize = getSize(node);
     this.node.setAttribute('class', 'draggable-preview');
-    // this.x = -1000;
-    // this.y = -1000;
     this.validMove = true;
 
     this.update();

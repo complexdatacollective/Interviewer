@@ -1,42 +1,39 @@
-/* eslint-disable react/no-find-dom-node */
+import React, { useRef, useEffect } from 'react';
+import { findDOMNode } from 'react-dom';
 
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+const selectable = WrappedComponent =>
+  (props) => {
+    const el = useRef();
+    const onTap = () => {
+      console.log('onTap');
+      props.onSelected();
+    };
 
-export const selectable = WrappedComponent => ({
-  onSelected,
-  allowSelect = true,
-  ...rest
-}) => {
-  const [selected, setSelected] = useState(false);
+    let element;
 
-  const handleSelect = () => {
-    if (!allowSelect) { return; }
+    useEffect(() => {
+      console.log('selectable effect', el);
 
-    if (!selected) {
-      setSelected(true);
-      onSelected();
-      return;
-    }
+      if (el.current) {
+        element = findDOMNode(el.current);
+        element.addEventListener('click', onTap, { passive: true });
+      }
 
-    setSelected(false);
+      return () => {
+        if (element) {
+          element.removeEventListener('click', onTap);
+        }
+      };
+    }, [el]);
+
+    const {
+      allowSelect,
+      onSelected,
+      ...rest
+    } = props;
+    console.log('selectable', props);
+    // if (!allowSelect) { return <WrappedComponent {...rest} />; }
+    return <WrappedComponent {...rest} ref={el} />;
   };
-
-  return (
-    <div onClick={handleSelect} >
-      <WrappedComponent {...rest} selected={selected} onClick={handleSelect} />
-    </div>
-  );
-};
-
-selectable.propTypes = {
-  onSelected: PropTypes.func,
-  allowSelect: PropTypes.bool,
-};
-
-selectable.defaultProps = {
-  onSelected: null,
-  allowSelect: true,
-};
 
 export default selectable;

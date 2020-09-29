@@ -140,7 +140,7 @@ export const importProtocolFromURI = (uri, usePairedServer) => {
         dispatch(toastActions.addToast({
           type: 'success',
           title: 'Finished!',
-          autoDismiss: false,
+          autoDismiss: true,
           content: (
             <React.Fragment>
               <p>Protocol installed successfully.</p>
@@ -265,7 +265,7 @@ export const importProtocolFromFile = (filePath, name) => {
         dispatch(toastActions.addToast({
           type: 'success',
           title: 'Finished!',
-          autoDismiss: false,
+          autoDismiss: true,
           content: (
             <React.Fragment>
               <p>Protocol installed successfully.</p>

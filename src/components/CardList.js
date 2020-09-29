@@ -4,26 +4,19 @@ import cx from 'classnames';
 import { connect } from 'react-redux';
 import { times } from 'lodash';
 import { List, AutoSizer, CellMeasurer, CellMeasurerCache } from 'react-virtualized';
-import { selectable } from '../behaviours';
+import selectable from '../behaviours/selectable';
 import { Card } from '.';
 import { entityPrimaryKeyProperty } from '../ducks/modules/network';
 
-
-const calculateRequiredColumns = (width, height) => {
-  // Tuple in format of [ratio, noOfColumns]
-  const ratios = [
-    [16 / 9, 4],
-    [16 / 10, 3],
-    [4 / 3, 2],
-  ];
-
-  const windowRatio = width / height;
-
-  // Calculate appropriate col number by finding closest ratio, or defaulting to 1
-  const [, columns] = ratios.find(([ratio]) => windowRatio > ratio) || [0, 1];
-
-  return columns;
-};
+/* eslint-disable */
+// [ ratio, columns ]
+// First match (windowRatio > ratio) sets columns
+const ratios = [
+  [ 16/ 9, 4 ],
+  [ 16/10, 3 ],
+  [  4/ 3, 2 ],
+];
+/* eslint-enable */
 
 const EnhancedCard = selectable(Card);
 
@@ -44,7 +37,11 @@ class CardList extends Component {
   }
 
   componentWillMount() {
-    this.columns = calculateRequiredColumns(window.innerWidth, window.innerHeight);
+    const windowRatio = window.innerWidth / window.innerHeight;
+
+    const [, columns] = ratios.find(([ratio]) => windowRatio > ratio);
+
+    this.columns = columns;
   }
 
   getColumns = () =>

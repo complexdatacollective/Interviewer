@@ -1,15 +1,14 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'recompose';
-
 import Node from '../Node';
-import { selectable } from '../../behaviours';
+import selectable from '../../behaviours/selectable';
 import { DragSource } from '../../behaviours/DragAndDrop';
 import { NO_SCROLL } from '../../behaviours/DragAndDrop/DragManager';
 import { getEntityAttributes } from '../../ducks/modules/network';
 
 const EnhancedNode = compose(
-  DragSource,
+  // DragSource,
   selectable,
 )(Node);
 

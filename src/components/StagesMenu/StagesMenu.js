@@ -166,7 +166,6 @@ const StagesMenu = (props) => {
 
     if (!filter) {
       const itemHeight = document.getElementsByClassName('stages-menu__preview-wrapper')[0].clientHeight;
-      console.log('calling scrtoll', currentStageIndex, itemHeight);
       scrollToLocation(currentStageIndex * itemHeight, 0.2);
     }
   }, [imageLoaded]);

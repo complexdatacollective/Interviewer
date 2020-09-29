@@ -1,5 +1,13 @@
 .draggable-preview {
   z-index: var(--z-fx-sub);
   opacity: 0.5;
-  cursor: grabbing;
+
+  .node {
+    transform: translate(-25%, -25%);
+    position: absolute;
+  }
+}
+
+.draggable {
+  cursor: grab;
 }

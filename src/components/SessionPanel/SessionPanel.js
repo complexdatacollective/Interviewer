@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'recompose';
 import { motion, AnimatePresence, AnimateSharedLayout } from 'framer-motion';
-import { getCSSVariableAsNumber, getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
 import { DropObstacle } from '../../behaviours/DragAndDrop';
 import StagesMenu from '../StagesMenu/StagesMenu';
 import SubMenu from './SubMenu';
@@ -19,9 +18,6 @@ const choiceVariants = {
 const SessionPanel = React.forwardRef((props, ref) => {
   const [expanded, setExpanded] = useState(false);
   const [showSubMenu, setShowSubMenu] = useState(false);
-
-  const baseAnimationDuration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
-  const baseAnimationEasing = getCSSVariableAsString('--animation-easing-json');
 
   const resetMenuState = () => {
     setExpanded(false);
@@ -55,10 +51,6 @@ const SessionPanel = React.forwardRef((props, ref) => {
         className="session-panel"
         key="session-panel"
         layout
-        transition={{
-          duration: baseAnimationDuration,
-          easing: baseAnimationEasing,
-        }}
       >
         <AnimatePresence exitBeforeEnter>
           { expanded ? menuContent : (
