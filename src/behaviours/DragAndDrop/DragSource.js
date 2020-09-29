@@ -1,6 +1,7 @@
 /* eslint-disable react/no-find-dom-node, react/sort-comp */
 
 import React, { useEffect, useRef, useState } from 'react';
+import { throttle } from 'lodash';
 import DragPreview from './DragPreview';
 import DragManager, { VERTICAL_SCROLL } from './DragManager';
 import { actionCreators as actions } from './reducer';
@@ -45,6 +46,7 @@ const dragSource = WrappedComponent =>
     };
 
     const setValidMove = (valid) => {
+      if (!preview) return;
       preview.setValidMove(valid);
     };
 
@@ -61,14 +63,17 @@ const dragSource = WrappedComponent =>
       setIsDragging(true);
     };
 
-    const onDragMove = ({ x, y, ...other }) => {
-      updatePreview({ x, y });
-
+    const throttledDragAction = throttle(({ x, y, ...other }) => {
       store.dispatch(
         actions.dragMove({
           x, y, setValidMove, ...other,
         }),
       );
+    }, 60);
+
+    const onDragMove = ({ x, y, ...other }) => {
+      updatePreview({ x, y });
+      throttledDragAction({ x, y, ...other });
     };
 
     const onDragEnd = (movement) => {

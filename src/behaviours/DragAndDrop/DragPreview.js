@@ -59,7 +59,7 @@ export default class DraggablePreview {
     if (this.validMove) {
       this.node.setAttribute('class', 'draggable-preview');
     } else {
-      this.node.setAttribute('class', 'draggable-preview node--inactive');
+      this.node.setAttribute('class', 'draggable-preview draggable-preview--invalid');
     }
   }
 

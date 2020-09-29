@@ -42,9 +42,7 @@ const FetchServerProtocolPicker = ({
   };
 
   useEffect(() => {
-    if (!show) { return; }
-
-    if (!onlineStatus || !pairedServer) { onClose(); return; }
+    if (!show || !onlineStatus || !pairedServer) { onClose(); }
 
     setLoading(true);
 

@@ -1,10 +1,14 @@
 .draggable-preview {
   z-index: var(--z-fx-sub);
-  opacity: 0.5;
+
+  &--invalid {
+    .node {
+      opacity: 0.5;
+    }
+  }
 
   .node {
     transform: translate(-25%, -25%);
-    position: absolute;
   }
 }
 
