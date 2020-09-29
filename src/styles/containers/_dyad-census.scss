@@ -111,6 +111,8 @@ $choice-padding: 2rem;
     overflow: hidden;
     text-align: center;
     width: 55rem;
+    z-index: var(--z-panel);
+    position: relative;
 
     &--invalid {
       border-color: var(--error);
