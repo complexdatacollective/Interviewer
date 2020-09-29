@@ -33,7 +33,7 @@ const HeaderSection = () => {
       },
     },
     hide: {
-      height: 0,
+      height: '0px',
       opacity: 0,
     },
   };
@@ -45,7 +45,7 @@ const HeaderSection = () => {
       transition: { when: 'beforeChildren', type: 'spring' },
     },
     hide: {
-      height: 0,
+      height: '0px',
       opacity: 0,
     },
   };
@@ -78,6 +78,7 @@ const HeaderSection = () => {
         <motion.div
           variants={start}
           animate={showGettingStarted ? 'show' : 'hide'}
+          key="balls"
         >
           <main className="welcome-section__main">
             <header>

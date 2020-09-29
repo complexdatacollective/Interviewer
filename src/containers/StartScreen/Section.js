@@ -14,11 +14,12 @@ const Section = (props) => {
       y: 0,
       transition: {
         type: 'spring',
+        when: 'beforeChildren',
       },
     },
     hide: {
       opacity: 0,
-      y: '10rem',
+      y: '5rem',
     },
   };
 
