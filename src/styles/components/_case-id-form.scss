@@ -1,0 +1,16 @@
+.case-id-form {
+  width: 60rem;
+
+  .form-field-container {
+    background: var(--background);
+    padding: unit(4);
+    border-radius: var(--border-radius);
+    margin-bottom: unit(2);
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+}

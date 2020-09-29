@@ -9,8 +9,7 @@ import { Section } from '.';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import useServerConnectionStatus from '../../hooks/useServerConnectionStatus';
-import Switch from './Switch';
-import { NewFilterableListWrapper } from '../../components';
+import { NewFilterableListWrapper, Switch } from '../../components';
 import { asNetworkWithSessionVariables } from '../../utils/networkFormat';
 
 const oneBasedIndex = i => parseInt(i || 0, 10) + 1;

@@ -8,30 +8,35 @@ const Section = (props) => {
     ...rest
   } = props;
 
-  const itemVariants = {
+  const springy = {
     show: {
-      y: 0,
       opacity: 1,
+      y: 0,
       transition: {
         type: 'spring',
-        when: 'beforeChildren',
       },
     },
     hide: {
-      y: '10rem',
       opacity: 0,
+      y: '10rem',
     },
   };
 
   return (
     <motion.section
       className={className}
-      variants={itemVariants}
+      variants={springy}
       {...rest}
     >
       {children}
     </motion.section>
   );
+};
+
+Section.propTypes = {
+};
+
+Section.defaultProps = {
 };
 
 export default Section;

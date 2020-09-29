@@ -1,0 +1,17 @@
+.start-screen-section {
+  border-radius: var(--border-radius);
+  box-shadow: 0 unit(1) unit(1) 0 rgba(0, 0, 0, 0.25);
+  margin: unit(6) auto;
+  max-width: 68rem;
+  width: 100%;
+  overflow: hidden;
+
+  main {
+    header {
+      h2 {
+        margin-top: 0;
+      }
+    }
+  }
+
+}

@@ -11,7 +11,6 @@ import {
 import WhatsNewSection from './WhatsNewSection';
 import DataExportSection from './DataExportSection';
 
-
 const StartScreen = ({
   activeSessionId,
   sessions,
@@ -39,7 +38,6 @@ const StartScreen = ({
         variants={variants}
         animate="show"
         initial="hide"
-        layout
         key="start-screen"
       >
         <HeaderSection />

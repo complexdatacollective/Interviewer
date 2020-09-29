@@ -8,7 +8,7 @@ import { actionCreators as deviceSettingsActions } from '../../ducks/modules/dev
 import { importProtocolFromURI } from '../../utils/protocol/importProtocol';
 import { SettingsMenuButton } from '../../components/SettingsMenu';
 import { openExternalLink } from '../../components/ExternalLink';
-import Switch from './Switch';
+import { Switch } from '../../components';
 import getVersion from '../../utils/getVersion';
 import useOnlineStatus from '../../hooks/useOnlineStatus';
 
@@ -78,7 +78,6 @@ const HeaderSection = () => {
         <motion.div
           variants={start}
           animate={showGettingStarted ? 'show' : 'hide'}
-          key="balls"
         >
           <main className="welcome-section__main">
             <header>

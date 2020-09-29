@@ -1,0 +1,61 @@
+.interview-section {
+  background: linear-gradient(#404088, var(--color-cyber-grape));
+  &__manage-protocols {
+    padding: unit(2) unit(6);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    h2 {
+      margin: 0;
+    }
+  }
+
+  &__start-new {
+    padding: 0 !important;
+
+    .content-area {
+      display: flex;
+
+      &__last-used {
+        padding: unit(4) unit(6);
+        flex: 1 1 auto;
+
+        > .protocol-card {
+          max-width: 35rem;
+        }
+      }
+
+      &__other {
+        flex: 0 1 40%;
+        display: flex;
+        flex-direction: column;
+      }
+    }
+  }
+
+  &__resume-section {
+    padding: 0 !important;
+    background: rgba(22, 21, 43, 0.14901960784313725);
+
+    .content-area {
+      display: flex;
+
+      &__last-session {
+        padding: unit(4) unit(6);
+        flex: 1 1 auto;
+        width: 60%;
+
+        > .session-card {
+          max-width: 35rem;
+        }
+      }
+
+      &__other {
+        flex: 0 1 40%;
+        display: flex;
+        flex-direction: column;
+      }
+    }
+  }
+}

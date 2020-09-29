@@ -1,0 +1,22 @@
+.start-screen {
+  --color-panel-grey: #DCDEDD;
+  background-color: var(--background);
+  background-image: url('../images/main-background.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: scroll;
+
+  -webkit-mask-image: linear-gradient(180deg, transparent, black 1.2rem, black calc(100% - 2rem), transparent 100%);
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+
+  &__container {
+    padding: unit(2) unit(8) unit(8);
+  }
+}
