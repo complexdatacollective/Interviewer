@@ -4,7 +4,6 @@ import cx from 'classnames';
 import { connect } from 'react-redux';
 import { times } from 'lodash';
 import { List, AutoSizer, CellMeasurer, CellMeasurerCache } from 'react-virtualized';
-import selectable from '../behaviours/selectable';
 import { Card } from '.';
 import { entityPrimaryKeyProperty } from '../ducks/modules/network';
 
@@ -17,8 +16,6 @@ const ratios = [
   [  4/ 3, 2 ],
 ];
 /* eslint-enable */
-
-const EnhancedCard = selectable(Card);
 
 /**
   * Card List
@@ -106,7 +103,7 @@ class CardList extends Component {
                 className="card-list__content"
                 key={getKey(node)}
               >
-                <EnhancedCard
+                <Card
                   label={label(node)}
                   selected={isItemSelected(node)}
                   details={details(node)}
@@ -154,6 +151,7 @@ class CardList extends Component {
               rowHeight={this.cellCache.rowHeight}
               rowRenderer={this.rowRenderer}
               ref={this.listRef}
+              items={items}
               className={scrollableClasses}
               {...rest}
             />

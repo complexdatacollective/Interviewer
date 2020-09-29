@@ -2,14 +2,12 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'recompose';
 import Node from '../Node';
-import selectable from '../../behaviours/selectable';
 import { DragSource } from '../../behaviours/DragAndDrop';
 import { NO_SCROLL } from '../../behaviours/DragAndDrop/DragManager';
 import { getEntityAttributes } from '../../ducks/modules/network';
 
 const EnhancedNode = compose(
-  // DragSource,
-  selectable,
+  DragSource,
 )(Node);
 
 class LayoutNode extends PureComponent {
@@ -36,9 +34,9 @@ class LayoutNode extends PureComponent {
       <div
         className="node-layout__node"
         style={styles}
+        onClick={this.props.onSelected}
       >
         <EnhancedNode
-          onSelected={this.props.onSelected}
           selected={selected}
           linking={linking}
           allowDrag={allowPositioning}

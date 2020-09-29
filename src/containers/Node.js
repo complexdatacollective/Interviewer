@@ -105,8 +105,8 @@ Node.defaultProps = {
   workerNetwork: null,
 };
 
-// export default connect(mapStateToProps)(Node);
+export default connect(mapStateToProps)(Node);
 
-export default Node;
+// export default Node;
 
 export { Node };
