@@ -28,5 +28,12 @@ exports[`<SlideFormEdge /> should render 1`] = `
     }
   }
   stageIndex={1}
+  submitButton={
+    <button
+      aria-label="Submit"
+      hidden={true}
+      type="submit"
+    />
+  }
 />
 `;

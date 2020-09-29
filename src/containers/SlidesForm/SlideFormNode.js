@@ -19,6 +19,7 @@ class SlideFormNode extends PureComponent {
       item,
       initialValues,
       subject,
+      submitButton,
     } = this.props;
 
     return (
@@ -34,6 +35,7 @@ class SlideFormNode extends PureComponent {
                 autoFocus={false}
                 subject={subject}
                 onSubmit={this.handleSubmit}
+                submitButton={submitButton}
               />
             </Scroller>
           </div>
@@ -48,11 +50,13 @@ SlideFormNode.propTypes = {
   subject: PropTypes.object.isRequired,
   item: PropTypes.object.isRequired,
   onUpdate: PropTypes.func,
+  submitButton: PropTypes.object,
 };
 
 SlideFormNode.defaultProps = {
   form: {},
   onUpdate: () => {},
+  submitButton: <button type="submit" key="submit" aria-label="Submit" hidden />,
 };
 
 const withNodeProps = withProps(({ item }) => ({
