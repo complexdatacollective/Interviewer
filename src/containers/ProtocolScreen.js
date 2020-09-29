@@ -129,7 +129,7 @@ class Protocol extends Component {
 
     const duration = {
       enter: getCSSVariableAsNumber('--animation-duration-slow-ms') * 2,
-      exit: getCSSVariableAsNumber('--animation-duration-slow-ms'),
+      exit: getCSSVariableAsNumber('--animation-duration-slow-ms') * 2,
     };
 
     return (
