@@ -3,6 +3,7 @@
 exports[`Card component renders selected card 1`] = `
 <div
   className="card card--selected"
+  onClick={null}
 >
   <svg
     className="card__indicator"
@@ -52,6 +53,7 @@ exports[`Card component renders selected card 1`] = `
 exports[`Card component renders unselected card 1`] = `
 <div
   className="card"
+  onClick={null}
 >
   <svg
     className="card__indicator"

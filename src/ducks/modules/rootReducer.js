@@ -32,7 +32,7 @@ const appReducer = history => combineReducers({
 const createRootReducer = history => (state, action) => {
   let currentState = state;
 
-  if (action.type === resetActionTypes.RESET_STATE) {
+  if (action && action.type === resetActionTypes.RESET_STATE) {
     currentState = undefined;
   }
 

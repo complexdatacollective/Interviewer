@@ -38,50 +38,6 @@ describe('<NodeLayout />', () => {
     expect(component).toMatchSnapshot();
   });
 
-  it('shouldComponentUpdate() when prop `nodes` changes length only', () => {
-    const componentDidUpdate = jest.fn();
-    NodeLayout.prototype.componentDidUpdate = componentDidUpdate;
-
-    const component = shallow(
-      <NodeLayout {...mockProps} />,
-      { lifecycleExperimental: true },
-    );
-
-    component.setProps({
-      ...mockProps,
-      nodes: [{ bar: 'buzz', [entityPrimaryKeyProperty]: 123 }],
-    });
-
-    component.setProps({
-      ...mockProps,
-      nodes: [{ bar: 'buzz', [entityPrimaryKeyProperty]: 123 }, { bar: 'bing', [entityPrimaryKeyProperty]: 456 }],
-    });
-
-    expect(componentDidUpdate.mock.calls.length).toEqual(1);
-  });
-
-  it('shouldComponentUpdate() when prop other than `nodes` changes', () => {
-    const componentDidUpdate = jest.fn();
-    NodeLayout.prototype.componentDidUpdate = componentDidUpdate;
-
-    const component = shallow(
-      <NodeLayout {...mockProps} />,
-      { lifecycleExperimental: true },
-    );
-
-    component.setProps({
-      ...mockProps,
-      nodes: [{ bar: 'buzz', [entityPrimaryKeyProperty]: 123 }],
-    });
-
-    component.setProps({
-      ...mockProps,
-      width: 789,
-    });
-
-    expect(componentDidUpdate.mock.calls.length).toEqual(1);
-  });
-
   describe('isLinking', () => {
     it('detects connecting state', () => {
       const subject = shallow(<NodeLayout {...mockProps} connectFrom="1" />);

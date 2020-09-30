@@ -24,7 +24,7 @@ const cleanUpProtocol = (uid) => {
 
 const cancelledImport = () => Promise.reject(new CancellationError('Import cancelled.'));
 
-const filenameFromURI = uri =>
+export const filenameFromURI = uri =>
   decodeURIComponent(uri.split('/').pop().split('#')[0].split('?')[0]);
 
 const filenameFromPath = path => path.split(/.*[/|\\]/)[1];

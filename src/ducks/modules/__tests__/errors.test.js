@@ -30,7 +30,7 @@ const getStore = actionListener =>
 
 describe('errors', () => {
   describe('epics', () => {
-    it('importProtocolFailed', (done) => {
+    it('importProtocolFailedAction', (done) => {
       const actionListener = jest.fn()
         .mockImplementationOnce(() => {
           expect(actionListener).lastCalledWith(
@@ -54,7 +54,7 @@ describe('errors', () => {
         });
 
       const store = getStore(actionListener);
-      store.dispatch(installedProtocolActions.importProtocolFailed(mockError));
+      store.dispatch(installedProtocolActions.importProtocolFailedAction(mockError));
     });
 
     it('pairingFailed', (done) => {

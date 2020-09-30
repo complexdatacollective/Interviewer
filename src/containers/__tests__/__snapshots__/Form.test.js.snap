@@ -1,44 +1,28 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<Form /> should render 1`] = `
-<AutoInitialisedForm
-  dispatch={[Function]}
-  fields={Array []}
-  form="form1"
-  meta={
-    Object {
-      "fields": Object {},
-      "values": undefined,
+<ContextProvider
+  value={null}
+>
+  <AutoInitialisedForm
+    dispatch={[Function]}
+    fields={Array []}
+    form="form1"
+    meta={
+      Object {
+        "fields": Object {},
+        "values": undefined,
+      }
     }
-  }
-  store={
-    Object {
-      "dispatch": [Function],
-      "getState": [Function],
-      "replaceReducer": [Function],
-      "subscribe": [Function],
-      Symbol(observable): [Function],
-    }
-  }
-  storeSubscription={
-    Subscription {
-      "listeners": Object {
-        "clear": [Function],
-        "get": [Function],
-        "notify": [Function],
-        "subscribe": [Function],
-      },
-      "onStateChange": [Function],
-      "parentSub": undefined,
-      "store": Object {
+    store={
+      Object {
         "dispatch": [Function],
         "getState": [Function],
         "replaceReducer": [Function],
         "subscribe": [Function],
         Symbol(observable): [Function],
-      },
-      "unsubscribe": [Function],
+      }
     }
-  }
-/>
+  />
+</ContextProvider>
 `;

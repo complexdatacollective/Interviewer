@@ -54,10 +54,10 @@ describe('Connect(ConvexHulls)', () => {
   const subject = shallow(<ConvexHulls {...mockProps} store={createStore(() => mockState)} />);
 
   it('provides a nodesByGroup prop', () => {
-    expect(subject.prop('nodesByGroup')).toBeDefined();
+    expect(subject.props().children.props.nodesByGroup).toBeDefined();
   });
 
   it('provides a categoricalOptions prop', () => {
-    expect(subject.prop('categoricalOptions')).toBeDefined();
+    expect(subject.props().children.props.categoricalOptions).toBeDefined();
   });
 });

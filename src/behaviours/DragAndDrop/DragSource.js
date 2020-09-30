@@ -106,7 +106,7 @@ const dragSource = WrappedComponent =>
 
     return (
       <div style={styles()} className="draggable" ref={node}>
-        <WrappedComponent {...rest} />
+        <WrappedComponent {...rest} scrollDirection={scrollDirection} />
       </div>
     );
   };

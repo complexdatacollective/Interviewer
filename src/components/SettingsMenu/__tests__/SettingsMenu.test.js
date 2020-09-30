@@ -3,19 +3,16 @@
 
 import React from 'react';
 import { createStore, applyMiddleware, compose } from 'redux';
+import { routerMiddleware } from 'connected-react-router';
+import { createHashHistory as createHistory } from 'history';
 import { Provider } from 'react-redux';
 import { mount } from 'enzyme';
 import thunk from 'redux-thunk';
 import epics from '../../../ducks/middleware/epics';
-import rootReducer from '../../../ducks/modules/rootReducer';
 import SettingsMenu from '../SettingsMenu';
+import createRootReducer from '../../../ducks/modules/rootReducer';
 
 jest.mock('@codaco/ui/lib/utils/CSSVariables');
-
-// jest.mock('framer-motion', () => ({
-//   AnimatePresence: 'AnimatePresence',
-// }));
-
 
 const actionLogger = actions =>
   () =>
@@ -82,14 +79,15 @@ const initialState = {
 const getMockStore = () => {
   const actions = [];
 
+  const history = createHistory();
+
   const store = createStore(
-    rootReducer,
+    createRootReducer(history),
     initialState,
     compose(
-      applyMiddleware(thunk, epics, actionLogger(actions)),
+      applyMiddleware(routerMiddleware(history), thunk, epics, actionLogger(actions)),
     ),
   );
-
   return { store, actions };
 };
 
@@ -107,7 +105,7 @@ const getSubject = store =>
 
 describe('<SettingsMenu />', () => {
   it('Close button closes menu', () => {
-    const { store } = getMockStore({ ui: { isMenuOpen: true } });
+    const { store } = getMockStore();
     const subject = getSubject(store);
 
     expect(isMenuOpen(subject)).toBe(true);
@@ -116,7 +114,7 @@ describe('<SettingsMenu />', () => {
   });
 
   it('Navigation changes tab', () => {
-    const { store } = getMockStore({ ui: { isMenuOpen: true } });
+    const { store } = getMockStore();
     const subject = getSubject(store);
 
     subject.find('li[data-name="Developer Options"]').simulate('click');
