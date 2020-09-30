@@ -15,6 +15,7 @@ cache:
 
 install:
   - npm install
+  - npx browserslist@latest --update-db # update browserslist browser versions
 jobs:
   include:
     - stage: lint
