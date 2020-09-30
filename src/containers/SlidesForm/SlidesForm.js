@@ -65,7 +65,7 @@ const SlidesForm = (props) => {
     swiper.slideNext();
   };
 
-  const isLastItem = () => activeIndex === items.length;
+  const isLastItem = () => activeIndex >= items.length;
 
   const submitForm = () => {
     submitFormRedux(getFormName(getItemIndex()));
@@ -112,7 +112,7 @@ const SlidesForm = (props) => {
         confirmIfChanged()
           .then((confirmed) => {
             if (confirmed) {
-              onComplete(); // show next stage and lose changes
+              onComplete(direction); // show next stage and lose changes
               return;
             }
             submitForm(); // submit so errors will display
@@ -124,7 +124,7 @@ const SlidesForm = (props) => {
     setPendingStage(index);
     // Determine if we should leave the stage.
     if (shouldContinue(direction)) {
-      onComplete();
+      onComplete(direction);
       return;
     }
 
@@ -175,7 +175,7 @@ const SlidesForm = (props) => {
     updateItem(...update);
 
     if (isComplete(pendingDirection, pendingStage)) {
-      onComplete();
+      onComplete(pendingDirection);
       return;
     }
 
@@ -190,6 +190,12 @@ const SlidesForm = (props) => {
   useEffect(() => {
     registerBeforeNext(beforeNext);
   }, [swiper, beforeNext]);
+
+  // enter key should always move forward, and needs to process using beforeNext
+  const handleEnterSubmit = (e) => {
+    beforeNext(1);
+    e.preventDefault();
+  };
 
   return (
     <div className={parentClasses}>
@@ -219,6 +225,7 @@ const SlidesForm = (props) => {
               item={item}
               onUpdate={handleUpdate}
               form={slideForm}
+              submitButton={<button type="submit" key="submit" aria-label="Submit" hidden onClick={handleEnterSubmit} />}
             />
           );
         })}

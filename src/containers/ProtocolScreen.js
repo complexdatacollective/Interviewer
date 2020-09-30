@@ -36,8 +36,8 @@ class Protocol extends Component {
     this.beforeNext = {};
   }
 
-  onComplete = () => {
-    const pendingDirection = this.state.pendingDirection;
+  onComplete = (directionOverride) => {
+    const pendingDirection = directionOverride || this.state.pendingDirection;
     const pendingStage = this.state.pendingStage;
 
     const navigate = (pendingStage === -1) ?
