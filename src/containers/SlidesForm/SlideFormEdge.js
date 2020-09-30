@@ -23,6 +23,7 @@ class SlideFormEdge extends PureComponent {
       toNode,
       subject,
       initialValues,
+      submitButton,
     } = this.props;
 
     return (
@@ -40,6 +41,7 @@ class SlideFormEdge extends PureComponent {
                 autoFocus={false}
                 subject={subject}
                 onSubmit={this.handleSubmit}
+                submitButton={submitButton}
               />
             </Scroller>
           </div>
@@ -54,6 +56,11 @@ SlideFormEdge.propTypes = {
   onUpdate: PropTypes.func.isRequired,
   subject: PropTypes.object.isRequired,
   item: PropTypes.object.isRequired,
+  submitButton: PropTypes.object,
+};
+
+SlideFormEdge.defaultProps = {
+  submitButton: <button type="submit" key="submit" aria-label="Submit" hidden />,
 };
 
 const withEdgeProps = withProps(({ item }) => ({

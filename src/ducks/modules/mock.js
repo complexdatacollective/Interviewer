@@ -68,8 +68,8 @@ const makeEntity = (typeID, variables = {}, promptAttributes = {}) => {
 };
 
 const makeNetwork = (protocol) => {
-  const codebookNodeTypes = Object.keys(protocol.codebook.node);
-  const codebookEdgeTypes = Object.keys(protocol.codebook.edge);
+  const codebookNodeTypes = Object.keys(protocol.codebook.node || {});
+  const codebookEdgeTypes = Object.keys(protocol.codebook.edge || {});
 
   // Generate nodes
   const nodes = [];
@@ -86,7 +86,7 @@ const makeNetwork = (protocol) => {
       )));
   });
 
-  const ego = makeEntity(null, protocol.codebook.ego.variables);
+  const ego = makeEntity(null, (protocol.codebook.ego || {}).variables);
 
   const edges = [];
   const networkMaxEdges = 20;
