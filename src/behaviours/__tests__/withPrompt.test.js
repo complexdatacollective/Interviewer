@@ -1,6 +1,6 @@
 /* eslint-env jest */
 import React from 'react';
-import { shallow, mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import { createStore } from 'redux';
 
 import withPrompt from '../withPrompt';
