@@ -6,7 +6,10 @@ import useOnlineStatus from './useOnlineStatus';
 function getServerConnectionStatus(apiClient) {
   return apiClient.requestHeartbeat()
     .then(() => 'ok')
-    .catch(() => 'error');
+    .catch((e) => {
+      if (e.status === 'version_mismatch') { return e.status; }
+      return 'error';
+    });
 }
 
 const useServerConnectionStatus = (pairedServer) => {

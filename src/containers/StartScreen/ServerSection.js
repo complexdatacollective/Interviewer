@@ -51,7 +51,21 @@ const ServerSection = () => {
       );
     }
 
-    if (pairedServerConnection !== 'ok') {
+    if (pairedServerConnection === 'version_mismatch') {
+      return (
+        <React.Fragment>
+          <p>
+            This device could not communicate with your paired Server because
+            of a version mismatch. You may need to update your software on the
+            device or the server. Fetching protocols and uploading data have
+            been disabled. Use the button below for more troubleshooting information.
+          </p>
+          <Button size="small" color="neon-coral" onClick={() => openExternalLink('https://documentation.networkcanvas.com/docs/key-concepts/pairing/#troubleshooting')}>More Information</Button>
+        </React.Fragment>
+      );
+    }
+
+    if (pairedServerConnection !== 'ok' && pairedServerConnection !== 'version_mismatch') {
       return (
         <React.Fragment>
           <p>
