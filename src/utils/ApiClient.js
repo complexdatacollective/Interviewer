@@ -1,4 +1,5 @@
 /* globals cordova */
+import React from 'react';
 import axios from 'axios';
 import EventEmitter from 'eventemitter3';
 import { isString } from 'lodash';
@@ -23,11 +24,13 @@ const ProgressMessages = {
   NoResponseMessage: 'Server could not be reached at the address you provided. Check your networking settings on this device, and on the computer running Server and try again. Consult our documentation on pairing for detailed information on this topic.',
 };
 
+const ApiVersion = '1';
+const ApiMismatchStatus = 'version_mismatch';
 const ApiErrorStatus = 'error';
 
 const defaultHeaders = {
   'Content-Type': 'application/json',
-  'X-Device-API-Version': 1,
+  'X-Device-API-Version': ApiVersion,
 };
 
 // A throwable 'friendly' error containing message from server
@@ -44,14 +47,31 @@ const apiError = (respJson) => {
   return error;
 };
 
+const apiMismatchError = (code, response) => {
+  const error = new Error('Device API mismatch');
+
+  error.status = ApiMismatchStatus;
+  error.friendlyMessage = (
+    <p>The device does not match the server API version</p>
+  );
+  error.code = code;
+  error.stack = JSON.stringify(response);
+
+  return error;
+};
+
 const handleError = (err) => {
   if (axios.isCancel(err)) {
     return false;
   }
   // Handle errors from the response
   if (err.response) {
-    if (err.response.data.status === ApiErrorStatus) {
-      throw apiError({ ...err.response.data, code: err.response.status });
+    switch (err.response.data.status) {
+      case ApiMismatchStatus:
+        throw apiMismatchError(err.response.status, err.response.data);
+      case ApiErrorStatus:
+        throw apiError({ ...err.response.data, code: err.response.status });
+      default:
     }
   }
   // Handle errors with the request
