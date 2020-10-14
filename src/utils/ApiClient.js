@@ -6,7 +6,6 @@ import { decrypt, deriveSecretKeyBytes, encrypt, fromHex, toHex } from 'secure-c
 import { isCordova, isElectron } from '../utils/Environment';
 import UserCancelledExport from './network-exporters/src/errors/UserCancelledExport';
 
-
 const ProgressMessages = {
   BeginExport: {
     progress: 0,
@@ -28,6 +27,7 @@ const ApiErrorStatus = 'error';
 
 const defaultHeaders = {
   'Content-Type': 'application/json',
+  'X-Device-API-Version': 1,
 };
 
 // A throwable 'friendly' error containing message from server
