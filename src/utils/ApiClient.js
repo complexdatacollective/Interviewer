@@ -1,5 +1,4 @@
 /* globals cordova */
-import React from 'react';
 import axios from 'axios';
 import EventEmitter from 'eventemitter3';
 import { isString } from 'lodash';
@@ -51,13 +50,24 @@ const apiMismatchError = (code, response) => {
   const error = new Error('Device API mismatch');
 
   error.status = ApiMismatchStatus;
-  error.friendlyMessage = (
-    <p>The device does not match the server API version</p>
-  );
+  error.friendlyMessage = 'The device does not match the server API version';
   error.code = code;
   error.stack = JSON.stringify(response);
 
   return error;
+};
+
+const getResponseError = (response) => {
+  if (!response) { return null; }
+
+  switch (response.data.status) {
+    case ApiMismatchStatus:
+      return apiMismatchError(response.status, response.data);
+    case ApiErrorStatus:
+      return apiError({ ...response.data, code: response.status });
+    default:
+      return null;
+  }
 };
 
 const handleError = (err) => {
@@ -65,14 +75,8 @@ const handleError = (err) => {
     return false;
   }
   // Handle errors from the response
-  if (err.response) {
-    switch (err.response.data.status) {
-      case ApiMismatchStatus:
-        throw apiMismatchError(err.response.status, err.response.data);
-      case ApiErrorStatus:
-        throw apiError({ ...err.response.data, code: err.response.status });
-      default:
-    }
+  if (getResponseError(err.response)) {
+    throw getResponseError(err.response);
   }
   // Handle errors with the request
   if (err.request) {
@@ -354,15 +358,9 @@ class ApiClient {
             return;
           }
           // Handle errors from the response
-          if (error.response) {
-            if (error.response.data.status === ApiErrorStatus) {
-              const formattedError = apiError({
-                ...error.response.data,
-                code: error.response.status,
-              });
-              this.emit('error', `${formattedError.message}: ${formattedError.friendlyMessage}`);
-              return;
-            }
+          const responseError = getResponseError(error.response);
+          if (responseError) {
+            this.emit('error', `${responseError.message}: ${responseError.friendlyMessage}`);
           }
           // Handle errors with the request
           if (error.request) {
