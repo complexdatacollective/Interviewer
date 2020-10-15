@@ -97,6 +97,7 @@ public class NetworkCanvasClient extends CordovaPlugin {
                 urlConnection.setSSLSocketFactory(sslContext.getSocketFactory());
                 urlConnection.setHostnameVerifier(localhostVerifier);
 
+                urlConnection.setRequestProperty("X-Device-API-Version", "1");
                 urlConnection.setRequestProperty("Content-Type", "application/json");
                 urlConnection.setRequestMethod(method);
 
