@@ -3,6 +3,8 @@ const PROTOCOL_EXTENSION = '.netcanvas';
 // Target protocol schema version. Used to determine compatibility & migration
 const APP_SCHEMA_VERSION = 4;
 
+const DEVICE_API_VERSION = '2'; // X-Device-API-Version
+
 const APP_SUPPORTED_SCHEMA_VERSIONS = [4];
 
 const DEVELOPMENT_PROTOCOL_URL = 'https://github.com/complexdatacollective/development-protocol/releases/download/20200706150517-1d7fd6b/Development.netcanvas';
@@ -32,4 +34,5 @@ module.exports = {
   APP_SCHEMA_VERSION,
   APP_SUPPORTED_SCHEMA_VERSIONS,
   DEVELOPMENT_PROTOCOL_URL,
+  DEVICE_API_VERSION,
 };

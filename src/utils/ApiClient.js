@@ -3,6 +3,7 @@ import axios from 'axios';
 import EventEmitter from 'eventemitter3';
 import { isString } from 'lodash';
 import { decrypt, deriveSecretKeyBytes, encrypt, fromHex, toHex } from 'secure-comms-api/cipher';
+import { DEVICE_API_VERSION } from '../config';
 import { isCordova, isElectron } from '../utils/Environment';
 import UserCancelledExport from './network-exporters/src/errors/UserCancelledExport';
 
@@ -23,13 +24,12 @@ const ProgressMessages = {
   NoResponseMessage: 'Server could not be reached at the address you provided. Check your networking settings on this device, and on the computer running Server and try again. Consult our documentation on pairing for detailed information on this topic.',
 };
 
-const ApiVersion = '1';
 const ApiMismatchStatus = 'version_mismatch';
 const ApiErrorStatus = 'error';
 
 const defaultHeaders = {
   'Content-Type': 'application/json',
-  'X-Device-API-Version': ApiVersion,
+  'X-Device-API-Version': DEVICE_API_VERSION,
 };
 
 // A throwable 'friendly' error containing message from server
