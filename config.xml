@@ -76,7 +76,7 @@
         <variable name="PHOTO_LIBRARY_USAGE_DESCRIPTION" value="This app requires photo library access to function properly." />
     </plugin>
     <plugin name="cordova-plugin-zeroconf" spec="^1.4.1" />
+    <plugin name="cordova-plugin-inappbrowser" spec="~4.0.0" />
     <engine name="android" spec="^8.0.0" />
     <engine name="ios" spec="^5.0.1" />
-    <plugin name="cordova-plugin-inappbrowser" spec="~4.0.0" />
 </widget>
