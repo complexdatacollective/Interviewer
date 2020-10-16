@@ -54,7 +54,7 @@
     <preference name="Orientation" value="landscape" />
     <preference name="target-device" value="tablet" />
     <preference name="DisallowOverscroll" value="true" />
-    <preference name="Fullscreen" value="false" />
+    <preference name="Fullscreen" value="true" />
     <preference name="CordovaWebViewEngine" value="CDVWKWebViewEngine" />
     <preference name="BackupWebStorage" value="none" />
     <preference name="AndroidPersistentFileLocation" value="Internal" />
