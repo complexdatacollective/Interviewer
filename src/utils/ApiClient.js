@@ -3,9 +3,9 @@ import axios from 'axios';
 import EventEmitter from 'eventemitter3';
 import { isString } from 'lodash';
 import { decrypt, deriveSecretKeyBytes, encrypt, fromHex, toHex } from 'secure-comms-api/cipher';
+import { DEVICE_API_VERSION } from '../config';
 import { isCordova, isElectron } from '../utils/Environment';
 import UserCancelledExport from './network-exporters/src/errors/UserCancelledExport';
-
 
 const ProgressMessages = {
   BeginExport: {
@@ -24,10 +24,12 @@ const ProgressMessages = {
   NoResponseMessage: 'Server could not be reached at the address you provided. Check your networking settings on this device, and on the computer running Server and try again. Consult our documentation on pairing for detailed information on this topic.',
 };
 
+const ApiMismatchStatus = 'version_mismatch';
 const ApiErrorStatus = 'error';
 
 const defaultHeaders = {
   'Content-Type': 'application/json',
+  'X-Device-API-Version': DEVICE_API_VERSION,
 };
 
 // A throwable 'friendly' error containing message from server
@@ -44,15 +46,37 @@ const apiError = (respJson) => {
   return error;
 };
 
+const apiMismatchError = (code, response) => {
+  const error = new Error('Device API mismatch');
+
+  error.status = ApiMismatchStatus;
+  error.friendlyMessage = 'The device does not match the server API version';
+  error.code = code;
+  error.stack = JSON.stringify(response);
+
+  return error;
+};
+
+const getResponseError = (response) => {
+  if (!response) { return null; }
+
+  switch (response.data.status) {
+    case ApiMismatchStatus:
+      return apiMismatchError(response.status, response.data);
+    case ApiErrorStatus:
+      return apiError({ ...response.data, code: response.status });
+    default:
+      return null;
+  }
+};
+
 const handleError = (err) => {
   if (axios.isCancel(err)) {
     return false;
   }
   // Handle errors from the response
-  if (err.response) {
-    if (err.response.data.status === ApiErrorStatus) {
-      throw apiError({ ...err.response.data, code: err.response.status });
-    }
+  if (getResponseError(err.response)) {
+    throw getResponseError(err.response);
   }
   // Handle errors with the request
   if (err.request) {
@@ -334,15 +358,9 @@ class ApiClient {
             return;
           }
           // Handle errors from the response
-          if (error.response) {
-            if (error.response.data.status === ApiErrorStatus) {
-              const formattedError = apiError({
-                ...error.response.data,
-                code: error.response.status,
-              });
-              this.emit('error', `${formattedError.message}: ${formattedError.friendlyMessage}`);
-              return;
-            }
+          const responseError = getResponseError(error.response);
+          if (responseError) {
+            this.emit('error', `${responseError.message}: ${responseError.friendlyMessage}`);
           }
           // Handle errors with the request
           if (error.request) {

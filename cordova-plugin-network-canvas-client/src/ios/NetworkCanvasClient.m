@@ -182,6 +182,7 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
 
     NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlStr]];
     req.HTTPMethod = method;
+    [req addValue:@"2" forHTTPHeaderField:@"X-Device-API-Version"];
     if (!isFileDownload) {
         [req setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     }
