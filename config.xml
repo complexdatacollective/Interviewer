@@ -36,6 +36,14 @@
         <allow-navigation href="*" />
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
+        <config-file parent="NSBonjourServices" target="*-Info.plist">
+            <array>
+                <string>_nc-server-6._tcp.</string>
+            </array>
+        </config-file>
+        <config-file parent="NSLocalNetworkUsageDescription" target="*-Info.plist">
+            <string>Network Canvas uses this feature to enable automatic discovery of computers running Server on your network.</string>
+        </config-file>
         <icon height="40" src="www/icons/ios/NC-Square-40.png" width="40" />
         <icon height="50" src="www/icons/ios/NC-Square-50.png" width="50" />
         <icon height="72" src="www/icons/ios/NC-Square-72.png" width="72" />
