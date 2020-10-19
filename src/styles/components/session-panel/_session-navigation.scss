@@ -47,9 +47,11 @@ $session-panel-button-size: 6rem;
     border-radius: 5rem;
     margin: 1rem 0;
     transition: box-shadow 0.3s ease-in-out;
-
     box-shadow: 0 0 0 1rem transparent;
 
+    .progress-bar {
+      height: unset;
+    }
 
   }
 

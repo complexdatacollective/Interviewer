@@ -77,7 +77,7 @@ class ServerDiscoverer {
     if (isCordova()) {
       this.zeroconf = window.cordova.plugins.zeroconf;
       try {
-        this.zeroconf.watch('_nc-server-6._tcp.', 'local.', (result) => {
+        this.zeroconf.watch('_nc-server-6._tcp.', 'local.', (result) => { // Service name must also be updated in config.xml for iOS 14 permissions
           const action = result.action;
           // Normalize the service object to match the mdns node module (above)
           const normalizeService = service => (
@@ -120,6 +120,8 @@ class ServerDiscoverer {
   }
 
   emitErrorMessage(error) {
+    // eslint-disable-next-line no-console
+    console.log('serverDiscoverer Error:', error);
     // Electron emits/throws Error objects, Android uses strings, iOS is null...
     // Normalize to a string, which is what consumer wants.
     let errorMessage;

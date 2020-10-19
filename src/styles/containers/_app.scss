@@ -5,13 +5,11 @@
 
 // NC specific override for stacking context
 .toast-container {
-  position: absolute;
   z-index: var(--z-fx);
 }
 
 // container for menus and content
 .app {
-
   background: palette('primary');
   height: 100%;
   width: 100vw;
