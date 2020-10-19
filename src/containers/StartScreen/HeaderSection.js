@@ -24,7 +24,7 @@ const HeaderSection = () => {
     getVersion().then(version => setAppVersion(version));
   }, [onlineStatus]);
 
-  const start = {
+  const gettingStartedStates = {
     show: {
       height: '100%',
       opacity: 1,
@@ -38,15 +38,15 @@ const HeaderSection = () => {
     },
   };
 
-  const test = {
+  const firstLoadStates = {
     show: {
       opacity: 1,
       height: '100%',
-      transition: { when: 'beforeChildren', type: 'spring' },
+      transition: { when: 'beforeChildren', type: 'spring', delay: 1 },
     },
     hide: {
-      height: '0px',
       opacity: 0,
+      height: '0',
     },
   };
 
@@ -73,12 +73,11 @@ const HeaderSection = () => {
       </div>
       <motion.section
         className="welcome-section"
-        variants={test}
+        initial={firstLoadStates.hide}
+        animate={firstLoadStates.show}
       >
         <motion.div
-          variants={start}
-          animate={showGettingStarted ? 'show' : 'hide'}
-          key="balls"
+          animate={showGettingStarted ? gettingStartedStates.show : gettingStartedStates.hide}
         >
           <main className="welcome-section__main">
             <header>

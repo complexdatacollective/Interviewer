@@ -7,7 +7,7 @@
     <author email="developers@coda.co" href="http://coda.co">
         Complex Data Collective
     </author>
-    <content src="index.html" />
+    <content src="http://10.0.0.13:3000/" />
     <access origin="*" />
     <access origin="cdvfile://*" />
     <allow-intent href="http://*/*" />
@@ -33,6 +33,7 @@
         </edit-config>
     </platform>
     <platform name="ios">
+        <allow-navigation href="*" />
         <allow-navigation href="*" />
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
