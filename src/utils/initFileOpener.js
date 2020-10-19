@@ -1,7 +1,7 @@
 
 import { store } from '../ducks/store';
 import { isElectron } from '../utils/Environment';
-import { actionCreators as protocolActions } from '../ducks/modules/importProtocol';
+import { importProtocolFromFile } from './protocol/importProtocol';
 import { actionCreators as dialogActions } from '../ducks/modules/dialogs';
 
 let ipcRenderer;
@@ -37,7 +37,7 @@ const initFileOpener = () => {
       return;
     }
 
-    store.dispatch(protocolActions.importProtocolFromFile(protocolPath));
+    importProtocolFromFile(protocolPath);
   });
 
   ipcRenderer.send('GET_ARGF');

@@ -11,8 +11,7 @@ import {
   LoadParamsRoute,
   ProtocolScreen,
 } from './containers';
-
-import { SetupScreen } from './containers/Setup';
+import { StartScreen } from './containers/StartScreen';
 
 function mapStateToProps(state) {
   return {
@@ -31,7 +30,6 @@ let SetupRequiredRoute = (
   )
 );
 
-
 SetupRequiredRoute.propTypes = {
   component: PropTypes.func.isRequired,
   sessionId: PropTypes.string.isRequired,
@@ -44,9 +42,9 @@ export default () => (
     <SetupRequiredRoute exact path="/session" component={ProtocolScreen} />
     <LoadParamsRoute path="/session/:sessionId/:stageIndex" component={ProtocolScreen} />
     <LoadParamsRoute path="/session/:sessionId" component={ProtocolScreen} />
-    <LoadParamsRoute path="/reset" shouldReset component={Redirect} to={{ pathname: '/setup' }} />
-    <Route path="/setup" component={SetupScreen} />
-    <Redirect to={{ pathname: '/setup' }} />
+    <LoadParamsRoute path="/reset" shouldReset component={Redirect} to={{ pathname: '/start' }} />
+    <Route path="/start" component={StartScreen} />
+    <Redirect to={{ pathname: '/start' }} />
   </Switch>
 );
 

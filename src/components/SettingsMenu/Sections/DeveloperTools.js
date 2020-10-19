@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withHandlers, compose } from 'recompose';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import { motion } from 'framer-motion';
 import { Button } from '@codaco/ui/lib/components';
 import { Number } from '@codaco/ui/lib/components/Fields';
-import { actionCreators as importProtocolActions } from '../../../ducks/modules/importProtocol';
+import { importProtocolFromURI } from '../../../utils/protocol/importProtocol';
 import { actionCreators as dialogsActions } from '../../../ducks/modules/dialogs';
 import { actionCreators as mockActions } from '../../../ducks/modules/mock';
 import { getAdditionalAttributesForCurrentPrompt, getNodeEntryForCurrentPrompt } from '../../../selectors/session';
@@ -19,7 +19,6 @@ const DeveloperTools = (props) => {
     handleResetAppData,
     handleAddMockNodes,
     shouldShowMocksItem,
-    importProtocolFromURI,
     generateMockSessions,
   } = props;
 
@@ -172,7 +171,6 @@ const developerToolsHandlers = withHandlers({
 const mapDispatchToProps = dispatch => ({
   generateMockNodes: bindActionCreators(mockActions.generateMockNodes, dispatch),
   generateMockSessions: bindActionCreators(mockActions.generateMockSessions, dispatch),
-  importProtocolFromURI: bindActionCreators(importProtocolActions.importProtocolFromURI, dispatch),
   openDialog: bindActionCreators(dialogsActions.openDialog, dispatch),
   resetState: () => dispatch(push('/reset')),
 });

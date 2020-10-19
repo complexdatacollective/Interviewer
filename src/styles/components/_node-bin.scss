@@ -12,6 +12,7 @@
   bottom: 1.8rem;
   left: 50%;
   overflow: hidden;
+  z-index: var(--z-fx);
 
   &--active {
     transform: translateY(0);

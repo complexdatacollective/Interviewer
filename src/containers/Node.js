@@ -107,4 +107,6 @@ Node.defaultProps = {
 
 export default connect(mapStateToProps)(Node);
 
+// export default Node;
+
 export { Node };

@@ -1,4 +1,4 @@
-import { deviceDescription, shouldUseDynamicScaling, shouldStartFullScreen } from '../../utils/DeviceInfo';
+import { deviceDescription, shouldUseDynamicScaling } from '../../utils/DeviceInfo';
 
 const SET_DESCRIPTION = 'SETTINGS/SET_DESCRIPTION';
 const SET_INTERFACE_SCALE = 'SETTINGS/SET_INTERFACE_SCALE';
@@ -15,7 +15,11 @@ const initialState = {
   useFullScreenForms: false,
   interfaceScale: 100,
   showScrollbars: false,
-  startFullScreen: shouldStartFullScreen(),
+  startFullScreen: false,
+
+  // Start screen
+  showGettingStarted: true,
+  showWhatsNew: false, // Disabled for initial release
 
   // Export Options
   exportGraphML: true,

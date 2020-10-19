@@ -100,7 +100,7 @@ const MenuTemplate = (window) => {
 
   if (process.platform !== 'darwin') {
     // Use File> menu for Windows
-    menu[0].submenu.concat(appMenu);
+    menu[0].submenu = menu[0].submenu.concat(appMenu);
   } else {
     // Use "App" menu for OS X
     menu.unshift({

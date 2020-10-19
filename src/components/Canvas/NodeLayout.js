@@ -1,16 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { isEmpty, isEqual, pick, has, isNil } from 'lodash';
+import { isEmpty, has, isNil } from 'lodash';
 import LayoutNode from '../../containers/Canvas/LayoutNode';
 import { entityPrimaryKeyProperty, getEntityAttributes, entityAttributesProperty } from '../../ducks/modules/network';
-
-const watchProps = ['width', 'height', 'rerenderCount'];
-
-const propsChangedExcludingNodes = (nextProps, props) =>
-  !isEqual(pick(nextProps, watchProps), pick(props, watchProps));
-
-const nodesLengthChanged = (nextProps, props) =>
-  nextProps.nodes.length !== props.nodes.length;
 
 class NodeLayout extends Component {
   static propTypes = {
@@ -35,14 +27,6 @@ class NodeLayout extends Component {
     width: null,
     height: null,
   };
-
-  shouldComponentUpdate(nextProps) {
-    if (nodesLengthChanged(nextProps, this.props)) { return true; }
-    if (!isEqual(nextProps.highlightAttribute, this.props.highlightAttribute)) { return true; }
-    if (propsChangedExcludingNodes(nextProps, this.props)) { return true; }
-
-    return false;
-  }
 
   isHighlighted(node) {
     return !isEmpty(this.props.highlightAttribute) &&

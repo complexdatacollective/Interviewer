@@ -9,6 +9,8 @@ import { CategoricalListItem } from '../CategoricalListItem';
 const mockStore = {
   getState: () => ({
   }),
+  subscribe: () => ({
+  }),
 };
 
 const mockProps = {

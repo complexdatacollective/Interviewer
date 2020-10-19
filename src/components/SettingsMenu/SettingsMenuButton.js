@@ -1,20 +1,17 @@
 import React from 'react';
-import { Icon } from '@codaco/ui';
 import { motion } from 'framer-motion';
+import { Icon } from '@codaco/ui';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
 
-
 const SettingsMenuButton = props => (
   <motion.div
-    whileHover={{ scale: 1.1 }}
-    whileTap={{ scale: 0.95 }}
     className="settings-menu-button"
     onClick={props.openSettingsMenu}
-    {...props}
   >
     <Icon name="settings" />
+    <h4>Settings</h4>
   </motion.div>
 );
 

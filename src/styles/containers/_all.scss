@@ -6,14 +6,10 @@
 @import 'name-generator-auto-complete-interface';
 @import 'ordinal-bin-interface';
 @import 'categorical-bin-interface';
-@import 'setupScreen';
-@import 'protocol-import-overlay';
-@import 'session-export-overlay';
-@import 'protocol-list';
-@import 'server-list';
 @import 'sociogram-interface';
 @import 'narrative-interface';
 @import 'alter-form-interface';
 @import 'ego-form-interface';
-@import 'dyad-interface';
+@import 'dyad-census';
 @import 'interface';
+@import 'StartScreen/all';

@@ -6,7 +6,8 @@ import networkReducer, { actionTypes as networkActionTypes, actionCreators as ne
 
 
 const ADD_SESSION = 'ADD_SESSION';
-const FINISH_SESSION = 'FINISH_SESSION';
+const SET_SESSION_FINISHED = 'SET_SESSION_FINISHED';
+const SET_SESSION_EXPORTED = 'SET_SESSION_EXPORTED';
 const LOAD_SESSION = 'LOAD_SESSION';
 const UPDATE_PROMPT = 'UPDATE_PROMPT';
 const UPDATE_STAGE = 'UPDATE_STAGE';
@@ -46,6 +47,9 @@ const getReducer = network =>
           ...state,
           [action.sessionId]: withTimestamp({
             ...state[action.sessionId],
+            // Reset finished and exported state if network changes
+            finishedAt: null,
+            exportedAt: null,
             network: network(state[action.sessionId].network, action),
           }),
         };
@@ -61,13 +65,21 @@ const getReducer = network =>
             startedAt: Date.now(),
           }),
         };
-      case FINISH_SESSION:
+      case SET_SESSION_FINISHED:
         return {
           ...state,
           [action.sessionId]: withTimestamp({
             ...state[action.sessionId],
             finishedAt: Date.now(),
           }),
+        };
+      case SET_SESSION_EXPORTED:
+        return {
+          ...state,
+          [action.sessionId]: {
+            ...state[action.sessionId],
+            exportedAt: Date.now(),
+          },
         };
       case LOAD_SESSION:
         return state;
@@ -410,8 +422,13 @@ function removeSession(id) {
   };
 }
 
-const finishSession = id => ({
-  type: FINISH_SESSION,
+const setSessionFinished = id => ({
+  type: SET_SESSION_FINISHED,
+  sessionId: id,
+});
+
+const setSessionExported = id => ({
+  type: SET_SESSION_EXPORTED,
   sessionId: id,
 });
 
@@ -434,12 +451,14 @@ const actionCreators = {
   updateCaseId,
   updateStageState,
   removeSession,
-  finishSession,
+  setSessionFinished,
+  setSessionExported,
 };
 
 const actionTypes = {
   ADD_SESSION,
-  FINISH_SESSION,
+  SET_SESSION_FINISHED,
+  SET_SESSION_EXPORTED,
   LOAD_SESSION,
   UPDATE_PROMPT,
   UPDATE_STAGE,

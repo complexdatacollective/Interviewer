@@ -1,5 +1,13 @@
 .pairing-code-input {
   text-align: center;
+  display: flex;
+  background: var(--background);
+  padding: unit(4);
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border-radius: var(--border-radius);
+  margin-bottom: unit(2);
 
   &__characters {
     display: inline-flex;
@@ -9,7 +17,7 @@
   }
 
   &__character {
-    --character-padding: .5rem;
+    --character-padding: .75rem;
     appearance: none;
     border-radius: .25rem;
     font-family: var(--code-font);
@@ -19,7 +27,7 @@
     text-align: center;
     width: calc(1rem + var(--character-padding) * 2);
     border: 0;
-    margin: .1rem;
+    margin: .25rem;
 
     &:nth-of-type(4n) {
       margin-right: 1rem;
@@ -31,17 +39,6 @@
 
     &--error {
       background-color: var(--error);
-    }
-  }
-
-  &__clear {
-    color: var(--color-platinum--dark);
-    cursor: pointer;
-    letter-spacing: 3px; // match button
-    text-transform: uppercase;
-
-    &:hover {
-      color: var(--color-white);
     }
   }
 }

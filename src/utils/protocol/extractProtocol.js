@@ -56,7 +56,6 @@ const extractZipFile = inEnvironment((environment) => {
 
     return (zipObject, destination) => {
       const extractPath = path.join(destination, zipObject.name);
-
       return writeStream(extractPath, zipObject.nodeStream());
     };
   }

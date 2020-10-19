@@ -1,0 +1,113 @@
+.new-filterable-list {
+  --transparent-background: #{transparentize(rgb(0, 0, 0), 0.8)};
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: var(--border-radius);
+  background: var(--transparent-background);
+
+  .card-list {
+    padding-bottom: 0;
+    padding-top: 1rem;
+  }
+
+  &__header {
+    display: flex;
+    flex: 0 1 auto;
+    align-items: center;
+    align-content: space-evenly;
+    justify-content: space-between;
+
+    &-section {
+
+      &--sort {
+        // display: flex;
+        overflow-x: auto;
+        flex: 1 1;
+        $opaque: rgba(0, 0, 0, 1);
+        $distance: unit(2);
+        -webkit-mask-image: linear-gradient(90deg, transparent, $opaque unit(2), $opaque calc(100% - #{unit(2)}), transparent 100%); //sass-lint:disable-line no-vendor-prefixes
+        mask-image: linear-gradient(90deg, transparent, $opaque unit(2), $opaque calc(100% - #{unit(2)}), transparent 100%);
+
+        .scroll-container {
+          white-space: nowrap;
+          padding: unit(2);
+        }
+      }
+
+      &--filter {
+        flex: 0 0 auto;
+        padding-left: unit(2);
+      }
+
+      button {
+        margin: 0 unit(1);
+      }
+
+      h4 {
+        display: inline;
+        font-size: 0.8rem;
+      }
+
+      .form-field-container {
+        display: inline-block;
+        margin: 0 unit(1);
+      }
+
+      input {
+        margin-bottom: 0;
+      }
+
+      &__filter {
+        width: 13rem;
+
+        input {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+
+  &__main {
+    flex: 1 0;
+    display: flex;
+    flex-direction: column;
+    height: 60vh;
+
+    .loading-state {
+      padding: unit(4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    .filterable-list-scroller {
+      height: 100%;
+      padding: unit(2);
+
+      // Grid would be a better way to display these items, but it
+      // causes distortion with framer-motion's layout prop
+      // display: grid;
+      > * {
+        width: calc(50% - #{unit(2)});
+        float: left;
+        margin: unit(1);
+      }
+
+      &:empty {
+        display: flex;
+
+        &::after {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          content: 'No items to display.';
+        }
+      }
+    }
+  }
+}

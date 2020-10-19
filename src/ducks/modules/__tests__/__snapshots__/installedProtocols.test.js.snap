@@ -6,14 +6,16 @@ Array [
     Object {
       "confirmLabel": "Delete protocol and sessions",
       "message": <React.Fragment>
-        There are sessions that use this protocol.
-        <br />
-        <br />
-        <strong>
-          Deleting this protocol will also delete associated sessions.
-        </strong>
+        <p>
+          There are interview sessions on this device that use this protocol.
+        </p>
+        <p>
+          <strong>
+            Deleting this protocol will also delete these sessions.
+          </strong>
+        </p>
       </React.Fragment>,
-      "title": "Session(s) using protocol",
+      "title": "Interviews using this protocol",
       "type": "Confirm",
     },
   ],
@@ -26,14 +28,16 @@ Array [
     Object {
       "confirmLabel": "Delete protocol and sessions",
       "message": <React.Fragment>
-        There are sessions that use this protocol which have not yet been exported.
-        <br />
-        <br />
-        <strong>
-          Deleting this protocol will also delete associated sessions.
-        </strong>
+        <p>
+          There are interview sessions on this device using this protocol that have not yet been exported.
+        </p>
+        <p>
+          <strong>
+            Deleting this protocol will also delete these sessions.
+          </strong>
+        </p>
       </React.Fragment>,
-      "title": "Non-exported session(s) using protocol",
+      "title": "Interviews using protocol have not been exported",
       "type": "Warning",
     },
   ],

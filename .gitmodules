@@ -4,9 +4,6 @@
 [submodule "src/utils/protocol/protocol-validation"]
 	path = src/utils/protocol/protocol-validation
 	url = https://github.com/complexdatacollective/protocol-validation.git
-[submodule "development-protocol"]
-	path = development-protocol
-	url = https://github.com/complexdatacollective/development-protocol.git
 [submodule "src/utils/network-exporters"]
 	path = src/utils/network-exporters
 	url = https://github.com/complexdatacollective/network-exporters

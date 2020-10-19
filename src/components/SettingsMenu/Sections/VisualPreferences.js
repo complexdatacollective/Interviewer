@@ -14,10 +14,8 @@ const VisualPreferences = (props) => {
     showScrollbars,
     startFullScreen,
     useFullScreenForms,
-    toggleUseDynamicScaling,
-    toggleUseFullScreenForms,
-    toggleStartFullScreen,
-    toggleShowScrollbars,
+    showGettingStarted,
+    toggleSetting,
     setInterfaceScale,
     interfaceScale,
   } = props;
@@ -41,11 +39,27 @@ const VisualPreferences = (props) => {
       }
     }
 
-    toggleStartFullScreen();
+    toggleSetting('startFullScreen');
   };
 
   return (
     <React.Fragment>
+      <motion.article variants={TabItemVariants} className="settings-element">
+        <Toggle
+          input={{
+            checked: true,
+            value: showGettingStarted,
+            onChange: () => toggleSetting('showGettingStarted'),
+          }}
+        />
+        <div>
+          <h2>Show &quot;getting started&quot; card?</h2>
+          <p>
+            This card provides links to useful resources when you open the app for the first
+            time.
+          </p>
+        </div>
+      </motion.article>
       <motion.article variants={TabItemVariants} className="settings-element">
         <div className="form-field-container">
           <div className="form-field">
@@ -81,7 +95,7 @@ const VisualPreferences = (props) => {
           input={{
             checked: true,
             value: useDynamicScaling,
-            onChange: toggleUseDynamicScaling,
+            onChange: () => toggleSetting('useDynamicScaling'),
           }}
         />
         <div>
@@ -98,7 +112,7 @@ const VisualPreferences = (props) => {
           input={{
             checked: false,
             value: showScrollbars,
-            onChange: toggleShowScrollbars,
+            onChange: () => toggleSetting('showScrollbars'),
           }}
         />
         <div>
@@ -137,7 +151,7 @@ const VisualPreferences = (props) => {
           input={{
             checked: true,
             value: useFullScreenForms,
-            onChange: toggleUseFullScreenForms,
+            onChange: () => toggleSetting('useFullScreenForms'),
           }}
         />
         <div>
@@ -154,10 +168,7 @@ const VisualPreferences = (props) => {
 
 
 const mapDispatchToProps = dispatch => ({
-  toggleUseFullScreenForms: () => dispatch(deviceSettingsActions.toggleSetting('useFullScreenForms')),
-  toggleUseDynamicScaling: () => dispatch(deviceSettingsActions.toggleSetting('useDynamicScaling')),
-  toggleShowScrollbars: () => dispatch(deviceSettingsActions.toggleSetting('showScrollbars')),
-  toggleStartFullScreen: () => dispatch(deviceSettingsActions.toggleSetting('startFullScreen')),
+  toggleSetting: settingName => dispatch(deviceSettingsActions.toggleSetting(settingName)),
   setInterfaceScale: scale => dispatch(deviceSettingsActions.setInterfaceScale(scale)),
 });
 
@@ -166,6 +177,7 @@ const mapStateToProps = state => ({
   useDynamicScaling: state.deviceSettings.useDynamicScaling,
   showScrollbars: state.deviceSettings.showScrollbars,
   startFullScreen: state.deviceSettings.startFullScreen,
+  showGettingStarted: state.deviceSettings.showGettingStarted,
   interfaceScale: state.deviceSettings.interfaceScale,
 });
 

@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import { isStageSkipped } from '../../selectors/skip-logic';
 import { getSessionPath, getSessionProgress } from '../../selectors/session';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
@@ -18,11 +18,11 @@ const isForwards = direction => direction > 0;
  * Go to the stage at the index provided
  * @param {number} index Index of the stage in protocol
  */
-const goToStage = index =>
+const goToStage = (index, direction) =>
   (dispatch, getState) => {
     const state = getState();
-
-    const sessionPath = getSessionPath(state, index);
+    const back = direction === -1 ? '/?back' : '';
+    const sessionPath = `${getSessionPath(state, index)}${back}`;
 
     return dispatch(push(sessionPath));
   };
@@ -68,7 +68,7 @@ const goToNextStage = (direction = 1) =>
 
     if (nextIndex === null) { return null; }
 
-    return dispatch(goToStage(nextIndex));
+    return dispatch(goToStage(nextIndex, direction));
   };
 
 /**

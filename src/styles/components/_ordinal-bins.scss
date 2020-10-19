@@ -6,7 +6,7 @@
   min-width: 0;
 
   .scrollable {
-    @include scroller-mask($scroller-top-padding-small);
+    @include scroller-mask;
 
   }
 

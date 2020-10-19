@@ -51,10 +51,6 @@
   right: 0;
   background: var(--modal-overlay);
   z-index: var(--z-background);
-  @supports (backdrop-filter: blur(0.75rem)) {
-    background: var(--modal-overlay);
-    backdrop-filter: blur(0.75rem);
-  }
   padding: unit(4);
   text-align: right;
 

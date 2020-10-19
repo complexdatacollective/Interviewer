@@ -7,7 +7,7 @@ import { TransitionGroup } from 'react-transition-group';
 import { getCSSVariableAsString, getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
 import Node from '../containers/Node';
 import { Node as NodeTransition } from './Transition';
-import { scrollable, selectable } from '../behaviours';
+import { scrollable } from '../behaviours';
 import {
   DragSource,
   DropTarget,
@@ -17,7 +17,7 @@ import {
 import sortOrder from '../utils/sortOrder';
 import { entityPrimaryKeyProperty } from '../ducks/modules/network';
 
-const EnhancedNode = DragSource(selectable(Node));
+const EnhancedNode = DragSource(Node);
 
 /**
   * Renders a list of Nodes.
@@ -81,7 +81,6 @@ class NodeList extends Component {
   render() {
     const {
       label,
-      isItemSelected,
       onItemClick,
       itemType,
       isOver,
@@ -125,14 +124,14 @@ class NodeList extends Component {
               index={index}
               stagger={stagger}
             >
-              <EnhancedNode
-                label={`${label(node)}`}
-                selected={isItemSelected(node)}
-                onSelected={() => onItemClick(node)}
-                meta={() => ({ ...node, itemType })}
-                itemType={itemType}
-                {...node}
-              />
+              <div onClick={() => onItemClick(node)}>
+                <EnhancedNode
+                  label={`${label(node)}`}
+                  meta={() => ({ ...node, itemType })}
+                  itemType={itemType}
+                  {...node}
+                />
+              </div>
             </NodeTransition>
           ))
         }
@@ -147,7 +146,6 @@ NodeList.propTypes = {
   onItemClick: PropTypes.func,
   itemType: PropTypes.string,
   label: PropTypes.func,
-  isItemSelected: PropTypes.func,
   isOver: PropTypes.bool,
   isDragging: PropTypes.bool,
   willAccept: PropTypes.bool,
@@ -161,7 +159,6 @@ NodeList.defaultProps = {
   items: [],
   hoverColor: null,
   label: () => (''),
-  isItemSelected: () => false,
   onItemClick: () => {},
   onDrop: () => {},
   itemType: 'NODE',

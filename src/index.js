@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 import { PersistGate } from 'redux-persist/integration/react';
 import { ready as secureCommsReady } from 'secure-comms-api/cipher';
 import { Provider } from 'react-redux';
-import { ConnectedRouter, push } from 'react-router-redux';
+import { ConnectedRouter, push } from 'connected-react-router';
 import { Spinner } from '@codaco/ui';
 import initFileOpener from './utils/initFileOpener';
 import initMenuActions from './utils/initMenuActions';

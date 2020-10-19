@@ -32,6 +32,7 @@ $module-name: prompts;
   }
 
   &__prompt {
+    --prompt-background: var(--background);
     width: 100%;
     height: 100%;
     transform: translateX(40%);
@@ -73,7 +74,7 @@ $module-name: prompts;
             right: 0;
             width: 70%;
             height: 1.3em;
-            background: linear-gradient(to right, rgba(255, 255, 255, 0) 70%, var(--background) 90%); //sass-lint:disable-line no-color-literals
+            background: linear-gradient(to right, rgba(255, 255, 255, 0) 70%, var(--prompt-background) 90%); //sass-lint:disable-line no-color-literals
           }
         }
 

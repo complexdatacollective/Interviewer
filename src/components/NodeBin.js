@@ -1,10 +1,8 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { compose, withProps } from 'recompose';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
+import { window } from '@codaco/ui/lib/components/window';
 import { DropTarget, MonitorDropTarget } from '../behaviours/DragAndDrop';
 
 /**
@@ -33,18 +31,12 @@ NodeBin.defaultProps = {
   willAccept: false,
 };
 
-function mapDispatchToProps(dispatch) {
-  return {
-    removeNode: bindActionCreators(sessionsActions.removeNode, dispatch),
-  };
-}
-
-export default compose(
-  connect(null, mapDispatchToProps),
+export default window(compose(
   withProps(props => ({
     accepts: ({ meta }) => props.accepts(meta),
     onDrop: ({ meta }) => props.dropHandler(meta),
   })),
   DropTarget,
   MonitorDropTarget(['isOver', 'willAccept']),
-)(NodeBin);
+)(NodeBin));
+

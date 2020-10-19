@@ -3,6 +3,7 @@
 exports[`<LayoutNode /> renders ok 1`] = `
 <div
   className="node-layout__node"
+  onClick={[Function]}
   style={
     Object {
       "left": "77%",
@@ -11,7 +12,7 @@ exports[`<LayoutNode /> renders ok 1`] = `
     }
   }
 >
-  <DragSource
+  <Component
     allowDrag={false}
     allowSelect={false}
     animate={false}
@@ -26,7 +27,6 @@ exports[`<LayoutNode /> renders ok 1`] = `
     }
     linking={false}
     meta={[Function]}
-    onSelected={[Function]}
     scrollDirection="NO_SCROLL"
     selected={false}
   />

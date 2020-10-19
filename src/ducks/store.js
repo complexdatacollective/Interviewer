@@ -2,15 +2,15 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import thunk from 'redux-thunk';
-import { routerMiddleware } from 'react-router-redux';
+import { routerMiddleware } from 'connected-react-router';
 import { createHashHistory as createHistory } from 'history';
 import { getEnv } from '../utils/Environment';
 import logger from './middleware/logger';
 import epics from './middleware/epics';
-import rootReducer from './modules/rootReducer';
+import createRootReducer from './modules/rootReducer';
 
 const persistConfig = {
-  key: 'networkCanvas',
+  key: 'networkCanvas6',
   storage,
   whitelist: [
     'deviceSettings',
@@ -29,10 +29,10 @@ export const history = createHistory();
 
 const getReducer = () => {
   if (env.REACT_APP_NO_PERSIST) {
-    return rootReducer;
+    return createRootReducer(history);
   }
 
-  return persistReducer(persistConfig, rootReducer);
+  return persistReducer(persistConfig, createRootReducer(history));
 };
 
 export const store = createStore(

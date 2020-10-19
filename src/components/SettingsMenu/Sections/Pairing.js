@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import { motion } from 'framer-motion';
 import { withHandlers, compose } from 'recompose';
 import { Text } from '@codaco/ui/lib/components/Fields';

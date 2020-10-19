@@ -73,7 +73,7 @@ class dragManager {
     this.state = { ...initalState };
     this.el = el;
     this.onDragStart = onDragStart;
-    this.onDragMove = throttle(onDragMove, 1000 / 60);
+    this.onDragMove = throttle(onDragMove, 1000 / 120);
     this.onDragEnd = onDragEnd;
     this.el.addEventListener('touchstart', this.onMoveStart, { passive: true });
     this.el.addEventListener('touchmove', this.onMove, { passive: false });

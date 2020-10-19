@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'recompose';
-import { motion, AnimatePresence } from 'framer-motion';
-import { getCSSVariableAsNumber, getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
+import { motion, AnimatePresence, AnimateSharedLayout } from 'framer-motion';
 import { DropObstacle } from '../../behaviours/DragAndDrop';
 import StagesMenu from '../StagesMenu/StagesMenu';
 import SubMenu from './SubMenu';
@@ -20,9 +19,6 @@ const SessionPanel = React.forwardRef((props, ref) => {
   const [expanded, setExpanded] = useState(false);
   const [showSubMenu, setShowSubMenu] = useState(false);
 
-  const baseAnimationDuration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
-  const baseAnimationEasing = getCSSVariableAsString('--animation-easing-json');
-
   const resetMenuState = () => {
     setExpanded(false);
     setShowSubMenu(false);
@@ -33,7 +29,7 @@ const SessionPanel = React.forwardRef((props, ref) => {
     : <StagesMenu setExpanded={setExpanded} onStageSelect={props.onStageSelect} key="stages-menu" />;
 
   return (
-    <React.Fragment>
+    <AnimateSharedLayout>
       <AnimatePresence>
         { expanded && (<BackgroundDimmer clickHandler={resetMenuState} ><CloseButton onClick={() => setExpanded(false)} className="close-button-wrapper" /></BackgroundDimmer>)}
       </AnimatePresence>
@@ -54,23 +50,22 @@ const SessionPanel = React.forwardRef((props, ref) => {
       <motion.div
         className="session-panel"
         key="session-panel"
-        layoutTransition={{
-          duration: baseAnimationDuration,
-          easing: baseAnimationEasing,
-        }}
+        layout
       >
-        { expanded ? menuContent : (
-          <SessionNavigation
-            onClickNext={props.onClickNext}
-            onClickBack={props.onClickBack}
-            percentProgress={props.percentProgress}
-            setExpanded={setExpanded}
-            setShowSubMenu={setShowSubMenu}
-            key="session-navigation"
-          />
-        ) }
+        <AnimatePresence exitBeforeEnter>
+          { expanded ? menuContent : (
+            <SessionNavigation
+              onClickNext={props.onClickNext}
+              onClickBack={props.onClickBack}
+              percentProgress={props.percentProgress}
+              setExpanded={setExpanded}
+              setShowSubMenu={setShowSubMenu}
+              key="session-navigation"
+            />
+          ) }
+        </AnimatePresence>
       </motion.div>
-    </React.Fragment>
+    </AnimateSharedLayout>
   );
 });
 

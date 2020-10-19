@@ -128,7 +128,7 @@
     height: 100%;
 
     .scrollable {
-      @include scroller-mask($scroller-top-padding-small);
+      @include scroller-mask;
       height: 100%;
     }
 

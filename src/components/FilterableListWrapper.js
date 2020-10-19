@@ -100,7 +100,6 @@ class FilterableListWrapper extends Component {
 
     const sorter = sortOrder([this.state.activeSortOrder]);
     const sortedNodes = this.getFilteredList(sorter(items));
-
     return (
       <div className="list-select">
         <div className="list-select__sort">

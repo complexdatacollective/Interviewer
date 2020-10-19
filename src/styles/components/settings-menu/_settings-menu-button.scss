@@ -1,26 +1,21 @@
 .settings-menu-button {
   display: flex;
-  justify-content: center;
   align-items: center;
-  background: var(--light-background);
-  border-radius: 50%;
-  padding: 1.5rem;
-  width: 6rem;
-  height: 6rem;
   cursor: pointer;
 
-  &__button {
-    height: 6rem;
-    width: 6rem;
-    border-radius: 100%;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    svg {
-      height: 2.5rem;
-      width: 2.5rem;
+  .icon {
+    &[name='settings'] {
+      height: unit(4);
+      width: unit(4);
     }
+  }
+
+  h4 {
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin: 0;
+    padding-left: unit(2);
   }
 }

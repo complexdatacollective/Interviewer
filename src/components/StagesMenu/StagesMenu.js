@@ -2,7 +2,7 @@ import React, { useState, useRef, useLayoutEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Text } from '@codaco/ui/lib/components/Fields';
 import { connect } from 'react-redux';
-import { motion, useInvertedScale, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, AnimateSharedLayout } from 'framer-motion';
 import { compose } from 'recompose';
 import { getCSSVariableAsNumber, getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
 import { getProtocolStages } from '../../selectors/protocol';
@@ -20,13 +20,12 @@ const StagesMenu = (props) => {
 
   const [filter, setFilter] = useState('');
   const [imageLoaded, updateImageLoaded] = useState(false);
-  const { scaleX, scaleY } = useInvertedScale();
   const scrollerRef = useRef(null);
 
   const baseAnimationDuration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
   const baseAnimationEasing = getCSSVariableAsString('--animation-easing-json');
 
-  const variants = {
+  const containerVariants = {
     normal: {
       opacity: 0,
       transition: {
@@ -50,7 +49,7 @@ const StagesMenu = (props) => {
      * that are currently visible.
      * */
 
-    const delayScale = 0.075;
+    const delayScale = 0.1;
 
     // Active index 0, current index less than 8: animate first 8 items.
     if (
@@ -83,12 +82,12 @@ const StagesMenu = (props) => {
     return 0;
   };
 
-  const timelineVariants = {
+  const itemVariants = {
     expanded: currentItemIndex => ({
       x: 0,
       opacity: 1,
       transition: {
-        delay: calculateDelay(currentItemIndex),
+        delay: calculateDelay(currentItemIndex) + 0.5,
         duration: baseAnimationDuration,
         easing: baseAnimationEasing,
       },
@@ -117,13 +116,6 @@ const StagesMenu = (props) => {
     }
   };
 
-  const positionTransition = {
-    type: 'spring',
-    damping: 200,
-    stiffness: 1200,
-    velocity: 200,
-  };
-
   const onFilterChange = event => setFilter(event.target.value || '');
 
   const filteredStageList = stages.filter(
@@ -135,12 +127,12 @@ const StagesMenu = (props) => {
     return (
       <motion.div
         custom={index}
-        variants={timelineVariants}
+        variants={itemVariants}
         initial="normal"
         animate="expanded"
         exit="filtered"
         key={item.id}
-        positionTransition={positionTransition}
+        layout
         className="stages-menu__preview-wrapper"
       >
         <StagePreview
@@ -182,17 +174,19 @@ const StagesMenu = (props) => {
     <motion.div
       className="stages-menu"
       key="stages-menu"
-      variants={variants}
+      variants={containerVariants}
       initial="normal"
       animate="expanded"
-      style={{ scaleX, scaleY }}
+      layout
     >
       <article className="stages-menu__wrapper">
         {renderMenuItems.length > 0 ? (
           <Scroller useSmoothScrolling={false} forwardedRef={scrollerRef}>
-            <AnimatePresence>
-              { renderMenuItems }
-            </AnimatePresence>
+            <AnimateSharedLayout>
+              <AnimatePresence>
+                { renderMenuItems }
+              </AnimatePresence>
+            </AnimateSharedLayout>
           </Scroller>
         ) : (
           <h4>No stages match your filter.</h4>

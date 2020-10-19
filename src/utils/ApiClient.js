@@ -21,7 +21,7 @@ const ProgressMessages = {
     statusText: 'Export finished.',
   },
   UnexpectedResponseMessage: 'Unexpected Response',
-  NoResponseMessage: 'Server could not be reached',
+  NoResponseMessage: 'Server could not be reached at the address you provided. Check your networking settings on this device, and on the computer running Server and try again. Consult our documentation on pairing for detailed information on this topic.',
 };
 
 const ApiErrorStatus = 'error';
@@ -328,6 +328,7 @@ class ApiClient {
       await previousPromise;
 
       return this.exportSession(nextSession)
+        .then(() => this.emit('session-exported', sessionList[index].sessionVariables.sessionId))
         .catch((error) => {
           if (axios.isCancel(error)) {
             return;
@@ -376,6 +377,20 @@ class ApiClient {
     };
 
     return exportPromise;
+  }
+
+  /**
+   * Check the status of the connection to Server
+   */
+  requestHeartbeat() {
+    if (!this.httpsClient) {
+      return Promise.reject('No secure client available');
+    }
+
+    return this.httpsClient.get('/protocols', { ...this.authHeader, cancelToken: this.cancelTokenSource.token })
+      .then(resp => resp.data)
+      .then(json => json.data)
+      .catch(err => handleError(err));
   }
 }
 

@@ -1,62 +1,45 @@
 import React from 'react';
 import cx from 'classnames';
-import anime from 'animejs';
+import { motion } from 'framer-motion';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Modal } from '@codaco/ui';
-import { getCSSVariableAsNumber, getCSSVariableAsObject } from '@codaco/ui/lib/utils/CSSVariables';
 import { CloseButton } from '../components';
 
 /**
  * Renders a modal window.
  */
 
-class Overlay extends React.Component {
-  constructor(props) {
-    super(props);
-    this.contentRef = React.createRef();
-  }
+const Overlay = (props) => {
+  const {
+    children,
+    onClose,
+    onBlur,
+    show,
+    title,
+    useFullScreenForms,
+    forceDisableFullScreen,
+    className,
+  } = props;
 
-  scrollContentsToTop = () => {
-    if (this.contentRef.current) {
-      anime({
-        targets: this.contentRef.current,
-        scrollTop: 0,
-        duration: getCSSVariableAsNumber('--animation-duration-slow-ms'),
-        easing: getCSSVariableAsObject('--animation-easing-js'),
-      });
-    }
-  }
+  if (!show) { return false; }
 
-  render() {
-    const {
-      children,
-      onClose,
-      onBlur,
-      show,
-      title,
-      useFullScreenForms,
-      forceDisableFullScreen,
-      className,
-    } = this.props;
-
-    return (
-      <Modal show={show} onBlur={onBlur}>
-        <div className={cx('overlay', { 'overlay--fullscreen': !forceDisableFullScreen && useFullScreenForms }, className)}>
-          { title && (
-            <div className="overlay__title">
-              <h1>{title}</h1>
-            </div>
-          )}
-          <div className="overlay__content" ref={this.contentRef}>
-            {children}
+  return (
+    <Modal show={show} onBlur={onBlur}>
+      <motion.div className={cx('overlay', { 'overlay--fullscreen': !forceDisableFullScreen && useFullScreenForms }, className)}>
+        { title && (
+          <div className="overlay__title">
+            <h1>{title}</h1>
           </div>
-          <CloseButton className="overlay__close" onClick={onClose} />
-        </div>
-      </Modal>
-    );
-  }
-}
+        )}
+        <motion.div className="overlay__content">
+          {children}
+        </motion.div>
+        <CloseButton className="overlay__close" onClick={onClose} />
+      </motion.div>
+    </Modal>
+  );
+};
 
 Overlay.propTypes = {
   onClose: PropTypes.func,
@@ -64,7 +47,7 @@ Overlay.propTypes = {
   title: PropTypes.string,
   show: PropTypes.bool,
   children: PropTypes.any,
-  useFullScreenForms: PropTypes.bool.isRequired,
+  useFullScreenForms: PropTypes.bool,
   forceDisableFullScreen: PropTypes.bool,
   className: PropTypes.string,
 };
@@ -77,6 +60,7 @@ Overlay.defaultProps = {
   show: false,
   children: null,
   forceDisableFullScreen: false,
+  useFullScreenForms: false,
 };
 
 export {
@@ -86,4 +70,4 @@ export {
 const mapStateToProps = state =>
   ({ useFullScreenForms: state.deviceSettings.useFullScreenForms });
 
-export default connect(mapStateToProps, null, null, { withRef: true })(Overlay);
+export default connect(mapStateToProps)(Overlay);

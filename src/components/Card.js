@@ -11,6 +11,7 @@ class Card extends PureComponent {
       details,
       label,
       selected,
+      onSelected,
     } = this.props;
 
     const attributes = details.map(
@@ -30,7 +31,7 @@ class Card extends PureComponent {
     });
 
     return (
-      <div className={classes}>
+      <div className={classes} onClick={onSelected}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           x="0px"
@@ -58,12 +59,14 @@ Card.propTypes = {
   details: PropTypes.array,
   label: PropTypes.string,
   selected: PropTypes.bool,
+  onSelected: PropTypes.func,
 };
 
 Card.defaultProps = {
   details: [],
   label: '',
   selected: false,
+  onSelected: null,
 };
 
 export default Card;

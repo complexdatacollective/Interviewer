@@ -36,7 +36,7 @@ describe('EgoForm Interface', () => {
 
   it('Allows leaving via Timeline if not changed', async () => {
     await goToStage(app, 'dyadcensus');
-    await app.client.waitForVisible('.dyad-interface__introduction');
+    await app.client.waitForVisible('.dyad-census__introduction');
   });
 
   it('Disallows leaving via Next if invalid', async () => {
@@ -54,6 +54,6 @@ describe('EgoForm Interface', () => {
     await goToStage(app, 'dyadcensus');
     await app.client.waitForVisible('.dialog--confirm');
     await app.client.click('span=Discard changes');
-    await app.client.waitForVisible('.dyad-interface__introduction');
+    await app.client.waitForVisible('.dyad-census__introduction');
   });
 });

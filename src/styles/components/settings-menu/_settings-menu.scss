@@ -10,6 +10,7 @@
     display: flex;
     height: 100%;
     overflow: hidden;
+    background: var(--modal-overlay);
 
     nav {
       background: var(--panel-bg-muted);
@@ -57,7 +58,7 @@
 
     section {
       width: 1000%;
-      padding: unit(8);
+      padding: unit(8) 0;
       display: flex;
       background: var(--color-cyber-grape);
 
@@ -80,6 +81,7 @@
       .settings-element {
         display: flex;
         margin-bottom: 2rem;
+        margin: 0 unit(8);
 
         >.form-field-container {
           .form-field-toggle {
@@ -102,9 +104,12 @@
         &--wide {
           display: flex;
           flex-direction: column;
+          margin: 0 unit(8);
         }
 
         &--sub-item {
+          margin: 0 unit(8);
+
           .form-field-container {
             margin: 0;
             display: flex;

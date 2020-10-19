@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="50002" id="org.codaco.networkCanvas" ios-CFBundleIdentifier="networkCanvas" ios-CFBundleVersion="50002" version="5.2.0" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>NetworkCanvas</name>
+<widget android-versionCode="6000" id="org.codaco.networkCanvas6" ios-CFBundleIdentifier="networkCanvas6" ios-CFBundleVersion="6000" version="6.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Network Canvas</name>
     <description>
         Simplifying complex network data collection.
     </description>
@@ -34,8 +34,18 @@
     </platform>
     <platform name="ios">
         <allow-navigation href="*" />
+        <allow-navigation href="*" />
+        <allow-navigation href="*" />
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
+        <config-file parent="NSBonjourServices" target="*-Info.plist">
+            <array>
+                <string>_nc-server-6._tcp.</string>
+            </array>
+        </config-file>
+        <config-file parent="NSLocalNetworkUsageDescription" target="*-Info.plist">
+            <string>Network Canvas uses this feature to enable automatic discovery of computers running Server on your network.</string>
+        </config-file>
         <icon height="40" src="www/icons/ios/NC-Square-40.png" width="40" />
         <icon height="50" src="www/icons/ios/NC-Square-50.png" width="50" />
         <icon height="72" src="www/icons/ios/NC-Square-72.png" width="72" />
@@ -54,7 +64,7 @@
     <preference name="Orientation" value="landscape" />
     <preference name="target-device" value="tablet" />
     <preference name="DisallowOverscroll" value="true" />
-    <preference name="Fullscreen" value="false" />
+    <preference name="Fullscreen" value="true" />
     <preference name="CordovaWebViewEngine" value="CDVWKWebViewEngine" />
     <preference name="BackupWebStorage" value="none" />
     <preference name="AndroidPersistentFileLocation" value="Internal" />
@@ -62,20 +72,23 @@
     <preference name="AllowInlineMediaPlayback" value="true" />
     <preference name="android-minSdkVersion" value="25" />
     <preference name="android-targetSdkVersion" value="28" />
-    <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
     <plugin name="cordova-plugin-file" spec="^5.0.0" />
     <plugin name="cordova-plugin-file-transfer" spec="^1.7.1" />
     <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
-    <plugin name="cordova-plugin-wkwebview-engine" spec="^1.1.4" />
     <plugin name="cordova-plugin-device" spec="^2.0.2" />
     <plugin name="cordova-plugin-network-canvas-client" spec="./cordova-plugin-network-canvas-client" />
     <plugin name="cordova-plugin-keyboard" spec="^1.2.0" />
     <plugin name="cordova-plugin-x-socialsharing" spec="^5.6.4">
-        <variable name="ANDROID_SUPPORT_V4_VERSION" value="24.1.1+" />
-        <variable name="PHOTO_LIBRARY_ADD_USAGE_DESCRIPTION" value="This app requires photo library access to function properly." />
-        <variable name="PHOTO_LIBRARY_USAGE_DESCRIPTION" value="This app requires photo library access to function properly." />
+      <variable name="ANDROID_SUPPORT_V4_VERSION" value="24.1.1+" />
+      <variable name="PHOTO_LIBRARY_ADD_USAGE_DESCRIPTION" value="This app requires photo library access to function properly." />
+      <variable name="PHOTO_LIBRARY_USAGE_DESCRIPTION" value="This app requires photo library access to function properly." />
     </plugin>
     <plugin name="cordova-plugin-zeroconf" spec="^1.4.1" />
+    <plugin name="cordova-plugin-inappbrowser" spec="~4.0.0" />
+    <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
+    <plugin name="cordova-plugin-network-information" spec="~2.0.2" />
+    <plugin name="cordova-plugin-chooser" spec="~1.3.1" />
+    <plugin name="cordova-plugin-wkwebview-engine" spec="^1.2.1" />
     <engine name="android" spec="^8.0.0" />
-    <engine name="ios" spec="^5.0.1" />
+    <engine name="ios" spec="^5.1.1" />
 </widget>
