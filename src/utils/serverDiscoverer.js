@@ -120,6 +120,8 @@ class ServerDiscoverer {
   }
 
   emitErrorMessage(error) {
+    // eslint-disable-next-line no-console
+    console.log('serverDiscoverer Error:', error);
     // Electron emits/throws Error objects, Android uses strings, iOS is null...
     // Normalize to a string, which is what consumer wants.
     let errorMessage;
