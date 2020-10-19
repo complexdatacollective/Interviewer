@@ -155,12 +155,12 @@ export const importProtocolFromURI = (uri, usePairedServer) => {
           dispatch(toastActions.removeToast(toastUUID));
 
           // attempt to clean up files
-          if (protocolUid) cleanUpProtocol(protocolUid); 
+          if (protocolUid) cleanUpProtocol(protocolUid);
 
           // If this wasn't user cancellation, dispatch an error
           if (!(error instanceof CancellationError)) {
             dispatch(installedProtocolActions.importProtocolFailedAction(error));
-          }          
+          }
         },
       );
   });
@@ -261,7 +261,6 @@ export const importProtocolFromFile = (filePath, name) => {
 
         // Remove the status toast
         dispatch(toastActions.removeToast(toastUUID));
-        console.log('here');
         dispatch(toastActions.addToast({
           type: 'success',
           title: 'Finished!',
@@ -280,12 +279,12 @@ export const importProtocolFromFile = (filePath, name) => {
         dispatch(toastActions.removeToast(toastUUID));
 
         // attempt to clean up files
-        if (protocolUid) cleanUpProtocol(protocolUid); 
+        if (protocolUid) cleanUpProtocol(protocolUid);
 
         // If this wasn't user cancellation, dispatch an error
         if (!(error instanceof CancellationError)) {
           dispatch(installedProtocolActions.importProtocolFailedAction(error));
-        }          
+        }
       },
     );
 };

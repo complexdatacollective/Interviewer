@@ -46,7 +46,7 @@ const HeaderSection = () => {
     },
     hide: {
       opacity: 0,
-      height: '0',
+      height: '0px',
     },
   };
 
@@ -74,9 +74,10 @@ const HeaderSection = () => {
       <motion.section
         className="welcome-section"
         initial={firstLoadStates.hide}
-        animate={firstLoadStates.show}
+        animate={showGettingStarted ? firstLoadStates.show : firstLoadStates.hide}
       >
         <motion.div
+          initial={showGettingStarted.hide}
           animate={showGettingStarted ? gettingStartedStates.show : gettingStartedStates.hide}
         >
           <main className="welcome-section__main">

@@ -33,7 +33,7 @@
     "dev:android": "node scripts/check-dev-server.js && cross-env LIVE_RELOAD=1 cordova run android",
     "generate-icons": "node scripts/generate-app-icons.js",
     "dist:android": "npm run build:android && cordova build android --release",
-    "dist:ios": "npm run build:ios && cordova build ios --release --buildFlag='-UseModernBuildSystem=0' --developmentTeam=85EZ69PQHJ",
+    "dist:ios": "npm run build:ios && cordova build ios --release --developmentTeam=85EZ69PQHJ",
     "dist:linux": "npm run build:electron && electron-builder -l",
     "dist:mac": "npm run build:electron && electron-builder -m",
     "dist:win": "npm run build:electron && electron-builder -w",
@@ -176,17 +176,19 @@
     "@babel/runtime": "^7.8.3",
     "archiver": "^2.1.1",
     "cordova-android": "^8.0.0",
-    "cordova-ios": "^5.0.1",
+    "cordova-ios": "^5.1.1",
     "cordova-plugin-add-swift-support": "^2.0.2",
     "cordova-plugin-app-version": "^0.1.9",
-    "cordova-plugin-chooser": "^1.2.5",
+    "cordova-plugin-chooser": "^1.3.2",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-file": "^5.0.0",
     "cordova-plugin-file-transfer": "^1.7.1",
+    "cordova-plugin-inappbrowser": "~4.0.0",
     "cordova-plugin-keyboard": "^1.2.0",
     "cordova-plugin-network-canvas-client": "./cordova-plugin-network-canvas-client",
+    "cordova-plugin-network-information": "~2.0.2",
     "cordova-plugin-whitelist": "^1.3.3",
-    "cordova-plugin-wkwebview-engine": "^1.1.4",
+    "cordova-plugin-wkwebview-engine": "^1.2.1",
     "cordova-plugin-x-socialsharing": "^5.6.4",
     "cordova-plugin-zeroconf": "^1.4.1",
     "electron-devtools-installer": "^3.0.0",
@@ -279,13 +281,11 @@
     ],
     "plugins": {
       "cordova-plugin-app-version": {},
-      "cordova-plugin-wkwebview-engine": {},
       "cordova-plugin-file": {},
       "cordova-plugin-file-transfer": {},
       "cordova-plugin-whitelist": {},
       "cordova-plugin-device": {},
       "cordova-plugin-network-canvas-client": {},
-      "cordova-plugin-chooser": {},
       "cordova-plugin-keyboard": {},
       "cordova-plugin-zeroconf": {},
       "cordova-plugin-x-socialsharing": {
@@ -293,7 +293,10 @@
         "PHOTO_LIBRARY_ADD_USAGE_DESCRIPTION": "This app requires photo library access to function properly.",
         "PHOTO_LIBRARY_USAGE_DESCRIPTION": "This app requires photo library access to function properly."
       },
-      "cordova-plugin-inappbrowser": {}
+      "cordova-plugin-inappbrowser": {},
+      "cordova-plugin-chooser": {},
+      "cordova-plugin-network-information": {},
+      "cordova-plugin-wkwebview-engine": {}
     }
   }
 }
