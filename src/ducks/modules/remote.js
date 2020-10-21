@@ -27,8 +27,7 @@ const previewStage = (protocol = {}, stageIndex = 0) =>
     dispatch(resetActions.resetAppState());
 
     // Load protocol
-    dispatch(installedProtocolActions.importProtocolComplete(protocol));
-    dispatch(installedProtocolActions.resetImportProtocol());
+    dispatch(installedProtocolActions.importProtocolCompleteAction(protocol));
 
     // Create session and open specified stage
     return dispatch(sessionActions.addSession(caseId, protocolUID))
