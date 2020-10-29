@@ -38,7 +38,7 @@ const ProtocolCard = (props) => {
             This protocol uses an older version of the protocol file format, or &quot;schema&quot;.
           </p>
           <p>
-            Newer schema versions support additional features in Network Canvas. During the beta
+            Newer schema versions support additional features in Interviewer. During the beta
             phase, we kindly request that you update your protocols to the latest version, and
             evaluate the newest features as we implement them. To do this, open the original
             protocol file it in the latest version of Architect, and follow the migration
@@ -69,13 +69,13 @@ const ProtocolCard = (props) => {
           </p>
           <p>
             The version of the schema used by this protocol is incompatible with this version of
-            Network Canvas. You may still export interview data that has already been collected,
+            Interviewer. You may still export interview data that has already been collected,
             but you may not start additional interviews.
           </p>
           <p>
             If you require the ability to start interviews, you can either (1) install an updated
             version of this protocol that uses the latest schema, or (2) downgrade your version
-            of Network Canvas to a version that supports this protocol schema version.
+            of Interviewer to a version that supports this protocol schema version.
           </p>
           <p>
             For documentation on this issue, please see our documentation site.

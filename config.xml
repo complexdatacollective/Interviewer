@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="6000" id="org.codaco.networkCanvas6" ios-CFBundleIdentifier="networkCanvas6" ios-CFBundleVersion="6000" version="6.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Network Canvas</name>
+<widget android-versionCode="6000" id="org.codaco.networkCanvasInterviewer6" ios-CFBundleIdentifier="networkCanvasInterviewer6" ios-CFBundleVersion="6000" version="6.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Network Canvas Interviewer</name>
     <description>
         Simplifying complex network data collection.
     </description>
@@ -44,7 +44,7 @@
             </array>
         </config-file>
         <config-file parent="NSLocalNetworkUsageDescription" target="*-Info.plist">
-            <string>Network Canvas uses this feature to enable automatic discovery of computers running Server on your network.</string>
+            <string>Network Canvas Interviewer uses this feature to enable automatic discovery of computers running Server on your network.</string>
         </config-file>
         <icon height="40" src="www/icons/ios/NC-Square-40.png" width="40" />
         <icon height="50" src="www/icons/ios/NC-Square-50.png" width="50" />

@@ -38,9 +38,9 @@ const ExportOptions = (props) => {
         <div>
           <h2>Export GraphML Files</h2>
           <p>
-            GraphML is the main file format used by Network Canvas. GraphML files can be used
-            to manually import your data into Server, and can be opened by many other pieces
-            of network analysis software.
+            GraphML is the main file format used by the Network Canvas software. GraphML files
+            can be used to manually import your data into Server, and can be opened by many
+            other pieces of network analysis software.
           </p>
         </div>
       </motion.article>
@@ -97,7 +97,7 @@ const ExportOptions = (props) => {
         <div>
           <h2>Use Screen Layout Coordinates</h2>
           <p>
-            By default Network Canvas exports sociogram node coordinates as normalized X/Y
+            By default Interviewer exports sociogram node coordinates as normalized X/Y
             values (a number between 0 and 1 for each axis, with the origin in the top
             left). Enabling this option will store coordinates as screen space pixel values,
             with the same origin.

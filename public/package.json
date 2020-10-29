@@ -1,7 +1,7 @@
 {
-  "name": "network-canvas",
+  "name": "network-canvas-interviewer",
   "version": "6.0.0",
-  "productName": "Network Canvas",
+  "productName": "Network Canvas Interviewer",
   "description": "Simplifying complex network data collection.",
   "author": "Complex Data Collective",
   "private": true,

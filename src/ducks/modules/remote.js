@@ -6,7 +6,7 @@ import { actionCreators as installedProtocolActions } from './installedProtocols
 import { actionCreators as sessionActions } from './sessions';
 
 /**
- * action dispatchers for remotely driving Network Canvas
+ * action dispatchers for remotely driving Interviewer
  */
 
 /**

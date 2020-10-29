@@ -44,7 +44,7 @@ class Updater {
 
     dialog.showMessageBox({
       title: 'No Updates Available',
-      message: 'Network Canvas is up-to-date.',
+      message: 'Network Canvas Interviewer is up-to-date.',
     });
   }
 

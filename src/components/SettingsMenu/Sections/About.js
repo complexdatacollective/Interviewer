@@ -12,7 +12,7 @@ const About = () => {
     <React.Fragment>
       <motion.article variants={TabItemVariants} className="settings-element--wide">
         <div>
-          <h1>About Network Canvas</h1>
+          <h1>About Network Canvas Interviewer</h1>
           <code className="version-code">Version {appVersion}</code>
         </div>
       </motion.article>

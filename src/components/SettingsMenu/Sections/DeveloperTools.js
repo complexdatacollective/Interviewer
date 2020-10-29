@@ -42,7 +42,7 @@ const DeveloperTools = (props) => {
         <div>
           <h2>Reset All App Data</h2>
           <p>
-            Click the button above to reset all Network Canvas data. This will erase any
+            Click the button above to reset all Interviewer data. This will erase any
             in-progress interviews, and all application settings.
           </p>
         </div>
@@ -83,7 +83,7 @@ const DeveloperTools = (props) => {
           <h2>Import Development Protocol</h2>
           <p>
             Clicking this button will import the latest development protocol for this
-            version of Network Canvas.
+            version of Network Canvas Interviewer.
           </p>
         </div>
       </motion.article>
@@ -159,7 +159,7 @@ const developerToolsHandlers = withHandlers({
     props.openDialog({
       type: 'Warning',
       title: 'Reset application data?',
-      message: 'This will delete ALL data from Network Canvas, including interview data and settings. Do you wish to continue?',
+      message: 'This will delete ALL data from Interviewer, including interview data and settings. Do you wish to continue?',
       onConfirm: () => {
         props.resetState();
       },
