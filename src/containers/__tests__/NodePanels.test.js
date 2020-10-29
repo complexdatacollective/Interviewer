@@ -12,6 +12,7 @@ const mockProps = {
   activePromptAttributes: {},
   newNodeAttributes: {},
   getLabel: () => 'some label',
+  getNodes: () => [],
 };
 
 describe('<NodePanels />', () => {

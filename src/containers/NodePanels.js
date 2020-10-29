@@ -2,8 +2,9 @@ import React, { PureComponent } from 'react';
 import { compose, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { find } from 'lodash';
 import { getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
-import { makeGetAdditionalAttributes } from '../selectors/interface';
+import { makeGetAdditionalAttributes, makeNetworkNodesForType } from '../selectors/interface';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { entityPrimaryKeyProperty } from '../ducks/modules/network';
 import { Panels } from '../components/';
@@ -24,6 +25,7 @@ class NodePanels extends PureComponent {
     removeNode: PropTypes.func.isRequired,
     stage: PropTypes.object,
     removeNodeFromPrompt: PropTypes.func.isRequired,
+    getNodes: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -39,6 +41,7 @@ class NodePanels extends PureComponent {
 
     this.state = {
       panelIndexes: [],
+      nodes: [],
     };
 
     this.colorPresets = [
@@ -50,11 +53,27 @@ class NodePanels extends PureComponent {
     ];
   }
 
+  componentDidMount() {
+    this.updateNodes();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.prompt.id !== this.props.prompt.id) {
+      this.updateNodes();
+    }
+  }
+
   getHighlight = (panelNumber) => {
     if (panelNumber === 0) { return null; }
 
     return this.colorPresets[panelNumber % this.colorPresets.length];
   };
+
+  updateNodes = () => {
+    this.setState({
+      nodes: this.props.getNodes(this.props),
+    });
+  }
 
   handleDrop = ({ meta }, dataSource) => {
     /**
@@ -67,6 +86,7 @@ class NodePanels extends PureComponent {
         meta[entityPrimaryKeyProperty],
         this.props.prompt.id,
         this.props.newNodeAttributes,
+        find(this.state.nodes, [entityPrimaryKeyProperty, meta[entityPrimaryKeyProperty]]),
       );
     } else {
       this.props.removeNode(meta[entityPrimaryKeyProperty]);
@@ -166,6 +186,7 @@ class NodePanels extends PureComponent {
 function makeMapStateToProps() {
   const getPromptNodeAttributes = makeGetAdditionalAttributes();
   const getPanelConfiguration = makeGetPanelConfiguration();
+  const getNetworkNodesForType = makeNetworkNodesForType();
 
   return function mapStateToProps(state, props) {
     const newNodeAttributes = getPromptNodeAttributes(state, props);
@@ -175,6 +196,7 @@ function makeMapStateToProps() {
       activePromptId: props.prompt.id,
       newNodeAttributes,
       panels,
+      getNodes: newProps => getNetworkNodesForType(state, newProps),
     };
   };
 }

@@ -240,6 +240,8 @@ export default function reducer(state = getInitialState(), action = {}) {
       };
     }
     case REMOVE_NODE_FROM_PROMPT: {
+      const previousPromptAttributes = keys(action.promptAttributes).reduce((attributes, attrKey) =>
+        ({ ...attributes, [attrKey]: action.previousNode[entityAttributesProperty][attrKey] }), {});
       return {
         ...state,
         nodes: (() => state.nodes.map(
@@ -248,7 +250,7 @@ export default function reducer(state = getInitialState(), action = {}) {
             return {
               ...node,
               [entityAttributesProperty]:
-                omit(node[entityAttributesProperty], keys(action.promptAttributes)),
+                { ...node[entityAttributesProperty], ...previousPromptAttributes },
               promptIDs: node.promptIDs.filter(id => id !== action.promptId),
             };
           })
