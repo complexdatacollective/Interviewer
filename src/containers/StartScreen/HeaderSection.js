@@ -63,6 +63,9 @@ const HeaderSection = () => {
         />
       </header>
       <div className="start-screen-header__wrapper">
+        <div className="header-brand">
+          <img src={NCLogo} className="header-logo" alt="Network Canvas Interviewer" />
+        </div>
         <div className="header-mark">
           <div className="project-tag">
             <img src={networkCanvasLogo} alt="A Network Canvas project" style={{ height: '2.4rem', width: '2.4rem' }} />
@@ -70,9 +73,6 @@ const HeaderSection = () => {
           </div>
           <h1>Interviewer</h1>
           <h4>Simplifying complex network data collection.</h4>
-        </div>
-        <div className="header-brand">
-          <img src={NCLogo} className="header-logo" alt="Network Canvas Interviewer" />
         </div>
         <div className="version-string">{appVersion}</div>
       </div>
