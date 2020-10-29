@@ -39,18 +39,6 @@ const HeaderSection = () => {
     },
   };
 
-  const firstLoadStates = {
-    show: {
-      opacity: 1,
-      height: '100%',
-      transition: { when: 'beforeChildren', type: 'spring', delay: 1 },
-    },
-    hide: {
-      opacity: 0,
-      height: '0px',
-    },
-  };
-
   return (
     <Section className="start-screen-section start-screen-header">
       <header className="start-screen-header__top">
@@ -78,8 +66,6 @@ const HeaderSection = () => {
       </div>
       <motion.section
         className="welcome-section"
-        initial={firstLoadStates.hide}
-        animate={showGettingStarted ? firstLoadStates.show : firstLoadStates.hide}
       >
         <motion.div
           initial={showGettingStarted.hide}
