@@ -39,7 +39,7 @@ const pairingHandlers = withHandlers({
     props.openDialog({
       type: 'Warning',
       title: 'Reset application data?',
-      message: 'This will delete ALL data from Network Canvas, including interview data and settings. Do you wish to continue?',
+      message: 'This will delete ALL data from Interviewer, including interview data and settings. Do you wish to continue?',
       onConfirm: () => {
         props.resetState();
       },

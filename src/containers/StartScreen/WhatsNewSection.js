@@ -21,7 +21,7 @@ const WhatsNewSection = () => {
             </header>
             <div className="content-section">
               <p>
-                Welcome to the stable release of Network Canvas. In future versions, this card
+                Welcome to the stable release of Interviewer. In future versions, this card
                 will be used to summarize changes and new features.
               </p>
             </div>

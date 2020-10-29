@@ -16,11 +16,11 @@ async function note(params) {
     throw new Error(`Cannot find application at: ${appPath}`);
   }
 
-  console.log(`Notarizing Network Canvas found at ${appPath}`);
+  console.log(`Notarizing app found at ${appPath}`);
 
   try {
     await electronNotarize.notarize({
-      appBundleId: 'org.codaco.networkCanvas',
+      appBundleId: 'org.codaco.networkCanvasInterviewer6',
       appPath,
       appleId: 'developers@coda.co',
       appleIdPassword: '@keychain:altoolpw',
@@ -29,7 +29,7 @@ async function note(params) {
     console.error(error);
   }
 
-  console.log('Done notarizing Network Canvas');
+  console.log('Done notarizing');
 }
 
 module.exports = note;

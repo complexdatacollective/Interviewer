@@ -84,7 +84,7 @@ const VisualPreferences = (props) => {
         <div>
           <h2>Interface Scale</h2>
           <p>
-            This setting allows you to control the size of the Network Canvas user
+            This setting allows you to control the size of the Interviewer user
             interface. Increasing the interface size may limit the amount of information
             visible on each screen.
           </p>
@@ -101,7 +101,7 @@ const VisualPreferences = (props) => {
         <div>
           <h2>Use dynamic scaling?</h2>
           <p>
-            Dynamic scaling lets Network Canvas resize the user interface proportionally to
+            Dynamic scaling lets Interviewer resize the user interface proportionally to
             the size of the window. Turning it off will use a fixed size.
           </p>
         </div>
@@ -118,7 +118,7 @@ const VisualPreferences = (props) => {
         <div>
           <h2>Show Scrollbars?</h2>
           <p>
-            By default, Network Canvas does not show scrollbars in order to provide
+            By default, Interviewer does not show scrollbars in order to provide
             a more streamlined visual experience. If you encounter difficulties with
             discoverability or with scrolling behavior, you may enable showing scrollbars
             here.
@@ -137,7 +137,7 @@ const VisualPreferences = (props) => {
         <div>
           <h2>Run Fullscreen?</h2>
           <p>
-            Network Canvas is designed to run in full screen mode for an
+            Interviewer is designed to run in full screen mode for an
             immersive experience. You may disable or enable this mode here.
           </p>
           <p>

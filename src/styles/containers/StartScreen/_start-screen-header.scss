@@ -52,9 +52,19 @@
       }
     }
 
+    .project-tag {
+      h5 {
+        display: inline-block;
+        font-family: var(--heading-font-family);
+        font-weight: 900;
+        letter-spacing: .15em;
+        margin: 0;
+      }
+    }
+
     .header-mark {
       flex: 0 0 auto;
-      margin-right: unit(2);
+      margin-left: unit(2);
 
       h1 {
         font-size: 3.052rem;

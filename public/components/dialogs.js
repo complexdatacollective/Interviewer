@@ -4,7 +4,7 @@ const openDialogOptions = {
   buttonLabel: 'Open',
   nameFieldLabel: 'Open:',
   defaultPath: 'Protocol.netcanvas',
-  filters: [{ name: 'Network Canvas', extensions: ['netcanvas'] }],
+  filters: [{ name: 'Network Canvas Interviewer protocol', extensions: ['netcanvas'] }],
   properties: ['openFile'],
 };
 

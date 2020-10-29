@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@codaco/ui';
 import { Section } from '.';
 import NCLogo from '../../images/NC-Round.svg';
+import networkCanvasLogo from '../../images/NC-Mark.svg';
 import { actionCreators as deviceSettingsActions } from '../../ducks/modules/deviceSettings';
 import { importProtocolFromURI } from '../../utils/protocol/importProtocol';
 import { SettingsMenuButton } from '../../components/SettingsMenu';
@@ -38,18 +39,6 @@ const HeaderSection = () => {
     },
   };
 
-  const firstLoadStates = {
-    show: {
-      opacity: 1,
-      height: '100%',
-      transition: { when: 'beforeChildren', type: 'spring', delay: 1 },
-    },
-    hide: {
-      opacity: 0,
-      height: '0px',
-    },
-  };
-
   return (
     <Section className="start-screen-section start-screen-header">
       <header className="start-screen-header__top">
@@ -62,19 +51,21 @@ const HeaderSection = () => {
         />
       </header>
       <div className="start-screen-header__wrapper">
-        <div className="header-mark">
-          <h1>Network Canvas</h1>
-          <h4>Simplifying complex network data collection.</h4>
-        </div>
         <div className="header-brand">
-          <img src={NCLogo} className="header-logo" alt="Network Canvas" />
+          <img src={NCLogo} className="header-logo" alt="Network Canvas Interviewer" />
+        </div>
+        <div className="header-mark">
+          <div className="project-tag">
+            <img src={networkCanvasLogo} alt="A Network Canvas project" style={{ height: '2.4rem', width: '2.4rem' }} />
+            <h5>Network Canvas</h5>
+          </div>
+          <h1>Interviewer</h1>
+          <h4>Simplifying complex network data collection.</h4>
         </div>
         <div className="version-string">{appVersion}</div>
       </div>
       <motion.section
         className="welcome-section"
-        initial={firstLoadStates.hide}
-        animate={showGettingStarted ? firstLoadStates.show : firstLoadStates.hide}
       >
         <motion.div
           initial={showGettingStarted.hide}
@@ -86,7 +77,7 @@ const HeaderSection = () => {
             </header>
             <div className="welcome-description">
               <p>
-                If this is your first time using Network Canvas, please consider taking
+                If this is your first time using Network Canvas Interviewer, please consider taking
                 a moment to watch our overview video. It will introduce you to the key
                 concepts of the Network Canvas project.
               </p>
