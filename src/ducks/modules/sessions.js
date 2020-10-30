@@ -245,19 +245,17 @@ const removeNode = uid => (dispatch, getState) => {
   });
 };
 
-const removeNodeFromPrompt = (nodeId, promptId, promptAttributes, previousNode) =>
-  (dispatch, getState) => {
-    const { activeSessionId } = getState();
+const removeNodeFromPrompt = (nodeId, promptId, promptAttributes) => (dispatch, getState) => {
+  const { activeSessionId } = getState();
 
-    dispatch({
-      type: networkActionTypes.REMOVE_NODE_FROM_PROMPT,
-      sessionId: activeSessionId,
-      nodeId,
-      promptId,
-      promptAttributes,
-      previousNode,
-    });
-  };
+  dispatch({
+    type: networkActionTypes.REMOVE_NODE_FROM_PROMPT,
+    sessionId: activeSessionId,
+    nodeId,
+    promptId,
+    promptAttributes,
+  });
+};
 
 const updateEgo = (modelData = {}, attributeData = {}) => (dispatch, getState) => {
   const { activeSessionId, sessions, installedProtocols } = getState();
