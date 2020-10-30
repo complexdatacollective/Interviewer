@@ -80,7 +80,6 @@
     "electron-builder": "^22.7.0",
     "electron-log": "^4.2.2",
     "electron-notarize": "^1.0.0",
-    "electron-updater": "^4.1.2",
     "electron-winstaller": "^4.0.0",
     "emoji-dictionary": "^1.0.9",
     "enzyme": "^3.11.0",
