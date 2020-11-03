@@ -20,6 +20,7 @@ const persistConfig = {
     'search',
     'activeSessionId',
     'sessions',
+    'dismissedUpdates',
   ],
 };
 
