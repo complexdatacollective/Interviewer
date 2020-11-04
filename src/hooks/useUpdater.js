@@ -44,8 +44,8 @@ const useUpdater = (updateURL) => {
 
       if (isWindows()) {
         // eslint-disable-next-line @codaco/spellcheck/spell-checker
-        const dmg = find(assets, value => value.name.split('.').pop() === 'exe');
-        return openExternalLink(dmg.browser_download_url);
+        const exe = find(assets, value => value.name.split('.').pop() === 'exe');
+        return openExternalLink(exe.browser_download_url);
       }
 
       return openExternalLink('https://networkcanvas.com/download.html');
