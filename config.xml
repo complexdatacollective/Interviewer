@@ -33,8 +33,7 @@
         </edit-config>
     </platform>
     <platform name="ios">
-        <allow-navigation href="*" />
-        <allow-navigation href="*" />
+        <preference name="WKWebViewOnly" value="true" />
         <allow-navigation href="*" />
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
