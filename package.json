@@ -175,7 +175,7 @@
   "dependencies": {
     "@babel/runtime": "^7.8.3",
     "archiver": "^2.1.1",
-    "cordova-android": "^8.0.0",
+    "cordova-android": "^7.1.4",
     "cordova-ios": "^5.1.1",
     "cordova-plugin-add-swift-support": "^2.0.2",
     "cordova-plugin-app-version": "^0.1.9",
@@ -276,8 +276,8 @@
   },
   "cordova": {
     "platforms": [
-      "android",
-      "ios"
+      "ios",
+      "android"
     ],
     "plugins": {
       "cordova-plugin-app-version": {},

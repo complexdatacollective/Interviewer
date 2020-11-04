@@ -18,7 +18,7 @@ module.exports = (ctx) => {
   const javaRoot = path.join(ctx.opts.projectRoot, 'platforms', 'android', 'app', 'src', 'main', 'java');
 
   const srcFile = path.join(__dirname, CustomActivityName);
-  const destFile = path.join(javaRoot, 'org', 'codaco', 'networkCanvas', CustomActivityName);
+  const destFile = path.join(javaRoot, 'org', 'codaco', 'NetworkCanvasInterviewer6', CustomActivityName);
 
   const errorMsg = 'Could not copy custom Android activity: Have you run `cordova platform add android`?';
 
