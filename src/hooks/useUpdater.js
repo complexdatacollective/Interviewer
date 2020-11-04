@@ -67,14 +67,13 @@ const useUpdater = (updateURL) => {
     dispatch(dialogActions.openDialog({
       type: 'Confirm',
       title: 'Release Notes',
-      className: 'update-available-toast',
       confirmLabel: getConfirmLabel(),
       onConfirm: openPlatformAsssetURL,
       message: (
         <div className="dialog-release-notes">
           <p>
-            Please read the following release notes carefully as the changes in the software
-            may impact the interview experience, and in some cases may even prevent
+            Please read the following release notes carefully as changes in the software
+            may impact the interview experience substantially, and in some cases may even prevent
             you from collecting data until further updates are installed.
           </p>
           <ReactMarkdown
@@ -106,6 +105,7 @@ const useUpdater = (updateURL) => {
           dispatch(toastActions.addToast({
             id: 'update-toast',
             type: 'info',
+            classNames: 'update-available-toast',
             title: `Version ${name} available`,
             autoDismiss: false,
             content: (

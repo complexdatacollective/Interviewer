@@ -46,6 +46,9 @@ a {
 }
 
 // Override UI toast style for now (make wider)
+.toast-container-list {
+  align-items: flex-end;
+}
 
 .toast {
   .toast-button-group {
