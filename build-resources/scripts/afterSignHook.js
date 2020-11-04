@@ -20,7 +20,7 @@ async function note(params) {
 
   try {
     await electronNotarize.notarize({
-      appBundleId: 'org.codaco.networkCanvasInterviewer6',
+      appBundleId: 'org.codaco.NetworkCanvasInterviewer6',
       appPath,
       appleId: 'developers@coda.co',
       appleIdPassword: '@keychain:altoolpw',

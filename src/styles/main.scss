@@ -45,12 +45,12 @@ a {
   text-decoration: none;
 }
 
-// Override UI toast style for now (make wider) 
+// Override UI toast style for now (make wider)
+.toast-container-list {
+  align-items: flex-end;
+}
 
 .toast {
-  max-width: 50rem;
-  width: auto;
-
   .toast-button-group {
     display: flex;
     justify-content: flex-end;
@@ -61,6 +61,10 @@ a {
       }
     }
   }
+}
+
+.update-available-toast {
+  width: 50rem;
 }
 
 .dialog-release-notes {

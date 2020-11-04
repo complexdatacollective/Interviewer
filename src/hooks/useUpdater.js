@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Button } from '@codaco/ui';
@@ -29,7 +30,7 @@ const useUpdater = (updateURL) => {
       }
 
       if (isCordova()) {
-        return openExternalLink('https://play.google.com/store/apps/details?id=org.codaco.networkCanvas');
+        return openExternalLink('https://play.google.com/store/apps/details?id=org.codaco.NetworkCanvasInterviewer6');
       }
 
       if (!assets || assets.length === 0) {
@@ -51,17 +52,28 @@ const useUpdater = (updateURL) => {
       return openExternalLink('https://networkcanvas.com/download.html');
     };
 
+    const getConfirmLabel = () => {
+      if (isCordova()) {
+        if (isIOS()) {
+          return 'Visit App Store';
+        }
+
+        return 'Visit Play Store';
+      }
+
+      return 'Download Installer';
+    };
+
     dispatch(dialogActions.openDialog({
       type: 'Confirm',
       title: 'Release Notes',
-      // eslint-disable-next-line no-nested-ternary
-      confirmLabel: isCordova() ? isIOS() ? 'Visit App Store' : 'Visit Play Store' : 'Download Installer',
+      confirmLabel: getConfirmLabel(),
       onConfirm: openPlatformAsssetURL,
       message: (
         <div className="dialog-release-notes">
           <p>
-            Please read the following release notes carefully as the changes in the software
-            may impact the interview experience, and in some cases may even prevent
+            Please read the following release notes carefully as changes in the software
+            may impact the interview experience substantially, and in some cases may even prevent
             you from collecting data until further updates are installed.
           </p>
           <ReactMarkdown
@@ -93,6 +105,7 @@ const useUpdater = (updateURL) => {
           dispatch(toastActions.addToast({
             id: 'update-toast',
             type: 'info',
+            classNames: 'update-available-toast',
             title: `Version ${name} available`,
             autoDismiss: false,
             content: (
