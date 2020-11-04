@@ -92,7 +92,7 @@ const useUpdater = (updateURL) => {
     fetch(updateURL)
       .then(response => response.json())
       .then(({ name, body, assets }) => {
-        if (compareVersions.compare(currentVersion, name, '<') || true) {
+        if (compareVersions.compare(currentVersion, name, '<')) {
           if (dismissedVersion && dismissedVersion.includes(name)) {
             return;
           }
