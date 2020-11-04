@@ -7,7 +7,7 @@
     <author email="developers@coda.co" href="http://coda.co">
         Complex Data Collective
     </author>
-    <content src="index.html" />
+    <content src="http://10.0.0.13:3000/" />
     <access origin="*" />
     <access origin="cdvfile://*" />
     <allow-intent href="http://*/*" />
@@ -33,6 +33,8 @@
         </edit-config>
     </platform>
     <platform name="ios">
+        <allow-navigation href="*" />
+        <allow-navigation href="*" />
         <allow-navigation href="*" />
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
@@ -74,19 +76,15 @@
     <plugin name="cordova-plugin-file-transfer" spec="^1.7.1" />
     <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
     <plugin name="cordova-plugin-device" spec="^2.0.2" />
-    <plugin name="cordova-plugin-network-canvas-client" spec="./cordova-plugin-network-canvas-client" />
+    <plugin name="cordova-plugin-network-canvas-client" spec="/Users/joshua/Projects/network-canvas/node_modules/cordova-plugin-network-canvas-client" />
     <plugin name="cordova-plugin-keyboard" spec="^1.2.0" />
-    <plugin name="cordova-plugin-x-socialsharing" spec="^5.6.4">
-        <variable name="ANDROID_SUPPORT_V4_VERSION" value="24.1.1+" />
-        <variable name="PHOTO_LIBRARY_ADD_USAGE_DESCRIPTION" value="This app requires photo library access to function properly." />
-        <variable name="PHOTO_LIBRARY_USAGE_DESCRIPTION" value="This app requires photo library access to function properly." />
-    </plugin>
+    <plugin name="cordova-plugin-x-socialsharing" spec="^5.6.4" />
     <plugin name="cordova-plugin-zeroconf" spec="^1.4.1" />
     <plugin name="cordova-plugin-inappbrowser" spec="~4.0.0" />
     <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
     <plugin name="cordova-plugin-network-information" spec="~2.0.2" />
     <plugin name="cordova-plugin-chooser" spec="~1.3.1" />
-    <plugin name="cordova-plugin-wkwebview-engine" spec="^1.2.1" />
+    <plugin name="cordova-plugin-wkwebview-engine" spec="~1.2.1" />
     <engine name="android" spec="^8.0.0" />
     <engine name="ios" spec="^5.1.1" />
 </widget>

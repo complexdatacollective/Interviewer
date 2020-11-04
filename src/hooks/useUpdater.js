@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Button } from '@codaco/ui';
@@ -29,7 +30,7 @@ const useUpdater = (updateURL) => {
       }
 
       if (isCordova()) {
-        return openExternalLink('https://play.google.com/store/apps/details?id=org.codaco.networkCanvas');
+        return openExternalLink('https://play.google.com/store/apps/details?id=org.codaco.NetworkCanvasInterviewer6');
       }
 
       if (!assets || assets.length === 0) {
@@ -51,11 +52,23 @@ const useUpdater = (updateURL) => {
       return openExternalLink('https://networkcanvas.com/download.html');
     };
 
+    const getConfirmLabel = () => {
+      if (isCordova()) {
+        if (isIOS()) {
+          return 'Visit App Store';
+        }
+
+        return 'Visit Play Store';
+      }
+
+      return 'Download Installer';
+    };
+
     dispatch(dialogActions.openDialog({
       type: 'Confirm',
       title: 'Release Notes',
-      // eslint-disable-next-line no-nested-ternary
-      confirmLabel: isCordova() ? isIOS() ? 'Visit App Store' : 'Visit Play Store' : 'Download Installer',
+      className: 'update-available-toast',
+      confirmLabel: getConfirmLabel(),
       onConfirm: openPlatformAsssetURL,
       message: (
         <div className="dialog-release-notes">
@@ -80,7 +93,7 @@ const useUpdater = (updateURL) => {
     fetch(updateURL)
       .then(response => response.json())
       .then(({ name, body, assets }) => {
-        if (compareVersions.compare(currentVersion, name, '<')) {
+        if (compareVersions.compare(currentVersion, name, '<') || true) {
           if (dismissedVersion && dismissedVersion.includes(name)) {
             return;
           }
