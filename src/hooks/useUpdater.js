@@ -25,7 +25,7 @@ const useUpdater = (updateURL) => {
       dispatch(toastActions.removeToast('update-toast'));
 
       if (isIOS()) {
-        return openExternalLink('https://apps.apple.com/us/app/network-canvas/id1233134698?ls=1');
+        return openExternalLink('https://apps.apple.com/us/app/network-canvas-interviewer/id1538673677');
       }
 
       if (isCordova()) {

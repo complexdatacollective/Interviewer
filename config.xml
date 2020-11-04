@@ -34,8 +34,6 @@
     </platform>
     <platform name="ios">
         <allow-navigation href="*" />
-        <allow-navigation href="*" />
-        <allow-navigation href="*" />
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
         <config-file parent="NSBonjourServices" target="*-Info.plist">
