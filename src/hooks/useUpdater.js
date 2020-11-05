@@ -21,21 +21,21 @@ const getPlatformSpecificContent = (assets) => {
   if (isIOS()) {
     return {
       buttonText: 'Open App Store',
-      onClickHandler: openExternalLink('https://apps.apple.com/us/app/network-canvas-interviewer/id1538673677'),
+      onClickHandler: () => openExternalLink('https://apps.apple.com/us/app/network-canvas-interviewer/id1538673677'),
     };
   }
 
   if (isAndroid()) {
     return {
       buttonText: 'Open Play Store',
-      onClickHandler: openExternalLink('https://play.google.com/store/apps/details?id=org.codaco.NetworkCanvasInterviewer6'),
+      onClickHandler: () => openExternalLink('https://play.google.com/store/apps/details?id=org.codaco.NetworkCanvasInterviewer6'),
     };
   }
 
   if (!assets || assets.length === 0) {
     return {
       buttonText: 'Open Download Page',
-      onClickHandler: openExternalLink('https://networkcanvas.com/download.html'),
+      onClickHandler: () => openExternalLink('https://networkcanvas.com/download.html'),
     };
   }
 
@@ -44,7 +44,7 @@ const getPlatformSpecificContent = (assets) => {
     const dmg = find(assets, value => value.name.split('.').pop() === 'dmg');
     return {
       buttonText: 'Download Installer',
-      onClickHandler: openExternalLink(dmg.browser_download_url),
+      onClickHandler: () => openExternalLink(dmg.browser_download_url),
     };
   }
 
@@ -53,13 +53,13 @@ const getPlatformSpecificContent = (assets) => {
     const exe = find(assets, value => value.name.split('.').pop() === 'exe');
     return {
       buttonText: 'Download Installer',
-      onClickHandler: openExternalLink(exe.browser_download_url),
+      onClickHandler: () => openExternalLink(exe.browser_download_url),
     };
   }
 
   return {
     buttonText: 'Open Download Page',
-    onClickHandler: openExternalLink('https://networkcanvas.com/download.html'),
+    onClickHandler: () => openExternalLink('https://networkcanvas.com/download.html'),
   };
 };
 
