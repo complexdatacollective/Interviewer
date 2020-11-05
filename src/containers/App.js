@@ -45,7 +45,7 @@ const App = ({
     root.style.setProperty('--base-font-size', newFontSize);
   };
 
-  useUpdater('https://api.github.com/repos/complexdatacollective/Interviewer/releases/latest');
+  useUpdater('https://api.github.com/repos/complexdatacollective/Interviewer/releases/latest', 2500);
 
   useEffect(() => {
     if (isCordova()) {
