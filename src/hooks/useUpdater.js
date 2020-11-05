@@ -123,7 +123,6 @@ const useUpdater = (updateEndpoint, timeout = 0) => {
 
   const checkForUpdate = async () => {
     const updateAvailable = await checkEndpoint(updateEndpoint);
-
     if (!updateAvailable) { return; }
 
     const {
