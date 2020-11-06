@@ -89,10 +89,10 @@ const checkEndpoint = updateEndpoint => new Promise((resolve) => {
 
 const useUpdater = (updateEndpoint, timeout = 0) => {
   const dispatch = useDispatch();
-  const [dismissedVersion, setDismissedVersion] = useDismissedUpdatesState('dismissedVersion');
+  const [dismissedUpdates, dismissUpdate] = useDismissedUpdatesState();
 
   const handleDismiss = (version) => {
-    setDismissedVersion(version);
+    dismissUpdate(version);
     dispatch(toastActions.removeToast('update-toast'));
   };
 
@@ -132,7 +132,9 @@ const useUpdater = (updateEndpoint, timeout = 0) => {
     } = updateAvailable;
 
     // Don't notify the user if they have dismissed this version.
-    if (dismissedVersion && dismissedVersion.includes(newVersion)) {
+    if (dismissedUpdates.includes(newVersion)) {
+      // eslint-disable-next-line no-console
+      console.info('Available update has been dismissed: ', dismissedUpdates, newVersion);
       return;
     }
 

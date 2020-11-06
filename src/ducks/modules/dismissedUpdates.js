@@ -1,69 +1,43 @@
-import { omit, get } from 'lodash';
+import { get } from 'lodash';
 
-const SET_PROPERTY = 'DISMISSED_UPDATES/SET_PROPERTY';
-const TOGGLE_PROPERTY = 'DISMISSED_UPDATES/TOGGLE_PROPERTY';
-const CLEAR_PROPERTY = 'DISMISSED_UPDATES/CLEAR_PROPERTY';
+const DISMISS_UPDATE = 'DISMISSED_UPDATES/DISMISS_UPDATE';
+const RESET = 'DISMISSED_UPDATES/RESET';
 
-const initialState = {
-};
+const initialState = [];
 
-const setProperty = (key, value) => ({
-  type: SET_PROPERTY,
+const dismissUpdate = version => ({
+  type: DISMISS_UPDATE,
   payload: {
-    key,
-    value,
-  },
-});
-
-const clearProperty = key => ({
-  type: CLEAR_PROPERTY,
-  payload: {
-    key,
-  },
-});
-
-const toggleProperty = key => ({
-  type: TOGGLE_PROPERTY,
-  payload: {
-    key,
+    version,
   },
 });
 
 export default (state = initialState, { type, payload } = { type: null, payload: null }) => {
   switch (type) {
-    case SET_PROPERTY:
-      return {
+    case DISMISS_UPDATE:
+      return [
         ...state,
-        [payload.key]: payload.value,
-      };
-    case CLEAR_PROPERTY: {
-      return omit(state, payload.key);
-    }
-    case TOGGLE_PROPERTY:
-      return {
-        ...state,
-        [payload.key]: !state[payload.key],
-      };
+        payload.version,
+      ];
+    case RESET:
+      return initialState;
     default:
       return state;
   }
 };
 
-const getProperty = key =>
-  state => get(state, ['dismissedUpdates', key]);
+const getDismissedUpdates = () =>
+  state => get(state, 'dismissedUpdates');
 
 export const selectors = {
-  getProperty,
+  getDismissedUpdates,
 };
 
 export const actionTypes = {
-  SET_PROPERTY,
-  TOGGLE_PROPERTY,
-  CLEAR_PROPERTY,
+  DISMISS_UPDATE,
+  RESET,
 };
 
 export const actionCreators = {
-  setProperty,
-  toggleProperty,
-  clearProperty,
+  dismissUpdate,
 };
