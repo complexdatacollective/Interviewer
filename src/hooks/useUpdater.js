@@ -163,7 +163,7 @@ const useUpdater = (updateEndpoint, timeout = 0) => {
     const delay = setTimeout(checkForUpdate, timeout);
 
     return () => clearTimeout(delay);
-  }, [updateEndpoint]);
+  }, [updateEndpoint, dismissedUpdates]);
 };
 
 export default useUpdater;
