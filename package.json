@@ -210,11 +210,6 @@
     "nsis": {
       "include": "build-resources/scripts/bonjour.nsh"
     },
-    "mac": {
-      "category": "public.app-category.education",
-      "hardenedRuntime": true,
-      "entitlements": "./build-resources/entitlements.mac.inherit.plist"
-    },
     "fileAssociations": {
       "ext": "netcanvas",
       "description": "Network Canvas Interviewer protocol",
@@ -225,13 +220,41 @@
       "target": "nsis",
       "certificateSha1": "512E5573B1961B0ADCAFB21288935F8A3E6E656F"
     },
-    "publish": [
-      {
-        "provider": "github",
-        "owner": "complexdatacollective",
-        "repo": "interviewer"
-      }
-    ]
+    "mac": {
+      "category": "public.app-category.education",
+      "hardenedRuntime": true,
+      "entitlements": "./build-resources/entitlements.mac.inherit.plist"
+    },
+    "linux": {
+      "maintainer": "Joshua Melville <joshmelville@gmail.com>",
+      "target": [{
+          "target": "deb",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        },
+        {
+          "target": "rpm",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        },
+        {
+          "target": "snap",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ]
+    },
+    "publish": [{
+      "provider": "github",
+      "owner": "complexdatacollective",
+      "repo": "interviewer"
+    }]
   },
   "browserslist": [
     "Electron 9.2.0",
