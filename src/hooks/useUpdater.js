@@ -17,25 +17,25 @@ const renderers = {
   link: ({ children, href }) => <ExternalLink href={href}>{children}</ExternalLink>,
 };
 
-const getPlatformSpecificContent = (assets) => {
+export const getPlatformSpecificContent = (assets) => {
   if (isIOS()) {
     return {
       buttonText: 'Open App Store',
-      onClickHandler: () => openExternalLink('https://apps.apple.com/us/app/network-canvas-interviewer/id1538673677'),
+      buttonLink: 'https://apps.apple.com/us/app/network-canvas-interviewer/id1538673677',
     };
   }
 
   if (isAndroid()) {
     return {
       buttonText: 'Open Play Store',
-      onClickHandler: () => openExternalLink('https://play.google.com/store/apps/details?id=org.codaco.NetworkCanvasInterviewer6'),
+      buttonLink: 'https://play.google.com/store/apps/details?id=org.codaco.NetworkCanvasInterviewer6',
     };
   }
 
   if (!assets || assets.length === 0) {
     return {
       buttonText: 'Open Download Page',
-      onClickHandler: () => openExternalLink('https://networkcanvas.com/download.html'),
+      buttonLink: 'https://networkcanvas.com/download.html',
     };
   }
 
@@ -44,7 +44,7 @@ const getPlatformSpecificContent = (assets) => {
     const dmg = find(assets, value => value.name.split('.').pop() === 'dmg');
     return {
       buttonText: 'Download Installer',
-      onClickHandler: () => openExternalLink(dmg.browser_download_url),
+      buttonLink: dmg.browser_download_url,
     };
   }
 
@@ -53,20 +53,20 @@ const getPlatformSpecificContent = (assets) => {
     const exe = find(assets, value => value.name.split('.').pop() === 'exe');
     return {
       buttonText: 'Download Installer',
-      onClickHandler: () => openExternalLink(exe.browser_download_url),
+      buttonLink: exe.browser_download_url,
     };
   }
 
   if (isLinux()) {
     return {
       buttonText: 'Open GitHub Release',
-      onClickHandler: () => openExternalLink('https://github.com/complexdatacollective/Interviewer/releases/latest'),
+      buttonLink: 'https://github.com/complexdatacollective/Interviewer/releases/latest',
     };
   }
 
   return {
     buttonText: 'Open Download Page',
-    onClickHandler: () => openExternalLink('https://networkcanvas.com/download.html'),
+    buttonLink: 'https://networkcanvas.com/download.html',
   };
 };
 
@@ -102,13 +102,13 @@ const useUpdater = (updateEndpoint, timeout = 0) => {
   };
 
   const showReleaseNotes = (releaseNotes, releaseButtonContent) => {
-    const { buttonText, onClickHandler } = releaseButtonContent;
+    const { buttonText, buttonLink } = releaseButtonContent;
 
     dispatch(dialogActions.openDialog({
       type: 'Confirm',
       title: 'Release Notes',
       confirmLabel: buttonText,
-      onConfirm: onClickHandler,
+      onConfirm: () => openExternalLink(buttonLink),
       message: (
         <div className="dialog-release-notes allow-text-selection">
           <p>
