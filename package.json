@@ -192,6 +192,7 @@
     "cordova-plugin-x-socialsharing": "^5.6.4",
     "cordova-plugin-zeroconf": "^1.4.1",
     "electron-devtools-installer": "^3.0.0",
+    "redux-persist-cordova-sqlite": "^1.0.0",
     "zeroconf": "^0.1.4"
   },
   "homepage": ".",
@@ -227,7 +228,8 @@
     },
     "linux": {
       "maintainer": "Joshua Melville <joshmelville@gmail.com>",
-      "target": [{
+      "target": [
+        {
           "target": "deb",
           "arch": [
             "x64",
@@ -250,11 +252,13 @@
         }
       ]
     },
-    "publish": [{
-      "provider": "github",
-      "owner": "complexdatacollective",
-      "repo": "interviewer"
-    }]
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "complexdatacollective",
+        "repo": "interviewer"
+      }
+    ]
   },
   "browserslist": [
     "Electron 9.2.0",
