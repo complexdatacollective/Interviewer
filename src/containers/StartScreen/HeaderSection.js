@@ -27,15 +27,13 @@ const HeaderSection = () => {
 
   const gettingStartedStates = {
     show: {
-      height: '100%',
-      opacity: 1,
+      height: 'auto',
       transition: {
         type: 'spring',
       },
     },
     hide: {
       height: '0px',
-      opacity: 0,
     },
   };
 
@@ -68,7 +66,7 @@ const HeaderSection = () => {
         className="welcome-section"
       >
         <motion.div
-          initial={showGettingStarted.hide}
+          initial={gettingStartedStates.hide}
           animate={showGettingStarted ? gettingStartedStates.show : gettingStartedStates.hide}
         >
           <main className="welcome-section__main">
