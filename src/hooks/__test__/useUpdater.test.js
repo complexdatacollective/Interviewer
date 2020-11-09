@@ -1,8 +1,4 @@
 /* eslint-env jest */
-import { mount } from 'enzyme';
-import React from 'react';
-import { Provider } from 'react-redux';
-import { createStore } from 'redux';
 import { checkEndpoint } from '../useUpdater';
 
 jest.useFakeTimers();
