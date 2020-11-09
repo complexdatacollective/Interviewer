@@ -1,17 +1,26 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import {sqlLiteStorage} from 'redux-persist-cordova-sqlite';
 import thunk from 'redux-thunk';
 import { routerMiddleware } from 'connected-react-router';
 import { createHashHistory as createHistory } from 'history';
-import { getEnv } from '../utils/Environment';
+import { getEnv, isCordova } from '../utils/Environment';
 import logger from './middleware/logger';
 import epics from './middleware/epics';
 import createRootReducer from './modules/rootReducer';
 
+const getStorageEngine = () => {
+  if (isCordova()) {
+    return sqlLiteStorage();
+  }
+
+  return storage;
+};
+
 const persistConfig = {
   key: 'networkCanvas6',
-  storage,
+  storage: getStorageEngine(),
   whitelist: [
     'deviceSettings',
     'pairedServer',
