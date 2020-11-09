@@ -9,7 +9,7 @@ import { actionCreators as toastActions } from '../ducks/modules/toasts';
 import { actionCreators as dialogActions } from '../ducks/modules/dialogs';
 import getVersion from '../utils/getVersion';
 import ExternalLink, { openExternalLink } from '../components/ExternalLink';
-import { isAndroid, isIOS, isMacOS, isWindows } from '../utils/Environment';
+import { isAndroid, isIOS, isLinux, isMacOS, isWindows } from '../utils/Environment';
 import useDismissedUpdatesState from './useDismissedUpdatesState';
 
 // Custom renderer for links so that they open correctly in an external browser
@@ -54,6 +54,13 @@ const getPlatformSpecificContent = (assets) => {
     return {
       buttonText: 'Download Installer',
       onClickHandler: () => openExternalLink(exe.browser_download_url),
+    };
+  }
+
+  if (isLinux()) {
+    return {
+      buttonText: 'Open GitHub Release',
+      onClickHandler: () => openExternalLink('https://github.com/complexdatacollective/Interviewer/releases/latest'),
     };
   }
 
