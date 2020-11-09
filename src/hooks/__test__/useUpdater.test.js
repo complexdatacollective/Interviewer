@@ -63,12 +63,16 @@ describe('getPlatformSpecificContent()', () => {
     Environment.isWindows = jest.fn().mockReturnValue(false);
     Environment.isMacOS = jest.fn().mockReturnValue(false);
     Environment.isLinux = jest.fn().mockReturnValue(false);
+    Environment.isAndroid = jest.fn().mockReturnValue(false);
+    Environment.isIOS = jest.fn().mockReturnValue(false);
   });
 
   afterEach(() => {
     Environment.isWindows = jest.fn().mockReturnValue(false);
     Environment.isMacOS = jest.fn().mockReturnValue(false);
     Environment.isLinux = jest.fn().mockReturnValue(false);
+    Environment.isAndroid = jest.fn().mockReturnValue(false);
+    Environment.isIOS = jest.fn().mockReturnValue(false);
   });
 
   it('gets EXE asset for Windows platform', () => {
@@ -97,6 +101,20 @@ describe('getPlatformSpecificContent()', () => {
 
     const content = getPlatformSpecificContent([]);
     expect(content.buttonLink).toBe('https://networkcanvas.com/download.html');
+  });
+
+  it('links to Play Store on Android', () => {
+    Environment.isAndroid = jest.fn().mockReturnValue(true);
+
+    const content = getPlatformSpecificContent(mockAssets);
+    expect(content.buttonLink).toBe('https://play.google.com/store/apps/details?id=org.codaco.NetworkCanvasInterviewer6');
+  });
+
+  it('links to App Store on iOS', () => {
+    Environment.isIOS = jest.fn().mockReturnValue(true);
+
+    const content = getPlatformSpecificContent(mockAssets);
+    expect(content.buttonLink).toBe('https://apps.apple.com/us/app/network-canvas-interviewer/id1538673677');
   });
 });
 
