@@ -24,23 +24,13 @@ describe('useUpdater', () => {
     // expect(window.fetch).toHaveBeenCalledTimes(1);
   });
 
-  it('shows a toast when an update is available', () => {
+  it.todo('shows a toast when an update is available');
 
-  });
+  it.todo('does not show a toast when an update has been dismissed');
 
-  it('does not show a toast when an update has been dismissed', () => {
+  it.todo('fails silently');
 
-  });
+  it.todo('handles networking errors');
 
-  it('fails silently', () => {
-    // fetch.mockImplementationOnce(() => Promise.reject('API is down'));
-  });
-
-  it('handles networking errors', () => {
-
-  });
-
-  it('can use a timeout to delay', () => {
-
-  });
+  it.todo('can use a timeout to delay');
 });
