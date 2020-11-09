@@ -1,36 +1,55 @@
 /* eslint-env jest */
-// import { mount } from 'enzyme';
-// import React from 'react';
-// import { Provider } from 'react-redux';
-// import { createStore } from 'redux';
-// import useUpdater from '../useUpdater';
+import { mount } from 'enzyme';
+import React from 'react';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import { checkEndpoint } from '../useUpdater';
 
-// const MockComponent = () => {
-//   useUpdater('https://test.com');
-//   return null;
-// };
+jest.useFakeTimers();
 
-describe('useUpdater', () => {
-  beforeAll(() => jest.spyOn(window, 'fetch'));
+const mockJson = jest.fn(() => ({
+  name: '1.0.0',
+  body: 'This is a newer version probably',
+  assets: ['foo.exe'], // eslint-disable-line
+}));
 
-  // let store;
 
-  // beforeEach(() => {
-  //   store = createStore(() => {});
-  // });
+describe('checkEndpoint()', () => {
+  let originalFetch;
 
-  it('requests release data from endpoint', () => {
-    // const updater = mount(<Provider store={store}><MockComponent /></Provider>);
-    // expect(window.fetch).toHaveBeenCalledTimes(1);
+  beforeAll(() => {
+    originalFetch = global.fetch;
+    global.fetch = jest.fn(() => Promise.resolve({ json: mockJson }));
   });
 
-  it.todo('shows a toast when an update is available');
+  afterAll(() => {
+    global.fetch = originalFetch;
+  });
 
-  it.todo('does not show a toast when an update has been dismissed');
+  it('when app is the latest version', async () => {
+    const subject = await checkEndpoint('foo', '1.0.0');
+    expect(subject).toBe(false);
+  });
 
-  it.todo('fails silently');
+  it('when app is a later version than the released version!', async () => {
+    const subject = await checkEndpoint('foo', '2.0.0');
+    expect(subject).toBe(false);
+  });
 
-  it.todo('handles networking errors');
+  it('when there is an update available', async () => {
+    const subject = await checkEndpoint('foo', '0.5.0');
+    expect(subject).toEqual({
+      newVersion: '1.0.0',
+      releaseNotes: 'This is a newer version probably',
+      releaseAssets: ['foo.exe'], // eslint-disable-line
+    });
+  });
 
-  it.todo('can use a timeout to delay');
+  it('fails silently', async () => {
+    global.fetch = jest.fn(() => Promise.reject(new Error('bad url')));
+
+    const subject = await checkEndpoint('foo', '0.5.0');
+
+    expect(subject).toEqual(false);
+  });
 });
