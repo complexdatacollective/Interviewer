@@ -63,29 +63,27 @@ const getPlatformSpecificContent = (assets) => {
   };
 };
 
-const checkEndpoint = updateEndpoint => new Promise((resolve) => {
-  getVersion().then(currentVersion => fetch(updateEndpoint)
+export const checkEndpoint = (updateEndpoint, currentVersion) =>
+  fetch(updateEndpoint)
     .then(response => response.json())
     .then(({ name, body, assets }) => {
       if (compareVersions.compare(currentVersion, name, '<')) {
-        resolve({
+        return {
           newVersion: name,
           releaseNotes: body,
-          releaseButtonContent: getPlatformSpecificContent(assets),
-        });
+          releaseAssets: assets,
+        };
       }
-
       // eslint-disable-next-line no-console
       console.info(`No update available (current: ${currentVersion}, latest: ${name}).`);
-      resolve(false);
+      return false;
     })
     .catch((error) => {
       // eslint-disable-next-line no-console
       console.warn('Error checking for updates:', error);
-      resolve(false); // Don't reject, as we don't want to handle this error - just fail silently.
-    }));
-});
-
+      // Don't reject, as we don't want to handle this error - just fail silently.
+      return Promise.resolve(false);
+    });
 
 const useUpdater = (updateEndpoint, timeout = 0) => {
   const dispatch = useDispatch();
@@ -122,14 +120,18 @@ const useUpdater = (updateEndpoint, timeout = 0) => {
   };
 
   const checkForUpdate = async () => {
-    const updateAvailable = await checkEndpoint(updateEndpoint);
+    const updateAvailable = await getVersion()
+      .then(version => checkEndpoint(updateEndpoint, version));
+
     if (!updateAvailable) { return; }
 
     const {
       newVersion,
       releaseNotes,
-      releaseButtonContent,
+      releaseAssets,
     } = updateAvailable;
+
+    const releaseButtonContent = getPlatformSpecificContent(releaseAssets);
 
     // Don't notify the user if they have dismissed this version.
     if (dismissedUpdates.includes(newVersion)) {
