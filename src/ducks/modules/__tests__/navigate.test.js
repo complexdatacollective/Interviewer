@@ -1,7 +1,6 @@
 /* eslint-env jest */
-
+import { last } from 'lodash';
 import { actionCreators } from '../navigate';
-import { first, last } from 'lodash';
 
 const getState = jest.fn();
 
