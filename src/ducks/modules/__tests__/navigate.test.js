@@ -33,8 +33,8 @@ const mockState = {
   },
 };
 
-const getMockState = (stage, prompt, state = mockState) => ({
-  ...state,
+const getMockState = (stage, prompt, state = {}) => ({
+  ...mockState,
   sessions: {
     MOCK_SESSION: {
       promptIndex: prompt,
@@ -42,6 +42,7 @@ const getMockState = (stage, prompt, state = mockState) => ({
       protocolUID: 'MOCK_PROTOCOL',
     },
   },
+  ...state,
 });
 
 describe('navigate actionCreators', () => {
@@ -49,51 +50,103 @@ describe('navigate actionCreators', () => {
     beforeEach(() => {
       dispatch.mockClear();
     });
-    it('If there is a next prompt it advances the prompt', () => {
-      getState.mockReturnValue(getMockState(0, 0));
 
-      actionCreators.goToNext(1)(dispatch, getState);
+    describe('forwards', () => {
+      it('If there is a next prompt it advances the prompt', () => {
+        getState.mockReturnValue(getMockState(0, 0));
 
-      expect(last(dispatch.mock.calls)[0]).toMatchObject({
-        promptIndex: 1,
-        type: 'UPDATE_PROMPT',
+        actionCreators.goToNext(1)(dispatch, getState);
+
+        expect(last(dispatch.mock.calls)[0]).toMatchObject({
+          promptIndex: 1,
+          type: 'UPDATE_PROMPT',
+        });
+      });
+
+      it('If there is not another prompt it advances the stage', () => {
+        getState.mockReturnValue(getMockState(0, 1));
+
+        actionCreators.goToNext(1)(dispatch, getState);
+
+        expect(dispatch.mock.calls.slice(-1)[0][0]).toMatchObject({
+          payload: {
+            method: 'push',
+            args: ['/session/MOCK_SESSION/1'],
+          },
+          type: '@@router/CALL_HISTORY_METHOD',
+        });
+      });
+
+      it('Assumes an additional stage for the Finish screen', () => {
+        getState.mockReturnValue(getMockState(1, 0));
+
+        actionCreators.goToNext(1)(dispatch, getState);
+
+        expect(dispatch.mock.calls.slice(-1)[0][0]).toMatchObject({
+          payload: {
+            method: 'push',
+            args: ['/session/MOCK_SESSION/2'],
+          },
+          type: '@@router/CALL_HISTORY_METHOD',
+        });
+      });
+
+      it('If we are at the end of interview it does nothing', () => {
+        getState.mockReturnValue(getMockState(2, 0));
+
+        actionCreators.goToNext(1)(dispatch, getState);
+
+        expect(dispatch.mock.calls).toEqual([]);
       });
     });
 
-    it('If there is not another prompt it advances the stage', () => {
-      getState.mockReturnValue(getMockState(0, 1));
+    describe('backwards', () => {
+      it('If there is a previous prompt it goes back to the previous prompt', () => {
+        getState.mockReturnValue(getMockState(0, 1));
 
-      actionCreators.goToNext(1)(dispatch, getState);
+        actionCreators.goToNext(-1)(dispatch, getState);
 
-      expect(dispatch.mock.calls.slice(-1)[0][0]).toMatchObject({
-        payload: {
-          method: 'push',
-          args: ['/session/MOCK_SESSION/1'],
-        },
-        type: '@@router/CALL_HISTORY_METHOD',
+        expect(last(dispatch.mock.calls)[0]).toMatchObject({
+          promptIndex: 0,
+          type: 'UPDATE_PROMPT',
+        });
       });
-    });
 
-    it('Assumes an additional stage for the Finish screen', () => {
-      getState.mockReturnValue(getMockState(1, 0));
+      it('If there is not another prompt it goes back to the previous stage', () => {
+        getState.mockReturnValue(getMockState(1, 0));
 
-      actionCreators.goToNext(1)(dispatch, getState);
+        actionCreators.goToNext(-1)(dispatch, getState);
 
-      expect(dispatch.mock.calls.slice(-1)[0][0]).toMatchObject({
-        payload: {
-          method: 'push',
-          args: ['/session/MOCK_SESSION/2'],
-        },
-        type: '@@router/CALL_HISTORY_METHOD',
+        expect(dispatch.mock.calls.slice(-1)[0][0]).toMatchObject({
+          payload: {
+            method: 'push',
+            args: ['/session/MOCK_SESSION/0/?back'],
+          },
+          type: '@@router/CALL_HISTORY_METHOD',
+        });
       });
-    });
 
-    it('If we are at the end of interview it does nothing', () => {
-      getState.mockReturnValue(getMockState(2, 0));
+      it('Assumes an additional stage for the Finish screen', () => {
+        getState.mockReturnValue(getMockState(2, 0));
 
-      actionCreators.goToNext(1)(dispatch, getState);
+        actionCreators.goToNext(-1)(dispatch, getState);
 
-      expect(dispatch.mock.calls).toEqual([]);
+        expect(dispatch.mock.calls.slice(-1)[0][0]).toMatchObject({
+          payload: {
+            method: 'push',
+            args: ['/session/MOCK_SESSION/1/?back'],
+          },
+          type: '@@router/CALL_HISTORY_METHOD',
+        });
+      });
+
+      it('If we are at the start of interview it does nothing', () => {
+        getState.mockReturnValue(getMockState(0, 0));
+
+        actionCreators.goToNext(-1)(dispatch, getState);
+
+        expect(dispatch.mock.calls).toEqual([]);
+      });
     });
   });
 
