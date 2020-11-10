@@ -12,6 +12,7 @@ import { isElectron, isCordova, isWindows, isMacOS, isLinux, isPreview, getEnv, 
 import DialogManager from '../components/DialogManager';
 import ToastManager from '../components/ToastManager';
 import { SettingsMenu } from '../components/SettingsMenu';
+import useUpdater from '../hooks/useUpdater';
 
 const getElectronWindow = () => {
   if (isElectron()) {
@@ -43,6 +44,8 @@ const App = ({
 
     root.style.setProperty('--base-font-size', newFontSize);
   };
+
+  useUpdater('https://api.github.com/repos/complexdatacollective/Interviewer/releases/latest', 2500);
 
   useEffect(() => {
     if (isCordova()) {

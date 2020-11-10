@@ -11,6 +11,7 @@ import dialogs from './dialogs';
 import toasts from './toasts';
 import search from './search';
 import ui from './ui';
+import dismissedUpdates from './dismissedUpdates';
 import pairedServer from './pairedServer';
 import { actionTypes as resetActionTypes } from './reset';
 
@@ -26,6 +27,7 @@ const appReducer = history => combineReducers({
   toasts,
   search,
   ui,
+  dismissedUpdates,
   pairedServer,
 });
 

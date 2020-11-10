@@ -1,5 +1,4 @@
 const { dialog } = require('electron');
-const Updater = require('./Updater');
 const { openDialog } = require('./dialogs');
 
 const openFile = window =>
@@ -8,25 +7,12 @@ const openFile = window =>
       .then(filePath => window.webContents.send('OPEN_FILE', filePath))
       .catch(err => console.log(err));
 
-
-const updater = Updater();
-
-// Check for updates once, when the mainMenu is initialized.
-// Don't notify the user if there aren't updates.
-if (!process.env.TEST) {
-  updater.checkForUpdates(true);
-}
-
 const MenuTemplate = (window) => {
   const appMenu = [
     { role: 'about' },
     {
       label: 'Settings...',
       click: () => window.webContents.send('OPEN_SETTINGS_MENU'),
-    },
-    {
-      label: 'Check for updates...',
-      click: () => updater.checkForUpdates(),
     },
     { type: 'separator' },
     { role: 'quit' },
