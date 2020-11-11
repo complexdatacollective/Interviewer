@@ -45,7 +45,7 @@ const query = (sql, parameters = []) => new Promise((resolve, reject) => {
 
 /**
  * Database methods **MUST NOT** be called before cordova device ready event has fired.
- * This function will return immediately if event has already fired
+ * This function will return immediately if the event has already fired.
  */
 const checkDeviceIsReady = () => new Promise((resolve) => {
   if (isElectron()) {
