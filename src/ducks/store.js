@@ -1,3 +1,4 @@
+/* eslint-disable @codaco/spellcheck/spell-checker */
 import { createStore, applyMiddleware, compose } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
@@ -25,7 +26,7 @@ const checkDeviceIsReady = () => new Promise((resolve) => {
 const createDatabase = () => new Promise((resolve) => {
   const tryDatabaseOpen = () => {
     if (window.db) {
-      resolve(window.db);
+      resolve();
     }
 
     try {
@@ -49,21 +50,7 @@ const createDatabase = () => new Promise((resolve) => {
   tryDatabaseOpen();
 });
 
-const createTable = () => new Promise((resolve) => {
-  const doThings = () => {
-    try {
-      window.query('CREATE TABLE IF NOT EXISTS redux_store (key, value)', []).then(resolve);
-    } catch (e) {
-      setTimeout(() => {
-        // eslint-disable-next-line no-console
-        console.log('waiting for create table...');
-        doThings();
-      }, 5000);
-    }
-  };
-
-  doThings();
-});
+const createTable = () => window.query(`CREATE TABLE IF NOT EXISTS ${TABLE_NAME} (key, value)`, []);
 
 window.formatQueryResult = (results) => {
   const arr = [];
@@ -116,7 +103,7 @@ const asyncStorage = () => {
 
   return {
     getItem: key => new Promise((resolve, reject) => {
-      window.query('SELECT value FROM redux_store WHERE key = ?', [key])
+      window.query(`SELECT value FROM ${TABLE_NAME} WHERE key = ?`, [key])
         .then((results) => {
           resolve(window.formatQueryResult(results)[0].value);
         })
@@ -124,15 +111,15 @@ const asyncStorage = () => {
     }),
     setItem: (key, value) => new Promise((resolve, reject) => {
       // Update or insert?
-      window.query('SELECT value FROM redux_store WHERE key = ?', [key]).then((results) => {
+      window.query(`SELECT value FROM ${TABLE_NAME} WHERE key = ?`, [key]).then((results) => {
         if (results.rows.length > 0) {
-          window.query('UPDATE redux_store SET value = ? WHERE key = ?', [value, key]).then(() => {
+          window.query(`UPDATE ${TABLE_NAME} SET value = ? WHERE key = ?`, [value, key]).then(() => {
             resolve();
           }).catch(reject);
           return;
         }
 
-        window.query('INSERT INTO redux_store (key,value) VALUES (?,?)', [key, value]).then(() => {
+        window.query(`INSERT INTO ${TABLE_NAME} (key,value) VALUES (?,?)`, [key, value]).then(() => {
           resolve();
         }).catch(reject);
       });
@@ -144,7 +131,7 @@ const asyncStorage = () => {
 
 window.getAll = () => {
   // eslint-disable-next-line no-console
-  window.query('SELECT value FROM redux_store').then(results => console.log(results));
+  window.query(`SELECT value FROM ${TABLE_NAME}`).then(results => console.log(results));
 };
 
 window.resetDB = () => {
