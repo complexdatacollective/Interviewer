@@ -34,7 +34,7 @@ const Persist = ({ persistor, children }) => {
   }
 
   return (
-    <PersistGate loading={<Spinner />} persistor={persistor}>
+    <PersistGate loading={null} persistor={persistor}>
       {children}
     </PersistGate>
   );

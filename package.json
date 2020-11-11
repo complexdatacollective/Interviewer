@@ -72,6 +72,7 @@
     "connect-history-api-fallback": "1.3.0",
     "connected-react-router": "^6.8.0",
     "cordova": "^8.1.2",
+    "cordova-sqlite-storage": "^5.1.0",
     "cross-env": "^5.2.0",
     "css-loader": "^3.4.2",
     "csvtojson": "^2.0.8",
@@ -139,7 +140,7 @@
     "redux-logger": "^2.7.4",
     "redux-mock-store": "^1.5.3",
     "redux-observable": "^0.14.1",
-    "redux-persist": "^5.10.0",
+    "redux-persist": "^6.0.0",
     "redux-thunk": "^2.3.0",
     "regenerator-runtime": "^0.13.3",
     "request": "^2.88.0",
@@ -192,7 +193,8 @@
     "cordova-plugin-x-socialsharing": "^5.6.4",
     "cordova-plugin-zeroconf": "^1.4.1",
     "electron-devtools-installer": "^3.0.0",
-    "zeroconf": "^0.1.4"
+    "zeroconf": "^0.1.4",
+    "cordova-sqlite-storage": "^5.1.0"
   },
   "homepage": ".",
   "main": "www/electron-starter.js",
@@ -227,7 +229,8 @@
     },
     "linux": {
       "maintainer": "Joshua Melville <joshmelville@gmail.com>",
-      "target": [{
+      "target": [
+        {
           "target": "deb",
           "arch": [
             "x64",
@@ -250,11 +253,13 @@
         }
       ]
     },
-    "publish": [{
-      "provider": "github",
-      "owner": "complexdatacollective",
-      "repo": "interviewer"
-    }]
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "complexdatacollective",
+        "repo": "interviewer"
+      }
+    ]
   },
   "browserslist": [
     "Electron 9.2.0",
@@ -299,8 +304,8 @@
   },
   "cordova": {
     "platforms": [
-      "android",
-      "ios"
+      "ios",
+      "android"
     ],
     "plugins": {
       "cordova-plugin-app-version": {},
@@ -319,7 +324,8 @@
       "cordova-plugin-inappbrowser": {},
       "cordova-plugin-chooser": {},
       "cordova-plugin-network-information": {},
-      "cordova-plugin-wkwebview-engine": {}
+      "cordova-plugin-wkwebview-engine": {},
+      "cordova-sqlite-storage": {}
     }
   }
 }

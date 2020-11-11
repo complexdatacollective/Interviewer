@@ -1,17 +1,33 @@
+/* eslint-disable @codaco/spellcheck/spell-checker */
 import { createStore, applyMiddleware, compose } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
 import thunk from 'redux-thunk';
 import { routerMiddleware } from 'connected-react-router';
 import { createHashHistory as createHistory } from 'history';
-import { getEnv } from '../utils/Environment';
+import { getEnv, isCordova } from '../utils/Environment';
 import logger from './middleware/logger';
 import epics from './middleware/epics';
 import createRootReducer from './modules/rootReducer';
+import { localStorageEngine, sqliteStorageEngine } from '../utils/storageAdapters';
+
+// eslint-disable-next-line import/no-mutable-exports
+let persistor;
+
+const getStorageEngine = () => {
+  const onPersistReady = () => {
+    persistor.persist();
+  };
+
+  if (isCordova()) {
+    return sqliteStorageEngine(onPersistReady);
+  }
+
+  return localStorageEngine(onPersistReady);
+};
 
 const persistConfig = {
   key: 'networkCanvas6',
-  storage,
+  storage: getStorageEngine(),
   whitelist: [
     'deviceSettings',
     'pairedServer',
@@ -32,7 +48,6 @@ const getReducer = () => {
   if (env.REACT_APP_NO_PERSIST) {
     return createRootReducer(history);
   }
-
   return persistReducer(persistConfig, createRootReducer(history));
 };
 
@@ -47,4 +62,6 @@ export const store = createStore(
   ),
 );
 
-export const persistor = persistStore(store);
+persistor = persistStore(store, { manualPersist: true });
+
+export { persistor };
