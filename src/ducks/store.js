@@ -133,8 +133,8 @@ const asyncStorage = () => {
         }
 
         window.query('INSERT INTO redux_store (key,value) VALUES (?,?)', [key, value]).then(() => {
-          resolve().catch(reject);
-        });
+          resolve();
+        }).catch(reject);
       });
     }),
     removeItem: () => {
