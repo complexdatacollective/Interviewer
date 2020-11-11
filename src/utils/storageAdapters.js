@@ -1,5 +1,6 @@
 /* eslint-disable @codaco/spellcheck/spell-checker */
 import storage from 'redux-persist/lib/storage';
+import { isElectron } from './Environment';
 
 const DATABASE_NAME = 'redux-store-db';
 const TABLE_NAME = 'redux_store'; // Cannot contain dashes
@@ -47,6 +48,10 @@ const query = (sql, parameters = []) => new Promise((resolve, reject) => {
  * This function will return immediately if event has already fired
  */
 const checkDeviceIsReady = () => new Promise((resolve) => {
+  if (isElectron()) {
+    resolve();
+  }
+
   document.addEventListener('deviceready', () => {
     resolve();
   }, { once: true });
