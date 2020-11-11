@@ -61,11 +61,10 @@ export const getSessionProgress = (state) => {
    * We use the stages selector (rather than plain protocol)
    * because it takes into account the finish screen
    */
-  const stages = getProtocolStages(state);
+  const stages = getProtocolStages(state); // includes extra 'finish' screen (not in preview mode)
   const currentPrompt = session.promptIndex;
   const currentStage = session.stageIndex;
   const stageCount = protocol.stages.length;
-  // includes finish screen if present
   const screenCount = stages.length;
   const promptCount = get(stages, [currentStage, 'prompts', 'length'], 0);
   const stageProgress = currentStage / (screenCount - 1);
@@ -78,8 +77,7 @@ export const getSessionProgress = (state) => {
   const isLastPrompt = promptCount > 0 && currentPrompt === promptCount - 1;
   const isFirstStage = currentStage === 0;
   const isLastStage = currentStage === stageCount - 1;
-  // includes finish screen if present
-  const isLastScreen = currentStage === screenCount - 1;
+  const isLastScreen = currentStage === screenCount - 1; // remember, includes extra 'finish' screen
   const startedAt = session.startedAt;
   const lastExportedAt = session.lastExportedAt;
 
