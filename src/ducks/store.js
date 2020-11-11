@@ -9,53 +9,54 @@ import logger from './middleware/logger';
 import epics from './middleware/epics';
 import createRootReducer from './modules/rootReducer';
 
+// eslint-disable-next-line import/no-mutable-exports
+let persistor;
+
+const DATABASE_NAME = 'redux-store-db';
+const TABLE_NAME = 'redux_store'; // Cannot contain dashes
+// const TABLE_KEY = 'networkCanvas6';
+
 const checkDeviceIsReady = () => new Promise((resolve) => {
   document.addEventListener('deviceready', () => {
-    console.log('device is ready!');
     resolve();
   }, { once: true });
 });
 
-const createDatabase = () => new Promise((resolve, reject) => {
-  const doThings = () => {
+const createDatabase = () => new Promise((resolve) => {
+  const tryDatabaseOpen = () => {
     if (window.db) {
       resolve(window.db);
     }
 
     try {
-      const db = window.sqlitePlugin.openDatabase({
-        name: 'redux-store-db',
+      window.db = window.sqlitePlugin.openDatabase({
+        name: DATABASE_NAME,
         location: 'default',
-        androidDatabaseProvider: 'system',
       }, () => {
-        window.db = db;
-        resolve(window.db);
-      }, reject);
+        resolve();
+      }, () => {
+        throw new Error('Database unavailable!');
+      });
     } catch (e) {
       setTimeout(() => {
+        // eslint-disable-next-line no-console
         console.log('waiting to create database');
-        doThings();
+        tryDatabaseOpen();
       }, 5000);
     }
   };
 
-  doThings();
+  tryDatabaseOpen();
 });
 
-const createTable = db => new Promise((resolve, reject) => {
+const createTable = () => new Promise((resolve) => {
   const doThings = () => {
     try {
-      db.transaction((tx) => {
-        tx.executeSql('CREATE TABLE IF NOT EXISTS redux_store (key, value)', []);
-      }, (err) => {
-        reject(err);
-      }, (res) => {
-        console.log('...table created');
-        return resolve(db);
-      });
+      window.query('CREATE TABLE IF NOT EXISTS redux_store (key, value)', []).then(resolve);
     } catch (e) {
       setTimeout(() => {
-        console.log('waiting for create table');
+        // eslint-disable-next-line no-console
+        console.log('waiting for create table...');
         doThings();
       }, 5000);
     }
@@ -64,67 +65,90 @@ const createTable = db => new Promise((resolve, reject) => {
   doThings();
 });
 
+window.formatQueryResult = (results) => {
+  const arr = [];
+  const len = results.rows.length;
 
-const createDataBaseIfNeeded = () => {
-  console.log('createDatabaseifneeded');
-  return checkDeviceIsReady()
-    .then(createDatabase)
-    .then(createTable)
-    .then(() => new Promise((resolve, reject) => {
-      console.log('enabling persistance');
-      persistor.persist();
-      resolve();
-    }));
+  for (let i = 0; i < len; i += 1) {
+    arr.push(results.rows.item(i));
+  }
+
+  return arr;
 };
 
+
+window.query = (query, parameters = []) => new Promise((resolve, reject) => {
+  // transation is the only API that seems somewhat stable. executeSql by itself failed randomly.
+  window.db.transaction((tx) => {
+    tx.executeSql(query, parameters, (_, rs) => {
+      resolve(rs);
+    }, (error) => {
+      reject(error.message);
+    });
+  }, (err) => {
+    reject(err);
+  }, () => {
+    resolve();
+  });
+});
+
 const asyncStorage = () => {
-  const onStorageReady = (callback) => {
-    const setup = createDataBaseIfNeeded();
-    return (...args) => setup.then(db => callback(db, ...args));
-    // return (...args) => callback(window.db, ...args);
+  let ready = false;
+
+  const onStorageReady = () => {
+    if (ready) {
+      return;
+    }
+
+    checkDeviceIsReady()
+      .then(createDatabase)
+      .then(createTable)
+      .then(() => new Promise((resolve) => {
+        persistor.persist();
+        resolve();
+      }))
+      .then(() => {
+        ready = true;
+      });
   };
 
-  // createDataBaseIfNeeded();
+  onStorageReady();
 
   return {
-    getItem: onStorageReady((db, key) => new Promise((resolve, reject) => {
-      window.db.transaction((tx) => {
-        tx.executeSql('SELECT value FROM redux_store WHERE key = ?', [key], (tx, rs) => {
-          if (rs.rows.length === 0) {
-            console.log('no rows');
-            resolve(null);
-          }
-          if (!rs.rows.item(0) || !rs.rows.item(0).value) {
-            console.log('no value');
-            resolve(null);
-          }
-          console.log('full value result', rs.rows.item(0).value);
-          resolve(rs.rows.item(0).value);
-        });
-      }, (err) => {
-        console.log('err', err);
-        reject();
-      }, (res) => {
-        console.log('result', res);
-      });
-    })),
-    setItem: onStorageReady((db, key, value) => new Promise((resolve, reject) => {
-      window.db.transaction((tx) => {
-        tx.executeSql('UPDATE redux_store SET value = ? WHERE key = ?', [value, key], (tx, rs) => {
-          console.log('update', rs, rs.rows);
-          resolve();
-        });
-      }, (err) => {
-        console.log('err', err);
-        reject();
-      }, (res) => {
-        console.log('result', res);
-      });
-    })),
-    removeItem: onStorageReady(() => {
-
+    getItem: key => new Promise((resolve, reject) => {
+      window.query('SELECT value FROM redux_store WHERE key = ?', [key])
+        .then((results) => {
+          resolve(window.formatQueryResult(results)[0].value);
+        })
+        .catch(reject);
     }),
+    setItem: (key, value) => new Promise((resolve, reject) => {
+      // Update or insert?
+      window.query('SELECT value FROM redux_store WHERE key = ?', [key]).then((results) => {
+        if (results.rows.length > 0) {
+          window.query('UPDATE redux_store SET value = ? WHERE key = ?', [value, key]).then(() => {
+            resolve();
+          }).catch(reject);
+          return;
+        }
+
+        window.query('INSERT INTO redux_store (key,value) VALUES (?,?)', [key, value]).then(() => {
+          resolve().catch(reject);
+        });
+      });
+    }),
+    removeItem: () => {
+    },
   };
+};
+
+window.getAll = () => {
+  // eslint-disable-next-line no-console
+  window.query('SELECT value FROM redux_store').then(results => console.log(results));
+};
+
+window.resetDB = () => {
+  window.query(`DROP TABLE IF EXISTS ${TABLE_NAME}`, []);
 };
 
 const getStorageEngine = () => {
@@ -159,7 +183,6 @@ const getReducer = () => {
   if (env.REACT_APP_NO_PERSIST) {
     return createRootReducer(history);
   }
-  console.log('persist', persistConfig);
   return persistReducer(persistConfig, createRootReducer(history));
 };
 
@@ -174,4 +197,6 @@ export const store = createStore(
   ),
 );
 
-export const persistor = persistStore(store, { manualPersist: true });
+persistor = persistStore(store, { manualPersist: true });
+
+export { persistor };
