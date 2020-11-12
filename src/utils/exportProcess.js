@@ -149,7 +149,7 @@ export const exportToFile = (sessionList) => {
 
   const exportPromise = fileExportManager.exportSessions(sessionList, installedProtocols);
 
-  // Attatch the dismisshandler to the toast not that we have exportPromise defined.
+  // Attatch the dismisshandler to the toast now that we have exportPromise defined.
   dispatch(toastActions.updateToast(toastUUID, {
     dismissHandler: () => {
       showCancellationToast();
@@ -223,7 +223,7 @@ export const exportToServer = (sessionList) => {
     }
 
     if (errors.length > 0) {
-      const errorList = errors.map((error, index) => (<li key={index}><Icon name="warning" /> {error}</li>));
+      const errorList = errors.map((error, index) => (<li key={index}><Icon name="warning" />{error}</li>));
 
       dispatch(dialogActions.openDialog({
         type: 'Warning',
