@@ -1,5 +1,6 @@
 import { omit } from 'lodash';
 import crypto from 'crypto';
+import objectHash from 'object-hash';
 import {
   getEntityAttributes,
   entityAttributesProperty,
@@ -11,6 +12,7 @@ import {
   remoteProtocolProperty,
   sessionProperty,
   caseProperty,
+  codebookHashProperty,
   protocolProperty,
   protocolName,
   sessionStartTimeProperty,
@@ -91,6 +93,7 @@ export const asNetworkWithSessionVariables = (sessionId, session, protocol) => {
   // caseId,
   // sessionId,
   // remoteProtocolID - format Server uniquely identifies protocols by
+  // codebookHash - used to compare server version with local version
   // protocol name
   // interview start and finish. If not available dont include
   // export date
@@ -101,6 +104,7 @@ export const asNetworkWithSessionVariables = (sessionId, session, protocol) => {
     [remoteProtocolProperty]: getRemoteProtocolID(protocol.name),
     [protocolName]: protocol.name,
     [protocolProperty]: session.protocolUID,
+    [codebookHashProperty]: objectHash(protocol.codebook),
     ...(session.startedAt && { [sessionStartTimeProperty]:
       new Date(session.startedAt).toISOString() }),
     ...(session.finishedAt && { [sessionFinishTimeProperty]:

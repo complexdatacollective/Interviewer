@@ -38,6 +38,7 @@ const apiError = (respJson) => {
 
   // Provide a friendly message, if available.
   if (respJson.message) {
+    error.caseID = respJson.caseID;
     error.friendlyMessage = respJson.message;
     error.code = respJson.code;
     error.stack = null;
@@ -50,7 +51,7 @@ const apiMismatchError = (code, response) => {
   const error = new Error('Device API mismatch');
 
   error.status = ApiMismatchStatus;
-  error.friendlyMessage = 'The device does not match the server API version';
+  error.friendlyMessage = 'The device does not match the server API version. Ensure that Interviewer and Server are running compatible versions.';
   error.code = code;
   error.stack = JSON.stringify(response);
 
@@ -357,13 +358,16 @@ class ApiClient {
           if (axios.isCancel(error)) {
             return;
           }
+
           // Handle errors from the response
           const responseError = getResponseError(error.response);
           if (responseError) {
-            this.emit('error', `${responseError.message}: ${responseError.friendlyMessage}`);
+            this.emit('error', `${sessionList[index].sessionVariables.caseId}: ${responseError.message} - ${responseError.friendlyMessage}`);
+            return;
           }
           // Handle errors with the request
           if (error.request) {
+            // Todo: there are other types of request error!
             this.emit('error', ProgressMessages.NoResponseMessage);
           }
         }).then(() => {
