@@ -51,7 +51,7 @@ module.exports = {
   // See the discussion in https://github.com/facebookincubator/create-react-app/issues/343.
   devtool: 'cheap-module-source-map',
   externals: {
-    "archiver": "require('archiver')"   
+    archiver: "require('archiver')",
   },
   // These are the "entry points" to our application.
   // This means they will be the "root" imports that are included in JS bundle.

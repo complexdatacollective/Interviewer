@@ -160,7 +160,6 @@ export const exportToFile = (sessionList) => {
     }).catch((error) => {
       // Fatal error handling
       dispatch(toastActions.removeToast(toastUUID));
-      console.error(error);
       dispatch({
         type: 'SESSION_EXPORT_FATAL_ERROR',
         error,
