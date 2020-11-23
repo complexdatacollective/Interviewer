@@ -110,6 +110,9 @@ module.exports = {
   // We generate sourcemaps in production. This is slow but gives good results.
   // You can exclude the *.map files from the build during deployment.
   devtool: false,
+  externals: {
+    archiver: "require('archiver')",
+  },
   // In production, we only want to load the polyfills and the app code.
   entry: ['regenerator-runtime', require.resolve('./polyfills'), paths.appIndexJs],
   output: {

@@ -409,7 +409,7 @@ class ApiClient {
       return Promise.reject('No secure client available');
     }
 
-    return this.httpsClient.get('/protocols', { ...this.authHeader, cancelToken: this.cancelTokenSource.token })
+    return this.httpsClient.get('/health', { ...this.authHeader, cancelToken: this.cancelTokenSource.token })
       .then(resp => resp.data)
       .then(json => json.data)
       .catch(err => handleError(err));

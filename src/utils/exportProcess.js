@@ -147,29 +147,24 @@ export const exportToFile = (sessionList) => {
     }));
   });
 
-  const exportPromise = fileExportManager.exportSessions(sessionList, installedProtocols);
-
-  // Attatch the dismisshandler to the toast now that we have exportPromise defined.
-  dispatch(toastActions.updateToast(toastUUID, {
-    dismissHandler: () => {
-      showCancellationToast();
-      exportPromise.abort();
-    },
-  }));
-
-  // Handle fatal export errors
-  exportPromise.catch((error) => {
-    // Close the progress toast
-    dispatch(toastActions.removeToast(toastUUID));
-    dispatch({
-      type: 'SESSION_EXPORT_FATAL_ERROR',
-      error,
+  fileExportManager.exportSessions(sessionList, installedProtocols)
+    .then(({ run, abort }) => {
+      // Attatch the dismisshandler to the toast now that we have exportPromise defined.
+      dispatch(toastActions.updateToast(toastUUID, {
+        dismissHandler: () => {
+          showCancellationToast();
+          abort();
+        },
+      }));
+      return run();
+    }).catch((error) => {
+      // Fatal error handling
+      dispatch(toastActions.removeToast(toastUUID));
+      dispatch({
+        type: 'SESSION_EXPORT_FATAL_ERROR',
+        error,
+      });
     });
-
-    exportPromise.abort();
-  });
-
-  return exportPromise;
 };
 
 export const exportToServer = (sessionList) => {
