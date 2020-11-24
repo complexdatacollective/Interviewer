@@ -28,9 +28,6 @@ const HeaderSection = () => {
   const gettingStartedStates = {
     show: {
       height: 'auto',
-      transition: {
-        type: 'spring',
-      },
     },
     hide: {
       height: '0px',
