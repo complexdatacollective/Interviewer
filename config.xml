@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="6002" id="org.codaco.NetworkCanvasInterviewer6" ios-CFBundleIdentifier="org.codaco.NetworkCanvasInterviewer6" ios-CFBundleVersion="6002" version="6.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="6004" id="org.codaco.NetworkCanvasInterviewer6" ios-CFBundleIdentifier="org.codaco.NetworkCanvasInterviewer6" ios-CFBundleVersion="6004" version="6.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Network Canvas Interviewer</name>
     <description>
         Simplifying complex network data collection.
@@ -69,8 +69,8 @@
     <preference name="AndroidPersistentFileLocation" value="Internal" />
     <preference name="iosPersistentFileLocation" value="Library" />
     <preference name="AllowInlineMediaPlayback" value="true" />
-    <preference name="android-minSdkVersion" value="25" />
-    <preference name="android-targetSdkVersion" value="28" />
+    <preference name="android-minSdkVersion" value="27" />
+    <preference name="android-targetSdkVersion" value="29" />
     <plugin name="cordova-plugin-file" spec="^5.0.0" />
     <plugin name="cordova-plugin-file-transfer" spec="^1.7.1" />
     <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
