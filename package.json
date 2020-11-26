@@ -168,6 +168,7 @@
     "webpack-manifest-plugin": "^2.0.4",
     "whatwg-fetch": "2.0.3",
     "worker-loader": "^2.0.0",
+    "xml2js": "^0.4.23",
     "xss": "^0.3.4"
   },
   "optionalDependencies": {
