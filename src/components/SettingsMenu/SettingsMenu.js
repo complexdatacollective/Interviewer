@@ -9,7 +9,6 @@ import { getActiveSession } from '../../selectors/session';
 import Scroller from '../Scroller';
 import VisualPreferences from './Sections/VisualPreferences';
 import DeveloperTools from './Sections/DeveloperTools';
-import About from './Sections/About';
 import Pairing from './Sections/Pairing';
 import ExportOptions from './Sections/ExportOptions';
 import CloseButton from '../CloseButton';
@@ -28,7 +27,6 @@ const SettingsMenu = (props) => {
     'Data Export Options': ExportOptions,
     Pairing,
     'Developer Options': DeveloperTools,
-    About,
   };
 
   const baseVariants = {
