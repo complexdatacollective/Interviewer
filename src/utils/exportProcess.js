@@ -8,6 +8,7 @@ import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../ducks/modules/dialogs';
 import ApiClient from './ApiClient';
 import FileExportManager from './network-exporters/src/FileExportManager';
+import { getRemoteProtocolID } from './networkFormat';
 
 const dispatch = store.dispatch;
 const getState = store.getState;
@@ -147,7 +148,16 @@ export const exportToFile = (sessionList) => {
     }));
   });
 
-  fileExportManager.exportSessions(sessionList, installedProtocols)
+  // The protocol object needs to be reformatted so that it is keyed by
+  // the sha of protocol.name, since this is what Server and network-exporters
+  // use.
+  const reformatedProtocols = Object.values(installedProtocols)
+    .reduce((acc, protocol) => ({
+      ...acc,
+      [getRemoteProtocolID(protocol.name)]: protocol,
+    }), {});
+
+  fileExportManager.exportSessions(sessionList, reformatedProtocols)
     .then(({ run, abort }) => {
       // Attatch the dismisshandler to the toast now that we have exportPromise defined.
       dispatch(toastActions.updateToast(toastUUID, {
