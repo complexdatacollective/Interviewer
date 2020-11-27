@@ -15,6 +15,7 @@ const FetchServerProtocolPicker = ({
 }) => {
   const handleProtocolCardClick = (downloadPath) => {
     importProtocolFromURI(downloadPath, true);
+    onClose();
   };
 
   const onlineStatus = useOnlineStatus();
