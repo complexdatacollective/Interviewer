@@ -80,37 +80,38 @@ const SessionInformation = (props) => {
         onClose={() => setShowCaseIDRename(false)}
         title="Change Case ID"
       >
-        <p>
-          Enter a new case ID for this interview.
-        </p>
-        <Form
-          className="case-id-form"
-          form="case-id-form"
-          formName="case-id-form"
-          autoFocus
-          onSubmit={handleChangeCaseID}
-          fields={[
-            {
-              label: null,
-              name: 'newCaseID',
-              component: 'Text',
-              placeholder: 'Enter a unique case ID',
-              validation: {
-                required: true,
-                maxLength: 30,
+        <div className="case-id-form">
+          <p>
+            Enter a new case ID for this interview.
+          </p>
+          <Form
+            form="case-id-form"
+            formName="case-id-form"
+            autoFocus
+            onSubmit={handleChangeCaseID}
+            fields={[
+              {
+                label: null,
+                name: 'newCaseID',
+                component: 'Text',
+                placeholder: 'Enter a unique case ID',
+                validation: {
+                  required: true,
+                  maxLength: 30,
+                },
               },
-            },
-          ]}
-          initialValues={{
-            newCaseID: caseId,
-          }}
-        >
-          <div className="case-id-form__footer">
-            <Button aria-label="Submit" type="submit">
-              Update Case ID
-            </Button>
-          </div>
-        </Form>
+            ]}
+            initialValues={{
+              newCaseID: caseId,
+            }}
+          >
+            <div className="case-id-form__footer">
+              <Button aria-label="Submit" type="submit">
+                Update Case ID
+              </Button>
+            </div>
+          </Form>
+        </div>
       </Overlay>
       <Scroller>
         <section>

@@ -49,23 +49,24 @@ const ProtocolUrlForm = ({
       onClose={handleClose}
       title="Import Protocol from URL"
     >
-      <p>
-        Enter the full URL to a protocol file below, including <code>http://</code> or <code>https://</code> at the start.
-      </p>
-      <Form
-        className="protocol-url-form"
-        form={formConfig.formName}
-        onSubmit={handleSubmit}
-        initialValues={initialValues}
-        autoFocus
-        {...formConfig}
-      >
-        <div className="protocol-url-form__footer">
-          <Button aria-label="Submit" type="submit" disabled={!submittable}>
-            Import
-          </Button>
-        </div>
-      </Form>
+      <div className="protocol-url-form">
+        <p>
+          Enter the full URL to a protocol file below, including <code>http://</code> or <code>https://</code> at the start.
+        </p>
+        <Form
+          form={formConfig.formName}
+          onSubmit={handleSubmit}
+          initialValues={initialValues}
+          autoFocus
+          {...formConfig}
+        >
+          <div className="protocol-url-form__footer">
+            <Button aria-label="Submit" type="submit" disabled={!submittable}>
+              Import
+            </Button>
+          </div>
+        </Form>
+      </div>
     </Overlay>
   );
 };

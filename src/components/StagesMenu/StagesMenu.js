@@ -179,7 +179,9 @@ const StagesMenu = (props) => {
       animate="expanded"
       layout
     >
-      <article className="stages-menu__wrapper">
+      <motion.article
+        className="stages-menu__wrapper"
+      >
         {renderMenuItems.length > 0 ? (
           <Scroller useSmoothScrolling={false} forwardedRef={scrollerRef}>
             <AnimateSharedLayout>
@@ -191,7 +193,7 @@ const StagesMenu = (props) => {
         ) : (
           <h4>No stages match your filter.</h4>
         )}
-      </article>
+      </motion.article>
       <motion.footer
         animate={{ y: 0 }}
         initial={{ y: '100%' }}

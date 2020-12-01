@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { motion } from 'framer-motion';
 import { Toggle } from '@codaco/ui/lib/components/Fields';
-import { isElectron, isCordova, isIOS } from '../../../utils/Environment';
+import { isElectron, isCordova } from '../../../utils/Environment';
 import { actionCreators as deviceSettingsActions } from '../../../ducks/modules/deviceSettings';
 import TabItemVariants from './TabItemVariants';
 
@@ -11,7 +11,6 @@ import TabItemVariants from './TabItemVariants';
 const VisualPreferences = (props) => {
   const {
     useDynamicScaling,
-    showScrollbars,
     startFullScreen,
     useFullScreenForms,
     showGettingStarted,
@@ -107,25 +106,6 @@ const VisualPreferences = (props) => {
         </div>
       </motion.article>
       }
-      {!isIOS() && <motion.article variants={TabItemVariants} className="settings-element">
-        <Toggle
-          input={{
-            checked: false,
-            value: showScrollbars,
-            onChange: () => toggleSetting('showScrollbars'),
-          }}
-        />
-        <div>
-          <h2>Show Scrollbars?</h2>
-          <p>
-            By default, Interviewer does not show scrollbars in order to provide
-            a more streamlined visual experience. If you encounter difficulties with
-            discoverability or with scrolling behavior, you may enable showing scrollbars
-            here.
-          </p>
-        </div>
-      </motion.article>
-      }
       {isElectron() && <motion.article variants={TabItemVariants} className="settings-element">
         <Toggle
           input={{
@@ -175,7 +155,6 @@ const mapDispatchToProps = dispatch => ({
 const mapStateToProps = state => ({
   useFullScreenForms: state.deviceSettings.useFullScreenForms,
   useDynamicScaling: state.deviceSettings.useDynamicScaling,
-  showScrollbars: state.deviceSettings.showScrollbars,
   startFullScreen: state.deviceSettings.startFullScreen,
   showGettingStarted: state.deviceSettings.showGettingStarted,
   interfaceScale: state.deviceSettings.interfaceScale,

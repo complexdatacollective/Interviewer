@@ -58,7 +58,6 @@
 
     section {
       width: 1000%;
-      padding: unit(8) 0;
       display: flex;
       background: var(--color-cyber-grape);
 
@@ -66,6 +65,7 @@
         position: absolute;
         top: unit(4);
         right: unit(4);
+        z-index: var(--z-modal);
       }
 
       .tab-content {

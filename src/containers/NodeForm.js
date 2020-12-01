@@ -45,6 +45,7 @@ class NodeForm extends Component {
         title={form.title}
         onClose={this.props.onClose}
         className="node-form"
+        footer={(<Button key="submit" aria-label="Submit" type="submit" onClick={submitForm}>Finished</Button>)}
       >
         { this.props.useFullScreenForms ?
           <FormWizard
@@ -56,11 +57,6 @@ class NodeForm extends Component {
                 {...formProps}
               />
             </Scroller>
-            <div className="node-form__footer">
-              <Button key="submit" aria-label="Submit" type="submit" onClick={submitForm}>
-                Finished
-              </Button>
-            </div>
           </React.Fragment>
         }
       </Overlay>

@@ -86,6 +86,7 @@ const FetchServerProtocolPicker = ({
       show={show}
       onClose={onClose}
       title="Select a Protocol to Import"
+      fullheight
     >
       <NewFilterableListWrapper
         ItemComponent={ProtocolCard}

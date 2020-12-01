@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { connect } from 'react-redux';
 import { times } from 'lodash';
 import { List, AutoSizer, CellMeasurer, CellMeasurerCache } from 'react-virtualized';
 import { Card } from '.';
@@ -120,7 +119,6 @@ class CardList extends Component {
   render() {
     const {
       className,
-      showScollbars,
       items,
       // we don't want the following props polluting `rest` which is used to indicate
       // prop changes like `sortBy`
@@ -134,10 +132,6 @@ class CardList extends Component {
     } = this.props;
 
     const cardlistClasses = cx('card-list', className);
-    const scrollableClasses = cx(
-      'scrollable',
-      { 'scrollable--show-scrollbars': showScollbars },
-    );
 
     return (
       <div className={cardlistClasses}>
@@ -152,7 +146,7 @@ class CardList extends Component {
               rowRenderer={this.rowRenderer}
               ref={this.listRef}
               items={items}
-              className={scrollableClasses}
+              className="scrollable"
               {...rest}
             />
           )}
@@ -167,7 +161,6 @@ CardList.propTypes = {
   details: PropTypes.func,
   label: PropTypes.func,
   items: PropTypes.array.isRequired,
-  showScollbars: PropTypes.bool,
   onItemClick: PropTypes.func,
   isItemSelected: PropTypes.func,
   getKey: PropTypes.func,
@@ -175,7 +168,6 @@ CardList.propTypes = {
 
 CardList.defaultProps = {
   className: '',
-  showScollbars: false,
   details: () => (''),
   label: () => (''),
   items: [],
@@ -184,8 +176,4 @@ CardList.defaultProps = {
   getKey: node => node[entityPrimaryKeyProperty],
 };
 
-const mapStateToProps = state => ({
-  showScollbars: state.deviceSettings.showScrollbars,
-});
-
-export default connect(mapStateToProps)(CardList);
+export default CardList;

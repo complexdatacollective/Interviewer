@@ -6,43 +6,64 @@ $close-button-size: 1rem;
   box-shadow: 0 0 4rem 0 var(--modal-window-box-shadow);
   position: relative;
   border-radius: .75rem;
-  padding: 2rem;
   width: 70rem;
   max-height: calc(100vh - 4rem);
-  max-width: calc(100vw - 2rem);
-  margin: 2rem;
+  max-width: calc(100vw - #{unit(4)});
+  margin: unit(4);
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
 
   &__title {
-    margin-bottom: 2.4rem;
+    padding: unit(4);
+    flex: 0 0 auto;
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
 
     h1 {
       margin: 0;
+      flex: 1 1 auto;
+      text-align: center;
+      padding-left: 2.4rem;
     }
   }
 
   &__content {
+    flex: 1;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
     overflow-x: hidden;
     overflow-y: auto;
-    padding: 0 .5rem; // to make scroll bar less jarring
-    padding-bottom: 0.2rem; // Needed so that @clickable elements dont cause scrollbars
+    padding: 0 2.4rem;
+
+    .new-filterable-list {
+      margin-bottom: unit(4);
+    }
+  }
+
+  &__footer {
+    width: 100%;
+    text-align: right;
+    padding: unit(2) unit(4);
   }
 
   &__close {
-    position: absolute;
-    top: 2rem;
-    right: unit(4);
+    flex: 0 0 unit(4);
 
     svg {
       &.icon {
-        height: 2rem;
-        width: 2rem;
+        height: unit(4);
+        width: unit(4);
       }
     }
+  }
+
+  &--fullheight {
+    height: 100vh;
   }
 
   &--fullscreen {

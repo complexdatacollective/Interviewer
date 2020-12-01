@@ -10,7 +10,6 @@ const initialState = {
   screenLayoutWidth: 0,
   showGettingStarted: true,
   showWhatsNew: false,
-  showScrollbars: false,
   startFullScreen: false,
   unifyNetworks: false,
   useDynamicScaling: undefined,

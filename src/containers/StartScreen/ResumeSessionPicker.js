@@ -49,6 +49,7 @@ const ResumeSessionPicker = ({
       show={show}
       onClose={onClose}
       title="Select an Interview to Resume"
+      fullheight
     >
       <NewFilterableListWrapper
         ItemComponent={SessionCard}
