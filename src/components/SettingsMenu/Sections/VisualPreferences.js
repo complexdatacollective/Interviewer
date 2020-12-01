@@ -52,7 +52,7 @@ const VisualPreferences = (props) => {
           }}
         />
         <div>
-          <h2>Show &quot;getting started&quot; card?</h2>
+          <h2>Show &quot;welcome&quot; card?</h2>
           <p>
             This card provides links to useful resources when you open the app for the first
             time.

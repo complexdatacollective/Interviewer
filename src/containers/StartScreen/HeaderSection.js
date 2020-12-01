@@ -40,7 +40,7 @@ const HeaderSection = () => {
         <SettingsMenuButton />
         <Switch
           className="header-toggle"
-          label="Show 'getting started'"
+          label="Show welcome"
           on={showGettingStarted}
           onChange={() => toggleShowGettingStarted()}
         />
@@ -68,7 +68,7 @@ const HeaderSection = () => {
         >
           <main className="welcome-section__main">
             <header>
-              <h2>Getting Started</h2>
+              <h2>Welcome to Interviewer!</h2>
             </header>
             <div className="welcome-description">
               <p>
