@@ -87,6 +87,13 @@ class QuickNodeForm extends PureComponent {
       nodeLabel,
     } = this.state;
 
+    const nodeProps = {
+      type: stage.subject.type,
+      [entityAttributesProperty]: {
+        [targetVariable]: nodeLabel.length === 0 ? ' ' : nodeLabel,
+      },
+    };
+
     return (
       <div className="quick-add">
         <div className={cx('quick-add-form', { 'quick-add-form--show': show })}>
@@ -111,12 +118,7 @@ class QuickNodeForm extends PureComponent {
               <Icon name={nodeIconName} />
             </div>
             <div className="flip-button-back" onClick={this.handleSubmitClick}>
-              <Node
-                type={stage.subject.type}
-                {...{ [entityAttributesProperty]: {
-                  [targetVariable]: this.state.nodeLabel,
-                } }}
-              />
+              <Node {...nodeProps} />
             </div>
           </div>
         </div>
