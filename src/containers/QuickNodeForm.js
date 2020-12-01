@@ -29,9 +29,7 @@ class QuickNodeForm extends PureComponent {
   }
 
   handleOpenForm = () => {
-    this.setState({
-      show: true,
-    });
+    this.setState(({ show }) => ({ show: !show }));
   }
 
   handleBlur = () => {

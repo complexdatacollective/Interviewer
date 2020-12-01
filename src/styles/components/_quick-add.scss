@@ -40,6 +40,7 @@
     width: 7rem;
     height: 7rem;
     perspective: 1000px;
+    cursor: pointer;
   }
 
   /* This container is needed to position the front and back side */
@@ -81,7 +82,6 @@
 
   .flip-button-back {
     transform: rotateY(180deg);
-    cursor: pointer;
   }
 
 }
