@@ -5,5 +5,6 @@
 }
 
 @mixin interface-centering {
-  margin-left: calc(2.5rem + var(--session-panel-width));
+  margin-left: calc(#{unit(4)} + var(--session-panel-width));
+  margin-right: unit(4);
 }

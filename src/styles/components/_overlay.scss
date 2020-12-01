@@ -76,6 +76,12 @@ $close-button-size: 1rem;
     padding: 6rem 10rem;
     margin: 0;
 
+    .overlay__close {
+      position: absolute;
+      top: unit(4);
+      right: unit(4);
+    }
+
     .overlay__content {
       height: 100%;
     }
