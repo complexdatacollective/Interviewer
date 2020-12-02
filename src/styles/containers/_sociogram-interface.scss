@@ -1,4 +1,5 @@
 .sociogram-interface {
+  @include interface-centering(false);
   align-items: center;
   display: flex;
   flex: 1 1 auto;

@@ -1,7 +1,6 @@
 .narrative-interface {
-  width: 100%;
+  @include interface-centering(false);
   height: 100%;
-  margin-left: var(--session-panel-width);
 
   &__canvas {
     width: 100%;
