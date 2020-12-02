@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="6025" id="org.codaco.NetworkCanvasInterviewer6" ios-CFBundleIdentifier="org.codaco.NetworkCanvasInterviewer6" ios-CFBundleVersion="6025" version="6.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="6031" id="org.codaco.NetworkCanvasInterviewer6" ios-CFBundleIdentifier="org.codaco.NetworkCanvasInterviewer6" ios-CFBundleVersion="6031" version="6.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Network Canvas Interviewer</name>
     <description>
         Simplifying complex network data collection.
@@ -87,5 +87,5 @@
     <plugin name="cordova-plugin-network-canvas-client" spec="https://github.com/complexdatacollective/cordova-plugin-network-canvas-client.git" />
     <plugin name="cordova-sqlite-storage" spec="^5.1.0" />
     <engine name="android" spec="8.1.0" />
-    <engine name="ios" spec="~5.1.1" />
+    <engine name="ios" spec="^5.1.1" />
 </widget>
