@@ -87,5 +87,5 @@
     <plugin name="cordova-plugin-network-canvas-client" spec="https://github.com/complexdatacollective/cordova-plugin-network-canvas-client.git" />
     <plugin name="cordova-sqlite-storage" spec="^5.1.0" />
     <engine name="android" spec="8.1.0" />
-    <engine name="ios" spec="5.1.1" />
+    <engine name="ios" spec="~5.1.1" />
 </widget>
