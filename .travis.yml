@@ -9,10 +9,9 @@ addons:
   apt:
     packages:
       - libavahi-compat-libdnssd-dev
-cache:
-  directories:
-    - node_modules # NPM packages
-
+# cache:
+#   directories:
+#     - node_modules # NPM packages
 install:
   - npm install
   - npx browserslist@latest --update-db # update browserslist browser versions
