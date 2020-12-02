@@ -88,6 +88,11 @@ export const exportToFile = (sessionList) => {
   });
 
   fileExportManager.on('session-exported', (sessionId) => {
+    if (!sessionId || typeof sessionId !== 'string') {
+      // eslint-disable-next-line no-console
+      console.warn('session-exported event did not contain a sessionID');
+      return;
+    }
     succeeded.push(sessionId);
   });
 

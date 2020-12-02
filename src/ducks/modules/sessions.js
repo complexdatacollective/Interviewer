@@ -1,4 +1,4 @@
-import { omit, reduce } from 'lodash';
+import { has, omit, reduce } from 'lodash';
 import uuid from 'uuid/v4';
 import { actionCreators as SessionWorkerActions } from './sessionWorkers';
 import { actionTypes as installedProtocolsActionTypes } from './installedProtocols';
@@ -22,6 +22,8 @@ const withTimestamp = session => ({
   updatedAt: Date.now(),
 });
 
+const sessionExists = (sessionId, sessions) => has(sessions, sessionId);
+
 const getReducer = network =>
   (state = initialState, action = {}) => {
     switch (action.type) {
@@ -42,7 +44,8 @@ const getReducer = network =>
       case networkActionTypes.UPDATE_EDGE:
       case networkActionTypes.TOGGLE_EDGE:
       case networkActionTypes.REMOVE_EDGE:
-      case networkActionTypes.UPDATE_EGO:
+      case networkActionTypes.UPDATE_EGO: {
+        if (!sessionExists(action.sessionId, state)) { return state; }
         return {
           ...state,
           [action.sessionId]: withTimestamp({
@@ -53,6 +56,7 @@ const getReducer = network =>
             network: network(state[action.sessionId].network, action),
           }),
         };
+      }
       case ADD_SESSION:
         return {
           ...state,
@@ -65,7 +69,8 @@ const getReducer = network =>
             startedAt: Date.now(),
           }),
         };
-      case SET_SESSION_FINISHED:
+      case SET_SESSION_FINISHED: {
+        if (!sessionExists(action.sessionId, state)) { return state; }
         return {
           ...state,
           [action.sessionId]: withTimestamp({
@@ -73,7 +78,10 @@ const getReducer = network =>
             finishedAt: Date.now(),
           }),
         };
-      case SET_SESSION_EXPORTED:
+      }
+
+      case SET_SESSION_EXPORTED: {
+        if (!sessionExists(action.sessionId, state)) { return state; }
         return {
           ...state,
           [action.sessionId]: {
@@ -81,9 +89,11 @@ const getReducer = network =>
             exportedAt: Date.now(),
           },
         };
+      }
       case LOAD_SESSION:
         return state;
-      case UPDATE_PROMPT:
+      case UPDATE_PROMPT: {
+        if (!sessionExists(action.sessionId, state)) { return state; }
         return {
           ...state,
           [action.sessionId]: withTimestamp({
@@ -91,7 +101,9 @@ const getReducer = network =>
             promptIndex: action.promptIndex,
           }),
         };
-      case UPDATE_STAGE:
+      }
+      case UPDATE_STAGE: {
+        if (!sessionExists(action.sessionId, state)) { return state; }
         return {
           ...state,
           [action.sessionId]: withTimestamp({
@@ -99,7 +111,9 @@ const getReducer = network =>
             stageIndex: action.stageIndex,
           }),
         };
-      case UPDATE_CASE_ID:
+      }
+      case UPDATE_CASE_ID: {
+        if (!sessionExists(action.sessionId, state)) { return state; }
         return {
           ...state,
           [action.sessionId]: withTimestamp({
@@ -107,9 +121,10 @@ const getReducer = network =>
             caseId: action.caseId,
           }),
         };
+      }
       case UPDATE_STAGE_STATE: {
+        if (!sessionExists(action.sessionId, state)) { return state; }
         const session = state[action.sessionId];
-
         return {
           ...state,
           [action.sessionId]: withTimestamp({
