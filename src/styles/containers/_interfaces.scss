@@ -4,7 +4,8 @@
   flex: 0 0 var(--interface-prompt-flex-basis);
 }
 
-@mixin interface-centering {
-  margin-left: calc(#{unit(4)} + var(--session-panel-width));
-  margin-right: unit(4);
+@mixin interface-centering($margins: true) {
+  $margin: if($margins, unit(4), 0px); // sass-lint:disable-line zero-unit
+  margin-left: calc(#{$margin} + var(--session-panel-width));
+  margin-right: $margin;
 }
