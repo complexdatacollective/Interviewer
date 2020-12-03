@@ -46,8 +46,8 @@ const Pair = ({
   const pairVariants = getPairVariants();
 
   const edgeVariants = {
-    show: { backgroundPosition: 'right bottom' },
-    hide: { backgroundPosition: 'left bottom' },
+    hideEdge: { backgroundPosition: 'right bottom' },
+    showEdge: { backgroundPosition: 'left bottom' },
   };
 
   return (
@@ -66,8 +66,8 @@ const Pair = ({
           className="dyad-census__edge"
           style={{ backgroundColor: `var(--${edgeColor})` }}
           variants={edgeVariants}
-          initial="hide"
-          animate={!hasEdge ? 'show' : 'hide'}
+          initial="hideEdge"
+          animate={!hasEdge ? 'hideEdge' : 'showEdge'}
         />
         <Node {...toNode} />
       </div>
