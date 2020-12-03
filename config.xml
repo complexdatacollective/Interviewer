@@ -2,7 +2,7 @@
 <widget android-versionCode="6031" id="org.codaco.NetworkCanvasInterviewer6" ios-CFBundleIdentifier="org.codaco.NetworkCanvasInterviewer6" ios-CFBundleVersion="6031" version="6.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Network Canvas Interviewer</name>
     <description>
-        Simplifying complex network data collection.
+        A tool for conducting Network Canvas Interviews.
     </description>
     <author email="developers@coda.co" href="http://coda.co">
         Complex Data Collective

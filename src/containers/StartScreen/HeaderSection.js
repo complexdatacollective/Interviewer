@@ -55,7 +55,7 @@ const HeaderSection = () => {
             <h5>Network Canvas</h5>
           </div>
           <h1>Interviewer</h1>
-          <h4>Simplifying complex network data collection.</h4>
+          <h4>A tool for conducting Network Canvas Interviews.</h4>
         </div>
         <div className="version-string">{appVersion}</div>
       </div>
