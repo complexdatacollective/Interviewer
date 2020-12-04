@@ -214,12 +214,6 @@
     "nsis": {
       "include": "build-resources/scripts/bonjour.nsh"
     },
-    "fileAssociations": {
-      "ext": "netcanvas",
-      "description": "Network Canvas Interviewer protocol",
-      "icon": "file",
-      "role": "Viewer"
-    },
     "win": {
       "target": "nsis",
       "certificateSha1": "512E5573B1961B0ADCAFB21288935F8A3E6E656F"
