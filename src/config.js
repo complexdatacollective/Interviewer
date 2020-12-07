@@ -7,7 +7,7 @@ const DEVICE_API_VERSION = '2'; // X-Device-API-Version
 
 const APP_SUPPORTED_SCHEMA_VERSIONS = [4];
 
-const DEVELOPMENT_PROTOCOL_URL = 'https://github.com/complexdatacollective/development-protocol/releases/download/20201125120304-d9c0394/Development.netcanvas';
+const DEVELOPMENT_PROTOCOL_URL = 'https://github.com/complexdatacollective/development-protocol/releases/download/20201207104100-8547e9b/Development.netcanvas';
 
 const ALLOWED_MARKDOWN_TAGS = [
   'break',
