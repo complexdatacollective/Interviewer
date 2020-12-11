@@ -89,14 +89,12 @@ const DyadCensus = ({
     setIsValid(true);
 
     if (isIntroduction) {
-      // If we're on the introduction and also at the end of steps,
-      // then there are no pairs and we should go to the next stage.
-      // In this case 'onComplete()', would take us to the next prompt
-      // which is going to be empty (still no pairs!).
-      if (stepsState.isEnd) {
+      // If there are no steps, clicking next should advance the stage
+      if (stepsState.totalSteps === 0) {
         dispatch(navigateActions.goToNextStage());
         return;
       }
+
       setIsIntroduction(false);
       return;
     }
