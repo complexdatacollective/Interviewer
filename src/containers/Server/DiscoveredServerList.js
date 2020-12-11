@@ -109,7 +109,7 @@ const DiscoveredServerList = ({
             <h4>We couldn&apos;t enable automatic discovery.</h4>
             <p>
               There was a problem enabling the automatic Server discovery
-              feature of Network Canvas. You can still pair with your computer
+              feature of Interviewer. You can still pair with your computer
               running Server by entering manual connection details.
             </p>
             <Button size="small" onClick={showErrorDialog} color="neon-coral">Show error details</Button>
