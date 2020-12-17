@@ -14,7 +14,7 @@
 
   .categorical-item__disk {
     @include clip;
-    @include transition-properties((background-color transform), var(--animation-easing), var(--animation-duration-standard));
+    @include transition-properties((background-color transform border-radius), var(--animation-easing), var(--animation-duration-standard));
     transform-origin: center;
     background-color: var(--background);
     border: solid .3rem var(--categorical-item-color);
@@ -90,24 +90,21 @@
     flex-direction: column;
     justify-content: center;
     z-index: var(--z-global-ui);
+    border-radius: unset;
 
     .categorical-item__inner {
       padding: 5vh 5vh 7vh;
+      border-radius: unset;
     }
 
     .categorical-item__disk {
       border: solid .3rem var(--categorical-item-color);
-      border-radius: 50%;
+      border-radius: var(--border-radius);
     }
 
     &.categorical-item--hover {
       @include transition-properties((width height margin), var(--animation-easing), var(--animation-duration-standard));
       margin: 0;
-
-      .categorical-item__content {
-        padding: 1rem 2rem;
-        transition: padding var(--animation-duration-standard) var(--animation-easing);
-      }
     }
 
     .categorical-item__title,
@@ -119,8 +116,6 @@
 
     .categorical-item__content {
       width: 100%;
-      padding: 1rem;
-      transition: padding var(--animation-duration-standard) var(--animation-easing);
     }
   }
 
@@ -128,7 +123,7 @@
     height: 100%;
 
     .scrollable {
-      @include scroller-mask;
+      @include scrollable;
       height: 100%;
     }
 

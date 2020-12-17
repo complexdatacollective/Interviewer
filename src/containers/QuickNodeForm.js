@@ -20,33 +20,38 @@ class QuickNodeForm extends PureComponent {
   constructor(props) {
     super(props);
 
+    this.timer = null;
+
     this.state = {
       nodeLabel: '',
       show: false,
     };
-
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmitForm = this.handleSubmitForm.bind(this);
-    this.handleCloseForm = this.handleCloseForm.bind(this);
-    this.handleOpenForm = this.handleOpenForm.bind(this);
   }
 
   handleOpenForm = () => {
-    this.setState({
-      show: true,
-    });
+    this.setState(({ show }) => ({ show: !show }));
   }
 
-  handleCloseForm = () => {
-    this.setState({
-      show: false,
-      nodeLabel: '',
-    });
-  }
+  handleBlur = () => {
+    clearTimeout(this.timer);
 
-  handleChange(e) {
+    this.timer = setTimeout(() => {
+      this.setState({
+        show: false,
+        nodeLabel: '',
+      });
+    }, 500);
+  };
+
+  handleSubmitClick = (e) => {
+    clearTimeout(this.timer);
+    this.handleSubmitForm(e);
+  };
+
+  handleChange = (e) => {
     this.setState({
       nodeLabel: e.target.value,
+      cancelBlur: false,
     });
   }
 
@@ -82,6 +87,13 @@ class QuickNodeForm extends PureComponent {
       nodeLabel,
     } = this.state;
 
+    const nodeProps = {
+      type: stage.subject.type,
+      [entityAttributesProperty]: {
+        [targetVariable]: nodeLabel.length === 0 ? ' ' : nodeLabel,
+      },
+    };
+
     return (
       <div className="quick-add">
         <div className={cx('quick-add-form', { 'quick-add-form--show': show })}>
@@ -92,7 +104,7 @@ class QuickNodeForm extends PureComponent {
               key="label"
               autoFocus // eslint-disable-line
               onChange={this.handleChange}
-              onBlur={this.handleCloseForm}
+              onBlur={this.handleBlur}
               placeholder="Type a name and press enter..."
               value={nodeLabel}
               type="text"
@@ -105,13 +117,8 @@ class QuickNodeForm extends PureComponent {
             <div className="flip-button-front" onClick={this.handleOpenForm}>
               <Icon name={nodeIconName} />
             </div>
-            <div className="flip-button-back">
-              <Node
-                type={stage.subject.type}
-                {...{ [entityAttributesProperty]: {
-                  [targetVariable]: this.state.nodeLabel,
-                } }}
-              />
+            <div className="flip-button-back" onClick={this.handleSubmitClick}>
+              <Node {...nodeProps} />
             </div>
           </div>
         </div>

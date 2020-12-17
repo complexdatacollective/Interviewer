@@ -28,9 +28,6 @@ const HeaderSection = () => {
   const gettingStartedStates = {
     show: {
       height: 'auto',
-      transition: {
-        type: 'spring',
-      },
     },
     hide: {
       height: '0px',
@@ -43,7 +40,7 @@ const HeaderSection = () => {
         <SettingsMenuButton />
         <Switch
           className="header-toggle"
-          label="Show 'getting started'"
+          label="Show welcome"
           on={showGettingStarted}
           onChange={() => toggleShowGettingStarted()}
         />
@@ -58,7 +55,7 @@ const HeaderSection = () => {
             <h5>Network Canvas</h5>
           </div>
           <h1>Interviewer</h1>
-          <h4>Simplifying complex network data collection.</h4>
+          <h4>A tool for conducting Network Canvas Interviews.</h4>
         </div>
         <div className="version-string">{appVersion}</div>
       </div>
@@ -71,7 +68,7 @@ const HeaderSection = () => {
         >
           <main className="welcome-section__main">
             <header>
-              <h2>Getting Started</h2>
+              <h2>Welcome to Interviewer!</h2>
             </header>
             <div className="welcome-description">
               <p>
@@ -107,7 +104,7 @@ const HeaderSection = () => {
               <Button
                 color="mustard"
                 disabled={!onlineStatus}
-                onClick={() => importProtocolFromURI('https://documentation.networkcanvas.com/protocols/Public%20Health%20Demo%20Protocol.netcanvas')}
+                onClick={() => importProtocolFromURI('https://documentation.networkcanvas.com/protocols/Sample%20Protocol%20v1.netcanvas')}
               >
                 Install sample protocol
               </Button>

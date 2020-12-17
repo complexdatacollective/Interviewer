@@ -1,3 +1,7 @@
+const fs = require('fs');
+const path = require('path');
+const deferral = require('q').defer();
+
 /**
  * Cordova 'before build' hook for android.
  *
@@ -5,10 +9,6 @@
  * Ensure you have run `cordova platform add android`
  */
 module.exports = (ctx) => {
-  const fs = ctx.requireCordovaModule('fs');
-  const path = ctx.requireCordovaModule('path');
-  const deferral = ctx.requireCordovaModule('q').defer();
-
   if (ctx.opts.platforms.indexOf('android') < 0) {
     deferral.reject('Must be run for android');
     return deferral.promise;

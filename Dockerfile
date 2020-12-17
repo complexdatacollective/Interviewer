@@ -34,7 +34,6 @@ FROM environment as build
 WORKDIR /app
 
 # Npm install
-COPY cordova-plugin-network-canvas-client /app/cordova-plugin-network-canvas-client
 COPY package.json /app
 COPY package-lock.json /app
 RUN npm install

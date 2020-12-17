@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="6002" id="org.codaco.NetworkCanvasInterviewer6" ios-CFBundleIdentifier="org.codaco.NetworkCanvasInterviewer6" ios-CFBundleVersion="6002" version="6.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="6041" id="org.codaco.NetworkCanvasInterviewer6" ios-CFBundleIdentifier="org.codaco.NetworkCanvasInterviewer6" ios-CFBundleVersion="6041" version="6.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Network Canvas Interviewer</name>
     <description>
-        Simplifying complex network data collection.
+        A tool for conducting Network Canvas Interviews.
     </description>
     <author email="developers@coda.co" href="http://coda.co">
         Complex Data Collective
@@ -14,6 +14,7 @@
     <allow-intent href="https://*/*" />
     <hook src="scripts/cordova/before-run.js" type="before_run" />
     <hook src="scripts/cordova/after-run.js" type="after_run" />
+    <hook src="scripts/cordova/before-prepare.js" type="before_prepare" />
     <platform name="android">
         <allow-intent href="market:*" />
         <allow-navigation href="https://*/*" />
@@ -69,13 +70,12 @@
     <preference name="AndroidPersistentFileLocation" value="Internal" />
     <preference name="iosPersistentFileLocation" value="Library" />
     <preference name="AllowInlineMediaPlayback" value="true" />
-    <preference name="android-minSdkVersion" value="25" />
-    <preference name="android-targetSdkVersion" value="28" />
+    <preference name="android-minSdkVersion" value="27" />
+    <preference name="android-targetSdkVersion" value="29" />
     <plugin name="cordova-plugin-file" spec="^5.0.0" />
     <plugin name="cordova-plugin-file-transfer" spec="^1.7.1" />
     <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
     <plugin name="cordova-plugin-device" spec="^2.0.2" />
-    <plugin name="cordova-plugin-network-canvas-client" spec="./cordova-plugin-network-canvas-client" />
     <plugin name="cordova-plugin-keyboard" spec="^1.2.0" />
     <plugin name="cordova-plugin-x-socialsharing" spec="^5.6.4" />
     <plugin name="cordova-plugin-zeroconf" spec="^1.4.1" />
@@ -84,7 +84,8 @@
     <plugin name="cordova-plugin-network-information" spec="~2.0.2" />
     <plugin name="cordova-plugin-chooser" spec="~1.3.1" />
     <plugin name="cordova-plugin-wkwebview-engine" spec="~1.2.1" />
+    <plugin name="cordova-plugin-network-canvas-client" spec="https://github.com/complexdatacollective/cordova-plugin-network-canvas-client.git" />
     <plugin name="cordova-sqlite-storage" spec="^5.1.0" />
+    <engine name="android" spec="8.1.0" />
     <engine name="ios" spec="^5.1.1" />
-    <engine name="android" spec="^8.1.0" />
 </widget>

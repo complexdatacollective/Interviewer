@@ -145,7 +145,7 @@ export const sqliteStorageEngine = (onPersistReady) => {
   // This chain ensures the storage engine is ready, and then calls the callback to enable
   // persistence.
   checkDeviceIsReady() // Device ready has fired
-    .then(createDatabase) // Creae or open the database
+    .then(createDatabase) // Create or open the database
     .then(createTable) // Create the table if it does not exist
     .then(onPersistReady);
 

@@ -1,4 +1,4 @@
-import { isNil, isString, keys, pickBy } from 'lodash';
+import { isNil, isNumber, isString, keys, pickBy } from 'lodash';
 
 const coerceArray = (value) => {
   if (value instanceof Object) {
@@ -44,10 +44,10 @@ export const minLength = min =>
     (value && value.length < min ? `Your answer must be ${min} characters or more` : undefined);
 export const minValue = min =>
   value =>
-    (value && value < min ? `Your answer must be at least ${min}` : undefined);
+    (isNumber(value) && value < min ? `Your answer must be at least ${min}` : undefined);
 export const maxValue = max =>
   value =>
-    (value && value > max ? `Your answer must be less than ${max}` : undefined);
+    (isNumber(value) && value > max ? `Your answer must be less than ${max}` : undefined);
 
 export const minSelected = min =>
   value =>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { get } from 'lodash';
+import { every, get, includes, pickBy } from 'lodash';
 import { motion } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@codaco/ui';
@@ -45,9 +45,26 @@ const DataExportSection = () => {
     });
   };
 
+  const getUnexportedSessions = () =>
+    Object.keys(pickBy(sessions, session => !session.exportedAt));
+
+  const isUnexportedSelected = () => getUnexportedSessions().length > 0 &&
+    (every(getUnexportedSessions(), session => includes(selectedSessions, session))) &&
+    (getUnexportedSessions().length === selectedSessions.length);
+
   const toggleSelectAll = () => {
     if ((Object.keys(sessions).length !== selectedSessions.length)) {
       setSelectedSessions(Object.keys(sessions));
+      return;
+    }
+
+    setSelectedSessions([]);
+  };
+
+  const toggleSelectUnexported = () => {
+    const unexportedSessions = getUnexportedSessions();
+    if (!isUnexportedSelected()) {
+      setSelectedSessions(unexportedSessions);
       return;
     }
 
@@ -152,15 +169,23 @@ const DataExportSection = () => {
           className="selection-status"
           layout
         >
-          <Switch
-            className="header-toggle"
-            label="Select all"
-            on={
-              Object.keys(sessions).length > 0
-              && (Object.keys(sessions).length === selectedSessions.length)
-            }
-            onChange={toggleSelectAll}
-          />
+          <div>
+            <Switch
+              className="header-toggle"
+              label="Select un-exported"
+              on={isUnexportedSelected()}
+              onChange={toggleSelectUnexported}
+            />
+            <Switch
+              className="header-toggle"
+              label="Select all"
+              on={
+                Object.keys(sessions).length > 0
+                && (Object.keys(sessions).length === selectedSessions.length)
+              }
+              onChange={toggleSelectAll}
+            />
+          </div>
           { selectedSessions.length > 0 &&
             (<span>{ selectedSessions.length} selected session{ selectedSessions.length > 1 ? ('s') : null }.</span>)}
         </motion.div>

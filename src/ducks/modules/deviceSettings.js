@@ -14,7 +14,6 @@ const initialState = {
   // useFullScreenForms defaults to false, leave using full screen forms up to user
   useFullScreenForms: false,
   interfaceScale: 100,
-  showScrollbars: false,
   startFullScreen: false,
 
   // Start screen
@@ -46,7 +45,6 @@ const getDeviceReadyState = (state) => {
     ...state,
     description,
     useDynamicScaling,
-    showScrollbars: state.showScrollbars,
 
   };
 };

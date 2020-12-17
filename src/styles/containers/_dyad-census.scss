@@ -158,16 +158,16 @@ $choice-padding: 2rem;
     padding: unit(2) unit(4);
 
     .form-field-togglebutton__checkbox {
-      border-radius: var(--border-radius);
+      border-radius: 12rem;
       width: 12rem;
       height: 5rem;
 
       &::before {
-        border-radius: 0.75rem;
+        border-radius: 12rem;
       }
 
       &::after {
-        border-radius: 0.75rem;
+        border-radius: 12rem;
       }
     }
   }

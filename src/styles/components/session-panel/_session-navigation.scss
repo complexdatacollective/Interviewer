@@ -9,6 +9,7 @@ $session-panel-button-size: 6rem;
   align-items: center;
   height: 100%;
   padding: unit(2);
+  width: var(--session-panel-width);
 
   svg {
     height: 2rem;

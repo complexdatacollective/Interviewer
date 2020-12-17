@@ -9,7 +9,6 @@ import {
   primaryKeyPropertyForWorker,
 } from '../ducks/modules/network';
 import {
-  remoteProtocolProperty,
   sessionProperty,
   caseProperty,
   codebookHashProperty,
@@ -101,9 +100,8 @@ export const asNetworkWithSessionVariables = (sessionId, session, protocol) => {
   const sessionVariables = {
     [caseProperty]: session.caseId,
     [sessionProperty]: sessionId,
-    [remoteProtocolProperty]: getRemoteProtocolID(protocol.name),
+    [protocolProperty]: getRemoteProtocolID(protocol.name),
     [protocolName]: protocol.name,
-    [protocolProperty]: session.protocolUID,
     [codebookHashProperty]: objectHash(protocol.codebook),
     ...(session.startedAt && { [sessionStartTimeProperty]:
       new Date(session.startedAt).toISOString() }),

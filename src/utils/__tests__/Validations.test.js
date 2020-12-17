@@ -87,6 +87,14 @@ describe('Validations', () => {
       expect(subject(undefined)).toBe(undefined);
     });
 
+    it('fails for a negative number', () => {
+      expect(subject(-1)).toBe(errorMessage);
+    });
+
+    it('fails for 0', () => {
+      expect(subject(0)).toBe(errorMessage);
+    });
+
     it('fails for a smaller value', () => {
       expect(subject(3)).toBe(errorMessage);
     });
@@ -107,6 +115,14 @@ describe('Validations', () => {
     it('passes for null or undefined', () => {
       expect(subject(null)).toBe(undefined);
       expect(subject(undefined)).toBe(undefined);
+    });
+
+    it('passes for a negative number', () => {
+      expect(subject(-1)).toBe(undefined);
+    });
+
+    it('passes for 0', () => {
+      expect(subject(0)).toBe(undefined);
     });
 
     it('passes for a smaller value', () => {

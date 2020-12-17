@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Scroller as UIScroller } from '@codaco/ui/lib/components';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 class Scroller extends Component {
@@ -24,14 +23,12 @@ class Scroller extends Component {
     const {
       className,
       children,
-      showScrollbars,
       useSmoothScrolling,
     } = this.props;
 
     return (
       <UIScroller
         className={className}
-        showScrollbars={showScrollbars}
         onScroll={this.handleScroll}
         useSmoothScrolling={useSmoothScrolling}
         forwardedRef={this.scrollable}
@@ -52,14 +49,7 @@ Scroller.propTypes = {
   children: PropTypes.any.isRequired,
   className: PropTypes.string,
   onScroll: PropTypes.func,
-  showScrollbars: PropTypes.bool.isRequired,
   useSmoothScrolling: PropTypes.bool,
 };
 
-function mapStateToProps(state) {
-  return {
-    showScrollbars: state.deviceSettings.showScrollbars,
-  };
-}
-
-export default connect(mapStateToProps)(Scroller);
+export default Scroller;

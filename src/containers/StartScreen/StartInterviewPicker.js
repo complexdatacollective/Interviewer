@@ -56,6 +56,7 @@ const StartInterviewPicker = ({
       show={show}
       onClose={onClose}
       title="Select a Protocol"
+      fullheight
     >
       <NewFilterableListWrapper
         ItemComponent={ProtocolCard}

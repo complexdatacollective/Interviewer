@@ -331,7 +331,7 @@ class ApiClient {
     const {
       sessionVariables: {
         sessionId,
-        remoteProtocolID,
+        protocolUID,
       },
     } = sessionData;
 
@@ -340,7 +340,7 @@ class ApiClient {
       data: sessionData,
     };
 
-    return this.httpsClient.post(`/protocols/${remoteProtocolID}/sessions`, payload, this.authHeader)
+    return this.httpsClient.post(`/protocols/${protocolUID}/sessions`, payload, this.authHeader)
       .then(resp => resp.data)
       .then(json => json.data);
   }

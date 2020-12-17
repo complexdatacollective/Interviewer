@@ -1,7 +1,7 @@
 .new-filterable-list {
   --transparent-background: #{transparentize(rgb(0, 0, 0), 0.8)};
   display: flex;
-  flex: 1;
+  flex: 1 1 auto;
   flex-direction: column;
   overflow: hidden;
   border-radius: var(--border-radius);
@@ -14,7 +14,7 @@
 
   &__header {
     display: flex;
-    flex: 0 1 auto;
+    flex: 0 0 auto;
     align-items: center;
     align-content: space-evenly;
     justify-content: space-between;
@@ -70,10 +70,30 @@
   }
 
   &__main {
-    flex: 1 0;
-    display: flex;
-    flex-direction: column;
-    height: 60vh;
+    @include scrollable(unit(1));
+    flex: 1 1 auto;
+    padding: unit(1);
+
+    > * {
+      width: 50%;
+      float: left;
+      padding: unit(1);
+    }
+
+    &:empty {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      &::after {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        content: 'No items to display.';
+      }
+    }
 
     .loading-state {
       padding: unit(4);
@@ -81,33 +101,6 @@
       align-items: center;
       justify-content: center;
       flex-direction: column;
-    }
-
-    .filterable-list-scroller {
-      height: 100%;
-      padding: unit(2);
-
-      // Grid would be a better way to display these items, but it
-      // causes distortion with framer-motion's layout prop
-      // display: grid;
-      > * {
-        width: calc(50% - #{unit(2)});
-        float: left;
-        margin: unit(1);
-      }
-
-      &:empty {
-        display: flex;
-
-        &::after {
-          width: 100%;
-          height: 100%;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          content: 'No items to display.';
-        }
-      }
     }
   }
 }

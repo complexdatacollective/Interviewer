@@ -17,6 +17,10 @@
       align-items: center;
       flex-direction: row-reverse;
       height: unit(6);
+
+      .header-toggle {
+        margin-left: 2rem;
+      }
     }
 
     .new-filterable-list {

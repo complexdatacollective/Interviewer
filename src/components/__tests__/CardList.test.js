@@ -17,7 +17,6 @@ const mockState = {
     useDynamicScaling: true,
     useFullScreenForms: false,
     interfaceScale: 100,
-    showScrollbars: false,
   },
   dialogs: { dialogs: Array(0) },
   form: {},

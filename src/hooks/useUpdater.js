@@ -9,7 +9,7 @@ import { actionCreators as toastActions } from '../ducks/modules/toasts';
 import { actionCreators as dialogActions } from '../ducks/modules/dialogs';
 import getVersion from '../utils/getVersion';
 import ExternalLink, { openExternalLink } from '../components/ExternalLink';
-import { isAndroid, isIOS, isLinux, isMacOS, isWindows } from '../utils/Environment';
+import { isAndroid, isIOS, isLinux, isMacOS, isPreview, isWindows } from '../utils/Environment';
 import useDismissedUpdatesState from './useDismissedUpdatesState';
 
 // Custom renderer for links so that they open correctly in an external browser
@@ -95,6 +95,12 @@ export const checkEndpoint = (updateEndpoint, currentVersion) =>
 const useUpdater = (updateEndpoint, timeout = 0) => {
   const dispatch = useDispatch();
   const [dismissedUpdates, dismissUpdate] = useDismissedUpdatesState();
+
+  if (isPreview()) {
+    // eslint-disable-next-line no-console
+    console.info('Checking for updates disabled because we are in preview mode!');
+    return;
+  }
 
   const handleDismiss = (version) => {
     dismissUpdate(version);

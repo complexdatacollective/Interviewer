@@ -17,6 +17,8 @@ const Overlay = (props) => {
     onBlur,
     show,
     title,
+    footer,
+    fullheight,
     useFullScreenForms,
     forceDisableFullScreen,
     className,
@@ -24,18 +26,31 @@ const Overlay = (props) => {
 
   if (!show) { return false; }
 
+  const overlayClasses = cx(
+    'overlay',
+    // eslint-disable-next-line @codaco/spellcheck/spell-checker
+    { 'overlay--fullheight': fullheight },
+    { 'overlay--fullscreen': !forceDisableFullScreen && useFullScreenForms },
+    className,
+  );
+
   return (
     <Modal show={show} onBlur={onBlur}>
-      <motion.div className={cx('overlay', { 'overlay--fullscreen': !forceDisableFullScreen && useFullScreenForms }, className)}>
+      <motion.div className={overlayClasses}>
         { title && (
           <div className="overlay__title">
             <h1>{title}</h1>
+            <CloseButton className="overlay__close" onClick={onClose} />
           </div>
         )}
         <motion.div className="overlay__content">
           {children}
         </motion.div>
-        <CloseButton className="overlay__close" onClick={onClose} />
+        { footer && (
+          <motion.div className="overlay__footer">
+            {footer}
+          </motion.div>
+        )}
       </motion.div>
     </Modal>
   );
@@ -47,7 +62,9 @@ Overlay.propTypes = {
   title: PropTypes.string,
   show: PropTypes.bool,
   children: PropTypes.any,
+  footer: PropTypes.any,
   useFullScreenForms: PropTypes.bool,
+  fullheight: PropTypes.bool,
   forceDisableFullScreen: PropTypes.bool,
   className: PropTypes.string,
 };
@@ -59,6 +76,8 @@ Overlay.defaultProps = {
   className: '',
   show: false,
   children: null,
+  footer: null,
+  fullheight: false,
   forceDisableFullScreen: false,
   useFullScreenForms: false,
 };

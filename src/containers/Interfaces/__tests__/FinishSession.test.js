@@ -9,18 +9,8 @@ const findButtonMatching = (text, container) => (
 );
 
 describe('the Finish Interface', () => {
-  let mockProps;
-
-  beforeEach(() => {
-    mockProps = {
-      currentSession: {},
-      defaultServer: { secureServiceUrl: 'x.x.x.x' },
-      remoteProtocolId: 'mockProtocolId',
-    };
-  });
-
   it('Renders a Finish button', () => {
-    const elem = shallow(<FinishSession {...mockProps} />);
+    const elem = shallow(<FinishSession />);
     expect(findButtonMatching('Finish', elem)).toHaveLength(1);
   });
 });

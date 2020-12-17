@@ -17,7 +17,7 @@ $results-height: calc(100vh - 23rem);
 
   &__loading {
     position: absolute;
-    width: calc(100% - var(--session-panel-width) - var(--interface-right-margin)) !important; // sass-lint:disable-line no-important
+    width: calc(100% - var(--session-panel-width)) !important; // sass-lint:disable-line no-important
     bottom: 0;
     left: var(--session-panel-width);
     overflow: hidden;

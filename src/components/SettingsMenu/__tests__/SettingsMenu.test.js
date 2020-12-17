@@ -29,7 +29,6 @@ const initialState = {
     description: 'Kirby (macOS)',
     useDynamicScaling: true,
     useFullScreenForms: false,
-    showScrollbars: false,
     startFullScreen: false,
     interfaceScale: 100,
   },

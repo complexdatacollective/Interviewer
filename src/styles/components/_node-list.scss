@@ -9,9 +9,6 @@ $node-inset: 1rem;  // approximate scaled margin + 'outer-trim' of a node
   align-content: flex-start;
   min-height: 100%;
   width: 100%;
-  padding-bottom: calc(var(--base-node-size) / 2);
-
-  padding-top: unit(2) - $node-inset;
 
   &--hover,
   &--drag {
