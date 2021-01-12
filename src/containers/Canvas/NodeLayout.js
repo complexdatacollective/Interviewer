@@ -60,8 +60,11 @@ const withSelectHandlers = compose(
         // If edge creation is disabled, return
         if (!createEdge) { return; }
 
-        // If the target and source node are the same, return
-        if (connectFrom === nodeId) { return; }
+        // If the target and source node are the same, deselect
+        if (connectFrom === nodeId) {
+          updateLinkFrom(null);
+          return;
+        }
 
         // If there isn't a target node yet, set the selected node into the linking state
         if (!connectFrom) {
