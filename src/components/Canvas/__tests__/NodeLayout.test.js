@@ -13,8 +13,14 @@ const layout = 'foo';
 
 const mockProps = {
   nodes: [
-    { [entityPrimaryKeyProperty]: 123, [entityAttributesProperty]: { isOn: true, [layout]: { x: 0, y: 0 } } },
-    { [entityPrimaryKeyProperty]: 1, [entityAttributesProperty]: { isOn: false, [layout]: { x: 0, y: 0 } } },
+    {
+      [entityPrimaryKeyProperty]: 123,
+      [entityAttributesProperty]: { isOn: true, [layout]: { x: 0, y: 0 } },
+    },
+    {
+      [entityPrimaryKeyProperty]: 1,
+      [entityAttributesProperty]: { isOn: false, [layout]: { x: 0, y: 0 } },
+    },
   ],
   updateNode: () => {},
   toggleEdge: () => {},
