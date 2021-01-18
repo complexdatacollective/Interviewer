@@ -95,7 +95,6 @@ const Sociogram = ({
           connectFrom={connectFrom}
           updateLinkFrom={handleConnectFrom}
           key={prompt.id}
-          stage={stage}
         />
       </div>
       <div style={{ position: 'absolute', right: '3rem', bottom: '3rem' }}>
