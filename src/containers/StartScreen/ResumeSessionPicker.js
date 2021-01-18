@@ -5,6 +5,7 @@ import { SessionCard } from '@codaco/ui/lib/components/Cards';
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
 import { NewFilterableListWrapper } from '../../components';
 import { Overlay } from '../Overlay';
+import formatDatestamp from '../../utils/formatDatestamp';
 
 const oneBasedIndex = i => parseInt(i || 0, 10) + 1;
 
@@ -34,10 +35,10 @@ const ResumeSessionPicker = ({
 
     return {
       caseId: session.caseId,
-      startedAt: session.startedAt,
-      updatedAt: session.updatedAt,
-      finishedAt: session.finishedAt,
-      exportedAt: session.exportedAt,
+      startedAt: formatDatestamp(session.startedAt),
+      updatedAt: formatDatestamp(session.updatedAt),
+      finishedAt: formatDatestamp(session.finishedAt),
+      exportedAt: formatDatestamp(session.exportedAt),
       protocolName: protocol.name,
       progress,
       onClickHandler: () => handleSessionCardClick(sessionUUID),

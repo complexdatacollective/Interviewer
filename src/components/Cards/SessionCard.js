@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { SessionCard as UISessionCard } from '@codaco/ui/lib/components/Cards';
 import { useSelector, useDispatch } from 'react-redux';
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
+import formatDatestamp from '../../utils/formatDatestamp';
 
 const oneBasedIndex = i => parseInt(i || 0, 10) + 1;
 
@@ -47,10 +48,10 @@ const SessionCard = ({
   return (
     <UISessionCard
       caseId={caseId}
-      startedAt={startedAt}
-      updatedAt={updatedAt}
-      exportedAt={exportedAt}
-      finishedAt={finishedAt}
+      startedAt={formatDatestamp(startedAt)}
+      updatedAt={formatDatestamp(updatedAt)}
+      exportedAt={formatDatestamp(exportedAt)}
+      finishedAt={formatDatestamp(finishedAt)}
       protocolName={name}
       progress={progress}
       onClickHandler={onClickLoadSession}

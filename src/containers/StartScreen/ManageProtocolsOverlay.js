@@ -23,7 +23,6 @@ const ManageProtocolsOverlay = ({
       description,
     } = installedProtocols[protocolUID];
 
-
     return {
       [entityAttributesProperty]: {
         schemaVersion,
