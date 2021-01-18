@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { get } from 'lodash';
 import objectHash from 'object-hash';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -17,11 +17,16 @@ const NewFilterableListWrapper = (props) => {
     initialSortDirection,
     sortableProperties,
     loading,
+    disableFilter,
   } = props;
 
   const [filterTerm, setFilterTerm] = useState(null);
   const [sortProperty, setSortProperty] = useState(initialSortProperty);
   const [sortAscending, setSortAscending] = useState(initialSortDirection === 'asc');
+
+  useEffect(() => {
+    setFilterTerm(null);
+  }, [disableFilter]);
 
   const handleSetSortProperty = (property) => {
     if (sortProperty === property) {
@@ -126,7 +131,9 @@ const NewFilterableListWrapper = (props) => {
             placeholder="Filter..."
             className="new-filterable-list__filter"
             input={{
+              value: filterTerm || '',
               onChange: onFilterChange,
+              disabled: disableFilter,
             }}
           />
         </section>
@@ -178,6 +185,7 @@ NewFilterableListWrapper.propTypes = {
   initialSortDirection: PropTypes.oneOf(['asc', 'desc']),
   sortableProperties: PropTypes.array,
   loading: PropTypes.bool,
+  disableFilter: true,
 };
 
 NewFilterableListWrapper.defaultProps = {
@@ -185,6 +193,7 @@ NewFilterableListWrapper.defaultProps = {
   propertyPath: entityAttributesProperty,
   sortableProperties: [],
   loading: false,
+  disableFilter: false,
 };
 
 export default NewFilterableListWrapper;
