@@ -27,6 +27,8 @@ const DataExportSection = () => {
   const deleteSession = id => dispatch(sessionsActions.removeSession(id));
   const openDialog = dialog => dispatch(dialogActions.openDialog(dialog));
 
+  const handleFilterChange = () => setSelectedSessions([]);
+
   const handleDeleteSessions = () => {
     openDialog({
       type: 'Warning',
@@ -138,7 +140,7 @@ const DataExportSection = () => {
     && (Object.keys(sessions).length === selectedSessions.length)
   );
 
-  const disableFilter = isSelectAll || toggleSelectUnexported;
+  const resetFilter = [isSelectAll, isUnexportedSelected()];
 
   return (
     <Section className="start-screen-section data-export-section">
@@ -157,6 +159,7 @@ const DataExportSection = () => {
           propertyPath={null}
           initialSortProperty="updatedAt"
           initialSortDirection="desc"
+          onFilterChange={handleFilterChange}
           sortableProperties={[
             {
               label: 'Last Changed',
@@ -171,7 +174,7 @@ const DataExportSection = () => {
               variable: 'progress',
             },
           ]}
-          disableFilter={disableFilter}
+          resetFilter={resetFilter}
         />
         <motion.div
           className="selection-status"

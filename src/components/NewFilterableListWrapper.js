@@ -17,7 +17,8 @@ const NewFilterableListWrapper = (props) => {
     initialSortDirection,
     sortableProperties,
     loading,
-    disableFilter,
+    onFilterChange,
+    resetFilter,
   } = props;
 
   const [filterTerm, setFilterTerm] = useState(null);
@@ -25,8 +26,9 @@ const NewFilterableListWrapper = (props) => {
   const [sortAscending, setSortAscending] = useState(initialSortDirection === 'asc');
 
   useEffect(() => {
+    console.log('reset filter', resetFilter);
     setFilterTerm(null);
-  }, [disableFilter]);
+  }, resetFilter);
 
   const handleSetSortProperty = (property) => {
     if (sortProperty === property) {
@@ -37,7 +39,11 @@ const NewFilterableListWrapper = (props) => {
     }
   };
 
-  const onFilterChange = event => setFilterTerm(event.target.value || null);
+  const handleFilterChange = (event) => {
+    const value = event.target.value || null;
+    setFilterTerm(value);
+    onFilterChange(value);
+  };
 
   const sortedItems = sortOrder([{
     property: sortProperty,
@@ -132,8 +138,7 @@ const NewFilterableListWrapper = (props) => {
             className="new-filterable-list__filter"
             input={{
               value: filterTerm || '',
-              onChange: onFilterChange,
-              disabled: disableFilter,
+              onChange: handleFilterChange,
             }}
           />
         </section>
@@ -185,7 +190,8 @@ NewFilterableListWrapper.propTypes = {
   initialSortDirection: PropTypes.oneOf(['asc', 'desc']),
   sortableProperties: PropTypes.array,
   loading: PropTypes.bool,
-  disableFilter: true,
+  resetFilter: PropTypes.array,
+  onFilterChange: PropTypes.func,
 };
 
 NewFilterableListWrapper.defaultProps = {
@@ -193,7 +199,8 @@ NewFilterableListWrapper.defaultProps = {
   propertyPath: entityAttributesProperty,
   sortableProperties: [],
   loading: false,
-  disableFilter: false,
+  resetFilter: [],
+  onFilterChange: () => {},
 };
 
 export default NewFilterableListWrapper;
