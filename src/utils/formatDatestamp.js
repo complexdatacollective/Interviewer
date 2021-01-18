@@ -1,5 +1,5 @@
 const formatDatestamp = (datestamp) => {
-  if (!datestamp) { return null; }
+  if (!datestamp) { return datestamp; }
   return new Date(datestamp).toISOString();
 };
 
