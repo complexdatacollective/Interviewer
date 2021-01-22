@@ -24,12 +24,13 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
       
-      # Install MDNS dependencies
-      - name: Install xmllint
+      - name: Checkout submodules
+        run: git submodule update --init --recursive
+      
+      - name: Install MDNS build dependencies
         run: sudo apt-get install libavahi-compat-libdnssd-dev
 
-      # Install node modules
-      - name: Install modules
+      - name: Install node modules
         run: npm install
     
       - name: Lint
