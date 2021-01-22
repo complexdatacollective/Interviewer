@@ -1,10 +1,5 @@
-# This is a basic workflow to help you get started with Actions
-
 name: CI
-
-# Controls when the action will run. 
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
   push:
     branches: [ master ]
   pull_request:
@@ -12,29 +7,41 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  setup:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-      
+
+      # Set node version
+      - uses: actions/setup-node@v2
+        with:
+        node-version: '12.14.1'
+
       - name: Checkout submodules
         run: git submodule update --init --recursive
-      
+
+      # Cache node_modules
+      - uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
+
       - name: Install MDNS build dependencies
         run: sudo apt-get install libavahi-compat-libdnssd-dev
 
       - name: Install node modules
         run: npm install
-    
+
+  test:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
       - name: Lint
         run: npm run lint -- --max-warnings 0 && npm run sass-lint -- --max-warnings 0
 
       - name: Run tests
         run: npm run test
+
