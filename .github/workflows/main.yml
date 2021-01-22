@@ -23,6 +23,10 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+      
+      # Install MDNS dependencies
+      - name: Install xmllint
+        run: sudo apt-get install libavahi-compat-libdnssd-dev
 
       # Install node modules
       - name: Install modules
