@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  setup:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -35,13 +35,41 @@ jobs:
       - name: Install node modules
         run: npm install
 
-  test:
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
       - name: Lint
         run: npm run lint -- --max-warnings 0 && npm run sass-lint -- --max-warnings 0
 
       - name: Run tests
         run: npm run test
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      # Set node version
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '12.14.1'
+
+      - name: Checkout submodules
+        run: git submodule update --init --recursive
+
+      # Cache node_modules
+      - uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install MDNS build dependencies
+        run: sudo apt-get install libavahi-compat-libdnssd-dev
+
+      - name: Install node modules
+        run: npm install
+
+      - name: Build
+        run: npm run build:electron
+
 
