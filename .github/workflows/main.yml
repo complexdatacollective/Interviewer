@@ -12,14 +12,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          submodules: recursive
 
       # Set node version
       - uses: actions/setup-node@v2
         with:
           node-version: '12.14.1'
-
-      - name: Checkout submodules
-        run: git submodule update --init --recursive
 
       # Cache node_modules
       - uses: actions/cache@v2
@@ -46,14 +45,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          submodules: recursive
 
       # Set node version
       - uses: actions/setup-node@v2
         with:
           node-version: '12.14.1'
-
-      - name: Checkout submodules
-        run: git submodule update --init --recursive
 
       # Cache node_modules
       - uses: actions/cache@v2
