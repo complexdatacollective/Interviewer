@@ -61,6 +61,6 @@ const makeMapStateToProps = () => {
 export { NodeBucket };
 
 export default compose(
-  DropObstacle,
   connect(makeMapStateToProps),
+  DropObstacle,
 )(NodeBucket);
