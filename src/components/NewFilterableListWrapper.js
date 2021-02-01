@@ -26,6 +26,7 @@ const NewFilterableListWrapper = (props) => {
   const [sortAscending, setSortAscending] = useState(initialSortDirection === 'asc');
 
   useEffect(() => {
+    if (resetFilter.every(v => v === false)) { return; }
     setFilterTerm(null);
   }, resetFilter);
 
