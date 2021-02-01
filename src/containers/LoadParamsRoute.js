@@ -63,7 +63,10 @@ class LoadParamsRoute extends Component {
 
 LoadParamsRoute.propTypes = {
   backParam: PropTypes.string.isRequired,
-  component: PropTypes.func.isRequired,
+  component: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.func,
+  ]).isRequired,
   computedMatch: PropTypes.object.isRequired,
   resetState: PropTypes.func.isRequired,
   sessionId: PropTypes.string,
