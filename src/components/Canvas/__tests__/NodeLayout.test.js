@@ -3,14 +3,24 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { NodeLayout } from '../NodeLayout';
-import { entityPrimaryKeyProperty } from '../../../ducks/modules/network';
+import NodeLayout from '../NodeLayout';
+import {
+  entityPrimaryKeyProperty,
+  entityAttributesProperty,
+} from '../../../ducks/modules/network';
 
 const layout = 'foo';
 
 const mockProps = {
   nodes: [
-    { bar: 'buzz', [entityPrimaryKeyProperty]: 123, [layout]: { x: 0, y: 0 } },
+    {
+      [entityPrimaryKeyProperty]: 123,
+      [entityAttributesProperty]: { isOn: true, [layout]: { x: 0, y: 0 } },
+    },
+    {
+      [entityPrimaryKeyProperty]: 1,
+      [entityAttributesProperty]: { isOn: false, [layout]: { x: 0, y: 0 } },
+    },
   ],
   updateNode: () => {},
   toggleEdge: () => {},
@@ -40,18 +50,39 @@ describe('<NodeLayout />', () => {
 
   describe('isLinking', () => {
     it('detects connecting state', () => {
-      const subject = shallow(<NodeLayout {...mockProps} connectFrom="1" />);
-      expect(subject.instance().isLinking({ _uid: '1' })).toBe(true);
-      expect(subject.instance().isLinking({ _uid: '2' })).toBe(false);
+      const subject = shallow(<NodeLayout {...mockProps} connectFrom={1} />);
+      const result = subject.find('LayoutNode').map((n) => {
+        const node = n.prop('node');
+        return [
+          node[entityPrimaryKeyProperty],
+          n.prop('linking'),
+        ];
+      });
+      expect(result).toEqual([
+        [123, false],
+        [1, true],
+      ]);
     });
   });
 
-  describe('highlighting', () => {
-    const subject = shallow(<NodeLayout highlightAttribute="isOn" />);
+  describe.only('highlighting', () => {
+    const subject = shallow(<NodeLayout {...mockProps} highlightAttribute="isOn" />);
 
     it('detects highlight state', () => {
-      expect(subject.instance().isHighlighted({ attributes: { isOn: true } })).toBe(true);
-      expect(subject.instance().isHighlighted({ attributes: {} })).toBe(false);
+      // expect(subject.instance().isHighlighted({ attributes: { isOn: true } })).toBe(true);
+      // expect(subject.instance().isHighlighted({ attributes: {} })).toBe(false);
+
+      const result = subject.find('LayoutNode').map((n) => {
+        const node = n.prop('node');
+        return [
+          node[entityPrimaryKeyProperty],
+          n.prop('selected'),
+        ];
+      });
+      expect(result).toEqual([
+        [123, true],
+        [1, false],
+      ]);
     });
   });
 });
