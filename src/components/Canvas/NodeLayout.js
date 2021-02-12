@@ -1,78 +1,81 @@
-import React, { Component } from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { isEmpty, has, isNil } from 'lodash';
+import { isEmpty, has, isNil, get } from 'lodash';
 import LayoutNode from '../../containers/Canvas/LayoutNode';
 import { entityPrimaryKeyProperty, getEntityAttributes, entityAttributesProperty } from '../../ducks/modules/network';
 
-class NodeLayout extends Component {
-  static propTypes = {
-    nodes: PropTypes.array,
-    onSelected: PropTypes.func.isRequired,
-    connectFrom: PropTypes.string,
-    highlightAttribute: PropTypes.string,
-    allowPositioning: PropTypes.bool,
-    allowSelect: PropTypes.bool,
-    layoutVariable: PropTypes.string,
-    width: PropTypes.number,
-    height: PropTypes.number,
-  };
+const NodeLayout = React.forwardRef(({
+  nodes,
+  allowPositioning,
+  highlightAttribute,
+  connectFrom,
+  allowSelect,
+  onSelected,
+  layoutVariable,
+  width,
+  height,
+}, ref) => {
+  const isHighlighted = useCallback(
+    node =>
+      !isEmpty(highlightAttribute) &&
+        get(node, [entityAttributesProperty, highlightAttribute]) === true,
+    [highlightAttribute],
+  );
 
-  static defaultProps = {
-    connectFrom: null,
-    nodes: [],
-    highlightAttribute: null,
-    allowPositioning: true,
-    allowSelect: true,
-    layoutVariable: null,
-    width: null,
-    height: null,
-  };
+  const isLinking = useCallback(
+    node => get(node, entityPrimaryKeyProperty) === connectFrom,
+    [connectFrom],
+  );
 
-  isHighlighted(node) {
-    return !isEmpty(this.props.highlightAttribute) &&
-      node[entityAttributesProperty][this.props.highlightAttribute] === true;
-  }
+  return (
+    <div className="node-layout" ref={ref}>
+      { nodes.map((node) => {
+        const nodeAttributes = getEntityAttributes(node);
+        if (!has(nodeAttributes, layoutVariable) || isNil(nodeAttributes[layoutVariable])) {
+          return null;
+        }
 
-  isLinking(node) {
-    return node[entityPrimaryKeyProperty] === this.props.connectFrom;
-  }
+        return (
+          <LayoutNode
+            key={node[entityPrimaryKeyProperty]}
+            node={node}
+            layoutVariable={layoutVariable}
+            onSelected={() => onSelected(node)}
+            selected={isHighlighted(node)}
+            linking={isLinking(node)}
+            allowPositioning={allowPositioning}
+            allowSelect={allowSelect}
+            areaWidth={width}
+            areaHeight={height}
+          />
+        );
+      }) }
+    </div>
+  );
+});
 
-  render() {
-    const {
-      nodes,
-      allowPositioning,
-      allowSelect,
-      layoutVariable,
-      width,
-      height,
-    } = this.props;
-    return (
-      <div className="node-layout">
-        { nodes.map((node) => {
-          const nodeAttributes = getEntityAttributes(node);
-          if (!has(nodeAttributes, layoutVariable) || isNil(nodeAttributes[layoutVariable])) {
-            return null;
-          }
+NodeLayout.propTypes = {
+  nodes: PropTypes.array,
+  onSelected: PropTypes.func.isRequired,
+  connectFrom: PropTypes.string,
+  highlightAttribute: PropTypes.string,
+  allowPositioning: PropTypes.bool,
+  allowSelect: PropTypes.bool,
+  layoutVariable: PropTypes.string,
+  width: PropTypes.number,
+  height: PropTypes.number,
+};
 
-          return (
-            <LayoutNode
-              key={node[entityPrimaryKeyProperty]}
-              node={node}
-              layoutVariable={layoutVariable}
-              onSelected={() => this.props.onSelected(node)}
-              selected={this.isHighlighted(node)}
-              linking={this.isLinking(node)}
-              allowPositioning={allowPositioning}
-              allowSelect={allowSelect}
-              areaWidth={width}
-              areaHeight={height}
-            />
-          );
-        }) }
-      </div>
-    );
-  }
-}
+NodeLayout.defaultProps = {
+  connectFrom: null,
+  nodes: [],
+  highlightAttribute: null,
+  allowPositioning: true,
+  allowSelect: true,
+  layoutVariable: null,
+  width: null,
+  height: null,
+};
 
 export { NodeLayout };
 
