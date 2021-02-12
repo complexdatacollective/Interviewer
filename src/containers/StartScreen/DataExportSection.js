@@ -27,6 +27,8 @@ const DataExportSection = () => {
   const deleteSession = id => dispatch(sessionsActions.removeSession(id));
   const openDialog = dialog => dispatch(dialogActions.openDialog(dialog));
 
+  const handleFilterChange = () => setSelectedSessions([]);
+
   const handleDeleteSessions = () => {
     openDialog({
       type: 'Warning',
@@ -133,6 +135,13 @@ const DataExportSection = () => {
 
   if (Object.keys(sessions).length === 0) { return null; }
 
+  const isSelectAll = (
+    Object.keys(sessions).length > 0
+    && (Object.keys(sessions).length === selectedSessions.length)
+  );
+
+  const resetFilter = [isSelectAll, isUnexportedSelected()];
+
   return (
     <Section className="start-screen-section data-export-section">
       <motion.main layout className="data-export-section__main">
@@ -150,6 +159,7 @@ const DataExportSection = () => {
           propertyPath={null}
           initialSortProperty="updatedAt"
           initialSortDirection="desc"
+          onFilterChange={handleFilterChange}
           sortableProperties={[
             {
               label: 'Last Changed',
@@ -164,6 +174,7 @@ const DataExportSection = () => {
               variable: 'progress',
             },
           ]}
+          resetFilter={resetFilter}
         />
         <motion.div
           className="selection-status"
@@ -179,10 +190,7 @@ const DataExportSection = () => {
             <Switch
               className="header-toggle"
               label="Select all"
-              on={
-                Object.keys(sessions).length > 0
-                && (Object.keys(sessions).length === selectedSessions.length)
-              }
+              on={isSelectAll}
               onChange={toggleSelectAll}
             />
           </div>
