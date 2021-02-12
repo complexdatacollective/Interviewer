@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ProtocolCard as UIProtocolCard } from '@codaco/ui/lib/components/Cards';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
+import formatDatestamp from '../../utils/formatDatestamp';
 import { APP_SUPPORTED_SCHEMA_VERSIONS, APP_SCHEMA_VERSION } from '../../config';
 
 const ProtocolCard = (props) => {
@@ -98,7 +99,7 @@ const ProtocolCard = (props) => {
     <UIProtocolCard
       schemaVersion={schemaVersion}
       lastModified={lastModified}
-      installationDate={installationDate}
+      installationDate={formatDatestamp(installationDate)}
       name={name}
       condensed={condensed}
       description={description}
@@ -123,7 +124,7 @@ ProtocolCard.propTypes = {
   attributes: PropTypes.shape({
     schemaVersion: PropTypes.number.isRequired,
     lastModified: PropTypes.string.isRequired,
-    installationDate: PropTypes.number,
+    installationDate: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
     description: PropTypes.string,
   }).isRequired,

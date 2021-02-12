@@ -11,6 +11,7 @@ import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import useServerConnectionStatus from '../../hooks/useServerConnectionStatus';
 import { NewFilterableListWrapper, Switch } from '../../components';
 import { asNetworkWithSessionVariables } from '../../utils/networkFormat';
+import formatDatestamp from '../../utils/formatDatestamp';
 
 const oneBasedIndex = i => parseInt(i || 0, 10) + 1;
 
@@ -107,10 +108,10 @@ const DataExportSection = () => {
     return {
       caseId,
       progress,
-      startedAt,
-      finishedAt,
-      updatedAt,
-      exportedAt,
+      startedAt: formatDatestamp(startedAt),
+      finishedAt: formatDatestamp(finishedAt),
+      updatedAt: formatDatestamp(updatedAt),
+      exportedAt: formatDatestamp(exportedAt),
       key: sessionUUID,
       protocolName: protocol.name,
       sessionUUID,
