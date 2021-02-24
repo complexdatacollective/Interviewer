@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { every, get, includes, pickBy } from 'lodash';
 import { motion } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
@@ -9,7 +9,8 @@ import { Section } from '.';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import useServerConnectionStatus from '../../hooks/useServerConnectionStatus';
-import { NewFilterableListWrapper, Switch } from '../../components';
+import { Switch } from '../../components';
+import NewFilterableListWrapper, { getFilteredList } from '../../components/NewFilterableListWrapper';
 import { asNetworkWithSessionVariables } from '../../utils/networkFormat';
 import formatDatestamp from '../../utils/formatDatestamp';
 
@@ -17,7 +18,7 @@ const oneBasedIndex = i => parseInt(i || 0, 10) + 1;
 
 const DataExportSection = () => {
   const sessions = useSelector(state => state.sessions);
-
+  const [filterTerm, setFilterTerm] = useState(null);
   const [selectedSessions, setSelectedSessions] = useState([]);
 
   const pairedServer = useSelector(state => state.pairedServer);
@@ -28,7 +29,7 @@ const DataExportSection = () => {
   const deleteSession = id => dispatch(sessionsActions.removeSession(id));
   const openDialog = dialog => dispatch(dialogActions.openDialog(dialog));
 
-  const handleFilterChange = () => setSelectedSessions([]);
+  const handleFilterChange = term => setFilterTerm(term);
 
   const handleDeleteSessions = () => {
     openDialog({
@@ -120,6 +121,17 @@ const DataExportSection = () => {
     };
   });
 
+
+  const [filteredSessions, setFilteredSessions] = useState(formattedSessions);
+
+  useEffect(() => {
+    const newFilteredSessions = getFilteredList(formattedSessions, filterTerm, null);
+    setFilteredSessions(newFilteredSessions);
+    console.log({ selectedSessions, newFilteredSessions });
+    // selectedSessions.filter(() => {});
+  }, [filterTerm, selectedSessions]);
+
+
   const exportSessions = (toServer = false) => {
     const exportFunction = toServer ? exportToServer : exportToFile;
 
@@ -156,7 +168,7 @@ const DataExportSection = () => {
         </motion.div>
         <NewFilterableListWrapper
           ItemComponent={SessionCard}
-          items={formattedSessions}
+          items={filteredSessions}
           propertyPath={null}
           initialSortProperty="updatedAt"
           initialSortDirection="desc"
