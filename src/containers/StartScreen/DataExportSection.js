@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { get, intersection, difference } from 'lodash';
+import { get, difference } from 'lodash';
 import { motion } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@codaco/ui';
@@ -97,7 +97,7 @@ const DataExportSection = () => {
 
   const [filteredSessions, setFilteredSessions] = useState(formattedSessions);
   const filteredIds = filteredSessions.map(({ sessionUUID }) => sessionUUID);
-  const selectedFilteredIds = intersection(selectedSessions, filteredIds);
+  // const selectedFilteredIds = intersection(selectedSessions, filteredIds);
 
   useEffect(() => {
     const newFilteredSessions = getFilteredList(formattedSessions, filterTerm, null);
@@ -108,7 +108,7 @@ const DataExportSection = () => {
   const exportSessions = (toServer = false) => {
     const exportFunction = toServer ? exportToServer : exportToFile;
 
-    const sessionsToExport = selectedFilteredIds
+    const sessionsToExport = selectedSessions
       .map((session) => {
         const sessionProtocol = installedProtocols[sessions[session].protocolUID];
 
@@ -125,8 +125,9 @@ const DataExportSection = () => {
   if (Object.keys(sessions).length === 0) { return null; }
 
   const isSelectAll = (
-    selectedFilteredIds.length > 0 &&
-    filteredIds.length === selectedFilteredIds.length
+    selectedSessions.length > 0 &&
+    selectedSessions.length === filteredIds.length &&
+    difference(selectedSessions, filteredIds).length === 0
   );
 
   const toggleSelectAll = () => {
@@ -146,8 +147,9 @@ const DataExportSection = () => {
 
   const isUnexportedSelected = (
     unexportedSessions.length > 0 &&
-    selectedFilteredIds.length > 0 &&
-      intersection(unexportedSessions, selectedFilteredIds).length === unexportedSessions.length
+    selectedSessions.length > 0 &&
+    selectedSessions.length === unexportedSessions.length &&
+    difference(selectedSessions, unexportedSessions).length === 0
   );
 
   const toggleSelectUnexported = () => {
@@ -210,15 +212,15 @@ const DataExportSection = () => {
               onChange={toggleSelectAll}
             />
           </div>
-          { selectedFilteredIds.length > 0 &&
-            (<span>{ selectedFilteredIds.length} selected session{ selectedFilteredIds.length > 1 ? ('s') : null }.</span>)}
+          { selectedSessions.length > 0 &&
+            (<span>{ selectedSessions.length} selected session{ selectedSessions.length > 1 ? ('s') : null }.</span>)}
         </motion.div>
       </motion.main>
       <motion.footer layout className="data-export-section__footer">
-        <Button color="neon-coral--dark" onClick={handleDeleteSessions} disabled={selectedFilteredIds.length === 0}>Delete Selected</Button>
+        <Button color="neon-coral--dark" onClick={handleDeleteSessions} disabled={selectedSessions.length === 0}>Delete Selected</Button>
         <div className="action-buttons">
-          { pairedServerConnection === 'ok' && (<Button onClick={() => exportSessions(true)} color="mustard" disabled={pairedServerConnection !== 'ok' || selectedFilteredIds.length === 0}>Export Selected To Server</Button>)}
-          <Button color="platinum" onClick={() => exportSessions(false)} disabled={selectedFilteredIds.length === 0}>Export Selected To File</Button>
+          { pairedServerConnection === 'ok' && (<Button onClick={() => exportSessions(true)} color="mustard" disabled={pairedServerConnection !== 'ok' || selectedSessions.length === 0}>Export Selected To Server</Button>)}
+          <Button color="platinum" onClick={() => exportSessions(false)} disabled={selectedSessions.length === 0}>Export Selected To File</Button>
         </div>
       </motion.footer>
     </Section>
