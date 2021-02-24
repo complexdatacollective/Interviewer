@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { every, get, includes, pickBy } from 'lodash';
+import { every, get, includes, pickBy, difference } from 'lodash';
 import { motion } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@codaco/ui';
@@ -49,32 +49,6 @@ const DataExportSection = () => {
     });
   };
 
-  const getUnexportedSessions = () =>
-    Object.keys(pickBy(sessions, session => !session.exportedAt));
-
-  const isUnexportedSelected = () => getUnexportedSessions().length > 0 &&
-    (every(getUnexportedSessions(), session => includes(selectedSessions, session))) &&
-    (getUnexportedSessions().length === selectedSessions.length);
-
-  const toggleSelectAll = () => {
-    if ((Object.keys(sessions).length !== selectedSessions.length)) {
-      setSelectedSessions(Object.keys(sessions));
-      return;
-    }
-
-    setSelectedSessions([]);
-  };
-
-  const toggleSelectUnexported = () => {
-    const unexportedSessions = getUnexportedSessions();
-    if (!isUnexportedSelected()) {
-      setSelectedSessions(unexportedSessions);
-      return;
-    }
-
-    setSelectedSessions([]);
-  };
-
   const handleSessionCardClick = (sessionUUID) => {
     if (selectedSessions.includes(sessionUUID)) {
       setSelectedSessions([
@@ -121,8 +95,8 @@ const DataExportSection = () => {
     };
   });
 
-
   const [filteredSessions, setFilteredSessions] = useState(formattedSessions);
+  const filteredIds = filteredSessions.map(({ sessionUUID }) => sessionUUID);
 
   useEffect(() => {
     const newFilteredSessions = getFilteredList(formattedSessions, filterTerm, null);
@@ -130,10 +104,8 @@ const DataExportSection = () => {
     setFilteredSessions(newFilteredSessions);
   }, [filterTerm, selectedSessions]);
 
-
   const exportSessions = (toServer = false) => {
     const exportFunction = toServer ? exportToServer : exportToFile;
-    const filteredIds = filteredSessions.map(({ sessionUUID }) => sessionUUID);
 
     const sessionsToExport = selectedSessions
       .filter(session => filteredIds.includes(session))
@@ -152,10 +124,36 @@ const DataExportSection = () => {
 
   if (Object.keys(sessions).length === 0) { return null; }
 
+  const getUnexportedSessions = () =>
+    Object.keys(pickBy(sessions, session => !session.exportedAt));
+
+  const isUnexportedSelected = () => getUnexportedSessions().length > 0 &&
+    (every(getUnexportedSessions(), session => includes(selectedSessions, session))) &&
+    (getUnexportedSessions().length === selectedSessions.length);
+
   const isSelectAll = (
-    Object.keys(sessions).length > 0
-    && (Object.keys(sessions).length === selectedSessions.length)
+    difference(selectedSessions, filteredIds).length === 0
+    && (filteredIds.length === selectedSessions.length)
   );
+
+  const toggleSelectAll = () => {
+    if (!isSelectAll) {
+      setSelectedSessions([...filteredIds]);
+      return;
+    }
+
+    setSelectedSessions([]);
+  };
+
+  const toggleSelectUnexported = () => {
+    const unexportedSessions = getUnexportedSessions();
+    if (!isUnexportedSelected()) {
+      setSelectedSessions(unexportedSessions);
+      return;
+    }
+
+    setSelectedSessions([]);
+  };
 
   const resetFilter = [isSelectAll, isUnexportedSelected()];
 
