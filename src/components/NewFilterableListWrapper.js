@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { get } from 'lodash';
 import objectHash from 'object-hash';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -8,7 +8,7 @@ import { Text } from '@codaco/ui/lib/components/Fields';
 import { entityAttributesProperty } from '../ducks/modules/network';
 import sortOrder from '../utils/sortOrder';
 
-export const getFilteredList = (items, filterTerm, propertyPath = entityAttributesProperty) => {
+export const getFilteredList = (items, filterTerm, propertyPath) => {
   if (!filterTerm) { return items; }
 
   const normalizedFilterTerm = filterTerm.toLowerCase();
@@ -58,7 +58,7 @@ const NewFilterableListWrapper = (props) => {
     if (onFilterChange) { onFilterChange(value); }
   };
 
-  const filteredItems = onFilterChange ? items : getFilteredList(items);
+  const filteredItems = onFilterChange ? items : getFilteredList(items, filterTerm, propertyPath);
 
   const sortedItems = sortOrder([{
     property: sortProperty,

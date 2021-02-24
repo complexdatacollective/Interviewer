@@ -126,24 +126,28 @@ const DataExportSection = () => {
 
   useEffect(() => {
     const newFilteredSessions = getFilteredList(formattedSessions, filterTerm, null);
+
     setFilteredSessions(newFilteredSessions);
-    console.log({ selectedSessions, newFilteredSessions });
-    // selectedSessions.filter(() => {});
   }, [filterTerm, selectedSessions]);
 
 
   const exportSessions = (toServer = false) => {
     const exportFunction = toServer ? exportToServer : exportToFile;
+    const filteredIds = filteredSessions.map(({ sessionUUID }) => sessionUUID);
 
-    exportFunction(selectedSessions.map((session) => {
-      const sessionProtocol = installedProtocols[sessions[session].protocolUID];
+    const sessionsToExport = selectedSessions
+      .filter(session => filteredIds.includes(session))
+      .map((session) => {
+        const sessionProtocol = installedProtocols[sessions[session].protocolUID];
 
-      return asNetworkWithSessionVariables(
-        session,
-        sessions[session],
-        sessionProtocol,
-      );
-    }));
+        return asNetworkWithSessionVariables(
+          session,
+          sessions[session],
+          sessionProtocol,
+        );
+      });
+
+    exportFunction(sessionsToExport);
   };
 
   if (Object.keys(sessions).length === 0) { return null; }
