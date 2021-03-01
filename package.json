@@ -232,9 +232,24 @@
           ]
         },
         {
-          "target": "snap",
+          "target": "rpm",
           "arch": [
-            "x64"
+            "x64",
+            "arm64"
+          ]
+        },
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        },
+        {
+          "target": "tar.gz",
+          "arch": [
+            "x64",
+            "arm64"
           ]
         }
       ]
