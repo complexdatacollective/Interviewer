@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { get } from 'lodash';
 import objectHash from 'object-hash';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -7,6 +7,25 @@ import { Button, Spinner } from '@codaco/ui';
 import { Text } from '@codaco/ui/lib/components/Fields';
 import { entityAttributesProperty } from '../ducks/modules/network';
 import sortOrder from '../utils/sortOrder';
+
+export const getFilteredList = (items, filterTerm, propertyPath) => {
+  if (!filterTerm) { return items; }
+
+  const normalizedFilterTerm = filterTerm.toLowerCase();
+
+  return items.filter(
+    (item) => {
+      const itemAttributes =
+        propertyPath ? Object.values(get(item, propertyPath, {}))
+          : Object.values(item);
+      // Include in filtered list if any of the attribute property values
+      // include the filter value
+      return itemAttributes.some(
+        property => property && property.toString().toLowerCase().includes(normalizedFilterTerm),
+      );
+    },
+  );
+};
 
 const NewFilterableListWrapper = (props) => {
   const {
@@ -18,17 +37,11 @@ const NewFilterableListWrapper = (props) => {
     sortableProperties,
     loading,
     onFilterChange,
-    resetFilter,
   } = props;
 
   const [filterTerm, setFilterTerm] = useState(null);
   const [sortProperty, setSortProperty] = useState(initialSortProperty);
   const [sortAscending, setSortAscending] = useState(initialSortDirection === 'asc');
-
-  useEffect(() => {
-    if (resetFilter.every(v => v === false)) { return; }
-    setFilterTerm(null);
-  }, resetFilter);
 
   const handleSetSortProperty = (property) => {
     if (sortProperty === property) {
@@ -42,32 +55,15 @@ const NewFilterableListWrapper = (props) => {
   const handleFilterChange = (event) => {
     const value = event.target.value || null;
     setFilterTerm(value);
-    onFilterChange(value);
+    if (onFilterChange) { onFilterChange(value); }
   };
+
+  const filteredItems = onFilterChange ? items : getFilteredList(items, filterTerm, propertyPath);
 
   const sortedItems = sortOrder([{
     property: sortProperty,
     direction: sortAscending ? 'asc' : 'desc',
-  }], {}, propertyPath)(items);
-
-  const getFilteredAndSortedItemList = () => {
-    if (!filterTerm) { return sortedItems; }
-
-    const normalizedFilterTerm = filterTerm.toLowerCase();
-
-    return sortedItems.filter(
-      (item) => {
-        const itemAttributes =
-          propertyPath ? Object.values(get(item, propertyPath, {}))
-            : Object.values(item);
-        // Include in filtered list if any of the attribute property values
-        // include the filter value
-        return itemAttributes.some(
-          property => property && property.toString().toLowerCase().includes(normalizedFilterTerm),
-        );
-      },
-    );
-  };
+  }], {}, propertyPath)(filteredItems);
 
   const containerVariants = {
     show: {
@@ -101,8 +97,6 @@ const NewFilterableListWrapper = (props) => {
       },
     },
   };
-
-  const sortedAndFilteredList = getFilteredAndSortedItemList();
 
   return (
     <div
@@ -163,7 +157,7 @@ const NewFilterableListWrapper = (props) => {
           ) : (
             <AnimatePresence>
               {
-                sortedAndFilteredList.length > 0 && sortedAndFilteredList.map(item => (
+                sortedItems.length > 0 && sortedItems.map(item => (
                   <motion.div
                     variants={itemVariants}
                     key={item.key || objectHash(item)}
@@ -200,7 +194,7 @@ NewFilterableListWrapper.defaultProps = {
   sortableProperties: [],
   loading: false,
   resetFilter: [],
-  onFilterChange: () => {},
+  onFilterChange: null,
 };
 
 export default NewFilterableListWrapper;

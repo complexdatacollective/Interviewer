@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { every, get, includes, pickBy } from 'lodash';
+import React, { useState, useEffect } from 'react';
+import { get, difference } from 'lodash';
 import { motion } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@codaco/ui';
@@ -9,7 +9,8 @@ import { Section } from '.';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import useServerConnectionStatus from '../../hooks/useServerConnectionStatus';
-import { NewFilterableListWrapper, Switch } from '../../components';
+import { Switch } from '../../components';
+import NewFilterableListWrapper, { getFilteredList } from '../../components/NewFilterableListWrapper';
 import { asNetworkWithSessionVariables } from '../../utils/networkFormat';
 import formatDatestamp from '../../utils/formatDatestamp';
 
@@ -17,7 +18,7 @@ const oneBasedIndex = i => parseInt(i || 0, 10) + 1;
 
 const DataExportSection = () => {
   const sessions = useSelector(state => state.sessions);
-
+  const [filterTerm, setFilterTerm] = useState(null);
   const [selectedSessions, setSelectedSessions] = useState([]);
 
   const pairedServer = useSelector(state => state.pairedServer);
@@ -28,7 +29,7 @@ const DataExportSection = () => {
   const deleteSession = id => dispatch(sessionsActions.removeSession(id));
   const openDialog = dialog => dispatch(dialogActions.openDialog(dialog));
 
-  const handleFilterChange = () => setSelectedSessions([]);
+  const handleFilterChange = term => setFilterTerm(term);
 
   const handleDeleteSessions = () => {
     openDialog({
@@ -46,32 +47,6 @@ const DataExportSection = () => {
         </p>
       ),
     });
-  };
-
-  const getUnexportedSessions = () =>
-    Object.keys(pickBy(sessions, session => !session.exportedAt));
-
-  const isUnexportedSelected = () => getUnexportedSessions().length > 0 &&
-    (every(getUnexportedSessions(), session => includes(selectedSessions, session))) &&
-    (getUnexportedSessions().length === selectedSessions.length);
-
-  const toggleSelectAll = () => {
-    if ((Object.keys(sessions).length !== selectedSessions.length)) {
-      setSelectedSessions(Object.keys(sessions));
-      return;
-    }
-
-    setSelectedSessions([]);
-  };
-
-  const toggleSelectUnexported = () => {
-    const unexportedSessions = getUnexportedSessions();
-    if (!isUnexportedSelected()) {
-      setSelectedSessions(unexportedSessions);
-      return;
-    }
-
-    setSelectedSessions([]);
   };
 
   const handleSessionCardClick = (sessionUUID) => {
@@ -120,28 +95,71 @@ const DataExportSection = () => {
     };
   });
 
+  const [filteredSessions, setFilteredSessions] = useState(formattedSessions);
+  const filteredIds = filteredSessions.map(({ sessionUUID }) => sessionUUID);
+  // const selectedFilteredIds = intersection(selectedSessions, filteredIds);
+
+  useEffect(() => {
+    const newFilteredSessions = getFilteredList(formattedSessions, filterTerm, null);
+
+    setFilteredSessions(newFilteredSessions);
+  }, [filterTerm, selectedSessions]);
+
   const exportSessions = (toServer = false) => {
     const exportFunction = toServer ? exportToServer : exportToFile;
 
-    exportFunction(selectedSessions.map((session) => {
-      const sessionProtocol = installedProtocols[sessions[session].protocolUID];
+    const sessionsToExport = selectedSessions
+      .map((session) => {
+        const sessionProtocol = installedProtocols[sessions[session].protocolUID];
 
-      return asNetworkWithSessionVariables(
-        session,
-        sessions[session],
-        sessionProtocol,
-      );
-    }));
+        return asNetworkWithSessionVariables(
+          session,
+          sessions[session],
+          sessionProtocol,
+        );
+      });
+
+    exportFunction(sessionsToExport);
   };
 
   if (Object.keys(sessions).length === 0) { return null; }
 
   const isSelectAll = (
-    Object.keys(sessions).length > 0
-    && (Object.keys(sessions).length === selectedSessions.length)
+    selectedSessions.length > 0 &&
+    selectedSessions.length === filteredIds.length &&
+    difference(selectedSessions, filteredIds).length === 0
   );
 
-  const resetFilter = [isSelectAll, isUnexportedSelected()];
+  const toggleSelectAll = () => {
+    if (!isSelectAll) {
+      setSelectedSessions([...filteredIds]);
+      return;
+    }
+
+    setSelectedSessions([]);
+  };
+
+  const unexportedSessions = filteredSessions
+    .reduce((acc, { exportedAt, sessionUUID }) => {
+      if (exportedAt) { return acc; }
+      return [...acc, sessionUUID];
+    }, []);
+
+  const isUnexportedSelected = (
+    unexportedSessions.length > 0 &&
+    selectedSessions.length > 0 &&
+    selectedSessions.length === unexportedSessions.length &&
+    difference(selectedSessions, unexportedSessions).length === 0
+  );
+
+  const toggleSelectUnexported = () => {
+    if (!isUnexportedSelected) {
+      setSelectedSessions(unexportedSessions);
+      return;
+    }
+
+    setSelectedSessions([]);
+  };
 
   return (
     <Section className="start-screen-section data-export-section">
@@ -156,7 +174,7 @@ const DataExportSection = () => {
         </motion.div>
         <NewFilterableListWrapper
           ItemComponent={SessionCard}
-          items={formattedSessions}
+          items={filteredSessions}
           propertyPath={null}
           initialSortProperty="updatedAt"
           initialSortDirection="desc"
@@ -175,7 +193,6 @@ const DataExportSection = () => {
               variable: 'progress',
             },
           ]}
-          resetFilter={resetFilter}
         />
         <motion.div
           className="selection-status"
@@ -185,7 +202,7 @@ const DataExportSection = () => {
             <Switch
               className="header-toggle"
               label="Select un-exported"
-              on={isUnexportedSelected()}
+              on={isUnexportedSelected}
               onChange={toggleSelectUnexported}
             />
             <Switch
