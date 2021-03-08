@@ -152,7 +152,7 @@
     "sass-lint": "^1.12.1",
     "sass-loader": "^6.0.6",
     "sass-svg": "^1.0.1",
-    "secure-comms-api": "git+https://github.com/complexdatacollective/secure-comms-api.git",
+    "secure-comms-api": "github:complexdatacollective/secure-comms-api#npm7",
     "sockjs-client": "^1.3.0",
     "style-loader": "0.18.2",
     "svg2png": "^4.1.1",
