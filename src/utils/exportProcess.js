@@ -118,7 +118,9 @@ export const exportToFile = (sessionList) => {
 
     if (succeeded.length > 0) {
       batch(() => {
-        succeeded.forEach((successfulExport) => dispatch(sessionsActions.setSessionExported(successfulExport)));
+        succeeded.forEach(
+          (successfulExport) => dispatch(sessionsActions.setSessionExported(successfulExport)),
+        );
       });
     }
 
@@ -235,7 +237,9 @@ export const exportToServer = (sessionList) => {
 
     if (succeeded.length > 0) {
       batch(() => {
-        succeeded.forEach((successfulExport) => dispatch(sessionsActions.setSessionExported(successfulExport)));
+        succeeded.forEach(
+          (successfulExport) => dispatch(sessionsActions.setSessionExported(successfulExport)),
+        );
       });
     }
 

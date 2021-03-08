@@ -35,6 +35,7 @@ export const getLastActiveProtocol = (state) => {
   }
 
   const lastActiveSession = getLastActiveSession(state);
+  const lastActiveAttributes = lastActiveSession[entityAttributesProperty];
 
   const protocolsCollection = values(mapValues(installedProtocols, (protocol, protocolUID) => ({
     protocolUID,
@@ -44,9 +45,9 @@ export const getLastActiveProtocol = (state) => {
   const lastInstalledProtocol = orderBy(protocolsCollection, ['installationDate'], ['desc'])[0];
 
   if (
-    lastActiveSession[entityAttributesProperty]
-    && lastActiveSession[entityAttributesProperty].updatedAt // Last active session exists
-    && lastActiveSession[entityAttributesProperty].updatedAt > lastInstalledProtocol.installationDate
+    lastActiveAttributes
+    && lastActiveAttributes.updatedAt // Last active session exists
+    && lastActiveAttributes.updatedAt > lastInstalledProtocol.installationDate
   ) {
     return {
       ...installedProtocols[lastActiveSession[entityAttributesProperty].protocolUID],

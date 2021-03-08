@@ -117,7 +117,7 @@ const ServerAddressForm = ({
         onSubmit={handleSubmit}
         formName="server-address-form"
         initialValues={initialValues}
-        {...formConfig}
+        {...formConfig} // eslint-disable-line react/jsx-props-no-spreading
       />
       <div className="server-address-form__footer">
         <Button aria-label="Submit" onClick={submitForm} disabled={!submittable}>

@@ -47,7 +47,9 @@ const DataExportSection = () => {
     });
   };
 
-  const getUnexportedSessions = () => Object.keys(pickBy(sessions, (session) => !session.exportedAt));
+  const getUnexportedSessions = () => Object.keys(
+    pickBy(sessions, (session) => !session.exportedAt),
+  );
 
   const isUnexportedSelected = () => getUnexportedSessions().length > 0
     && (every(getUnexportedSessions(), (session) => includes(selectedSessions, session)))

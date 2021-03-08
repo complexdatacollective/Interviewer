@@ -66,11 +66,12 @@ const withToast = (actionCreator) => (...args) => (dispatch) => {
       return dispatch(addToast({
         type: 'success',
         title: 'Pairing complete!',
-        content:
-            (<p>
-              You have successfully paired with Server. You may now fetch protocols
-              and upload data.
-            </p>),
+        content: (
+          <p>
+            You have successfully paired with Server. You may now fetch protocols
+            and upload data.
+          </p>
+        ),
       }));
     }
     default:

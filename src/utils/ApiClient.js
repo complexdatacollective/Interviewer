@@ -230,6 +230,8 @@ class ApiClient {
    */
   requestPairing() {
     if (!this.pairingClient) {
+      // TODO: reject with error
+      // eslint-disable-next-line prefer-promise-reject-errors
       return Promise.reject('No pairing client available');
     }
     return this.pairingClient.get('/devices/new', { cancelToken: this.cancelTokenSource.token })
@@ -252,6 +254,8 @@ class ApiClient {
    */
   confirmPairing(pairingCode, pairingRequestId, pairingRequestSalt, deviceName = '') {
     if (!this.pairingClient) {
+      // TODO: reject with error
+      // eslint-disable-next-line prefer-promise-reject-errors
       return Promise.reject('No pairing client available');
     }
 
@@ -299,6 +303,8 @@ class ApiClient {
    */
   getProtocols() {
     if (!this.httpsClient) {
+      // TODO: reject with error
+      // eslint-disable-next-line prefer-promise-reject-errors
       return Promise.reject('No secure client available');
     }
 
@@ -310,6 +316,8 @@ class ApiClient {
 
   downloadProtocol(path, destination) {
     if (!this.httpsClient) {
+      // TODO: reject with error
+      // eslint-disable-next-line prefer-promise-reject-errors
       return Promise.reject('No secure client available');
     }
 
@@ -408,6 +416,8 @@ class ApiClient {
    */
   requestHeartbeat() {
     if (!this.httpsClient) {
+      // TODO: reject with error
+      // eslint-disable-next-line prefer-promise-reject-errors
       return Promise.reject('No secure client available');
     }
 

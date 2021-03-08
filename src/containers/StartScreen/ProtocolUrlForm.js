@@ -66,7 +66,7 @@ const ProtocolUrlForm = ({
           onSubmit={handleSubmit}
           initialValues={initialValues}
           autoFocus
-          {...formConfig}
+          {...formConfig} // eslint-disable-line react/jsx-props-no-spreading
         >
           <div className="protocol-url-form__footer">
             <Button aria-label="Submit" type="submit" disabled={!submittable}>

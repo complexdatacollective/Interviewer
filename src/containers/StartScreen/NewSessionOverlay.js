@@ -45,7 +45,7 @@ const NewSessionOverlay = ({
           form={formConfig.formName}
           autoFocus
           onSubmit={onSubmitForm}
-          {...formConfig}
+          {...formConfig} // eslint-disable-line react/jsx-props-no-spreading
         >
           <div className="case-id-form__footer">
             <Button aria-label="Submit" type="submit">

@@ -45,8 +45,13 @@ const withVariableUUIDReplacement = (nodeList, protocolCodebook, stageSubject) =
 
     const uuid = withUUID(node);
 
-    const attributes = mapKeys(node.attributes,
-      (attributeValue, attributeKey) => getParentKeyByNameValue(codebookDefinition.variables, attributeKey));
+    const attributes = mapKeys(
+      node.attributes,
+      (attributeValue, attributeKey) => getParentKeyByNameValue(
+        codebookDefinition.variables,
+        attributeKey,
+      ),
+    );
 
     return {
       type: stageNodeType,

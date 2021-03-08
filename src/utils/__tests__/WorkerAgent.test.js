@@ -1,5 +1,5 @@
 /* eslint-env jest */
-/* eslint-disable @codaco/spellcheck/spell-checker */
+/* eslint-disable @codaco/spellcheck/spell-checker, max-classes-per-file */
 
 import WorkerAgent, { urlForWorkerSource } from '../WorkerAgent';
 

@@ -13,7 +13,9 @@ import { entityAttributesProperty } from '../ducks/modules/network';
 const currentPathname = (router) => router && router.location && router.location.pathname;
 const stageIndexForCurrentSession = (state) => currentStageIndex(currentPathname(state.router));
 
-export const getActiveSession = (state) => state.activeSessionId && state.sessions[state.activeSessionId];
+export const getActiveSession = (state) => (
+  state.activeSessionId && state.sessions[state.activeSessionId]
+);
 
 export const getLastActiveSession = (state) => {
   if (Object.keys(state.sessions).length === 0) {
@@ -72,7 +74,11 @@ export const getSessionProgress = (state) => {
   const promptProgress = promptCount ? currentPrompt / promptCount : 0;
   // This can go over 100% when finish screen is not present,
   // so it needs to be clamped
-  const percentProgress = clamp((stageProgress + (promptProgress / (screenCount - 1))) * 100, 0, 100);
+  const percentProgress = clamp(
+    (stageProgress + (promptProgress / (screenCount - 1))) * 100,
+    0,
+    100,
+  );
   const isFirstPrompt = promptCount > 0 && currentPrompt === 0;
   const isLastPrompt = promptCount > 0 && currentPrompt === promptCount - 1;
   const isFirstStage = currentStage === 0;
@@ -100,7 +106,9 @@ export const getSessionProgress = (state) => {
   };
 };
 
-export const anySessionIsActive = (state) => state.activeSessionId && state.activeSessionId !== initialState;
+export const anySessionIsActive = (state) => (
+  state.activeSessionId && state.activeSessionId !== initialState
+);
 
 export const getStageForCurrentSession = createSelector(
   (state, props) => getProtocolStages(state, props),

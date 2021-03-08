@@ -241,14 +241,14 @@ const DyadCensus = ({
                     <div className="dyad-census__options">
                       <AnimatePresence exitBeforeEnter>
                         <motion.div
-                key={stepsState.step}
-                className="dyad-census__options-step"
-                variants={optionsVariants}
-                initial="hide"
-                animate="show"
-                exit="hide"
-              >
-                <div className="dyad-census__yes">
+                          key={stepsState.step}
+                          className="dyad-census__options-step"
+                          variants={optionsVariants}
+                          initial="hide"
+                          animate="show"
+                          exit="hide"
+                        >
+                          <div className="dyad-census__yes">
                             <Button
                               onClick={handleChange(true)}
                               selected={!!hasEdge && hasEdge !== null}
@@ -256,7 +256,7 @@ const DyadCensus = ({
                               Yes
                             </Button>
                           </div>
-                <div className="dyad-census__no">
+                          <div className="dyad-census__no">
                             <Button
                               onClick={handleChange(false)}
                               selected={!hasEdge && hasEdge !== null}
@@ -265,7 +265,7 @@ const DyadCensus = ({
                               No
                             </Button>
                           </div>
-              </motion.div>
+                        </motion.div>
                       </AnimatePresence>
                     </div>
                     <div className="dyad-census__progress">

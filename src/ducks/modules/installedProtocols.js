@@ -58,24 +58,26 @@ const hasSessionDialog = {
   confirmLabel: 'Delete protocol and sessions',
 };
 
-const deleteProtocolAction = (protocolUID) => (dispatch, getState) => protocolHasSessions(getState(), protocolUID)
-  .then(({ hasSession, hasNotExportedSession }) => {
-    if (hasNotExportedSession) {
-      return dispatch(dialogActions.openDialog(hasNonExportedSessionDialog));
-    }
+const deleteProtocolAction = (protocolUID) => (dispatch, getState) =>
+  // eslint-disable-next-line implicit-arrow-linebreak
+  protocolHasSessions(getState(), protocolUID)
+    .then(({ hasSession, hasNotExportedSession }) => {
+      if (hasNotExportedSession) {
+        return dispatch(dialogActions.openDialog(hasNonExportedSessionDialog));
+      }
 
-    if (hasSession) {
-      return dispatch(dialogActions.openDialog(hasSessionDialog));
-    }
+      if (hasSession) {
+        return dispatch(dialogActions.openDialog(hasSessionDialog));
+      }
 
-    return dispatch(dialogActions.openDialog(confirmDeleteDialog));
-  })
-  .then((confirmed) => {
-    if (!confirmed) { return; }
+      return dispatch(dialogActions.openDialog(confirmDeleteDialog));
+    })
+    .then((confirmed) => {
+      if (!confirmed) { return; }
 
-    dispatch({ type: DELETE_PROTOCOL, protocolUID });
-    deleteProtocol(protocolUID);
-  });
+      dispatch({ type: DELETE_PROTOCOL, protocolUID });
+      deleteProtocol(protocolUID);
+    });
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
