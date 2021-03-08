@@ -5,7 +5,7 @@ import { makeNetworkNodesForType } from '../../selectors/interface';
 import SlideFormNode from '../SlidesForm/SlideFormNode';
 import SlidesForm from '../SlidesForm/SlidesForm';
 
-const AlterForm = props => (
+const AlterForm = (props) => (
   <SlidesForm
     itemName="alter"
     slideForm={SlideFormNode}

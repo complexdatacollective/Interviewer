@@ -6,18 +6,17 @@ import { actionCreators as sessionActions } from '../../ducks/modules/session';
 import { NewFilterableListWrapper } from '../../components';
 import { Overlay } from '../Overlay';
 
-const oneBasedIndex = i => parseInt(i || 0, 10) + 1;
+const oneBasedIndex = (i) => parseInt(i || 0, 10) + 1;
 
 const ResumeSessionPicker = ({
   show,
   onClose,
 }) => {
   const dispatch = useDispatch();
-  const setSession = sessionUID => dispatch(sessionActions.setSession(sessionUID));
+  const setSession = (sessionUID) => dispatch(sessionActions.setSession(sessionUID));
 
-  const sessions = useSelector(state => state.sessions);
-  const installedProtocols = useSelector(state => state.installedProtocols);
-
+  const sessions = useSelector((state) => state.sessions);
+  const installedProtocols = useSelector((state) => state.installedProtocols);
 
   const handleSessionCardClick = (sessionUUID) => {
     setSession(sessionUUID);

@@ -10,17 +10,17 @@ import { entityPrimaryKeyProperty } from '../../../ducks/modules/network';
  * @returns {array} An array of node pairs e.g. `[[id, id], ...]`
  */
 export const getPairs = (nodes) => {
-  const nodeIds = nodes.map(node => node[entityPrimaryKeyProperty]);
+  const nodeIds = nodes.map((node) => node[entityPrimaryKeyProperty]);
 
   const pairs = nodeIds.reduce(
     ({ result, pool }, id) => {
-      const nextPool = pool.filter(alterId => alterId !== id);
+      const nextPool = pool.filter((alterId) => alterId !== id);
 
       if (nextPool.length === 0) {
         return result;
       }
 
-      const newPairs = nextPool.map(alterId => ([id, alterId]));
+      const newPairs = nextPool.map((alterId) => ([id, alterId]));
 
       return {
         result: [...result, ...newPairs],
@@ -33,10 +33,9 @@ export const getPairs = (nodes) => {
   return pairs;
 };
 
-export const getNode = (nodes, id) =>
-  nodes.find(node => node[entityPrimaryKeyProperty] === id);
+export const getNode = (nodes, id) => nodes.find((node) => node[entityPrimaryKeyProperty] === id);
 
 export const getNodePair = (nodes, pair) => {
   if (!pair) { return []; }
-  return pair.map(id => getNode(nodes, id));
+  return pair.map((id) => getNode(nodes, id));
 };

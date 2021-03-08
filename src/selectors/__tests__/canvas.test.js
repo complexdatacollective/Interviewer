@@ -14,7 +14,6 @@ const node3 = { _uid: 3, type: 'person', [entityAttributesProperty]: { role: ['a
 const node4 = { _uid: 4, type: 'person', [entityAttributesProperty]: { role: ['a'], name: 'echo', closeness: [1, 1] } };
 const node5 = { _uid: 5, type: 'person', [entityAttributesProperty]: { role: [2], name: 'charlie', closeness: [1, 1] } };
 
-
 const mockState = {
   activeSessionId: 'testSession',
   sessions: {
@@ -109,8 +108,12 @@ describe('canvas selectors', () => {
       const subject = getDisplayEdges(mockState, props);
 
       expect(subject).toEqual([
-        { from: [1, 1], key: '1_friend_4', to: [1, 1], type: 'friend' },
-        { from: [1, 1], key: '4_friend_5', to: [1, 1], type: 'friend' },
+        {
+          from: [1, 1], key: '1_friend_4', to: [1, 1], type: 'friend',
+        },
+        {
+          from: [1, 1], key: '4_friend_5', to: [1, 1], type: 'friend',
+        },
       ]);
     });
   });

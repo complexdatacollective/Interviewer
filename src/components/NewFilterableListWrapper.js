@@ -32,7 +32,7 @@ const NewFilterableListWrapper = (props) => {
     }
   };
 
-  const onFilterChange = event => setFilterTerm(event.target.value || null);
+  const onFilterChange = (event) => setFilterTerm(event.target.value || null);
 
   const sortedItems = sortOrder([{
     property: sortProperty,
@@ -46,13 +46,12 @@ const NewFilterableListWrapper = (props) => {
 
     return sortedItems.filter(
       (item) => {
-        const itemAttributes =
-          propertyPath ? Object.values(get(item, propertyPath, {}))
-            : Object.values(item);
+        const itemAttributes = propertyPath ? Object.values(get(item, propertyPath, {}))
+          : Object.values(item);
         // Include in filtered list if any of the attribute property values
         // include the filter value
         return itemAttributes.some(
-          property => property && property.toString().toLowerCase().includes(normalizedFilterTerm),
+          (property) => property && property.toString().toLowerCase().includes(normalizedFilterTerm),
         );
       },
     );
@@ -99,10 +98,11 @@ const NewFilterableListWrapper = (props) => {
     >
       <header className="new-filterable-list__header">
         <section className="new-filterable-list__header-section new-filterable-list__header-section--sort">
-          { (sortableProperties && sortableProperties.length > 0) &&
+          { (sortableProperties && sortableProperties.length > 0)
+            && (
             <div className="scroll-container">
               <h4>Sort: </h4>
-              {sortableProperties.map(sortField => (
+              {sortableProperties.map((sortField) => (
                 <Button
                   color={sortProperty === sortField.variable ? 'primary' : 'white'}
                   key={sortField.variable}
@@ -117,7 +117,7 @@ const NewFilterableListWrapper = (props) => {
                 </Button>
               ))}
             </div>
-          }
+            )}
         </section>
         <section className="new-filterable-list__header-section new-filterable-list__header-section--filter">
           <h4>Filter: </h4>
@@ -151,7 +151,7 @@ const NewFilterableListWrapper = (props) => {
           ) : (
             <AnimatePresence>
               {
-                sortedAndFilteredList.length > 0 && sortedAndFilteredList.map(item => (
+                sortedAndFilteredList.length > 0 && sortedAndFilteredList.map((item) => (
                   <motion.div
                     variants={itemVariants}
                     key={item.key || objectHash(item)}

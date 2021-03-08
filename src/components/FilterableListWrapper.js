@@ -54,7 +54,7 @@ class FilterableListWrapper extends Component {
         // Include in filtered list if any of the attribute property values
         // include the filter value
         return nodeDetails.some(
-          item => item && item.toString().toLowerCase().includes(filterValue),
+          (item) => item && item.toString().toLowerCase().includes(filterValue),
         );
       },
     );
@@ -104,10 +104,11 @@ class FilterableListWrapper extends Component {
       <div className="list-select">
         <div className="list-select__sort">
           <div>
-            { (sortFields && sortFields.length > 0) &&
-              <React.Fragment>
+            { (sortFields && sortFields.length > 0)
+              && (
+              <>
                 <h4>Sort: </h4>
-                {sortFields.map(sortField => (
+                {sortFields.map((sortField) => (
                   <Button
                     color={this.state.activeSortOrder.property === sortField.variable ? 'primary' : 'white'}
                     key={sortField.variable}
@@ -119,8 +120,8 @@ class FilterableListWrapper extends Component {
                     }
                   </Button>
                 ))}
-              </React.Fragment>
-            }
+              </>
+              )}
           </div>
           <div>
             <h4>Filter: </h4>

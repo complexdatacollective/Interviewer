@@ -36,7 +36,7 @@ const unpairServer = () => ({
   type: UNPAIR_SERVER,
 });
 
-const pairingFailed = withErrorDialog(error => ({
+const pairingFailed = withErrorDialog((error) => ({
   type: SERVER_PAIRING_FAILED,
   error,
 }));

@@ -7,7 +7,7 @@ import color from 'color';
 import { getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
 import { makeNetworkNodesForType, makeGetVariableOptions, makeGetPromptVariable } from '../selectors/interface';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
-import { NodeList } from '../components/';
+import { NodeList } from '../components';
 import { MonitorDragSource } from '../behaviours/DragAndDrop';
 import { getEntityAttributes, entityAttributesProperty, entityPrimaryKeyProperty } from '../ducks/modules/network';
 
@@ -25,12 +25,13 @@ class OrdinalBins extends PureComponent {
     meta: {},
   };
 
-  promptColor = () => (this.props.prompt.color ?
-    color(getCSSVariableAsString(`--${this.props.prompt.color}`)) :
-    color(getCSSVariableAsString('--ord-color-seq-1'))
+  promptColor = () => (this.props.prompt.color
+    ? color(getCSSVariableAsString(`--${this.props.prompt.color}`))
+    : color(getCSSVariableAsString('--ord-color-seq-1'))
   );
 
   backgroundColor = () => color(getCSSVariableAsString('--background'));
+
   calculateAccentColor = (index, missingValue) => {
     if (missingValue) {
       return color(getCSSVariableAsString('--color-rich-black')).mix(this.backgroundColor(), 0.8).toString();
@@ -84,7 +85,7 @@ class OrdinalBins extends PureComponent {
             id={`ORDBIN_NODE_LIST_${index}`}
             items={bin.nodes}
             itemType="NEW_NODE"
-            onDrop={item => onDrop(item)}
+            onDrop={(item) => onDrop(item)}
             accepts={() => true}
             hoverColor={highlightColor}
             sortOrder={this.props.prompt.binSortOrder}
@@ -115,9 +116,8 @@ function makeMapStateToProps() {
       bins: getOrdinalValues(state, props)
         .map((bin) => {
           const nodes = stageNodes.filter(
-            node =>
-              !isNil(node[entityAttributesProperty][activePromptVariable]) &&
-              node[entityAttributesProperty][activePromptVariable] === bin.value,
+            (node) => !isNil(node[entityAttributesProperty][activePromptVariable])
+              && node[entityAttributesProperty][activePromptVariable] === bin.value,
           );
 
           return {

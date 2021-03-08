@@ -21,8 +21,8 @@ const FetchServerProtocolPicker = ({
   const onlineStatus = useOnlineStatus();
 
   const dispatch = useDispatch();
-  const openDialog = dialog => dispatch(dialogActions.openDialog(dialog));
-  const pairedServer = useSelector(state => state.pairedServer);
+  const openDialog = (dialog) => dispatch(dialogActions.openDialog(dialog));
+  const pairedServer = useSelector((state) => state.pairedServer);
 
   const [protocolList, setProtocolList] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -58,7 +58,7 @@ const FetchServerProtocolPicker = ({
         setProtocolList(protocols);
         setLoading(false);
       })
-      .catch(err => handleApiError(err));
+      .catch((err) => handleApiError(err));
   }, [show, pairedServer, onlineStatus]);
 
   const formattedProtocols = [...Object.keys(protocolList)].map((protocolUID) => {

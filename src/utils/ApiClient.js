@@ -2,9 +2,11 @@
 import axios from 'axios';
 import EventEmitter from 'eventemitter3';
 import { isString } from 'lodash';
-import { decrypt, deriveSecretKeyBytes, encrypt, fromHex, toHex } from 'secure-comms-api/cipher';
+import {
+  decrypt, deriveSecretKeyBytes, encrypt, fromHex, toHex,
+} from 'secure-comms-api/cipher';
 import { DEVICE_API_VERSION } from '../config';
-import { isCordova, isElectron } from '../utils/Environment';
+import { isCordova, isElectron } from './Environment';
 import UserCancelledExport from './network-exporters/src/errors/UserCancelledExport';
 
 const ProgressMessages = {
@@ -144,7 +146,7 @@ class ApiClient {
     if (pairedServer && pairedServer.secureServiceUrl) {
       const secureURL = pairedServer.secureServiceUrl.replace(/\/$/, '');
       if (isCordova()) {
-        const deviceId = pairedServer.deviceId;
+        const { deviceId } = pairedServer;
         const cert = pairedServer.sslCertificate;
         this.httpsClient = new cordova.plugins.NetworkCanvasClient(deviceId, cert, secureURL);
       } else if (isElectron()) {
@@ -188,7 +190,7 @@ class ApiClient {
 
     if (isCordova()) {
       return this.httpsClient.acceptCertificate().catch(handleError);
-    } else if (isElectron()) {
+    } if (isElectron()) {
       return new Promise((resolve, reject) => {
         if (!this.pairedServer || !this.pairedServer.sslCertificate) {
           reject(new Error('No trusted Server certificate available'));
@@ -231,8 +233,8 @@ class ApiClient {
       return Promise.reject('No pairing client available');
     }
     return this.pairingClient.get('/devices/new', { cancelToken: this.cancelTokenSource.token })
-      .then(resp => resp.data)
-      .then(json => json.data)
+      .then((resp) => resp.data)
+      .then((json) => json.data)
       .catch(handleError);
   }
 
@@ -272,14 +274,14 @@ class ApiClient {
       {
         cancelToken: this.cancelTokenSource.token,
       })
-      .then(resp => resp.data)
-      .then(json => decrypt(json.data.message, secretHex))
+      .then((resp) => resp.data)
+      .then((json) => decrypt(json.data.message, secretHex))
       .then(JSON.parse)
       .then((decryptedData) => {
         if (!decryptedData.device || !decryptedData.device.id) {
           throw new Error(ProgressMessages.UnexpectedResponseMessage);
         }
-        const device = decryptedData.device;
+        const { device } = decryptedData;
         device.secret = secretHex;
         return {
           device,
@@ -301,9 +303,9 @@ class ApiClient {
     }
 
     return this.httpsClient.get('/protocols', { ...this.authHeader, cancelToken: this.cancelTokenSource.token })
-      .then(resp => resp.data)
-      .then(json => json.data)
-      .catch(err => handleError(err));
+      .then((resp) => resp.data)
+      .then((json) => json.data)
+      .catch((err) => handleError(err));
   }
 
   downloadProtocol(path, destination) {
@@ -313,10 +315,10 @@ class ApiClient {
 
     if (isCordova()) {
       return this.httpsClient.download(path, destination).catch(handleError);
-    } else if (isElectron()) {
+    } if (isElectron()) {
       return this.httpsClient
         .get(path, { ...this.authHeader, responseType: 'arraybuffer' })
-        .then(resp => new Uint8Array(resp.data));
+        .then((resp) => new Uint8Array(resp.data));
     }
     return Promise.reject(new Error('Downloads not supported on this platform'));
   }
@@ -341,8 +343,8 @@ class ApiClient {
     };
 
     return this.httpsClient.post(`/protocols/${protocolUID}/sessions`, payload, this.authHeader)
-      .then(resp => resp.data)
-      .then(json => json.data);
+      .then((resp) => resp.data)
+      .then((json) => json.data);
   }
 
   exportSessions(sessionList) {
@@ -410,9 +412,9 @@ class ApiClient {
     }
 
     return this.httpsClient.get('/health', { ...this.authHeader, cancelToken: this.cancelTokenSource.token })
-      .then(resp => resp.data)
-      .then(json => json.data)
-      .catch(err => handleError(err));
+      .then((resp) => resp.data)
+      .then((json) => json.data)
+      .catch((err) => handleError(err));
   }
 }
 

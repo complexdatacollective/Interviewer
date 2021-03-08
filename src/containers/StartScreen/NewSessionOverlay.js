@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from '@codaco/ui';
-import Overlay from '../../containers/Overlay';
-import { Form } from '../../containers';
+import Overlay from '../Overlay';
+import { Form } from '..';
 import { required, maxLength } from '../../utils/Validations';
-
 
 const NewSessionOverlay = ({
   handleSubmit,

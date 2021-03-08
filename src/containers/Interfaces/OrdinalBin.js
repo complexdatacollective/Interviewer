@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { isNil } from 'lodash';
 
 import withPrompt from '../../behaviours/withPrompt';
-import { PromptSwiper, OrdinalBins } from '../';
+import { PromptSwiper, OrdinalBins } from '..';
 import { makeGetPromptVariable, makeNetworkNodesForType } from '../../selectors/interface';
 import { MultiNodeBucket } from '../../components';
 import { entityAttributesProperty } from '../../ducks/modules/network';
@@ -67,7 +67,7 @@ function makeMapStateToProps() {
 
     return {
       nodesForPrompt: stageNodes.filter(
-        node => isNil(node[entityAttributesProperty][activePromptVariable]),
+        (node) => isNil(node[entityAttributesProperty][activePromptVariable]),
       ),
     };
   };

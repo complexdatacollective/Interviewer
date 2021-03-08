@@ -19,9 +19,7 @@ const initialState = {
   pendingStage: -1,
 };
 
-const childFactoryCreator = stageBackward =>
-  child =>
-    React.cloneElement(child, { stageBackward });
+const childFactoryCreator = (stageBackward) => (child) => React.cloneElement(child, { stageBackward });
 
 /**
   * Check protocol is loaded, and render the stage
@@ -38,11 +36,11 @@ class Protocol extends Component {
 
   onComplete = (directionOverride) => {
     const pendingDirection = directionOverride || this.state.pendingDirection;
-    const pendingStage = this.state.pendingStage;
+    const { pendingStage } = this.state;
 
-    const navigate = (pendingStage === -1) ?
-      () => this.props.goToNext(pendingDirection) :
-      () => this.goToStage(pendingStage);
+    const navigate = (pendingStage === -1)
+      ? () => this.props.goToNext(pendingDirection)
+      : () => this.goToStage(pendingStage);
     this.setState(
       { ...initialState },
       navigate,
@@ -91,11 +89,9 @@ class Protocol extends Component {
     }
   }
 
-  handleClickNext = () =>
-    this.goToNext();
+  handleClickNext = () => this.goToNext();
 
-  handleClickBack = () =>
-    this.goToNext(-1);
+  handleClickBack = () => this.goToNext(-1);
 
   handleStageSelect = (index) => {
     if (index === this.props.stageIndex) return;
@@ -189,7 +185,7 @@ function mapStateToProps(state, ownProps) {
   const { percentProgress, currentPrompt } = getSessionProgress(state);
 
   return {
-    isSkipped: index => isStageSkipped(index)(state),
+    isSkipped: (index) => isStageSkipped(index)(state),
     isSessionLoaded: !!state.activeSessionId,
     pathPrefix: `/session/${sessionId}`,
     percentProgress,

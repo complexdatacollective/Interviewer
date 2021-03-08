@@ -17,12 +17,12 @@ const HeaderSection = () => {
   const onlineStatus = useOnlineStatus();
 
   const [appVersion, setAppVersion] = useState('0.0.0');
-  const showGettingStarted = useSelector(state => state.deviceSettings.showGettingStarted);
+  const showGettingStarted = useSelector((state) => state.deviceSettings.showGettingStarted);
   const dispatch = useDispatch();
   const toggleShowGettingStarted = () => dispatch(deviceSettingsActions.toggleSetting('showGettingStarted'));
 
   useEffect(() => {
-    getVersion().then(version => setAppVersion(version));
+    getVersion().then((version) => setAppVersion(version));
   }, [onlineStatus]);
 
   const gettingStartedStates = {

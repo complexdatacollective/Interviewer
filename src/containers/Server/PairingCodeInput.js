@@ -24,7 +24,7 @@ class PairingCodeInput extends Component {
   onChange = (evt) => {
     const target = evt.currentTarget;
     const index = parseInt(target.getAttribute('data-index'), 10);
-    let value = target.value;
+    let { value } = target;
     let newCharacters;
 
     if (value.length === this.props.charCount) {

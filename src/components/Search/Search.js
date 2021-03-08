@@ -4,11 +4,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { Icon } from '@codaco/ui';
-import SearchTransition from '../../components/Transition/Search';
+import SearchTransition from '../Transition/Search';
 import SearchResults from '../../containers/Search/SearchResults';
-import AddCountButton from '../../components/AddCountButton';
-import SearchButton from '../../components/Search/SearchButton';
-import Loading from '../../components/Loading';
+import AddCountButton from '../AddCountButton';
+import SearchButton from './SearchButton';
+import Loading from '../Loading';
 
 const formSubmitHandler = (e) => { e.preventDefault(); };
 
@@ -45,17 +45,19 @@ const Search = ({
   const headers = [SearchPrompt, SelectPrompt]
     .map((prompt, i) => {
       let hiddenClass = '';
-      if ((prompt === SearchPrompt && hasSearchTerm) ||
-        (prompt === SelectPrompt && !hasSearchTerm)) {
+      if ((prompt === SearchPrompt && hasSearchTerm)
+        || (prompt === SelectPrompt && !hasSearchTerm)) {
         hiddenClass = `${HeaderClass}--hidden`;
       }
-      return (<h2 className={`${HeaderClass} ${hiddenClass}`} key={`${HeaderClass}${i}`}>
-        {prompt}
-      </h2>);
+      return (
+        <h2 className={`${HeaderClass} ${hiddenClass}`} key={`${HeaderClass}${i}`}>
+          {prompt}
+        </h2>
+      );
     });
 
   return (
-    <React.Fragment>
+    <>
       <SearchButton
         nodeIconName={nodeIconName}
         onClick={onToggleSearch}
@@ -82,12 +84,14 @@ const Search = ({
           />
 
           {
-            selectedResults.length > 0 &&
+            selectedResults.length > 0
+            && (
             <AddCountButton
               count={selectedResults.length}
               colorName={nodeColor}
               onClick={onCommit}
             />
+            )
           }
 
           <input
@@ -100,7 +104,7 @@ const Search = ({
           />
         </form>
       </SearchTransition>
-    </React.Fragment>
+    </>
   );
 };
 

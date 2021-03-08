@@ -7,7 +7,9 @@ const getEdgeColor = makeGetEdgeColor();
 
 class Edge extends PureComponent {
   render() {
-    const { from, to, color, viewBoxScale } = this.props;
+    const {
+      from, to, color, viewBoxScale,
+    } = this.props;
     if (!from || !to) { return null; }
     return (
       <line

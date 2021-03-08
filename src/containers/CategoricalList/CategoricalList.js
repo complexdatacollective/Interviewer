@@ -6,7 +6,9 @@ import PropTypes from 'prop-types';
 import { Flipper } from 'react-flip-toolkit';
 import cx from 'classnames';
 import { getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
-import { makeNetworkNodesForType, makeGetVariableOptions, makeGetPromptVariable, getPromptOtherVariable } from '../../selectors/interface';
+import {
+  makeNetworkNodesForType, makeGetVariableOptions, makeGetPromptVariable, getPromptOtherVariable,
+} from '../../selectors/interface';
 import { makeGetNodeLabel, makeGetNodeColor } from '../../selectors/network';
 import { MonitorDragSource } from '../../behaviours/DragAndDrop';
 import { entityAttributesProperty } from '../../ducks/modules/network';
@@ -83,8 +85,7 @@ class CategoricalList extends Component {
     return null;
   };
 
-  getBinSize = index =>
-    (this.props.expandedBinIndex === index ? this.binSizes.expandedSize : this.binSizes.itemSize);
+  getBinSize = (index) => (this.props.expandedBinIndex === index ? this.binSizes.expandedSize : this.binSizes.itemSize);
 
   renderCategoricalBins = () => {
     const {
@@ -175,22 +176,18 @@ CategoricalList.defaultProps = {
 };
 
 const matchVariable = (node, variable, value) => (
-  node[entityAttributesProperty][variable] &&
-  node[entityAttributesProperty][variable].includes(value)
+  node[entityAttributesProperty][variable]
+  && node[entityAttributesProperty][variable].includes(value)
 );
 
-const hasOtherVariable = (node, otherVariable) =>
-  otherVariable && node[entityAttributesProperty][otherVariable] !== null;
+const hasOtherVariable = (node, otherVariable) => otherVariable && node[entityAttributesProperty][otherVariable] !== null;
 
-const matchBin = (bin, variable) =>
-  node =>
-    matchVariable(node, variable, bin.value) || hasOtherVariable(node, bin.otherVariable);
+const matchBin = (bin, variable) => (node) => matchVariable(node, variable, bin.value) || hasOtherVariable(node, bin.otherVariable);
 
-const appendNodesForBin = (nodes, activePromptVariable) =>
-  bin => ({
-    ...bin,
-    nodes: nodes.filter(matchBin(bin, activePromptVariable)),
-  });
+const appendNodesForBin = (nodes, activePromptVariable) => (bin) => ({
+  ...bin,
+  nodes: nodes.filter(matchBin(bin, activePromptVariable)),
+});
 
 function makeMapStateToProps() {
   const getCategoricalValues = makeGetVariableOptions(true);

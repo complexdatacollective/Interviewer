@@ -4,8 +4,7 @@ import { reduxForm } from 'redux-form';
 import { Button, Node } from '@codaco/ui';
 import Field from '../Field';
 
-const stopClickPropagation = e =>
-  e.stopPropagation();
+const stopClickPropagation = (e) => e.stopPropagation();
 
 const OtherVariableForm = ({
   otherVariablePrompt,
@@ -33,7 +32,7 @@ const OtherVariableForm = ({
       </div>
       <div className="other-variable-form__footer">
         <Button type="button" color="white" onClick={onCancel}>Cancel</Button>
-        <Button type="submit" aria-label="Submit" >Continue</Button>
+        <Button type="submit" aria-label="Submit">Continue</Button>
       </div>
     </form>
   </div>

@@ -19,7 +19,9 @@ class Panel extends Component {
   };
 
   render() {
-    const { title, children, minimize, highlight } = this.props;
+    const {
+      title, children, minimize, highlight,
+    } = this.props;
 
     const panelClasses = cx(
       'panel',

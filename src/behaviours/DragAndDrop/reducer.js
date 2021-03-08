@@ -1,4 +1,6 @@
-import { filter, reject, omit, isEmpty, thru, some } from 'lodash';
+import {
+  filter, reject, omit, isEmpty, thru, some,
+} from 'lodash';
 
 const UPSERT_TARGET = Symbol('DRAG_AND_DROP/UPSERT_TARGET');
 const RENAME_TARGET = Symbol('DRAG_AND_DROP/RENAME_TARGET');
@@ -34,10 +36,10 @@ const willAccept = (accepts, source) => {
 
 const markOutOfBounds = (source) => {
   const isOutOfBounds = (
-    source.x > window.innerWidth ||
-    source.x < 0 ||
-    source.y > window.innerHeight ||
-    source.y < 0
+    source.x > window.innerWidth
+    || source.x < 0
+    || source.y > window.innerHeight
+    || source.y < 0
   );
 
   return isOutOfBounds;
@@ -47,10 +49,10 @@ const markHitTarget = ({ target, source }) => {
   if (!source) { return { ...target, isOver: false, willAccept: false }; }
 
   const isOver = (
-    source.x >= target.x &&
-    source.x <= target.x + target.width &&
-    source.y >= target.y &&
-    source.y <= target.y + target.height
+    source.x >= target.x
+    && source.x <= target.x + target.width
+    && source.y >= target.y
+    && source.y <= target.y + target.height
   );
 
   return {
@@ -60,21 +62,21 @@ const markHitTarget = ({ target, source }) => {
   };
 };
 
-const markHitTargets = ({ targets, source }) =>
-  targets.map(target => markHitTarget({ target, source }));
+const markHitTargets = ({ targets, source }) => targets.map((target) => markHitTarget({ target, source }));
 
-const markHitSource = ({ targets, source }) =>
-  thru(source, (s) => {
-    if (isEmpty(s)) { return s; }
+const markHitSource = ({ targets, source }) => thru(source, (s) => {
+  if (isEmpty(s)) { return s; }
 
-    return {
-      ...s,
-      isOver: filter(targets, 'isOver').length > 0,
-      isOutOfBounds: markOutOfBounds(s),
-    };
-  });
+  return {
+    ...s,
+    isOver: filter(targets, 'isOver').length > 0,
+    isOutOfBounds: markOutOfBounds(s),
+  };
+});
 
-const markHitAll = ({ targets, obstacles, source, ...rest }) => {
+const markHitAll = ({
+  targets, obstacles, source, ...rest
+}) => {
   const targetsWithHits = markHitTargets({ targets, source });
   const obstaclesWithHits = markHitTargets({ targets: obstacles, source });
   const sourceWithHits = markHitSource({ targets: targetsWithHits, source });
@@ -88,7 +90,7 @@ const markHitAll = ({ targets, obstacles, source, ...rest }) => {
 };
 
 const resetHits = ({ targets, ...rest }) => ({
-  targets: targets.map(target => omit(target, ['isOver', 'willAccept'])),
+  targets: targets.map((target) => omit(target, ['isOver', 'willAccept'])),
   ...rest,
 });
 
@@ -295,7 +297,6 @@ function dragEnd(data) {
     });
   };
 }
-
 
 const actionCreators = {
   upsertTarget,

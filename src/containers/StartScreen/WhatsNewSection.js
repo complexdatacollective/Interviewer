@@ -6,7 +6,7 @@ import { Section } from '.';
 import { actionCreators as deviceActions } from '../../ducks/modules/deviceSettings';
 
 const WhatsNewSection = () => {
-  const showWhatsNew = useSelector(state => state.deviceSettings.showWhatsNew);
+  const showWhatsNew = useSelector((state) => state.deviceSettings.showWhatsNew);
 
   const dispatch = useDispatch();
   const dismissSection = () => dispatch(deviceActions.toggleSetting('showWhatsNew'));

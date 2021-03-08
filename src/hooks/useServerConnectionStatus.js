@@ -59,4 +59,3 @@ const useServerConnectionStatus = (pairedServer) => {
 };
 
 export default useServerConnectionStatus;
-

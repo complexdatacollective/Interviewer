@@ -31,8 +31,8 @@ class ConvexHulls extends Component {
 
   updateSize = () => {
     if (this.hullComponent.current && (
-      this.state.size.width !== getAbsoluteBoundingRect(this.hullComponent.current).width ||
-      this.state.size.height !== getAbsoluteBoundingRect(this.hullComponent.current).height)) {
+      this.state.size.width !== getAbsoluteBoundingRect(this.hullComponent.current).width
+      || this.state.size.height !== getAbsoluteBoundingRect(this.hullComponent.current).height)) {
       this.setState({
         size: {
           width: getAbsoluteBoundingRect(this.hullComponent.current).width,
@@ -77,6 +77,5 @@ ConvexHulls.propTypes = {
 ConvexHulls.defaultProps = {
   categoricalOptions: [],
 };
-
 
 export default ConvexHulls;

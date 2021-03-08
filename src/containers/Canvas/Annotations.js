@@ -4,8 +4,9 @@ import PropTypes from 'prop-types';
 import { Fade } from '@codaco/ui/lib/components/Transitions';
 import DragManager, { NO_SCROLL } from '../../behaviours/DragAndDrop/DragManager';
 
-const AnnotationLines =
-({ lines, isDrawing, isFreeze, linesShowing, linesToFade, onLineFaded }) => (
+const AnnotationLines = ({
+  lines, isDrawing, isFreeze, linesShowing, linesToFade, onLineFaded,
+}) => (
   <svg className="annotations__lines" width="100%" height="100%" viewBox="0 0 1 1" preserveAspectRatio="none">
     {lines.map((line, index) => {
       const handleLineGone = () => onLineFaded(index);
@@ -31,8 +32,10 @@ AnnotationLines.propTypes = {
   onLineFaded: PropTypes.func.isRequired,
 };
 
-const AnnotationLine = ({ line, showLine, freezeLine, onLineFaded }) => {
-  const pathData = `M ${line.map(point => (`${point.x} ${point.y}`)).join(' L ')}`;
+const AnnotationLine = ({
+  line, showLine, freezeLine, onLineFaded,
+}) => {
+  const pathData = `M ${line.map((point) => (`${point.x} ${point.y}`)).join(' L ')}`;
   let path = (
     <Fade
       in={showLine}
@@ -78,9 +81,9 @@ class Annotations extends Component {
   }
 
   componentDidMount() {
-    const nodeListRoot = document.getElementsByClassName('node-layout').length > 0 ?
-      document.getElementsByClassName('node-layout')[0] :
-      document.getElementById('narrative-interface__canvas');
+    const nodeListRoot = document.getElementsByClassName('node-layout').length > 0
+      ? document.getElementsByClassName('node-layout')[0]
+      : document.getElementById('narrative-interface__canvas');
     if (nodeListRoot) {
       nodeListRoot.insertBefore(this.portal, nodeListRoot.firstChild);
     }

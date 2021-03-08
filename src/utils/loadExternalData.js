@@ -11,38 +11,36 @@ import CSVWorker from './csvDecoder.worker';
  * inside of a worker to keep the app as responsive as possible.
  *
  * This function takes the result of the platform-specific file load operation,
- * and then initialises the conversion worker, before sending it the file contents
+ * and then initializes the conversion worker, before sending it the file contents
  * to decode.
  */
-const convertCSVToJsonWithWorker = data =>
-  new Promise((resolve, reject) => {
-    const worker = new CSVWorker();
-    worker.postMessage(data);
-    worker.onerror = (event) => {
-      reject(event);
-    };
-    worker.onmessage = (event) => {
-      resolve(event.data);
-    };
-  });
+const convertCSVToJsonWithWorker = (data) => new Promise((resolve, reject) => {
+  const worker = new CSVWorker();
+  worker.postMessage(data);
+  worker.onerror = (event) => {
+    reject(event);
+  };
+  worker.onmessage = (event) => {
+    resolve(event.data);
+  };
+});
 
 const fetchNetwork = inEnvironment(
   (environment) => {
     if (environment === environments.ELECTRON || environment === environments.WEB) {
-      return (url, fileType) =>
-        fetch(url)
-          .then((response) => {
-            if (fileType === 'csv') {
-              return response.text()
-                .then(convertCSVToJsonWithWorker);
-            }
+      return (url, fileType) => fetch(url)
+        .then((response) => {
+          if (fileType === 'csv') {
+            return response.text()
+              .then(convertCSVToJsonWithWorker);
+          }
 
-            return response.json();
-          })
-          .then((json) => {
-            const nodes = get(json, 'nodes', []);
-            return ({ nodes });
-          });
+          return response.json();
+        })
+        .then((json) => {
+          const nodes = get(json, 'nodes', []);
+          return ({ nodes });
+        });
     }
 
     if (environment === environments.CORDOVA) {
@@ -59,11 +57,12 @@ const fetchNetwork = inEnvironment(
         });
     }
 
-    return Promise.reject('Environment not supported');
+    // TODO: This should reject an error
+    return Promise.reject('Environment not supported'); // eslint-disable-line prefer-promise-reject-errors
   },
 );
 
-const fileExtension = fileName => fileName.split('.').pop();
+const fileExtension = (fileName) => fileName.split('.').pop();
 
 /**
  * Loads network data from assets and appends objectHash uids.
@@ -79,7 +78,7 @@ const loadExternalData = (protocolUID, fileName, type) => {
   switch (type) {
     case 'network':
       return getAssetUrl(protocolUID, fileName)
-        .then(url => fetchNetwork(url, fileType));
+        .then((url) => fetchNetwork(url, fileType));
     default:
       return new Error('You must specify an external data type.');
   }

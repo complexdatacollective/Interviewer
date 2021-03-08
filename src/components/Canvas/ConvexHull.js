@@ -6,9 +6,9 @@ import { entityAttributesProperty } from '../../ducks/modules/network';
 
 export class ConvexHull extends Component {
   shouldComponentUpdate(nextProps) {
-    if (this.props.layoutVariable !== nextProps.layoutVariable ||
-      !isEqual(this.props.nodePoints, nextProps.nodePoints) ||
-      !isEqual(this.props.windowDimensions, nextProps.windowDimensions)) {
+    if (this.props.layoutVariable !== nextProps.layoutVariable
+      || !isEqual(this.props.nodePoints, nextProps.nodePoints)
+      || !isEqual(this.props.windowDimensions, nextProps.windowDimensions)) {
       return true;
     }
     return false;

@@ -7,7 +7,9 @@ import { Icon, window } from '@codaco/ui';
 import { Radio } from '@codaco/ui/lib/components/Fields';
 import { Accordion } from '.';
 
-import { makeGetEdgeColor, makeGetEdgeLabel, makeGetNodeAttributeLabel, makeGetCategoricalOptions } from '../../selectors/network';
+import {
+  makeGetEdgeColor, makeGetEdgeLabel, makeGetNodeAttributeLabel, makeGetCategoricalOptions,
+} from '../../selectors/network';
 
 class PresetSwitcherKey extends Component {
   constructor() {
@@ -44,7 +46,7 @@ class PresetSwitcherKey extends Component {
         input={{
           value: index,
           checked: index === highlightIndex,
-          onChange: event => handleHighlightClick(event, index),
+          onChange: (event) => handleHighlightClick(event, index),
         }}
         label={highlight}
       />
@@ -131,10 +133,10 @@ const makeMapStateToProps = () => {
   const getCategoricalOptions = makeGetCategoricalOptions();
 
   const mapStateToProps = (state, props) => {
-    const highlightLabels = props.highlights.map(variable => (
+    const highlightLabels = props.highlights.map((variable) => (
       getNodeAttributeLabel(state, { variableId: variable, ...props })
     ));
-    const edges = props.displayEdges.map(type => (
+    const edges = props.displayEdges.map((type) => (
       { label: getEdgeLabel(state, { type }), color: getEdgeColor(state, { type }) }
     ));
     const convexOptions = getCategoricalOptions(state,

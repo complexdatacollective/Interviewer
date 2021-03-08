@@ -8,24 +8,20 @@ import { epics as errorsEpic } from '../errors';
 
 const mockError = new Error('foo');
 
-const testMiddleware = actionListener =>
-  () =>
-    next =>
-      (action) => {
-        actionListener(action);
-        return next(action);
-      };
+const testMiddleware = (actionListener) => () => (next) => (action) => {
+  actionListener(action);
+  return next(action);
+};
 
-const getStore = actionListener =>
-  createStore(
-    () => {},
-    undefined,
-    applyMiddleware(
-      thunk,
-      createEpicMiddleware(errorsEpic),
-      testMiddleware(actionListener),
-    ),
-  );
+const getStore = (actionListener) => createStore(
+  () => {},
+  undefined,
+  applyMiddleware(
+    thunk,
+    createEpicMiddleware(errorsEpic),
+    testMiddleware(actionListener),
+  ),
+);
 
 describe('errors', () => {
   describe('epics', () => {

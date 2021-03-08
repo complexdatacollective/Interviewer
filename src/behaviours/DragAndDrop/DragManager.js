@@ -69,7 +69,13 @@ const initalState = {
 };
 
 class dragManager {
-  constructor({ el, onDragStart, onDragMove, onDragEnd, scrollDirection }) {
+  constructor({
+    el,
+    onDragStart,
+    onDragMove,
+    onDragEnd,
+    scrollDirection,
+  }) {
     this.state = { ...initalState };
     this.el = el;
     this.onDragStart = onDragStart;
@@ -104,7 +110,7 @@ class dragManager {
   }
 
   movementFromEvent = (e) => {
-    const state = this.state;
+    const { state } = this;
     const { x, y } = getCoords(e);
     const { dy, dx } = moveDelta(state, { x, y });
     const t = new Date().getTime();
@@ -175,7 +181,12 @@ class dragManager {
         this.onDragMove(movement);
       }
 
-      this.state = { ...this.state, x, y, t };
+      this.state = {
+        ...this.state,
+        x,
+        y,
+        t,
+      };
     }
   }
 

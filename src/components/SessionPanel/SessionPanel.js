@@ -11,7 +11,13 @@ import CloseButton from '../CloseButton';
 import SessionInformation from './SessionInformation';
 
 const choiceVariants = {
-  show: { opacity: 1, translateY: '0%', transition: { type: 'spring', damping: 15, stiffness: 200, delay: 0.25 } },
+  show: {
+    opacity: 1,
+    translateY: '0%',
+    transition: {
+      type: 'spring', damping: 15, stiffness: 200, delay: 0.25,
+    },
+  },
   hide: { opacity: 0, translateY: '100%', transition: { duration: 0.3 } },
 };
 
@@ -24,14 +30,14 @@ const SessionPanel = React.forwardRef((props, ref) => {
     setShowSubMenu(false);
   };
 
-  const menuContent = showSubMenu ?
-    <SubMenu setShowSubMenu={setShowSubMenu} setExpanded={setExpanded} key="sub-menu" />
+  const menuContent = showSubMenu
+    ? <SubMenu setShowSubMenu={setShowSubMenu} setExpanded={setExpanded} key="sub-menu" />
     : <StagesMenu setExpanded={setExpanded} onStageSelect={props.onStageSelect} key="stages-menu" />;
 
   return (
     <AnimateSharedLayout>
       <AnimatePresence>
-        { expanded && (<BackgroundDimmer clickHandler={resetMenuState} ><CloseButton onClick={() => setExpanded(false)} className="close-button-wrapper" /></BackgroundDimmer>)}
+        { expanded && (<BackgroundDimmer clickHandler={resetMenuState}><CloseButton onClick={() => setExpanded(false)} className="close-button-wrapper" /></BackgroundDimmer>)}
       </AnimatePresence>
       <AnimatePresence>
         { (expanded && showSubMenu) && (

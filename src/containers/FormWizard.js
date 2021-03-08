@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Icon } from '@codaco/ui';
-import { Pips } from '../components/';
-import { Form } from '../containers/';
+import { Pips } from '../components';
+import { Form } from '.';
 
 class FormWizard extends Component {
   constructor(props) {
@@ -39,9 +39,9 @@ class FormWizard extends Component {
     return !showingLastField;
   }
 
-  hiddenFields = () => this.props.fields.filter(field => field.component === 'hidden');
+  hiddenFields = () => this.props.fields.filter((field) => field.component === 'hidden');
 
-  shownFields = () => this.props.fields.filter(field => field.component !== 'hidden');
+  shownFields = () => this.props.fields.filter((field) => field.component !== 'hidden');
 
   filterFields = () => {
     if (this.state.fieldIndex === 0) {

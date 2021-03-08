@@ -33,21 +33,25 @@ const ConcentricCircles = ({
       image={backgroundImage}
     />
     {
-      convexHulls &&
+      convexHulls
+      && (
       <ConvexHulls
         groupVariable={convexHulls}
         subject={subject}
         layoutVariable={layoutVariable}
       />
+      )
     }
     {
-      displayEdges.length > 0 &&
+      displayEdges.length > 0
+      && (
       <EdgeLayout
         displayEdges={displayEdges}
         subject={subject}
         layoutVariable={layoutVariable}
         stage={stage}
       />
+      )
     }
     <NodeLayout
       id="NODE_LAYOUT"

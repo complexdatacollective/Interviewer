@@ -9,7 +9,7 @@ const getSearchData = (_, props) => get(props.externalData, 'nodes', []);
 /**
  * Fuse.js is an interface for (optionally) fuzzy searching
  */
-export const makeGetFuse = fuseOpts => createSelector(
+export const makeGetFuse = (fuseOpts) => createSelector(
   getSearchData,
   getSearchOpts,
   (searchData = [], searchOpts = {}) => {

@@ -5,7 +5,7 @@ export const supportedWorkers = [NodeLabelWorkerName];
 
 // Create an object URL from worker contents.
 // We own the URL and can release it when no longer needed.
-export const urlForWorkerSource = blob => URL.createObjectURL(blob);
+export const urlForWorkerSource = (blob) => URL.createObjectURL(blob);
 
 const workers = {};
 
@@ -18,7 +18,7 @@ const getSharedWorker = (url) => {
       // Runtime errors are caught by the worker script wrapper; a syntax error (here) is
       // only issued once, and should indicate that all requests for this URL should fail.
       worker.globalError = err;
-      Object.values(worker.workMap).forEach(job => job.reject(err));
+      Object.values(worker.workMap).forEach((job) => job.reject(err));
     };
     worker.onmessage = (evt) => {
       const job = worker.workMap[evt.data.messageId];

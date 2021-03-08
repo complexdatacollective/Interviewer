@@ -15,8 +15,7 @@ const categoricalBinStateHandler = withStateHandlers(
     expandedBinIndex: null,
   },
   {
-    handleExpandBin: () =>
-      (expandedBinIndex = null) => ({ expandedBinIndex }),
+    handleExpandBin: () => (expandedBinIndex = null) => ({ expandedBinIndex }),
   },
 );
 
@@ -86,9 +85,8 @@ function makeMapStateToProps() {
     const activePromptVariable = getPromptVariable(state, props);
     const [promptOtherVariable] = getPromptOtherVariable(state, props);
 
-    const matchNoCategory = node =>
-      !node[entityAttributesProperty][activePromptVariable] &&
-      !node[entityAttributesProperty][promptOtherVariable];
+    const matchNoCategory = (node) => !node[entityAttributesProperty][activePromptVariable]
+      && !node[entityAttributesProperty][promptOtherVariable];
 
     return {
       activePromptVariable,

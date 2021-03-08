@@ -6,7 +6,7 @@ const defaultMonitorProps = {
 };
 
 const getMonitorProps = (state) => {
-  const source = state.source;
+  const { source } = state;
 
   if (!source) { return { ...defaultMonitorProps }; }
 
@@ -18,8 +18,6 @@ const getMonitorProps = (state) => {
   return monitorProps;
 };
 
-const MonitorDragSource = types =>
-  Monitor(getMonitorProps, types);
+const MonitorDragSource = (types) => Monitor(getMonitorProps, types);
 
 export default MonitorDragSource;
-

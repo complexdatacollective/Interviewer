@@ -54,8 +54,7 @@ describe('sessions', () => {
           caseId: 'case1',
           sessionId: 'a',
           protocolUID: 'mockProtocol',
-        },
-      );
+        });
 
       expect(newState).toEqual({
         a: {
@@ -82,8 +81,7 @@ describe('sessions', () => {
         {
           type: actionTypes.UPDATE_SESSION,
           sessionId: mockSessionId,
-        },
-      );
+        });
 
       expect(newState[mockSessionId]).toEqual(expect.objectContaining({
         caseId: undefined,
@@ -98,8 +96,7 @@ describe('sessions', () => {
           type: actionTypes.UPDATE_CASE_ID,
           sessionId: mockSessionId,
           caseId: 'case2',
-        },
-      );
+        });
 
       expect(newState[mockSessionId]).toEqual(expect.objectContaining({
         caseId: 'case2',
@@ -113,12 +110,10 @@ describe('sessions', () => {
         {
           type: installedProtocolsActionTypes.DELETE_PROTOCOL,
           protocolUID: '1234',
-        },
-      );
+        });
 
       expect(newState).toEqual(mockState);
     });
-
 
     it('should handle UPDATE_PROMPT', () => {
       const newState = reducer(mockStateWithSession,
@@ -126,8 +121,7 @@ describe('sessions', () => {
           type: actionTypes.UPDATE_PROMPT,
           sessionId: mockSessionId,
           promptIndex: 2,
-        },
-      );
+        });
 
       expect(newState[mockSessionId]).toEqual(expect.objectContaining({
         caseId: undefined,
@@ -142,8 +136,7 @@ describe('sessions', () => {
         {
           type: actionTypes.REMOVE_SESSION,
           sessionId: mockSessionId,
-        },
-      );
+        });
 
       expect(newState[mockSessionId]).toEqual(undefined);
     });

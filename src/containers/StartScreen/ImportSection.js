@@ -15,11 +15,11 @@ import FetchServerProtocolPicker from './FetchServerProtocolPicker';
 
 const ImportSection = () => {
   const onlineStatus = useOnlineStatus();
-  const pairedServer = useSelector(state => state.pairedServer);
+  const pairedServer = useSelector((state) => state.pairedServer);
   const pairedServerConnection = useServerConnectionStatus(pairedServer);
-  const installedProtocols = useSelector(state => state.installedProtocols);
-  const showProtocolUrlForm = useSelector(state => state.ui.showProtocolUrlForm);
-  const showFetchProtocolPicker = useSelector(state => state.ui.showFetchProtocolPicker);
+  const installedProtocols = useSelector((state) => state.installedProtocols);
+  const showProtocolUrlForm = useSelector((state) => state.ui.showProtocolUrlForm);
+  const showFetchProtocolPicker = useSelector((state) => state.ui.showFetchProtocolPicker);
   const [showManageProtocolsOverlay, setShowManageProtocolsOverlay] = useState(false);
 
   const dispatch = useDispatch();

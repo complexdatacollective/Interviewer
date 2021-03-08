@@ -1,38 +1,41 @@
+/* eslint-disable implicit-arrow-linebreak, react/jsx-props-no-spreading */
 import React, { PureComponent } from 'react';
 import { pick, isEqual } from 'lodash';
 import store from './store';
 
-const monitor = (getMonitorProps, types) =>
-  WrappedComponent =>
-    class Monitor extends PureComponent {
-      constructor(props) {
-        super(props);
-        this.state = { monitorProps: null };
-      }
+const monitor = (getMonitorProps, types) => (WrappedComponent) =>
+  class Monitor extends PureComponent {
+    constructor(props) {
+      super(props);
+      this.state = { monitorProps: null };
+    }
 
-      componentDidMount() {
-        this.unsubscribe = store.subscribe(this.updateMonitorProps);
-      }
+    componentDidMount() {
+      this.unsubscribe = store.subscribe(this.updateMonitorProps);
+    }
 
-      componentWillUnmount() {
-        this.unsubscribe();
-      }
+    componentWillUnmount() {
+      this.unsubscribe();
+    }
 
-      updateMonitorProps = () => {
-        const monitorProps = pick(getMonitorProps(store.getState(), this.props), types);
-        if (!isEqual(this.state.monitorProps, monitorProps)) {
-          this.setState({ monitorProps });
-        }
+    updateMonitorProps = () => {
+      const monitorPropsNew = pick(getMonitorProps(store.getState(), this.props), types);
+      const { monitorProps } = this.state;
+      if (!isEqual(monitorProps, monitorPropsNew)) {
+        this.setState({ monitorProps: monitorPropsNew });
       }
+    }
 
-      render() {
-        const props = {
-          ...this.props,
-          ...this.state.monitorProps,
-        };
+    render() {
+      const { monitorProps } = this.state;
 
-        return <WrappedComponent {...props} />;
-      }
-    };
+      const props = {
+        ...this.props,
+        ...monitorProps,
+      };
+
+      return <WrappedComponent {...props} />;
+    }
+  };
 
 export default monitor;

@@ -26,7 +26,7 @@ const StartScreen = ({
   };
 
   if (activeSessionId) {
-    const stageIndex = sessions[activeSessionId].stageIndex;
+    const { stageIndex } = sessions[activeSessionId];
     const pathname = `/session/${activeSessionId}/${stageIndex}`;
     return (<Redirect to={{ pathname: `${pathname}` }} />);
   }
@@ -62,7 +62,7 @@ const mapDispatchToProps = {
 
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   activeSessionId: state.activeSessionId,
   sessions: state.sessions,
 

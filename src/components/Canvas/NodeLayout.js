@@ -1,6 +1,8 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { isEmpty, has, isNil, get } from 'lodash';
+import {
+  isEmpty, has, isNil, get,
+} from 'lodash';
 import LayoutNode from '../../containers/Canvas/LayoutNode';
 import { entityPrimaryKeyProperty, getEntityAttributes, entityAttributesProperty } from '../../ducks/modules/network';
 
@@ -16,14 +18,13 @@ const NodeLayout = React.forwardRef(({
   height,
 }, ref) => {
   const isHighlighted = useCallback(
-    node =>
-      !isEmpty(highlightAttribute) &&
-        get(node, [entityAttributesProperty, highlightAttribute]) === true,
+    (node) => !isEmpty(highlightAttribute)
+        && get(node, [entityAttributesProperty, highlightAttribute]) === true,
     [highlightAttribute],
   );
 
   const isLinking = useCallback(
-    node => get(node, entityPrimaryKeyProperty) === connectFrom,
+    (node) => get(node, entityPrimaryKeyProperty) === connectFrom,
     [connectFrom],
   );
 

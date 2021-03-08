@@ -14,7 +14,9 @@ const baseClass = 'add-count-button';
  * @param {string} props.colorName a color named defined by Network-Canvas-UI
  * @param {number} props.count the natural number to display
  */
-const AddCountButton = ({ colorName, className, count, onClick }) => (
+const AddCountButton = ({
+  colorName, className, count, onClick,
+}) => (
   <button className={`${baseClass} ${baseClass}--${colorName} ${className}`} onClick={() => onClick()}>
     <div className={`${baseClass}__background`}>
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 240">

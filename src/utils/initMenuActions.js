@@ -1,6 +1,5 @@
-
 import { store } from '../ducks/store';
-import { isElectron } from '../utils/Environment';
+import { isElectron } from './Environment';
 import { actionCreators as uiActions } from '../ducks/modules/ui';
 import { actionCreators as sessionActions } from '../ducks/modules/session';
 

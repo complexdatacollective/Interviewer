@@ -7,11 +7,13 @@ const mockUrl = 'blob:file://script.js';
 
 global.URL = class URL {
   static createObjectURL = jest.fn().mockReturnValue(mockUrl)
+
   static revokeObjectURL = jest.fn()
 };
 
 global.Worker = class Worker {
   onmessage = jest.fn()
+
   postMessage = jest.fn().mockResolvedValue({})
 };
 

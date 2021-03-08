@@ -3,7 +3,7 @@ import React from 'react';
 import { compose } from 'redux';
 
 export const scrollable = (WrappedComponent) => {
-  const Scrollable = props => (
+  const Scrollable = (props) => (
     <Scroller onScroll={props.onScroll}>
       <WrappedComponent {...props} />
     </Scroller>

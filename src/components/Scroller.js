@@ -12,7 +12,7 @@ class Scroller extends Component {
   handleScroll = () => {
     if (!this.scrollable.current) { return; }
     const element = this.scrollable.current;
-    const scrollTop = element.scrollTop;
+    const { scrollTop } = element;
     const maxScrollPosition = element.scrollHeight - element.clientHeight;
     const scrollAmount = scrollTop / maxScrollPosition;
 

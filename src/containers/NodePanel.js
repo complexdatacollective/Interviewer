@@ -7,7 +7,7 @@ import {
   makeNetworkNodesForOtherPrompts as makeGetNodesForOtherPrompts,
 } from '../selectors/interface';
 import { getNetworkEdges, getNetworkEgo } from '../selectors/network';
-import { Panel, NodeList } from '../components/';
+import { Panel, NodeList } from '../components';
 import withExternalData from './withExternalData';
 import { entityPrimaryKeyProperty } from '../ducks/modules/network';
 import customFilter from '../utils/networkQuery/filter';
@@ -32,7 +32,7 @@ class NodePanel extends PureComponent {
     const externalNodes = get(this.props.externalData, 'nodes', []);
     const allNodes = (dataSource === 'existing' ? this.props.nodes : externalNodes);
 
-    return new Set(allNodes.map(node => node[entityPrimaryKeyProperty]));
+    return new Set(allNodes.map((node) => node[entityPrimaryKeyProperty]));
   }
 
   // This can use the displayed nodes for a count as it is used to see whether the panel
@@ -46,8 +46,7 @@ class NodePanel extends PureComponent {
     );
   }
 
-  handleDrop = item =>
-    this.props.onDrop(item, this.props.dataSource);
+  handleDrop = (item) => this.props.onDrop(item, this.props.dataSource);
 
   render = () => {
     const {
@@ -81,8 +80,7 @@ class NodePanel extends PureComponent {
   }
 }
 
-
-const getNodeId = node => node[entityPrimaryKeyProperty];
+const getNodeId = (node) => node[entityPrimaryKeyProperty];
 
 const makeGetNodes = () => {
   const getNodesForPrompt = makeGetNodesForPrompt();
@@ -96,8 +94,7 @@ const makeGetNodes = () => {
       other: nodesForOtherPrompts.map(getNodeId),
     };
 
-    const notInSet = set =>
-      node => !set.has(node[entityPrimaryKeyProperty]);
+    const notInSet = (set) => (node) => !set.has(node[entityPrimaryKeyProperty]);
 
     if (props.dataSource === 'existing') {
       const nodes = nodesForOtherPrompts

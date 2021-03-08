@@ -12,7 +12,7 @@ const DefaultFinishStage = {
   label: 'Finish Interview',
 };
 
-export const getInstalledProtocols = state => state.installedProtocols;
+export const getInstalledProtocols = (state) => state.installedProtocols;
 
 export const getCurrentSessionProtocol = createSelector(
   (state, props) => getActiveSession(state, props),
@@ -44,9 +44,9 @@ export const getLastActiveProtocol = (state) => {
   const lastInstalledProtocol = orderBy(protocolsCollection, ['installationDate'], ['desc'])[0];
 
   if (
-    lastActiveSession[entityAttributesProperty] &&
-    lastActiveSession[entityAttributesProperty].updatedAt && // Last active session exists
-    lastActiveSession[entityAttributesProperty].updatedAt > lastInstalledProtocol.installationDate
+    lastActiveSession[entityAttributesProperty]
+    && lastActiveSession[entityAttributesProperty].updatedAt // Last active session exists
+    && lastActiveSession[entityAttributesProperty].updatedAt > lastInstalledProtocol.installationDate
   ) {
     return {
       ...installedProtocols[lastActiveSession[entityAttributesProperty].protocolUID],
@@ -59,18 +59,17 @@ export const getLastActiveProtocol = (state) => {
 
 export const getActiveProtocolName = createSelector(
   getCurrentSessionProtocol,
-  protocol => protocol && protocol.name,
+  (protocol) => protocol && protocol.name,
 );
 
 export const getAssetManifest = createSelector(
   getCurrentSessionProtocol,
-  protocol => protocol.assetManifest,
+  (protocol) => protocol.assetManifest,
 );
-
 
 export const getProtocolCodebook = createSelector(
   getCurrentSessionProtocol,
-  protocol => protocol.codebook,
+  (protocol) => protocol.codebook,
 );
 
 const withFinishStage = (stages = []) => {
@@ -82,5 +81,5 @@ const withFinishStage = (stages = []) => {
 
 export const getProtocolStages = createSelector(
   getCurrentSessionProtocol,
-  protocol => withFinishStage(protocol.stages),
+  (protocol) => withFinishStage(protocol.stages),
 );

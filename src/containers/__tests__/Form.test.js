@@ -10,20 +10,19 @@ import Field from '../Field';
 
 jest.mock('@codaco/ui/lib/utils/CSSVariables');
 
-const mockStore = () =>
-  createStore(
-    () => (
-      {
-        installedProtocols: {
-          config: {
-            registry: {},
-          },
+const mockStore = () => createStore(
+  () => (
+    {
+      installedProtocols: {
+        config: {
+          registry: {},
         },
-      }
-    ),
-  );
+      },
+    }
+  ),
+);
 
-const props = testProps => ({
+const props = (testProps) => ({
   form: 'form1',
   fields: [],
   ...testProps,
@@ -73,7 +72,7 @@ describe('<Form />', () => {
     ];
 
     const subject = mount((
-      <Provider store={mockStore()} >
+      <Provider store={mockStore()}>
         <Form {...props({ fields })} />
       </Provider>
     ));

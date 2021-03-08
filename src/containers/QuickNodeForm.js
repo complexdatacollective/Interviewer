@@ -5,7 +5,7 @@ import { compose } from 'redux';
 import { Icon } from '@codaco/ui';
 import withPrompt from '../behaviours/withPrompt';
 import { entityAttributesProperty } from '../ducks/modules/network';
-import { Node } from './';
+import { Node } from '.';
 
 class QuickNodeForm extends PureComponent {
   static propTypes = {
@@ -98,7 +98,8 @@ class QuickNodeForm extends PureComponent {
       <div className="quick-add">
         <div className={cx('quick-add-form', { 'quick-add-form--show': show })}>
           <form autoComplete="off" onSubmit={this.handleSubmitForm}>
-            {show &&
+            {show
+            && (
             <input
               className="quick-add-form__label-input"
               key="label"
@@ -109,7 +110,7 @@ class QuickNodeForm extends PureComponent {
               value={nodeLabel}
               type="text"
             />
-            }
+            )}
           </form>
         </div>
         <div className={cx('flip-button', { 'flip-button--flip': nodeLabel.length > 0 })}>

@@ -1,23 +1,23 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { withHandlers, compose, withState, withPropsOnChange } from 'recompose';
+import {
+  withHandlers, compose, withState, withPropsOnChange,
+} from 'recompose';
 import PropTypes from 'prop-types';
 import withPrompt from '../../behaviours/withPrompt';
 import {
   PromptObstacle,
   ButtonObstacle,
-} from '../../containers/Canvas';
+} from '../Canvas';
 import { ConcentricCircles } from '../../components/Canvas';
 import { actionCreators as resetActions } from '../../ducks/modules/reset';
 
 const withConnectFrom = withState('connectFrom', 'setConnectFrom', null);
 
 const withConnectFromHandler = withHandlers({
-  handleConnectFrom: ({ setConnectFrom }) =>
-    id => setConnectFrom(id),
-  handleResetConnectFrom: ({ setConnectFrom }) =>
-    () => setConnectFrom(null),
+  handleConnectFrom: ({ setConnectFrom }) => (id) => setConnectFrom(id),
+  handleResetConnectFrom: ({ setConnectFrom }) => () => setConnectFrom(null),
 });
 
 const withResetInterfaceHandler = withHandlers({
@@ -39,7 +39,7 @@ const withResetInterfaceHandler = withHandlers({
 
 const withPromptIdAsKey = withPropsOnChange(
   ['promptId'],
-  props => ({ key: props.promptId }),
+  (props) => ({ key: props.promptId }),
 );
 
 /**
@@ -55,7 +55,7 @@ const Sociogram = ({
   connectFrom,
   handleConnectFrom,
 }) => {
-  const subject = stage.subject;
+  const { subject } = stage;
   const layoutVariable = prompt.layout && prompt.layout.layoutVariable;
   const highlightAttribute = prompt.highlight && prompt.highlight.variable;
   const allowHighlighting = prompt.highlight && prompt.highlight.allowHighlighting;
@@ -65,7 +65,7 @@ const Sociogram = ({
   const backgroundImage = stage.background && stage.background.image;
   const concentricCircles = stage.background && stage.background.concentricCircles;
   const skewedTowardCenter = stage.background && stage.background.skewedTowardCenter;
-  const sortOrder = prompt.sortOrder;
+  const { sortOrder } = prompt;
 
   return (
     <div className="sociogram-interface">
@@ -124,7 +124,7 @@ Sociogram.defaultProps = {
   connectFrom: null,
 };
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   resetEdgesOfType: bindActionCreators(resetActions.resetEdgesOfType, dispatch),
   resetPropertyForAllNodes: bindActionCreators(resetActions.resetPropertyForAllNodes, dispatch),
 });

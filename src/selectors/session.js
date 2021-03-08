@@ -1,6 +1,8 @@
 /* eslint-disable no-shadow */
 import { createSelector } from 'reselect';
-import { get, clamp, orderBy, values, mapValues, omit } from 'lodash';
+import {
+  get, clamp, orderBy, values, mapValues, omit,
+} from 'lodash';
 import { currentStageIndex } from '../utils/matchSessionPath';
 import { getAdditionalAttributes, getSubject } from '../utils/protocol/accessors';
 import { createDeepEqualSelector } from './utils';
@@ -8,11 +10,10 @@ import { initialState } from '../ducks/modules/session';
 import { getProtocolCodebook, getProtocolStages, getCurrentSessionProtocol } from './protocol';
 import { entityAttributesProperty } from '../ducks/modules/network';
 
-const currentPathname = router => router && router.location && router.location.pathname;
-const stageIndexForCurrentSession = state => currentStageIndex(currentPathname(state.router));
+const currentPathname = (router) => router && router.location && router.location.pathname;
+const stageIndexForCurrentSession = (state) => currentStageIndex(currentPathname(state.router));
 
-export const getActiveSession = state =>
-  state.activeSessionId && state.sessions[state.activeSessionId];
+export const getActiveSession = (state) => state.activeSessionId && state.sessions[state.activeSessionId];
 
 export const getLastActiveSession = (state) => {
   if (Object.keys(state.sessions).length === 0) {
@@ -36,13 +37,13 @@ export const getLastActiveSession = (state) => {
 export const getStageState = (state) => {
   const session = getActiveSession(state);
   if (!session) { return undefined; }
-  const stageIndex = session.stageIndex;
+  const { stageIndex } = session;
   return get(session, ['stages', stageIndex], undefined);
 };
 
 export const getCaseId = createDeepEqualSelector(
   getActiveSession,
-  session => (session && session.caseId),
+  (session) => (session && session.caseId),
 );
 
 export const getSessionPath = (state, stageIndex) => {
@@ -71,15 +72,14 @@ export const getSessionProgress = (state) => {
   const promptProgress = promptCount ? currentPrompt / promptCount : 0;
   // This can go over 100% when finish screen is not present,
   // so it needs to be clamped
-  const percentProgress =
-    clamp((stageProgress + (promptProgress / (screenCount - 1))) * 100, 0, 100);
+  const percentProgress = clamp((stageProgress + (promptProgress / (screenCount - 1))) * 100, 0, 100);
   const isFirstPrompt = promptCount > 0 && currentPrompt === 0;
   const isLastPrompt = promptCount > 0 && currentPrompt === promptCount - 1;
   const isFirstStage = currentStage === 0;
   const isLastStage = currentStage === stageCount - 1;
   const isLastScreen = currentStage === screenCount - 1; // remember, includes extra 'finish' screen
-  const startedAt = session.startedAt;
-  const lastExportedAt = session.lastExportedAt;
+  const { startedAt } = session;
+  const { lastExportedAt } = session;
 
   return {
     currentStage,
@@ -100,8 +100,7 @@ export const getSessionProgress = (state) => {
   };
 };
 
-export const anySessionIsActive =
-  state => state.activeSessionId && state.activeSessionId !== initialState;
+export const anySessionIsActive = (state) => state.activeSessionId && state.activeSessionId !== initialState;
 
 export const getStageForCurrentSession = createSelector(
   (state, props) => getProtocolStages(state, props),
@@ -110,10 +109,10 @@ export const getStageForCurrentSession = createSelector(
 );
 
 export const getPromptIndexForCurrentSession = createSelector(
-  state => (
+  (state) => (
     state.sessions[state.activeSessionId] && state.sessions[state.activeSessionId].promptIndex
   ) || 0,
-  promptIndex => promptIndex,
+  (promptIndex) => promptIndex,
 );
 
 const getPromptForCurrentSession = createSelector(

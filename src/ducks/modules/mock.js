@@ -77,13 +77,11 @@ const makeNetwork = (protocol) => {
   const networkMinNodes = 2;
 
   codebookNodeTypes.forEach((nodeType) => {
-    const nodesOfThisType =
-      Math.round(Math.random() * ((networkMaxNodes - networkMinNodes) + networkMinNodes));
-    nodes.push(...[...Array(nodesOfThisType)].map(() =>
-      makeEntity(
-        nodeType,
-        protocol.codebook.node[nodeType].variables,
-      )));
+    const nodesOfThisType = Math.round(Math.random() * ((networkMaxNodes - networkMinNodes) + networkMinNodes));
+    nodes.push(...[...Array(nodesOfThisType)].map(() => makeEntity(
+      nodeType,
+      protocol.codebook.node[nodeType].variables,
+    )));
   });
 
   const ego = makeEntity(null, (protocol.codebook.ego || {}).variables);
@@ -95,8 +93,7 @@ const makeNetwork = (protocol) => {
   const pickNodeUid = () => nodes[~~(Math.random() * (nodes.length - 1))][entityPrimaryKeyProperty];
 
   codebookEdgeTypes.forEach((edgeType) => {
-    const edgesOfThisType =
-      Math.round(Math.random() * ((networkMaxEdges - networkMinEdges) + networkMinEdges));
+    const edgesOfThisType = Math.round(Math.random() * ((networkMaxEdges - networkMinEdges) + networkMinEdges));
 
     edges.push(...[...Array(edgesOfThisType)].map(() => ({
       ...makeEntity(
@@ -115,16 +112,13 @@ const makeNetwork = (protocol) => {
   };
 };
 
-const generateMockNodes = (variableDefs, typeKey, howMany = 0, additionalAttributes = {}) =>
-  dispatch =>
-    times(howMany, () => {
-      const node = makeEntity(typeKey, variableDefs, additionalAttributes);
-      const modelData = omit(node, entityAttributesProperty);
-      const attributeData = node[entityAttributesProperty];
+const generateMockNodes = (variableDefs, typeKey, howMany = 0, additionalAttributes = {}) => (dispatch) => times(howMany, () => {
+  const node = makeEntity(typeKey, variableDefs, additionalAttributes);
+  const modelData = omit(node, entityAttributesProperty);
+  const attributeData = node[entityAttributesProperty];
 
-      dispatch(sessionsActions.addNode(modelData, attributeData));
-    });
-
+  dispatch(sessionsActions.addNode(modelData, attributeData));
+});
 
 const generateMockSessions = (protocolId, protocol, sessionCount) => (dispatch) => {
   [...Array(sessionCount)].forEach((_, i) => {

@@ -5,7 +5,7 @@ import cx from 'classnames';
 import { Flipped } from 'react-flip-toolkit';
 
 import { DropTarget, MonitorDropTarget } from '../behaviours/DragAndDrop';
-import { NodeList } from './';
+import { NodeList } from '.';
 
 /**
   * Renders a droppable CategoricalBin item
@@ -44,7 +44,8 @@ const CategoricalItem = ({
               {(!isExpanded && details) && <h5>{details}</h5>}
             </div>
           </Flipped>
-          {isExpanded &&
+          {isExpanded
+            && (
             <div className="categorical-item__content">
               <NodeList
                 listId={`CATBIN_NODE_LIST_${label}`}
@@ -54,7 +55,7 @@ const CategoricalItem = ({
                 sortOrder={sortOrder}
               />
             </div>
-          }
+            )}
         </div>
       </div>
     </Flipped>
@@ -92,7 +93,7 @@ export { CategoricalItem as UnconnectedCategoricalItem };
 
 export default compose(
   withState('recentNode', 'setRecentNode', {}),
-  withProps(props => ({
+  withProps((props) => ({
     accepts: () => true,
     onDrop: ({ meta }) => {
       props.onDrop({ meta });

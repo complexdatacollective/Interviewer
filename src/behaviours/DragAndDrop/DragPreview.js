@@ -11,8 +11,7 @@ const getSize = (element) => {
   };
 };
 
-const styles = (width, height, x, y) =>
-  `width: ${width}px; height: ${height}px; display: inline-block; position: absolute; left: 0px; top: 0px; transform: translate(${x}px, ${y}px);`;
+const styles = (width, height, x, y) => `width: ${width}px; height: ${height}px; display: inline-block; position: absolute; left: 0px; top: 0px; transform: translate(${x}px, ${y}px);`;
 
 const body = () => document.getElementsByTagName('body')[0];
 

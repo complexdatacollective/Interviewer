@@ -95,10 +95,10 @@ class Narrative extends Component {
       stage,
     } = this.props;
 
-    const subject = stage.subject;
-    const presets = stage.presets;
+    const { subject } = stage;
+    const { presets } = stage;
     const currentPreset = presets[this.state.presetIndex];
-    const layoutVariable = currentPreset.layoutVariable;
+    const { layoutVariable } = currentPreset;
     const highlight = currentPreset.highlight || [];
     const displayEdges = (currentPreset.edges && currentPreset.edges.display) || [];
     const convexHulls = currentPreset.groupVariable;
@@ -117,19 +117,21 @@ class Narrative extends Component {
       <div className="narrative-interface">
         <div className="narrative-interface__canvas" id="narrative-interface__canvas">
           <Canvas>
-            { freeDraw &&
+            { freeDraw
+              && (
               <Annotations
                 ref={this.annotationLayer}
                 setActiveStatus={(status) => { this.setActiveStatus('activeAnnotations', status); }}
                 key={`annotation-${currentPreset.id}`}
                 isFreeze={this.state.isFreeze}
               />
-            }
+              )}
             <ConcentricCircles
               subject={subject}
               layoutVariable={layoutVariable}
               highlightAttribute={
-                (this.state.showHighlights ? highlight[this.state.highlightIndex] : null)}
+                (this.state.showHighlights ? highlight[this.state.highlightIndex] : null)
+}
               displayEdges={(this.state.showEdges && displayEdges) || []}
               convexHulls={(this.state.showConvex && convexHulls) || ''}
               allowPositioning={allowRepositioning}

@@ -99,7 +99,7 @@ function mapStateToProps(state) {
   };
 }
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   addSession: (caseId, protocol) => dispatch(sessionsActions.addSession(caseId, protocol)),
 });
 

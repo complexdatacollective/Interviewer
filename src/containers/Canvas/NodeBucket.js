@@ -31,14 +31,15 @@ class NodeBucket extends PureComponent {
 
     return (
       <div className="node-bucket">
-        { node &&
+        { node
+          && (
           <EnhancedNode
             key={node[entityPrimaryKeyProperty]}
             meta={() => ({ ...node, itemType: 'POSITIONED_NODE' })}
             scrollDirection={NO_SCROLL}
             {...node}
           />
-        }
+          )}
       </div>
     );
   }
@@ -47,8 +48,12 @@ class NodeBucket extends PureComponent {
 const makeMapStateToProps = () => {
   const getNextUnplacedNode = makeGetNextUnplacedNode();
 
-  const mapStateToProps = (state, { layoutVariable, subject, sortOrder, stage }) => {
-    const node = getNextUnplacedNode(state, { layoutVariable, subject, sortOrder, stage });
+  const mapStateToProps = (state, {
+    layoutVariable, subject, sortOrder, stage,
+  }) => {
+    const node = getNextUnplacedNode(state, {
+      layoutVariable, subject, sortOrder, stage,
+    });
 
     return {
       node,

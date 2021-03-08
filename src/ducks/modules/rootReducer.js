@@ -15,7 +15,7 @@ import dismissedUpdates from './dismissedUpdates';
 import pairedServer from './pairedServer';
 import { actionTypes as resetActionTypes } from './reset';
 
-const appReducer = history => combineReducers({
+const appReducer = (history) => combineReducers({
   router: connectRouter(history),
   form: formReducer,
   activeSessionId,
@@ -31,7 +31,7 @@ const appReducer = history => combineReducers({
   pairedServer,
 });
 
-const createRootReducer = history => (state, action) => {
+const createRootReducer = (history) => (state, action) => {
   let currentState = state;
 
   if (action && action.type === resetActionTypes.RESET_STATE) {

@@ -71,7 +71,6 @@ const mockState = {
   ui: { settingsMenuOpen: false },
 };
 
-
 const emptyState = {
   installedProtocols: {},
 };
@@ -84,4 +83,3 @@ describe('protocol selector', () => {
     });
   });
 });
-

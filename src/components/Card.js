@@ -19,7 +19,9 @@ class Card extends PureComponent {
         const key = Object.keys(detail)[0];
         return (
           <h5 key={index} className={cx('card__attribute')}>
-            {key}: {detail[key]}
+            {key}
+            :
+            {detail[key]}
           </h5>
         );
       },
@@ -70,4 +72,3 @@ Card.defaultProps = {
 };
 
 export default Card;
-

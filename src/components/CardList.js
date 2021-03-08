@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { times } from 'lodash';
-import { List, AutoSizer, CellMeasurer, CellMeasurerCache } from 'react-virtualized';
+import {
+  List, AutoSizer, CellMeasurer, CellMeasurerCache,
+} from 'react-virtualized';
 import { Card } from '.';
 import { entityPrimaryKeyProperty } from '../ducks/modules/network';
 
@@ -42,14 +44,12 @@ class CardList extends Component {
     this.columns = calculateRequiredColumns(window.innerWidth, window.innerHeight);
   }
 
-  getColumns = () =>
-    this.columns;
+  getColumns = () => this.columns;
 
-  getRows = () =>
-    Math.ceil(this.props.items.length / this.getColumns());
+  getRows = () => Math.ceil(this.props.items.length / this.getColumns());
 
   getRow = (index) => {
-    const items = this.props.items;
+    const { items } = this.props;
     const columns = this.getColumns();
 
     const offset = index * columns;
@@ -76,14 +76,13 @@ class CardList extends Component {
 
     const nodes = this.getRow(index);
 
-    const handleSelected = node =>
-      () => {
-        onItemClick(node);
-        if (this.listRef.current) {
-          // Ensure item changes are shown
-          this.listRef.current.forceUpdateGrid();
-        }
-      };
+    const handleSelected = (node) => () => {
+      onItemClick(node);
+      if (this.listRef.current) {
+        // Ensure item changes are shown
+        this.listRef.current.forceUpdateGrid();
+      }
+    };
 
     return (
       <CellMeasurer
@@ -175,7 +174,7 @@ CardList.defaultProps = {
   items: [],
   onItemClick: () => {},
   isItemSelected: () => false,
-  getKey: node => node[entityPrimaryKeyProperty],
+  getKey: (node) => node[entityPrimaryKeyProperty],
 };
 
 export default CardList;

@@ -11,16 +11,12 @@ import { actionCreators as dialogsActions } from '../dialogs';
 jest.mock('../dialogs');
 jest.mock('../../../utils/protocol/deleteProtocol');
 
-const testMiddleware = actionListener =>
-  () =>
-    next =>
-      (action) => {
-        actionListener(action);
-        return next(action);
-      };
+const testMiddleware = (actionListener) => () => (next) => (action) => {
+  actionListener(action);
+  return next(action);
+};
 
-const getStore = (actionListener, initialState) =>
-  createStore(reducer, initialState, applyMiddleware(thunks, testMiddleware(actionListener)));
+const getStore = (actionListener, initialState) => createStore(reducer, initialState, applyMiddleware(thunks, testMiddleware(actionListener)));
 
 describe('protocols reducer', () => {
   it('should return the initial state', () => {
@@ -59,8 +55,7 @@ describe('protocols reducer', () => {
       const actionListener = jest.fn();
 
       dialogsActions.openDialog.mockImplementationOnce(
-        () =>
-          () => Promise.resolve(true),
+        () => () => Promise.resolve(true),
       );
 
       const store = getStore(actionListener);
@@ -77,8 +72,7 @@ describe('protocols reducer', () => {
       const actionListener = jest.fn();
 
       dialogsActions.openDialog.mockImplementationOnce(
-        () =>
-          () => Promise.resolve(false),
+        () => () => Promise.resolve(false),
       );
 
       const store = getStore(actionListener);
@@ -96,8 +90,7 @@ describe('protocols reducer', () => {
         const actionListener = jest.fn();
 
         dialogsActions.openDialog.mockImplementationOnce(
-          () =>
-            () => Promise.resolve(false),
+          () => () => Promise.resolve(false),
         );
 
         const store = getStore(actionListener, {
@@ -118,8 +111,7 @@ describe('protocols reducer', () => {
         const actionListener = jest.fn();
 
         dialogsActions.openDialog.mockImplementationOnce(
-          () =>
-            () => Promise.resolve(true),
+          () => () => Promise.resolve(true),
         );
 
         const store = getStore(actionListener, {
@@ -141,8 +133,7 @@ describe('protocols reducer', () => {
         const actionListener = jest.fn();
 
         dialogsActions.openDialog.mockImplementationOnce(
-          () =>
-            () => Promise.resolve(false),
+          () => () => Promise.resolve(false),
         );
 
         const store = getStore(actionListener, {
@@ -163,8 +154,7 @@ describe('protocols reducer', () => {
         const actionListener = jest.fn();
 
         dialogsActions.openDialog.mockImplementationOnce(
-          () =>
-            () => Promise.resolve(true),
+          () => () => Promise.resolve(true),
         );
 
         const store = getStore(actionListener, {

@@ -8,8 +8,8 @@ import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { makeNetworkNodesForPrompt, makeGetAdditionalAttributes } from '../../selectors/interface';
 import { makeGetPromptNodeModelData, makeGetNodeIconName } from '../../selectors/name-generator';
-import { PromptSwiper, NodePanels, NodeForm } from '../';
-import { NodeList, NodeBin } from '../../components/';
+import { PromptSwiper, NodePanels, NodeForm } from '..';
+import { NodeList, NodeBin } from '../../components';
 import { entityAttributesProperty, entityPrimaryKeyProperty } from '../../ducks/modules/network';
 
 /**
@@ -135,7 +135,7 @@ class NameGenerator extends Component {
             <NodeList
               items={nodesForPrompt}
               listId={`${stage.id}_${prompt.id}_MAIN_NODE_LIST`}
-              id={'MAIN_NODE_LIST'}
+              id="MAIN_NODE_LIST"
               accepts={({ meta }) => get(meta, 'itemType', null) === 'NEW_NODE'}
               itemType="EXISTING_NODE"
               onDrop={this.handleDropNode}
@@ -144,7 +144,8 @@ class NameGenerator extends Component {
           </div>
         </div>
 
-        { form &&
+        { form
+          && (
           <div
             onClick={this.handleClickAddNode}
             className="name-generator-interface__add-node"
@@ -152,9 +153,10 @@ class NameGenerator extends Component {
           >
             <Icon name={nodeIconName} />
           </div>
-        }
+          )}
 
-        { form &&
+        { form
+          && (
           <NodeForm
             key={this.state.selectedNode}
             node={this.state.selectedNode}
@@ -163,10 +165,10 @@ class NameGenerator extends Component {
             onClose={this.handleCloseForm}
             show={this.state.showNodeForm}
           />
-        }
+          )}
         <NodeBin
-          accepts={meta => meta.itemType === 'EXISTING_NODE'}
-          dropHandler={meta => this.props.removeNode(meta[entityPrimaryKeyProperty])}
+          accepts={(meta) => meta.itemType === 'EXISTING_NODE'}
+          dropHandler={(meta) => this.props.removeNode(meta[entityPrimaryKeyProperty])}
           id="NODE_BIN"
         />
       </div>

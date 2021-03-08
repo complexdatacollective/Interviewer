@@ -26,7 +26,7 @@ const DeveloperTools = (props) => {
   const [selectedProtocol, setSelectedProtocol] = useState('');
 
   return (
-    <React.Fragment>
+    <>
       <motion.article variants={TabItemVariants} className="settings-element">
         <div className="form-field-container">
           <div className="form-field">
@@ -48,7 +48,8 @@ const DeveloperTools = (props) => {
         </div>
       </motion.article>
       {
-        shouldShowMocksItem &&
+        shouldShowMocksItem
+        && (
         <motion.article variants={TabItemVariants} className="settings-element">
           <div className="form-field-container">
             <div className="form-field">
@@ -68,6 +69,7 @@ const DeveloperTools = (props) => {
             </p>
           </div>
         </motion.article>
+        )
       }
       <motion.article variants={TabItemVariants} className="settings-element">
         <div className="form-field-container">
@@ -105,7 +107,7 @@ const DeveloperTools = (props) => {
             >
               <option value="">-- Select a protocol ---</option>
               {
-                Object.keys(installedProtocols).map(protocolId => (
+                Object.keys(installedProtocols).map((protocolId) => (
                   <option
                     value={protocolId}
                     key={protocolId}
@@ -121,7 +123,7 @@ const DeveloperTools = (props) => {
         <Number
           input={{
             value: sessionCount,
-            onChange: e => setSessionCount(e),
+            onChange: (e) => setSessionCount(e),
             validation: {
               required: true,
               minValue: 1,
@@ -142,12 +144,12 @@ const DeveloperTools = (props) => {
           Generate
         </Button>
       </motion.article>
-    </React.Fragment>
+    </>
   );
 };
 
 const developerToolsHandlers = withHandlers({
-  handleAddMockNodes: props => () => {
+  handleAddMockNodes: (props) => () => {
     if (!props.nodeVariableEntry) {
       return;
     }
@@ -155,7 +157,7 @@ const developerToolsHandlers = withHandlers({
     props.generateMockNodes(nodeDefinition.variables, typeKey, 20, props.additionalMockAttributes);
     props.closeMenu();
   },
-  handleResetAppData: props => () => {
+  handleResetAppData: (props) => () => {
     props.openDialog({
       type: 'Warning',
       title: 'Reset application data?',
@@ -168,14 +170,14 @@ const developerToolsHandlers = withHandlers({
   },
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   generateMockNodes: bindActionCreators(mockActions.generateMockNodes, dispatch),
   generateMockSessions: bindActionCreators(mockActions.generateMockSessions, dispatch),
   openDialog: bindActionCreators(dialogsActions.openDialog, dispatch),
   resetState: () => dispatch(push('/reset')),
 });
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   installedProtocols: state.installedProtocols,
   nodeVariableEntry: getNodeEntryForCurrentPrompt(state),
   shouldShowMocksItem: !!getNodeEntryForCurrentPrompt(state),

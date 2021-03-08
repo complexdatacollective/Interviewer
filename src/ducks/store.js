@@ -57,7 +57,7 @@ export const store = createStore(
     applyMiddleware(routerMiddleware(history), thunk, logger),
     typeof window === 'object' && typeof window.devToolsExtension !== 'undefined'
       ? window.devToolsExtension()
-      : f => f,
+      : (f) => f,
   ),
 );
 

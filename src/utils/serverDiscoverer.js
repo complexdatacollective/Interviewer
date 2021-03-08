@@ -1,6 +1,5 @@
 import { EventEmitter } from 'eventemitter3';
-
-import { isElectron, isCordova } from '../utils/Environment';
+import { isElectron, isCordova } from './Environment';
 import { addPairingUrlToService } from './serverAddressing';
 
 class ServerDiscoverer {
@@ -55,7 +54,12 @@ class ServerDiscoverer {
         // Pick the properties we want from the service object
         // and provide a valid URL for the API if one is available
         const normalizeService = (service) => {
-          const { name, host, port, addresses } = service;
+          const {
+            name,
+            host,
+            port,
+            addresses,
+          } = service;
           return {
             name,
             host,
@@ -65,9 +69,9 @@ class ServerDiscoverer {
         };
 
         this.browser = mdns.createBrowser({ name: 'nc-server-6', protocol: 'tcp' });
-        this.browser.on('serviceUp', service => this.emitAnnouncement(normalizeService(service)));
-        this.browser.on('serviceDown', service => this.emitRemoval(normalizeService(service)));
-        this.browser.on('error', error => this.emitErrorMessage(error));
+        this.browser.on('serviceUp', (service) => this.emitAnnouncement(normalizeService(service)));
+        this.browser.on('serviceDown', (service) => this.emitRemoval(normalizeService(service)));
+        this.browser.on('error', (error) => this.emitErrorMessage(error));
         this.browser.start();
       } catch (error) {
         this.emitErrorMessage(error);
@@ -78,9 +82,9 @@ class ServerDiscoverer {
       this.zeroconf = window.cordova.plugins.zeroconf;
       try {
         this.zeroconf.watch('_nc-server-6._tcp.', 'local.', (result) => { // Service name must also be updated in config.xml for iOS 14 permissions
-          const action = result.action;
+          const { action } = result;
           // Normalize the service object to match the mdns node module (above)
-          const normalizeService = service => (
+          const normalizeService = (service) => (
             {
               name: service.name,
               host: service.hostname,
@@ -96,7 +100,7 @@ class ServerDiscoverer {
           } else {
             this.emitRemoval(normalizeService(result.service));
           }
-        }, error => this.emitErrorMessage(error));
+        }, (error) => this.emitErrorMessage(error));
       } catch (error) {
         this.emitErrorMessage(error);
       }

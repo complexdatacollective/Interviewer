@@ -19,7 +19,9 @@ describe('pairedServer reducer', () => {
   it('decorates with client info', () => {
     const deviceId = 'deviceId';
     const deviceSecret = 'deviceSecret';
-    const action = { type: actionTypes.SET_SERVER, server: mockServer, deviceId, deviceSecret };
+    const action = {
+      type: actionTypes.SET_SERVER, server: mockServer, deviceId, deviceSecret,
+    };
     const reduced = reducer(initialState, action);
     expect(reduced).toEqual({ ...mockServer, deviceId, deviceSecret });
   });

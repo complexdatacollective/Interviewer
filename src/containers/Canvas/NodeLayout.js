@@ -18,30 +18,36 @@ const withRerenderCount = withState('rerenderCount', 'setRerenderCount', 0);
 
 const withDropHandlers = withHandlers({
   accepts: () => ({ meta }) => meta.itemType === 'POSITIONED_NODE',
-  onDrop: ({ updateNode, layoutVariable, setRerenderCount, rerenderCount, width, height, x, y }) =>
-    (item) => {
-      updateNode(
-        item.meta[entityPrimaryKeyProperty],
-        {},
-        {
-          [layoutVariable]: relativeCoords({ width, height, x, y }, item),
-        },
-      );
+  onDrop: ({
+    updateNode, layoutVariable, setRerenderCount, rerenderCount, width, height, x, y,
+  }) => (item) => {
+    updateNode(
+      item.meta[entityPrimaryKeyProperty],
+      {},
+      {
+        [layoutVariable]: relativeCoords({
+          width, height, x, y,
+        }, item),
+      },
+    );
 
-      // Horrible hack for performance (only re-render nodes on drop, not on drag)
-      setRerenderCount(rerenderCount + 1);
-    },
-  onDrag: ({ layoutVariable, updateNode, width, height, x, y }) =>
-    (item) => {
-      if (isNil(item.meta[entityAttributesProperty][layoutVariable])) { return; }
-      updateNode(
-        item.meta[entityPrimaryKeyProperty],
-        {},
-        {
-          [layoutVariable]: relativeCoords({ width, height, x, y }, item),
-        },
-      );
-    },
+    // Horrible hack for performance (only re-render nodes on drop, not on drag)
+    setRerenderCount(rerenderCount + 1);
+  },
+  onDrag: ({
+    layoutVariable, updateNode, width, height, x, y,
+  }) => (item) => {
+    if (isNil(item.meta[entityAttributesProperty][layoutVariable])) { return; }
+    updateNode(
+      item.meta[entityPrimaryKeyProperty],
+      {},
+      {
+        [layoutVariable]: relativeCoords({
+          width, height, x, y,
+        }, item),
+      },
+    );
+  },
   onDragEnd: ({ setRerenderCount, rerenderCount }) => () => {
     // make sure to also re-render nodes that were updated on drag end
     setRerenderCount(rerenderCount + 1);
@@ -55,44 +61,42 @@ const withSelectHandlers = compose(
       connectFrom,
       updateLinkFrom,
       toggleEdge,
-    }) =>
-      (nodeId) => {
-        // If edge creation is disabled, return
-        if (!createEdge) { return; }
+    }) => (nodeId) => {
+      // If edge creation is disabled, return
+      if (!createEdge) { return; }
 
-        // If the target and source node are the same, deselect
-        if (connectFrom === nodeId) {
-          updateLinkFrom(null);
-          return;
-        }
-
-        // If there isn't a target node yet, set the selected node into the linking state
-        if (!connectFrom) {
-          updateLinkFrom(nodeId);
-          return;
-        }
-
-        // Either add or remove an edge
-        if (connectFrom !== nodeId) {
-          toggleEdge({
-            from: connectFrom,
-            to: nodeId,
-            type: createEdge,
-          });
-        }
-
-        // Reset the node linking state
+      // If the target and source node are the same, deselect
+      if (connectFrom === nodeId) {
         updateLinkFrom(null);
-      },
-    toggleHighlightAttribute: ({ allowHighlighting, highlightAttribute, toggleHighlight }) =>
-      (node) => {
-        if (!allowHighlighting) { return; }
-        const newVal = !node[entityAttributesProperty][highlightAttribute];
-        toggleHighlight(
-          node[entityPrimaryKeyProperty],
-          { [highlightAttribute]: newVal },
-        );
-      },
+        return;
+      }
+
+      // If there isn't a target node yet, set the selected node into the linking state
+      if (!connectFrom) {
+        updateLinkFrom(nodeId);
+        return;
+      }
+
+      // Either add or remove an edge
+      if (connectFrom !== nodeId) {
+        toggleEdge({
+          from: connectFrom,
+          to: nodeId,
+          type: createEdge,
+        });
+      }
+
+      // Reset the node linking state
+      updateLinkFrom(null);
+    },
+    toggleHighlightAttribute: ({ allowHighlighting, highlightAttribute, toggleHighlight }) => (node) => {
+      if (!allowHighlighting) { return; }
+      const newVal = !node[entityAttributesProperty][highlightAttribute];
+      toggleHighlight(
+        node[entityPrimaryKeyProperty],
+        { [highlightAttribute]: newVal },
+      );
+    },
   }),
   withHandlers({
     onSelected: ({
@@ -116,7 +120,9 @@ function makeMapStateToProps() {
 
   return function mapStateToProps(
     state,
-    { createEdge, allowHighlighting, subject, layoutVariable, stage },
+    {
+      createEdge, allowHighlighting, subject, layoutVariable, stage,
+    },
   ) {
     const allowSelect = !!(createEdge || allowHighlighting);
 

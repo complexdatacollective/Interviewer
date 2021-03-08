@@ -62,8 +62,8 @@ describe('CardList component', () => {
       <Provider store={createStore(() => mockState)}>
         <CardList
           nodes={nodes}
-          label={node => node.name}
-          details={node => [{ age: `${node.age}` }]}
+          label={(node) => node.name}
+          details={(node) => [{ age: `${node.age}` }]}
           onToggleCard={() => {}}
           selected={() => false}
         />

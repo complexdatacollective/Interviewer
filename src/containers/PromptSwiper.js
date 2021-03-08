@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { findIndex } from 'lodash';
 import cx from 'classnames';
-import { Prompt, Pips } from '../components/';
+import { Prompt, Pips } from '../components';
 
 /**
   * Displays a control to swipe through prompts
@@ -66,19 +66,21 @@ class PromptSwiper extends Component {
       prompts,
     } = this.props;
 
-    const promptsRender = prompts.map((prompt, index) =>
-      (<Prompt
+    const promptsRender = prompts.map((prompt, index) => (
+      <Prompt
         key={index}
         label={prompt.text}
         isActive={promptIndex === index}
         isLeaving={promptIndex === (index - 1)}
-      />),
-    );
+      />
+    ));
 
     const classes = cx(
       'prompts',
-      { 'prompts--floating': this.props.floating,
-        'prompts--minimized': this.state.minimized },
+      {
+        'prompts--floating': this.props.floating,
+        'prompts--minimized': this.state.minimized,
+      },
     );
 
     const minimizeButton = (
@@ -89,29 +91,31 @@ class PromptSwiper extends Component {
 
     if (prompts.length <= 1) {
       return (
-        <React.Fragment>
+        <>
           <div className={classes}>
             <div className="prompts__prompts">
               {promptsRender}
             </div>
           </div>
           {minimizable && minimizeButton}
-        </React.Fragment>
+        </>
       );
     }
 
     return (
-      <React.Fragment>
+      <>
         <div className={classes}>
           <div className="prompts__pips">
             <Pips count={prompts.length} currentIndex={promptIndex} />
           </div>
-          {!this.state.minimized && (<div className="prompts__prompts">
+          {!this.state.minimized && (
+          <div className="prompts__prompts">
             {promptsRender}
-          </div>)}
+          </div>
+          )}
         </div>
         {minimizable && minimizeButton}
-      </React.Fragment>
+      </>
     );
   }
 }

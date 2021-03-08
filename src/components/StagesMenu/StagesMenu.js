@@ -53,17 +53,17 @@ const StagesMenu = (props) => {
 
     // Active index 0, current index less than 8: animate first 8 items.
     if (
-      currentStageIndex === 0 &&
-      currentItemIndex < 8
+      currentStageIndex === 0
+      && currentItemIndex < 8
     ) {
       return currentItemIndex * delayScale;
     }
 
     // Active index non-zero: resequence index to 8 following current.
     if (
-      currentStageIndex > 0 &&
-      currentItemIndex < (currentStageIndex + 8) &&
-      (stages.length - currentStageIndex) > 8
+      currentStageIndex > 0
+      && currentItemIndex < (currentStageIndex + 8)
+      && (stages.length - currentStageIndex) > 8
     ) {
       const resequencedIndex = currentItemIndex - currentStageIndex;
       return resequencedIndex * delayScale;
@@ -71,8 +71,8 @@ const StagesMenu = (props) => {
 
     // Active index within 8 of end: resequence to last 8
     if (
-      (stages.length - currentStageIndex) < 8 &&
-      stages.length - currentItemIndex < 8
+      (stages.length - currentStageIndex) < 8
+      && stages.length - currentItemIndex < 8
     ) {
       const resequencedIndex = (stages.length - currentItemIndex - 8) * -1;
       return resequencedIndex * delayScale;
@@ -83,7 +83,7 @@ const StagesMenu = (props) => {
   };
 
   const itemVariants = {
-    expanded: currentItemIndex => ({
+    expanded: (currentItemIndex) => ({
       x: 0,
       opacity: 1,
       transition: {
@@ -92,7 +92,7 @@ const StagesMenu = (props) => {
         easing: baseAnimationEasing,
       },
     }),
-    normal: currentItemIndex => ({
+    normal: (currentItemIndex) => ({
       x: '-5rem',
       opacity: 0,
       transition: {
@@ -116,10 +116,11 @@ const StagesMenu = (props) => {
     }
   };
 
-  const onFilterChange = event => setFilter(event.target.value || '');
+  const onFilterChange = (event) => setFilter(event.target.value || '');
 
   const filteredStageList = stages.filter(
-    stage => stage.label.toLowerCase().includes(filter.toLowerCase()));
+    (stage) => stage.label.toLowerCase().includes(filter.toLowerCase()),
+  );
 
   const renderMenuItems = filteredStageList.map((item, index) => {
     const isActive = currentStageIndex === item.index;

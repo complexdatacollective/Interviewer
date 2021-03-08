@@ -17,7 +17,8 @@ describe('Connect(NodeLayout)', () => {
     const subject = mount(
       <Provider store={createStore(() => mockState)}>
         <NodeLayout {...mockProps} />
-      </Provider>);
+      </Provider>,
+    );
     expect(subject.find('DropTarget')).toHaveLength(1);
   });
 });

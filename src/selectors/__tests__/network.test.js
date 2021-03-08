@@ -58,7 +58,6 @@ const mockNode5 = {
   nAMe: 'Second',
 };
 
-
 describe('network selector', () => {
   describe('Node label logic', () => {
     // Handles codebook lookup

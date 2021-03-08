@@ -47,4 +47,3 @@ export default () => (
     <Redirect to={{ pathname: '/start' }} />
   </Switch>
 );
-

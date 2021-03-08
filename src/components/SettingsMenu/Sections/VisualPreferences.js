@@ -7,7 +7,6 @@ import { isElectron, isCordova } from '../../../utils/Environment';
 import { actionCreators as deviceSettingsActions } from '../../../ducks/modules/deviceSettings';
 import TabItemVariants from './TabItemVariants';
 
-
 const VisualPreferences = (props) => {
   const {
     useDynamicScaling,
@@ -42,7 +41,7 @@ const VisualPreferences = (props) => {
   };
 
   return (
-    <React.Fragment>
+    <>
       <motion.article variants={TabItemVariants} className="settings-element">
         <Toggle
           input={{
@@ -89,7 +88,8 @@ const VisualPreferences = (props) => {
           </p>
         </div>
       </motion.article>
-      {!isCordova() && <motion.article variants={TabItemVariants} className="settings-element">
+      {!isCordova() && (
+      <motion.article variants={TabItemVariants} className="settings-element">
         <Toggle
           input={{
             checked: true,
@@ -105,8 +105,9 @@ const VisualPreferences = (props) => {
           </p>
         </div>
       </motion.article>
-      }
-      {isElectron() && <motion.article variants={TabItemVariants} className="settings-element">
+      )}
+      {isElectron() && (
+      <motion.article variants={TabItemVariants} className="settings-element">
         <Toggle
           input={{
             checked: !!startFullScreen,
@@ -121,11 +122,20 @@ const VisualPreferences = (props) => {
             immersive experience. You may disable or enable this mode here.
           </p>
           <p>
-            <em><strong>Windows users:</strong> when in full screen mode you
-              can access the native app menu by pressing the <code>alt</code> key.</em>
+            <em>
+              <strong>Windows users:</strong>
+              {' '}
+              when in full screen mode you
+              can access the native app menu by pressing the
+              {' '}
+              <code>alt</code>
+              {' '}
+              key.
+            </em>
           </p>
         </div>
-      </motion.article>}
+      </motion.article>
+      )}
       <motion.article variants={TabItemVariants} className="settings-element">
         <Toggle
           input={{
@@ -142,17 +152,16 @@ const VisualPreferences = (props) => {
           </p>
         </div>
       </motion.article>
-    </React.Fragment>
+    </>
   );
 };
 
-
-const mapDispatchToProps = dispatch => ({
-  toggleSetting: settingName => dispatch(deviceSettingsActions.toggleSetting(settingName)),
-  setInterfaceScale: scale => dispatch(deviceSettingsActions.setInterfaceScale(scale)),
+const mapDispatchToProps = (dispatch) => ({
+  toggleSetting: (settingName) => dispatch(deviceSettingsActions.toggleSetting(settingName)),
+  setInterfaceScale: (scale) => dispatch(deviceSettingsActions.setInterfaceScale(scale)),
 });
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   useFullScreenForms: state.deviceSettings.useFullScreenForms,
   useDynamicScaling: state.deviceSettings.useDynamicScaling,
   startFullScreen: state.deviceSettings.startFullScreen,

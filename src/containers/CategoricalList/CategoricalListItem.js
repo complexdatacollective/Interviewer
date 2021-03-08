@@ -60,8 +60,7 @@ const CategoricalListItem = (props) => {
     });
   };
 
-  const closeOtherVariableWindow = () =>
-    setOtherVariableWindow(otherVariableWindowInitialState);
+  const closeOtherVariableWindow = () => setOtherVariableWindow(otherVariableWindowInitialState);
 
   const setNodeCategory = (node, category) => {
     const variable = bin.otherVariable || activePromptVariable;
@@ -104,7 +103,7 @@ const CategoricalListItem = (props) => {
   };
 
   const handleSubmitOtherVariableForm = ({ otherVariable: value }) => {
-    const node = otherVariableWindow.node;
+    const { node } = otherVariableWindow;
 
     setNodeCategory(node, value);
     closeOtherVariableWindow();
@@ -135,13 +134,15 @@ const CategoricalListItem = (props) => {
         nodes={bin.nodes}
         sortOrder={sortOrder}
       />
-      { isOtherVariable &&
+      { isOtherVariable
+        && (
         <Overlay
           show={otherVariableWindow.show}
           onClose={closeOtherVariableWindow}
           onBlur={closeOtherVariableWindow}
         >
-          { otherVariableWindow.show &&
+          { otherVariableWindow.show
+            && (
             <OtherVariableForm
               label={otherVariableWindow.label}
               color={otherVariableWindow.color}
@@ -150,9 +151,9 @@ const CategoricalListItem = (props) => {
               onCancel={closeOtherVariableWindow}
               initialValues={otherVariableWindow.initialValues}
             />
-          }
+            )}
         </Overlay>
-      }
+        )}
     </div>
   );
 };

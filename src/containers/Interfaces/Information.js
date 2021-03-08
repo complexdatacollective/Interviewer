@@ -8,7 +8,6 @@ import { InformationContentType, AssetType } from '../../protocol-consts';
 import AssetMetaProvider from '../../behaviours/AssetMetaProvider';
 import { ALLOWED_MARKDOWN_TAGS } from '../../config';
 
-
 const getAssetComponent = (asset) => {
   switch (asset.type) {
     case AssetType.image:
@@ -40,7 +39,7 @@ const getItemComponent = (item) => {
     case InformationContentType.asset:
       return (
         <AssetMetaProvider asset={item.content}>
-          {assetMeta => getAssetComponent({ ...item, ...assetMeta })}
+          {(assetMeta) => getAssetComponent({ ...item, ...assetMeta })}
         </AssetMetaProvider>
       );
 
@@ -63,7 +62,7 @@ const renderItem = (item, index) => {
   );
 };
 
-const renderItems = items => (items ? items.map(renderItem) : null);
+const renderItems = (items) => (items ? items.map(renderItem) : null);
 
 /**
  * Information Interface

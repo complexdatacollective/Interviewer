@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
 
-const SettingsMenuButton = props => (
+const SettingsMenuButton = (props) => (
   <motion.div
     className="settings-menu-button"
     onClick={props.openSettingsMenu}
@@ -15,7 +15,7 @@ const SettingsMenuButton = props => (
   </motion.div>
 );
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   openSettingsMenu: () => dispatch(uiActions.update({ settingsMenuOpen: true })),
 });
 

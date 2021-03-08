@@ -16,7 +16,6 @@ class Background extends PureComponent {
     image: null,
   };
 
-
   render() {
     const { concentricCircles, skewedTowardCenter, image } = this.props;
     let background;

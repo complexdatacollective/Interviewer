@@ -17,14 +17,12 @@ const equalByArea = (outerRadius, n) => {
     .reverse();
 };
 
-const equalByIncrement = (outerRadius, n) =>
-  range(1, n + 1)
-    .map(v => (v * outerRadius) / n)
-    .reverse();
+const equalByIncrement = (outerRadius, n) => range(1, n + 1)
+  .map((v) => (v * outerRadius) / n)
+  .reverse();
 
 // Weight towards `a` by factor
-const weightedAverage = (a, b, factor = 1) =>
-  zipWith(a, b, (c, d) => ((c * factor) + d) / (1 + factor));
+const weightedAverage = (a, b, factor = 1) => zipWith(a, b, (c, d) => ((c * factor) + d) / (1 + factor));
 
 const Radar = ({ n, skewed }) => {
   const num = parseInt(n, 10);
@@ -32,9 +30,9 @@ const Radar = ({ n, skewed }) => {
     return null;
   }
 
-  const radii = skewed ?
-    weightedAverage(equalByArea(50, num), equalByIncrement(50, num), 3) :
-    equalByIncrement(50, num);
+  const radii = skewed
+    ? weightedAverage(equalByArea(50, num), equalByIncrement(50, num), 3)
+    : equalByIncrement(50, num);
 
   const colorRing = color(getCSSVariableAsString('--ring--accent'));
   const colorBackground = color(getCSSVariableAsString('--ring--background'));

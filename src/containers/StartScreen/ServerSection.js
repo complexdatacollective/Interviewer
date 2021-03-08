@@ -13,7 +13,7 @@ import { openExternalLink } from '../../components/ExternalLink';
 import useServerConnectionStatus from '../../hooks/useServerConnectionStatus';
 
 const ServerSection = () => {
-  const pairedServer = useSelector(state => state.pairedServer);
+  const pairedServer = useSelector((state) => state.pairedServer);
 
   const [selectedServer, setSelectedServer] = useState(null);
   const [showServerAddressForm, setShowServerAddressForm] = useState(false);
@@ -22,7 +22,7 @@ const ServerSection = () => {
   const pairedServerConnection = useServerConnectionStatus(pairedServer);
 
   const dispatch = useDispatch();
-  const openDialog = dialog => dispatch(dialogActions.openDialog(dialog));
+  const openDialog = (dialog) => dispatch(dialogActions.openDialog(dialog));
   const unpairServer = () => dispatch(serverActions.unpairServer());
 
   const handleUnpairRequest = () => {
@@ -53,7 +53,7 @@ const ServerSection = () => {
 
     if (pairedServerConnection === 'version_mismatch') {
       return (
-        <React.Fragment>
+        <>
           <p>
             This device could not communicate with your paired Server because
             of a version mismatch. You may need to update your software on the
@@ -61,13 +61,13 @@ const ServerSection = () => {
             been disabled. Use the button below for more troubleshooting information.
           </p>
           <Button size="small" color="neon-coral" onClick={() => openExternalLink('https://documentation.networkcanvas.com/docs/key-concepts/pairing/#troubleshooting')}>More Information</Button>
-        </React.Fragment>
+        </>
       );
     }
 
     if (pairedServerConnection !== 'ok' && pairedServerConnection !== 'version_mismatch') {
       return (
-        <React.Fragment>
+        <>
           <p>
             This device could not communicate with your paired Server. Fetching
             protocols and uploading data have been disabled. Check Server is
@@ -75,7 +75,7 @@ const ServerSection = () => {
             correctly. Use the button below for more troubleshooting information.
           </p>
           <Button size="small" color="neon-coral" onClick={() => openExternalLink('https://documentation.networkcanvas.com/docs/key-concepts/pairing/#troubleshooting')}>More Information</Button>
-        </React.Fragment>
+        </>
       );
     }
 
@@ -100,7 +100,7 @@ const ServerSection = () => {
               <h2>Server Status</h2>
             </header>
             { !pairedServer ? (
-              <React.Fragment>
+              <>
                 <p>
                   To begin, open Server on a computer connected to the same network as this device.
                   When the device appears below, click its card to start the pairing process.
@@ -110,7 +110,7 @@ const ServerSection = () => {
                   setShowServerAddressForm(true);
                 }}
                 />
-              </React.Fragment>
+              </>
             ) : (
               <div className="paired-server-wrapper">
                 <ServerCard
@@ -134,9 +134,8 @@ const ServerSection = () => {
             <Button color="mustard--dark" disabled={!onlineStatus} onClick={() => openExternalLink('https://documentation.networkcanvas.com/docs/key-concepts/pairing/')}>View Pairing Documentation</Button>
             { !pairedServer ? (
               <Button disabled={!onlineStatus} color="platinum" onClick={() => setShowServerAddressForm(true)}>Provide manual connection details...</Button>
-            ) :
-              (<Button color="platinum" onClick={handleUnpairRequest}>Unpair</Button>)
-            }
+            )
+              : (<Button color="platinum" onClick={handleUnpairRequest}>Unpair</Button>)}
           </div>
         </div>
         <ServerAddressForm

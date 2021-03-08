@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { every, get, includes, pickBy } from 'lodash';
+import {
+  every, get, includes, pickBy,
+} from 'lodash';
 import { motion } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@codaco/ui';
@@ -12,20 +14,20 @@ import useServerConnectionStatus from '../../hooks/useServerConnectionStatus';
 import { NewFilterableListWrapper, Switch } from '../../components';
 import { asNetworkWithSessionVariables } from '../../utils/networkFormat';
 
-const oneBasedIndex = i => parseInt(i || 0, 10) + 1;
+const oneBasedIndex = (i) => parseInt(i || 0, 10) + 1;
 
 const DataExportSection = () => {
-  const sessions = useSelector(state => state.sessions);
+  const sessions = useSelector((state) => state.sessions);
 
   const [selectedSessions, setSelectedSessions] = useState([]);
 
-  const pairedServer = useSelector(state => state.pairedServer);
+  const pairedServer = useSelector((state) => state.pairedServer);
   const pairedServerConnection = useServerConnectionStatus(pairedServer);
-  const installedProtocols = useSelector(state => state.installedProtocols);
+  const installedProtocols = useSelector((state) => state.installedProtocols);
 
   const dispatch = useDispatch();
-  const deleteSession = id => dispatch(sessionsActions.removeSession(id));
-  const openDialog = dialog => dispatch(dialogActions.openDialog(dialog));
+  const deleteSession = (id) => dispatch(sessionsActions.removeSession(id));
+  const openDialog = (dialog) => dispatch(dialogActions.openDialog(dialog));
 
   const handleDeleteSessions = () => {
     openDialog({
@@ -33,7 +35,7 @@ const DataExportSection = () => {
       title: `Delete ${selectedSessions.length} Interview Session${selectedSessions.length > 1 ? 's' : ''}?`,
       confirmLabel: 'Permanently Delete',
       onConfirm: () => {
-        selectedSessions.map(session => deleteSession(session));
+        selectedSessions.map((session) => deleteSession(session));
         setSelectedSessions([]);
       },
       message: (
@@ -45,12 +47,11 @@ const DataExportSection = () => {
     });
   };
 
-  const getUnexportedSessions = () =>
-    Object.keys(pickBy(sessions, session => !session.exportedAt));
+  const getUnexportedSessions = () => Object.keys(pickBy(sessions, (session) => !session.exportedAt));
 
-  const isUnexportedSelected = () => getUnexportedSessions().length > 0 &&
-    (every(getUnexportedSessions(), session => includes(selectedSessions, session))) &&
-    (getUnexportedSessions().length === selectedSessions.length);
+  const isUnexportedSelected = () => getUnexportedSessions().length > 0
+    && (every(getUnexportedSessions(), (session) => includes(selectedSessions, session)))
+    && (getUnexportedSessions().length === selectedSessions.length);
 
   const toggleSelectAll = () => {
     if ((Object.keys(sessions).length !== selectedSessions.length)) {
@@ -74,13 +75,13 @@ const DataExportSection = () => {
   const handleSessionCardClick = (sessionUUID) => {
     if (selectedSessions.includes(sessionUUID)) {
       setSelectedSessions([
-        ...selectedSessions.filter(session => session !== sessionUUID),
+        ...selectedSessions.filter((session) => session !== sessionUUID),
       ]);
 
       return;
     }
 
-    setSelectedSessions(alreadySelected => [
+    setSelectedSessions((alreadySelected) => [
       ...alreadySelected,
       sessionUUID,
     ]);
@@ -186,8 +187,16 @@ const DataExportSection = () => {
               onChange={toggleSelectAll}
             />
           </div>
-          { selectedSessions.length > 0 &&
-            (<span>{ selectedSessions.length} selected session{ selectedSessions.length > 1 ? ('s') : null }.</span>)}
+          { selectedSessions.length > 0
+            && (
+            <span>
+              { selectedSessions.length}
+              {' '}
+              selected session
+              { selectedSessions.length > 1 ? ('s') : null }
+              .
+            </span>
+            )}
         </motion.div>
       </motion.main>
       <motion.footer layout className="data-export-section__footer">

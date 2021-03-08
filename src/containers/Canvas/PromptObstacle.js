@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { compose } from 'recompose';
 import PropTypes from 'prop-types';
 
-import { PromptSwiper } from '../../containers';
+import { PromptSwiper } from '..';
 import { DropObstacle } from '../../behaviours/DragAndDrop';
 
 class PromptObstacle extends PureComponent {

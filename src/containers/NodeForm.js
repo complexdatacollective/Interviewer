@@ -28,7 +28,9 @@ class NodeForm extends Component {
   })
 
   render() {
-    const { show, form, initialValues, submitForm, stage } = this.props;
+    const {
+      show, form, initialValues, submitForm, stage,
+    } = this.props;
 
     const formProps = {
       ...form,
@@ -47,18 +49,21 @@ class NodeForm extends Component {
         className="node-form"
         footer={(<Button key="submit" aria-label="Submit" type="submit" onClick={submitForm}>Finished</Button>)}
       >
-        { this.props.useFullScreenForms ?
-          <FormWizard
-            {...formProps}
-          /> :
-          <React.Fragment>
-            <Scroller>
-              <Form
-                {...formProps}
-              />
-            </Scroller>
-          </React.Fragment>
-        }
+        { this.props.useFullScreenForms
+          ? (
+            <FormWizard
+              {...formProps}
+            />
+          )
+          : (
+            <>
+              <Scroller>
+                <Form
+                  {...formProps}
+                />
+              </Scroller>
+            </>
+          )}
       </Overlay>
     );
   }
@@ -78,7 +83,7 @@ const mapStateToProps = (state, props) => {
   };
 };
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   submitForm: bindActionCreators(() => submit(reduxFormName), dispatch),
 });
 

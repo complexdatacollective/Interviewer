@@ -152,13 +152,12 @@ const DyadCensus = ({
 
   useAutoAdvance(next, isTouched, isChanged);
 
-  const handleChange = nextValue =>
-    () => {
-      // 'debounce' clicks, one click (isTouched) should start auto-advance
-      // so ignore further clicks
-      if (isTouched) { return; }
-      setEdge(nextValue);
-    };
+  const handleChange = (nextValue) => () => {
+    // 'debounce' clicks, one click (isTouched) should start auto-advance
+    // so ignore further clicks
+    if (isTouched) { return; }
+    setEdge(nextValue);
+  };
 
   const choiceClasses = cx(
     'dyad-census__choice',
@@ -171,7 +170,8 @@ const DyadCensus = ({
         initial={false}
         exitBeforeEnter
       >
-        { isIntroduction &&
+        { isIntroduction
+        && (
         <motion.div
           className="dyad-census__introduction"
           variants={introVariants}
@@ -187,8 +187,9 @@ const DyadCensus = ({
             renderers={defaultMarkdownRenderers}
           />
         </motion.div>
-        }
-        { !isIntroduction &&
+        )}
+        { !isIntroduction
+          && (
           <motion.div
             key="content"
             variants={fadeVariants}
@@ -240,27 +241,31 @@ const DyadCensus = ({
                     <div className="dyad-census__options">
                       <AnimatePresence exitBeforeEnter>
                         <motion.div
-                          key={stepsState.step}
-                          className="dyad-census__options-step"
-                          variants={optionsVariants}
-                          initial="hide"
-                          animate="show"
-                          exit="hide"
-                        >
-                          <div className="dyad-census__yes">
+                key={stepsState.step}
+                className="dyad-census__options-step"
+                variants={optionsVariants}
+                initial="hide"
+                animate="show"
+                exit="hide"
+              >
+                <div className="dyad-census__yes">
                             <Button
                               onClick={handleChange(true)}
                               selected={!!hasEdge && hasEdge !== null}
-                            >Yes</Button>
+                            >
+                              Yes
+                            </Button>
                           </div>
-                          <div className="dyad-census__no">
+                <div className="dyad-census__no">
                             <Button
                               onClick={handleChange(false)}
                               selected={!hasEdge && hasEdge !== null}
                               className="no"
-                            >No</Button>
+                            >
+                              No
+                            </Button>
                           </div>
-                        </motion.div>
+              </motion.div>
                       </AnimatePresence>
                     </div>
                     <div className="dyad-census__progress">
@@ -271,7 +276,7 @@ const DyadCensus = ({
               </motion.div>
             </AnimatePresence>
           </motion.div>
-        }
+          )}
       </AnimatePresence>
     </div>
   );

@@ -2,12 +2,10 @@ import environments from './environments';
 
 export const isElectron = () => !!window.require;
 
-export const isPreview = () =>
-  isElectron() && window.require('electron').remote.getGlobal('NETWORK_CANVAS_PREVIEW');
+export const isPreview = () => isElectron() && window.require('electron').remote.getGlobal('NETWORK_CANVAS_PREVIEW');
 
 // Not supported on Cordova
-export const getEnv = () =>
-  (isElectron() ? process.env : {});
+export const getEnv = () => (isElectron() ? process.env : {});
 
 export const isMacOS = () => isElectron() && window.require('os').platform() === 'darwin';
 
@@ -29,8 +27,6 @@ const getEnvironment = () => {
   return environments.WEB;
 };
 
-const inEnvironment = tree =>
-  (...args) =>
-    tree(getEnvironment())(...args);
+const inEnvironment = (tree) => (...args) => tree(getEnvironment())(...args);
 
 export default inEnvironment;

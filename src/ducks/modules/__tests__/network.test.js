@@ -2,12 +2,12 @@
 /* eslint-disable @codaco/spellcheck/spell-checker */
 import uuid from 'uuid/v4';
 import reducer,
-{ actionTypes,
+{
+  actionTypes,
   actionCreators,
   entityPrimaryKeyProperty as PK,
   entityAttributesProperty,
 } from '../network';
-
 
 jest.mock('uuid');
 
@@ -144,7 +144,6 @@ describe('network reducer', () => {
     );
   });
 
-
   it('should handle ADD_NODE', () => {
     const newState = reducer(
       {
@@ -157,7 +156,9 @@ describe('network reducer', () => {
       },
     );
     expect(newState.nodes.length).toBe(1);
-    expect(newState.nodes[0]).toEqual({ [PK]: '383a6119e94aa2a1b2e1a5e84b2936b753437a11', [entityAttributesProperty]: { name: 'foo' }, itemType: undefined, promptIDs: [undefined], stageId: undefined, type: undefined });
+    expect(newState.nodes[0]).toEqual({
+      [PK]: '383a6119e94aa2a1b2e1a5e84b2936b753437a11', [entityAttributesProperty]: { name: 'foo' }, itemType: undefined, promptIDs: [undefined], stageId: undefined, type: undefined,
+    });
 
     const newNode = newState.nodes[0];
     expect(newNode.attributes.name).toEqual('foo');
@@ -327,7 +328,8 @@ describe('network reducer', () => {
         type: actionTypes.TOGGLE_EDGE,
         modelData: edgeA.modelData,
         attributeData: edgeA.attributeData,
-      })).toEqual(
+      },
+    )).toEqual(
       {
         ...mockState,
         edges: [{ ...edgeB.modelData, attributes: {} }],
@@ -339,7 +341,8 @@ describe('network reducer', () => {
         type: actionTypes.TOGGLE_EDGE,
         modelData: edgeA.modelData,
         attributeData: edgeA.attributeData,
-      })).toEqual(
+      },
+    )).toEqual(
       {
         ...mockState,
         edges: [{ ...edgeB.modelData, attributes: {} }, { ...edgeA.modelData, attributes: {} }],
@@ -348,8 +351,12 @@ describe('network reducer', () => {
   });
 
   it('should handle REMOVE_EDGE', () => {
-    const edgeA = { [PK]: 123, from: 'foo', to: 'bar', type: 'friend', attributes: {} };
-    const edgeB = { [PK]: 1234, from: 'asdf', to: 'qwerty', type: 'friend', attributes: {} };
+    const edgeA = {
+      [PK]: 123, from: 'foo', to: 'bar', type: 'friend', attributes: {},
+    };
+    const edgeB = {
+      [PK]: 1234, from: 'asdf', to: 'qwerty', type: 'friend', attributes: {},
+    };
     expect(reducer(
       { ...mockState, edges: [edgeA, edgeB] },
       { type: actionTypes.REMOVE_EDGE, edgeId: 123 },

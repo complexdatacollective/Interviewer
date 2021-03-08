@@ -87,8 +87,7 @@ const SubMenu = (props) => {
   );
 };
 
-
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   endSession: () => dispatch(sessionActions.endSession()),
   openSettingsMenu: () => dispatch(uiActions.update({ settingsMenuOpen: true })),
 });

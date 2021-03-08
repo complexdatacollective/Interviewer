@@ -4,14 +4,14 @@ import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import withPrompt from '../../behaviours/withPrompt';
-import Search from '../../containers/Search';
+import Search from '../Search';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { entityAttributesProperty, entityPrimaryKeyProperty } from '../../ducks/modules/network';
 import { makeGetSubjectType, makeNetworkNodesForPrompt, makeGetAdditionalAttributes } from '../../selectors/interface';
 import { getNetworkNodes, makeGetNodeTypeDefinition, makeGetNodeLabel } from '../../selectors/network';
 import { getCardAdditionalProperties, makeGetNodeIconName, makeGetPromptNodeModelData } from '../../selectors/name-generator';
-import { PromptSwiper } from '../';
-import { NodeBin, NodeList } from '../../components/';
+import { PromptSwiper } from '..';
+import { NodeBin, NodeList } from '../../components';
 import getParentKeyByNameValue from '../../utils/getParentKeyByNameValue';
 
 /**
@@ -20,7 +20,7 @@ import getParentKeyByNameValue from '../../utils/getParentKeyByNameValue';
   */
 class NameGeneratorAutoComplete extends Component {
   onSearchComplete = (selectedResults) => {
-    const withNewModelData = map(selectedResults, result => ({
+    const withNewModelData = map(selectedResults, (result) => ({
       ...this.props.newNodeModelData,
       ...result,
     }));
@@ -98,8 +98,8 @@ class NameGeneratorAutoComplete extends Component {
 
         <div className="name-generator-auto-complete-interface__node-bin">
           <NodeBin
-            accepts={meta => meta.itemType === 'EXISTING_NODE'}
-            dropHandler={meta => this.props.removeNode(meta[entityPrimaryKeyProperty])}
+            accepts={(meta) => meta.itemType === 'EXISTING_NODE'}
+            dropHandler={(meta) => this.props.removeNode(meta[entityPrimaryKeyProperty])}
             id="NODE_BIN"
           />
         </div>

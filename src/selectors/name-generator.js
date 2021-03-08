@@ -16,7 +16,7 @@ These selectors assume the following props:
 const defaultPanelConfiguration = {
   title: '',
   dataSource: 'existing',
-  filter: network => network,
+  filter: (network) => network,
 };
 
 // MemoedSelectors
@@ -24,7 +24,6 @@ const defaultPanelConfiguration = {
 const stageCardOptions = (_, props) => props.stage.cardOptions;
 const stageSortOptions = (_, props) => props.stage.sortOptions;
 const propPanels = (_, props) => props.stage.panels;
-
 
 export const makeGetPromptNodeModelData = () => {
   const getSubject = makeGetSubject();
@@ -44,19 +43,18 @@ export const makeGetPromptNodeModelData = () => {
 // Returns an empty array if no additional properties are specified in the protocol.
 export const getCardAdditionalProperties = createSelector(
   stageCardOptions,
-  cardOptions => (has(cardOptions, 'additionalProperties') ? cardOptions.additionalProperties : []),
+  (cardOptions) => (has(cardOptions, 'additionalProperties') ? cardOptions.additionalProperties : []),
 );
 
 // Returns the properties that are specified as sortable in sortOptions
 export const getSortableFields = createSelector(
   stageSortOptions,
-  sortOptions => (has(sortOptions, 'sortableProperties') ? sortOptions.sortableProperties : []),
+  (sortOptions) => (has(sortOptions, 'sortableProperties') ? sortOptions.sortableProperties : []),
 );
-
 
 export const getInitialSortOrder = createSelector(
   stageSortOptions,
-  sortOptions => (has(sortOptions, 'sortOrder') ? sortOptions.sortOrder : []),
+  (sortOptions) => (has(sortOptions, 'sortOrder') ? sortOptions.sortOrder : []),
 );
 
 export const makeGetNodeIconName = () => createSelector(
@@ -68,8 +66,7 @@ export const makeGetNodeIconName = () => createSelector(
   },
 );
 
-export const makeGetPanelConfiguration = () =>
-  createSelector(
-    propPanels,
-    panels => (panels ? panels.map(panel => ({ ...defaultPanelConfiguration, ...panel })) : []),
-  );
+export const makeGetPanelConfiguration = () => createSelector(
+  propPanels,
+  (panels) => (panels ? panels.map((panel) => ({ ...defaultPanelConfiguration, ...panel })) : []),
+);

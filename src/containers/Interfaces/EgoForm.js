@@ -7,7 +7,7 @@ import { ProgressBar, Scroller } from '@codaco/ui';
 import { submit, isValid, isDirty } from 'redux-form';
 import ReactMarkdown from 'react-markdown';
 import { isIOS } from '../../utils/Environment';
-import { Form } from '../../containers';
+import { Form } from '..';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { getNetworkEgo } from '../../selectors/network';
 import { getSessionProgress } from '../../selectors/session';
@@ -23,8 +23,7 @@ const confirmDialog = {
   confirmLabel: 'Discard changes',
 };
 
-const getFormName = index =>
-  `EGO_FORM_${index}`;
+const getFormName = (index) => `EGO_FORM_${index}`;
 
 class EgoForm extends Component {
   constructor(props) {

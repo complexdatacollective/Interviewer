@@ -48,9 +48,7 @@ const mockResult = {
 const mockSource = 'bar';
 
 loadExternalData
-  .mockImplementation(() =>
-    Promise.resolve(mockResult),
-  );
+  .mockImplementation(() => Promise.resolve(mockResult));
 
 describe('withExternalDataLoader', () => {
   let withExternalDataConfigured;

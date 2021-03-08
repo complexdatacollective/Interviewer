@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { Button } from '@codaco/ui';
 import { isValid } from 'redux-form';
-import { Overlay } from '../../containers/Overlay';
+import { Overlay } from '../Overlay';
 import { importProtocolFromURI } from '../../utils/protocol/importProtocol';
 import Form from '../Form';
 import { required, validateUrl } from '../../utils/Validations';
@@ -14,7 +14,7 @@ const ProtocolUrlForm = ({
   show,
   handleClose,
 }) => {
-  const submittable = useSelector(state => isValid(FORM_NAME)(state));
+  const submittable = useSelector((state) => isValid(FORM_NAME)(state));
 
   const handleSubmit = (fields) => {
     if (fields) {
@@ -51,7 +51,15 @@ const ProtocolUrlForm = ({
     >
       <div className="protocol-url-form">
         <p>
-          Enter the full URL to a protocol file below, including <code>http://</code> or <code>https://</code> at the start.
+          Enter the full URL to a protocol file below, including
+          {' '}
+          <code>http://</code>
+          {' '}
+          or
+          {' '}
+          <code>https://</code>
+          {' '}
+          at the start.
         </p>
         <Form
           form={formConfig.formName}

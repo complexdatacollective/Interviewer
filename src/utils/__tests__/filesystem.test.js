@@ -29,7 +29,7 @@ describe('filesystem', () => {
       });
 
       const mockFileEntry = ({
-        createWriter: jest.fn().mockImplementation(resolve => resolve(mockFileWriter)),
+        createWriter: jest.fn().mockImplementation((resolve) => resolve(mockFileWriter)),
       });
 
       const mockDirectoryEntry = ({

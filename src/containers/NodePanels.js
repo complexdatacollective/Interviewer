@@ -6,7 +6,7 @@ import { getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
 import { makeGetAdditionalAttributes } from '../selectors/interface';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { entityPrimaryKeyProperty } from '../ducks/modules/network';
-import { Panels } from '../components/';
+import { Panels } from '../components';
 import { makeGetPanelConfiguration } from '../selectors/name-generator';
 import NodePanel from './NodePanel';
 import { MonitorDragSource } from '../behaviours/DragAndDrop';
@@ -73,9 +73,9 @@ class NodePanels extends PureComponent {
     }
   }
 
-  isPanelEmpty = index => (
-    this.state.panelIndexes[index] &&
-    this.state.panelIndexes[index].count === 0
+  isPanelEmpty = (index) => (
+    this.state.panelIndexes[index]
+    && this.state.panelIndexes[index].count === 0
   );
 
   isPanelCompatible = (index) => {
@@ -103,11 +103,9 @@ class NodePanels extends PureComponent {
     return panelIndex && panelIndex.has(meta[entityPrimaryKeyProperty]);
   };
 
-  isPanelOpen = index =>
-    (this.props.isDragging && this.isPanelCompatible(index)) || !this.isPanelEmpty(index);
+  isPanelOpen = (index) => (this.props.isDragging && this.isPanelCompatible(index)) || !this.isPanelEmpty(index);
 
-  isAnyPanelOpen = () =>
-    this.props.panels.some((panel, index) => this.isPanelOpen(index));
+  isAnyPanelOpen = () => this.props.panels.some((panel, index) => this.isPanelOpen(index));
 
   handlePanelUpdate = (index, displayCount, nodeIndex) => {
     this.setState((state) => {

@@ -4,8 +4,7 @@ import { compose } from 'recompose';
 import cx from 'classnames';
 import { Icon } from '@codaco/ui';
 import { DropObstacle } from '../../behaviours/DragAndDrop';
-import { PresetSwitcherKey } from './';
-
+import { PresetSwitcherKey } from '.';
 
 class PresetSwitcher extends PureComponent {
   constructor() {
@@ -73,11 +72,12 @@ class PresetSwitcher extends PureComponent {
         >
           <Icon name="chevron-left" />
         </div>
-        {showFreezeButton &&
+        {showFreezeButton
+          && (
           <div className={freezeClasses} onClick={toggleFreeze}>
             <h1>&#10052;</h1>
           </div>
-        }
+          )}
         <div
           className={cx('preset-switcher__reset-button', { 'preset-switcher__reset-button--show': showResetButton })}
           onClick={resetInteractions}

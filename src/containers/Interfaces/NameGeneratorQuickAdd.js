@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { get, has, omit, debounce } from 'lodash';
+import {
+  get, has, omit, debounce,
+} from 'lodash';
 import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { makeNetworkNodesForPrompt, makeGetAdditionalAttributes } from '../../selectors/interface';
 import { makeGetPromptNodeModelData, makeGetNodeIconName } from '../../selectors/name-generator';
-import { PromptSwiper, NodePanels, QuickNodeForm } from '../';
-import { NodeList, NodeBin } from '../../components/';
+import { PromptSwiper, NodePanels, QuickNodeForm } from '..';
+import { NodeList, NodeBin } from '../../components';
 import { entityAttributesProperty, entityPrimaryKeyProperty } from '../../ducks/modules/network';
 
 /**
@@ -113,7 +115,7 @@ class NameGenerator extends Component {
             <NodeList
               items={nodesForPrompt}
               listId={`${stage.id}_${prompt.id}_MAIN_NODE_LIST`}
-              id={'MAIN_NODE_LIST'}
+              id="MAIN_NODE_LIST"
               accepts={({ meta }) => get(meta, 'itemType', null) === 'NEW_NODE'}
               itemType="EXISTING_NODE"
               onDrop={this.handleDropNode}
@@ -132,8 +134,8 @@ class NameGenerator extends Component {
         />
 
         <NodeBin
-          accepts={meta => meta.itemType === 'EXISTING_NODE'}
-          dropHandler={meta => this.props.removeNode(meta[entityPrimaryKeyProperty])}
+          accepts={(meta) => meta.itemType === 'EXISTING_NODE'}
+          dropHandler={(meta) => this.props.removeNode(meta[entityPrimaryKeyProperty])}
           id="NODE_BIN"
         />
       </div>

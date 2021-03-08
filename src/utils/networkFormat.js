@@ -50,8 +50,9 @@ export const getEntityAttributesWithNamesResolved = (entity, entityVariables,
  * ID/key for that name.
  */
 const getVariableIdFromName = (variableName, variableDefinitions) => {
-  const entry = Object.entries(variableDefinitions).find(([, variable]) =>
-    variable.name === variableName);
+  const entry = Object.entries(variableDefinitions).find(
+    ([, variable]) => variable.name === variableName,
+  );
   return entry && entry[0];
 };
 
@@ -81,7 +82,7 @@ export const getNodeWithIdAttributes = (node, nodeVariables) => {
  * Get the remote protocol name for a protocol, which Server uses to uniquely identify it
  * @param {string} name the name of a protocol
  */
-export const getRemoteProtocolID = name => name && crypto.createHash('sha256').update(name).digest('hex');
+export const getRemoteProtocolID = (name) => name && crypto.createHash('sha256').update(name).digest('hex');
 
 /**
  * Creates an object containing all required session metadata for export
@@ -94,7 +95,7 @@ export const asNetworkWithSessionVariables = (sessionId, session, protocol) => {
   // remoteProtocolID - format Server uniquely identifies protocols by
   // codebookHash - used to compare server version with local version
   // protocol name
-  // interview start and finish. If not available dont include
+  // interview start and finish. If not available don't include
   // export date
 
   const sessionVariables = {
@@ -103,10 +104,12 @@ export const asNetworkWithSessionVariables = (sessionId, session, protocol) => {
     [protocolProperty]: getRemoteProtocolID(protocol.name),
     [protocolName]: protocol.name,
     [codebookHashProperty]: objectHash(protocol.codebook),
-    ...(session.startedAt && { [sessionStartTimeProperty]:
-      new Date(session.startedAt).toISOString() }),
-    ...(session.finishedAt && { [sessionFinishTimeProperty]:
-      new Date(session.finishedAt).toISOString() }),
+    ...(session.startedAt && {
+      [sessionStartTimeProperty]: new Date(session.startedAt).toISOString(),
+    }),
+    ...(session.finishedAt && {
+      [sessionFinishTimeProperty]: new Date(session.finishedAt).toISOString(),
+    }),
     [sessionExportTimeProperty]: new Date().toISOString(),
   };
 
@@ -148,8 +151,8 @@ export const asWorkerAgentNetwork = (network = {}, registry = {}) => {
   const { nodes = [], edges = [], ego = {} } = network;
   const { node: nodeRegistry = {}, edge: edgeRegistry = {}, ego: egoRegistry = {} } = registry;
   return ({
-    nodes: nodes.map(node => asWorkerAgentEntity(node, nodeRegistry[node.type])),
-    edges: edges.map(edge => asWorkerAgentEdge(edge, edgeRegistry[edge.type])),
+    nodes: nodes.map((node) => asWorkerAgentEntity(node, nodeRegistry[node.type])),
+    edges: edges.map((edge) => asWorkerAgentEdge(edge, edgeRegistry[edge.type])),
     ego: asWorkerAgentEntity(ego, egoRegistry),
   });
 };

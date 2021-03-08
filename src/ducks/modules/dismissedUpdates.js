@@ -5,7 +5,7 @@ const RESET = 'DISMISSED_UPDATES/RESET';
 
 const initialState = [];
 
-const dismissUpdate = version => ({
+const dismissUpdate = (version) => ({
   type: DISMISS_UPDATE,
   payload: {
     version,
@@ -26,8 +26,7 @@ export default (state = initialState, { type, payload } = { type: null, payload:
   }
 };
 
-const getDismissedUpdates = () =>
-  state => get(state, 'dismissedUpdates');
+const getDismissedUpdates = () => (state) => get(state, 'dismissedUpdates');
 
 export const selectors = {
   getDismissedUpdates,

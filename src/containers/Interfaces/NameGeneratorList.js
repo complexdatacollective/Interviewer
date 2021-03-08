@@ -14,9 +14,9 @@ import {
   getInitialSortOrder,
   makeGetPromptNodeModelData,
 } from '../../selectors/name-generator';
-import { PromptSwiper } from '../../containers';
+import { PromptSwiper } from '..';
 import { FilterableListWrapper, CardList } from '../../components';
-import withExternalData from '../../containers/withExternalData';
+import withExternalData from '../withExternalData';
 import getParentKeyByNameValue from '../../utils/getParentKeyByNameValue';
 
 /**
@@ -51,9 +51,8 @@ class NameGeneratorList extends Component {
     this.props.removeNode(node[entityPrimaryKeyProperty]);
   }
 
-  isNodeSelected = node =>
-    !!this.props.selectedNodes
-      .find(current => current[entityPrimaryKeyProperty] === node[entityPrimaryKeyProperty]);
+  isNodeSelected = (node) => !!this.props.selectedNodes
+    .find((current) => current[entityPrimaryKeyProperty] === node[entityPrimaryKeyProperty]);
 
   /**
     * toggle whether the card is selected or not.
@@ -72,17 +71,17 @@ class NameGeneratorList extends Component {
     const nodeTypeVariables = this.props.nodeTypeDefinition.variables;
     const attrs = getEntityAttributes(node);
     const fields = this.props.visibleSupplementaryFields;
-    const withUUIDReplacement = fields.map(field => ({
+    const withUUIDReplacement = fields.map((field) => ({
       ...field,
       variable: getParentKeyByNameValue(nodeTypeVariables, field.variable),
     }));
 
-    return withUUIDReplacement.map(field => ({ [field.label]: attrs[field.variable] }));
+    return withUUIDReplacement.map((field) => ({ [field.label]: attrs[field.variable] }));
   }
 
   sortableFieldsWithVariableUUIDs = (sortFields) => {
     const nodeTypeVariables = this.props.nodeTypeDefinition.variables;
-    return sortFields.map(field => ({
+    return sortFields.map((field) => ({
       ...field,
       variable: getParentKeyByNameValue(nodeTypeVariables, field.variable),
     }));
@@ -90,7 +89,7 @@ class NameGeneratorList extends Component {
 
   initialSortWithVariableUUIDs = (initialSortOrder) => {
     const nodeTypeVariables = this.props.nodeTypeDefinition.variables;
-    return initialSortOrder.map(rule => ({
+    return initialSortOrder.map((rule) => ({
       ...rule,
       property: getParentKeyByNameValue(nodeTypeVariables, rule.property),
     }));

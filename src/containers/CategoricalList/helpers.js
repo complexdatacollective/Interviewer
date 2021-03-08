@@ -1,11 +1,9 @@
+const getIsPortrait = (width, height) => width / height < 1;
 
-const getIsPortrait = (width, height) =>
-  width / height < 1;
-
-export const getExpandedSize = bounds => (
-  bounds.height > (bounds.width * 0.67) ?
-    Math.floor(bounds.width * 0.67) :
-    bounds.height
+export const getExpandedSize = (bounds) => (
+  bounds.height > (bounds.width * 0.67)
+    ? Math.floor(bounds.width * 0.67)
+    : bounds.height
 );
 
 export const getItemSize = (bounds, itemCount, expanded = false) => {
