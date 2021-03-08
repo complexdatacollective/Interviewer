@@ -6,6 +6,7 @@ import { store } from '../ducks/store';
 import { actionCreators as toastActions } from '../ducks/modules/toasts';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../ducks/modules/dialogs';
+import { withErrorDialog } from '../ducks/modules/errors';
 import ApiClient from './ApiClient';
 import FileExportManager from './network-exporters/src/FileExportManager';
 import { getRemoteProtocolID } from './networkFormat';
@@ -40,6 +41,11 @@ const showCancellationToast = () => {
     ),
   }));
 };
+
+const fatalExportErrorAction = withErrorDialog((error) => ({
+  type: 'SESSION_EXPORT_FATAL_ERROR',
+  error,
+}));
 
 export const exportToFile = (sessionList) => {
   const {
@@ -175,10 +181,7 @@ export const exportToFile = (sessionList) => {
     }).catch((error) => {
       // Fatal error handling
       dispatch(toastActions.removeToast(toastUUID));
-      dispatch({
-        type: 'SESSION_EXPORT_FATAL_ERROR',
-        error,
-      });
+      dispatch(fatalExportErrorAction(error));
     });
 };
 
@@ -281,10 +284,7 @@ export const exportToServer = (sessionList) => {
   exportPromise.catch((error) => {
     // Close the progress toast
     dispatch(toastActions.removeToast(toastUUID));
-    dispatch({
-      type: 'SESSION_EXPORT_FATAL_ERROR',
-      error,
-    });
+    dispatch(fatalExportErrorAction(error));
 
     exportPromise.abort();
   });

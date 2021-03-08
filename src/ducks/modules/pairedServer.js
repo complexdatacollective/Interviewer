@@ -1,3 +1,6 @@
+import { withErrorDialog } from './errors';
+import { withToast } from './toasts';
+
 const SET_SERVER = 'SET_SERVER';
 const UNPAIR_SERVER = 'UNPAIR_SERVER';
 const SERVER_PAIRING_FAILED = 'SERVER_PAIRING_FAILED';
@@ -22,21 +25,21 @@ export default function reducer(state = initialState, action = {}) {
   }
 }
 
-const setPairedServer = (server, deviceId, deviceSecret) => ({
+const setPairedServer = withToast((server, deviceId, deviceSecret) => ({
   type: SET_SERVER,
   deviceId,
   deviceSecret,
   server,
-});
+}));
 
 const unpairServer = () => ({
   type: UNPAIR_SERVER,
 });
 
-const pairingFailed = error => ({
+const pairingFailed = withErrorDialog(error => ({
   type: SERVER_PAIRING_FAILED,
   error,
-});
+}));
 
 const actionCreators = {
   setPairedServer,

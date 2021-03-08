@@ -1,5 +1,4 @@
 /* eslint-env jest */
-import { createEpicMiddleware } from 'redux-observable';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { actionTypes as dialogActionTypes } from '../dialogs';

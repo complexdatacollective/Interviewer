@@ -6,7 +6,6 @@ import { routerMiddleware } from 'connected-react-router';
 import { createHashHistory as createHistory } from 'history';
 import { getEnv, isCordova } from '../utils/Environment';
 import logger from './middleware/logger';
-import epics from './middleware/epics';
 import createRootReducer from './modules/rootReducer';
 import { localStorageEngine, sqliteStorageEngine } from '../utils/storageAdapters';
 
@@ -55,7 +54,7 @@ export const store = createStore(
   getReducer(),
   undefined,
   compose(
-    applyMiddleware(routerMiddleware(history), thunk, epics, logger),
+    applyMiddleware(routerMiddleware(history), thunk, logger),
     typeof window === 'object' && typeof window.devToolsExtension !== 'undefined'
       ? window.devToolsExtension()
       : f => f,

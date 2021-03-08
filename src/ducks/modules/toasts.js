@@ -1,4 +1,5 @@
 import uuid from 'uuid';
+import React from 'react';
 
 const ADD_TOAST = Symbol('PROTOCOL/ADD_TOAST');
 const UPDATE_TOAST = Symbol('PROTOCOL/UPDATE_TOAST');
@@ -60,6 +61,29 @@ function reducer(state = initialState, action = {}) {
   }
 }
 
+
+const withToast = (actionCreator) =>
+  (...args) =>
+    (dispatch) => {
+      const action = actionCreator(...args);
+      dispatch(action);
+      switch (action.type) {
+        case 'SET_SERVER': {
+          return dispatch(addToast({
+            type: 'success',
+            title: 'Pairing complete!',
+            content:
+            (<p>
+              You have successfully paired with Server. You may now fetch protocols
+              and upload data.
+            </p>),
+          }));
+        }
+        default:
+          return null;
+      }
+    };
+
 const actionCreators = {
   addToast,
   updateToast,
@@ -74,6 +98,7 @@ const actionTypes = {
 export {
   actionCreators,
   actionTypes,
+  withToast,
 };
 
 export default reducer;

@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { omit, findKey } from 'lodash';
 import { actionCreators as dialogActions } from './dialogs';
+import { withErrorDialog } from './errors';
 import deleteProtocol from '../../utils/protocol/deleteProtocol';
 
 const IMPORT_PROTOCOL_COMPLETE = 'IMPORT_PROTOCOL_COMPLETE';
@@ -120,12 +121,12 @@ function importProtocolCompleteAction(protocolData) {
   };
 }
 
-function importProtocolFailedAction(error) {
+const importProtocolFailedAction = withErrorDialog((error) => {
   return {
     type: IMPORT_PROTOCOL_FAILED,
     error,
   };
-}
+});
 
 const actionTypes = {
   DELETE_PROTOCOL,
