@@ -119,6 +119,7 @@ ProtocolCard.propTypes = {
   onClickHandler: PropTypes.func,
   openDialog: PropTypes.func.isRequired,
   condensed: PropTypes.bool,
+  description: PropTypes.string,
   attributes: PropTypes.shape({
     schemaVersion: PropTypes.number.isRequired,
     lastModified: PropTypes.string.isRequired,

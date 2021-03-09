@@ -40,13 +40,18 @@ class CardList extends Component {
     });
   }
 
-  componentWillMount() {
+  // TODO: Make this component functional?
+  // eslint-disable-next-line camelcase
+  UNSAFE_componentWillMount() {
     this.columns = calculateRequiredColumns(window.innerWidth, window.innerHeight);
   }
 
   getColumns = () => this.columns;
 
-  getRows = () => Math.ceil(this.props.items.length / this.getColumns());
+  getRows = () => {
+    const { items } = this.props;
+    Math.ceil(items.length / this.getColumns());
+  };
 
   getRow = (index) => {
     const { items } = this.props;
@@ -161,7 +166,7 @@ CardList.propTypes = {
   className: PropTypes.string,
   details: PropTypes.func,
   label: PropTypes.func,
-  items: PropTypes.array.isRequired,
+  items: PropTypes.array,
   onItemClick: PropTypes.func,
   isItemSelected: PropTypes.func,
   getKey: PropTypes.func,

@@ -62,7 +62,10 @@ const markHitTarget = ({ target, source }) => {
   };
 };
 
-const markHitTargets = ({ targets, source }) => targets.map((target) => markHitTarget({ target, source }));
+const markHitTargets = ({
+  targets,
+  source,
+}) => targets.map((target) => markHitTarget({ target, source }));
 
 const markHitSource = ({ targets, source }) => thru(source, (s) => {
   if (isEmpty(s)) { return s; }

@@ -4,15 +4,7 @@ import Edge from '../Edge';
 
 const viewBoxScale = 100;
 
-export class EdgeLayout extends PureComponent {
-  static propTypes = {
-    edges: PropTypes.array,
-  };
-
-  static defaultProps = {
-    edges: [],
-  };
-
+class EdgeLayout extends PureComponent {
   renderEdge = (edge) => {
     if (!['key', 'from', 'to', 'type'].every((prop) => prop in edge)) {
       return null;
@@ -39,5 +31,15 @@ export class EdgeLayout extends PureComponent {
     );
   }
 }
+
+EdgeLayout.propTypes = {
+  edges: PropTypes.array,
+};
+
+EdgeLayout.defaultProps = {
+  edges: [],
+};
+
+export { EdgeLayout };
 
 export default EdgeLayout;

@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
@@ -33,7 +35,10 @@ class Card extends PureComponent {
     });
 
     return (
-      <div className={classes} onClick={onSelected}>
+      <div
+        className={classes}
+        onClick={onSelected}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           x="0px"

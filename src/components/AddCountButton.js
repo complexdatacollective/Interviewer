@@ -17,7 +17,11 @@ const baseClass = 'add-count-button';
 const AddCountButton = ({
   colorName, className, count, onClick,
 }) => (
-  <button className={`${baseClass} ${baseClass}--${colorName} ${className}`} onClick={() => onClick()}>
+  <button
+    className={`${baseClass} ${baseClass}--${colorName} ${className}`}
+    onClick={() => onClick()}
+    type="button"
+  >
     <div className={`${baseClass}__background`}>
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 240">
         <title>Add</title>

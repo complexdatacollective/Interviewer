@@ -2,38 +2,52 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
+import { get } from 'lodash';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { getPromptIndexForCurrentSession } from '../selectors/session';
 import { getProtocolStages } from '../selectors/protocol';
 
 export default function withPrompt(WrappedComponent) {
   class WithPrompt extends Component {
-    prompts() {
-      return this.props.stage && this.props.stage.prompts;
+    isFirstPrompt = () => {
+      const { promptIndex } = this.props;
+      return promptIndex === 0;
+    }
+
+    isLastPrompt = () => {
+      const { promptIndex } = this.props;
+      const lastPromptIndex = this.promptsCount() - 1;
+      return promptIndex === lastPromptIndex;
+    }
+
+    promptForward = () => {
+      const { updatePrompt, promptIndex } = this.props;
+
+      updatePrompt(
+        (this.promptsCount() + promptIndex + 1) % this.promptsCount(),
+      );
+    }
+
+    promptBackward = () => {
+      const { updatePrompt, promptIndex } = this.props;
+
+      updatePrompt(
+        (this.promptsCount() + promptIndex - 1) % this.promptsCount(),
+      );
+    }
+
+    prompt() {
+      const { promptIndex } = this.prompts;
+
+      return get(this.prompts(), promptIndex);
     }
 
     promptsCount() {
       return this.prompts().length;
     }
 
-    isFirstPrompt = () => this.props.promptIndex === 0;
-
-    isLastPrompt = () => this.props.promptIndex === (this.promptsCount() - 1);
-
-    prompt() {
-      return this.prompts() && this.prompts()[this.props.promptIndex];
-    }
-
-    promptForward = () => {
-      this.props.updatePrompt(
-        (this.promptsCount() + this.props.promptIndex + 1) % this.promptsCount(),
-      );
-    }
-
-    promptBackward = () => {
-      this.props.updatePrompt(
-        (this.promptsCount() + this.props.promptIndex - 1) % this.promptsCount(),
-      );
+    prompts() {
+      return get(this.props, ['stage', 'prompts']);
     }
 
     render() {
