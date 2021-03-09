@@ -7,20 +7,36 @@ import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { actionCreators as sessionActions } from '../ducks/modules/session';
 
 class LoadParamsRoute extends Component {
-  componentWillMount() {
-    const { params } = this.props.computedMatch;
-    this.props.setSession(params.sessionId);
+  // eslint-disable-next-line camelcase
+  UNSAFE_componentWillMount() {
+    const {
+      computedMatch,
+      setSession,
+      shouldReset,
+      resetState,
+      sessionId,
+      updatePrompt,
+    } = this.props;
 
-    if (this.props.shouldReset) {
-      this.props.resetState();
+    setSession(computedMatch.params.sessionId);
+
+    if (shouldReset) {
+      resetState();
       return;
     }
-    if (this.props.sessionId) {
-      this.props.updatePrompt(0);
+    if (sessionId) {
+      updatePrompt(0);
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  // eslint-disable-next-line camelcase
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    const {
+      stageIndex,
+      updatePrompt,
+      updateStage,
+    } = this.props;
+
     if (nextProps.shouldReset) {
       nextProps.resetState();
       return;
@@ -32,11 +48,11 @@ class LoadParamsRoute extends Component {
     if (
       nextParams // there are new params
       && nextParams.stageIndex // there's a stage index
-      && nextParams.stageIndex !== this.props.stageIndex // the new stage index is different
+      && nextParams.stageIndex !== stageIndex // the new stage index is different
       && nextProps.sessionId // We still have an active session
     ) {
-      this.props.updateStage(parseInt(nextParams.stageIndex, 10));
-      this.props.updatePrompt(0);
+      updateStage(parseInt(nextParams.stageIndex, 10));
+      updatePrompt(0);
     }
   }
 
@@ -49,13 +65,13 @@ class LoadParamsRoute extends Component {
       ...rest
     } = this.props;
 
-    const finishedLoading = this.props.sessionId;
+    const finishedLoading = rest.sessionId;
     if (!shouldReset && !finishedLoading) { return null; }
 
     return (
       <RenderComponent
         {...rest}
-        stageIndex={this.props.computedMatch.params.stageIndex || 0}
+        stageIndex={rest.computedMatch.params.stageIndex || 0}
         stageBackward={!!backParam}
       />
     );

@@ -282,10 +282,6 @@ const DyadCensus = ({
   );
 };
 
-DyadCensus.defaultProps = {
-  form: null,
-};
-
 DyadCensus.propTypes = {
   prompt: PropTypes.object.isRequired,
   promptBackward: PropTypes.func.isRequired,

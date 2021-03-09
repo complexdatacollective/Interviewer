@@ -23,7 +23,6 @@ class NameGenerator extends Component {
 
     this.state = {
       selectedNode: null,
-      showNodeForm: false,
     };
   }
 
@@ -31,25 +30,33 @@ class NameGenerator extends Component {
    * Node Form submit handler
    */
   handleSubmitForm = debounce(({ form }) => {
+    const { selectedNode } = this.state;
+    const {
+      addNode,
+      newNodeModelData,
+      newNodeAttributes,
+      updateNode,
+    } = this.props;
+
     if (form) {
-      if (!this.state.selectedNode) {
+      if (!selectedNode) {
         /**
          *  addNode(modelData, attributeData);
         */
-        this.props.addNode(
-          this.props.newNodeModelData,
-          { ...this.props.newNodeAttributes, ...form },
+        addNode(
+          newNodeModelData,
+          { ...newNodeAttributes, ...form },
         );
       } else {
         /**
          * updateNode(nodeId, newModelData, newAttributeData)
          */
-        const selectedUID = this.state.selectedNode[entityPrimaryKeyProperty];
-        this.props.updateNode(selectedUID, {}, form);
+        const selectedUID = selectedNode[entityPrimaryKeyProperty];
+        updateNode(selectedUID, {}, form);
       }
     }
 
-    this.setState({ showNodeForm: false, selectedNode: null });
+    this.setState({ selectedNode: null });
   }, 1000, { // This is needed to prevent double submit.
     leading: true,
     trailing: false,
@@ -61,21 +68,29 @@ class NameGenerator extends Component {
    * @param {object} item - key/value object containing node object from the network store
    */
   handleDropNode = (item) => {
+    const {
+      updateNode,
+      newNodeModelData,
+      newNodeAttributes,
+      addNode,
+    } = this.props;
+
     const node = { ...item.meta };
+
     // Test if we are updating an existing network node, or adding it to the network
     if (has(node, 'promptIDs')) {
-      this.props.updateNode(
+      updateNode(
         node[entityPrimaryKeyProperty],
-        { ...this.props.newNodeModelData },
-        { ...this.props.newNodeAttributes },
+        { ...newNodeModelData },
+        { ...newNodeAttributes },
       );
     } else {
       const droppedAttributeData = node[entityAttributesProperty];
       const droppedModelData = omit(node, entityAttributesProperty);
 
-      this.props.addNode(
-        { ...this.props.newNodeModelData, ...droppedModelData },
-        { ...droppedAttributeData, ...this.props.newNodeAttributes },
+      addNode(
+        { ...newNodeModelData, ...droppedModelData },
+        { ...droppedAttributeData, ...newNodeAttributes },
       );
     }
   }
@@ -90,12 +105,14 @@ class NameGenerator extends Component {
       promptBackward,
       promptForward,
       stage,
+      addNode,
+      removeNode,
     } = this.props;
 
     const {
       prompts,
       quickAdd,
-    } = this.props.stage;
+    } = stage;
 
     return (
       <div className="name-generator-interface">
@@ -125,9 +142,9 @@ class NameGenerator extends Component {
         </div>
 
         <QuickNodeForm
-          stage={this.props.stage}
+          stage={stage}
           targetVariable={quickAdd}
-          addNode={this.props.addNode}
+          addNode={addNode}
           nodeIconName={nodeIconName}
           newNodeAttributes={newNodeAttributes}
           newNodeModelData={newNodeModelData}
@@ -135,7 +152,7 @@ class NameGenerator extends Component {
 
         <NodeBin
           accepts={(meta) => meta.itemType === 'EXISTING_NODE'}
-          dropHandler={(meta) => this.props.removeNode(meta[entityPrimaryKeyProperty])}
+          dropHandler={(meta) => removeNode(meta[entityPrimaryKeyProperty])}
           id="NODE_BIN"
         />
       </div>
@@ -144,7 +161,6 @@ class NameGenerator extends Component {
 }
 
 NameGenerator.defaultProps = {
-  activePromptAttributes: {},
   quickAdd: null,
 };
 

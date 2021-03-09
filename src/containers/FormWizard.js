@@ -13,11 +13,12 @@ class FormWizard extends Component {
   }
 
   onSubmit = (formData, dispatch, form) => {
+    const { onSubmit } = this.props;
     if (this.shouldShowNextButton()) {
       this.nextField();
       return;
     }
-    this.props.onSubmit(formData, dispatch, form);
+    onSubmit(formData, dispatch, form);
   }
 
   nextField = () => {

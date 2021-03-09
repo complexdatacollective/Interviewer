@@ -27,7 +27,6 @@ class Narrative extends Component {
       showEdges: true,
       showHighlights: true,
       highlightIndex: 0,
-      showResetButton: false,
       activeAnnotations: false,
       activeFocusNodes: false,
       isFreeze: false,
@@ -43,20 +42,23 @@ class Narrative extends Component {
   }
 
   toggleConvex = () => {
+    const { showConvex } = this.state;
     this.setState({
-      showConvex: !this.state.showConvex,
+      showConvex: !showConvex,
     });
   }
 
   toggleEdges = () => {
+    const { showEdges } = this.state;
     this.setState({
-      showEdges: !this.state.showEdges,
+      showEdges: !showEdges,
     });
   }
 
   toggleHighlights = () => {
+    const { showHighlights } = this.state;
     this.setState({
-      showHighlights: !this.state.showHighlights,
+      showHighlights: !showHighlights,
     });
   }
 
@@ -67,8 +69,9 @@ class Narrative extends Component {
   }
 
   toggleFreeze = () => {
+    const { isFreeze } = this.state;
     this.setState({
-      isFreeze: !this.state.isFreeze,
+      isFreeze: !isFreeze,
     });
   }
 
@@ -77,7 +80,8 @@ class Narrative extends Component {
   }
 
   updatePreset = (index) => {
-    if (index !== this.state.presetIndex) {
+    const { presetIndex } = this.state;
+    if (index !== presetIndex) {
       this.setState({
         showConvex: true,
         showEdges: true,
@@ -94,10 +98,20 @@ class Narrative extends Component {
     const {
       stage,
     } = this.props;
+    const {
+      presetIndex,
+      activeFocusNodes,
+      activeAnnotations,
+      isFreeze,
+      showHighlights,
+      highlightIndex,
+      showEdges,
+      showConvex,
+    } = this.state;
 
     const { subject } = stage;
     const { presets } = stage;
-    const currentPreset = presets[this.state.presetIndex];
+    const currentPreset = presets[presetIndex];
     const { layoutVariable } = currentPreset;
     const highlight = currentPreset.highlight || [];
     const displayEdges = (currentPreset.edges && currentPreset.edges.display) || [];
@@ -111,7 +125,7 @@ class Narrative extends Component {
     // eslint-disable-next-line @codaco/spellcheck/spell-checker
     const freeDraw = get(stage, 'behaviours.freeDraw', false);
 
-    const showResetButton = this.state.activeAnnotations || this.state.activeFocusNodes;
+    const showResetButton = activeAnnotations || activeFocusNodes;
 
     return (
       <div className="narrative-interface">
@@ -123,17 +137,17 @@ class Narrative extends Component {
                 ref={this.annotationLayer}
                 setActiveStatus={(status) => { this.setActiveStatus('activeAnnotations', status); }}
                 key={`annotation-${currentPreset.id}`}
-                isFreeze={this.state.isFreeze}
+                isFreeze={isFreeze}
               />
               )}
             <ConcentricCircles
               subject={subject}
               layoutVariable={layoutVariable}
               highlightAttribute={
-                (this.state.showHighlights ? highlight[this.state.highlightIndex] : null)
+                (showHighlights ? highlight[highlightIndex] : null)
 }
-              displayEdges={(this.state.showEdges && displayEdges) || []}
-              convexHulls={(this.state.showConvex && convexHulls) || ''}
+              displayEdges={(showEdges && displayEdges) || []}
+              convexHulls={(showConvex && convexHulls) || ''}
               allowPositioning={allowRepositioning}
               backgroundImage={backgroundImage}
               concentricCircles={concentricCircles}
@@ -146,10 +160,10 @@ class Narrative extends Component {
             id="preset-switcher"
             presets={presets}
             updatePreset={this.updatePreset}
-            presetIndex={this.state.presetIndex}
+            presetIndex={presetIndex}
             subject={subject}
             highlights={highlight}
-            highlightIndex={this.state.highlightIndex}
+            highlightIndex={highlightIndex}
             toggleHighlightIndex={this.toggleHighlightIndex}
             toggleHighlights={this.toggleHighlights}
             resetInteractions={this.resetInteractions}
@@ -159,7 +173,7 @@ class Narrative extends Component {
             toggleConvex={this.toggleConvex}
             showResetButton={showResetButton}
             showFreezeButton={freeDraw}
-            isFreeze={this.state.isFreeze}
+            isFreeze={isFreeze}
             toggleFreeze={this.toggleFreeze}
           />
         </div>

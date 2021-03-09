@@ -20,8 +20,13 @@ class NodeForm extends Component {
   }
 
   handleSubmit = debounce((form) => {
-    this.props.onSubmit({ form });
-    this.props.onClose();
+    const {
+      onSubmit,
+      onClose,
+    } = this.props;
+
+    onSubmit({ form });
+    onClose();
   }, 1000, { // This is needed to prevent double submit.
     leading: true,
     trailing: false,
@@ -29,7 +34,13 @@ class NodeForm extends Component {
 
   render() {
     const {
-      show, form, initialValues, submitForm, stage,
+      show,
+      form,
+      initialValues,
+      submitForm,
+      stage,
+      onClose,
+      useFullScreenForms,
     } = this.props;
 
     const formProps = {
@@ -45,11 +56,11 @@ class NodeForm extends Component {
       <Overlay
         show={show}
         title={form.title}
-        onClose={this.props.onClose}
+        onClose={onClose}
         className="node-form"
         footer={(<Button key="submit" aria-label="Submit" type="submit" onClick={submitForm}>Finished</Button>)}
       >
-        { this.props.useFullScreenForms
+        { useFullScreenForms
           ? (
             <FormWizard
               {...formProps}

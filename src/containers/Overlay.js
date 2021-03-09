@@ -86,6 +86,8 @@ export {
   Overlay,
 };
 
-const mapStateToProps = (state) => ({ useFullScreenForms: state.deviceSettings.useFullScreenForms });
+const mapStateToProps = (state) => ({
+  useFullScreenForms: state.deviceSettings.useFullScreenForms,
+});
 
 export default connect(mapStateToProps)(Overlay);

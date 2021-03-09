@@ -10,20 +10,6 @@ import { Prompt, Pips } from '../components';
   * @extends Component
   */
 class PromptSwiper extends Component {
-  static propTypes = {
-    forward: PropTypes.func.isRequired,
-    backward: PropTypes.func.isRequired,
-    prompts: PropTypes.any.isRequired,
-    promptIndex: PropTypes.number.isRequired,
-    floating: PropTypes.bool,
-    minimizable: PropTypes.bool,
-  };
-
-  static defaultProps = {
-    floating: false,
-    minimizable: false,
-  };
-
   constructor(props) {
     super(props);
 
@@ -36,27 +22,34 @@ class PromptSwiper extends Component {
   }
 
   handleMinimize = () => {
+    const { minimized } = this.state;
     this.setState({
-      minimized: !this.state.minimized,
+      minimized: !minimized,
     });
   };
 
   handleSwipe(event) {
+    const {
+      forward,
+      backward,
+    } = this.props;
+
     switch (event.direction) {
       case 2:
       case 3:
-        this.props.forward();
+        forward();
         break;
       case 1:
       case 4:
-        this.props.backward();
+        backward();
         break;
       default:
     }
   }
 
   handleTap() {
-    this.props.forward();
+    const { forward } = this.props;
+    forward();
   }
 
   render() {
@@ -64,6 +57,8 @@ class PromptSwiper extends Component {
       minimizable,
       promptIndex,
       prompts,
+      floating,
+      minimized,
     } = this.props;
 
     const promptsRender = prompts.map((prompt, index) => (
@@ -78,14 +73,14 @@ class PromptSwiper extends Component {
     const classes = cx(
       'prompts',
       {
-        'prompts--floating': this.props.floating,
-        'prompts--minimized': this.state.minimized,
+        'prompts--floating': floating,
+        'prompts--minimized': minimized,
       },
     );
 
     const minimizeButton = (
       <span className="prompts__minimizer" onClick={this.handleMinimize}>
-        {this.state.minimized ? '?' : '—'}
+        {minimized ? '?' : '—'}
       </span>
     );
 
@@ -108,7 +103,7 @@ class PromptSwiper extends Component {
           <div className="prompts__pips">
             <Pips count={prompts.length} currentIndex={promptIndex} />
           </div>
-          {!this.state.minimized && (
+          {!minimized && (
           <div className="prompts__prompts">
             {promptsRender}
           </div>
@@ -119,6 +114,20 @@ class PromptSwiper extends Component {
     );
   }
 }
+
+PromptSwiper.propTypes = {
+  forward: PropTypes.func.isRequired,
+  backward: PropTypes.func.isRequired,
+  prompts: PropTypes.any.isRequired,
+  promptIndex: PropTypes.number.isRequired,
+  floating: PropTypes.bool,
+  minimizable: PropTypes.bool,
+};
+
+PromptSwiper.defaultProps = {
+  floating: false,
+  minimizable: false,
+};
 
 function mapStateToProps(state, ownProps) {
   return {

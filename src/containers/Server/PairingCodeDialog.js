@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -181,12 +182,11 @@ const PairingCodeDialog = (props) => {
 PairingCodeDialog.propTypes = {
   handleCancel: PropTypes.func.isRequired,
   handleSuccess: PropTypes.func.isRequired,
+  deviceName: PropTypes.string,
 };
 
 PairingCodeDialog.defaultProps = {
   deviceName: '',
-  onComplete: () => {},
-  onError: () => {},
 };
 
 const mapStateToProps = (state) => ({

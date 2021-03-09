@@ -22,19 +22,21 @@ class PairingCodeInput extends Component {
   }
 
   onChange = (evt) => {
+    const { charCount } = this.props;
+    const { characters } = this.state;
     const target = evt.currentTarget;
     const index = parseInt(target.getAttribute('data-index'), 10);
     let { value } = target;
     let newCharacters;
 
-    if (value.length === this.props.charCount) {
+    if (value.length === charCount) {
       // Handle paste of entire code
       newCharacters = value.split('');
       target.blur();
     } else {
       // TODO: this takes the last form input, which may not be the last typed.
       value = value[value.length - 1] || '';
-      newCharacters = this.state.characters.slice();
+      newCharacters = characters.slice();
       newCharacters.splice(index, 1, value);
 
       if (value) {
@@ -49,18 +51,20 @@ class PairingCodeInput extends Component {
   }
 
   updateCharacters(newCharacters) {
+    const { setPairingCode } = this.props;
     this.setState({ characters: newCharacters }, () => (
-      this.props.setPairingCode(newCharacters.join(''))
+      setPairingCode(newCharacters.join(''))
     ));
   }
 
   render() {
     const { disabled } = this.props;
+    const { characters } = this.state;
     return (
       <div onKeyUp={onKeyUp} className="pairing-code-input">
         <div className="pairing-code-input__characters">
           {
-            this.state.characters.map((char, i) => (
+            characters.map((char, i) => (
               <CharInput
                 index={i}
                 key={i}

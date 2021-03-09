@@ -55,7 +55,9 @@ const DiscoveredServerList = ({
     });
 
     serverDiscoverer.on('SERVER_REMOVED', (response) => {
-      updateAvailableServers((prevState) => prevState.filter((item) => (item.name !== response.name)));
+      updateAvailableServers(
+        (prevState) => prevState.filter((item) => (item.name !== response.name)),
+      );
     });
 
     serverDiscoverer.on('SERVER_ERROR', (serverError) => {
