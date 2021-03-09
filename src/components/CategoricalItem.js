@@ -3,6 +3,8 @@ import { compose, withProps, withState } from 'recompose';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { Flipped } from 'react-flip-toolkit';
+import ReactMarkdown from 'react-markdown';
+import { ALLOWED_MARKDOWN_LABEL_TAGS } from '@codaco/ui/src/utils/config';
 
 import { DropTarget, MonitorDropTarget } from '../behaviours/DragAndDrop';
 import { NodeList } from './';
@@ -40,8 +42,13 @@ const CategoricalItem = ({
         <div className="categorical-item__inner">
           <Flipped inverseFlipId={id} scale>
             <div className="categorical-item__title">
-              <h3>{label}</h3>
-              {(!isExpanded && details) && <h5>{details}</h5>}
+              <h3>
+                <ReactMarkdown source={label} allowedTypes={ALLOWED_MARKDOWN_LABEL_TAGS} />
+              </h3>
+              {(!isExpanded && details) &&
+                <h5>
+                  <ReactMarkdown source={details} allowedTypes={ALLOWED_MARKDOWN_LABEL_TAGS} />
+                </h5>}
             </div>
           </Flipped>
           {isExpanded &&
