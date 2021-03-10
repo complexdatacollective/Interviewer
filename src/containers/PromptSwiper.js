@@ -58,8 +58,9 @@ class PromptSwiper extends Component {
       promptIndex,
       prompts,
       floating,
-      minimized,
     } = this.props;
+
+    const { minimized } = this.state;
 
     const promptsRender = prompts.map((prompt, index) => (
       <Prompt
