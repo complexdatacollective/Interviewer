@@ -20,6 +20,10 @@ const ExportOptions = (props) => {
     updateSetting,
   } = props;
 
+  const updateLayoutSetting = (setting) => (value) => (
+    updateSetting(setting, parseInt(value, 10) || 1)
+  );
+
   return (
     <>
       <motion.article variants={TabItemVariants} className="settings-element">
@@ -130,10 +134,10 @@ const ExportOptions = (props) => {
                 </p>
               </div>
               <Number
-                label="Width (pixels)"
+                label="Width (pixels, 1 pixel minimum)"
                 input={{
                   value: screenLayoutWidth,
-                  onChange: (e) => updateSetting('screenLayoutWidth', e),
+                  onChange: updateLayoutSetting('screenLayoutWidth'),
                   validation: {
                     required: true,
                     minValue: 1,
@@ -142,10 +146,10 @@ const ExportOptions = (props) => {
                 name="screenLayoutWidth"
               />
               <Number
-                label="Height (pixels)"
+                label="Height (pixels, 1 pixel minimum)"
                 input={{
                   value: screenLayoutHeight,
-                  onChange: (e) => updateSetting('screenLayoutHeight', e),
+                  onChange: updateLayoutSetting('screenLayoutHeight'),
                   validation: {
                     required: true,
                     minValue: 1,
@@ -174,10 +178,10 @@ const ExportOptions = (props) => {
   );
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  toggleSetting: (setting) => dispatch(deviceSettingsActions.toggleSetting(setting)),
-  updateSetting: (setting, value) => dispatch(deviceSettingsActions.setSetting(setting, value)),
-});
+const mapDispatchToProps = {
+  toggleSetting: deviceSettingsActions.toggleSetting,
+  updateSetting: deviceSettingsActions.setSetting,
+};
 
 const mapStateToProps = (state) => ({
   exportGraphML: state.deviceSettings.exportGraphML,

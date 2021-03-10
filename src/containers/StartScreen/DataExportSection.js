@@ -11,8 +11,10 @@ import Section from './Section';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import useServerConnectionStatus from '../../hooks/useServerConnectionStatus';
-import { NewFilterableListWrapper, Switch } from '../../components';
+import NewFilterableListWrapper from '../../components/NewFilterableListWrapper';
+import Switch from '../../components/Switch';
 import { asNetworkWithSessionVariables } from '../../utils/networkFormat';
+import formatDatestamp from '../../utils/formatDatestamp';
 
 const oneBasedIndex = (i) => parseInt(i || 0, 10) + 1;
 
@@ -28,6 +30,8 @@ const DataExportSection = () => {
   const dispatch = useDispatch();
   const deleteSession = (id) => dispatch(sessionsActions.removeSession(id));
   const openDialog = (dialog) => dispatch(dialogActions.openDialog(dialog));
+
+  const handleFilterChange = () => setSelectedSessions([]);
 
   const handleDeleteSessions = () => {
     openDialog({
@@ -108,10 +112,10 @@ const DataExportSection = () => {
     return {
       caseId,
       progress,
-      startedAt,
-      finishedAt,
-      updatedAt,
-      exportedAt,
+      startedAt: formatDatestamp(startedAt),
+      finishedAt: formatDatestamp(finishedAt),
+      updatedAt: formatDatestamp(updatedAt),
+      exportedAt: formatDatestamp(exportedAt),
       key: sessionUUID,
       protocolName: protocol.name,
       sessionUUID,
@@ -136,6 +140,13 @@ const DataExportSection = () => {
 
   if (Object.keys(sessions).length === 0) { return null; }
 
+  const isSelectAll = (
+    Object.keys(sessions).length > 0
+    && (Object.keys(sessions).length === selectedSessions.length)
+  );
+
+  const resetFilter = [isSelectAll, isUnexportedSelected()];
+
   return (
     <Section className="start-screen-section data-export-section">
       <motion.main layout className="data-export-section__main">
@@ -153,6 +164,7 @@ const DataExportSection = () => {
           propertyPath={null}
           initialSortProperty="updatedAt"
           initialSortDirection="desc"
+          onFilterChange={handleFilterChange}
           sortableProperties={[
             {
               label: 'Last Changed',
@@ -167,6 +179,7 @@ const DataExportSection = () => {
               variable: 'progress',
             },
           ]}
+          resetFilter={resetFilter}
         />
         <motion.div
           className="selection-status"
@@ -182,10 +195,7 @@ const DataExportSection = () => {
             <Switch
               className="header-toggle"
               label="Select all"
-              on={
-                Object.keys(sessions).length > 0
-                && (Object.keys(sessions).length === selectedSessions.length)
-              }
+              on={isSelectAll}
               onChange={toggleSelectAll}
             />
           </div>

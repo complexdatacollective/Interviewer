@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { get } from 'lodash';
 import objectHash from 'object-hash';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -17,11 +17,18 @@ const NewFilterableListWrapper = (props) => {
     initialSortDirection,
     sortableProperties,
     loading,
+    onFilterChange,
+    resetFilter,
   } = props;
 
   const [filterTerm, setFilterTerm] = useState(null);
   const [sortProperty, setSortProperty] = useState(initialSortProperty);
   const [sortAscending, setSortAscending] = useState(initialSortDirection === 'asc');
+
+  useEffect(() => {
+    if (resetFilter.every((v) => v === false)) { return; }
+    setFilterTerm(null);
+  }, resetFilter);
 
   const handleSetSortProperty = (property) => {
     if (sortProperty === property) {
@@ -32,7 +39,11 @@ const NewFilterableListWrapper = (props) => {
     }
   };
 
-  const onFilterChange = (event) => setFilterTerm(event.target.value || null);
+  const handleFilterChange = (event) => {
+    const value = event.target.value || null;
+    setFilterTerm(value);
+    onFilterChange(value);
+  };
 
   const sortedItems = sortOrder([{
     property: sortProperty,
@@ -125,7 +136,8 @@ const NewFilterableListWrapper = (props) => {
             placeholder="Filter..."
             className="new-filterable-list__filter"
             input={{
-              onChange: onFilterChange,
+              value: filterTerm || '',
+              onChange: handleFilterChange,
             }}
           />
         </section>
@@ -177,6 +189,8 @@ NewFilterableListWrapper.propTypes = {
   initialSortDirection: PropTypes.oneOf(['asc', 'desc']),
   sortableProperties: PropTypes.array,
   loading: PropTypes.bool,
+  resetFilter: PropTypes.array,
+  onFilterChange: PropTypes.func,
 };
 
 NewFilterableListWrapper.defaultProps = {
@@ -184,6 +198,8 @@ NewFilterableListWrapper.defaultProps = {
   propertyPath: entityAttributesProperty,
   sortableProperties: [],
   loading: false,
+  resetFilter: [],
+  onFilterChange: () => {},
 };
 
 export default NewFilterableListWrapper;

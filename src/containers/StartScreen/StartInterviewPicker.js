@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ProtocolCard } from '@codaco/ui/lib/components/Cards';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
-import { NewFilterableListWrapper } from '../../components';
+import NewFilterableListWrapper from '../../components/NewFilterableListWrapper';
 import NewSessionOverlay from './NewSessionOverlay';
 import { Overlay } from '../Overlay';
 
