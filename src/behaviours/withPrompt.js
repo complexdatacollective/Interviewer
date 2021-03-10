@@ -9,6 +9,14 @@ import { getProtocolStages } from '../selectors/protocol';
 
 export default function withPrompt(WrappedComponent) {
   class WithPrompt extends Component {
+    get prompts() {
+      return get(this.props, ['stage', 'prompts']);
+    }
+
+    get promptsCount() {
+      return this.prompts.length;
+    }
+
     isFirstPrompt = () => {
       const { promptIndex } = this.props;
       return promptIndex === 0;
@@ -16,7 +24,7 @@ export default function withPrompt(WrappedComponent) {
 
     isLastPrompt = () => {
       const { promptIndex } = this.props;
-      const lastPromptIndex = this.promptsCount() - 1;
+      const lastPromptIndex = this.promptsCount - 1;
       return promptIndex === lastPromptIndex;
     }
 
@@ -24,7 +32,7 @@ export default function withPrompt(WrappedComponent) {
       const { updatePrompt, promptIndex } = this.props;
 
       updatePrompt(
-        (this.promptsCount() + promptIndex + 1) % this.promptsCount(),
+        (this.promptsCount + promptIndex + 1) % this.promptsCount,
       );
     }
 
@@ -32,22 +40,14 @@ export default function withPrompt(WrappedComponent) {
       const { updatePrompt, promptIndex } = this.props;
 
       updatePrompt(
-        (this.promptsCount() + promptIndex - 1) % this.promptsCount(),
+        (this.promptsCount + promptIndex - 1) % this.promptsCount,
       );
     }
 
     prompt() {
-      const { promptIndex } = this.prompts;
+      const { promptIndex } = this.props;
 
-      return get(this.prompts(), promptIndex);
-    }
-
-    promptsCount() {
-      return this.prompts().length;
-    }
-
-    prompts() {
-      return get(this.props, ['stage', 'prompts']);
+      return get(this.prompts, promptIndex);
     }
 
     render() {

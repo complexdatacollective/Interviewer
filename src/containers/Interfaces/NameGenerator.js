@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { bindActionCreators, compose } from 'redux';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { get, has, omit } from 'lodash';
@@ -227,7 +227,7 @@ function makeMapStateToProps() {
 
   return function mapStateToProps(state, props) {
     return {
-      activePromptAttributes: props.prompt.additionalAttributes,
+      activePromptAttributes: get(props, ['prompt', 'additionalAttributes'], {}),
       newNodeAttributes: getPromptNodeAttributes(state, props),
       newNodeModelData: getPromptNodeModelData(state, props),
       nodesForPrompt: networkNodesForPrompt(state, props),
@@ -236,13 +236,11 @@ function makeMapStateToProps() {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    addNode: bindActionCreators(sessionsActions.addNode, dispatch),
-    updateNode: bindActionCreators(sessionsActions.updateNode, dispatch),
-    removeNode: bindActionCreators(sessionsActions.removeNode, dispatch),
-  };
-}
+const mapDispatchToProps = {
+  addNode: sessionsActions.addNode,
+  updateNode: sessionsActions.updateNode,
+  removeNode: sessionsActions.removeNode,
+};
 
 export default compose(
   withPrompt,

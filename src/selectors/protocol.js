@@ -16,11 +16,11 @@ const DefaultFinishStage = {
   label: 'Finish Interview',
 };
 
-export const getActiveSession = (state) => (
+const getActiveSession = (state) => (
   state.activeSessionId && state.sessions[state.activeSessionId]
 );
 
-export const getLastActiveSession = (state) => {
+const getLastActiveSession = (state) => {
   if (Object.keys(state.sessions).length === 0) {
     return {};
   }
