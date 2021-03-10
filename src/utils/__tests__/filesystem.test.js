@@ -2,6 +2,7 @@
 /* eslint-disable @codaco/spellcheck/spell-checker */
 
 import environments from '../environments';
+// eslint-disable-next-line import/named
 import { getEnvironment } from '../Environment';
 import { getNestedPaths, writeStream } from '../filesystem';
 

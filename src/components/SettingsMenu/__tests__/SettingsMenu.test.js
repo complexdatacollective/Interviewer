@@ -8,7 +8,6 @@ import { createHashHistory as createHistory } from 'history';
 import { Provider } from 'react-redux';
 import { mount } from 'enzyme';
 import thunk from 'redux-thunk';
-import epics from '../../../ducks/middleware/epics';
 import SettingsMenu from '../SettingsMenu';
 import createRootReducer from '../../../ducks/modules/rootReducer';
 
@@ -81,7 +80,7 @@ const getMockStore = () => {
     createRootReducer(history),
     initialState,
     compose(
-      applyMiddleware(routerMiddleware(history), thunk, epics, actionLogger(actions)),
+      applyMiddleware(routerMiddleware(history), thunk, actionLogger(actions)),
     ),
   );
   return { store, actions };

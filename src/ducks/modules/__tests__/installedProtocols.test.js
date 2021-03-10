@@ -16,7 +16,9 @@ const testMiddleware = (actionListener) => () => (next) => (action) => {
   return next(action);
 };
 
-const getStore = (actionListener, initialState) => createStore(reducer, initialState, applyMiddleware(thunks, testMiddleware(actionListener)));
+const getStore = (actionListener, initialState) => (
+  createStore(reducer, initialState, applyMiddleware(thunks, testMiddleware(actionListener)))
+);
 
 describe('protocols reducer', () => {
   it('should return the initial state', () => {

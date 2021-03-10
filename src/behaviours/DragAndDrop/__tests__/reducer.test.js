@@ -13,7 +13,9 @@ const hitAttributes = (isOver = false, willAccept = false) => ({
   willAccept,
 });
 
-const getResult = (actionsToPerform = [], initialState = undefined) => actionsToPerform.reduce((memo, action) => reducer(memo, action), initialState);
+const getResult = (actionsToPerform = [], initialState = undefined) => (
+  actionsToPerform.reduce((memo, action) => reducer(memo, action), initialState)
+);
 
 describe('reducer', () => {
   it('initialState', () => {

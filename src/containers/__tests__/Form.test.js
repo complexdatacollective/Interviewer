@@ -41,7 +41,7 @@ describe('<Form />', () => {
     const customSubmit = mount((
       <Form
         {...props()}
-        submitButton={<button key="customSubmit" className="custom">Custom Submit</button>}
+        submitButton={<button key="customSubmit" className="custom" type="button">Custom Submit</button>}
         store={mockStore()}
       />
     ));

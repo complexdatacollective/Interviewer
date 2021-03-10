@@ -4,7 +4,6 @@ import thunk from 'redux-thunk';
 import { actionTypes as dialogActionTypes } from '../dialogs';
 import { actionCreators as installedProtocolActions, actionTypes as installedProtocolActionTypes } from '../installedProtocols';
 import { actionCreators as serverActions, actionTypes as serverActionTypes } from '../pairedServer';
-import { epics as errorsEpic } from '../errors';
 
 const mockError = new Error('foo');
 
@@ -18,7 +17,6 @@ const getStore = (actionListener) => createStore(
   undefined,
   applyMiddleware(
     thunk,
-    createEpicMiddleware(errorsEpic),
     testMiddleware(actionListener),
   ),
 );
