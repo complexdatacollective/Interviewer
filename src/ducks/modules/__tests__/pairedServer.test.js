@@ -32,10 +32,35 @@ describe('pairedServer reducer', () => {
   });
 });
 
+const runThunk = (action) => {
+  const getState = jest.fn(() => ({}));
+  const dispatch = jest.fn((thunk) => {
+    if (typeof thunk !== 'function') {
+      return thunk;
+    }
+    return thunk(dispatch, getState);
+  });
+
+  action(dispatch, getState);
+
+  return {
+    getState,
+    dispatch,
+  };
+};
+
 describe('pairedServer action creator', () => {
   it('supports setting a paired server', () => {
     const expectedAction = { type: actionTypes.SET_SERVER, server: mockServer };
-    expect(actionCreators.setPairedServer(mockServer)).toEqual(expectedAction);
+    const { dispatch } = runThunk(
+      actionCreators.setPairedServer(mockServer),
+    );
+    // expect(dispatch.mock.calls[0]).toEqual(expectedAction);
+    expect(dispatch.mock.calls[0][0]).toMatchObject(expectedAction);
+    expect(dispatch.mock.calls[2][0]).toMatchObject({
+      toast: { title: 'Pairing complete!' },
+      type: 'TOASTS/ADD_TOAST',
+    });
   });
 
   it('supports unpairing a server', () => {

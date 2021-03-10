@@ -1,9 +1,9 @@
 import uuid from 'uuid';
 import React from 'react';
 
-const ADD_TOAST = Symbol('PROTOCOL/ADD_TOAST');
-const UPDATE_TOAST = Symbol('PROTOCOL/UPDATE_TOAST');
-const REMOVE_TOAST = Symbol('PROTOCOL/REMOVE_TOAST');
+const ADD_TOAST = 'TOASTS/ADD_TOAST';
+const UPDATE_TOAST = 'TOASTS/UPDATE_TOAST';
+const REMOVE_TOAST = 'TOASTS/REMOVE_TOAST';
 
 const initialState = [];
 
