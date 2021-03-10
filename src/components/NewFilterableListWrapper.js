@@ -43,6 +43,7 @@ const NewFilterableListWrapper = (props) => {
     if (!filterTerm) { return sortedItems; }
 
     const normalizedFilterTerm = filterTerm.toLowerCase();
+    const hasFilterTerm = (property) => property.toLowerCase().includes(normalizedFilterTerm);
 
     return sortedItems.filter(
       (item) => {
@@ -50,9 +51,7 @@ const NewFilterableListWrapper = (props) => {
           : Object.values(item);
         // Include in filtered list if any of the attribute property values
         // include the filter value
-        return itemAttributes.some(
-          (property) => property && property.toString().toLowerCase().includes(normalizedFilterTerm),
-        );
+        return itemAttributes.some((property) => property && hasFilterTerm(property.toString()));
       },
     );
   };

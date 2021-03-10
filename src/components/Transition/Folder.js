@@ -65,7 +65,7 @@ const FolderTransition = ({ children, ...props }) => (
 );
 
 FolderTransition.propTypes = {
-  children: PropTypes.any.isRequired,
+  children: PropTypes.any,
 };
 
 FolderTransition.defaultProps = {

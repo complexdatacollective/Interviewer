@@ -16,8 +16,9 @@ class PresetSwitcher extends PureComponent {
   }
 
   toggleKey = () => {
+    const { openKey } = this.state;
     this.setState({
-      openKey: !this.state.openKey,
+      openKey: !openKey,
     });
   }
 
@@ -39,11 +40,16 @@ class PresetSwitcher extends PureComponent {
       showFreezeButton,
       resetInteractions,
       toggleFreeze,
+      updatePreset,
     } = this.props;
+
+    const {
+      openKey,
+    } = this.state;
 
     const navigationClasses = cx(
       'preset-switcher__navigation ',
-      { 'preset-switcher__navigation--hidden': this.state.openKey },
+      { 'preset-switcher__navigation--hidden': openKey },
     );
 
     const freezeClasses = cx(
@@ -63,12 +69,12 @@ class PresetSwitcher extends PureComponent {
           toggleEdges={toggleEdges}
           convexHulls={convexHulls}
           toggleConvex={toggleConvex}
-          open={this.state.openKey}
+          open={openKey}
           key={presetIndex}
         />
         <div
           className={cx(navigationClasses, 'preset-switcher__navigation--previous', { 'preset-switcher__navigation--disabled': presetIndex === 0 })}
-          onClick={() => this.props.updatePreset(presetIndex - 1)}
+          onClick={() => updatePreset(presetIndex - 1)}
         >
           <Icon name="chevron-left" />
         </div>
@@ -91,7 +97,7 @@ class PresetSwitcher extends PureComponent {
         </div>
         <div
           className={cx(navigationClasses, 'preset-switcher__navigation--next', { 'preset-switcher__navigation--disabled': presetIndex + 1 === presets.length })}
-          onClick={() => this.props.updatePreset(presetIndex + 1)}
+          onClick={() => updatePreset(presetIndex + 1)}
         >
           <Icon name="chevron-right" />
         </div>

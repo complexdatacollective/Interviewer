@@ -11,16 +11,6 @@ import { makeGetNextUnplacedNode } from '../../selectors/canvas';
 const EnhancedNode = DragSource(Node);
 
 class NodeBucket extends PureComponent {
-  static propTypes = {
-    allowPositioning: PropTypes.bool,
-    node: PropTypes.object,
-  };
-
-  static defaultProps = {
-    allowPositioning: true,
-    node: null,
-  };
-
   render() {
     const {
       allowPositioning,
@@ -44,6 +34,16 @@ class NodeBucket extends PureComponent {
     );
   }
 }
+
+NodeBucket.propTypes = {
+  allowPositioning: PropTypes.bool,
+  node: PropTypes.object,
+};
+
+NodeBucket.defaultProps = {
+  allowPositioning: true,
+  node: null,
+};
 
 const makeMapStateToProps = () => {
   const getNextUnplacedNode = makeGetNextUnplacedNode();

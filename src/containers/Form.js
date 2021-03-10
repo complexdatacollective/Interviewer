@@ -73,7 +73,8 @@ const scrollToFirstError = (errors) => {
   */
 class Form extends Component {
   handleFieldBlur = () => {
-    if (!this.props.autoPopulate) { return; }
+    const { autoPopulate } = this.props;
+    if (!autoPopulate) { return; }
 
     const {
       meta: {
@@ -87,7 +88,7 @@ class Form extends Component {
     // if we don't check dirty state, this ends up firing and auto populating fields
     // when it shouldn't, like when closing the form
     if (dirty) {
-      this.props.autoPopulate(fields, values, autofill);
+      autoPopulate(fields, values, autofill);
     }
   };
 

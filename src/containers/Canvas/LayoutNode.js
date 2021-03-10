@@ -19,6 +19,7 @@ class LayoutNode extends PureComponent {
       linking,
       node,
       selected,
+      onSelected,
     } = this.props;
     const nodeAttributes = getEntityAttributes(node);
 
@@ -34,7 +35,7 @@ class LayoutNode extends PureComponent {
       <div
         className="node-layout__node"
         style={styles}
-        onClick={this.props.onSelected}
+        onClick={onSelected}
       >
         <EnhancedNode
           selected={selected}
@@ -59,7 +60,7 @@ LayoutNode.propTypes = {
   layoutVariable: PropTypes.string.isRequired,
   linking: PropTypes.bool,
   node: PropTypes.object.isRequired,
-  onSelected: PropTypes.func.isRequired,
+  onSelected: PropTypes.func,
   selected: PropTypes.bool,
 };
 

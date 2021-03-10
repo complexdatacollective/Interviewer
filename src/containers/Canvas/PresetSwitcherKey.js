@@ -23,8 +23,9 @@ class PresetSwitcherKey extends Component {
   }
 
   togglePanel = () => {
+    const { open } = this.state;
     this.setState({
-      open: !this.state.open,
+      open: !open,
     });
   }
 

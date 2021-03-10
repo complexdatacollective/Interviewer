@@ -4,15 +4,6 @@ import PropTypes from 'prop-types';
 import injectAssetUrl from '../behaviours/injectAssetUrl';
 
 class Video extends Component {
-  static propTypes = {
-    description: PropTypes.string,
-    url: PropTypes.string.isRequired,
-  };
-
-  static defaultProps = {
-    description: '',
-  };
-
   constructor(props) {
     super(props);
     this.video = React.createRef();
@@ -43,6 +34,15 @@ class Video extends Component {
     );
   }
 }
+
+Video.propTypes = {
+  description: PropTypes.string,
+  url: PropTypes.string.isRequired,
+};
+
+Video.defaultProps = {
+  description: '',
+};
 
 export { Video };
 

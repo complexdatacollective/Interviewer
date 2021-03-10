@@ -22,11 +22,15 @@ const equalByIncrement = (outerRadius, n) => range(1, n + 1)
   .reverse();
 
 // Weight towards `a` by factor
-const weightedAverage = (a, b, factor = 1) => zipWith(a, b, (c, d) => ((c * factor) + d) / (1 + factor));
+const weightedAverage = (a, b, factor = 1) => zipWith(
+  a,
+  b,
+  (c, d) => ((c * factor) + d) / (1 + factor),
+);
 
 const Radar = ({ n, skewed }) => {
   const num = parseInt(n, 10);
-  if (isNaN(num) || !num) {
+  if (Number.isNaN(num) || !num) {
     return null;
   }
 

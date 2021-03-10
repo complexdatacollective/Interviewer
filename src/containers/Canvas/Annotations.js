@@ -98,8 +98,9 @@ class Annotations extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.isFreeze !== this.props.isFreeze) {
-      if (this.props.isFreeze) {
+    const { isFreeze } = this.props;
+    if (prevProps.isFreeze !== isFreeze) {
+      if (isFreeze) {
         this.freeze();
       } else {
         this.unfreeze();
@@ -117,69 +118,88 @@ class Annotations extends Component {
   }
 
   onDragStart = (mouseEvent) => {
-    const point = this.relativeCoordinatesForEvent(mouseEvent);
-    const lines = this.state.lines.slice();
-    const linesShowing = this.state.linesShowing.slice();
-    lines.push([point]);
-    linesShowing.push(true);
-
-    this.setState({
+    const {
       lines,
       linesShowing,
-      activeLines: this.state.activeLines + 1,
+      activeLines,
+    } = this.state;
+
+    const { setActiveStatus } = this.props;
+
+    const point = this.relativeCoordinatesForEvent(mouseEvent);
+
+    this.setState({
+      lines: [...lines, [point]], // TODO: check this was intention of push([point])
+      linesShowing: [...linesShowing, true],
+      activeLines: activeLines + 1,
       isDrawing: true,
     });
 
-    this.props.setActiveStatus(true);
+    setActiveStatus(true);
   };
 
   onDragMove = (mouseEvent) => {
-    if (!this.state.isDrawing) {
+    const {
+      isDrawing,
+      lines,
+    } = this.state;
+
+    if (!isDrawing) {
       return;
     }
 
     const point = this.relativeCoordinatesForEvent(mouseEvent);
-    const lines = this.state.lines.slice();
-    lines[lines.length - 1].push(point);
+    const newLines = [...lines];
+    newLines[newLines.length - 1].push(point);
 
     this.setState({
-      lines,
+      lines: newLines,
     });
   };
 
   onDragEnd = () => {
+    const { isFreeze } = this.props;
+    const { lines } = this.state;
+
     this.setState({ isDrawing: false });
-    if (this.props.isFreeze) return;
+    if (isFreeze) return;
 
     // Add a setTimeout that will trigger line starting to fade.
     this.removeLineTimers.push(
       setTimeout(
-        this.fadeLines.bind(null, this.state.lines.length - 1),
+        this.fadeLines.bind(null, lines.length - 1),
         1000,
       ),
     );
   };
 
   fadeLines = (position) => {
-    const linesToFade = this.state.linesToFade.slice();
-    linesToFade[position] = false;
+    const { linesToFade } = this.state;
+    const newLinesToFade = [...linesToFade];
+    newLinesToFade[position] = false;
 
     this.setState({
-      linesToFade,
+      linesToFade: newLinesToFade,
     });
   }
 
   // callback from line Fade, reduces activeLines count as lines disappear
   handleLineGone = (position) => {
-    const linesShowing = this.state.linesShowing.slice();
-    linesShowing[position] = false;
+    const {
+      linesShowing,
+      activeLines,
+    } = this.state;
+    const { setActiveStatus } = this.props;
+
+    const newLinesShowing = [...linesShowing];
+    newLinesShowing[position] = false;
 
     this.setState({
-      activeLines: this.state.activeLines - 1,
-      linesShowing,
+      activeLines: activeLines - 1,
+      linesShowing: newLinesShowing,
     }, () => {
-      if (this.state.activeLines === 0) {
-        this.props.setActiveStatus(false);
+      if (activeLines === 0) {
+        setActiveStatus(false);
       }
     });
   }
@@ -189,12 +209,16 @@ class Annotations extends Component {
   }
 
   unfreeze = () => {
-    const linesToFade = this.state.linesShowing.slice();
+    const {
+      linesShowing,
+    } = this.state;
+    const newLinesToFade = [...linesShowing];
+
     this.setState({
-      linesToFade,
+      linesToFade: newLinesToFade,
     });
 
-    this.state.linesShowing.forEach((showing, index) => {
+    linesShowing.forEach((showing, index) => {
       if (showing) {
         this.removeLineTimers.push(
           setTimeout(
@@ -208,6 +232,8 @@ class Annotations extends Component {
 
   // Called by parent component via ref when the reset button is clicked.
   reset = () => {
+    const { setActiveStatus } = this.props;
+
     this.setState({
       lines: [],
       activeLines: 0,
@@ -217,7 +243,7 @@ class Annotations extends Component {
     });
 
     this.resetRemoveLineTimers();
-    this.props.setActiveStatus(false);
+    setActiveStatus(false);
   };
 
   resetRemoveLineTimers = () => {
@@ -245,14 +271,22 @@ class Annotations extends Component {
   }
 
   render() {
+    const {
+      lines,
+      isFreeze,
+      linesShowing,
+      linesToFade,
+      isDrawing,
+    } = this.state;
+
     return ReactDOM.createPortal(
       (
         <AnnotationLines
-          lines={this.state.lines}
-          isFreeze={this.props.isFreeze}
-          linesShowing={this.state.linesShowing}
-          linesToFade={this.state.linesToFade}
-          isDrawing={this.state.isDrawing}
+          lines={lines}
+          isFreeze={isFreeze}
+          linesShowing={linesShowing}
+          linesToFade={linesToFade}
+          isDrawing={isDrawing}
           onLineFaded={this.handleLineGone}
         />
       ),

@@ -25,7 +25,8 @@ class CategoricalList extends Component {
     this.categoricalListElement = React.createRef();
   }
 
-  componentWillMount() {
+  // eslint-disable-next-line camelcase
+  UNSAFE_componentWillMount() {
     this.colorPresets = [
       getCSSVariableAsString('--cat-color-seq-1'),
       getCSSVariableAsString('--cat-color-seq-2'),
@@ -54,6 +55,8 @@ class CategoricalList extends Component {
   }, 1000 / 60);
 
   get binSizes() {
+    const { bins } = this.props;
+
     if (!this.categoricalListElement.current) {
       return [];
     }
@@ -66,7 +69,7 @@ class CategoricalList extends Component {
 
     const itemSize = getItemSize(
       bounds,
-      this.props.bins.length,
+      bins.length,
       this.isExpanded,
     );
 
@@ -77,7 +80,8 @@ class CategoricalList extends Component {
   }
 
   get isExpanded() {
-    return this.props.expandedBinIndex !== null;
+    const { expandedBinIndex } = this.props;
+    return expandedBinIndex !== null;
   }
 
   getCatColor = (itemNumber) => {
@@ -85,7 +89,12 @@ class CategoricalList extends Component {
     return null;
   };
 
-  getBinSize = (index) => (this.props.expandedBinIndex === index ? this.binSizes.expandedSize : this.binSizes.itemSize);
+  getBinSize = (index) => {
+    const { expandedBinIndex } = this.props;
+    return expandedBinIndex === index
+      ? this.binSizes.expandedSize
+      : this.binSizes.itemSize;
+  };
 
   renderCategoricalBins = () => {
     const {
@@ -171,8 +180,6 @@ CategoricalList.propTypes = {
 CategoricalList.defaultProps = {
   expandedBinIndex: null,
   promptOtherVariable: null,
-  isDragging: false,
-  meta: {},
 };
 
 const matchVariable = (node, variable, value) => (
@@ -180,9 +187,13 @@ const matchVariable = (node, variable, value) => (
   && node[entityAttributesProperty][variable].includes(value)
 );
 
-const hasOtherVariable = (node, otherVariable) => otherVariable && node[entityAttributesProperty][otherVariable] !== null;
+const hasOtherVariable = (node, otherVariable) => (
+  otherVariable && node[entityAttributesProperty][otherVariable] !== null
+);
 
-const matchBin = (bin, variable) => (node) => matchVariable(node, variable, bin.value) || hasOtherVariable(node, bin.otherVariable);
+const matchBin = (bin, variable) => (node) => (
+  matchVariable(node, variable, bin.value) || hasOtherVariable(node, bin.otherVariable)
+);
 
 const appendNodesForBin = (nodes, activePromptVariable) => (bin) => ({
   ...bin,

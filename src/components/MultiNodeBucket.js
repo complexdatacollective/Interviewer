@@ -31,9 +31,14 @@ class MultiNodeBucket extends Component {
     this.refreshTimer = null;
   }
 
-  componentWillReceiveProps(newProps) {
+  // eslint-disable-next-line camelcase
+  UNSAFE_componentWillReceiveProps(newProps) {
+    const {
+      nodes,
+      listId,
+    } = this.props;
     // Don't update if nodes are the same
-    if (isEqual(newProps.nodes, this.props.nodes)) {
+    if (isEqual(newProps.nodes, nodes)) {
       return;
     }
 
@@ -41,7 +46,7 @@ class MultiNodeBucket extends Component {
     const sortedNodes = sorter(newProps.nodes);
 
     // if we provided the same id, then just update normally
-    if (newProps.listId === this.props.listId) {
+    if (newProps.listId === listId) {
       this.setState({ exit: false }, () => {
         this.setState({ nodes: sortedNodes, stagger: false });
       });
@@ -109,7 +114,7 @@ class MultiNodeBucket extends Component {
 }
 
 MultiNodeBucket.propTypes = {
-  nodes: PropTypes.array.isRequired,
+  nodes: PropTypes.array,
   nodeColor: PropTypes.string,
   itemType: PropTypes.string,
   label: PropTypes.func,

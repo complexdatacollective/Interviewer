@@ -13,24 +13,32 @@ class Accordion extends Component {
   }
 
   toggleAccordion = () => {
+    const { open } = this.state;
     this.setState({
-      open: !this.state.open,
+      open: !open,
     });
   }
 
   render() {
+    const { open } = this.state;
+    const {
+      onAccordionToggle,
+      label,
+      children,
+    } = this.props;
+
     const toggleClasses = cx(
       'accordion__toggle',
-      { 'accordion__toggle--open': this.state.open },
+      { 'accordion__toggle--open': open },
     );
 
     return (
-      <div className="accordion" onClick={this.props.onAccordionToggle}>
+      <div className="accordion" onClick={onAccordionToggle}>
         <div
           className={toggleClasses}
           onClick={this.toggleAccordion}
         >
-          <h4>{this.props.label}</h4>
+          <h4>{label}</h4>
 &nbsp;
           <Icon
             name="chevron-up"
@@ -43,10 +51,10 @@ class Accordion extends Component {
             className="accordion__icon accordion__icon--close"
           />
         </div>
-        {this.state.open
+        {open
           && (
           <div className="accordion__content">
-            {this.props.children}
+            {children}
           </div>
           )}
       </div>

@@ -185,7 +185,8 @@ class ApiClient {
    */
   addTrustedCert() {
     if (!this.httpsClient) {
-      return Promise.reject('No secure client available');
+      // eslint-disable-next-line prefer-promise-reject-errors
+      return Promise.reject('No secure client available'); // TODO: return Error()
     }
 
     if (isCordova()) {

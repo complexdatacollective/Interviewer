@@ -68,7 +68,7 @@ const Node = ({
 };
 
 Node.propTypes = {
-  children: PropTypes.any.isRequired,
+  children: PropTypes.any,
   index: PropTypes.number,
   stagger: PropTypes.bool,
 };

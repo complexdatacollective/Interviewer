@@ -89,7 +89,11 @@ const withSelectHandlers = compose(
       // Reset the node linking state
       updateLinkFrom(null);
     },
-    toggleHighlightAttribute: ({ allowHighlighting, highlightAttribute, toggleHighlight }) => (node) => {
+    toggleHighlightAttribute: ({
+      allowHighlighting,
+      highlightAttribute,
+      toggleHighlight,
+    }) => (node) => {
       if (!allowHighlighting) { return; }
       const newVal = !node[entityAttributesProperty][highlightAttribute];
       toggleHighlight(
