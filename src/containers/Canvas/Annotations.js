@@ -5,7 +5,12 @@ import { Fade } from '@codaco/ui/lib/components/Transitions';
 import DragManager, { NO_SCROLL } from '../../behaviours/DragAndDrop/DragManager';
 
 const AnnotationLines = ({
-  lines, isDrawing, isFreeze, linesShowing, linesToFade, onLineFaded,
+  lines,
+  isDrawing,
+  isFreeze,
+  linesShowing,
+  linesToFade,
+  onLineFaded,
 }) => (
   <svg className="annotations__lines" width="100%" height="100%" viewBox="0 0 1 1" preserveAspectRatio="none">
     {lines.map((line, index) => {
@@ -33,7 +38,10 @@ AnnotationLines.propTypes = {
 };
 
 const AnnotationLine = ({
-  line, showLine, freezeLine, onLineFaded,
+  line,
+  showLine,
+  freezeLine,
+  onLineFaded,
 }) => {
   const pathData = `M ${line.map((point) => (`${point.x} ${point.y}`)).join(' L ')}`;
   let path = (
@@ -123,14 +131,14 @@ class Annotations extends Component {
       linesShowing,
       activeLines,
     } = this.state;
-
     const { setActiveStatus } = this.props;
-
     const point = this.relativeCoordinatesForEvent(mouseEvent);
+    const nextLines = [...lines, [point]];
+    const nextLinesShowing = [...linesShowing, true];
 
     this.setState({
-      lines: [...lines, [point]], // TODO: check this was intention of push([point])
-      linesShowing: [...linesShowing, true],
+      lines: nextLines,
+      linesShowing: nextLinesShowing,
       activeLines: activeLines + 1,
       isDrawing: true,
     });
@@ -149,11 +157,11 @@ class Annotations extends Component {
     }
 
     const point = this.relativeCoordinatesForEvent(mouseEvent);
-    const newLines = [...lines];
-    newLines[newLines.length - 1].push(point);
+    const nextLines = [...lines];
+    nextLines[nextLines.length - 1].push(point);
 
     this.setState({
-      lines: newLines,
+      lines: nextLines,
     });
   };
 
@@ -175,11 +183,11 @@ class Annotations extends Component {
 
   fadeLines = (position) => {
     const { linesToFade } = this.state;
-    const newLinesToFade = [...linesToFade];
-    newLinesToFade[position] = false;
+    const nextLinesToFade = [...linesToFade];
+    nextLinesToFade[position] = false;
 
     this.setState({
-      linesToFade: newLinesToFade,
+      linesToFade: nextLinesToFade,
     });
   }
 
@@ -189,14 +197,15 @@ class Annotations extends Component {
       linesShowing,
       activeLines,
     } = this.state;
+
     const { setActiveStatus } = this.props;
 
-    const newLinesShowing = [...linesShowing];
-    newLinesShowing[position] = false;
+    const nextLinesShowing = [...linesShowing];
+    nextLinesShowing[position] = false;
 
     this.setState({
       activeLines: activeLines - 1,
-      linesShowing: newLinesShowing,
+      linesShowing: nextLinesShowing,
     }, () => {
       if (activeLines === 0) {
         setActiveStatus(false);
@@ -209,13 +218,11 @@ class Annotations extends Component {
   }
 
   unfreeze = () => {
-    const {
-      linesShowing,
-    } = this.state;
-    const newLinesToFade = [...linesShowing];
+    const { linesShowing } = this.state;
+    const nextLinesToFade = [...linesShowing];
 
     this.setState({
-      linesToFade: newLinesToFade,
+      linesToFade: nextLinesToFade,
     });
 
     linesShowing.forEach((showing, index) => {
@@ -273,11 +280,11 @@ class Annotations extends Component {
   render() {
     const {
       lines,
-      isFreeze,
       linesShowing,
       linesToFade,
       isDrawing,
     } = this.state;
+    const { isFreeze } = this.props;
 
     return ReactDOM.createPortal(
       (
