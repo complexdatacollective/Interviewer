@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { compose, bindActionCreators } from 'redux';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { get } from 'lodash';
@@ -75,6 +75,8 @@ class NodePanels extends PureComponent {
     } = this.props;
     const { panelIndexes } = this.state;
 
+    if (panelIndexes.length !== panels.length) { return false; }
+
     const panel = panels[index];
     const panelIndex = panelIndexes[index].index;
 
@@ -103,7 +105,7 @@ class NodePanels extends PureComponent {
 
   isAnyPanelOpen = () => {
     const { panels } = this.props;
-    panels.some((panel, index) => this.isPanelOpen(index));
+    return panels.some((panel, index) => this.isPanelOpen(index));
   };
 
   handlePanelUpdate = (index, displayCount, nodeIndex) => {
@@ -197,12 +199,10 @@ function makeMapStateToProps() {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    removeNodeFromPrompt: bindActionCreators(sessionsActions.removeNodeFromPrompt, dispatch),
-    removeNode: bindActionCreators(sessionsActions.removeNode, dispatch),
-  };
-}
+const mapDispatchToProps = {
+  removeNodeFromPrompt: sessionsActions.removeNodeFromPrompt,
+  removeNode: sessionsActions.removeNode,
+};
 
 export { NodePanels };
 
