@@ -21,7 +21,7 @@ class Node extends PureComponent {
 
   componentDidUpdate(nextProps, nextState) {
     const { label } = this.state;
-    const { workerUrl } = this.state;
+    const { workerUrl } = this.props;
     if (label === nextState.label) {
       // Unless the label has changed, we need to check for an update
       this.initWorker(workerUrl);
