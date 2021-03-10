@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { reduxForm, getFormValues, getFormMeta } from 'redux-form';
 import { autoInitialisedForm } from '../behaviours';
-import { Field } from '.';
+import Field from './Field';
 import { makeRehydrateFields } from '../selectors/forms';
 
 const getScrollParent = (node) => {

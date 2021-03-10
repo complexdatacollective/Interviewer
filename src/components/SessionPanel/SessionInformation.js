@@ -7,9 +7,9 @@ import { actionCreators as sessionsActions } from '../../ducks/modules/sessions'
 import { getCaseId, getSessionProgress } from '../../selectors/session';
 import { getActiveProtocolName, getProtocolCodebook } from '../../selectors/protocol';
 import { getNetwork } from '../../selectors/network';
-import { Scroller } from '..';
+import Scroller from '../Scroller';
 import { Overlay } from '../../containers/Overlay';
-import { Form } from '../../containers';
+import Form from '../../containers/Form';
 import useInterval from '../../hooks/useInterval';
 
 const elapsedTime = (timestamp) => timestamp && new Date(Date.now() - timestamp).toISOString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, '$1');

@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@codaco/ui';
 import { SessionCard } from '@codaco/ui/lib/components/Cards';
 import { exportToFile, exportToServer } from '../../utils/exportProcess';
-import { Section } from '.';
+import Section from './Section';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import useServerConnectionStatus from '../../hooks/useServerConnectionStatus';

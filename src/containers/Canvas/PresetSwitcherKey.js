@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { Icon, window } from '@codaco/ui';
 import { Radio } from '@codaco/ui/lib/components/Fields';
-import { Accordion } from '.';
+import Accordion from './Accordion';
 
 import {
   makeGetEdgeColor, makeGetEdgeLabel, makeGetNodeAttributeLabel, makeGetCategoricalOptions,

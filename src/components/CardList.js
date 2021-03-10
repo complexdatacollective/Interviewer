@@ -5,7 +5,7 @@ import { times } from 'lodash';
 import {
   List, AutoSizer, CellMeasurer, CellMeasurerCache,
 } from 'react-virtualized';
-import { Card } from '.';
+import Card from './Card';
 import { entityPrimaryKeyProperty } from '../ducks/modules/network';
 
 const calculateRequiredColumns = (width, height) => {

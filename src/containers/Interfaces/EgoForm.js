@@ -7,7 +7,7 @@ import { ProgressBar, Scroller } from '@codaco/ui';
 import { submit, isValid, isDirty } from 'redux-form';
 import ReactMarkdown from 'react-markdown';
 import { isIOS } from '../../utils/Environment';
-import { Form } from '..';
+import Form from '../Form';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { getNetworkEgo } from '../../selectors/network';
 import { getSessionProgress } from '../../selectors/session';

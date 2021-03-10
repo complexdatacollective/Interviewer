@@ -10,7 +10,7 @@ import { entityAttributesProperty, entityPrimaryKeyProperty } from '../../ducks/
 import { makeGetSubjectType, makeNetworkNodesForPrompt, makeGetAdditionalAttributes } from '../../selectors/interface';
 import { getNetworkNodes, makeGetNodeTypeDefinition, makeGetNodeLabel } from '../../selectors/network';
 import { getCardAdditionalProperties, makeGetNodeIconName, makeGetPromptNodeModelData } from '../../selectors/name-generator';
-import { PromptSwiper } from '..';
+import PromptSwiper from '../PromptSwiper';
 import { NodeBin, NodeList } from '../../components';
 import getParentKeyByNameValue from '../../utils/getParentKeyByNameValue';
 

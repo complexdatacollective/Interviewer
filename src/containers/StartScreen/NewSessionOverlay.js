@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from '@codaco/ui';
 import Overlay from '../Overlay';
-import { Form } from '..';
+import Form from '../Form';
 import { required, maxLength } from '../../utils/Validations';
 
 const NewSessionOverlay = ({

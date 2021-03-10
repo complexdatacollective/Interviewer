@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Section } from '.';
+import Section from './Section';
 import { ProtocolCard, SessionCard } from '../../components/Cards';
 import { actionCreators as sessionActions } from '../../ducks/modules/sessions';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';

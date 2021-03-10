@@ -8,7 +8,9 @@ import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { makeNetworkNodesForPrompt, makeGetAdditionalAttributes } from '../../selectors/interface';
 import { makeGetPromptNodeModelData, makeGetNodeIconName } from '../../selectors/name-generator';
-import { PromptSwiper, NodePanels, NodeForm } from '..';
+import PromptSwiper from '../PromptSwiper';
+import NodePanels from '../NodePanels';
+import NodeForm from '../NodeForm';
 import { NodeList, NodeBin } from '../../components';
 import { entityAttributesProperty, entityPrimaryKeyProperty } from '../../ducks/modules/network';
 

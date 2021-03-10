@@ -102,7 +102,7 @@ class NodePanels extends PureComponent {
   };
 
   isAnyPanelOpen = () => {
-    const { panels } = this.proops;
+    const { panels } = this.props;
     panels.some((panel, index) => this.isPanelOpen(index));
   };
 

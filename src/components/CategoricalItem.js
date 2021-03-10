@@ -6,7 +6,7 @@ import cx from 'classnames';
 import { Flipped } from 'react-flip-toolkit';
 
 import { DropTarget, MonitorDropTarget } from '../behaviours/DragAndDrop';
-import { NodeList } from '.';
+import NodeList from './NodeList';
 
 /**
   * Renders a droppable CategoricalBin item

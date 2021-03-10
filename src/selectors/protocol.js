@@ -1,8 +1,12 @@
 import uuid from 'uuid/v4';
-import { orderBy, values, mapValues } from 'lodash';
+import {
+  orderBy,
+  values,
+  mapValues,
+  omit,
+} from 'lodash';
 import { createSelector } from 'reselect';
 import { isPreview } from '../utils/Environment';
-import { getActiveSession, getLastActiveSession } from './session';
 import { entityAttributesProperty } from '../ducks/modules/network';
 
 const DefaultFinishStage = {
@@ -10,6 +14,29 @@ const DefaultFinishStage = {
   id: uuid(),
   type: 'FinishSession',
   label: 'Finish Interview',
+};
+
+export const getActiveSession = (state) => (
+  state.activeSessionId && state.sessions[state.activeSessionId]
+);
+
+export const getLastActiveSession = (state) => {
+  if (Object.keys(state.sessions).length === 0) {
+    return {};
+  }
+
+  const sessionsCollection = values(mapValues(state.sessions, (session, sessionUUID) => ({
+    sessionUUID,
+    ...session,
+  })));
+
+  const lastActive = orderBy(sessionsCollection, ['updatedAt', 'caseId'], ['desc', 'asc'])[0];
+  return {
+    sessionUUID: lastActive.sessionUUID,
+    [entityAttributesProperty]: {
+      ...omit(lastActive, 'sessionUUID'),
+    },
+  };
 };
 
 export const getInstalledProtocols = (state) => state.installedProtocols;

@@ -4,7 +4,7 @@ import cx from 'classnames';
 import { Button } from '@codaco/ui';
 import { actionCreators as serverActions } from '../../ducks/modules/pairedServer';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
-import { Section } from '.';
+import Section from './Section';
 import DiscoveredServerList from '../Server/DiscoveredServerList';
 import ServerAddressForm from './ServerAddressForm';
 import useOnlineStatus from '../../hooks/useOnlineStatus';

@@ -6,7 +6,7 @@ import { motion, AnimatePresence, AnimateSharedLayout } from 'framer-motion';
 import { compose } from 'recompose';
 import { getCSSVariableAsNumber, getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
 import { getProtocolStages } from '../../selectors/protocol';
-import { Scroller } from '..';
+import Scroller from '../Scroller';
 import StagePreview from './StagePreview';
 import { currentStageIndex as getCurrentStageIndex } from '../../utils/matchSessionPath';
 

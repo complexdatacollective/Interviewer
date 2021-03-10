@@ -4,7 +4,7 @@ import { submit, isValid } from 'redux-form';
 import { connect } from 'react-redux';
 import { motion } from 'framer-motion';
 import { Button } from '@codaco/ui';
-import { Form } from '..';
+import Form from '../Form';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import {
   isValidAddress, isValidPort, maxPort, minPort, addPairingUrlToService,

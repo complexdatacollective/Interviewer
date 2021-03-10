@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { GraphicButton, Button } from '@codaco/ui';
-import { Section } from '.';
+import Section from './Section';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
 import ProtocolUrlForm from './ProtocolUrlForm';
 import { beginLocalProtocolImport } from '../../utils/protocol/importProtocol';

@@ -5,7 +5,7 @@ import { compose } from 'redux';
 import { Icon } from '@codaco/ui';
 import withPrompt from '../behaviours/withPrompt';
 import { entityAttributesProperty } from '../ducks/modules/network';
-import { Node } from '.';
+import Node from './Node';
 
 class QuickNodeForm extends PureComponent {
   constructor(props) {

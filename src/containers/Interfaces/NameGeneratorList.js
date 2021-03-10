@@ -14,7 +14,7 @@ import {
   getInitialSortOrder,
   makeGetPromptNodeModelData,
 } from '../../selectors/name-generator';
-import { PromptSwiper } from '..';
+import PromptSwiper from '../PromptSwiper';
 import { FilterableListWrapper, CardList } from '../../components';
 import withExternalData from '../withExternalData';
 import getParentKeyByNameValue from '../../utils/getParentKeyByNameValue';

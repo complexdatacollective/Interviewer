@@ -4,7 +4,7 @@ import { compose } from 'recompose';
 import cx from 'classnames';
 import { Icon } from '@codaco/ui';
 import { DropObstacle } from '../../behaviours/DragAndDrop';
-import { PresetSwitcherKey } from '.';
+import PresetSwitcherKey from './PresetSwitcherKey';
 
 class PresetSwitcher extends PureComponent {
   constructor() {

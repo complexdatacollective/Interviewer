@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@codaco/ui';
 import { AnimatePresence } from 'framer-motion';
-import { Section } from '.';
+import Section from './Section';
 import { actionCreators as deviceActions } from '../../ducks/modules/deviceSettings';
 
 const WhatsNewSection = () => {
