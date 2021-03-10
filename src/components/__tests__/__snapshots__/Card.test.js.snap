@@ -34,7 +34,7 @@ exports[`Card component renders selected card 1`] = `
         key="0"
       >
         age
-        : 
+        :
         33
       </h5>
       <h5
@@ -42,7 +42,7 @@ exports[`Card component renders selected card 1`] = `
         key="1"
       >
         fullname
-        : 
+        :
         full name
       </h5>
     </div>
@@ -84,7 +84,7 @@ exports[`Card component renders unselected card 1`] = `
         key="0"
       >
         age
-        : 
+        :
         33
       </h5>
     </div>
