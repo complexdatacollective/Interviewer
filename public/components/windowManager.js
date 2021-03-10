@@ -25,12 +25,12 @@ function createWindow() {
 
   return new Promise((resolve) => {
     // TODO: custom env var? NO_CONSTRAIN?
-    const minDimensions = isTest() ?
-      {} :
-      { minWidth: 1280, minHeight: 800 };
+    const minDimensions = isTest()
+      ? {}
+      : { minWidth: 1280, minHeight: 800 };
 
     // Create the browser window.
-    const windowParameters = Object.assign({
+    const windowParameters = {
       width: 1440,
       height: 900,
       center: true,
@@ -39,7 +39,9 @@ function createWindow() {
         nodeIntegration: true,
         spellcheck: false,
       },
-    }, minDimensions, titlebarParameters);
+      ...minDimensions,
+      ...titlebarParameters,
+    };
 
     const mainWindow = new BrowserWindow(windowParameters);
 

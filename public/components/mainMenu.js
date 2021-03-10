@@ -1,11 +1,9 @@
 const { dialog } = require('electron');
 const { openDialog } = require('./dialogs');
 
-const openFile = window =>
-  () =>
-    openDialog()
-      .then(filePath => window.webContents.send('OPEN_FILE', filePath))
-      .catch(err => console.log(err));
+const openFile = (window) => () => openDialog()
+  .then((filePath) => window.webContents.send('OPEN_FILE', filePath))
+  .catch((err) => console.log(err));
 
 const MenuTemplate = (window) => {
   const appMenu = [
