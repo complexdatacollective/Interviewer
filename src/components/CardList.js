@@ -50,7 +50,7 @@ class CardList extends Component {
 
   getRows = () => {
     const { items } = this.props;
-    Math.ceil(items.length / this.getColumns());
+    return Math.ceil(items.length / this.getColumns());
   };
 
   getRow = (index) => {
