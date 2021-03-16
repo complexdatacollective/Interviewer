@@ -10,7 +10,6 @@ import {
 import { getStageSubject } from '../utils/protocol/accessors';
 
 const getLayout = (_, props) => get(props, 'prompt.layout.layoutVariable');
-const getCategoricalVariable = (_, props) => get(props, 'presets.groupVariable');
 const getSortOptions = (_, props) => get(props, 'prompt.props.sortOrder');
 const getDisplayEdges = (_, props) => get(props, 'prompt.edges.display', []);
 
@@ -63,40 +62,6 @@ export const makeGetPlacedNodes = () =>
       });
     },
   );
-
-/**
- * Selector for nodes by group (categorical) variable.
- */
-
-export const makeGetNodesByCategorical = () => {
-  const getPlacedNodes = makeGetPlacedNodes();
-  return createDeepEqualSelector(
-    getPlacedNodes,
-    getCategoricalVariable,
-    (nodes, categoricalVariable) => {
-      const groupedList = {};
-
-      nodes.forEach((node) => {
-        const categoricalValues = node[entityAttributesProperty][categoricalVariable];
-
-        // Filter out nodes with no value for this variable.
-        if (!categoricalValues) { return; }
-
-        categoricalValues.forEach((categoricalValue) => {
-          if (groupedList[categoricalValue]) {
-            groupedList[categoricalValue].nodes.push(node);
-          } else {
-            groupedList[categoricalValue] = { group: categoricalValue, nodes: [] };
-            groupedList[categoricalValue].nodes.push(node);
-          }
-        });
-      });
-
-      return groupedList;
-    },
-  );
-};
-
 
 const edgeCoords = (edge, { nodes, layout }) => {
   const from = nodes.find(n => n[entityPrimaryKeyProperty] === edge.from);

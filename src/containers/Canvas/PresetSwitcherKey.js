@@ -141,11 +141,11 @@ const makeMapStateToProps = () => {
   return mapStateToProps;
 };
 
+export {
+  PresetSwitcherKey as UnconnectedPresetSwitcherKey,
+};
+
 export default compose(
   window,
   connect(makeMapStateToProps),
 )(PresetSwitcherKey);
-
-export {
-  PresetSwitcherKey,
-};
