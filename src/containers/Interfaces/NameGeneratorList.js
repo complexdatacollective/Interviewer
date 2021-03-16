@@ -192,7 +192,7 @@ function makeMapStateToProps() {
 
     return {
       getCardTitle: getNodeLabel(state, props),
-      nodeTypeDefinition: getNodeTypeDefinition(state, { type: props.stage.subject.type }),
+      nodeTypeDefinition: getNodeTypeDefinition(state, props),
       newNodeAttributes: getPromptNodeAttributes(state, props),
       newNodeModelData: getPromptNodeModelData(state, props),
       nodesForList,

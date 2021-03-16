@@ -1,4 +1,4 @@
-import { first, has, isNil } from 'lodash';
+import { first, get, has, isNil } from 'lodash';
 import { getNetworkNodes, getNetworkEdges } from './network';
 import { createDeepEqualSelector } from './utils';
 import sortOrder from '../utils/sortOrder';
@@ -7,12 +7,12 @@ import {
   entityPrimaryKeyProperty,
   entityAttributesProperty,
 } from '../ducks/modules/network';
+import { getStageSubject } from '../utils/protocol/accessors';
 
-const getLayout = (_, props) => props.layoutVariable;
-const getSubject = (_, props) => props.subject;
-const getCategoricalVariable = (_, props) => props.groupVariable;
-const getSortOptions = (_, props) => props.sortOrder;
-const getDisplayEdges = (_, props) => props.displayEdges;
+const getLayout = (_, props) => get(props, 'prompt.layout.layoutVariable');
+const getCategoricalVariable = (_, props) => get(props, 'presets.groupVariable');
+const getSortOptions = (_, props) => get(props, 'prompt.props.sortOrder');
+const getDisplayEdges = (_, props) => get(props, 'prompt.edges.display', []);
 
 /**
  * Selector for next unplaced node.
@@ -23,7 +23,7 @@ const getDisplayEdges = (_, props) => props.displayEdges;
 export const makeGetNextUnplacedNode = () =>
   createDeepEqualSelector(
     getNetworkNodes,
-    getSubject,
+    getStageSubject(),
     getLayout,
     getSortOptions,
     (nodes, subject, layoutVariable, sortOptions) => {
@@ -49,10 +49,11 @@ export const makeGetNextUnplacedNode = () =>
 export const makeGetPlacedNodes = () =>
   createDeepEqualSelector(
     getNetworkNodes,
-    getSubject,
+    getStageSubject(),
     getLayout,
     (nodes, subject, layoutVariable) => {
       const type = subject && subject.type;
+
       return nodes.filter((node) => {
         const attributes = getEntityAttributes(node);
         return (
@@ -111,7 +112,7 @@ const edgeCoords = (edge, { nodes, layout }) => {
   };
 };
 
-const edgesToCoords = (edges, { nodes, layout }) =>
+export const edgesToCoords = (edges, { nodes, layout }) =>
   edges.map(
     edge => edgeCoords(
       edge,

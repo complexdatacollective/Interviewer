@@ -3,16 +3,16 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { get } from 'lodash';
 import PropTypes from 'prop-types';
-
-import { getProtocolStages } from '../../selectors/protocol';
-import {
-  PresetSwitcher,
-  Annotations,
-} from '../Canvas';
-import {
-  Canvas,
-  ConcentricCircles,
-} from '../../components/Canvas';
+import ConvexHulls from '../Canvas/ConvexHulls';
+import NodeLayout from '../Canvas/NodeLayout';
+import Background from '../Canvas/Background';
+import PresetSwitcher from '../Canvas/PresetSwitcher';
+import Annotations from '../Canvas/Annotations';
+import EdgeLayout from '../../components/Canvas/EdgeLayout';
+import Canvas from '../../components/Canvas/Canvas';
+import { getNetworkEdges, getNetworkNodes } from '../../selectors/network';
+import { edgesToCoords } from '../../selectors/canvas';
+import { entityAttributesProperty } from '../../utils/network-exporters/src/utils/reservedAttributes';
 
 /**
   * Narrative Interface
@@ -23,65 +23,65 @@ class Narrative extends Component {
     super(props);
     this.state = {
       presetIndex: 0,
-      showConvex: true,
+      showConvexHulls: true,
       showEdges: true,
-      showHighlights: true,
+      showHighlightedNodes: true,
       highlightIndex: 0,
-      showResetButton: false,
+      shouldShowResetButton: false,
       activeAnnotations: false,
       activeFocusNodes: false,
-      isFreeze: false,
+      isFrozen: false,
     };
 
     this.annotationLayer = React.createRef();
   }
 
-  setActiveStatus = (component, status) => {
+  handleChangeActiveAnnotations = (status) => {
     this.setState({
-      [component]: status,
+      activeAnnotations: status,
     });
   }
 
-  toggleConvex = () => {
+  handleToggleHulls = () => {
     this.setState({
-      showConvex: !this.state.showConvex,
+      showConvexHulls: !this.state.showConvexHulls,
     });
   }
 
-  toggleEdges = () => {
+  handleToggleEdges = () => {
     this.setState({
       showEdges: !this.state.showEdges,
     });
   }
 
-  toggleHighlights = () => {
+  handleToggleHighlighting = () => {
     this.setState({
-      showHighlights: !this.state.showHighlights,
+      showHighlightedNodes: !this.state.showHighlightedNodes,
     });
   }
 
-  toggleHighlightIndex = (index) => {
+  handleChangeHighlightIndex = (index) => {
     this.setState({
       highlightIndex: index,
     });
   }
 
-  toggleFreeze = () => {
+  handleToggleFreeze = () => {
     this.setState({
-      isFreeze: !this.state.isFreeze,
+      isFrozen: !this.state.isFrozen,
     });
   }
 
-  resetInteractions = () => {
+  handleResetInteractions = () => {
     this.annotationLayer.current.reset();
   }
 
-  updatePreset = (index) => {
+  handleChangePreset = (index) => {
     if (index !== this.state.presetIndex) {
       this.setState({
-        showConvex: true,
+        showConvexHulls: true,
         showEdges: true,
-        showHighlights: true,
+        showHighlightedNodes: true,
         highlightIndex: 0,
         presetIndex: index,
         activeAnnotations: false,
@@ -93,72 +93,95 @@ class Narrative extends Component {
   render() {
     const {
       stage,
+      nodes,
+      edges,
     } = this.props;
 
-    const subject = stage.subject;
     const presets = stage.presets;
     const currentPreset = presets[this.state.presetIndex];
-    const layoutVariable = currentPreset.layoutVariable;
-    const highlight = currentPreset.highlight || [];
-    const displayEdges = (currentPreset.edges && currentPreset.edges.display) || [];
-    const convexHulls = currentPreset.groupVariable;
 
-    const backgroundImage = stage.background && stage.background.image;
-    const concentricCircles = stage.background && stage.background.concentricCircles;
-    const skewedTowardCenter = stage.background && stage.background.skewedTowardCenter;
+    // Behaviour Configuration
     // eslint-disable-next-line @codaco/spellcheck/spell-checker
     const allowRepositioning = get(stage, 'behaviours.allowRepositioning', false);
     // eslint-disable-next-line @codaco/spellcheck/spell-checker
     const freeDraw = get(stage, 'behaviours.freeDraw', false);
+    const shouldShowResetButton = this.state.activeAnnotations || this.state.activeFocusNodes;
 
-    const showResetButton = this.state.activeAnnotations || this.state.activeFocusNodes;
+    // Display Properties
+    const layoutVariable = get(currentPreset, 'layoutVariable');
+    const displayEdges = this.state.showEdges ? get(currentPreset, 'edges.display', []) : [];
+    const highlight = get(currentPreset, 'highlight', []);
+    const convexHullVariable = this.state.showConvexHulls ? get(currentPreset, 'groupVariable', '') : '';
+
+    // Background Configuration
+    const backgroundImage = get(stage, 'stage.background.image');
+    const concentricCircles = get(stage, 'stage.background.concentricCircles');
+    const skewedTowardCenter = get(stage, 'stage.background.skewedTowardCenter');
+
+    // Wrangled entities
+
+    // NodeLayout and ConvexHulls should only be passed nodes that have
+    // the layoutVariable set
+    const nodesWithLayout = nodes.filter(node => node[entityAttributesProperty][layoutVariable]);
+
+    // EdgeLayout should only be passed edges that are included in the presets
+    // edges.display list
+    const filteredEdges = edges.filter(edge => displayEdges.includes(edge.type));
+    const edgesWithCoords = edgesToCoords(
+      filteredEdges,
+      { nodes: nodesWithLayout, layout: layoutVariable },
+    );
 
     return (
       <div className="narrative-interface">
         <div className="narrative-interface__canvas" id="narrative-interface__canvas">
-          <Canvas>
-            { freeDraw &&
-              <Annotations
-                ref={this.annotationLayer}
-                setActiveStatus={(status) => { this.setActiveStatus('activeAnnotations', status); }}
-                key={`annotation-${currentPreset.id}`}
-                isFreeze={this.state.isFreeze}
-              />
-            }
-            <ConcentricCircles
-              subject={subject}
-              layoutVariable={layoutVariable}
-              highlightAttribute={
-                (this.state.showHighlights ? highlight[this.state.highlightIndex] : null)}
-              displayEdges={(this.state.showEdges && displayEdges) || []}
-              convexHulls={(this.state.showConvex && convexHulls) || ''}
-              allowPositioning={allowRepositioning}
-              backgroundImage={backgroundImage}
+          <Canvas
+            className="narrative-concentric-circles"
+            id="concentric-circles"
+            key={`circles-${currentPreset.id}`}
+          >
+            <Background
               concentricCircles={concentricCircles}
               skewedTowardCenter={skewedTowardCenter}
-              key={`circles-${currentPreset.id}`}
-              className="narrative-concentric-circles"
+              image={backgroundImage}
+            />
+            <ConvexHulls
+              nodes={nodesWithLayout}
+              groupVariable={convexHullVariable}
+              layoutVariable={layoutVariable}
+            />
+            <EdgeLayout
+              edges={edgesWithCoords}
+            />
+            <Annotations
+              ref={this.annotationLayer}
+              isFrozen={this.state.isFrozen}
+              onChangeActiveAnnotations={this.handleChangeActiveAnnotations}
+            />
+            <NodeLayout
+              nodes={nodesWithLayout}
+              id="NODE_LAYOUT"
+              highlightAttribute={
+                (this.state.showHighlightedNodes ? highlight[this.state.highlightIndex] : null)}
+              layoutVariable={layoutVariable}
+              allowPositioning={allowRepositioning}
             />
           </Canvas>
           <PresetSwitcher
-            id="preset-switcher"
+            id="drop-obstacle"
             presets={presets}
-            updatePreset={this.updatePreset}
-            presetIndex={this.state.presetIndex}
-            subject={subject}
-            highlights={highlight}
+            activePreset={this.state.presetIndex}
             highlightIndex={this.state.highlightIndex}
-            toggleHighlightIndex={this.toggleHighlightIndex}
-            toggleHighlights={this.toggleHighlights}
-            resetInteractions={this.resetInteractions}
-            displayEdges={displayEdges}
-            toggleEdges={this.toggleEdges}
-            convexHulls={convexHulls}
-            toggleConvex={this.toggleConvex}
-            showResetButton={showResetButton}
-            showFreezeButton={freeDraw}
-            isFreeze={this.state.isFreeze}
-            toggleFreeze={this.toggleFreeze}
+            isFrozen={this.state.isFrozen}
+            shouldShowResetButton={shouldShowResetButton}
+            shouldShowFreezeButton={freeDraw}
+            onResetInteractions={this.handleResetInteractions}
+            onChangePreset={this.handleChangePreset}
+            onToggleFreeze={this.handleToggleFreeze}
+            onToggleHulls={this.handleToggleHulls}
+            onToggleEdges={this.handleToggleEdges}
+            onChangeHighlightIndex={this.handleChangeHighlightIndex}
+            onToggleHighlighting={this.handleToggleHighlighting}
           />
         </div>
       </div>
@@ -170,9 +193,10 @@ Narrative.propTypes = {
   stage: PropTypes.object.isRequired,
 };
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state) {
   return {
-    stage: ownProps.stage || getProtocolStages(state)[ownProps.stageIndex],
+    nodes: getNetworkNodes(state),
+    edges: getNetworkEdges(state),
   };
 }
 

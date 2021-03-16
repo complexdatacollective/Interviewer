@@ -13,7 +13,7 @@ class PresetSwitcherKey extends Component {
   constructor() {
     super();
     this.state = {
-      open: false,
+      isOpen: false,
 
     };
 
@@ -22,19 +22,19 @@ class PresetSwitcherKey extends Component {
 
   togglePanel = () => {
     this.setState({
-      open: !this.state.open,
+      isOpen: !this.state.isOpen,
     });
   }
 
   renderHighlightLabel = (highlight, index) => {
     const {
       highlightIndex,
-      toggleHighlightIndex,
+      changeHighlightIndex,
     } = this.props;
 
     const handleHighlightClick = (event) => {
       event.stopPropagation();
-      toggleHighlightIndex(index);
+      changeHighlightIndex(index);
     };
 
     return (
@@ -53,24 +53,24 @@ class PresetSwitcherKey extends Component {
 
   render() {
     const {
+      toggleHighlighting,
+      toggleEdges,
+      toggleHulls,
+      isOpen,
       convexOptions,
       edges,
       highlightLabels,
-      toggleConvex,
-      toggleEdges,
-      toggleHighlights,
-      open,
     } = this.props;
 
     const classNames = cx(
       'preset-switcher-key',
-      { 'preset-switcher-key--open': open },
+      { 'preset-switcher-key--open': isOpen },
     );
 
     return (
       <div className={classNames} ref={this.panel}>
         <div className="preset-switcher-key__content">
-          <Accordion label="Attributes" onAccordionToggle={toggleHighlights}>
+          <Accordion label="Attributes" onAccordionToggle={toggleHighlighting}>
             {highlightLabels.map(this.renderHighlightLabel)}
           </Accordion>
           <Accordion label="Links" onAccordionToggle={toggleEdges}>
@@ -84,7 +84,7 @@ class PresetSwitcherKey extends Component {
               </div>
             ))}
           </Accordion>
-          <Accordion label="Groups" onAccordionToggle={toggleConvex}>
+          <Accordion label="Groups" onAccordionToggle={toggleHulls}>
             {convexOptions.map((option, index) => (
               <div className="accordion-item" key={index}>
                 <Icon
@@ -102,26 +102,17 @@ class PresetSwitcherKey extends Component {
 }
 
 PresetSwitcherKey.propTypes = {
-  convexOptions: PropTypes.array,
-  edges: PropTypes.array,
-  highlightLabels: PropTypes.array,
-  highlightIndex: PropTypes.number,
-  toggleConvex: PropTypes.func,
-  toggleEdges: PropTypes.func,
-  toggleHighlights: PropTypes.func,
-  toggleHighlightIndex: PropTypes.func,
-  open: PropTypes.bool.isRequired,
+  // eslint-disable-next-line react/no-unused-prop-types
+  preset: PropTypes.object.isRequired,
+  highlightIndex: PropTypes.number.isRequired,
+  changeHighlightIndex: PropTypes.func.isRequired,
+  toggleHighlighting: PropTypes.func.isRequired,
+  toggleEdges: PropTypes.func.isRequired,
+  toggleHulls: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool.isRequired,
 };
 
 PresetSwitcherKey.defaultProps = {
-  edges: [],
-  convexOptions: [],
-  highlightLabels: [],
-  highlightIndex: 0,
-  toggleConvex: () => {},
-  toggleEdges: () => {},
-  toggleHighlights: () => {},
-  toggleHighlightIndex: () => {},
 };
 
 const makeMapStateToProps = () => {
@@ -131,14 +122,14 @@ const makeMapStateToProps = () => {
   const getCategoricalOptions = makeGetCategoricalOptions();
 
   const mapStateToProps = (state, props) => {
-    const highlightLabels = props.highlights.map(variable => (
+    const highlightLabels = props.preset.highlight.map(variable => (
       getNodeAttributeLabel(state, { variableId: variable, ...props })
     ));
-    const edges = props.displayEdges.map(type => (
+    const edges = props.preset.edges.display.map(type => (
       { label: getEdgeLabel(state, { type }), color: getEdgeColor(state, { type }) }
     ));
     const convexOptions = getCategoricalOptions(state,
-      { variableId: props.convexHulls, ...props });
+      { variableId: props.preset.groupVariable, ...props });
 
     return {
       convexOptions,

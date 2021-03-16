@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'recompose';
 import cx from 'classnames';
 import { Icon } from '@codaco/ui';
+import HoverMarquee from '@codaco/ui/lib/components/HoverMarquee';
 import { DropObstacle } from '../../behaviours/DragAndDrop';
 import { PresetSwitcherKey } from './';
 
@@ -12,86 +13,92 @@ class PresetSwitcher extends PureComponent {
     super();
 
     this.state = {
-      openKey: false,
+      open: false,
     };
   }
 
-  toggleKey = () => {
+  toggleOpen = () => {
     this.setState({
-      openKey: !this.state.openKey,
+      open: !this.state.open,
     });
   }
 
   render() {
     const {
       presets,
-      presetIndex,
-      subject,
-      displayEdges,
-      convexHulls,
-      isFreeze,
-      toggleConvex,
-      toggleEdges,
+      activePreset,
       highlightIndex,
-      highlights,
-      toggleHighlights,
-      toggleHighlightIndex,
-      showResetButton,
-      showFreezeButton,
-      resetInteractions,
-      toggleFreeze,
+      isFrozen,
+      shouldShowResetButton,
+      shouldShowFreezeButton,
+      onResetInteractions,
+      onChangePreset,
+      onToggleFreeze,
+      onToggleHulls,
+      onToggleEdges,
+      onToggleHighlighting,
+      onChangeHighlightIndex,
     } = this.props;
+
+    const currentActivePreset = presets[activePreset];
 
     const navigationClasses = cx(
       'preset-switcher__navigation ',
-      { 'preset-switcher__navigation--hidden': this.state.openKey },
+      { 'preset-switcher__navigation--hidden': this.state.open },
     );
 
     const freezeClasses = cx(
       'preset-switcher__freeze',
-      { 'preset-switcher__freeze--active': isFreeze },
+      { 'preset-switcher__freeze--active': isFrozen },
     );
 
     return (
       <div className="preset-switcher">
         <PresetSwitcherKey
-          subject={subject}
-          highlights={highlights}
+          preset={currentActivePreset}
           highlightIndex={highlightIndex}
-          toggleHighlights={toggleHighlights}
-          toggleHighlightIndex={toggleHighlightIndex}
-          displayEdges={displayEdges}
-          toggleEdges={toggleEdges}
-          convexHulls={convexHulls}
-          toggleConvex={toggleConvex}
-          open={this.state.openKey}
-          key={presetIndex}
+          changeHighlightIndex={onChangeHighlightIndex}
+          toggleHighlighting={onToggleHighlighting}
+          toggleEdges={onToggleEdges}
+          toggleHulls={onToggleHulls}
+          isOpen={this.state.open}
+          key={activePreset}
         />
         <div
-          className={cx(navigationClasses, 'preset-switcher__navigation--previous', { 'preset-switcher__navigation--disabled': presetIndex === 0 })}
-          onClick={() => this.props.updatePreset(presetIndex - 1)}
+          className={cx(navigationClasses,
+            'preset-switcher__navigation--previous',
+            { 'preset-switcher__navigation--disabled': activePreset === 0 },
+          )}
+          onClick={() => onChangePreset(activePreset - 1)}
         >
           <Icon name="chevron-left" />
         </div>
-        {showFreezeButton &&
-          <div className={freezeClasses} onClick={toggleFreeze}>
+        {shouldShowFreezeButton &&
+          <div className={freezeClasses} onClick={onToggleFreeze}>
             <h1>&#10052;</h1>
           </div>
         }
         <div
-          className={cx('preset-switcher__reset-button', { 'preset-switcher__reset-button--show': showResetButton })}
-          onClick={resetInteractions}
+          className={cx(
+            'preset-switcher__reset-button',
+            { 'preset-switcher__reset-button--show': shouldShowResetButton },
+          )}
+          onClick={onResetInteractions}
         >
           <Icon name="reset" />
         </div>
         <div className="preset-switcher__label">
-          <div style={{ width: '100%' }} onClick={this.toggleKey}>
-            <h4>{presets[presetIndex].label}</h4>
+          <div style={{ width: '100%' }} onClick={this.toggleOpen}>
+            <h4><HoverMarquee>{currentActivePreset.label}</HoverMarquee></h4>
           </div>
         </div>
         <div
-          className={cx(navigationClasses, 'preset-switcher__navigation--next', { 'preset-switcher__navigation--disabled': presetIndex + 1 === presets.length })}
-          onClick={() => this.props.updatePreset(presetIndex + 1)}
+          className={cx(
+            navigationClasses,
+            'preset-switcher__navigation--next',
+            { 'preset-switcher__navigation--disabled': activePreset + 1 === presets.length },
+          )}
+          onClick={() => onChangePreset(activePreset + 1)}
         >
           <Icon name="chevron-right" />
         </div>
@@ -102,31 +109,21 @@ class PresetSwitcher extends PureComponent {
 
 PresetSwitcher.propTypes = {
   presets: PropTypes.array.isRequired,
-  presetIndex: PropTypes.number.isRequired,
-  updatePreset: PropTypes.func.isRequired,
-  subject: PropTypes.object.isRequired,
-  displayEdges: PropTypes.array,
-  convexHulls: PropTypes.string,
-  isFreeze: PropTypes.bool,
-  toggleConvex: PropTypes.func.isRequired,
-  toggleEdges: PropTypes.func.isRequired,
+  activePreset: PropTypes.number.isRequired,
   highlightIndex: PropTypes.number.isRequired,
-  highlights: PropTypes.array,
-  toggleHighlights: PropTypes.func.isRequired,
-  toggleHighlightIndex: PropTypes.func.isRequired,
-  showResetButton: PropTypes.bool.isRequired,
-  showFreezeButton: PropTypes.bool,
-  resetInteractions: PropTypes.func.isRequired,
-  toggleFreeze: PropTypes.func,
+  isFrozen: PropTypes.bool.isRequired,
+  shouldShowResetButton: PropTypes.bool.isRequired,
+  shouldShowFreezeButton: PropTypes.bool.isRequired,
+  onResetInteractions: PropTypes.func.isRequired,
+  onChangePreset: PropTypes.func.isRequired,
+  onToggleFreeze: PropTypes.func.isRequired,
+  onToggleHulls: PropTypes.func.isRequired,
+  onToggleEdges: PropTypes.func.isRequired,
+  onToggleHighlighting: PropTypes.func.isRequired,
+  onChangeHighlightIndex: PropTypes.func.isRequired,
 };
 
 PresetSwitcher.defaultProps = {
-  displayEdges: null,
-  convexHulls: null,
-  highlights: [],
-  isFreeze: false,
-  showFreezeButton: true,
-  toggleFreeze: () => {},
 };
 
 export default compose(

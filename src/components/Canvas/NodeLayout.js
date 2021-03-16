@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { isEmpty, has, isNil, get } from 'lodash';
+import { isEmpty, get } from 'lodash';
 import LayoutNode from '../../containers/Canvas/LayoutNode';
-import { entityPrimaryKeyProperty, getEntityAttributes, entityAttributesProperty } from '../../ducks/modules/network';
+import { entityPrimaryKeyProperty, entityAttributesProperty } from '../../ducks/modules/network';
 
 const NodeLayout = React.forwardRef(({
   nodes,
@@ -29,52 +29,40 @@ const NodeLayout = React.forwardRef(({
 
   return (
     <div className="node-layout" ref={ref}>
-      { nodes.map((node) => {
-        const nodeAttributes = getEntityAttributes(node);
-        if (!has(nodeAttributes, layoutVariable) || isNil(nodeAttributes[layoutVariable])) {
-          return null;
-        }
-
-        return (
-          <LayoutNode
-            key={node[entityPrimaryKeyProperty]}
-            node={node}
-            layoutVariable={layoutVariable}
-            onSelected={() => onSelected(node)}
-            selected={isHighlighted(node)}
-            linking={isLinking(node)}
-            allowPositioning={allowPositioning}
-            allowSelect={allowSelect}
-            areaWidth={width}
-            areaHeight={height}
-          />
-        );
-      }) }
+      { nodes.map(node => (
+        <LayoutNode
+          key={node[entityPrimaryKeyProperty]}
+          node={node}
+          layoutVariable={layoutVariable}
+          onSelected={() => onSelected(node)}
+          selected={isHighlighted(node)}
+          linking={isLinking(node)}
+          allowPositioning={allowPositioning}
+          allowSelect={allowSelect}
+          areaWidth={width}
+          areaHeight={height}
+        />
+      ))}
     </div>
   );
 });
 
 NodeLayout.propTypes = {
-  nodes: PropTypes.array,
+  nodes: PropTypes.array.isRequired,
   onSelected: PropTypes.func.isRequired,
   connectFrom: PropTypes.string,
   highlightAttribute: PropTypes.string,
-  allowPositioning: PropTypes.bool,
+  allowPositioning: PropTypes.bool.isRequired,
   allowSelect: PropTypes.bool,
-  layoutVariable: PropTypes.string,
-  width: PropTypes.number,
-  height: PropTypes.number,
+  layoutVariable: PropTypes.string.isRequired,
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired,
 };
 
 NodeLayout.defaultProps = {
   connectFrom: null,
-  nodes: [],
   highlightAttribute: null,
-  allowPositioning: true,
   allowSelect: true,
-  layoutVariable: null,
-  width: null,
-  height: null,
 };
 
 export { NodeLayout };

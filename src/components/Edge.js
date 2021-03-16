@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { makeGetEdgeColor } from '../selectors/network';
 
-const getEdgeColor = makeGetEdgeColor();
-
 class Edge extends PureComponent {
   render() {
     const { from, to, color, viewBoxScale } = this.props;
@@ -22,6 +20,8 @@ class Edge extends PureComponent {
 }
 
 function mapStateToProps(state, props) {
+  const getEdgeColor = makeGetEdgeColor();
+
   return {
     color: getEdgeColor(state, props),
   };

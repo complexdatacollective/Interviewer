@@ -5,7 +5,7 @@ import { Fade } from '@codaco/ui/lib/components/Transitions';
 import DragManager, { NO_SCROLL } from '../../behaviours/DragAndDrop/DragManager';
 
 const AnnotationLines =
-({ lines, isDrawing, isFreeze, linesShowing, linesToFade, onLineFaded }) => (
+({ lines, isDrawing, isFrozen, linesShowing, linesToFade, onLineFaded }) => (
   <svg className="annotations__lines" width="100%" height="100%" viewBox="0 0 1 1" preserveAspectRatio="none">
     {lines.map((line, index) => {
       const handleLineGone = () => onLineFaded(index);
@@ -14,7 +14,7 @@ const AnnotationLines =
           key={index}
           line={line}
           showLine={(isDrawing && index === lines.length - 1) || !!linesToFade[index]}
-          freezeLine={isFreeze && !!linesShowing[index]}
+          freezeLine={isFrozen && !!linesShowing[index]}
           onLineFaded={handleLineGone}
         />
       );
@@ -24,7 +24,7 @@ const AnnotationLines =
 
 AnnotationLines.propTypes = {
   isDrawing: PropTypes.bool.isRequired,
-  isFreeze: PropTypes.bool.isRequired,
+  isFrozen: PropTypes.bool.isRequired,
   lines: PropTypes.array.isRequired,
   linesShowing: PropTypes.array.isRequired,
   linesToFade: PropTypes.array.isRequired,
@@ -72,9 +72,9 @@ class Annotations extends Component {
     };
 
     this.dragManager = null;
+    this.removeLineTimers = [];
     this.portal = document.createElement('div');
     this.portal.className = 'annotations';
-    this.removeLineTimers = [];
   }
 
   componentDidMount() {
@@ -95,8 +95,8 @@ class Annotations extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.isFreeze !== this.props.isFreeze) {
-      if (this.props.isFreeze) {
+    if (prevProps.isFrozen !== this.props.isFrozen) {
+      if (this.props.isFrozen) {
         this.freeze();
       } else {
         this.unfreeze();
@@ -107,10 +107,6 @@ class Annotations extends Component {
   componentWillUnmount() {
     this.cleanupDragManager();
     this.resetRemoveLineTimers();
-
-    if (this.portal) {
-      this.portal.remove();
-    }
   }
 
   onDragStart = (mouseEvent) => {
@@ -127,7 +123,7 @@ class Annotations extends Component {
       isDrawing: true,
     });
 
-    this.props.setActiveStatus(true);
+    this.props.onChangeActiveAnnotations(true);
   };
 
   onDragMove = (mouseEvent) => {
@@ -146,7 +142,7 @@ class Annotations extends Component {
 
   onDragEnd = () => {
     this.setState({ isDrawing: false });
-    if (this.props.isFreeze) return;
+    if (this.props.isFrozen) return;
 
     // Add a setTimeout that will trigger line starting to fade.
     this.removeLineTimers.push(
@@ -176,7 +172,7 @@ class Annotations extends Component {
       linesShowing,
     }, () => {
       if (this.state.activeLines === 0) {
-        this.props.setActiveStatus(false);
+        this.props.onChangeActiveAnnotations(false);
       }
     });
   }
@@ -214,7 +210,7 @@ class Annotations extends Component {
     });
 
     this.resetRemoveLineTimers();
-    this.props.setActiveStatus(false);
+    this.props.onChangeActiveAnnotations(false);
   };
 
   resetRemoveLineTimers = () => {
@@ -246,7 +242,7 @@ class Annotations extends Component {
       (
         <AnnotationLines
           lines={this.state.lines}
-          isFreeze={this.props.isFreeze}
+          isFrozen={this.props.isFrozen}
           linesShowing={this.state.linesShowing}
           linesToFade={this.state.linesToFade}
           isDrawing={this.state.isDrawing}
@@ -259,13 +255,8 @@ class Annotations extends Component {
 }
 
 Annotations.propTypes = {
-  isFreeze: PropTypes.bool,
-  setActiveStatus: PropTypes.func,
-};
-
-Annotations.defaultProps = {
-  isFreeze: false,
-  setActiveStatus: () => { },
+  isFrozen: PropTypes.bool.isRequired,
+  onChangeActiveAnnotations: PropTypes.func.isRequired,
 };
 
 export default Annotations;

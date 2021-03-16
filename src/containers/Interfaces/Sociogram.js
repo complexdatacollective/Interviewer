@@ -1,33 +1,26 @@
 import React from 'react';
+import { get } from 'lodash';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { withHandlers, compose, withState, withPropsOnChange } from 'recompose';
+import { withHandlers, compose, withPropsOnChange } from 'recompose';
 import PropTypes from 'prop-types';
 import withPrompt from '../../behaviours/withPrompt';
-import {
-  PromptObstacle,
-  ButtonObstacle,
-} from '../../containers/Canvas';
-import { ConcentricCircles } from '../../components/Canvas';
+import Canvas from '../../components/Canvas/Canvas';
+import NodeBucket from '../../containers/Canvas/NodeBucket';
+import NodeLayout from '../../containers/Canvas/NodeLayout';
+import EdgeLayout from '../../components/Canvas/EdgeLayout';
+import Background from '../../containers/Canvas/Background';
+import PromptObstacle from '../../containers/Canvas/PromptObstacle';
+import ButtonObstacle from '../../containers/Canvas/ButtonObstacle';
 import { actionCreators as resetActions } from '../../ducks/modules/reset';
-
-const withConnectFrom = withState('connectFrom', 'setConnectFrom', null);
-
-const withConnectFromHandler = withHandlers({
-  handleConnectFrom: ({ setConnectFrom }) =>
-    id => setConnectFrom(id),
-  handleResetConnectFrom: ({ setConnectFrom }) =>
-    () => setConnectFrom(null),
-});
+import { makeGetDisplayEdges, makeGetNextUnplacedNode, makeGetPlacedNodes } from '../../selectors/canvas';
 
 const withResetInterfaceHandler = withHandlers({
   handleResetInterface: ({
-    handleResetConnectFrom,
     resetPropertyForAllNodes,
     resetEdgesOfType,
     stage,
   }) => () => {
-    handleResetConnectFrom();
     stage.prompts.forEach((prompt) => {
       resetPropertyForAllNodes(prompt.layout.layoutVariable);
       if (prompt.edges) {
@@ -46,26 +39,31 @@ const withPromptIdAsKey = withPropsOnChange(
   * Sociogram Interface
   * @extends Component
   */
-const Sociogram = ({
-  promptForward,
-  promptBackward,
-  prompt,
-  stage,
-  handleResetInterface,
-  connectFrom,
-  handleConnectFrom,
-}) => {
-  const subject = stage.subject;
-  const layoutVariable = prompt.layout && prompt.layout.layoutVariable;
-  const highlightAttribute = prompt.highlight && prompt.highlight.variable;
-  const allowHighlighting = prompt.highlight && prompt.highlight.allowHighlighting;
-  const createEdge = prompt.edges && prompt.edges.create;
-  const allowPositioning = prompt.layout && prompt.layout.allowPositioning;
-  const displayEdges = (prompt.edges && prompt.edges.display) || [];
-  const backgroundImage = stage.background && stage.background.image;
-  const concentricCircles = stage.background && stage.background.concentricCircles;
-  const skewedTowardCenter = stage.background && stage.background.skewedTowardCenter;
-  const sortOrder = prompt.sortOrder;
+const Sociogram = (props) => {
+  const {
+    promptForward,
+    promptBackward,
+    prompt,
+    stage,
+    handleResetInterface,
+    nodes,
+    nextUnplacedNode,
+    edges,
+  } = props;
+
+  // Behaviour Configuration
+  const allowHighlighting = get(prompt, 'highlight.allowHighlighting', false);
+  const createEdge = get(prompt, 'edges.create');
+  const allowPositioning = get(prompt, 'prompt.layout.allowPositioning', true);
+
+  // Display Properties
+  const layoutVariable = get(prompt, 'layout.layoutVariable');
+  const highlightAttribute = get(prompt, 'highlight.variable');
+
+  // Background Configuration
+  const backgroundImage = get(stage, 'stage.background.image');
+  const concentricCircles = get(stage, 'stage.background.concentricCircles');
+  const skewedTowardCenter = get(stage, 'stage.background.skewedTowardCenter');
 
   return (
     <div className="sociogram-interface">
@@ -80,22 +78,29 @@ const Sociogram = ({
         minimizable
       />
       <div className="sociogram-interface__concentric-circles">
-        <ConcentricCircles
-          subject={subject}
-          layoutVariable={layoutVariable}
-          highlightAttribute={highlightAttribute}
-          allowHighlighting={allowHighlighting}
-          createEdge={createEdge}
-          allowPositioning={allowPositioning}
-          displayEdges={displayEdges}
-          backgroundImage={backgroundImage}
-          concentricCircles={concentricCircles}
-          skewedTowardCenter={skewedTowardCenter}
-          sortOrder={sortOrder}
-          connectFrom={connectFrom}
-          updateLinkFrom={handleConnectFrom}
-          key={prompt.id}
-        />
+        <Canvas className="concentric-circles" id="concentric-circles">
+          <Background
+            concentricCircles={concentricCircles}
+            skewedTowardCenter={skewedTowardCenter}
+            image={backgroundImage}
+          />
+          <EdgeLayout
+            edges={edges}
+          />
+          <NodeLayout
+            nodes={nodes}
+            id="NODE_LAYOUT"
+            highlightAttribute={highlightAttribute}
+            layoutVariable={layoutVariable}
+            allowHighlighting={allowHighlighting && !createEdge}
+            allowPositioning={allowPositioning}
+            createEdge={createEdge}
+          />
+          <NodeBucket
+            id="NODE_BUCKET"
+            node={nextUnplacedNode}
+          />
+        </Canvas>
       </div>
       <div style={{ position: 'absolute', right: '3rem', bottom: '3rem' }}>
         <ButtonObstacle
@@ -115,12 +120,11 @@ Sociogram.propTypes = {
   promptForward: PropTypes.func.isRequired,
   promptBackward: PropTypes.func.isRequired,
   handleResetInterface: PropTypes.func.isRequired,
-  connectFrom: PropTypes.string,
-  handleConnectFrom: PropTypes.func.isRequired,
+  nodes: PropTypes.array.isRequired,
+  edges: PropTypes.array.isRequired,
 };
 
 Sociogram.defaultProps = {
-  connectFrom: null,
 };
 
 const mapDispatchToProps = dispatch => ({
@@ -128,11 +132,23 @@ const mapDispatchToProps = dispatch => ({
   resetPropertyForAllNodes: bindActionCreators(resetActions.resetPropertyForAllNodes, dispatch),
 });
 
+const makeMapStateToProps = () => {
+  const getDisplayEdges = makeGetDisplayEdges();
+  const getPlacedNodes = makeGetPlacedNodes();
+  const getNextUnplacedNode = makeGetNextUnplacedNode();
+
+  const mapStateToProps = (state, ownProps) => ({
+    edges: getDisplayEdges(state, ownProps),
+    nodes: getPlacedNodes(state, ownProps),
+    nextUnplacedNode: getNextUnplacedNode(state, ownProps),
+  });
+
+  return mapStateToProps;
+};
+
 export default compose(
-  withPromptIdAsKey,
-  connect(null, mapDispatchToProps),
-  withConnectFrom,
-  withConnectFromHandler,
-  withResetInterfaceHandler,
   withPrompt,
+  withPromptIdAsKey,
+  connect(makeMapStateToProps, mapDispatchToProps),
+  withResetInterfaceHandler,
 )(Sociogram);
