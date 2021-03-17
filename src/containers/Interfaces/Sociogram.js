@@ -61,9 +61,9 @@ const Sociogram = (props) => {
   const highlightAttribute = get(prompt, 'highlight.variable');
 
   // Background Configuration
-  const backgroundImage = get(stage, 'stage.background.image');
-  const concentricCircles = get(stage, 'stage.background.concentricCircles');
-  const skewedTowardCenter = get(stage, 'stage.background.skewedTowardCenter');
+  const backgroundImage = get(stage, 'background.image');
+  const concentricCircles = get(stage, 'background.concentricCircles');
+  const skewedTowardCenter = get(stage, 'background.skewedTowardCenter');
 
   return (
     <div className="sociogram-interface">
