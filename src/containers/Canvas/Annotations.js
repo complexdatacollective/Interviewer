@@ -107,6 +107,10 @@ class Annotations extends Component {
   componentWillUnmount() {
     this.cleanupDragManager();
     this.resetRemoveLineTimers();
+
+    if (this.portal) {
+      this.portal.remove();
+    }
   }
 
   onDragStart = (mouseEvent) => {
