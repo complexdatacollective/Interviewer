@@ -153,11 +153,15 @@ class Narrative extends Component {
             <EdgeLayout
               edges={edgesWithCoords}
             />
-            <Annotations
-              ref={this.annotationLayer}
-              isFrozen={this.state.isFrozen}
-              onChangeActiveAnnotations={this.handleChangeActiveAnnotations}
-            />
+            {
+              freeDraw && (
+                <Annotations
+                  ref={this.annotationLayer}
+                  isFrozen={this.state.isFrozen}
+                  onChangeActiveAnnotations={this.handleChangeActiveAnnotations}
+                />
+              )
+            }
             <NodeLayout
               nodes={nodesWithLayout}
               id="NODE_LAYOUT"
