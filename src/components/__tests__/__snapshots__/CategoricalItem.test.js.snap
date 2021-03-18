@@ -24,7 +24,28 @@ exports[`CategoricalItem component renders unexpanded categorical item 1`] = `
           className="categorical-item__title"
         >
           <h3>
-            undefined
+            <ReactMarkdown
+              allowedTypes={
+                Array [
+                  "paragraph",
+                  "break",
+                  "emphasis",
+                  "strong",
+                  "text",
+                  "list",
+                  "listItem",
+                ]
+              }
+              astPlugins={Array []}
+              escapeHtml={true}
+              plugins={Array []}
+              rawSourcePos={false}
+              renderers={Object {}}
+              skipHtml={false}
+              source="undefined"
+              sourcePos={false}
+              transformLinkUri={[Function]}
+            />
           </h3>
         </div>
       </FlippedWithContext>
