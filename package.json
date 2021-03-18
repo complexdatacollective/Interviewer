@@ -7,7 +7,7 @@
   "private": true,
   "engines": {
     "node": "12.14.1",
-    "npm": "7.6.2"
+    "npm": "7.6.3"
   },
   "scripts": {
     "pack": "electron-builder --dir",
@@ -52,7 +52,7 @@
     "@babel/preset-env": "7.10.4",
     "@babel/preset-react": "7.10.1",
     "@codaco/eslint-plugin-spellcheck": "0.0.14",
-    "@codaco/ui": "~5.0.0-alpha.1",
+    "@codaco/ui": "~5.0.0-alpha.2",
     "@zippytech/sorty": "^2.0.0",
     "ajv": "^6.5.4",
     "animejs": "^2.2.0",
