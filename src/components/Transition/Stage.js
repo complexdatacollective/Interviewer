@@ -60,7 +60,7 @@ const Stage = ({ children, stageBackward, ...props }) => {
 };
 
 Stage.propTypes = {
-  children: PropTypes.any.isRequired,
+  children: PropTypes.any,
   stageBackward: PropTypes.bool,
 };
 

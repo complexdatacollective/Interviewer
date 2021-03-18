@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
 
-const BackgroundDimmer = (props) => {
+const BackgroundDimmer = ({ clickHandler, children }) => {
   const slowDuration = getCSSVariableAsNumber('--animation-duration-slow-ms') / 1000;
 
   const variants = {
@@ -28,9 +28,9 @@ const BackgroundDimmer = (props) => {
       initial="expanded"
       exit="expanded"
       animate="normal"
-      onClick={() => props.clickHandler()}
+      onClick={() => clickHandler()}
     >
-      {props.children}
+      {children}
     </motion.div>
   );
 };

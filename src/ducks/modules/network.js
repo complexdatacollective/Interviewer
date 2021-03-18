@@ -1,4 +1,6 @@
-import { reject, find, isMatch, omit, keys, get } from 'lodash';
+import {
+  reject, find, isMatch, omit, keys, get,
+} from 'lodash';
 import uuid from 'uuid/v4';
 
 /*
@@ -72,7 +74,7 @@ function edgeExists(edges, from, to, type) {
   return false;
 }
 
-export const getEntityAttributes = node => node[entityAttributesProperty] || {};
+export const getEntityAttributes = (node) => node[entityAttributesProperty] || {};
 
 /**
  * Correctly construct the node object based on a
@@ -128,9 +130,7 @@ const addEdge = (state, action) => ({
 
 const removeEdge = (state, edgeId) => ({
   ...state,
-  edges: reject(state.edges, edge =>
-    edge[entityPrimaryKeyProperty] === edgeId,
-  ),
+  edges: reject(state.edges, (edge) => edge[entityPrimaryKeyProperty] === edgeId),
 });
 
 export default function reducer(state = getInitialState(), action = {}) {
@@ -192,7 +192,7 @@ export default function reducer(state = getInitialState(), action = {}) {
               // If the node's attrs contain the same key/vals, remove them
               if (isMatch(node[entityAttributesProperty], action.attributes)) {
                 const omittedKeys = Object.keys(action.attributes);
-                const nestedProps = omittedKeys.map(key => `${entityAttributesProperty}.${key}`);
+                const nestedProps = omittedKeys.map((key) => `${entityAttributesProperty}.${key}`);
                 return omit(node, nestedProps);
               }
 
@@ -217,8 +217,8 @@ export default function reducer(state = getInitialState(), action = {}) {
           return {
             ...node,
             ...omit(action.newModelData, 'promptId'),
-            promptIDs: action.newModelData.promptId ?
-              [...node.promptIDs, action.newModelData.promptId] : node.promptIDs,
+            promptIDs: action.newModelData.promptId
+              ? [...node.promptIDs, action.newModelData.promptId] : node.promptIDs,
             [entityAttributesProperty]: {
               ...node[entityAttributesProperty],
               ...action.newAttributeData,
@@ -232,16 +232,28 @@ export default function reducer(state = getInitialState(), action = {}) {
       const removeentityPrimaryKeyProperty = action[entityPrimaryKeyProperty];
       return {
         ...state,
-        nodes: reject(state.nodes, node =>
-          node[entityPrimaryKeyProperty] === removeentityPrimaryKeyProperty),
-        edges: reject(state.edges, edge =>
-          edge.from === removeentityPrimaryKeyProperty ||
-          edge.to === removeentityPrimaryKeyProperty),
+        nodes: reject(
+          state.nodes,
+          (node) => node[entityPrimaryKeyProperty] === removeentityPrimaryKeyProperty,
+        ),
+        edges: reject(
+          state.edges,
+          (edge) => (
+            edge.from === removeentityPrimaryKeyProperty
+            || edge.to === removeentityPrimaryKeyProperty
+          ),
+        ),
       };
     }
     case REMOVE_NODE_FROM_PROMPT: {
-      const togglePromptAttributes = keys(action.promptAttributes).reduce((attributes, attrKey) =>
-        ({ ...attributes, [attrKey]: !action.promptAttributes[attrKey] }), {});
+      const togglePromptAttributes = keys(action.promptAttributes)
+        .reduce(
+          (attributes, attrKey) => ({
+            ...attributes,
+            [attrKey]: !action.promptAttributes[attrKey],
+          }),
+          {},
+        );
       return {
         ...state,
         nodes: (() => state.nodes.map(
@@ -251,9 +263,10 @@ export default function reducer(state = getInitialState(), action = {}) {
               ...node,
               [entityAttributesProperty]:
                 { ...node[entityAttributesProperty], ...togglePromptAttributes },
-              promptIDs: node.promptIDs.filter(id => id !== action.promptId),
+              promptIDs: node.promptIDs.filter((id) => id !== action.promptId),
             };
-          })
+          },
+        )
         )(),
       };
     }

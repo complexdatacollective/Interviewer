@@ -51,7 +51,6 @@ describe('useGetFormName', () => {
       return getFormName(uid);
     };
 
-
     const result = mount(<MockComponent uid={null} stage={{ id: 'foo' }} />);
 
     const formName1 = result.text();

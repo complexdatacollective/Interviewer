@@ -20,9 +20,7 @@ export const isWeb = () => (!isCordova() && !isElectron());
 
 const getEnvironment = jest.fn().mockReturnValue(environments.WEB);
 
-const inEnvironment = tree =>
-  (...args) =>
-    tree(getEnvironment())(...args);
+const inEnvironment = (tree) => (...args) => tree(getEnvironment())(...args);
 
 export { getEnvironment };
 

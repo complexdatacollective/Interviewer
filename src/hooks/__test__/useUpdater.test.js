@@ -58,7 +58,6 @@ const mockJson = jest.fn(() => ({
   assets: mockAssets, // eslint-disable-line
 }));
 
-
 describe('getPlatformSpecificContent()', () => {
   beforeEach(() => {
     Environment.isWindows = jest.fn().mockReturnValue(false);
@@ -118,7 +117,6 @@ describe('getPlatformSpecificContent()', () => {
     expect(content.buttonLink).toBe('https://apps.apple.com/us/app/network-canvas-interviewer/id1538673677');
   });
 });
-
 
 describe('checkEndpoint()', () => {
   let originalFetch;

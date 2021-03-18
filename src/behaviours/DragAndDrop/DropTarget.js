@@ -1,4 +1,4 @@
-/* eslint-disable react/no-find-dom-node */
+/* eslint-disable react/no-find-dom-node, react/jsx-props-no-spreading */
 
 import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
@@ -9,25 +9,8 @@ import store from './store';
 
 const maxFramesPerSecond = 10;
 
-const dropTarget = WrappedComponent =>
+const dropTarget = (WrappedComponent) => {
   class DropTarget extends Component {
-    static propTypes = {
-      id: PropTypes.string.isRequired,
-      onDrop: PropTypes.func,
-      onDrag: PropTypes.func,
-      onDragEnd: PropTypes.func,
-      accepts: PropTypes.func,
-      meta: PropTypes.func,
-    }
-
-    static defaultProps = {
-      meta: () => ({}),
-      accepts: () => false,
-      onDrop: () => {},
-      onDrag: () => {},
-      onDragEnd: () => {},
-    }
-
     componentDidMount() {
       if (!this.component) { return; }
       this.node = findDOMNode(this.component);
@@ -41,8 +24,9 @@ const dropTarget = WrappedComponent =>
     }
 
     removeTarget = () => {
+      const { id } = this.props;
       store.dispatch(
-        actions.removeTarget(this.props.id),
+        actions.removeTarget(id),
       );
     }
 
@@ -60,16 +44,25 @@ const dropTarget = WrappedComponent =>
     updateTarget = () => {
       if (!this.node) { return; }
 
+      const {
+        id,
+        onDrop,
+        onDrag,
+        onDragEnd,
+        accepts,
+        meta,
+      } = this.props;
+
       const boundingClientRect = getAbsoluteBoundingRect(this.node);
 
       store.dispatch(
         actions.upsertTarget({
-          id: this.props.id,
-          onDrop: this.props.onDrop,
-          onDrag: this.props.onDrag,
-          onDragEnd: this.props.onDragEnd,
-          accepts: this.props.accepts,
-          meta: this.props.meta(),
+          id,
+          onDrop,
+          onDrag,
+          onDragEnd,
+          accepts,
+          meta: meta(),
           width: boundingClientRect.width,
           height: boundingClientRect.height,
           y: boundingClientRect.top,
@@ -92,7 +85,27 @@ const dropTarget = WrappedComponent =>
         />
       );
     }
+  }
+
+  DropTarget.propTypes = {
+    id: PropTypes.string.isRequired,
+    onDrop: PropTypes.func,
+    onDrag: PropTypes.func,
+    onDragEnd: PropTypes.func,
+    accepts: PropTypes.func,
+    meta: PropTypes.func,
   };
+
+  DropTarget.defaultProps = {
+    meta: () => ({}),
+    accepts: () => false,
+    onDrop: () => {},
+    onDrag: () => {},
+    onDragEnd: () => {},
+  };
+
+  return DropTarget;
+};
 
 export default dropTarget;
 

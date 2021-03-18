@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { reduxForm, getFormValues, getFormMeta } from 'redux-form';
 import { autoInitialisedForm } from '../behaviours';
-import { Field } from '../containers/';
+import Field from './Field';
 import { makeRehydrateFields } from '../selectors/forms';
 
 const getScrollParent = (node) => {
@@ -15,8 +15,8 @@ const getScrollParent = (node) => {
   };
 
   const style = (_node, prop) => getComputedStyle(_node, null).getPropertyValue(prop);
-  const overflow = _node => style(_node, 'overflow') + style(_node, 'overflow-y') + style(_node, 'overflow-x');
-  const scroll = _node => regex.test(overflow(_node));
+  const overflow = (_node) => style(_node, 'overflow') + style(_node, 'overflow-y') + style(_node, 'overflow-x');
+  const scroll = (_node) => regex.test(overflow(_node));
 
   /* eslint-disable consistent-return */
   const scrollParent = (_node) => {
@@ -46,12 +46,11 @@ const scrollToFirstError = (errors) => {
 
   const firstError = Object.keys(errors)[0];
 
-
   // All Fields have a name corresponding to variable ID so look this up.
   // When used on alter form, multiple forms can be differentiated by the active slide
   // class. This needs priority, so look it up first.
-  const el = document.querySelector(`.swiper-slide-active [name="${firstError}"]`) ||
-             document.querySelector(`[name="${firstError}"]`);
+  const el = document.querySelector(`.swiper-slide-active [name="${firstError}"]`)
+             || document.querySelector(`[name="${firstError}"]`);
 
   // If element is not found, prevent crash.
   if (!el) {
@@ -74,7 +73,8 @@ const scrollToFirstError = (errors) => {
   */
 class Form extends Component {
   handleFieldBlur = () => {
-    if (!this.props.autoPopulate) { return; }
+    const { autoPopulate } = this.props;
+    if (!autoPopulate) { return; }
 
     const {
       meta: {
@@ -88,7 +88,7 @@ class Form extends Component {
     // if we don't check dirty state, this ends up firing and auto populating fields
     // when it shouldn't, like when closing the form
     if (dirty) {
-      this.props.autoPopulate(fields, values, autofill);
+      autoPopulate(fields, values, autofill);
     }
   };
 

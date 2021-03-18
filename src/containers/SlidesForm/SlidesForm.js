@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React, { useState, useEffect } from 'react';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
@@ -43,8 +44,7 @@ const SlidesForm = (props) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [swiper, updateSwiper] = useState(null);
 
-  const getItemIndex = () =>
-    activeIndex - 1;
+  const getItemIndex = () => activeIndex - 1;
 
   const isIntroScreen = () => activeIndex === 0;
 
@@ -199,7 +199,7 @@ const SlidesForm = (props) => {
 
   return (
     <div className={parentClasses}>
-      <Swiper {...swiperParams} getSwiper={updateSwiper} >
+      <Swiper {...swiperParams} getSwiper={updateSwiper}>
         <div>
           <div key="alter-form__introduction" className="slide-content alter-form__introduction">
             <h1>{stage.introductionPanel.title}</h1>
@@ -232,7 +232,10 @@ const SlidesForm = (props) => {
       </Swiper>
       <div className={progressClasses}>
         <h6 className="progress-container__status-text">
-          <strong>{activeIndex}</strong> of <strong>{items.length}</strong>
+          <strong>{activeIndex}</strong>
+          {' '}
+          of
+          <strong>{items.length}</strong>
         </h6>
         <ProgressBar orientation="horizontal" percentProgress={(activeIndex / items.length) * 100} />
       </div>
@@ -261,10 +264,8 @@ SlidesForm.defaultProps = {
 };
 
 const mapStateToProps = (state, props) => {
-  const getIsFormValid = formName =>
-    isValid(formName)(state);
-  const getIsFormDirty = formName =>
-    isDirty(formName)(state);
+  const getIsFormValid = (formName) => isValid(formName)(state);
+  const getIsFormDirty = (formName) => isDirty(formName)(state);
 
   return {
     form: props.stage.form,

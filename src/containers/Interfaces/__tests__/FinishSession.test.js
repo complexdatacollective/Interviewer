@@ -5,7 +5,7 @@ import { shallow } from 'enzyme';
 import { UnconnectedFinishSession as FinishSession } from '../FinishSession';
 
 const findButtonMatching = (text, container) => (
-  container.find('Button').filterWhere(b => b.prop('children') === text)
+  container.find('Button').filterWhere((b) => b.prop('children') === text)
 );
 
 describe('the Finish Interface', () => {

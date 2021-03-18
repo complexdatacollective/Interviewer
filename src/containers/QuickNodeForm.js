@@ -5,18 +5,9 @@ import { compose } from 'redux';
 import { Icon } from '@codaco/ui';
 import withPrompt from '../behaviours/withPrompt';
 import { entityAttributesProperty } from '../ducks/modules/network';
-import { Node } from './';
+import Node from './Node';
 
 class QuickNodeForm extends PureComponent {
-  static propTypes = {
-    addNode: PropTypes.func.isRequired,
-    newNodeAttributes: PropTypes.object.isRequired,
-    newNodeModelData: PropTypes.object.isRequired,
-    stage: PropTypes.object.isRequired,
-    targetVariable: PropTypes.string.isRequired,
-    nodeIconName: PropTypes.string.isRequired,
-  };
-
   constructor(props) {
     super(props);
 
@@ -51,22 +42,30 @@ class QuickNodeForm extends PureComponent {
   handleChange = (e) => {
     this.setState({
       nodeLabel: e.target.value,
-      cancelBlur: false,
+      // TODO: is this used?
+      cancelBlur: false, // eslint-disable-line
     });
   }
 
   handleSubmitForm = (e) => {
     e.preventDefault();
+    const { nodeLabel } = this.state;
+    const {
+      addNode,
+      newNodeModelData,
+      newNodeAttributes,
+      targetVariable,
+    } = this.props;
 
-    if (this.state.nodeLabel.length === 0) {
+    if (nodeLabel.length === 0) {
       return;
     }
 
-    this.props.addNode(
-      this.props.newNodeModelData,
+    addNode(
+      newNodeModelData,
       {
-        ...this.props.newNodeAttributes,
-        [this.props.targetVariable]: this.state.nodeLabel,
+        ...newNodeAttributes,
+        [targetVariable]: nodeLabel,
       },
     );
 
@@ -98,7 +97,8 @@ class QuickNodeForm extends PureComponent {
       <div className="quick-add">
         <div className={cx('quick-add-form', { 'quick-add-form--show': show })}>
           <form autoComplete="off" onSubmit={this.handleSubmitForm}>
-            {show &&
+            {show
+            && (
             <input
               className="quick-add-form__label-input"
               key="label"
@@ -109,7 +109,7 @@ class QuickNodeForm extends PureComponent {
               value={nodeLabel}
               type="text"
             />
-            }
+            )}
           </form>
         </div>
         <div className={cx('flip-button', { 'flip-button--flip': nodeLabel.length > 0 })}>
@@ -126,6 +126,15 @@ class QuickNodeForm extends PureComponent {
     );
   }
 }
+
+QuickNodeForm.propTypes = {
+  addNode: PropTypes.func.isRequired,
+  newNodeAttributes: PropTypes.object.isRequired,
+  newNodeModelData: PropTypes.object.isRequired,
+  stage: PropTypes.object.isRequired,
+  targetVariable: PropTypes.string.isRequired,
+  nodeIconName: PropTypes.string.isRequired,
+};
 
 export { QuickNodeForm };
 

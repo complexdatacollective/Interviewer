@@ -10,11 +10,17 @@ import StageErrorBoundary from '../components/StageErrorBoundary';
   */
 class Stage extends Component {
   componentWillUnmount() {
-    this.props.registerBeforeNext(null, this.props.stage.id);
+    const { registerBeforeNext, stage: { id } } = this.props;
+    registerBeforeNext(null, id);
   }
 
-  registerBeforeNext = beforeNext =>
-    this.props.registerBeforeNext(beforeNext, this.props.stage.id)
+  registerBeforeNext = (beforeNext) => {
+    const { registerBeforeNext, stage: { id } } = this.props;
+    registerBeforeNext(
+      beforeNext,
+      id,
+    );
+  }
 
   render() {
     const { stage, registerBeforeNext, ...props } = this.props;
@@ -25,14 +31,15 @@ class Stage extends Component {
       <div className="stage">
         <div className="stage__interface">
           <StageErrorBoundary>
-            { CurrentInterface &&
+            { CurrentInterface
+              && (
               <CurrentInterface
-                {...props}
+                {...props} // eslint-disable-line react/jsx-props-no-spreading
                 registerBeforeNext={this.registerBeforeNext}
                 stage={stage}
                 key={stage.id}
               />
-            }
+              )}
           </StageErrorBoundary>
         </div>
       </div>

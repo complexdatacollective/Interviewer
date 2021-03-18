@@ -1,4 +1,4 @@
-
+/* eslint-disable no-restricted-globals */
 import { entityAttributesProperty } from '../ducks/modules/network';
 /**
  * Converts a CSV file into a Network Canvas node list JSON
@@ -13,7 +13,7 @@ import { entityAttributesProperty } from '../ducks/modules/network';
 const csv = require('../../node_modules/csvtojson/browser/browser.js');
 
 const CSVToJSONNetworkFormat = (data) => {
-  const withTypeAndAttributes = node => ({
+  const withTypeAndAttributes = (node) => ({
     [entityAttributesProperty]: {
       ...node,
     },
@@ -21,7 +21,7 @@ const CSVToJSONNetworkFormat = (data) => {
 
   return csv().fromString(data)
     .then((json) => {
-      const nodes = json.map(entry => withTypeAndAttributes(entry));
+      const nodes = json.map((entry) => withTypeAndAttributes(entry));
       return { nodes };
     });
 };

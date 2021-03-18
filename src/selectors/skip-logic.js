@@ -5,36 +5,33 @@ import { getNetwork } from './network';
 import { SkipLogicAction } from '../protocol-consts';
 
 const rotateIndex = (max, nextIndex) => (nextIndex + max) % max;
-const maxLength = state => getProtocolStages(state).length;
+const maxLength = (state) => getProtocolStages(state).length;
 
-export const getNextIndex = index => createSelector(
+export const getNextIndex = (index) => createSelector(
   maxLength,
-  max => rotateIndex(max, index),
+  (max) => rotateIndex(max, index),
 );
 
-const getSkipLogic = index => createSelector(
+const getSkipLogic = (index) => createSelector(
   getProtocolStages,
-  stages => stages && stages[index] && stages[index].skipLogic,
+  (stages) => stages && stages[index] && stages[index].skipLogic,
 );
 
 /**
  * @returns {boolean} true for skip (when query matches), false for show (when query matches)
  */
-const isSkipAction = index => createSelector(
+const isSkipAction = (index) => createSelector(
   getSkipLogic(index),
-  logic => logic && logic.action === SkipLogicAction.SKIP,
+  (logic) => logic && logic.action === SkipLogicAction.SKIP,
 );
 
-const formatQueryParameters = params =>
-  Object.assign(
-    {
-      rules: [],
-      join: null,
-    },
-    params,
-  );
+const formatQueryParameters = (params) => ({
+  rules: [],
+  join: null,
+  ...params,
+});
 
-export const isStageSkipped = index => createSelector(
+export const isStageSkipped = (index) => createSelector(
   getSkipLogic(index),
   isSkipAction(index),
   getNetwork,

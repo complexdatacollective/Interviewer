@@ -2,11 +2,11 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@codaco/ui';
 import { AnimatePresence } from 'framer-motion';
-import { Section } from '.';
+import Section from './Section';
 import { actionCreators as deviceActions } from '../../ducks/modules/deviceSettings';
 
 const WhatsNewSection = () => {
-  const showWhatsNew = useSelector(state => state.deviceSettings.showWhatsNew);
+  const showWhatsNew = useSelector((state) => state.deviceSettings.showWhatsNew);
 
   const dispatch = useDispatch();
   const dismissSection = () => dispatch(deviceActions.toggleSetting('showWhatsNew'));

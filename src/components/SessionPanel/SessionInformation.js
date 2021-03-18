@@ -7,13 +7,12 @@ import { actionCreators as sessionsActions } from '../../ducks/modules/sessions'
 import { getCaseId, getSessionProgress } from '../../selectors/session';
 import { getActiveProtocolName, getProtocolCodebook } from '../../selectors/protocol';
 import { getNetwork } from '../../selectors/network';
-import { Scroller } from '..';
+import Scroller from '../Scroller';
 import { Overlay } from '../../containers/Overlay';
-import { Form } from '../../containers';
+import Form from '../../containers/Form';
 import useInterval from '../../hooks/useInterval';
 
-const elapsedTime = timestamp => timestamp && new Date(Date.now() - timestamp).toISOString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, '$1');
-
+const elapsedTime = (timestamp) => timestamp && new Date(Date.now() - timestamp).toISOString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, '$1');
 
 const SessionInformation = (props) => {
   const {
@@ -26,7 +25,14 @@ const SessionInformation = (props) => {
 
   const renderSummaryEntities = (type) => {
     if (sessionNetwork[type].length === 0) {
-      return (<h6>No {type} in this interview.</h6>);
+      return (
+        <h6>
+          No
+          {type}
+          {' '}
+          in this interview.
+        </h6>
+      );
     }
 
     const networkEntitiesByType = countBy(sessionNetwork[type], 'type');
@@ -52,7 +58,13 @@ const SessionInformation = (props) => {
             color={sessionCodebook[codebookType][entity].color}
             name="links"
           />
-          <h6>{sessionCodebook[codebookType][entity].name} ({networkEntitiesByType[entity]})</h6>
+          <h6>
+            {sessionCodebook[codebookType][entity].name}
+            {' '}
+            (
+            {networkEntitiesByType[entity]}
+            )
+          </h6>
         </div>
       );
     });
@@ -74,7 +86,7 @@ const SessionInformation = (props) => {
   };
 
   return (
-    <React.Fragment>
+    <>
       <Overlay
         show={showCaseIDRename}
         onClose={() => setShowCaseIDRename(false)}
@@ -120,7 +132,11 @@ const SessionInformation = (props) => {
         </section>
         <section>
           <h4>Case ID</h4>
-          <h2 className="case-id">{caseId} <Button size="small" icon="edit" color="platinum--dark" onClick={() => setShowCaseIDRename(true)}>Edit</Button></h2>
+          <h2 className="case-id">
+            {caseId}
+            {' '}
+            <Button size="small" icon="edit" color="platinum--dark" onClick={() => setShowCaseIDRename(true)}>Edit</Button>
+          </h2>
         </section>
         <section>
           <h4>Nodes</h4>
@@ -136,13 +152,13 @@ const SessionInformation = (props) => {
           </div>
         </section>
       </Scroller>
-    </React.Fragment>
+    </>
 
   );
 };
 
-const mapDispatchToProps = dispatch => ({
-  setCaseId: name => dispatch(sessionsActions.updateCaseId(name)),
+const mapDispatchToProps = (dispatch) => ({
+  setCaseId: (name) => dispatch(sessionsActions.updateCaseId(name)),
 });
 
 const mapStateToProps = (state, props) => ({

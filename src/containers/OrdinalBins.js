@@ -9,43 +9,36 @@ import { ALLOWED_MARKDOWN_LABEL_TAGS } from '@codaco/ui/src/utils/config';
 import { getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
 import { makeNetworkNodesForType, makeGetVariableOptions, makeGetPromptVariable } from '../selectors/interface';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
-import { NodeList } from '../components/';
+import { NodeList } from '../components';
 import { MonitorDragSource } from '../behaviours/DragAndDrop';
 import { getEntityAttributes, entityAttributesProperty, entityPrimaryKeyProperty } from '../ducks/modules/network';
 
 class OrdinalBins extends PureComponent {
-  static propTypes = {
-    activePromptVariable: PropTypes.string.isRequired,
-    bins: PropTypes.array.isRequired,
-    prompt: PropTypes.object.isRequired,
-    stage: PropTypes.object.isRequired,
-    updateNode: PropTypes.func.isRequired,
-  };
+  promptColor = () => {
+    const { prompt } = this.props;
 
-  static defaultProps = {
-    isDragging: false,
-    meta: {},
+    return prompt.color
+      ? color(getCSSVariableAsString(`--${prompt.color}`))
+      : color(getCSSVariableAsString('--ord-color-seq-1'));
   };
-
-  promptColor = () => (this.props.prompt.color ?
-    color(getCSSVariableAsString(`--${this.props.prompt.color}`)) :
-    color(getCSSVariableAsString('--ord-color-seq-1'))
-  );
 
   backgroundColor = () => color(getCSSVariableAsString('--background'));
+
   calculateAccentColor = (index, missingValue) => {
+    const { bins } = this.props;
     if (missingValue) {
       return color(getCSSVariableAsString('--color-rich-black')).mix(this.backgroundColor(), 0.8).toString();
     }
-    const blendRatio = 1 / (this.props.bins.length) * index;
+    const blendRatio = 1 / (bins.length) * index;
     return this.promptColor().mix(this.backgroundColor(), blendRatio).toString();
   };
 
   calculatePanelColor = (index, missingValue) => {
+    const { bins } = this.props;
     if (missingValue) {
       return color(getCSSVariableAsString('--color-rich-black')).mix(this.backgroundColor(), 0.9).toString();
     }
-    const blendRatio = 1 / (this.props.bins.length) * index;
+    const blendRatio = 1 / (bins.length) * index;
     return color(getCSSVariableAsString('--panel-bg-muted')).mix(this.backgroundColor(), blendRatio).toString();
   };
 
@@ -57,17 +50,23 @@ class OrdinalBins extends PureComponent {
   };
 
   renderOrdinalBin = (bin, index) => {
+    const {
+      prompt,
+      stage,
+      activePromptVariable,
+      updateNode,
+    } = this.props;
     const missingValue = bin.value < 0;
 
     const onDrop = ({ meta }) => {
-      if (getEntityAttributes(meta)[this.props.activePromptVariable] === bin.value) {
+      if (getEntityAttributes(meta)[activePromptVariable] === bin.value) {
         return;
       }
 
-      this.props.updateNode(
+      updateNode(
         meta[entityPrimaryKeyProperty],
         {},
-        { [this.props.activePromptVariable]: bin.value },
+        { [activePromptVariable]: bin.value },
       );
     };
 
@@ -82,14 +81,14 @@ class OrdinalBins extends PureComponent {
         </div>
         <div className="ordinal-bin--content" style={{ borderBottomColor: accentColor, background: panelColor }}>
           <NodeList
-            listId={`ORDBIN_NODE_LIST_${this.props.stage.id}_${this.props.prompt.id}_${index}`}
+            listId={`ORDBIN_NODE_LIST_${stage.id}_${prompt.id}_${index}`}
             id={`ORDBIN_NODE_LIST_${index}`}
             items={bin.nodes}
             itemType="NEW_NODE"
-            onDrop={item => onDrop(item)}
+            onDrop={(item) => onDrop(item)}
             accepts={() => true}
             hoverColor={highlightColor}
-            sortOrder={this.props.prompt.binSortOrder}
+            sortOrder={prompt.binSortOrder}
           />
         </div>
       </div>
@@ -97,11 +96,20 @@ class OrdinalBins extends PureComponent {
   }
 
   render() {
+    const { bins } = this.props;
     return (
-      this.props.bins.map(this.renderOrdinalBin)
+      bins.map(this.renderOrdinalBin)
     );
   }
 }
+
+OrdinalBins.propTypes = {
+  activePromptVariable: PropTypes.string.isRequired,
+  bins: PropTypes.array.isRequired,
+  prompt: PropTypes.object.isRequired,
+  stage: PropTypes.object.isRequired,
+  updateNode: PropTypes.func.isRequired,
+};
 
 function makeMapStateToProps() {
   const getOrdinalValues = makeGetVariableOptions();
@@ -117,9 +125,8 @@ function makeMapStateToProps() {
       bins: getOrdinalValues(state, props)
         .map((bin) => {
           const nodes = stageNodes.filter(
-            node =>
-              !isNil(node[entityAttributesProperty][activePromptVariable]) &&
-              node[entityAttributesProperty][activePromptVariable] === bin.value,
+            (node) => !isNil(node[entityAttributesProperty][activePromptVariable])
+              && node[entityAttributesProperty][activePromptVariable] === bin.value,
           );
 
           return {

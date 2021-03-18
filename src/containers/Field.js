@@ -6,8 +6,13 @@ import * as Fields from '@codaco/ui/lib/components/Fields';
 import validations from '../utils/Validations';
 import { FormComponent } from '../protocol-consts';
 
-const ComponentTypeNotFound = componentType =>
-  () => (<div>Input component &quot;{componentType}&quot; not found.</div>);
+const ComponentTypeNotFound = (componentType) => () => (
+  <div>
+    Input component &quot;
+    {componentType}
+    &quot; not found.
+  </div>
+);
 
 /*
   * Returns the named field compontent, if no matching one is found
@@ -29,13 +34,12 @@ export const getInputComponent = (componentType = 'Text') => {
 * which will always fail.
 * @param {string} validation The name of the validation function to return.
   */
-const getValidation = validation =>
-  map(
-    toPairs(validation),
-    ([type, options]) => (
-      Object.hasOwnProperty.call(validations, type) ? validations[type](options) : () => (`Validation "${type}" not found`)
-    ),
-  );
+const getValidation = (validation) => map(
+  toPairs(validation),
+  ([type, options]) => (
+    Object.hasOwnProperty.call(validations, type) ? validations[type](options) : () => (`Validation "${type}" not found`)
+  ),
+);
 
 /**
   * Renders a redux-form field in the style of our app.
@@ -55,7 +59,9 @@ class Field extends PureComponent {
   }
 
   render() {
-    const { label, name, validation, ...rest } = this.props;
+    const {
+      label, name, validation, ...rest
+    } = this.props;
     return (
       <ReduxFormField
         {...rest}

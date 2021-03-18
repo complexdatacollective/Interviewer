@@ -16,7 +16,7 @@ describe('Annotations', () => {
   });
 
   it('freezes lines drawn by user', () => {
-    const subject = shallow(<Annotations isFreeze />);
+    const subject = shallow(<Annotations isFrozen />);
     subject.setState({ lines: [[{ x: 0, y: 0 }, { x: 1, y: 1 }]], linesShowing: [true, true] });
     const lines = subject.find('AnnotationLines').dive();
     const firstLine = lines.find('AnnotationLine').dive();

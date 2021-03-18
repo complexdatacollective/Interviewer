@@ -14,9 +14,9 @@ import {
   getInitialSortOrder,
   makeGetPromptNodeModelData,
 } from '../../selectors/name-generator';
-import { PromptSwiper } from '../../containers';
+import PromptSwiper from '../PromptSwiper';
 import { FilterableListWrapper, CardList } from '../../components';
-import withExternalData from '../../containers/withExternalData';
+import withExternalData from '../withExternalData';
 import getParentKeyByNameValue from '../../utils/getParentKeyByNameValue';
 
 /**
@@ -24,36 +24,37 @@ import getParentKeyByNameValue from '../../utils/getParentKeyByNameValue';
   * @extends Component
   */
 class NameGeneratorList extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      selectedNode: null,
-    };
-  }
-
   /**
    * Select node submit handler
    */
   onSubmitNewNode = (node) => {
+    const {
+      newNodeAttributes,
+      newNodeModelData,
+      addNode,
+    } = this.props;
     const attributeData = {
-      ...this.props.newNodeAttributes,
+      ...newNodeAttributes,
       ...node[entityAttributesProperty],
     };
     const modelData = {
-      ...this.props.newNodeModelData,
+      ...newNodeModelData,
       ...omit(node, entityAttributesProperty),
     };
-    this.props.addNode(modelData, attributeData);
+    addNode(modelData, attributeData);
   }
 
   onRemoveNode = (node) => {
-    this.props.removeNode(node[entityPrimaryKeyProperty]);
+    const { removeNode } = this.props;
+    removeNode(node[entityPrimaryKeyProperty]);
   }
 
-  isNodeSelected = node =>
-    !!this.props.selectedNodes
-      .find(current => current[entityPrimaryKeyProperty] === node[entityPrimaryKeyProperty]);
+  isNodeSelected = (node) => {
+    const { selectedNodes } = this.props;
+    return selectedNodes.some(
+      (current) => current[entityPrimaryKeyProperty] === node[entityPrimaryKeyProperty],
+    );
+  };
 
   /**
     * toggle whether the card is selected or not.
@@ -69,28 +70,35 @@ class NameGeneratorList extends Component {
   };
 
   detailsWithVariableUUIDs = (node) => {
-    const nodeTypeVariables = this.props.nodeTypeDefinition.variables;
+    const {
+      nodeTypeDefinition,
+      visibleSupplementaryFields,
+    } = this.props;
+
+    const nodeTypeVariables = nodeTypeDefinition.variables;
     const attrs = getEntityAttributes(node);
-    const fields = this.props.visibleSupplementaryFields;
-    const withUUIDReplacement = fields.map(field => ({
+    const fields = visibleSupplementaryFields;
+    const withUUIDReplacement = fields.map((field) => ({
       ...field,
       variable: getParentKeyByNameValue(nodeTypeVariables, field.variable),
     }));
 
-    return withUUIDReplacement.map(field => ({ [field.label]: attrs[field.variable] }));
+    return withUUIDReplacement.map((field) => ({ [field.label]: attrs[field.variable] }));
   }
 
   sortableFieldsWithVariableUUIDs = (sortFields) => {
-    const nodeTypeVariables = this.props.nodeTypeDefinition.variables;
-    return sortFields.map(field => ({
+    const { nodeTypeDefinition } = this.props;
+    const nodeTypeVariables = nodeTypeDefinition.variables;
+    return sortFields.map((field) => ({
       ...field,
       variable: getParentKeyByNameValue(nodeTypeVariables, field.variable),
     }));
   }
 
   initialSortWithVariableUUIDs = (initialSortOrder) => {
-    const nodeTypeVariables = this.props.nodeTypeDefinition.variables;
-    return initialSortOrder.map(rule => ({
+    const { nodeTypeDefinition } = this.props;
+    const nodeTypeVariables = nodeTypeDefinition.variables;
+    return initialSortOrder.map((rule) => ({
       ...rule,
       property: getParentKeyByNameValue(nodeTypeVariables, rule.property),
     }));
@@ -105,11 +113,8 @@ class NameGeneratorList extends Component {
       promptBackward,
       promptForward,
       sortFields,
+      stage: { prompts },
     } = this.props;
-
-    const {
-      prompts,
-    } = this.props.stage;
 
     return (
       <div className="name-generator-list-interface">
@@ -132,7 +137,7 @@ class NameGeneratorList extends Component {
             listId: `select-${prompt.id}`,
             details: this.detailsWithVariableUUIDs,
             title: prompt.text,
-            label: this.props.getCardTitle,
+            label: getCardTitle,
             getCardTitle,
             onItemClick: this.toggleCard,
             isItemSelected: this.isNodeSelected,
@@ -149,7 +154,7 @@ NameGeneratorList.propTypes = {
   getCardTitle: PropTypes.func.isRequired,
   newNodeAttributes: PropTypes.object.isRequired,
   newNodeModelData: PropTypes.object.isRequired,
-  nodesForList: PropTypes.array.isRequired,
+  nodesForList: PropTypes.array,
   selectedNodes: PropTypes.array.isRequired,
   prompt: PropTypes.object.isRequired,
   promptForward: PropTypes.func.isRequired,
@@ -192,7 +197,7 @@ function makeMapStateToProps() {
 
     return {
       getCardTitle: getNodeLabel(state, props),
-      nodeTypeDefinition: getNodeTypeDefinition(state, { type: props.stage.subject.type }),
+      nodeTypeDefinition: getNodeTypeDefinition(state, props),
       newNodeAttributes: getPromptNodeAttributes(state, props),
       newNodeModelData: getPromptNodeModelData(state, props),
       nodesForList,

@@ -3,7 +3,7 @@ import { actionTypes as SessionsActionTypes, actionCreators as SessionsActions }
 import { actionCreators as SessionWorkerActions } from './sessionWorkers';
 import { actionTypes as installedProtocolsActionTypes } from './installedProtocols';
 
-const ADD_SESSION = SessionsActionTypes.ADD_SESSION;
+const { ADD_SESSION } = SessionsActionTypes;
 const SET_SESSION = 'SET_SESSION';
 const END_SESSION = 'END_SESSION';
 
@@ -25,7 +25,7 @@ export default function reducer(state = initialState, action = {}) {
 /**
  * setSession can be used to resume an interview (e.g. from GUI, or URL on load)
  */
-const setSession = id => (dispatch, getState) => {
+const setSession = (id) => (dispatch, getState) => {
   const { sessions } = getState();
   if (!sessions[id]) { return; }
 

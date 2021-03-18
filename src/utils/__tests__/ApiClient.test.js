@@ -5,7 +5,7 @@ import axios from 'axios';
 import { decrypt } from 'secure-comms-api/cipher';
 
 import ApiClient from '../ApiClient';
-import * as Environment from '../../utils/Environment';
+import * as Environment from '../Environment';
 
 jest.mock('axios');
 jest.mock('secure-comms-api/cipher');

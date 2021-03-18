@@ -13,18 +13,25 @@ class Panel extends Component {
   }
 
   toggleCollapsed = () => {
+    const { collapsed } = this.state;
     this.setState({
-      collapsed: !this.state.collapsed,
+      collapsed: !collapsed,
     });
   };
 
   render() {
-    const { title, children, minimize, highlight } = this.props;
+    const {
+      title,
+      children,
+      minimize,
+      highlight,
+    } = this.props;
+    const { collapsed } = this.state;
 
     const panelClasses = cx(
       'panel',
       { 'panel--minimize': minimize },
-      { 'panel--collapsed': this.state.collapsed },
+      { 'panel--collapsed': collapsed },
     );
 
     const styles = { borderColor: highlight };

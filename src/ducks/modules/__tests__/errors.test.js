@@ -1,32 +1,25 @@
 /* eslint-env jest */
-import { createEpicMiddleware } from 'redux-observable';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { actionTypes as dialogActionTypes } from '../dialogs';
 import { actionCreators as installedProtocolActions, actionTypes as installedProtocolActionTypes } from '../installedProtocols';
 import { actionCreators as serverActions, actionTypes as serverActionTypes } from '../pairedServer';
-import { epics as errorsEpic } from '../errors';
 
 const mockError = new Error('foo');
 
-const testMiddleware = actionListener =>
-  () =>
-    next =>
-      (action) => {
-        actionListener(action);
-        return next(action);
-      };
+const testMiddleware = (actionListener) => () => (next) => (action) => {
+  actionListener(action);
+  return next(action);
+};
 
-const getStore = actionListener =>
-  createStore(
-    () => {},
-    undefined,
-    applyMiddleware(
-      thunk,
-      createEpicMiddleware(errorsEpic),
-      testMiddleware(actionListener),
-    ),
-  );
+const getStore = (actionListener) => createStore(
+  () => {},
+  undefined,
+  applyMiddleware(
+    thunk,
+    testMiddleware(actionListener),
+  ),
+);
 
 describe('errors', () => {
   describe('epics', () => {

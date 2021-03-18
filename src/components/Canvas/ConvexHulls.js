@@ -30,9 +30,10 @@ class ConvexHulls extends Component {
   }
 
   updateSize = () => {
+    const { size } = this.state;
     if (this.hullComponent.current && (
-      this.state.size.width !== getAbsoluteBoundingRect(this.hullComponent.current).width ||
-      this.state.size.height !== getAbsoluteBoundingRect(this.hullComponent.current).height)) {
+      size.width !== getAbsoluteBoundingRect(this.hullComponent.current).width
+      || size.height !== getAbsoluteBoundingRect(this.hullComponent.current).height)) {
       this.setState({
         size: {
           width: getAbsoluteBoundingRect(this.hullComponent.current).width,
@@ -48,6 +49,9 @@ class ConvexHulls extends Component {
       layoutVariable,
       categoricalOptions,
     } = this.props;
+    const {
+      size,
+    } = this.state;
 
     return (
       <div style={{ width: '100%', height: '100%' }} ref={this.hullComponent}>
@@ -55,7 +59,7 @@ class ConvexHulls extends Component {
           const color = getColor(group, categoricalOptions);
           return (
             <ConvexHull
-              windowDimensions={this.state.size}
+              windowDimensions={size}
               color={color}
               nodePoints={nodes}
               key={index}
@@ -77,6 +81,5 @@ ConvexHulls.propTypes = {
 ConvexHulls.defaultProps = {
   categoricalOptions: [],
 };
-
 
 export default ConvexHulls;

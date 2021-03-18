@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
-import Node from '../../../containers/Node';
+import Node from '../../Node';
 
 const animationOffset = 200;
 const animationTarget = -50;

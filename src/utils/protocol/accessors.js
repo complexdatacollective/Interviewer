@@ -1,7 +1,9 @@
 import { get } from 'lodash';
+import { createDeepEqualSelector } from '../../selectors/utils';
 
-export const getSubject = (stage, prompt) =>
-  stage.subject || prompt.subject;
+export const getSubject = (stage, prompt) => {
+  return stage.subject || prompt.subject;
+}
 
 const asKeyValue = (acc, { variable, value }) => ({
   ...acc,

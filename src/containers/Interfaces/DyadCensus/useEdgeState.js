@@ -7,8 +7,8 @@ const getEdgeInNetwork = (edges, pair, edgeType) => {
   const [a, b] = pair;
 
   const edge = edges.find(({ from, to, type }) => (
-    type === edgeType &&
-    ((from === a && to === b) || (to === b && from === a))
+    type === edgeType
+    && ((from === a && to === b) || (to === b && from === a))
   ));
 
   if (!edge) { return null; }
@@ -16,11 +16,10 @@ const getEdgeInNetwork = (edges, pair, edgeType) => {
   return edge;
 };
 
-export const matchEntry = (prompt, pair) =>
-  ([p, a, b]) => (
-    (p === prompt && a === pair[0] && b === pair[1]) ||
-    (p === prompt && b === pair[0] && a === pair[1])
-  );
+export const matchEntry = (prompt, pair) => ([p, a, b]) => (
+  (p === prompt && a === pair[0] && b === pair[1])
+    || (p === prompt && b === pair[0] && a === pair[1])
+);
 
 export const getIsPreviouslyAnsweredNo = (state, prompt, pair) => {
   if (!state || pair.length !== 2) { return false; }
@@ -38,7 +37,7 @@ export const getIsPreviouslyAnsweredNo = (state, prompt, pair) => {
 export const stageStateReducer = (state = [], { pair, prompt, value }) => {
   // Remove existing entry, if it exists, and add new one on the end
   const newState = [
-    ...state.filter(item => !matchEntry(prompt, pair)(item)),
+    ...state.filter((item) => !matchEntry(prompt, pair)(item)),
     [prompt, ...pair, value],
   ];
 

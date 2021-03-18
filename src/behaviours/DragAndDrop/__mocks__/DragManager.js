@@ -2,6 +2,7 @@
 
 class DragManager {
   static options = {};
+
   static unmount = jest.fn();
 
   static setOptions(options) {

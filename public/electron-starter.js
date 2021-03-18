@@ -1,8 +1,8 @@
 const { app, ipcMain, protocol } = require('electron');
+const { commonName } = require('secure-comms-api/sslConfig.js');
 const log = require('./components/log');
 const loadDevTools = require('./components/loadDevTools');
 const appManager = require('./components/appManager');
-const { commonName } = require('secure-comms-api/sslConfig.js');
 
 // For now, MDNS is not context aware so we need to use this.
 // See here for details: https://github.com/electron/electron/issues/18397
@@ -27,7 +27,7 @@ if (!gotTheLock) {
   app.quit();
   return;
 }
-app.on('second-instance', argv => appManager.openFileFromArgs(argv));
+app.on('second-instance', (argv) => appManager.openFileFromArgs(argv));
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -58,7 +58,7 @@ app.on('open-file', (event, filePath) => {
   appManager.openFile(filePath);
 });
 
-const normalizeEol = str => str.replace(/\r\n|\r|\n/g, '\r\n');
+const normalizeEol = (str) => str.replace(/\r\n|\r|\n/g, '\r\n');
 
 // App must only add a certificate known to be from a trusted, paired Server.
 // Cert will be considered when making https calls; see the 'certificate-error' handler.

@@ -40,7 +40,6 @@ const mockItems = [
   },
 ];
 
-
 describe('sortOrder', () => {
   it('it does not change order when rules are empty', () => {
     const sorter = sortOrder();

@@ -38,11 +38,17 @@ class NodeList extends Component {
     this.refreshTimer = null;
   }
 
-  componentWillReceiveProps(newProps) {
+  // eslint-disable-next-line camelcase
+  UNSAFE_componentWillReceiveProps(newProps) {
+    const {
+      items,
+      listId,
+    } = this.props;
+
     if (this.refreshTimer) { clearTimeout(this.refreshTimer); }
 
     // Don't update if items are the same
-    if (isEqual(newProps.items, this.props.items)) {
+    if (isEqual(newProps.items, items)) {
       return;
     }
 
@@ -50,7 +56,7 @@ class NodeList extends Component {
     const sortedNodes = sorter(newProps.items);
 
     // if we provided the same id, then just update normally
-    if (newProps.listId === this.props.listId) {
+    if (newProps.listId === listId) {
       this.setState({ exit: false }, () => {
         this.setState({ items: sortedNodes, stagger: false });
       });
@@ -86,6 +92,7 @@ class NodeList extends Component {
       isOver,
       willAccept,
       meta,
+      hoverColor,
     } = this.props;
 
     const {
@@ -107,9 +114,9 @@ class NodeList extends Component {
       { 'node-list--drag': isValidTarget },
     );
 
-    const hoverColor = this.props.hoverColor ? this.props.hoverColor : getCSSVariableAsString('--light-background');
+    const hoverBackgroundColor = hoverColor || getCSSVariableAsString('--light-background');
 
-    const styles = isHovering ? { backgroundColor: hoverColor } : {};
+    const styles = isHovering ? { backgroundColor: hoverBackgroundColor } : {};
 
     return (
       <TransitionGroup
@@ -141,7 +148,7 @@ class NodeList extends Component {
 }
 
 NodeList.propTypes = {
-  items: PropTypes.array.isRequired,
+  items: PropTypes.array,
   hoverColor: PropTypes.string,
   onItemClick: PropTypes.func,
   itemType: PropTypes.string,
@@ -153,6 +160,7 @@ NodeList.propTypes = {
   id: PropTypes.string.isRequired,
   listId: PropTypes.string.isRequired,
   sortOrder: PropTypes.array,
+  onDrop: PropTypes.func,
 };
 
 NodeList.defaultProps = {

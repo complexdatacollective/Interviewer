@@ -6,18 +6,23 @@ import { entityAttributesProperty } from '../../ducks/modules/network';
 
 export class ConvexHull extends Component {
   shouldComponentUpdate(nextProps) {
-    if (this.props.layoutVariable !== nextProps.layoutVariable ||
-      !isEqual(this.props.nodePoints, nextProps.nodePoints) ||
-      !isEqual(this.props.windowDimensions, nextProps.windowDimensions)) {
+    const { layoutVariable, nodePoints, windowDimensions } = this.props;
+    if (layoutVariable !== nextProps.layoutVariable
+      || !isEqual(nodePoints, nextProps.nodePoints)
+      || !isEqual(windowDimensions, nextProps.windowDimensions)) {
       return true;
     }
     return false;
   }
 
   generateHull = (nodeCollection) => {
+    const {
+      layoutVariable,
+      windowDimensions,
+    } = this.props;
     // Restructure as array of arrays of coords
     const groupAsCoords = map(nodeCollection, (node) => {
-      const nodeCoords = node[entityAttributesProperty][this.props.layoutVariable];
+      const nodeCoords = node[entityAttributesProperty][layoutVariable];
       return [nodeCoords.x, nodeCoords.y];
     });
 
@@ -26,8 +31,8 @@ export class ConvexHull extends Component {
     // See: https://github.com/mapbox/concaveman
     ConcaveMan(groupAsCoords, 0.6, 0).forEach((item) => {
       // Scale each hull point from ratio to window coordinate.
-      const itemX = item[0] * this.props.windowDimensions.width;
-      const itemY = item[1] * this.props.windowDimensions.height;
+      const itemX = item[0] * windowDimensions.width;
+      const itemY = item[1] * windowDimensions.height;
 
       // SVG points structured as string: "value1,value2 value3,value4"
       hullPointsAsSVG += `${itemX}, ${itemY} `;

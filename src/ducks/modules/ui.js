@@ -26,12 +26,12 @@ export default function reducer(state = initialState, action = {}) {
   }
 }
 
-const update = state => ({
+const update = (state) => ({
   type: UPDATE,
   state,
 });
 
-const toggle = item => ({
+const toggle = (item) => ({
   type: TOGGLE,
   item,
 });

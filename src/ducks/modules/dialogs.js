@@ -39,35 +39,32 @@ const initialState = {
   ],
 };
 
-const openDialog = dialog =>
-  dispatch =>
-    new Promise((resolve) => {
-      const onConfirm = () => {
-        if (dialog.onConfirm) { dialog.onConfirm(); }
-        resolve(true);
-      };
+const openDialog = (dialog) => (dispatch) => new Promise((resolve) => {
+  const onConfirm = () => {
+    if (dialog.onConfirm) { dialog.onConfirm(); }
+    resolve(true);
+  };
 
-      const onCancel = () => {
-        if (dialog.onCancel) { dialog.onCancel(); }
-        resolve(false);
-      };
+  const onCancel = () => {
+    if (dialog.onCancel) { dialog.onCancel(); }
+    resolve(false);
+  };
 
-      dispatch({
-        id: uuid(),
-        type: OPEN_DIALOG,
-        dialog: {
-          ...dialog,
-          onConfirm,
-          onCancel,
-        },
-      });
-    });
-
-const closeDialog = id =>
-  ({
-    type: CLOSE_DIALOG,
-    id,
+  dispatch({
+    id: uuid(),
+    type: OPEN_DIALOG,
+    dialog: {
+      ...dialog,
+      onConfirm,
+      onCancel,
+    },
   });
+});
+
+const closeDialog = (id) => ({
+  type: CLOSE_DIALOG,
+  id,
+});
 
 function reducer(state = initialState, action = {}) {
   switch (action.type) {
@@ -82,7 +79,7 @@ function reducer(state = initialState, action = {}) {
     case CLOSE_DIALOG:
       return {
         ...state,
-        dialogs: state.dialogs.filter(dialog => dialog.id !== action.id),
+        dialogs: state.dialogs.filter((dialog) => dialog.id !== action.id),
       };
     default:
       return state;

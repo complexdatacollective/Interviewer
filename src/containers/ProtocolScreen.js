@@ -19,9 +19,9 @@ const initialState = {
   pendingStage: -1,
 };
 
-const childFactoryCreator = stageBackward =>
-  child =>
-    React.cloneElement(child, { stageBackward });
+const childFactoryCreator = (
+  stageBackward,
+) => (child) => React.cloneElement(child, { stageBackward });
 
 /**
   * Check protocol is loaded, and render the stage
@@ -37,12 +37,13 @@ class Protocol extends Component {
   }
 
   onComplete = (directionOverride) => {
-    const pendingDirection = directionOverride || this.state.pendingDirection;
-    const pendingStage = this.state.pendingStage;
+    const { pendingStage, pendingDirection } = this.state;
+    const { goToNext } = this.props;
+    const nextDirection = directionOverride || pendingDirection;
 
-    const navigate = (pendingStage === -1) ?
-      () => this.props.goToNext(pendingDirection) :
-      () => this.goToStage(pendingStage);
+    const navigate = (pendingStage === -1)
+      ? () => goToNext(nextDirection)
+      : () => this.goToStage(pendingStage);
     this.setState(
       { ...initialState },
       navigate,
@@ -59,10 +60,11 @@ class Protocol extends Component {
   }
 
   goToNext = (direction = 1) => {
-    const beforeNext = get(this.beforeNext, this.props.stage.id);
+    const { stage, goToNext } = this.props;
+    const beforeNext = get(this.beforeNext, stage.id);
 
     if (!beforeNext) {
-      this.props.goToNext(direction);
+      goToNext(direction);
       return;
     }
 
@@ -73,12 +75,17 @@ class Protocol extends Component {
   };
 
   goToStage = (index) => {
-    if (this.props.isSkipped(index)) {
-      this.props.openDialog({
+    const {
+      isSkipped,
+      openDialog,
+      goToStage,
+    } = this.props;
+    if (isSkipped(index)) {
+      openDialog({
         type: 'Warning',
         title: 'Show this stage?',
         confirmLabel: 'Show Stage',
-        onConfirm: () => this.props.goToStage(index),
+        onConfirm: () => goToStage(index),
         message: (
           <p>
             Your skip logic settings would normally prevent this stage from being shown in this
@@ -87,27 +94,30 @@ class Protocol extends Component {
         ),
       });
     } else {
-      this.props.goToStage(index);
+      goToStage(index);
     }
   }
 
-  handleClickNext = () =>
-    this.goToNext();
+  handleClickNext = () => this.goToNext();
 
-  handleClickBack = () =>
-    this.goToNext(-1);
+  handleClickBack = () => this.goToNext(-1);
 
   handleStageSelect = (index) => {
-    if (index === this.props.stageIndex) return;
+    const {
+      stageIndex,
+      stage,
+    } = this.props;
 
-    const beforeNext = get(this.beforeNext, this.props.stage.id);
+    if (index === stageIndex) return;
+
+    const beforeNext = get(this.beforeNext, stage.id);
 
     if (!beforeNext) {
       this.goToStage(index);
       return;
     }
 
-    const direction = (this.props.stageIndex > index) ? -1 : 1;
+    const direction = (stageIndex > index) ? -1 : 1;
     this.setState(
       { pendingStage: index, pendingDirection: direction },
       () => beforeNext(direction, index),
@@ -189,7 +199,7 @@ function mapStateToProps(state, ownProps) {
   const { percentProgress, currentPrompt } = getSessionProgress(state);
 
   return {
-    isSkipped: index => isStageSkipped(index)(state),
+    isSkipped: (index) => isStageSkipped(index)(state),
     isSessionLoaded: !!state.activeSessionId,
     pathPrefix: `/session/${sessionId}`,
     percentProgress,

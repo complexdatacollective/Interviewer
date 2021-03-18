@@ -10,7 +10,7 @@ const loadDevTools = () => {
     installExtension(REACT_DEVELOPER_TOOLS),
     installExtension(REDUX_DEVTOOLS),
   ])
-    .then(tools => log.info(`Added Extension:  ${tools.toString()}`))
+    .then((tools) => log.info(`Added Extension:  ${tools.toString()}`))
     .catch((err) => {
       log.warn('An error occurred: ', err);
     });

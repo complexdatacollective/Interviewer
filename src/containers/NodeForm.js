@@ -20,15 +20,28 @@ class NodeForm extends Component {
   }
 
   handleSubmit = debounce((form) => {
-    this.props.onSubmit({ form });
-    this.props.onClose();
+    const {
+      onSubmit,
+      onClose,
+    } = this.props;
+
+    onSubmit({ form });
+    onClose();
   }, 1000, { // This is needed to prevent double submit.
     leading: true,
     trailing: false,
   })
 
   render() {
-    const { show, form, initialValues, submitForm, stage } = this.props;
+    const {
+      show,
+      form,
+      initialValues,
+      submitForm,
+      stage,
+      onClose,
+      useFullScreenForms,
+    } = this.props;
 
     const formProps = {
       ...form,
@@ -43,22 +56,25 @@ class NodeForm extends Component {
       <Overlay
         show={show}
         title={form.title}
-        onClose={this.props.onClose}
+        onClose={onClose}
         className="node-form"
         footer={(<Button key="submit" aria-label="Submit" type="submit" onClick={submitForm}>Finished</Button>)}
       >
-        { this.props.useFullScreenForms ?
-          <FormWizard
-            {...formProps}
-          /> :
-          <React.Fragment>
-            <Scroller>
-              <Form
-                {...formProps}
-              />
-            </Scroller>
-          </React.Fragment>
-        }
+        { useFullScreenForms
+          ? (
+            <FormWizard
+              {...formProps}
+            />
+          )
+          : (
+            <>
+              <Scroller>
+                <Form
+                  {...formProps}
+                />
+              </Scroller>
+            </>
+          )}
       </Overlay>
     );
   }
@@ -78,7 +94,7 @@ const mapStateToProps = (state, props) => {
   };
 };
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   submitForm: bindActionCreators(() => submit(reduxFormName), dispatch),
 });
 

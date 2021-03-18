@@ -9,9 +9,11 @@ class FilterableListWrapper extends Component {
   constructor(props) {
     super(props);
 
+    const { initialSortOrder } = this.props;
+
     this.state = {
       activeSortOrder: {
-        ...this.props.initialSortOrder[0], // For now, just respect the first default sort rule
+        ...initialSortOrder[0], // For now, just respect the first default sort rule
       },
       filterValue: '',
     };
@@ -31,8 +33,9 @@ class FilterableListWrapper extends Component {
     * @return character to indicate sort direction (if applicable)
     */
   getDirection = (property) => {
-    if (property === this.state.activeSortOrder.property) {
-      return this.state.activeSortOrder.direction === 'asc' ? ' \u25B2' : ' \u25BC';
+    const { activeSortOrder } = this.state;
+    if (property === activeSortOrder.property) {
+      return activeSortOrder.direction === 'asc' ? ' \u25B2' : ' \u25BC';
     }
     return '';
   };
@@ -45,8 +48,9 @@ class FilterableListWrapper extends Component {
     * TODO: specify search attributes, include fuzziness, match start of string only.
     */
   getFilteredList = (list) => {
-    const filterValue = this.state.filterValue.toLowerCase();
-    if (!filterValue) { return list; }
+    const { filterValue } = this.state;
+    const lowerCaseFilterValue = filterValue.toLowerCase();
+    if (!lowerCaseFilterValue) { return list; }
 
     const filteredList = list.filter(
       (node) => {
@@ -54,7 +58,7 @@ class FilterableListWrapper extends Component {
         // Include in filtered list if any of the attribute property values
         // include the filter value
         return nodeDetails.some(
-          item => item && item.toString().toLowerCase().includes(filterValue),
+          (item) => item && item.toString().toLowerCase().includes(lowerCaseFilterValue),
         );
       },
     );
@@ -66,7 +70,8 @@ class FilterableListWrapper extends Component {
     * @param property to sort by
     */
   setSortBy = (property) => {
-    if (this.state.activeSortOrder.property === property) {
+    const { activeSortOrder } = this.state;
+    if (activeSortOrder.property === property) {
       this.toggleSortDirection();
     } else {
       this.setState({
@@ -82,10 +87,11 @@ class FilterableListWrapper extends Component {
     * changes direction of current sort
     */
   toggleSortDirection = () => {
+    const { activeSortOrder } = this.state;
     this.setState({
       activeSortOrder: {
-        direction: this.state.activeSortOrder.direction === 'asc' ? 'desc' : 'asc',
-        property: this.state.activeSortOrder.property,
+        direction: activeSortOrder.direction === 'asc' ? 'desc' : 'asc',
+        property: activeSortOrder.property,
       },
     });
   };
@@ -97,19 +103,25 @@ class FilterableListWrapper extends Component {
       listComponentProps,
       items,
     } = this.props;
+    const {
+      activeSortOrder,
+      filterValue,
+    } = this.state;
 
-    const sorter = sortOrder([this.state.activeSortOrder]);
+    const sorter = sortOrder([activeSortOrder]);
     const sortedNodes = this.getFilteredList(sorter(items));
+
     return (
       <div className="list-select">
         <div className="list-select__sort">
           <div>
-            { (sortFields && sortFields.length > 0) &&
-              <React.Fragment>
+            { (sortFields && sortFields.length > 0)
+              && (
+              <>
                 <h4>Sort: </h4>
-                {sortFields.map(sortField => (
+                {sortFields.map((sortField) => (
                   <Button
-                    color={this.state.activeSortOrder.property === sortField.variable ? 'primary' : 'white'}
+                    color={activeSortOrder.property === sortField.variable ? 'primary' : 'white'}
                     key={sortField.variable}
                     onClick={() => this.setSortBy(sortField.variable)}
                   >
@@ -119,8 +131,8 @@ class FilterableListWrapper extends Component {
                     }
                   </Button>
                 ))}
-              </React.Fragment>
-            }
+              </>
+              )}
           </div>
           <div>
             <h4>Filter: </h4>
@@ -129,7 +141,7 @@ class FilterableListWrapper extends Component {
               placeholder="Filter Items..."
               className="list-select__filter"
               input={{
-                value: this.state.filterValue,
+                value: filterValue,
                 onChange: this.onFilterChange,
               }}
             />
@@ -137,9 +149,9 @@ class FilterableListWrapper extends Component {
         </div>
         <ListComponent
           {...listComponentProps}
-          sortDirection={this.state.activeSortOrder.direction}
-          sortProperty={this.state.activeSortOrder.property}
-          filter={this.state.filterValue}
+          sortDirection={activeSortOrder.direction}
+          sortProperty={activeSortOrder.property}
+          filter={filterValue}
           items={sortedNodes}
         />
       </div>

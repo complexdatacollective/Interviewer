@@ -20,11 +20,12 @@ const ExportOptions = (props) => {
     updateSetting,
   } = props;
 
-  const updateLayoutSetting = setting => value =>
-    updateSetting(setting, parseInt(value, 10) || 1);
+  const updateLayoutSetting = (setting) => (value) => (
+    updateSetting(setting, parseInt(value, 10) || 1)
+  );
 
   return (
-    <React.Fragment>
+    <>
       <motion.article variants={TabItemVariants} className="settings-element">
         <Toggle
           input={{
@@ -65,9 +66,23 @@ const ExportOptions = (props) => {
           <p>
             CSV is a widely used format for storing network data, but this wider compatibility
             comes at the expense of robustness. If you enable this format, your networks will
-            be exported as an <strong>attribute list file</strong> for each node type,
-            an <strong>edge list file</strong> for each edge type, and an <strong>ego attribute
-              file</strong> that also contains session data.
+            be exported as an
+            {' '}
+            <strong>attribute list file</strong>
+            {' '}
+            for each node type,
+            an
+            {' '}
+            <strong>edge list file</strong>
+            {' '}
+            for each edge type, and an
+            {' '}
+            <strong>
+              ego attribute
+              file
+            </strong>
+            {' '}
+            that also contains session data.
           </p>
         </div>
       </motion.article>
@@ -85,7 +100,11 @@ const ExportOptions = (props) => {
             them to be merged into a single file, on a per-protocol basis. In the case of CSV
             export, you will receive one of each type of file for each protocol. In the case
             of GraphML you will receive a single GraphML file with
-            multiple <code>graph</code> elements. Please note that most software does not yet
+            multiple
+            {' '}
+            <code>graph</code>
+            {' '}
+            elements. Please note that most software does not yet
             support multiple graphs in a single GraphML file.
           </p>
         </div>
@@ -141,8 +160,8 @@ const ExportOptions = (props) => {
               <Button
                 size="small"
                 disabled={
-                  screenLayoutHeight === window.screen.height &&
-                  screenLayoutWidth === window.screen.width
+                  screenLayoutHeight === window.screen.height
+                  && screenLayoutWidth === window.screen.width
                 }
                 onClick={() => {
                   updateSetting('screenLayoutHeight', window.screen.height);
@@ -155,7 +174,7 @@ const ExportOptions = (props) => {
           )}
         </div>
       </motion.article>
-    </React.Fragment>
+    </>
   );
 };
 
@@ -164,7 +183,7 @@ const mapDispatchToProps = {
   updateSetting: deviceSettingsActions.setSetting,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   exportGraphML: state.deviceSettings.exportGraphML,
   exportCSV: state.deviceSettings.exportCSV,
   unifyNetworks: state.deviceSettings.unifyNetworks,
@@ -186,4 +205,3 @@ ExportOptions.propTypes = {
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
 )(ExportOptions);
-

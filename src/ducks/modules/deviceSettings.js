@@ -32,8 +32,8 @@ const initialState = {
 // This provides additional default state based on information unavailable before 'deviceready'.
 // Rehydration may occur before this, so only overwrite static default values.
 const getDeviceReadyState = (state) => {
-  let description = state.description;
-  let useDynamicScaling = state.useDynamicScaling;
+  let { description } = state;
+  let { useDynamicScaling } = state;
   if (description === initialState.description) {
     description = deviceDescription();
   }
@@ -82,17 +82,17 @@ const deviceReady = () => ({
   type: DEVICE_READY,
 });
 
-const setDescription = description => ({
+const setDescription = (description) => ({
   type: SET_DESCRIPTION,
   description,
 });
 
-const setInterfaceScale = scale => ({
+const setInterfaceScale = (scale) => ({
   type: SET_INTERFACE_SCALE,
   scale,
 });
 
-const toggleSetting = item => ({
+const toggleSetting = (item) => ({
   type: TOGGLE_SETTING,
   item,
 });

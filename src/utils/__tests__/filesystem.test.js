@@ -2,6 +2,7 @@
 /* eslint-disable @codaco/spellcheck/spell-checker */
 
 import environments from '../environments';
+// eslint-disable-next-line import/named
 import { getEnvironment } from '../Environment';
 import { getNestedPaths, writeStream } from '../filesystem';
 
@@ -29,7 +30,7 @@ describe('filesystem', () => {
       });
 
       const mockFileEntry = ({
-        createWriter: jest.fn().mockImplementation(resolve => resolve(mockFileWriter)),
+        createWriter: jest.fn().mockImplementation((resolve) => resolve(mockFileWriter)),
       });
 
       const mockDirectoryEntry = ({

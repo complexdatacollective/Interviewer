@@ -12,7 +12,9 @@ const mockState = {
       protocolUID: 'mockProtocol',
       network: {
         edges: [
-          { id: 1, type: 'friend', to: 1, from: 2 },
+          {
+            id: 1, type: 'friend', to: 1, from: 2,
+          },
         ],
         ego: {},
         nodes: [

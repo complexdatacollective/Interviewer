@@ -27,7 +27,7 @@ const Section = (props) => {
     <motion.section
       className={className}
       variants={springy}
-      {...rest}
+      {...rest} // eslint-disable-line react/jsx-props-no-spreading
     >
       {children}
     </motion.section>

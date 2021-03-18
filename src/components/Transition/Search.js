@@ -171,7 +171,7 @@ class Search extends Component {
 }
 
 Search.propTypes = {
-  children: PropTypes.any.isRequired,
+  children: PropTypes.any,
 };
 
 Search.defaultProps = {

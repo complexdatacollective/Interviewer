@@ -5,7 +5,7 @@ import { makeNetworkEdgesForType } from '../../selectors/interface';
 import SlideFormEdge from '../SlidesForm/SlideFormEdge';
 import SlidesForm from '../SlidesForm/SlidesForm';
 
-const AlterEdgeForm = props => (
+const AlterEdgeForm = (props) => (
   <SlidesForm
     itemName="edge"
     slideForm={SlideFormEdge}

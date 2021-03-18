@@ -21,7 +21,7 @@ const ExternalLink = ({ children, href }) => {
   };
 
   return (
-    // eslint-disable-next-line jsx-a11y/href-no-hash
+    // eslint-disable-next-line jsx-a11y/anchor-is-valid
     <a href="#" onClick={handleClick}>
       {children}
     </a>
@@ -31,10 +31,6 @@ const ExternalLink = ({ children, href }) => {
 ExternalLink.propTypes = {
   children: PropTypes.node.isRequired,
   href: PropTypes.string.isRequired,
-};
-
-ExternalLink.defaultProps = {
-  params: {},
 };
 
 export { ExternalLink };

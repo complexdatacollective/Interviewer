@@ -26,8 +26,7 @@ describe('session reducer', () => {
     const newState = reducer('a',
       {
         type: installedProtocolsActionTypes.DELETE_PROTOCOL,
-      },
-    );
+      });
 
     expect(newState).toEqual(initialState);
   });

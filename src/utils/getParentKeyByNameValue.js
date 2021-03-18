@@ -22,7 +22,7 @@ const getParentKeyByNameValue = (object, toFind) => {
   }
 
   // Iterate object keys and return the key (itself )
-  const foundKey = findKey(object, objectItem => objectItem.name === toFind);
+  const foundKey = findKey(object, (objectItem) => objectItem.name === toFind);
 
   return foundKey || toFind;
 };

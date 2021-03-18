@@ -2,8 +2,7 @@ import { matchPath } from 'react-router-dom';
 
 const SessionPath = '/session/:sessionId/:stageIndex';
 
-const matchSessionPath = pathname => matchPath(pathname, { path: SessionPath });
-
+const matchSessionPath = (pathname) => matchPath(pathname, { path: SessionPath });
 
 const currentStageIndex = (path) => {
   const matchedPath = matchSessionPath(path);

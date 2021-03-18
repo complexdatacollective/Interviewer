@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { AnimatePresence } from 'framer-motion';
-import { Icon, Spinner, Scroller, Button } from '@codaco/ui';
+import {
+  Icon, Spinner, Scroller, Button,
+} from '@codaco/ui';
 import useOnlineStatus from '../../hooks/useOnlineStatus';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import ServerDiscoverer from '../../utils/serverDiscoverer';
@@ -20,7 +22,7 @@ const DiscoveredServerList = ({
   const [error, setError] = useState(null);
 
   const dispatch = useDispatch();
-  const openDialog = dialog => dispatch(dialogActions.openDialog(dialog));
+  const openDialog = (dialog) => dispatch(dialogActions.openDialog(dialog));
 
   const handlePairingCardClick = (server) => {
     onSelectServer(server);
@@ -40,7 +42,7 @@ const DiscoveredServerList = ({
       if (!response.name) { return; }
       updateAvailableServers((prevState) => {
         // Detect if we already have a service with this name
-        const serverIndex = prevState.findIndex(server => response.name === server.name);
+        const serverIndex = prevState.findIndex((server) => response.name === server.name);
 
         if (serverIndex !== -1) {
           const newArray = [...prevState];
@@ -53,7 +55,9 @@ const DiscoveredServerList = ({
     });
 
     serverDiscoverer.on('SERVER_REMOVED', (response) => {
-      updateAvailableServers(prevState => prevState.filter(item => (item.name !== response.name)));
+      updateAvailableServers(
+        (prevState) => prevState.filter((item) => (item.name !== response.name)),
+      );
     });
 
     serverDiscoverer.on('SERVER_ERROR', (serverError) => {
@@ -122,12 +126,13 @@ const DiscoveredServerList = ({
   return (
     <div className="discovered-server-list">
       <header>
-        <Spinner small /><h4>Looking for nearby Servers...</h4>
+        <Spinner small />
+        <h4>Looking for nearby Servers...</h4>
       </header>
       <Scroller className="discovered-server-list__content">
         <AnimatePresence>
           {
-            availableServers.map(server => (
+            availableServers.map((server) => (
               <ServerCard
                 key={server.name}
                 handleServerCardClick={() => handlePairingCardClick(server)}
@@ -142,4 +147,3 @@ const DiscoveredServerList = ({
 };
 
 export default DiscoveredServerList;
-

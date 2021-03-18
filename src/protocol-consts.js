@@ -104,7 +104,6 @@ export const StageType = Object.freeze({
 // VariableTYpe imported from network-exporters submodule
 // Docs: https://github.com/complexdatacollective/Network-Canvas/wiki/Variable-Types
 
-
 const enumValueMaps = Object.freeze({
   Entity,
   FilterJoin,
@@ -123,7 +122,6 @@ const enums = Object.entries(enumValueMaps).reduce((acc, [key, map]) => {
   acc[`${key}Values`] = Object.freeze(Object.values(map));
   return acc;
 }, {});
-
 
 export default {
   ...enumValueMaps,

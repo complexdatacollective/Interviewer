@@ -1,6 +1,5 @@
-
 import { store } from '../ducks/store';
-import { isElectron } from '../utils/Environment';
+import { isElectron } from './Environment';
 import { importProtocolFromFile } from './protocol/importProtocol';
 import { actionCreators as dialogActions } from '../ducks/modules/dialogs';
 
@@ -16,7 +15,7 @@ const initFileOpener = () => {
     console.log(`Open file "${protocolPath}"`);
 
     const state = store.getState();
-    const activeSessionId = state.activeSessionId;
+    const { activeSessionId } = state;
 
     // Check if we are in the middle of an interview.
     if (activeSessionId) {

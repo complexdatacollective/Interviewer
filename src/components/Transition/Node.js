@@ -4,7 +4,9 @@ import { Transition } from 'react-transition-group';
 import anime from 'animejs';
 import { getCSSVariableAsObject, getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
 
-const Node = ({ children, index, stagger, ...props }) => {
+const Node = ({
+  children, index, stagger, ...props
+}) => {
   const delay = stagger ? index * 30 : 0;
 
   const animationThreshold = 20;
@@ -66,7 +68,7 @@ const Node = ({ children, index, stagger, ...props }) => {
 };
 
 Node.propTypes = {
-  children: PropTypes.any.isRequired,
+  children: PropTypes.any,
   index: PropTypes.number,
   stagger: PropTypes.bool,
 };

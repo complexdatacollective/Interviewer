@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { importProtocolFromURI } from '../../utils/protocol/importProtocol';
-import { NewFilterableListWrapper } from '../../components';
+import NewFilterableListWrapper from '../../components/NewFilterableListWrapper';
 import { Overlay } from '../Overlay';
 import ApiClient from '../../utils/ApiClient';
 import useOnlineStatus from '../../hooks/useOnlineStatus';
@@ -21,8 +21,8 @@ const FetchServerProtocolPicker = ({
   const onlineStatus = useOnlineStatus();
 
   const dispatch = useDispatch();
-  const openDialog = dialog => dispatch(dialogActions.openDialog(dialog));
-  const pairedServer = useSelector(state => state.pairedServer);
+  const openDialog = (dialog) => dispatch(dialogActions.openDialog(dialog));
+  const pairedServer = useSelector((state) => state.pairedServer);
 
   const [protocolList, setProtocolList] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -58,7 +58,7 @@ const FetchServerProtocolPicker = ({
         setProtocolList(protocols);
         setLoading(false);
       })
-      .catch(err => handleApiError(err));
+      .catch((err) => handleApiError(err));
   }, [show, pairedServer, onlineStatus]);
 
   const formattedProtocols = [...Object.keys(protocolList)].map((protocolUID) => {

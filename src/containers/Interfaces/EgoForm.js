@@ -7,7 +7,7 @@ import { ProgressBar, Scroller } from '@codaco/ui';
 import { submit, isValid, isDirty } from 'redux-form';
 import ReactMarkdown from 'react-markdown';
 import { isIOS } from '../../utils/Environment';
-import { Form } from '../../containers';
+import Form from '../Form';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { getNetworkEgo } from '../../selectors/network';
 import { getSessionProgress } from '../../selectors/session';
@@ -23,8 +23,7 @@ const confirmDialog = {
   confirmLabel: 'Discard changes',
 };
 
-const getFormName = index =>
-  `EGO_FORM_${index}`;
+const getFormName = (index) => `EGO_FORM_${index}`;
 
 class EgoForm extends Component {
   constructor(props) {
@@ -35,7 +34,8 @@ class EgoForm extends Component {
   }
 
   componentDidMount() {
-    this.props.registerBeforeNext(this.beforeNext);
+    const { registerBeforeNext } = this.props;
+    registerBeforeNext(this.beforeNext);
   }
 
   beforeNext = (direction, index = -1) => {
@@ -67,17 +67,26 @@ class EgoForm extends Component {
   }
 
   submitForm = () => {
-    this.props.submitForm(this.props.formName);
+    const {
+      submitForm,
+      formName,
+    } = this.props;
+    submitForm(formName);
   };
 
   confirmIfChanged = () => {
-    if (!this.props.isFormDirty()) { return Promise.resolve(true); }
-    return this.props.openDialog(confirmDialog);
+    const {
+      isFormDirty,
+      openDialog,
+    } = this.props;
+    if (!isFormDirty()) { return Promise.resolve(true); }
+    return openDialog(confirmDialog);
   };
 
   handleConfirmNavigation = (confirm) => {
+    const { onComplete } = this.props;
     if (confirm) {
-      this.props.onComplete();
+      onComplete();
       return;
     }
 
@@ -90,11 +99,12 @@ class EgoForm extends Component {
     onComplete();
   }
 
-  handleScroll = (scrollTop, scrollProgress) => {
+  handleScroll = (scrollTop, newScrollProgress) => {
+    const { scrollProgress } = this.state;
     // iOS inertial scrolling takes values out of range
-    const clampedScrollProgress = clamp(scrollProgress, 0, 1);
+    const clampedScrollProgress = clamp(newScrollProgress, 0, 1);
 
-    if (this.state.scrollProgress !== clampedScrollProgress) {
+    if (scrollProgress !== clampedScrollProgress) {
       this.setState({ scrollProgress: clampedScrollProgress });
     }
   }
@@ -107,10 +117,12 @@ class EgoForm extends Component {
       formName,
     } = this.props;
 
+    const { scrollProgress } = this.state;
+
     const progressClasses = cx(
       'progress-container',
       {
-        'progress-container--show': isIOS() || this.state.scrollProgress > 0,
+        'progress-container--show': isIOS() || scrollProgress > 0,
       },
     );
 
@@ -136,10 +148,10 @@ class EgoForm extends Component {
           </Scroller>
         </div>
         <div className={progressClasses}>
-          { (!isIOS() && this.state.scrollProgress === 1) && (<span className="progress-container__status-text">&#10003; When ready, click next to continue...</span>)}
+          { (!isIOS() && scrollProgress === 1) && (<span className="progress-container__status-text">&#10003; When ready, click next to continue...</span>)}
           <ProgressBar
             orientation="horizontal"
-            percentProgress={this.state.scrollProgress * 100}
+            percentProgress={scrollProgress * 100}
           />
         </div>
       </div>

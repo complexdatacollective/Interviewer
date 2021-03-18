@@ -1,9 +1,9 @@
 /* globals device */
 import { isCordova, isElectron } from './Environment';
 
-const versioned = name => `${name} - ${device.version || '?'}`;
+const versioned = (name) => `${name} - ${device.version || '?'}`;
 
-const esc = string => (string || '').replace(/\W/g, ' ');
+const esc = (string) => (string || '').replace(/\W/g, ' ');
 
 const electronDescription = () => {
   // https://nodejs.org/api/os.html#os_os_type
@@ -34,7 +34,7 @@ const androidDescription = () => {
 const iosDescription = () => {
   // Only iPads are officially supported
   // http://theiphonewiki.com/wiki/index.php?title=Models
-  const model = device.model;
+  const { model } = device;
   switch (true) {
     case (device.isVirtual): return versioned('iOS Simulator');
     case (/iPad2,(1|2|3|4)/.test(model)): return versioned('iPad 2');

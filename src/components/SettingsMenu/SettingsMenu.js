@@ -19,7 +19,7 @@ const SettingsMenu = (props) => {
     settingsMenuOpen,
   } = props;
 
-  const getAnimationDuration = variable => getCSSVariableAsNumber(variable) / 1000;
+  const getAnimationDuration = (variable) => getCSSVariableAsNumber(variable) / 1000;
   const baseAnimationEasing = getCSSVariableAsString('--animation-easing-json');
 
   const tabs = {
@@ -131,7 +131,7 @@ const SettingsMenu = (props) => {
 
   const [activeTab, setActiveTab] = useState('Visual Preferences');
 
-  const renderNavigation = Object.keys(tabs).map(tabName => (
+  const renderNavigation = Object.keys(tabs).map((tabName) => (
     <motion.li
       key={tabName}
       data-name={tabName}
@@ -204,12 +204,12 @@ const SettingsMenu = (props) => {
   );
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   isActiveSession: !!getActiveSession(state),
   settingsMenuOpen: state.ui.settingsMenuOpen,
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   closeMenu: () => dispatch(uiActions.update({ settingsMenuOpen: false })),
 });
 
@@ -221,4 +221,3 @@ SettingsMenu.propTypes = {
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
 )(SettingsMenu);
-

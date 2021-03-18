@@ -20,7 +20,10 @@ class StageErrorBoundary extends Component {
         <div className="error-boundary">
           <p><Icon name="error" /></p>
           <h1>There was a problem with this stage.</h1>
-          <p>The following error occurred: <code>{error.message}</code></p>
+          <p>
+            The following error occurred:
+            <code>{error.message}</code>
+          </p>
         </div>
       );
     }

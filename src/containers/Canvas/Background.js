@@ -4,19 +4,6 @@ import Radar from './Radar';
 import { BackgroundImage } from '../../components';
 
 class Background extends PureComponent {
-  static propTypes = {
-    concentricCircles: PropTypes.number,
-    skewedTowardCenter: PropTypes.bool,
-    image: PropTypes.string,
-  };
-
-  static defaultProps = {
-    concentricCircles: 3,
-    skewedTowardCenter: true,
-    image: null,
-  };
-
-
   render() {
     const { concentricCircles, skewedTowardCenter, image } = this.props;
     let background;
@@ -33,6 +20,18 @@ class Background extends PureComponent {
     );
   }
 }
+
+Background.propTypes = {
+  concentricCircles: PropTypes.number,
+  skewedTowardCenter: PropTypes.bool,
+  image: PropTypes.string,
+};
+
+Background.defaultProps = {
+  concentricCircles: 3,
+  skewedTowardCenter: true,
+  image: null,
+};
 
 export { Background };
 

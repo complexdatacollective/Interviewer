@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { times } from 'lodash';
-import { List, AutoSizer, CellMeasurer, CellMeasurerCache } from 'react-virtualized';
-import { Card } from '.';
+import {
+  List, AutoSizer, CellMeasurer, CellMeasurerCache,
+} from 'react-virtualized';
+import Card from './Card';
 import { entityPrimaryKeyProperty } from '../ducks/modules/network';
 
 const calculateRequiredColumns = (width, height) => {
@@ -38,18 +40,21 @@ class CardList extends Component {
     });
   }
 
-  componentWillMount() {
+  // TODO: Make this component functional?
+  // eslint-disable-next-line camelcase
+  UNSAFE_componentWillMount() {
     this.columns = calculateRequiredColumns(window.innerWidth, window.innerHeight);
   }
 
-  getColumns = () =>
-    this.columns;
+  getColumns = () => this.columns;
 
-  getRows = () =>
-    Math.ceil(this.props.items.length / this.getColumns());
+  getRows = () => {
+    const { items } = this.props;
+    return Math.ceil(items.length / this.getColumns());
+  };
 
   getRow = (index) => {
-    const items = this.props.items;
+    const { items } = this.props;
     const columns = this.getColumns();
 
     const offset = index * columns;
@@ -76,14 +81,13 @@ class CardList extends Component {
 
     const nodes = this.getRow(index);
 
-    const handleSelected = node =>
-      () => {
-        onItemClick(node);
-        if (this.listRef.current) {
-          // Ensure item changes are shown
-          this.listRef.current.forceUpdateGrid();
-        }
-      };
+    const handleSelected = (node) => () => {
+      onItemClick(node);
+      if (this.listRef.current) {
+        // Ensure item changes are shown
+        this.listRef.current.forceUpdateGrid();
+      }
+    };
 
     return (
       <CellMeasurer
@@ -162,7 +166,7 @@ CardList.propTypes = {
   className: PropTypes.string,
   details: PropTypes.func,
   label: PropTypes.func,
-  items: PropTypes.array.isRequired,
+  items: PropTypes.array,
   onItemClick: PropTypes.func,
   isItemSelected: PropTypes.func,
   getKey: PropTypes.func,
@@ -175,7 +179,7 @@ CardList.defaultProps = {
   items: [],
   onItemClick: () => {},
   isItemSelected: () => false,
-  getKey: node => node[entityPrimaryKeyProperty],
+  getKey: (node) => node[entityPrimaryKeyProperty],
 };
 
 export default CardList;

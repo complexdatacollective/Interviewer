@@ -6,12 +6,13 @@ import { store } from '../ducks/store';
 import { actionCreators as toastActions } from '../ducks/modules/toasts';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../ducks/modules/dialogs';
+import { withErrorDialog } from '../ducks/modules/errors';
 import ApiClient from './ApiClient';
 import FileExportManager from './network-exporters/src/FileExportManager';
 import { getRemoteProtocolID } from './networkFormat';
 
-const dispatch = store.dispatch;
-const getState = store.getState;
+const { dispatch } = store;
+const { getState } = store;
 
 const showExportBeginToast = (id) => {
   dispatch(toastActions.addToast({
@@ -21,10 +22,10 @@ const showExportBeginToast = (id) => {
     CustomIcon: (<Spinner small />),
     autoDismiss: false,
     content: (
-      <React.Fragment>
+      <>
         <p>Starting export...</p>
         <ProgressBar orientation="horizontal" percentProgress={0} />
-      </React.Fragment>
+      </>
     ),
   }));
 };
@@ -34,12 +35,17 @@ const showCancellationToast = () => {
     type: 'warning',
     title: 'Export cancelled',
     content: (
-      <React.Fragment>
+      <>
         <p>You cancelled the export process.</p>
-      </React.Fragment>
+      </>
     ),
   }));
 };
+
+const fatalExportErrorAction = withErrorDialog((error) => ({
+  type: 'SESSION_EXPORT_FATAL_ERROR',
+  error,
+}));
 
 export const exportToFile = (sessionList) => {
   const {
@@ -79,10 +85,10 @@ export const exportToFile = (sessionList) => {
   fileExportManager.on('update', ({ statusText, progress }) => {
     dispatch(toastActions.updateToast(toastUUID, {
       content: (
-        <React.Fragment>
+        <>
           <p>{statusText}</p>
           <ProgressBar orientation="horizontal" percentProgress={progress} />
-        </React.Fragment>
+        </>
       ),
     }));
   });
@@ -112,20 +118,27 @@ export const exportToFile = (sessionList) => {
 
     if (succeeded.length > 0) {
       batch(() => {
-        succeeded.forEach(successfulExport =>
-          dispatch(sessionsActions.setSessionExported(successfulExport)));
+        succeeded.forEach(
+          (successfulExport) => dispatch(sessionsActions.setSessionExported(successfulExport)),
+        );
       });
     }
 
     if (errors.length > 0) {
-      const errorList = errors.map((error, index) => (<li key={index}><Icon name="warning" /> {error}</li>));
+      const errorList = errors.map((error, index) => (
+        <li key={index}>
+          <Icon name="warning" />
+          {' '}
+          {error}
+        </li>
+      ));
 
       dispatch(dialogActions.openDialog({
         type: 'Warning',
         title: 'Errors encountered during export',
         canCancel: false,
         message: (
-          <React.Fragment>
+          <>
             <p>
               Your export completed, but non-fatal errors were encountered during the process. This
               may mean that not all sessions or all formats were able to be exported.
@@ -134,7 +147,7 @@ export const exportToFile = (sessionList) => {
             </p>
             <strong>Errors:</strong>
             <ul className="export-error-list">{errorList}</ul>
-          </React.Fragment>
+          </>
         ),
       }));
 
@@ -146,9 +159,9 @@ export const exportToFile = (sessionList) => {
       title: 'Export Complete!',
       autoDismiss: true,
       content: (
-        <React.Fragment>
+        <>
           <p>Your sessions were exported successfully.</p>
-        </React.Fragment>
+        </>
       ),
     }));
   });
@@ -175,10 +188,7 @@ export const exportToFile = (sessionList) => {
     }).catch((error) => {
       // Fatal error handling
       dispatch(toastActions.removeToast(toastUUID));
-      dispatch({
-        type: 'SESSION_EXPORT_FATAL_ERROR',
-        error,
-      });
+      dispatch(fatalExportErrorAction(error));
     });
 };
 
@@ -187,7 +197,7 @@ export const exportToServer = (sessionList) => {
   const errors = [];
   const succeeded = [];
 
-  const pairedServer = getState().pairedServer;
+  const { pairedServer } = getState();
 
   const client = new ApiClient(pairedServer);
   client.addTrustedCert();
@@ -199,10 +209,10 @@ export const exportToServer = (sessionList) => {
   client.on('update', ({ statusText, progress }) => {
     dispatch(toastActions.updateToast(toastUUID, {
       content: (
-        <React.Fragment>
+        <>
           <p>{statusText}</p>
           <ProgressBar orientation="horizontal" percentProgress={progress} />
-        </React.Fragment>
+        </>
       ),
     }));
   });
@@ -227,20 +237,26 @@ export const exportToServer = (sessionList) => {
 
     if (succeeded.length > 0) {
       batch(() => {
-        succeeded.forEach(successfulExport =>
-          dispatch(sessionsActions.setSessionExported(successfulExport)));
+        succeeded.forEach(
+          (successfulExport) => dispatch(sessionsActions.setSessionExported(successfulExport)),
+        );
       });
     }
 
     if (errors.length > 0) {
-      const errorList = errors.map((error, index) => (<li key={index}><Icon name="warning" />{error}</li>));
+      const errorList = errors.map((error, index) => (
+        <li key={index}>
+          <Icon name="warning" />
+          {error}
+        </li>
+      ));
 
       dispatch(dialogActions.openDialog({
         type: 'Warning',
         title: 'Errors encountered during export',
         canCancel: false,
         message: (
-          <React.Fragment>
+          <>
             <p>
               Your export completed, but non-fatal errors were encountered during the process. This
               may mean that not all sessions were transferred to Server.
@@ -249,7 +265,7 @@ export const exportToServer = (sessionList) => {
             </p>
             <strong>Errors:</strong>
             <ul className="export-error-list">{errorList}</ul>
-          </React.Fragment>
+          </>
         ),
       }));
 
@@ -261,9 +277,9 @@ export const exportToServer = (sessionList) => {
       title: 'Export Complete!',
       autoDismiss: true,
       content: (
-        <React.Fragment>
+        <>
           <p>Your sessions were exported successfully.</p>
-        </React.Fragment>
+        </>
       ),
     }));
   });
@@ -281,10 +297,7 @@ export const exportToServer = (sessionList) => {
   exportPromise.catch((error) => {
     // Close the progress toast
     dispatch(toastActions.removeToast(toastUUID));
-    dispatch({
-      type: 'SESSION_EXPORT_FATAL_ERROR',
-      error,
-    });
+    dispatch(fatalExportErrorAction(error));
 
     exportPromise.abort();
   });

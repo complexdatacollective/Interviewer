@@ -1,9 +1,8 @@
 .preset-switcher-key {
   display: flex;
-  z-index: var(--z-global-ui);
   bottom: 7rem;
   width: 18rem;
-  position: fixed;
+  position: absolute;
   right: 0;
   margin-right: 6.1rem; // distance of preset-switcher from right side
   max-height: 85%;

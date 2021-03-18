@@ -9,11 +9,12 @@ import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
 import timelineImages from '../../images/timeline';
 import { currentStageIndex } from '../../utils/matchSessionPath';
 
-const getTimelineImage = type =>
-  get(timelineImages, type, timelineImages.Default);
+const getTimelineImage = (type) => get(timelineImages, type, timelineImages.Default);
 
 const StagePreview = ({
-  item: { type, label, index, id },
+  item: {
+    type, label, index, id,
+  },
   handleOpenStage,
   onImageLoaded,
   active,
@@ -63,26 +64,30 @@ const StagePreview = ({
           onLoad={onImageLoaded}
         />
       </div>
-      <div className="stage-preview__label">{index + 1}. {label}</div>
+      <div className="stage-preview__label">
+        {index + 1}
+        .
+        {' '}
+        {label}
+      </div>
     </div>
   );
 };
 
 const stagePreviewHandlers = withHandlers({
-  handleOpenStage: props =>
-    () => {
-      const {
-        item: { index: stageIndex },
-        onStageSelect,
-        setExpanded,
-      } = props;
+  handleOpenStage: (props) => () => {
+    const {
+      item: { index: stageIndex },
+      onStageSelect,
+      setExpanded,
+    } = props;
 
-      onStageSelect(stageIndex);
-      setExpanded(false);
-    },
+    onStageSelect(stageIndex);
+    setExpanded(false);
+  },
 });
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   currentStageIndex: currentStageIndex(state.router.location.pathname),
 });
 
@@ -97,4 +102,3 @@ export default compose(
   connect(mapStateToProps),
   stagePreviewHandlers,
 )(StagePreview);
-

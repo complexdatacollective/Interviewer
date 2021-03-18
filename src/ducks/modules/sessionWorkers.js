@@ -4,7 +4,6 @@ import preloadWorkers from '../../utils/protocol/preloadWorkers';
 const SET_WORKER_MAP = 'SET_WORKER_MAP';
 const RESET_WORKER_MAP = 'RESET_WORKER_MAP';
 
-
 const initialState = null;
 
 export default function reducer(state = initialState, action = {}) {
@@ -32,21 +31,20 @@ function resetWorkerMapAction() {
   };
 }
 
-const initializeSessionWorkersThunk = protocolUID => dispatch =>
-  preloadWorkers(protocolUID)
-    .then(
-      (workerUrls) => {
-        const map = workerUrls.reduce((urlMap, workerUrl, i) => {
-          if (workerUrl) {
-            // eslint-disable-next-line no-param-reassign
-            urlMap[supportedWorkers[i]] = workerUrl;
-          }
-          return urlMap;
-        }, {});
-        return dispatch(setWorkerMapAction(map));
-      },
-    )
-    .catch(error => console.warn('Generating worker map failed: ', error)); // eslint-disable-line no-console
+const initializeSessionWorkersThunk = (protocolUID) => (dispatch) => preloadWorkers(protocolUID)
+  .then(
+    (workerUrls) => {
+      const map = workerUrls.reduce((urlMap, workerUrl, i) => {
+        if (workerUrl) {
+          // eslint-disable-next-line no-param-reassign
+          urlMap[supportedWorkers[i]] = workerUrl;
+        }
+        return urlMap;
+      }, {});
+      return dispatch(setWorkerMapAction(map));
+    },
+  )
+  .catch((error) => console.warn('Generating worker map failed: ', error)); // eslint-disable-line no-console
 
 const actionCreators = {
   setWorkerMapAction,
@@ -63,4 +61,3 @@ export {
   actionCreators,
   actionTypes,
 };
-

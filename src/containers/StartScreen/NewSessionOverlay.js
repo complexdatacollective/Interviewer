@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from '@codaco/ui';
-import Overlay from '../../containers/Overlay';
-import { Form } from '../../containers';
+import Overlay from '../Overlay';
+import Form from '../Form';
 import { required, maxLength } from '../../utils/Validations';
-
 
 const NewSessionOverlay = ({
   handleSubmit,
@@ -46,7 +45,7 @@ const NewSessionOverlay = ({
           form={formConfig.formName}
           autoFocus
           onSubmit={onSubmitForm}
-          {...formConfig}
+          {...formConfig} // eslint-disable-line react/jsx-props-no-spreading
         >
           <div className="case-id-form__footer">
             <Button aria-label="Submit" type="submit">

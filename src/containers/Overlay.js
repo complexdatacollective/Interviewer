@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Modal } from '@codaco/ui';
-import { CloseButton } from '../components';
+import CloseButton from '../components/CloseButton';
 
 /**
  * Renders a modal window.
@@ -86,7 +86,8 @@ export {
   Overlay,
 };
 
-const mapStateToProps = state =>
-  ({ useFullScreenForms: state.deviceSettings.useFullScreenForms });
+const mapStateToProps = (state) => ({
+  useFullScreenForms: state.deviceSettings.useFullScreenForms,
+});
 
 export default connect(mapStateToProps)(Overlay);

@@ -1,6 +1,8 @@
 /* eslint-disable react/sort-comp */
 
-import { compose, withStateHandlers, withHandlers, defaultProps } from 'recompose';
+import {
+  compose, withStateHandlers, withHandlers, defaultProps,
+} from 'recompose';
 import { connect } from 'react-redux';
 import { actionCreators as searchActions } from '../../ducks/modules/search';
 import { getEntityAttributes } from '../../ducks/modules/network';
@@ -33,51 +35,47 @@ const initialState = {
 const withSearchState = withStateHandlers(
   () => ({ ...initialState }),
   {
-    resetState: () =>
-      () => ({ ...initialState }),
-    setQuery: () =>
-      query => ({
-        searchTerm: query,
-        hasSearchTerm: query.length !== 0,
-        searchResults: [],
-        awaitingResults: true,
-      }),
-    setResults: () =>
-      results => ({
-        searchResults: results,
-        awaitingResults: false,
-      }),
-    setSelected: previousState =>
-      (result) => {
-        let newResults;
-        const existingIndex = previousState.selectedResults.indexOf(result);
-        if (existingIndex > -1) {
-          newResults = previousState.selectedResults.slice();
-          newResults.splice(existingIndex, 1);
-        } else {
-          newResults = [...previousState.selectedResults, result];
-        }
-        return {
-          selectedResults: newResults,
-        };
-      },
+    resetState: () => () => ({ ...initialState }),
+    setQuery: () => (query) => ({
+      searchTerm: query,
+      hasSearchTerm: query.length !== 0,
+      searchResults: [],
+      awaitingResults: true,
+    }),
+    setResults: () => (results) => ({
+      searchResults: results,
+      awaitingResults: false,
+    }),
+    setSelected: (previousState) => (result) => {
+      let newResults;
+      const existingIndex = previousState.selectedResults.indexOf(result);
+      if (existingIndex > -1) {
+        newResults = previousState.selectedResults.slice();
+        newResults.splice(existingIndex, 1);
+      } else {
+        newResults = [...previousState.selectedResults, result];
+      }
+      return {
+        selectedResults: newResults,
+      };
+    },
   },
 );
 
 const withSearchHandlers = withHandlers({
-  onToggleSearch: ({ toggleSearch }) =>
-    () => toggleSearch(),
+  onToggleSearch: ({ toggleSearch }) => () => toggleSearch(),
 
-  onClose: ({ clearResultsOnClose, closeSearch, resetState }) =>
-    () => {
-      if (clearResultsOnClose) {
-        resetState();
-      }
+  onClose: ({ clearResultsOnClose, closeSearch, resetState }) => () => {
+    if (clearResultsOnClose) {
+      resetState();
+    }
 
-      closeSearch();
-    },
+    closeSearch();
+  },
 
-  onCommit: ({ onComplete, selectedResults, closeSearch, resetState }) => () => {
+  onCommit: ({
+    onComplete, selectedResults, closeSearch, resetState,
+  }) => () => {
     onComplete(selectedResults);
     closeSearch();
     resetState();
@@ -91,11 +89,9 @@ const withSearchHandlers = withHandlers({
     search(query);
   },
 
-  onSelectResult: ({ setSelected }) =>
-    result => setSelected(result),
+  onSelectResult: ({ setSelected }) => (result) => setSelected(result),
 
-  getIsSelected: ({ selectedResults }) =>
-    node => selectedResults.indexOf(node) > -1,
+  getIsSelected: ({ selectedResults }) => (node) => selectedResults.indexOf(node) > -1,
 
   getDetails: ({ details, nodeTypeDefinition }) => {
     const toDetail = (node, field) => {
@@ -104,7 +100,7 @@ const withSearchHandlers = withHandlers({
       return { [field.label]: getEntityAttributes(node)[labelKey] };
     };
 
-    return node => details.map(attr => toDetail(node, attr));
+    return (node) => details.map((attr) => toDetail(node, attr));
   },
 });
 

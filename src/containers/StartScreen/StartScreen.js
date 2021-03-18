@@ -2,12 +2,10 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import {
-  HeaderSection,
-  InterviewSection,
-  ImportSection,
-  ServerSection,
-} from '.';
+import HeaderSection from './HeaderSection';
+import InterviewSection from './InterviewSection';
+import ImportSection from './ImportSection';
+import ServerSection from './ServerSection';
 import WhatsNewSection from './WhatsNewSection';
 import DataExportSection from './DataExportSection';
 
@@ -26,7 +24,7 @@ const StartScreen = ({
   };
 
   if (activeSessionId) {
-    const stageIndex = sessions[activeSessionId].stageIndex;
+    const { stageIndex } = sessions[activeSessionId];
     const pathname = `/session/${activeSessionId}/${stageIndex}`;
     return (<Redirect to={{ pathname: `${pathname}` }} />);
   }
@@ -62,7 +60,7 @@ const mapDispatchToProps = {
 
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   activeSessionId: state.activeSessionId,
   sessions: state.sessions,
 

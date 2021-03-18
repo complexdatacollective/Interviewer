@@ -4,6 +4,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import DragManager from '../DragManager';
+// eslint-disable-next-line import/named
 import DragPreview, { position as previewPosition, cleanup as previewCleanup } from '../DragPreview';
 import { actionCreators as actions } from '../reducer';
 import DragSource from '../DragSource';

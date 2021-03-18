@@ -29,7 +29,7 @@ const formatQueryResult = (results) => {
  * @param {array} parameters - An array of parameters for query substitution
  */
 const query = (sql, parameters = []) => new Promise((resolve, reject) => {
-  // transation is the only API that seems somewhat stable. executeSql by itself failed randomly.
+  // transaction is the only API that seems somewhat stable. executeSql by itself failed randomly.
   db.transaction((tx) => {
     tx.executeSql(sql, parameters, (_, rs) => {
       resolve(rs);
@@ -61,7 +61,7 @@ const checkDeviceIsReady = () => new Promise((resolve) => {
  * Attempt to open the database using the cordova sqlite plugin.
  * Opening will create the database if it does not exist
  *
- * There is a small chance that the plugin will not have yet inititalised even though
+ * There is a small chance that the plugin will not have yet initialized even though
  * device ready has been fired. We retry every 2 seconds until the database is available.
  */
 const createDatabase = () => new Promise((resolve) => {
@@ -104,7 +104,7 @@ const createTable = () => query(`CREATE TABLE IF NOT EXISTS ${TABLE_NAME} (key, 
  */
 export const getAll = () => {
   // eslint-disable-next-line no-console
-  query(`SELECT key, value FROM ${TABLE_NAME}`).then(results => console.log(results));
+  query(`SELECT key, value FROM ${TABLE_NAME}`).then((results) => console.log(results));
 };
 
 window.getAll = getAll;
@@ -150,7 +150,7 @@ export const sqliteStorageEngine = (onPersistReady) => {
     .then(onPersistReady);
 
   return {
-    getItem: key => new Promise((resolve, reject) => {
+    getItem: (key) => new Promise((resolve, reject) => {
       query(`SELECT value FROM ${TABLE_NAME} WHERE key = ?`, [key])
         .then((results) => {
           resolve(formatQueryResult(results)[0].value);
@@ -172,7 +172,7 @@ export const sqliteStorageEngine = (onPersistReady) => {
         }).catch(reject);
       });
     }),
-    removeItem: key => new Promise((resolve, reject) => {
+    removeItem: (key) => new Promise((resolve, reject) => {
       query(`DELETE FROM ${TABLE_NAME} WHERE key = ?`, [key]).then(() => {
         resolve();
       }).catch(reject);

@@ -1,6 +1,6 @@
 {
   "name": "network-canvas-interviewer",
-  "version": "6.0.1",
+  "version": "6.1.0",
   "productName": "Network Canvas Interviewer",
   "description": "A tool for conducting Network Canvas Interviews.",
   "author": "Complex Data Collective",
@@ -12,6 +12,6 @@
     "electron-devtools-installer": "^3.0.0",
     "mdns": "^2.5.1",
     "archiver": "^4.0.1",
-    "secure-comms-api": "git+https://github.com/complexdatacollective/secure-comms-api.git"
+    "secure-comms-api": "github:complexdatacollective/secure-comms-api#npm7"
   }
 }

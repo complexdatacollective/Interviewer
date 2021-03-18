@@ -4,14 +4,14 @@ import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import withPrompt from '../../behaviours/withPrompt';
-import Search from '../../containers/Search';
+import Search from '../Search';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { entityAttributesProperty, entityPrimaryKeyProperty } from '../../ducks/modules/network';
 import { makeGetSubjectType, makeNetworkNodesForPrompt, makeGetAdditionalAttributes } from '../../selectors/interface';
 import { getNetworkNodes, makeGetNodeTypeDefinition, makeGetNodeLabel } from '../../selectors/network';
 import { getCardAdditionalProperties, makeGetNodeIconName, makeGetPromptNodeModelData } from '../../selectors/name-generator';
-import { PromptSwiper } from '../';
-import { NodeBin, NodeList } from '../../components/';
+import PromptSwiper from '../PromptSwiper';
+import { NodeBin, NodeList } from '../../components';
 import getParentKeyByNameValue from '../../utils/getParentKeyByNameValue';
 
 /**
@@ -20,15 +20,21 @@ import getParentKeyByNameValue from '../../utils/getParentKeyByNameValue';
   */
 class NameGeneratorAutoComplete extends Component {
   onSearchComplete = (selectedResults) => {
-    const withNewModelData = map(selectedResults, result => ({
-      ...this.props.newNodeModelData,
+    const {
+      newNodeModelData,
+      batchAddNodes,
+      newNodeAttributes,
+      stage,
+    } = this.props;
+    const withNewModelData = map(selectedResults, (result) => ({
+      ...newNodeModelData,
       ...result,
     }));
 
-    this.props.batchAddNodes(
+    batchAddNodes(
       withNewModelData,
-      this.props.newNodeAttributes,
-      this.props.stage.subject.type,
+      newNodeAttributes,
+      stage.subject.type,
     );
   }
 
@@ -44,6 +50,8 @@ class NameGeneratorAutoComplete extends Component {
       promptForward,
       stage,
       details,
+      nodeTypeDefinition,
+      removeNode,
     } = this.props;
 
     const baseClass = 'name-generator-auto-complete-interface';
@@ -55,7 +63,7 @@ class NameGeneratorAutoComplete extends Component {
     // Map the matchproperties to add the entity attributes object, and replace names with
     // uuids, where possible.
     searchOptions.matchProperties = searchOptions.matchProperties.map((prop) => {
-      const nodeTypeVariables = this.props.nodeTypeDefinition.variables;
+      const nodeTypeVariables = nodeTypeDefinition.variables;
       const replacedProp = getParentKeyByNameValue(nodeTypeVariables, prop);
       return (`${entityAttributesProperty}.${replacedProp}`);
     });
@@ -84,22 +92,22 @@ class NameGeneratorAutoComplete extends Component {
           <Search
             key={prompt.id}
             nodeIconName={nodeIconName}
-            dataSourceKey={this.props.stage.dataSource}
+            dataSourceKey={stage.dataSource}
             getCardTitle={getCardTitle}
             details={details}
             excludedNodes={excludedNodes}
             nodeType={nodeType}
             onComplete={this.onSearchComplete}
             options={searchOptions}
-            stage={this.props.stage}
-            nodeTypeDefinition={this.props.nodeTypeDefinition}
+            stage={stage}
+            nodeTypeDefinition={nodeTypeDefinition}
           />
         </div>
 
         <div className="name-generator-auto-complete-interface__node-bin">
           <NodeBin
-            accepts={meta => meta.itemType === 'EXISTING_NODE'}
-            dropHandler={meta => this.props.removeNode(meta[entityPrimaryKeyProperty])}
+            accepts={(meta) => meta.itemType === 'EXISTING_NODE'}
+            dropHandler={(meta) => removeNode(meta[entityPrimaryKeyProperty])}
             id="NODE_BIN"
           />
         </div>
@@ -149,7 +157,7 @@ function makeMapStateToProps() {
       getCardTitle: getNodeLabel(state, props),
       newNodeAttributes: getPromptNodeAttributes(state, props),
       newNodeModelData: getPromptNodeModelData(state, props),
-      nodeTypeDefinition: getNodeTypeDefinition(state, { type: props.stage.subject.type }),
+      nodeTypeDefinition: getNodeTypeDefinition(state, props),
       nodeIconName: getNodeIconName(state, props),
       nodesForPrompt: networkNodesForPrompt(state, props),
       nodeType: getNodeType(state, props),

@@ -7,7 +7,6 @@ import { getProtocolCodebook } from './protocol';
 import { getNetworkEdges, getNetworkNodes } from './network';
 import { getAdditionalAttributes, getSubject } from '../utils/protocol/accessors';
 
-
 // Selectors that are generic between interfaces
 
 /*
@@ -24,23 +23,20 @@ const propStageId = (_, props) => props.stage.id;
 const propPromptId = (_, props) => props.prompt.id;
 
 // Returns current stage and prompt ID
-export const makeGetIds = () =>
-  createSelector(
-    propStageId, propPromptId,
-    (stageId, promptId) => ({ stageId, promptId }),
-  );
+export const makeGetIds = () => createSelector(
+  propStageId, propPromptId,
+  (stageId, promptId) => ({ stageId, promptId }),
+);
 
-export const makeGetAdditionalAttributes = () =>
-  createSelector(
-    propStage, propPrompt,
-    (stage, prompt) => getAdditionalAttributes(stage, prompt),
-  );
+export const makeGetAdditionalAttributes = () => createSelector(
+  propStage, propPrompt,
+  (stage, prompt) => getAdditionalAttributes(stage, prompt),
+);
 
-export const makeGetSubject = () =>
-  createSelector(
-    propStage, propPrompt,
-    (stage, prompt) => getSubject(stage, prompt),
-  );
+export const makeGetSubject = () => createSelector(
+  propStage, propPrompt,
+  (stage, prompt) => getSubject(stage, prompt),
+);
 
 const nodeTypeIsDefined = (codebook, nodeType) => {
   if (!codebook) { return false; }
@@ -68,62 +64,58 @@ export const makeGetNodeVariables = () => createDeepEqualSelector(
 );
 
 // TODO: Not sure this needs to be a createSelector
-export const makeGetPromptVariable = () =>
-  createSelector(
-    propPrompt,
-    prompt => prompt.variable,
-  );
+export const makeGetPromptVariable = () => createSelector(
+  propPrompt,
+  (prompt) => prompt.variable,
+);
 
 export const getPromptOtherVariable = (state, props) => {
   const prompt = propPrompt(state, props);
   return [prompt.otherVariable, prompt.otherOptionLabel, prompt.otherVariablePrompt];
 };
 
-export const makeGetVariableOptions = (includeOtherVariable = false) =>
-  createSelector(
-    makeGetNodeVariables(), makeGetPromptVariable(), getPromptOtherVariable,
-    (
-      nodeVariables,
-      promptVariable,
-      [promptOtherVariable, promptOtherOptionLabel, promptOtherVariablePrompt],
-    ) => {
-      const optionValues = nodeVariables[promptVariable].options || [];
-      const otherValue = {
-        label: promptOtherOptionLabel,
-        value: null,
-        otherVariablePrompt: promptOtherVariablePrompt,
-        otherVariable: promptOtherVariable,
-      };
+export const makeGetVariableOptions = (includeOtherVariable = false) => createSelector(
+  makeGetNodeVariables(), makeGetPromptVariable(), getPromptOtherVariable,
+  (
+    nodeVariables,
+    promptVariable,
+    [promptOtherVariable, promptOtherOptionLabel, promptOtherVariablePrompt],
+  ) => {
+    const optionValues = nodeVariables[promptVariable].options || [];
+    const otherValue = {
+      label: promptOtherOptionLabel,
+      value: null,
+      otherVariablePrompt: promptOtherVariablePrompt,
+      otherVariable: promptOtherVariable,
+    };
 
-      return includeOtherVariable && promptOtherVariable ?
-        [...optionValues, otherValue] :
-        optionValues;
-    },
-  );
+    return includeOtherVariable && promptOtherVariable
+      ? [...optionValues, otherValue]
+      : optionValues;
+  },
+);
 
 /**
  * makeNetworkEdgesForType()
  * Get the current prompt/stage subject, and filter the network by this edge type.
 */
 
-export const makeNetworkEdgesForType = () =>
-  createSelector(
-    (state, props) => getNetworkEdges(state, props),
-    makeGetSubject(),
-    (edges, subject) => filter(edges, ['type', subject.type]),
-  );
+export const makeNetworkEdgesForType = () => createSelector(
+  (state, props) => getNetworkEdges(state, props),
+  makeGetSubject(),
+  (edges, subject) => filter(edges, ['type', subject.type]),
+);
 
 /**
  * makeNetworkNodesForType()
  * Get the current prompt/stage subject, and filter the network by this node type.
 */
 
-export const makeNetworkNodesForType = () =>
-  createSelector(
-    (state, props) => getNetworkNodes(state, props),
-    makeGetSubject(),
-    (nodes, subject) => filter(nodes, ['type', subject.type]),
-  );
+export const makeNetworkNodesForType = () => createSelector(
+  (state, props) => getNetworkNodes(state, props),
+  makeGetSubject(),
+  (nodes, subject) => filter(nodes, ['type', subject.type]),
+);
 
 /**
  * makeNetworkNodesForPrompt
@@ -135,7 +127,7 @@ export const makeNetworkNodesForPrompt = () => {
   const getNetworkNodesForSubject = makeNetworkNodesForType();
   return createSelector(
     getNetworkNodesForSubject, propPromptId,
-    (nodes, promptId) => filter(nodes, node => includes(node.promptIDs, promptId)),
+    (nodes, promptId) => filter(nodes, (node) => includes(node.promptIDs, promptId)),
   );
 };
 
@@ -151,6 +143,6 @@ export const makeNetworkNodesForOtherPrompts = () => {
 
   return createSelector(
     getNetworkNodesForSubject, propPromptId,
-    (nodes, promptId) => filter(nodes, node => !includes(node.promptIDs, promptId)),
+    (nodes, promptId) => filter(nodes, (node) => !includes(node.promptIDs, promptId)),
   );
 };

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Section } from '.';
+import Section from './Section';
 import { ProtocolCard, SessionCard } from '../../components/Cards';
 import { actionCreators as sessionActions } from '../../ducks/modules/sessions';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
@@ -13,18 +13,18 @@ import ResumeSessionPicker from './ResumeSessionPicker';
 import StartInterviewPicker from './StartInterviewPicker';
 
 const InterviewSection = () => {
-  const installedProtocols = useSelector(state => state.installedProtocols);
-  const sessions = useSelector(state => state.sessions);
+  const installedProtocols = useSelector((state) => state.installedProtocols);
+  const sessions = useSelector((state) => state.sessions);
 
-  const lastActiveSession = useSelector(state => getLastActiveSession(state));
-  const lastActiveProtocol = useSelector(state => getLastActiveProtocol(state));
+  const lastActiveSession = useSelector((state) => getLastActiveSession(state));
+  const lastActiveProtocol = useSelector((state) => getLastActiveProtocol(state));
 
   const dispatch = useDispatch();
   const addSession = (caseId, protocol) => dispatch(sessionActions.addSession(caseId, protocol));
-  const toggleUIOverlay = overlay => dispatch(uiActions.toggle(overlay));
+  const toggleUIOverlay = (overlay) => dispatch(uiActions.toggle(overlay));
 
-  const showResumeSessionPicker = useSelector(state => state.ui.showResumeSessionPicker);
-  const showStartInterviewPicker = useSelector(state => state.ui.showStartInterviewPicker);
+  const showResumeSessionPicker = useSelector((state) => state.ui.showResumeSessionPicker);
+  const showStartInterviewPicker = useSelector((state) => state.ui.showStartInterviewPicker);
 
   const [showNewSessionOverlay, setShowNewSessionOverlay] = useState(false);
   const [selectedProtocol, setSelectedProtocol] = useState(null);

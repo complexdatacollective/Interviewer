@@ -1,5 +1,5 @@
 /* eslint-env jest */
-/* eslint-disable @codaco/spellcheck/spell-checker */
+/* eslint-disable @codaco/spellcheck/spell-checker, max-classes-per-file */
 
 import WorkerAgent, { urlForWorkerSource } from '../WorkerAgent';
 
@@ -7,11 +7,13 @@ const mockUrl = 'blob:file://script.js';
 
 global.URL = class URL {
   static createObjectURL = jest.fn().mockReturnValue(mockUrl)
+
   static revokeObjectURL = jest.fn()
 };
 
 global.Worker = class Worker {
   onmessage = jest.fn()
+
   postMessage = jest.fn().mockResolvedValue({})
 };
 

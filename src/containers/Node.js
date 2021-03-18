@@ -3,7 +3,9 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Node as UINode } from '@codaco/ui';
 import WorkerAgent from '../utils/WorkerAgent';
-import { getWorkerNetwork, makeGetNodeLabel, makeGetNodeColor, makeGetNodeTypeDefinition } from '../selectors/network';
+import {
+  getWorkerNetwork, makeGetNodeLabel, makeGetNodeColor, makeGetNodeTypeDefinition,
+} from '../selectors/network';
 import { getNodeLabelWorkerUrl } from '../selectors/activeSessionWorkers';
 import { asWorkerAgentEntity } from '../utils/networkFormat';
 
@@ -18,9 +20,11 @@ class Node extends PureComponent {
   }
 
   componentDidUpdate(nextProps, nextState) {
-    if (this.state.label === nextState.label) {
+    const { label } = this.state;
+    const { workerUrl } = this.props;
+    if (label === nextState.label) {
       // Unless the label has changed, we need to check for an update
-      this.initWorker(this.props.workerUrl);
+      this.initWorker(workerUrl);
     }
   }
 
@@ -31,7 +35,13 @@ class Node extends PureComponent {
   }
 
   initWorker(url) {
-    if (!url || this.state.workerError) {
+    const { workerError } = this.state;
+    const {
+      nodeTypeDefinition,
+      workerNetwork,
+    } = this.props;
+
+    if (!url || workerError) {
       return;
     }
     if (!this.webWorker) {
@@ -39,12 +49,12 @@ class Node extends PureComponent {
     }
 
     // Create an object containing the node's model properties
-    const node = asWorkerAgentEntity(this.props, this.props.nodeTypeDefinition);
+    const node = asWorkerAgentEntity(this.props, nodeTypeDefinition);
 
     // Send the worker the node model properties along with the network
     const msgPromise = this.webWorker.sendMessageAsync({
       node,
-      network: this.props.workerNetwork || {},
+      network: workerNetwork || {},
     });
     this.outstandingMessage = msgPromise.cancellationId;
     msgPromise
@@ -55,22 +65,27 @@ class Node extends PureComponent {
         }
         this.setState({ label });
       })
-      .catch(workerError => this.setState({ workerError }));
+      .catch((error) => this.setState({ workerError: error }));
   }
 
   render() {
     const {
       color,
       workerUrl,
+      getLabel,
     } = this.props;
+    const {
+      workerError,
+      label,
+    } = this.state;
 
-    const useWorkerLabel = workerUrl !== false && !this.state.workerError;
-    const label = useWorkerLabel ? (this.state.label || '') : this.props.getLabel(this.props);
+    const useWorkerLabel = workerUrl !== false && !workerError;
+    const dynamicLabel = useWorkerLabel ? (label || '') : getLabel(this.props);
     return (
       <UINode
         color={color}
         {...this.props}
-        label={label}
+        label={dynamicLabel}
       />
     );
   }

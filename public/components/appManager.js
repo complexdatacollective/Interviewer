@@ -32,12 +32,9 @@ const appManager = {
       }
     });
 
-    ipcMain.on('OPEN_DIALOG', () =>
-      openDialog()
-        .then(filePath =>
-          windowManager.getWindow().then(window => window.webContents.send('OPEN_FILE', filePath)))
-        .catch(err => console.log(err)),
-    );
+    ipcMain.on('OPEN_DIALOG', () => openDialog()
+      .then((filePath) => windowManager.getWindow().then((window) => window.webContents.send('OPEN_FILE', filePath)))
+      .catch((err) => console.log(err)));
   },
   openFileFromArgs: function openFileFromArgs(argv) {
     return this.restore()

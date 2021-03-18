@@ -8,19 +8,15 @@ import { createHashHistory as createHistory } from 'history';
 import { Provider } from 'react-redux';
 import { mount } from 'enzyme';
 import thunk from 'redux-thunk';
-import epics from '../../../ducks/middleware/epics';
 import SettingsMenu from '../SettingsMenu';
 import createRootReducer from '../../../ducks/modules/rootReducer';
 
 jest.mock('@codaco/ui/lib/utils/CSSVariables');
 
-const actionLogger = actions =>
-  () =>
-    next =>
-      (action) => {
-        actions.push(action);
-        return next(action);
-      };
+const actionLogger = (actions) => () => (next) => (action) => {
+  actions.push(action);
+  return next(action);
+};
 
 const initialState = {
   activeSessionId: '62415a79-cd46-409a-98b3-5a0a2fef1f97',
@@ -84,23 +80,21 @@ const getMockStore = () => {
     createRootReducer(history),
     initialState,
     compose(
-      applyMiddleware(routerMiddleware(history), thunk, epics, actionLogger(actions)),
+      applyMiddleware(routerMiddleware(history), thunk, actionLogger(actions)),
     ),
   );
   return { store, actions };
 };
 
-const isMenuOpen = subject =>
-  subject.find('SettingsMenu').prop('settingsMenuOpen');
+const isMenuOpen = (subject) => subject.find('SettingsMenu').prop('settingsMenuOpen');
 
-const getSubject = store =>
-  mount((
-    <Provider
-      store={store}
-    >
-      <SettingsMenu />
-    </Provider>
-  ));
+const getSubject = (store) => mount((
+  <Provider
+    store={store}
+  >
+    <SettingsMenu />
+  </Provider>
+));
 
 describe('<SettingsMenu />', () => {
   it('Close button closes menu', () => {

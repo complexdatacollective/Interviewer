@@ -6,7 +6,9 @@ import PropTypes from 'prop-types';
 import { Flipper } from 'react-flip-toolkit';
 import cx from 'classnames';
 import { getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
-import { makeNetworkNodesForType, makeGetVariableOptions, makeGetPromptVariable, getPromptOtherVariable } from '../../selectors/interface';
+import {
+  makeNetworkNodesForType, makeGetVariableOptions, makeGetPromptVariable, getPromptOtherVariable,
+} from '../../selectors/interface';
 import { makeGetNodeLabel, makeGetNodeColor } from '../../selectors/network';
 import { MonitorDragSource } from '../../behaviours/DragAndDrop';
 import { entityAttributesProperty } from '../../ducks/modules/network';
@@ -23,7 +25,8 @@ class CategoricalList extends Component {
     this.categoricalListElement = React.createRef();
   }
 
-  componentWillMount() {
+  // eslint-disable-next-line camelcase
+  UNSAFE_componentWillMount() {
     this.colorPresets = [
       getCSSVariableAsString('--cat-color-seq-1'),
       getCSSVariableAsString('--cat-color-seq-2'),
@@ -52,6 +55,8 @@ class CategoricalList extends Component {
   }, 1000 / 60);
 
   get binSizes() {
+    const { bins } = this.props;
+
     if (!this.categoricalListElement.current) {
       return [];
     }
@@ -64,7 +69,7 @@ class CategoricalList extends Component {
 
     const itemSize = getItemSize(
       bounds,
-      this.props.bins.length,
+      bins.length,
       this.isExpanded,
     );
 
@@ -75,7 +80,8 @@ class CategoricalList extends Component {
   }
 
   get isExpanded() {
-    return this.props.expandedBinIndex !== null;
+    const { expandedBinIndex } = this.props;
+    return expandedBinIndex !== null;
   }
 
   getCatColor = (itemNumber) => {
@@ -83,8 +89,12 @@ class CategoricalList extends Component {
     return null;
   };
 
-  getBinSize = index =>
-    (this.props.expandedBinIndex === index ? this.binSizes.expandedSize : this.binSizes.itemSize);
+  getBinSize = (index) => {
+    const { expandedBinIndex } = this.props;
+    return expandedBinIndex === index
+      ? this.binSizes.expandedSize
+      : this.binSizes.itemSize;
+  };
 
   renderCategoricalBins = () => {
     const {
@@ -170,27 +180,25 @@ CategoricalList.propTypes = {
 CategoricalList.defaultProps = {
   expandedBinIndex: null,
   promptOtherVariable: null,
-  isDragging: false,
-  meta: {},
 };
 
 const matchVariable = (node, variable, value) => (
-  node[entityAttributesProperty][variable] &&
-  node[entityAttributesProperty][variable].includes(value)
+  node[entityAttributesProperty][variable]
+  && node[entityAttributesProperty][variable].includes(value)
 );
 
-const hasOtherVariable = (node, otherVariable) =>
-  otherVariable && node[entityAttributesProperty][otherVariable] !== null;
+const hasOtherVariable = (node, otherVariable) => (
+  otherVariable && node[entityAttributesProperty][otherVariable] !== null
+);
 
-const matchBin = (bin, variable) =>
-  node =>
-    matchVariable(node, variable, bin.value) || hasOtherVariable(node, bin.otherVariable);
+const matchBin = (bin, variable) => (node) => (
+  matchVariable(node, variable, bin.value) || hasOtherVariable(node, bin.otherVariable)
+);
 
-const appendNodesForBin = (nodes, activePromptVariable) =>
-  bin => ({
-    ...bin,
-    nodes: nodes.filter(matchBin(bin, activePromptVariable)),
-  });
+const appendNodesForBin = (nodes, activePromptVariable) => (bin) => ({
+  ...bin,
+  nodes: nodes.filter(matchBin(bin, activePromptVariable)),
+});
 
 function makeMapStateToProps() {
   const getCategoricalValues = makeGetVariableOptions(true);

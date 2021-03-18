@@ -8,7 +8,9 @@ import cx from 'classnames';
 import 'swiper/css/swiper.css';
 import { actionCreators as deviceSettingsActions } from '../ducks/modules/deviceSettings';
 import '../styles/main.scss';
-import { isElectron, isCordova, isWindows, isMacOS, isLinux, isPreview, getEnv, isIOS, isAndroid } from '../utils/Environment';
+import {
+  isElectron, isCordova, isWindows, isMacOS, isLinux, isPreview, getEnv, isIOS, isAndroid,
+} from '../utils/Environment';
 import DialogManager from '../components/DialogManager';
 import ToastManager from '../components/ToastManager';
 import { SettingsMenu } from '../components/SettingsMenu';
@@ -38,9 +40,9 @@ const App = ({
 
   const setFontSize = () => {
     const root = document.documentElement;
-    const newFontSize = useDynamicScaling ?
-      `${(1.65 * interfaceScale) / 100}vmin` :
-      `${(16 * interfaceScale) / 100}px`;
+    const newFontSize = useDynamicScaling
+      ? `${(1.65 * interfaceScale) / 100}vmin`
+      : `${(16 * interfaceScale) / 100}px`;
 
     root.style.setProperty('--base-font-size', newFontSize);
   };
@@ -135,8 +137,8 @@ App.defaultProps = {
   children: null,
 };
 
-const mapDispatchToProps = dispatch => ({
-  setStartFullScreen: value => dispatch(deviceSettingsActions.setSetting('startFullScreen', value)),
+const mapDispatchToProps = (dispatch) => ({
+  setStartFullScreen: (value) => dispatch(deviceSettingsActions.setSetting('startFullScreen', value)),
 });
 
 function mapStateToProps(state) {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { GraphicButton, Button } from '@codaco/ui';
-import { Section } from '.';
+import Section from './Section';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
 import ProtocolUrlForm from './ProtocolUrlForm';
 import { beginLocalProtocolImport } from '../../utils/protocol/importProtocol';
@@ -15,11 +15,11 @@ import FetchServerProtocolPicker from './FetchServerProtocolPicker';
 
 const ImportSection = () => {
   const onlineStatus = useOnlineStatus();
-  const pairedServer = useSelector(state => state.pairedServer);
+  const pairedServer = useSelector((state) => state.pairedServer);
   const pairedServerConnection = useServerConnectionStatus(pairedServer);
-  const installedProtocols = useSelector(state => state.installedProtocols);
-  const showProtocolUrlForm = useSelector(state => state.ui.showProtocolUrlForm);
-  const showFetchProtocolPicker = useSelector(state => state.ui.showFetchProtocolPicker);
+  const installedProtocols = useSelector((state) => state.installedProtocols);
+  const showProtocolUrlForm = useSelector((state) => state.ui.showProtocolUrlForm);
+  const showFetchProtocolPicker = useSelector((state) => state.ui.showFetchProtocolPicker);
   const [showManageProtocolsOverlay, setShowManageProtocolsOverlay] = useState(false);
 
   const dispatch = useDispatch();

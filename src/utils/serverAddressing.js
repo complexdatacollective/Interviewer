@@ -5,10 +5,10 @@ const pairingApiProtocol = 'http';
 const minPort = 1;
 const maxPort = 65535;
 
-const isLinkLocal = addr => /^(fe80::|169\.254)/.test(addr);
+const isLinkLocal = (addr) => /^(fe80::|169\.254)/.test(addr);
 // We'll need to use [] notation if not already in that form; regex are good enough for needs here
 // Note scope ID and zone index (for link-local) are not supported.
-const isUnbracketedIpv6 = addr => /^[a-f0-9]{1,4}:/i.test(addr) || /^::[a-f0-9]{1,4}/i.test(addr);
+const isUnbracketedIpv6 = (addr) => /^[a-f0-9]{1,4}:/i.test(addr) || /^::[a-f0-9]{1,4}/i.test(addr);
 
 const parseUrl = (urlStr) => {
   try {
@@ -51,14 +51,14 @@ const validApiUrl = (address, port) => {
  * @return {Boolean}
  * @memberOf serverAddressing
  */
-const isValidAddress = address => !!validApiUrl(address, maxPort);
+const isValidAddress = (address) => !!validApiUrl(address, maxPort);
 
 /**
  * @param  {number|*} port [description]
  * @return {Boolean}
  * @memberOf serverAddressing
  */
-const isValidPort = port => !!validApiUrl('0.0.0.0', port);
+const isValidPort = (port) => !!validApiUrl('0.0.0.0', port);
 
 /**
  * @typedef {Object} Service

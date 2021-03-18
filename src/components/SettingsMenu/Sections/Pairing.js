@@ -16,7 +16,7 @@ const Pairing = (props) => {
   } = props;
 
   return (
-    <React.Fragment>
+    <>
       <motion.article variants={TabItemVariants} className="settings-element--wide">
         <div>
           <h2>Device Name</h2>
@@ -25,17 +25,17 @@ const Pairing = (props) => {
         <Text
           input={{
             value: deviceDescription,
-            onChange: e => setDeviceDescription(e.target.value),
+            onChange: (e) => setDeviceDescription(e.target.value),
           }}
           name="deviceName"
         />
       </motion.article>
-    </React.Fragment>
+    </>
   );
 };
 
 const pairingHandlers = withHandlers({
-  handleResetAppData: props => () => {
+  handleResetAppData: (props) => () => {
     props.openDialog({
       type: 'Warning',
       title: 'Reset application data?',
@@ -48,13 +48,13 @@ const pairingHandlers = withHandlers({
   },
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   openDialog: bindActionCreators(dialogsActions.openDialog, dispatch),
   resetState: () => dispatch(push('/reset')),
-  setDeviceDescription: name => dispatch(deviceSettingsActions.setDescription(name)),
+  setDeviceDescription: (name) => dispatch(deviceSettingsActions.setDescription(name)),
 });
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   deviceDescription: state.deviceSettings.description,
 });
 

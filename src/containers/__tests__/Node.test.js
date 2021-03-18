@@ -55,7 +55,6 @@ const mockState = {
   ui: { settingsMenuOpen: false },
 };
 
-
 global.console.warn = jest.fn();
 
 describe('a connected <Node />', () => {
@@ -98,7 +97,7 @@ describe('<Node />', () => {
   });
 
   describe('dynamic labeler', () => {
-    const flushPromises = () => new Promise(resolve => setImmediate(resolve));
+    const flushPromises = () => new Promise((resolve) => setImmediate(resolve));
 
     it('sets a label on state', async () => {
       mocksendMessageAsync.mockResolvedValue('dynamic-label');

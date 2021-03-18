@@ -5,13 +5,15 @@ import PropTypes from 'prop-types';
 // eslint-disable-next-line @codaco/spellcheck/spell-checker
 const charSet = 'abcdefghijklmnopqrstuvwxyz'.split('');
 
-const CharInput = ({ value, disabled, index, onChange }) => {
+const CharInput = ({
+  value, disabled, index, onChange,
+}) => {
   let className = 'pairing-code-input__character';
   if (value && !charSet.includes(value)) {
     className += ' pairing-code-input__character--error';
   }
   return (
-    <React.Fragment>
+    <>
       <input
         autoCapitalize="off"
         autoComplete="off"
@@ -21,11 +23,11 @@ const CharInput = ({ value, disabled, index, onChange }) => {
         disabled={disabled}
         id={`pairing-code-character-${index}`}
         onChange={onChange}
-        onFocus={evt => evt.target.select()}
+        onFocus={(evt) => evt.target.select()}
         type="text"
         value={value}
       />
-    </React.Fragment>
+    </>
   );
 };
 

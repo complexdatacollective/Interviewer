@@ -3,8 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import injectAssetUrl from '../behaviours/injectAssetUrl';
 
-const Audio = ({ url, description, ...props }) =>
-  <audio src={url} {...props}>{description}</audio>;
+const Audio = ({ url, description, ...props }) => <audio src={url} {...props}>{description}</audio>;
 
 Audio.propTypes = {
   description: PropTypes.string,

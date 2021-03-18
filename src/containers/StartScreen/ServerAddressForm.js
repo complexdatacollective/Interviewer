@@ -4,9 +4,11 @@ import { submit, isValid } from 'redux-form';
 import { connect } from 'react-redux';
 import { motion } from 'framer-motion';
 import { Button } from '@codaco/ui';
-import { Form } from '../../containers/';
+import Form from '../Form';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
-import { isValidAddress, isValidPort, maxPort, minPort, addPairingUrlToService } from '../../utils/serverAddressing';
+import {
+  isValidAddress, isValidPort, maxPort, minPort, addPairingUrlToService,
+} from '../../utils/serverAddressing';
 import { Overlay } from '../Overlay';
 import PairingCodeDialog from '../Server/PairingCodeDialog';
 import { ExternalLink } from '../../components';
@@ -95,12 +97,19 @@ const ServerAddressForm = ({
       <p>
         Enter the hostname or IP address of the computer running Server, along with
         a port (either the default port, or a port you have opened through your firewall
-        and redirected to Server) and then click <strong>send pairing request</strong>.
+        and redirected to Server) and then click
+        {' '}
+        <strong>send pairing request</strong>
+        .
         The computer running Server must be reachable from this device using the details
         you provide.
       </p>
       <p>
-        Visit our <ExternalLink href="https://documentation.networkcanvas.com/docs/key-concepts/pairing/">documentation article</ExternalLink> on pairing to learn more.
+        Visit our
+        {' '}
+        <ExternalLink href="https://documentation.networkcanvas.com/docs/key-concepts/pairing/">documentation article</ExternalLink>
+        {' '}
+        on pairing to learn more.
       </p>
       <Form
         className="server-address-form__form"
@@ -108,7 +117,7 @@ const ServerAddressForm = ({
         onSubmit={handleSubmit}
         formName="server-address-form"
         initialValues={initialValues}
-        {...formConfig}
+        {...formConfig} // eslint-disable-line react/jsx-props-no-spreading
       />
       <div className="server-address-form__footer">
         <Button aria-label="Submit" onClick={submitForm} disabled={!submittable}>
@@ -152,7 +161,7 @@ const ServerAddressForm = ({
   }, [server, selectedServer]);
 
   return (
-    <React.Fragment>
+    <>
       <Overlay
         show={show}
         onClose={handleClose}
@@ -160,7 +169,7 @@ const ServerAddressForm = ({
       >
         { showPairingCodeDialog ? renderPairingCode() : RenderPairingForm()}
       </Overlay>
-    </React.Fragment>
+    </>
   );
 };
 
@@ -180,11 +189,10 @@ const mapDispatchToProps = {
   submitForm: () => submit(FORM_NAME),
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   submittable: isValid(FORM_NAME)(state),
 });
 
 export { ServerAddressForm };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ServerAddressForm);
-

@@ -9,7 +9,9 @@ const propStageSubject = (_, props) => props.subject || { entity: 'ego' };
 
 // MemoedSelectors
 
-export const rehydrateField = ({ codebook, entity, type, field }) => {
+export const rehydrateField = ({
+  codebook, entity, type, field,
+}) => {
   if (!field.variable) { return field; }
 
   const entityPath = entity === 'ego' ? [entity] : [entity, type];
@@ -24,12 +26,13 @@ export const rehydrateField = ({ codebook, entity, type, field }) => {
   };
 };
 
-export const makeRehydrateFields = () =>
-  createSelector(
-    propStageSubject,
-    propFields,
-    (state, props) => getProtocolCodebook(state, props),
-    ({ entity, type }, fields, codebook) => fields.map(
-      field => rehydrateField({ codebook, entity, type, field }),
-    ),
-  );
+export const makeRehydrateFields = () => createSelector(
+  propStageSubject,
+  propFields,
+  (state, props) => getProtocolCodebook(state, props),
+  ({ entity, type }, fields, codebook) => fields.map(
+    (field) => rehydrateField({
+      codebook, entity, type, field,
+    }),
+  ),
+);

@@ -3,22 +3,21 @@ import { useSelector, useDispatch } from 'react-redux';
 import { get } from 'lodash';
 import { SessionCard } from '@codaco/ui/lib/components/Cards';
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
-import { NewFilterableListWrapper } from '../../components';
+import NewFilterableListWrapper from '../../components/NewFilterableListWrapper';
 import { Overlay } from '../Overlay';
 import formatDatestamp from '../../utils/formatDatestamp';
 
-const oneBasedIndex = i => parseInt(i || 0, 10) + 1;
+const oneBasedIndex = (i) => parseInt(i || 0, 10) + 1;
 
 const ResumeSessionPicker = ({
   show,
   onClose,
 }) => {
   const dispatch = useDispatch();
-  const setSession = sessionUID => dispatch(sessionActions.setSession(sessionUID));
+  const setSession = (sessionUID) => dispatch(sessionActions.setSession(sessionUID));
 
-  const sessions = useSelector(state => state.sessions);
-  const installedProtocols = useSelector(state => state.installedProtocols);
-
+  const sessions = useSelector((state) => state.sessions);
+  const installedProtocols = useSelector((state) => state.installedProtocols);
 
   const handleSessionCardClick = (sessionUUID) => {
     setSession(sessionUUID);

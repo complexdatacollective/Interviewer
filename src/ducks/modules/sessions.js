@@ -4,7 +4,6 @@ import { actionCreators as SessionWorkerActions } from './sessionWorkers';
 import { actionTypes as installedProtocolsActionTypes } from './installedProtocols';
 import networkReducer, { actionTypes as networkActionTypes, actionCreators as networkActions, entityPrimaryKeyProperty } from './network';
 
-
 const ADD_SESSION = 'ADD_SESSION';
 const SET_SESSION_FINISHED = 'SET_SESSION_FINISHED';
 const SET_SESSION_EXPORTED = 'SET_SESSION_EXPORTED';
@@ -17,131 +16,130 @@ const REMOVE_SESSION = 'REMOVE_SESSION';
 
 const initialState = {};
 
-const withTimestamp = session => ({
+const withTimestamp = (session) => ({
   ...session,
   updatedAt: Date.now(),
 });
 
 const sessionExists = (sessionId, sessions) => has(sessions, sessionId);
 
-const getReducer = network =>
-  (state = initialState, action = {}) => {
-    switch (action.type) {
-      case installedProtocolsActionTypes.DELETE_PROTOCOL:
-        return reduce(state, (result, sessionData, sessionId) => {
-          if (sessionData.protocolUID !== action.protocolUID) {
-            return { ...result, [sessionId]: sessionData };
-          }
-          return result;
-        }, {});
-      case networkActionTypes.ADD_NODE:
-      case networkActionTypes.BATCH_ADD_NODES:
-      case networkActionTypes.REMOVE_NODE:
-      case networkActionTypes.REMOVE_NODE_FROM_PROMPT:
-      case networkActionTypes.UPDATE_NODE:
-      case networkActionTypes.TOGGLE_NODE_ATTRIBUTES:
-      case networkActionTypes.ADD_EDGE:
-      case networkActionTypes.UPDATE_EDGE:
-      case networkActionTypes.TOGGLE_EDGE:
-      case networkActionTypes.REMOVE_EDGE:
-      case networkActionTypes.UPDATE_EGO: {
-        if (!sessionExists(action.sessionId, state)) { return state; }
-        return {
-          ...state,
-          [action.sessionId]: withTimestamp({
-            ...state[action.sessionId],
-            // Reset finished and exported state if network changes
-            finishedAt: null,
-            exportedAt: null,
-            network: network(state[action.sessionId].network, action),
-          }),
-        };
-      }
-      case ADD_SESSION:
-        return {
-          ...state,
-          [action.sessionId]: withTimestamp({
-            protocolUID: action.protocolUID,
-            promptIndex: 0,
-            stageIndex: 0,
-            caseId: action.caseId,
-            network: action.network ? action.network : network(state.network, action),
-            startedAt: Date.now(),
-          }),
-        };
-      case SET_SESSION_FINISHED: {
-        if (!sessionExists(action.sessionId, state)) { return state; }
-        return {
-          ...state,
-          [action.sessionId]: withTimestamp({
-            ...state[action.sessionId],
-            finishedAt: Date.now(),
-          }),
-        };
-      }
-
-      case SET_SESSION_EXPORTED: {
-        if (!sessionExists(action.sessionId, state)) { return state; }
-        return {
-          ...state,
-          [action.sessionId]: {
-            ...state[action.sessionId],
-            exportedAt: Date.now(),
-          },
-        };
-      }
-      case LOAD_SESSION:
-        return state;
-      case UPDATE_PROMPT: {
-        if (!sessionExists(action.sessionId, state)) { return state; }
-        return {
-          ...state,
-          [action.sessionId]: withTimestamp({
-            ...state[action.sessionId],
-            promptIndex: action.promptIndex,
-          }),
-        };
-      }
-      case UPDATE_STAGE: {
-        if (!sessionExists(action.sessionId, state)) { return state; }
-        return {
-          ...state,
-          [action.sessionId]: withTimestamp({
-            ...state[action.sessionId],
-            stageIndex: action.stageIndex,
-          }),
-        };
-      }
-      case UPDATE_CASE_ID: {
-        if (!sessionExists(action.sessionId, state)) { return state; }
-        return {
-          ...state,
-          [action.sessionId]: withTimestamp({
-            ...state[action.sessionId],
-            caseId: action.caseId,
-          }),
-        };
-      }
-      case UPDATE_STAGE_STATE: {
-        if (!sessionExists(action.sessionId, state)) { return state; }
-        const session = state[action.sessionId];
-        return {
-          ...state,
-          [action.sessionId]: withTimestamp({
-            ...session,
-            stages: {
-              ...session.stages,
-              [action.stageIndex]: action.state,
-            },
-          }),
-        };
-      }
-      case REMOVE_SESSION:
-        return omit(state, [action.sessionId]);
-      default:
-        return state;
+const getReducer = (network) => (state = initialState, action = {}) => {
+  switch (action.type) {
+    case installedProtocolsActionTypes.DELETE_PROTOCOL:
+      return reduce(state, (result, sessionData, sessionId) => {
+        if (sessionData.protocolUID !== action.protocolUID) {
+          return { ...result, [sessionId]: sessionData };
+        }
+        return result;
+      }, {});
+    case networkActionTypes.ADD_NODE:
+    case networkActionTypes.BATCH_ADD_NODES:
+    case networkActionTypes.REMOVE_NODE:
+    case networkActionTypes.REMOVE_NODE_FROM_PROMPT:
+    case networkActionTypes.UPDATE_NODE:
+    case networkActionTypes.TOGGLE_NODE_ATTRIBUTES:
+    case networkActionTypes.ADD_EDGE:
+    case networkActionTypes.UPDATE_EDGE:
+    case networkActionTypes.TOGGLE_EDGE:
+    case networkActionTypes.REMOVE_EDGE:
+    case networkActionTypes.UPDATE_EGO: {
+      if (!sessionExists(action.sessionId, state)) { return state; }
+      return {
+        ...state,
+        [action.sessionId]: withTimestamp({
+          ...state[action.sessionId],
+          // Reset finished and exported state if network changes
+          finishedAt: null,
+          exportedAt: null,
+          network: network(state[action.sessionId].network, action),
+        }),
+      };
     }
-  };
+    case ADD_SESSION:
+      return {
+        ...state,
+        [action.sessionId]: withTimestamp({
+          protocolUID: action.protocolUID,
+          promptIndex: 0,
+          stageIndex: 0,
+          caseId: action.caseId,
+          network: action.network ? action.network : network(state.network, action),
+          startedAt: Date.now(),
+        }),
+      };
+    case SET_SESSION_FINISHED: {
+      if (!sessionExists(action.sessionId, state)) { return state; }
+      return {
+        ...state,
+        [action.sessionId]: withTimestamp({
+          ...state[action.sessionId],
+          finishedAt: Date.now(),
+        }),
+      };
+    }
+
+    case SET_SESSION_EXPORTED: {
+      if (!sessionExists(action.sessionId, state)) { return state; }
+      return {
+        ...state,
+        [action.sessionId]: {
+          ...state[action.sessionId],
+          exportedAt: Date.now(),
+        },
+      };
+    }
+    case LOAD_SESSION:
+      return state;
+    case UPDATE_PROMPT: {
+      if (!sessionExists(action.sessionId, state)) { return state; }
+      return {
+        ...state,
+        [action.sessionId]: withTimestamp({
+          ...state[action.sessionId],
+          promptIndex: action.promptIndex,
+        }),
+      };
+    }
+    case UPDATE_STAGE: {
+      if (!sessionExists(action.sessionId, state)) { return state; }
+      return {
+        ...state,
+        [action.sessionId]: withTimestamp({
+          ...state[action.sessionId],
+          stageIndex: action.stageIndex,
+        }),
+      };
+    }
+    case UPDATE_CASE_ID: {
+      if (!sessionExists(action.sessionId, state)) { return state; }
+      return {
+        ...state,
+        [action.sessionId]: withTimestamp({
+          ...state[action.sessionId],
+          caseId: action.caseId,
+        }),
+      };
+    }
+    case UPDATE_STAGE_STATE: {
+      if (!sessionExists(action.sessionId, state)) { return state; }
+      const session = state[action.sessionId];
+      return {
+        ...state,
+        [action.sessionId]: withTimestamp({
+          ...session,
+          stages: {
+            ...session.stages,
+            [action.stageIndex]: action.state,
+          },
+        }),
+      };
+    }
+    case REMOVE_SESSION:
+      return omit(state, [action.sessionId]);
+    default:
+      return state;
+  }
+};
 
 /**
  * This function generates default values for all variables in the variable registry for this node
@@ -167,15 +165,14 @@ const getDefaultAttributesForEntityType = (registryForType = {}) => {
  * to it.
  * @param {object} action redux action object
  */
-const withActiveSessionId = action =>
-  (dispatch, getState) => {
-    const { activeSessionId: sessionId } = getState();
+const withActiveSessionId = (action) => (dispatch, getState) => {
+  const { activeSessionId: sessionId } = getState();
 
-    dispatch({
-      ...action,
-      sessionId,
-    });
-  };
+  dispatch({
+    ...action,
+    sessionId,
+  });
+};
 
 /**
  * Add a batch of nodes to the state.
@@ -187,26 +184,25 @@ const withActiveSessionId = action =>
  * @memberof! NetworkActionCreators
  * TODO: is `type` superfluous as contained by nodes in nodeList?
  */
-const batchAddNodes = (nodeList, attributeData, type) =>
-  (dispatch, getState) => {
-    const { activeSessionId, sessions, installedProtocols } = getState();
+const batchAddNodes = (nodeList, attributeData, type) => (dispatch, getState) => {
+  const { activeSessionId, sessions, installedProtocols } = getState();
 
-    const session = sessions[activeSessionId];
-    const activeProtocol = installedProtocols[session.protocolUID];
-    const nodeRegistry = activeProtocol.codebook.node;
-    const registryForType = nodeRegistry[type].variables;
-    const defaultAttributes = getDefaultAttributesForEntityType(registryForType);
+  const session = sessions[activeSessionId];
+  const activeProtocol = installedProtocols[session.protocolUID];
+  const nodeRegistry = activeProtocol.codebook.node;
+  const registryForType = nodeRegistry[type].variables;
+  const defaultAttributes = getDefaultAttributesForEntityType(registryForType);
 
-    dispatch(
-      withActiveSessionId(
-        networkActions.batchAddNodes(
-          nodeList,
-          attributeData,
-          defaultAttributes,
-        ),
+  dispatch(
+    withActiveSessionId(
+      networkActions.batchAddNodes(
+        nodeList,
+        attributeData,
+        defaultAttributes,
       ),
-    );
-  };
+    ),
+  );
+};
 
 const addNode = (modelData, attributeData = {}) => (dispatch, getState) => {
   const { activeSessionId, sessions, installedProtocols } = getState();
@@ -250,7 +246,7 @@ const toggleNodeAttributes = (uid, attributes) => (dispatch, getState) => {
   });
 };
 
-const removeNode = uid => (dispatch, getState) => {
+const removeNode = (uid) => (dispatch, getState) => {
   const { activeSessionId } = getState();
 
   dispatch({
@@ -339,7 +335,7 @@ const toggleEdge = (modelData, attributeData = {}) => (dispatch, getState) => {
   });
 };
 
-const removeEdge = edgeId => (dispatch, getState) => {
+const removeEdge = (edgeId) => (dispatch, getState) => {
   const { activeSessionId } = getState();
 
   dispatch({
@@ -370,7 +366,7 @@ const addSession = (caseId, protocolUID, sessionNetwork) => (dispatch, getState)
     .then(() => id);
 };
 
-const updateCaseId = caseId => (dispatch, getState) => {
+const updateCaseId = (caseId) => (dispatch, getState) => {
   const { activeSessionId } = getState();
 
   dispatch({
@@ -386,7 +382,7 @@ const loadSession = () => (dispatch) => {
   });
 };
 
-const updatePrompt = promptIndex => (dispatch, getState) => {
+const updatePrompt = (promptIndex) => (dispatch, getState) => {
   const state = getState();
   const sessionId = state.activeSessionId;
 
@@ -397,7 +393,7 @@ const updatePrompt = promptIndex => (dispatch, getState) => {
   });
 };
 
-const updateStage = stageIndex => (dispatch, getState) => {
+const updateStage = (stageIndex) => (dispatch, getState) => {
   const state = getState();
   const sessionId = state.activeSessionId;
 
@@ -408,27 +404,25 @@ const updateStage = stageIndex => (dispatch, getState) => {
   });
 };
 
-const withSessionId = action =>
-  (dispatch, getState) => {
-    const { activeSessionId: sessionId } = getState();
+const withSessionId = (action) => (dispatch, getState) => {
+  const { activeSessionId: sessionId } = getState();
 
-    dispatch({
-      ...action,
-      sessionId,
-    });
-  };
+  dispatch({
+    ...action,
+    sessionId,
+  });
+};
 
-const updateStageState = state =>
-  (dispatch, getState) => {
-    const { activeSessionId, sessions } = getState();
-    const stageIndex = sessions[activeSessionId].stageIndex;
+const updateStageState = (state) => (dispatch, getState) => {
+  const { activeSessionId, sessions } = getState();
+  const { stageIndex } = sessions[activeSessionId];
 
-    dispatch(withSessionId({
-      type: UPDATE_STAGE_STATE,
-      stageIndex,
-      state,
-    }));
-  };
+  dispatch(withSessionId({
+    type: UPDATE_STAGE_STATE,
+    stageIndex,
+    state,
+  }));
+};
 
 function removeSession(id) {
   return {
@@ -437,12 +431,12 @@ function removeSession(id) {
   };
 }
 
-const setSessionFinished = id => ({
+const setSessionFinished = (id) => ({
   type: SET_SESSION_FINISHED,
   sessionId: id,
 });
 
-const setSessionExported = id => ({
+const setSessionExported = (id) => ({
   type: SET_SESSION_EXPORTED,
   sessionId: id,
 });

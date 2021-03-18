@@ -23,7 +23,7 @@ const mockProps = {
   areaWidth: 100,
   areaHeight: 40,
   draggableType: 'bar',
-  getLabel: node => node.label,
+  getLabel: (node) => node.label,
 };
 
 describe('<LayoutNode />', () => {

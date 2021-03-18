@@ -108,12 +108,18 @@ const emptyProps = {
   stage: {},
 };
 
-const personNode = { uid: 1, promptIDs: ['promptIdxxx'], type: 'person', attributes: { name: 'foo' } };
-const closeFriendNode = { uid: 2, promptIDs: ['promptId123'], type: 'person', attributes: { name: 'bar', close_friend: true } };
+const personNode = {
+  uid: 1, promptIDs: ['promptIdxxx'], type: 'person', attributes: { name: 'foo' },
+};
+const closeFriendNode = {
+  uid: 2, promptIDs: ['promptId123'], type: 'person', attributes: { name: 'bar', close_friend: true },
+};
 const nodes = [
   personNode,
   closeFriendNode,
-  { uid: 3, promptIDs: ['promptId456'], attributes: { name: 'baz' }, type: 'venue' },
+  {
+    uid: 3, promptIDs: ['promptId456'], attributes: { name: 'baz' }, type: 'venue',
+  },
 ];
 
 const edges = [{ to: 'bar', from: 'foo' }, { to: 'asdf', from: 'qwerty' }];

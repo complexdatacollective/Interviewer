@@ -22,9 +22,8 @@ const ProtocolCard = (props) => {
     description,
   } = attributes;
 
-  const isOutdatedProtocol = () =>
-    schemaVersion !== APP_SCHEMA_VERSION &&
-    APP_SUPPORTED_SCHEMA_VERSIONS.includes(schemaVersion);
+  const isOutdatedProtocol = () => schemaVersion !== APP_SCHEMA_VERSION
+    && APP_SUPPORTED_SCHEMA_VERSIONS.includes(schemaVersion);
 
   const isObsoleteProtocol = () => !APP_SUPPORTED_SCHEMA_VERSIONS.includes(schemaVersion);
 
@@ -34,7 +33,7 @@ const ProtocolCard = (props) => {
       title: 'Schema can be updated',
       canCancel: false,
       message: (
-        <React.Fragment>
+        <>
           <p>
             This protocol uses an older version of the protocol file format, or &quot;schema&quot;.
           </p>
@@ -52,7 +51,7 @@ const ProtocolCard = (props) => {
             In the meantime, you can continue to use this protocol to start interviews or
             export data.
           </p>
-        </React.Fragment>
+        </>
       ),
     });
   };
@@ -63,7 +62,7 @@ const ProtocolCard = (props) => {
       title: 'Obsolete Protocol Schema',
       canCancel: false,
       message: (
-        <React.Fragment>
+        <>
           <p>
             This protocol uses an obsolete version of the protocol file format, or
             &quot;schema&quot;.
@@ -81,7 +80,7 @@ const ProtocolCard = (props) => {
           <p>
             For documentation on this issue, please see our documentation site.
           </p>
-        </React.Fragment>
+        </>
       ),
     });
   };
@@ -121,6 +120,7 @@ ProtocolCard.propTypes = {
   onClickHandler: PropTypes.func,
   openDialog: PropTypes.func.isRequired,
   condensed: PropTypes.bool,
+  description: PropTypes.string,
   attributes: PropTypes.shape({
     schemaVersion: PropTypes.number.isRequired,
     lastModified: PropTypes.string.isRequired,

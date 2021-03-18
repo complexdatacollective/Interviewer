@@ -1,8 +1,12 @@
 import uuid from 'uuid/v4';
-import { orderBy, values, mapValues } from 'lodash';
+import {
+  orderBy,
+  values,
+  mapValues,
+  omit,
+} from 'lodash';
 import { createSelector } from 'reselect';
 import { isPreview } from '../utils/Environment';
-import { getActiveSession, getLastActiveSession } from './session';
 import { entityAttributesProperty } from '../ducks/modules/network';
 
 const DefaultFinishStage = {
@@ -12,7 +16,30 @@ const DefaultFinishStage = {
   label: 'Finish Interview',
 };
 
-export const getInstalledProtocols = state => state.installedProtocols;
+const getActiveSession = (state) => (
+  state.activeSessionId && state.sessions[state.activeSessionId]
+);
+
+const getLastActiveSession = (state) => {
+  if (Object.keys(state.sessions).length === 0) {
+    return {};
+  }
+
+  const sessionsCollection = values(mapValues(state.sessions, (session, sessionUUID) => ({
+    sessionUUID,
+    ...session,
+  })));
+
+  const lastActive = orderBy(sessionsCollection, ['updatedAt', 'caseId'], ['desc', 'asc'])[0];
+  return {
+    sessionUUID: lastActive.sessionUUID,
+    [entityAttributesProperty]: {
+      ...omit(lastActive, 'sessionUUID'),
+    },
+  };
+};
+
+export const getInstalledProtocols = (state) => state.installedProtocols;
 
 export const getCurrentSessionProtocol = createSelector(
   (state, props) => getActiveSession(state, props),
@@ -35,6 +62,7 @@ export const getLastActiveProtocol = (state) => {
   }
 
   const lastActiveSession = getLastActiveSession(state);
+  const lastActiveAttributes = lastActiveSession[entityAttributesProperty];
 
   const protocolsCollection = values(mapValues(installedProtocols, (protocol, protocolUID) => ({
     protocolUID,
@@ -44,9 +72,9 @@ export const getLastActiveProtocol = (state) => {
   const lastInstalledProtocol = orderBy(protocolsCollection, ['installationDate'], ['desc'])[0];
 
   if (
-    lastActiveSession[entityAttributesProperty] &&
-    lastActiveSession[entityAttributesProperty].updatedAt && // Last active session exists
-    lastActiveSession[entityAttributesProperty].updatedAt > lastInstalledProtocol.installationDate
+    lastActiveAttributes
+    && lastActiveAttributes.updatedAt // Last active session exists
+    && lastActiveAttributes.updatedAt > lastInstalledProtocol.installationDate
   ) {
     return {
       ...installedProtocols[lastActiveSession[entityAttributesProperty].protocolUID],
@@ -59,18 +87,17 @@ export const getLastActiveProtocol = (state) => {
 
 export const getActiveProtocolName = createSelector(
   getCurrentSessionProtocol,
-  protocol => protocol && protocol.name,
+  (protocol) => protocol && protocol.name,
 );
 
 export const getAssetManifest = createSelector(
   getCurrentSessionProtocol,
-  protocol => protocol.assetManifest,
+  (protocol) => protocol.assetManifest,
 );
-
 
 export const getProtocolCodebook = createSelector(
   getCurrentSessionProtocol,
-  protocol => protocol.codebook,
+  (protocol) => protocol.codebook,
 );
 
 const withFinishStage = (stages = []) => {
@@ -82,5 +109,5 @@ const withFinishStage = (stages = []) => {
 
 export const getProtocolStages = createSelector(
   getCurrentSessionProtocol,
-  protocol => withFinishStage(protocol.stages),
+  (protocol) => withFinishStage(protocol.stages),
 );

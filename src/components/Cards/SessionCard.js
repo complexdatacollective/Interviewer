@@ -5,19 +5,19 @@ import { useSelector, useDispatch } from 'react-redux';
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
 import formatDatestamp from '../../utils/formatDatestamp';
 
-const oneBasedIndex = i => parseInt(i || 0, 10) + 1;
+const oneBasedIndex = (i) => parseInt(i || 0, 10) + 1;
 
 const SessionCard = ({
   sessionUUID,
 }) => {
-  const sessions = useSelector(state => state.sessions);
+  const sessions = useSelector((state) => state.sessions);
   const session = sessions[sessionUUID];
-  const installedProtocols = useSelector(state => state.installedProtocols);
+  const installedProtocols = useSelector((state) => state.installedProtocols);
 
   if (!session) { return null; }
 
   const dispatch = useDispatch();
-  const setSession = sessionUID => dispatch(sessionActions.setSession(sessionUID));
+  const setSession = (sessionUID) => dispatch(sessionActions.setSession(sessionUID));
 
   const {
     caseId,

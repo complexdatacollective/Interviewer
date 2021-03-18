@@ -3,11 +3,16 @@ import React from 'react';
 import { compose } from 'redux';
 
 export const scrollable = (WrappedComponent) => {
-  const Scrollable = props => (
-    <Scroller onScroll={props.onScroll}>
-      <WrappedComponent {...props} />
-    </Scroller>
-  );
+  const Scrollable = (props) => {
+    const { onScroll } = props;
+
+    return (
+      <Scroller onScroll={onScroll}>
+        <WrappedComponent {...props} />
+      </Scroller>
+    );
+  };
+
   return Scrollable;
 };
 

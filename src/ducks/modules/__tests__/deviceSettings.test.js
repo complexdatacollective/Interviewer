@@ -54,8 +54,10 @@ describe('deviceSettings reducer', () => {
   it('should toggle a device setting', () => {
     const reduced = reducer(initialState,
       { type: actionTypes.TOGGLE_SETTING, item: mockSettingToToggle });
-    expect(reduced).toEqual({ ...initialState,
-      [mockSettingToToggle]: !initialState[mockSettingToToggle] });
+    expect(reduced).toEqual({
+      ...initialState,
+      [mockSettingToToggle]: !initialState[mockSettingToToggle],
+    });
   });
 
   it('should set an interface scale', () => {
@@ -77,8 +79,7 @@ describe('device actions', () => {
   });
 
   it('should set interface scale', () => {
-    const expectedAction =
-      { type: actionTypes.SET_INTERFACE_SCALE, scale: mockInterfaceScale };
+    const expectedAction = { type: actionTypes.SET_INTERFACE_SCALE, scale: mockInterfaceScale };
     expect(actionCreators.setInterfaceScale(mockInterfaceScale)).toEqual(expectedAction);
   });
 });

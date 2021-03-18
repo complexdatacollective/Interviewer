@@ -7,41 +7,53 @@ import { actionCreators as sessionsActions } from '../../ducks/modules/sessions'
 import { entityPrimaryKeyProperty, entityAttributesProperty } from '../../ducks/modules/network';
 import { DropTarget } from '../../behaviours/DragAndDrop';
 import NodeLayout from '../../components/Canvas/NodeLayout';
-import { makeGetPlacedNodes } from '../../selectors/canvas';
 
 const relativeCoords = (container, node) => ({
   x: (node.x - container.x) / container.width,
   y: (node.y - container.y) / container.height,
 });
 
+const withConnectFrom = withState('connectFrom', 'setConnectFrom', null);
+
+const withConnectFromHandler = withHandlers({
+  handleConnectFrom: ({ setConnectFrom }) => (id) => setConnectFrom(id),
+  handleResetConnectFrom: ({ setConnectFrom }) => () => setConnectFrom(null),
+});
+
 const withRerenderCount = withState('rerenderCount', 'setRerenderCount', 0);
 
 const withDropHandlers = withHandlers({
   accepts: () => ({ meta }) => meta.itemType === 'POSITIONED_NODE',
-  onDrop: ({ updateNode, layoutVariable, setRerenderCount, rerenderCount, width, height, x, y }) =>
-    (item) => {
-      updateNode(
-        item.meta[entityPrimaryKeyProperty],
-        {},
-        {
-          [layoutVariable]: relativeCoords({ width, height, x, y }, item),
-        },
-      );
+  onDrop: ({
+    updateNode, layoutVariable, setRerenderCount, rerenderCount, width, height, x, y,
+  }) => (item) => {
+    updateNode(
+      item.meta[entityPrimaryKeyProperty],
+      {},
+      {
+        [layoutVariable]: relativeCoords({
+          width, height, x, y,
+        }, item),
+      },
+    );
 
-      // Horrible hack for performance (only re-render nodes on drop, not on drag)
-      setRerenderCount(rerenderCount + 1);
-    },
-  onDrag: ({ layoutVariable, updateNode, width, height, x, y }) =>
-    (item) => {
-      if (isNil(item.meta[entityAttributesProperty][layoutVariable])) { return; }
-      updateNode(
-        item.meta[entityPrimaryKeyProperty],
-        {},
-        {
-          [layoutVariable]: relativeCoords({ width, height, x, y }, item),
-        },
-      );
-    },
+    // Horrible hack for performance (only re-render nodes on drop, not on drag)
+    setRerenderCount(rerenderCount + 1);
+  },
+  onDrag: ({
+    layoutVariable, updateNode, width, height, x, y,
+  }) => (item) => {
+    if (isNil(item.meta[entityAttributesProperty][layoutVariable])) { return; }
+    updateNode(
+      item.meta[entityPrimaryKeyProperty],
+      {},
+      {
+        [layoutVariable]: relativeCoords({
+          width, height, x, y,
+        }, item),
+      },
+    );
+  },
   onDragEnd: ({ setRerenderCount, rerenderCount }) => () => {
     // make sure to also re-render nodes that were updated on drag end
     setRerenderCount(rerenderCount + 1);
@@ -53,79 +65,64 @@ const withSelectHandlers = compose(
     connectNode: ({
       createEdge,
       connectFrom,
-      updateLinkFrom,
+      handleConnectFrom,
       toggleEdge,
-    }) =>
-      (nodeId) => {
-        // If edge creation is disabled, return
-        if (!createEdge) { return; }
+    }) => (nodeId) => {
+      // If edge creation is disabled, return
+      if (!createEdge) { return; }
 
-        // If the target and source node are the same, deselect
-        if (connectFrom === nodeId) {
-          updateLinkFrom(null);
-          return;
-        }
+      // If the target and source node are the same, deselect
+      if (connectFrom === nodeId) {
+        handleConnectFrom(null);
+        return;
+      }
 
-        // If there isn't a target node yet, set the selected node into the linking state
-        if (!connectFrom) {
-          updateLinkFrom(nodeId);
-          return;
-        }
+      // If there isn't a target node yet, set the selected node into the linking state
+      if (!connectFrom) {
+        handleConnectFrom(nodeId);
+        return;
+      }
 
-        // Either add or remove an edge
-        if (connectFrom !== nodeId) {
-          toggleEdge({
-            from: connectFrom,
-            to: nodeId,
-            type: createEdge,
-          });
-        }
+      // Either add or remove an edge
+      if (connectFrom !== nodeId) {
+        toggleEdge({
+          from: connectFrom,
+          to: nodeId,
+          type: createEdge,
+        });
+      }
 
-        // Reset the node linking state
-        updateLinkFrom(null);
-      },
-    toggleHighlightAttribute: ({ allowHighlighting, highlightAttribute, toggleHighlight }) =>
-      (node) => {
-        if (!allowHighlighting) { return; }
-        const newVal = !node[entityAttributesProperty][highlightAttribute];
-        toggleHighlight(
-          node[entityPrimaryKeyProperty],
-          { [highlightAttribute]: newVal },
-        );
-      },
+      // Reset the node linking state
+      handleConnectFrom(null);
+    },
+    toggleHighlightAttribute: ({
+      allowHighlighting, highlightAttribute, toggleHighlight,
+    }) => (node) => {
+      if (!allowHighlighting) { return; }
+      const newVal = !node[entityAttributesProperty][highlightAttribute];
+      toggleHighlight(
+        node[entityPrimaryKeyProperty],
+        { [highlightAttribute]: newVal },
+      );
+    },
   }),
   withHandlers({
     onSelected: ({
-      allowSelect,
+      allowHighlighting,
       connectNode,
       toggleHighlightAttribute,
       setRerenderCount,
       rerenderCount,
     }) => (node) => {
-      if (!allowSelect) { return; }
-
-      connectNode(node[entityPrimaryKeyProperty]);
-      toggleHighlightAttribute(node);
+      if (!allowHighlighting) {
+        connectNode(node[entityPrimaryKeyProperty]);
+      } else {
+        toggleHighlightAttribute(node);
+      }
       setRerenderCount(rerenderCount + 1);
     },
   }),
 );
-
-function makeMapStateToProps() {
-  const getPlacedNodes = makeGetPlacedNodes();
-
-  return function mapStateToProps(
-    state,
-    { createEdge, allowHighlighting, subject, layoutVariable, stage },
-  ) {
-    const allowSelect = !!(createEdge || allowHighlighting);
-
-    return {
-      nodes: getPlacedNodes(state, { subject, layoutVariable, stage }),
-      allowSelect,
-    };
-  };
-}
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -136,7 +133,9 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default compose(
-  connect(makeMapStateToProps, mapDispatchToProps),
+  withConnectFrom,
+  withConnectFromHandler,
+  connect(null, mapDispatchToProps),
   withBounds,
   withRerenderCount,
   withDropHandlers,

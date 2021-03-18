@@ -1,17 +1,17 @@
 .accordion {
   border-bottom: solid 0.1rem var(--narrative-border-bottom-color);
 
-  &:not(.accordion__toggle--open) {
-    .accordion__icon--open {
-      display: none;
-    }
-  }
-
   &__toggle {
     align-items: center;
     display: flex;
     height: 4rem;
     padding: 0 1rem;
+
+    &:not(.accordion__toggle--open) {
+      .accordion__icon--open {
+        display: none;
+      }
+    }
 
     &:hover,
     &--open {

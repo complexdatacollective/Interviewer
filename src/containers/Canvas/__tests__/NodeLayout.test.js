@@ -11,13 +11,17 @@ describe('Connect(NodeLayout)', () => {
   const mockState = {
     sessions: {},
   };
-  const mockProps = {};
+  const mockProps = {
+    nodes: [],
+    edges: [],
+  };
 
   it('provides a drop target', () => {
     const subject = mount(
       <Provider store={createStore(() => mockState)}>
         <NodeLayout {...mockProps} />
-      </Provider>);
+      </Provider>,
+    );
     expect(subject.find('DropTarget')).toHaveLength(1);
   });
 });

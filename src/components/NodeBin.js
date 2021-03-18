@@ -32,11 +32,10 @@ NodeBin.defaultProps = {
 };
 
 export default window(compose(
-  withProps(props => ({
+  withProps((props) => ({
     accepts: ({ meta }) => props.accepts(meta),
     onDrop: ({ meta }) => props.dropHandler(meta),
   })),
   DropTarget,
   MonitorDropTarget(['isOver', 'willAccept']),
 )(NodeBin));
-
