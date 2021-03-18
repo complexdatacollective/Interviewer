@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { isNil } from 'lodash';
 import color from 'color';
+import ReactMarkdown from 'react-markdown';
+import { ALLOWED_MARKDOWN_LABEL_TAGS } from '@codaco/ui/src/utils/config';
 import { getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
 import { makeNetworkNodesForType, makeGetVariableOptions, makeGetPromptVariable } from '../selectors/interface';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
@@ -75,7 +77,7 @@ class OrdinalBins extends PureComponent {
     return (
       <div className="ordinal-bin" key={index}>
         <div className="ordinal-bin--title" style={{ background: accentColor }}>
-          <h3>{bin.label}</h3>
+          <h3><ReactMarkdown source={bin.label} allowedTypes={ALLOWED_MARKDOWN_LABEL_TAGS} /></h3>
         </div>
         <div className="ordinal-bin--content" style={{ borderBottomColor: accentColor, background: panelColor }}>
           <NodeList
