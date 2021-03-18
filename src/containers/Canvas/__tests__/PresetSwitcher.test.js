@@ -6,7 +6,7 @@ import { shallow } from 'enzyme';
 import PresetSwitcher from '../PresetSwitcher';
 
 describe('<PresetSwitcher />', () => {
-  const props = { presets: [{}, {}], presetIndex: 0 };
+  const props = { presets: [{}, {}], activePreset: 0 };
 
   it('renders navigation', () => {
     const subject = shallow(<PresetSwitcher {...props} />);
@@ -15,7 +15,7 @@ describe('<PresetSwitcher />', () => {
 
   it('handles navigation', () => {
     const handler = jest.fn();
-    const subject = shallow(<PresetSwitcher {...props} updatePreset={handler} />);
+    const subject = shallow(<PresetSwitcher {...props} onChangePreset={handler} />);
     const next = subject.dive().find('.preset-switcher__navigation--next');
     next.simulate('click');
     expect(handler).toHaveBeenCalled();
@@ -23,7 +23,11 @@ describe('<PresetSwitcher />', () => {
 
   it('enables freeze button', () => {
     const handler = jest.fn();
-    const subject = shallow(<PresetSwitcher {...props} toggleFreeze={handler} />);
+    const subject = shallow(<PresetSwitcher
+      {...props}
+      shouldShowFreezeButton
+      onToggleFreeze={handler}
+    />);
     const next = subject.dive().find('.preset-switcher__freeze');
     next.simulate('click');
     expect(handler).toHaveBeenCalled();
@@ -31,12 +35,12 @@ describe('<PresetSwitcher />', () => {
   });
 
   it('activates freeze button', () => {
-    const subject = shallow(<PresetSwitcher {...props} isFreeze />);
+    const subject = shallow(<PresetSwitcher {...props} shouldShowFreezeButton isFrozen />);
     expect(subject.dive().find('.preset-switcher__freeze--active')).toHaveLength(1);
   });
 
   it('hides freeze button', () => {
-    const subject = shallow(<PresetSwitcher {...props} showFreezeButton={false} />);
+    const subject = shallow(<PresetSwitcher {...props} shouldShowFreezeButton={false} />);
     expect(subject.dive().find('.preset-switcher__freeze')).toHaveLength(0);
   });
 });

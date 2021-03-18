@@ -1,4 +1,9 @@
-import { first, has, isNil } from 'lodash';
+import {
+  first,
+  get,
+  has,
+  isNil,
+} from 'lodash';
 import { getNetworkNodes, getNetworkEdges } from './network';
 import { createDeepEqualSelector } from './utils';
 import sortOrder from '../utils/sortOrder';
@@ -7,12 +12,11 @@ import {
   entityPrimaryKeyProperty,
   entityAttributesProperty,
 } from '../ducks/modules/network';
+import { getStageSubject } from './session';
 
-const getLayout = (_, props) => props.layoutVariable;
-const getSubject = (_, props) => props.subject;
-const getCategoricalVariable = (_, props) => props.groupVariable;
-const getSortOptions = (_, props) => props.sortOrder;
-const getDisplayEdges = (_, props) => props.displayEdges;
+const getLayout = (_, props) => get(props, 'prompt.layout.layoutVariable');
+const getSortOptions = (_, props) => get(props, 'prompt.props.sortOrder');
+const getDisplayEdges = (_, props) => get(props, 'prompt.edges.display', []);
 
 /**
  * Selector for next unplaced node.
@@ -22,7 +26,7 @@ const getDisplayEdges = (_, props) => props.displayEdges;
  */
 export const makeGetNextUnplacedNode = () => createDeepEqualSelector(
   getNetworkNodes,
-  getSubject,
+  getStageSubject(),
   getLayout,
   getSortOptions,
   (nodes, subject, layoutVariable, sortOptions) => {
@@ -31,7 +35,7 @@ export const makeGetNextUnplacedNode = () => createDeepEqualSelector(
       const attributes = getEntityAttributes(node);
       return (
         node.type === type
-          && (has(attributes, layoutVariable) && isNil(attributes[layoutVariable]))
+        && (has(attributes, layoutVariable) && isNil(attributes[layoutVariable]))
       );
     });
     const sorter = sortOrder(sortOptions);
@@ -47,52 +51,20 @@ export const makeGetNextUnplacedNode = () => createDeepEqualSelector(
  */
 export const makeGetPlacedNodes = () => createDeepEqualSelector(
   getNetworkNodes,
-  getSubject,
+  getStageSubject(),
   getLayout,
   (nodes, subject, layoutVariable) => {
     const type = subject && subject.type;
+
     return nodes.filter((node) => {
       const attributes = getEntityAttributes(node);
       return (
         node.type === type
-          && (has(attributes, layoutVariable) && !isNil(attributes[layoutVariable]))
+        && (has(attributes, layoutVariable) && !isNil(attributes[layoutVariable]))
       );
     });
   },
 );
-
-/**
- * Selector for nodes by group (categorical) variable.
- */
-
-export const makeGetNodesByCategorical = () => {
-  const getPlacedNodes = makeGetPlacedNodes();
-  return createDeepEqualSelector(
-    getPlacedNodes,
-    getCategoricalVariable,
-    (nodes, categoricalVariable) => {
-      const groupedList = {};
-
-      nodes.forEach((node) => {
-        const categoricalValues = node[entityAttributesProperty][categoricalVariable];
-
-        // Filter out nodes with no value for this variable.
-        if (!categoricalValues) { return; }
-
-        categoricalValues.forEach((categoricalValue) => {
-          if (groupedList[categoricalValue]) {
-            groupedList[categoricalValue].nodes.push(node);
-          } else {
-            groupedList[categoricalValue] = { group: categoricalValue, nodes: [] };
-            groupedList[categoricalValue].nodes.push(node);
-          }
-        });
-      });
-
-      return groupedList;
-    },
-  );
-};
 
 const edgeCoords = (edge, { nodes, layout }) => {
   const from = nodes.find((n) => n[entityPrimaryKeyProperty] === edge.from);
@@ -108,7 +80,7 @@ const edgeCoords = (edge, { nodes, layout }) => {
   };
 };
 
-const edgesToCoords = (edges, { nodes, layout }) => edges.map(
+export const edgesToCoords = (edges, { nodes, layout }) => edges.map(
   (edge) => edgeCoords(
     edge,
     { nodes, layout },

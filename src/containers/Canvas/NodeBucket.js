@@ -1,12 +1,10 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import Node from '../Node';
 import { DragSource, DropObstacle } from '../../behaviours/DragAndDrop';
 import { NO_SCROLL } from '../../behaviours/DragAndDrop/DragManager';
 import { entityPrimaryKeyProperty } from '../../ducks/modules/network';
-import { makeGetNextUnplacedNode } from '../../selectors/canvas';
 
 const EnhancedNode = DragSource(Node);
 
@@ -17,7 +15,7 @@ class NodeBucket extends PureComponent {
       node,
     } = this.props;
 
-    if (!allowPositioning || !node) { return (<div />); }
+    if (!allowPositioning || !node) { return null; }
 
     return (
       <div className="node-bucket">
@@ -36,36 +34,16 @@ class NodeBucket extends PureComponent {
 }
 
 NodeBucket.propTypes = {
-  allowPositioning: PropTypes.bool,
-  node: PropTypes.object,
+  allowPositioning: PropTypes.bool.isRequired,
+  node: PropTypes.any,
 };
 
 NodeBucket.defaultProps = {
-  allowPositioning: true,
   node: null,
-};
-
-const makeMapStateToProps = () => {
-  const getNextUnplacedNode = makeGetNextUnplacedNode();
-
-  const mapStateToProps = (state, {
-    layoutVariable, subject, sortOrder, stage,
-  }) => {
-    const node = getNextUnplacedNode(state, {
-      layoutVariable, subject, sortOrder, stage,
-    });
-
-    return {
-      node,
-    };
-  };
-
-  return mapStateToProps;
 };
 
 export { NodeBucket };
 
 export default compose(
-  connect(makeMapStateToProps),
   DropObstacle,
 )(NodeBucket);

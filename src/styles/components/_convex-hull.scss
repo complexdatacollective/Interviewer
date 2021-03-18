@@ -10,6 +10,7 @@
   polygon {
     stroke-linejoin: round;
     stroke-width: calc((var(--base-node-size) / 2) + 1rem);
+    opacity: 0.5;
   }
 }
 

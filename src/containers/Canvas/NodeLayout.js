@@ -7,11 +7,17 @@ import { actionCreators as sessionsActions } from '../../ducks/modules/sessions'
 import { entityPrimaryKeyProperty, entityAttributesProperty } from '../../ducks/modules/network';
 import { DropTarget } from '../../behaviours/DragAndDrop';
 import NodeLayout from '../../components/Canvas/NodeLayout';
-import { makeGetPlacedNodes } from '../../selectors/canvas';
 
 const relativeCoords = (container, node) => ({
   x: (node.x - container.x) / container.width,
   y: (node.y - container.y) / container.height,
+});
+
+const withConnectFrom = withState('connectFrom', 'setConnectFrom', null);
+
+const withConnectFromHandler = withHandlers({
+  handleConnectFrom: ({ setConnectFrom }) => (id) => setConnectFrom(id),
+  handleResetConnectFrom: ({ setConnectFrom }) => () => setConnectFrom(null),
 });
 
 const withRerenderCount = withState('rerenderCount', 'setRerenderCount', 0);
@@ -59,7 +65,7 @@ const withSelectHandlers = compose(
     connectNode: ({
       createEdge,
       connectFrom,
-      updateLinkFrom,
+      handleConnectFrom,
       toggleEdge,
     }) => (nodeId) => {
       // If edge creation is disabled, return
@@ -67,13 +73,13 @@ const withSelectHandlers = compose(
 
       // If the target and source node are the same, deselect
       if (connectFrom === nodeId) {
-        updateLinkFrom(null);
+        handleConnectFrom(null);
         return;
       }
 
       // If there isn't a target node yet, set the selected node into the linking state
       if (!connectFrom) {
-        updateLinkFrom(nodeId);
+        handleConnectFrom(nodeId);
         return;
       }
 
@@ -87,12 +93,10 @@ const withSelectHandlers = compose(
       }
 
       // Reset the node linking state
-      updateLinkFrom(null);
+      handleConnectFrom(null);
     },
     toggleHighlightAttribute: ({
-      allowHighlighting,
-      highlightAttribute,
-      toggleHighlight,
+      allowHighlighting, highlightAttribute, toggleHighlight,
     }) => (node) => {
       if (!allowHighlighting) { return; }
       const newVal = !node[entityAttributesProperty][highlightAttribute];
@@ -104,38 +108,21 @@ const withSelectHandlers = compose(
   }),
   withHandlers({
     onSelected: ({
-      allowSelect,
+      allowHighlighting,
       connectNode,
       toggleHighlightAttribute,
       setRerenderCount,
       rerenderCount,
     }) => (node) => {
-      if (!allowSelect) { return; }
-
-      connectNode(node[entityPrimaryKeyProperty]);
-      toggleHighlightAttribute(node);
+      if (!allowHighlighting) {
+        connectNode(node[entityPrimaryKeyProperty]);
+      } else {
+        toggleHighlightAttribute(node);
+      }
       setRerenderCount(rerenderCount + 1);
     },
   }),
 );
-
-function makeMapStateToProps() {
-  const getPlacedNodes = makeGetPlacedNodes();
-
-  return function mapStateToProps(
-    state,
-    {
-      createEdge, allowHighlighting, subject, layoutVariable, stage,
-    },
-  ) {
-    const allowSelect = !!(createEdge || allowHighlighting);
-
-    return {
-      nodes: getPlacedNodes(state, { subject, layoutVariable, stage }),
-      allowSelect,
-    };
-  };
-}
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -146,7 +133,9 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default compose(
-  connect(makeMapStateToProps, mapDispatchToProps),
+  withConnectFrom,
+  withConnectFromHandler,
+  connect(null, mapDispatchToProps),
   withBounds,
   withRerenderCount,
   withDropHandlers,

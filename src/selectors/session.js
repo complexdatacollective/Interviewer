@@ -116,6 +116,16 @@ export const getStageForCurrentSession = createSelector(
   (stages, stageIndex) => stages[stageIndex],
 );
 
+export const getStageSubject = () => createDeepEqualSelector(
+  getStageForCurrentSession,
+  (stage) => stage.subject,
+);
+
+export const getStageSubjectType = () => createDeepEqualSelector(
+  getStageSubject(),
+  (subject) => subject.type,
+);
+
 export const getPromptIndexForCurrentSession = createSelector(
   (state) => (
     state.sessions[state.activeSessionId] && state.sessions[state.activeSessionId].promptIndex

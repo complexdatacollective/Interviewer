@@ -28,7 +28,12 @@ describe('Connect(ConvexHulls)', () => {
         description: '',
         forms: {},
         lastModified: '2018-10-01T00:00:00.000Z',
-        stages: [],
+        stages: [{
+          subject: {
+            entity: 'node',
+            type: 'person',
+          },
+        }],
       },
     },
     pairedServer: null,
@@ -50,6 +55,7 @@ describe('Connect(ConvexHulls)', () => {
   };
   const mockProps = {
     subject: {},
+    nodes: [],
   };
   const subject = shallow(<ConvexHulls {...mockProps} store={createStore(() => mockState)} />);
 

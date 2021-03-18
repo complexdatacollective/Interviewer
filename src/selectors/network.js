@@ -1,5 +1,5 @@
-import { findKey, find } from 'lodash';
-import { getActiveSession } from './session';
+import { findKey, find, get } from 'lodash';
+import { getActiveSession, getStageSubjectType } from './session';
 import { createDeepEqualSelector } from './utils';
 import { getProtocolCodebook } from './protocol';
 import { asWorkerAgentNetwork } from '../utils/networkFormat';
@@ -48,9 +48,9 @@ export const getWorkerNetwork = createDeepEqualSelector(
 // The user-defined name of a node type; e.g. `codebook.node[uuid].name == 'person'`
 export const makeGetNodeTypeDefinition = () => createDeepEqualSelector(
   (state, props) => getProtocolCodebook(state, props),
-  (state, props) => (props && props.type)
-    || (props && props.stage && props.stage.subject && props.stage.subject.type)
-    || (state && state.type),
+  (state, props) => get(props, 'type') // When used in <Node />
+    || get(props, 'stage.subject.type') // Standard location
+    || get(state, 'type'), // Unknown - perhaps worker?
   (codebook, nodeType) => {
     const nodeInfo = codebook && codebook.node;
     return nodeInfo && nodeInfo[nodeType];
@@ -59,7 +59,7 @@ export const makeGetNodeTypeDefinition = () => createDeepEqualSelector(
 
 // See: https://github.com/complexdatacollective/Network-Canvas/wiki/Node-Labeling
 export const labelLogic = (codebookForNodeType, nodeAttributes) => {
-  // In the codebook for the stage's subject, look for a variable with a name
+  // 1. In the codebook for the stage's subject, look for a variable with a name
   // property of "name", and try to retrieve this value by key in the node's
   // attributes
   const variableCalledName = codebookForNodeType
@@ -71,7 +71,7 @@ export const labelLogic = (codebookForNodeType, nodeAttributes) => {
     return nodeAttributes[variableCalledName];
   }
 
-  // Look for a property on the node with a key of ‘name’, and try to retrieve this
+  // 2. Look for a property on the node with a key of ‘name’, and try to retrieve this
   // value as a key in the node's attributes.
   // const nodeVariableCalledName = get(nodeAttributes, 'name');
 
@@ -84,7 +84,7 @@ export const labelLogic = (codebookForNodeType, nodeAttributes) => {
     return nodeVariableCalledName;
   }
 
-  // Last resort!
+  // 3. Last resort!
   return 'No \'name\' variable!';
 };
 
@@ -127,22 +127,22 @@ export const makeGetEdgeColor = () => createDeepEqualSelector(
 
 export const makeGetNodeAttributeLabel = () => createDeepEqualSelector(
   getProtocolCodebook,
-  (_, props) => props.subject.type,
+  getStageSubjectType(),
   (_, props) => props.variableId,
-  (codebook, nodeType, variableId) => {
+  (codebook, subjectType, variableId) => {
     const nodeInfo = codebook.node;
-    const variables = (nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].variables) || {};
+    const variables = (nodeInfo && nodeInfo[subjectType] && nodeInfo[subjectType].variables) || {};
     return (variables && variables[variableId] && variables[variableId].name) || variableId;
   },
 );
 
 export const makeGetCategoricalOptions = () => createDeepEqualSelector(
   (state, props) => getProtocolCodebook(state, props),
-  (_, props) => props.subject.type,
+  getStageSubjectType(),
   (_, props) => props.variableId,
-  (codebook, nodeType, variableId) => {
+  (codebook, subjectType, variableId) => {
     const nodeInfo = codebook.node;
-    const variables = (nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].variables) || {};
+    const variables = (nodeInfo && nodeInfo[subjectType] && nodeInfo[subjectType].variables) || {};
     return (variables && variables[variableId] && variables[variableId].options) || [];
   },
 );
