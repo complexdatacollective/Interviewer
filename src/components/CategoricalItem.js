@@ -46,10 +46,12 @@ const CategoricalItem = ({
               <h3>
                 <ReactMarkdown source={label} allowedTypes={ALLOWED_MARKDOWN_LABEL_TAGS} />
               </h3>
-              {(!isExpanded && details) &&
+              {(!isExpanded && details)
+              && (
                 <h5>
                   <ReactMarkdown source={details} allowedTypes={ALLOWED_MARKDOWN_LABEL_TAGS} />
-                </h5>}
+                </h5>
+              )}
             </div>
           </Flipped>
           {isExpanded
