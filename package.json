@@ -212,6 +212,10 @@
     "nsis": {
       "include": "build-resources/scripts/bonjour.nsh"
     },
+    "win": {
+      "target": "nsis",
+      "certificateSha1": "512E5573B1961B0ADCAFB21288935F8A3E6E656F"
+    },
     "mac": {
       "category": "public.app-category.education",
       "hardenedRuntime": true,
