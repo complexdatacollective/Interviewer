@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import { get } from 'lodash';
 import { Icon, window } from '@codaco/ui';
 import { Radio } from '@codaco/ui/lib/components/Fields';
 import Accordion from './Accordion';
@@ -124,14 +125,18 @@ const makeMapStateToProps = () => {
   const getCategoricalOptions = makeGetCategoricalOptions();
 
   const mapStateToProps = (state, props) => {
-    const highlightLabels = props.preset.highlight.map((variable) => (
-      getNodeAttributeLabel(state, { variableId: variable, ...props })
-    ));
-    const edges = props.preset.edges.display.map((type) => (
-      { label: getEdgeLabel(state, { type }), color: getEdgeColor(state, { type }) }
-    ));
-    const convexOptions = getCategoricalOptions(state,
-      { variableId: props.preset.groupVariable, ...props });
+    const highlightLabels = get(props, 'preset.highlight', [])
+      .map((variable) => (
+        getNodeAttributeLabel(state, { variableId: variable, ...props })
+      ));
+    const edges = get(props, 'preset.edges.display', [])
+      .map((type) => (
+        { label: getEdgeLabel(state, { type }), color: getEdgeColor(state, { type }) }
+      ));
+    const convexOptions = getCategoricalOptions(
+      state,
+      { variableId: props.preset.groupVariable, ...props },
+    );
 
     return {
       convexOptions,
