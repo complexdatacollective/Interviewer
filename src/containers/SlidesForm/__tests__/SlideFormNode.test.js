@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import SlideForm from '../SlideFormNode';
+import { SlideFormNode as SlideForm } from '../SlideFormNode';
 import { entityAttributesProperty } from '../../../ducks/modules/network';
 
 const mockProps = {

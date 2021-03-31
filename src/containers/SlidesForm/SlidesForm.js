@@ -235,6 +235,7 @@ const SlidesForm = (props) => {
           <strong>{activeIndex}</strong>
           {' '}
           of
+          {' '}
           <strong>{items.length}</strong>
         </h6>
         <ProgressBar orientation="horizontal" percentProgress={(activeIndex / items.length) * 100} />

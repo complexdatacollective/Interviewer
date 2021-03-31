@@ -1,11 +1,12 @@
 import React, { PureComponent } from 'react';
-import { find } from 'lodash';
+import { filter, find } from 'lodash';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withProps, compose } from 'recompose';
 import { makeGetEdgeColor, getNetworkNodes } from '../../selectors/network';
 import { Scroller } from '../../components';
 import { entityAttributesProperty, entityPrimaryKeyProperty } from '../../ducks/modules/network';
+import { makeNetworkEntitiesForType } from '../../selectors/interface';
 import Node from '../Node';
 import Form from '../Form';
 
@@ -24,6 +25,7 @@ class SlideFormEdge extends PureComponent {
       subject,
       initialValues,
       submitButton,
+      otherNetworkEntities,
     } = this.props;
 
     return (
@@ -42,6 +44,7 @@ class SlideFormEdge extends PureComponent {
                 subject={subject}
                 onSubmit={this.handleSubmit}
                 submitButton={submitButton}
+                otherNetworkEntities={otherNetworkEntities}
               />
             </Scroller>
           </div>
@@ -57,9 +60,11 @@ SlideFormEdge.propTypes = {
   subject: PropTypes.object.isRequired,
   item: PropTypes.object.isRequired,
   submitButton: PropTypes.object,
+  otherNetworkEntities: PropTypes.array,
 };
 
 SlideFormEdge.defaultProps = {
+  otherNetworkEntities: [],
   submitButton: <button type="submit" key="submit" aria-label="Submit" hidden />,
 };
 
@@ -71,6 +76,9 @@ const withEdgeProps = withProps(({ item }) => ({
 const withStore = connect((state, props) => {
   const getEdgeColor = makeGetEdgeColor();
   const nodes = getNetworkNodes(state);
+  const networkEntitiesForType = makeNetworkEntitiesForType();
+  const otherNetworkEntities = filter(networkEntitiesForType(state, props), (edge) => (
+    !props.item || edge[entityPrimaryKeyProperty] !== props.item[entityPrimaryKeyProperty]));
 
   const fromNode = find(nodes, [entityPrimaryKeyProperty, props.item.from]);
   const toNode = find(nodes, [entityPrimaryKeyProperty, props.item.to]);
@@ -79,6 +87,7 @@ const withStore = connect((state, props) => {
     fromNode,
     toNode,
     edgeColor: getEdgeColor(state, props.item),
+    otherNetworkEntities,
   };
 });
 

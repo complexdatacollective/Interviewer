@@ -4,8 +4,9 @@ import { createSelector } from 'reselect';
 import { filter, includes } from 'lodash';
 import { assert, createDeepEqualSelector } from './utils';
 import { getProtocolCodebook } from './protocol';
-import { getNetworkEdges, getNetworkNodes } from './network';
+import { getNetwork, getNetworkEdges, getNetworkNodes } from './network';
 import { getAdditionalAttributes, getSubject } from '../utils/protocol/accessors';
+import { getStageSubject } from './session';
 
 // Selectors that are generic between interfaces
 
@@ -104,6 +105,28 @@ export const makeNetworkEdgesForType = () => createSelector(
   (state, props) => getNetworkEdges(state, props),
   makeGetSubject(),
   (edges, subject) => filter(edges, ['type', subject.type]),
+);
+
+/**
+ * makeNetworkEntitiesForType()
+ * Get the current prompt/stage subject, and filter the network by this entity type.
+*/
+export const makeNetworkEntitiesForType = () => createSelector(
+  (state, props) => getNetwork(state, props),
+  getStageSubject(),
+  (network, subject) => {
+    let entities;
+    if (!subject || !network) {
+      entities = [];
+    } else if (subject.entity === 'node') {
+      entities = filter(network.nodes, ['type', subject.type]);
+    } else if (subject.entity === 'edge') {
+      entities = filter(network.edges, ['type', subject.type]);
+    } else {
+      entities = [network.ego];
+    }
+    return entities;
+  },
 );
 
 /**

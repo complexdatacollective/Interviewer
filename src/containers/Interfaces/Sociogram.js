@@ -99,6 +99,7 @@ const Sociogram = (props) => {
           <NodeBucket
             id="NODE_BUCKET"
             node={nextUnplacedNode}
+            allowPositioning={allowPositioning}
           />
         </Canvas>
       </div>

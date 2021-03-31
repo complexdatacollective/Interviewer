@@ -27,6 +27,7 @@ exports[`<SlideFormEdge /> should render 1`] = `
       },
     }
   }
+  otherNetworkEntities={Array []}
   stageIndex={1}
   submitButton={
     <button

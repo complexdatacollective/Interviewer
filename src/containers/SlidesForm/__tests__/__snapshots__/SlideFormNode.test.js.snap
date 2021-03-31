@@ -23,6 +23,7 @@ exports[`<SlideFormNode /> should render 1`] = `
   }
   nodeIndex={1}
   onUpdate={[Function]}
+  otherNetworkEntities={Array []}
   stageIndex={1}
   submitButton={
     <button
