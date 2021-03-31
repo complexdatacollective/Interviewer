@@ -115,17 +115,16 @@ export const makeNetworkEntitiesForType = () => createSelector(
   (state, props) => getNetwork(state, props),
   getStageSubject(),
   (network, subject) => {
-    let entities;
     if (!subject || !network) {
-      entities = [];
-    } else if (subject.entity === 'node') {
-      entities = filter(network.nodes, ['type', subject.type]);
-    } else if (subject.entity === 'edge') {
-      entities = filter(network.edges, ['type', subject.type]);
-    } else {
-      entities = [network.ego];
+      return [];
     }
-    return entities;
+    if (subject.entity === 'node') {
+      return filter(network.nodes, ['type', subject.type]);
+    }
+    if (subject.entity === 'edge') {
+      return filter(network.edges, ['type', subject.type]);
+    }
+    return [network.ego];
   },
 );
 

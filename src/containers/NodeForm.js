@@ -97,7 +97,7 @@ const mapStateToProps = (state, props) => {
     form: props.stage.form,
     useFullScreenForms: state.deviceSettings.useFullScreenForms,
     initialValues,
-    otherNetworkEntities,
+    otherNetworkEntities, // used for some validation functions
   };
 };
 

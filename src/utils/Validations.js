@@ -49,11 +49,14 @@ const isMatchingValue = (submittedValue, existingValue) => {
   if (submittedValue && existingValue && existingValue instanceof Array) {
     return isEqual(submittedValue.sort(), existingValue.sort());
   }
+  if (submittedValue && existingValue && existingValue instanceof Object) {
+    return isEqual(submittedValue, existingValue);
+  }
   return submittedValue === existingValue;
 };
 
 const isSomeValueMatching = (value, otherNetworkEntities, name) => (
-  some(otherNetworkEntities, (entity) => entity.attributes && entity.attributes[name]
+  some(otherNetworkEntities, (entity) => entity.attributes
     && isMatchingValue(value, entity.attributes[name])));
 
 export const unique = () => (value, _, props, name) => (isSomeValueMatching(value, props.otherNetworkEntities, name) ? 'Your answer must be unique' : undefined);

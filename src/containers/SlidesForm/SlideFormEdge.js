@@ -60,7 +60,7 @@ SlideFormEdge.propTypes = {
   subject: PropTypes.object.isRequired,
   item: PropTypes.object.isRequired,
   submitButton: PropTypes.object,
-  otherNetworkEntities: PropTypes.array,
+  otherNetworkEntities: PropTypes.array, // used for some validation functions
 };
 
 SlideFormEdge.defaultProps = {

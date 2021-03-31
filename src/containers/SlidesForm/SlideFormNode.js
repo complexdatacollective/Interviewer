@@ -56,7 +56,7 @@ SlideFormNode.propTypes = {
   item: PropTypes.object.isRequired,
   onUpdate: PropTypes.func,
   submitButton: PropTypes.object,
-  otherNetworkEntities: PropTypes.array,
+  otherNetworkEntities: PropTypes.array, // used for some validation functions
 };
 
 SlideFormNode.defaultProps = {

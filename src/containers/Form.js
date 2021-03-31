@@ -137,7 +137,7 @@ Form.propTypes = {
   tooltip: PropTypes.string,
   submitButton: PropTypes.object,
   initialValues: PropTypes.object,
-  otherNetworkEntities: PropTypes.array,
+  otherNetworkEntities: PropTypes.array, // used for some validation functions
 };
 
 Form.defaultProps = {
