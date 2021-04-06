@@ -155,30 +155,11 @@ $choice-padding: 2rem;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: unit(2) unit(4);
+    padding: 0 unit(4);
 
-    .form-field-togglebutton__checkbox {
-      border-radius: 12rem;
-      width: 12rem;
-      height: 5rem;
-
-      &::before {
-        border-radius: 12rem;
-      }
-
-      &::after {
-        border-radius: 12rem;
-      }
+    .form-field-boolean {
+      flex: 1 auto;
     }
-  }
-
-  &__yes {
-    @include recolor-toggle(var(--primary));
-    margin-right: 4rem;
-  }
-
-  &__no {
-    @include recolor-toggle(var(--color-tomato));
   }
 
   &__progress {

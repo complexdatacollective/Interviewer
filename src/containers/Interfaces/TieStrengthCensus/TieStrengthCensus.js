@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import { get } from 'lodash';
 import cx from 'classnames';
 import { ProgressBar } from '@codaco/ui';
-import BooleanOption from '@codaco/ui/lib/components/Boolean/BooleanOption';
 import { AnimatePresence, motion } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import defaultMarkdownRenderers from '../../../utils/markdownRenderers';
@@ -22,6 +21,7 @@ import useSteps from './useSteps';
 import useNetworkEdgeState from './useEdgeState';
 import useAutoAdvance from './useAutoAdvance';
 import Pair from './Pair';
+import Button from './Button';
 
 const fadeVariants = {
   show: { opacity: 1, transition: { duration: 0.5 } },
@@ -248,23 +248,22 @@ const DyadCensus = ({
                           animate="show"
                           exit="hide"
                         >
-                          <div className="form-field-container form-field-boolean">
-                            <div className="form-field-boolean__control">
-                              <div className="form-field boolean">
-                                <div className="boolean__options">
-                                  <BooleanOption
-                                    selected={!!hasEdge && hasEdge !== null}
-                                    onClick={handleChange(true)}
-                                    label="Yes"
-                                  />
-                                  <BooleanOption
-                                    onClick={handleChange(false)}
-                                    selected={!hasEdge && hasEdge !== null}
-                                    label="No"
-                                  />
-                                </div>
-                              </div>
-                            </div>
+                          <div className="dyad-census__yes">
+                            <Button
+                              onClick={handleChange(true)}
+                              selected={!!hasEdge && hasEdge !== null}
+                            >
+                              Yes
+                            </Button>
+                          </div>
+                          <div className="dyad-census__no">
+                            <Button
+                              onClick={handleChange(false)}
+                              selected={!hasEdge && hasEdge !== null}
+                              className="no"
+                            >
+                              No
+                            </Button>
                           </div>
                         </motion.div>
                       </AnimatePresence>
