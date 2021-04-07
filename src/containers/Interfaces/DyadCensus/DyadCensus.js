@@ -250,17 +250,19 @@ const DyadCensus = ({
                         >
                           <div className="form-field-container form-field-boolean">
                             <div className="form-field-boolean__control">
-                              <div className="form-field boolean">
+                              <div className="form-field-boolean">
                                 <div className="boolean__options">
                                   <BooleanOption
                                     selected={!!hasEdge && hasEdge !== null}
                                     onClick={handleChange(true)}
-                                    label="Yes"
+                                    label={() => <h1>Yes</h1>}
                                   />
                                   <BooleanOption
+                                    classes="boolean-option--no"
                                     onClick={handleChange(false)}
                                     selected={!hasEdge && hasEdge !== null}
-                                    label="No"
+                                    label={() => <h1>No</h1>}
+                                    negative
                                   />
                                 </div>
                               </div>

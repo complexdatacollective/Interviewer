@@ -4,7 +4,8 @@ import { compose } from 'recompose';
 import PropTypes from 'prop-types';
 import { get } from 'lodash';
 import cx from 'classnames';
-import { ProgressBar } from '@codaco/ui';
+import { CircularProgressbar } from 'react-circular-progressbar';
+import BooleanOption from '@codaco/ui/lib/components/Boolean/BooleanOption';
 import { AnimatePresence, motion } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import defaultMarkdownRenderers from '../../../utils/markdownRenderers';
@@ -21,7 +22,8 @@ import useSteps from './useSteps';
 import useNetworkEdgeState from './useEdgeState';
 import useAutoAdvance from './useAutoAdvance';
 import Pair from './Pair';
-import Button from './Button';
+
+import 'react-circular-progressbar/dist/styles.css';
 
 const fadeVariants = {
   show: { opacity: 1, transition: { duration: 0.5 } },
@@ -48,21 +50,31 @@ const canSkip = false;
 /**
   * Dyad Census Interface
   */
-const DyadCensus = ({
-  registerBeforeNext,
-  promptId: promptIndex, // TODO: what is going on here?
-  prompt,
-  promptBackward,
-  promptForward,
-  stage,
-  pairs,
-  nodes,
-  edges,
-  edgeColor,
-  dispatch,
-  stageState,
-  onComplete,
-}) => {
+const TieStrengthCensus = (props) => {
+
+  const {
+    registerBeforeNext,
+    promptId: promptIndex, // TODO: what is going on here?
+    prompt,
+    promptBackward,
+    promptForward,
+    stage,
+    pairs,
+    nodes,
+    edges,
+    edgeColor,
+    dispatch,
+    stageState,
+    onComplete,
+    edgeVariableOptions,
+  } = props;
+
+  const {
+    createEdge,
+    edgeVariable,
+    negativeLabel
+  } = prompt;
+
   const [isIntroduction, setIsIntroduction] = useState(true);
   const [isForwards, setForwards] = useState(true);
   const [isValid, setIsValid] = useState(true);
@@ -74,15 +86,18 @@ const DyadCensus = ({
   const pair = get(pairs, stepsState.substep, null);
   const [fromNode, toNode] = getNodePair(nodes, pair);
 
-  const [hasEdge, setEdge, isTouched, isChanged] = useNetworkEdgeState(
+  const [hasEdge, setEdge, edgeVariableValue, isTouched, isChanged] = useNetworkEdgeState(
     dispatch,
     edges,
-    prompt.createEdge, // Type of edge to create
+    createEdge, // Type of edge to create
+    edgeVariable, // Edge ordinal variable
     pair,
     promptIndex,
     stageState,
     [stepsState.step],
   );
+
+  console.log({ hasEdge, edgeVariableValue, isTouched, isChanged});
 
   const next = () => {
     setForwards(true);
@@ -160,12 +175,12 @@ const DyadCensus = ({
   };
 
   const choiceClasses = cx(
-    'dyad-census__choice',
-    { 'dyad-census__choice--invalid': !isValid },
+    'tie-strength-census__choice',
+    { 'tie-strength-census__choice--invalid': !isValid },
   );
 
   return (
-    <div className="dyad-census">
+    <div className="tie-strength-census">
       <AnimatePresence
         initial={false}
         exitBeforeEnter
@@ -173,7 +188,7 @@ const DyadCensus = ({
         { isIntroduction
         && (
         <motion.div
-          className="dyad-census__introduction"
+          className="tie-strength-census__introduction"
           variants={introVariants}
           initial="hide"
           exit="hide"
@@ -196,19 +211,19 @@ const DyadCensus = ({
             initial="hide"
             exit="hide"
             animate="show"
-            className="dyad-census__wrapper"
+            className="tie-strength-census__wrapper"
           >
             <AnimatePresence exitBeforeEnter>
               <motion.div
-                className="dyad-census__main"
+                className="tie-strength-census__main"
                 key={promptIndex}
                 variants={fadeVariants}
                 initial="hide"
                 exit="hide"
                 animate="show"
               >
-                <div className="dyad-census__layout">
-                  <div className="dyad-census__pairs">
+                <div className="tie-strength-census__layout">
+                  <div className="tie-strength-census__pairs">
                     <AnimatePresence
                       custom={[isForwards]}
                       initial={false}
@@ -230,7 +245,7 @@ const DyadCensus = ({
                     initial="hide"
                     animate="show"
                   >
-                    <div className="dyad-census__prompt">
+                    <div className="tie-strength-census__prompt">
                       <PromptSwiper
                         forward={promptForward}
                         backward={promptBackward}
@@ -238,43 +253,62 @@ const DyadCensus = ({
                         prompts={stage.prompts}
                       />
                     </div>
-                    <div className="dyad-census__options">
+                    <div className="tie-strength-census__options">
                       <AnimatePresence exitBeforeEnter>
                         <motion.div
                           key={stepsState.step}
-                          className="dyad-census__options-step"
+                          className="tie-strength-census__options-step"
                           variants={optionsVariants}
                           initial="hide"
                           animate="show"
                           exit="hide"
                         >
-                          <div className="dyad-census__yes">
-                            <Button
-                              onClick={handleChange(true)}
-                              selected={!!hasEdge && hasEdge !== null}
-                            >
-                              Yes
-                            </Button>
-                          </div>
-                          <div className="dyad-census__no">
-                            <Button
-                              onClick={handleChange(false)}
-                              selected={!hasEdge && hasEdge !== null}
-                              className="no"
-                            >
-                              No
-                            </Button>
+                          <div className="form-field-container form-field-boolean">
+                            <div className="form-field-boolean__control">
+                              <div className="form-field-boolean">
+                                <div className="boolean__options">
+                                  { edgeVariableOptions.map(option => (
+                                    <BooleanOption
+                                      key={option.value}
+                                      selected={!!hasEdge && edgeVariableValue === option.value}
+                                      onClick={handleChange(option.value)}
+                                      label={option.label}
+                                    />
+                                  ))}
+                                  <BooleanOption
+                                    classes="boolean-option--no"
+                                    selected={!hasEdge && hasEdge !== null}
+                                    onClick={handleChange(false)}
+                                    label={negativeLabel}
+                                    negative
+                                  />
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         </motion.div>
                       </AnimatePresence>
-                    </div>
-                    <div className="dyad-census__progress">
-                      <ProgressBar orientation="horizontal" percentProgress={((stepsState.substep + 1) / stepsState.steps[stepsState.stage]) * 100} />
                     </div>
                   </motion.div>
                 </div>
               </motion.div>
             </AnimatePresence>
+            <motion.div
+              className="tie-strength-census__progress"
+              initial={{
+                opacity: 0,
+                y: '-5rem',
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+            >
+              <CircularProgressbar
+                value={((stepsState.substep + 1) / stepsState.steps[stepsState.stage]) * 100}
+                text={`${Math.round(((stepsState.substep + 1) / stepsState.steps[stepsState.stage]) * 100)}%`}
+              />
+            </motion.div>
           </motion.div>
           )}
       </AnimatePresence>
@@ -282,7 +316,7 @@ const DyadCensus = ({
   );
 };
 
-DyadCensus.propTypes = {
+TieStrengthCensus.propTypes = {
   prompt: PropTypes.object.isRequired,
   promptBackward: PropTypes.func.isRequired,
   promptForward: PropTypes.func.isRequired,
@@ -297,6 +331,7 @@ const makeMapStateToProps = () => {
     const edges = getEdges(state, props);
     const codebook = getProtocolCodebook(state, props);
     const edgeColor = get(codebook, ['edge', props.prompt.createEdge, 'color']);
+    const edgeVariableOptions = get(codebook, ['edge', props.prompt.createEdge, 'variables', props.prompt.edgeVariable, 'options'], []);
     const pairs = getPairs(nodes);
     const stageState = getStageState(state);
 
@@ -306,6 +341,7 @@ const makeMapStateToProps = () => {
       edges,
       edgeColor,
       stageState,
+      edgeVariableOptions,
     };
   };
 
@@ -315,8 +351,8 @@ const makeMapStateToProps = () => {
 export default compose(
   withPrompt,
   connect(makeMapStateToProps),
-)(DyadCensus);
+)(TieStrengthCensus);
 
 export {
-  DyadCensus as UnconnectedDyadCensus,
+  TieStrengthCensus as UnconnectedTieStrengthCensus,
 };

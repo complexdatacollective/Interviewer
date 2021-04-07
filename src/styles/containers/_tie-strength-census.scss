@@ -1,16 +1,3 @@
-@mixin recolor-toggle($color) {
-  .form-field-togglebutton__checkbox {
-
-    &::before {
-      border-color: $color;
-    }
-
-    &::after {
-      background-color: $color;
-    }
-  }
-}
-
 @keyframes shake {
   10%,
   90% {
@@ -36,7 +23,7 @@
 
 $choice-padding: 2rem;
 
-.dyad-census {
+.tie-strength-census {
   @include interface-centering;
   height: 100%;
   padding: 1rem 0 2rem;
@@ -110,8 +97,7 @@ $choice-padding: 2rem;
     background: var(--light-background);
     border-radius: var(--border-radius);
     overflow: hidden;
-    text-align: center;
-    width: 55rem;
+    max-width: 80rem;
     z-index: var(--z-panel);
     position: relative;
 
@@ -152,16 +138,16 @@ $choice-padding: 2rem;
   }
 
   &__options-step {
+    flex: 1 1 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 0 unit(4);
 
     .form-field-boolean {
-      flex: 1 auto;
+      flex: 1 0 100%;
 
       .boolean-option--selected {
-
         &.boolean-option {
           &--no {
             border-color: var(--error);
@@ -176,16 +162,9 @@ $choice-padding: 2rem;
   }
 
   &__progress {
-    padding: unit(2) unit(4);
-    width: 42rem;
-    margin: 0 auto;
-
-    .progress-bar {
-      background-color: var(--transparent-light);
-    }
-
-    .progress-container__status-text {
-      text-align: center;
-    }
+    position: absolute;
+    top: unit(2);
+    right: unit(4);
+    width: unit(12);
   }
 }

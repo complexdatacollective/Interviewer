@@ -99,6 +99,7 @@ export const StageType = Object.freeze({
   EgoForm: 'EgoForm',
   AlterEdgeForm: 'AlterEdgeForm',
   DyadCensus: 'DyadCensus',
+  TieStrengthCensus: 'TieStrengthCensus',
 });
 
 // VariableTYpe imported from network-exporters submodule

@@ -1,1 +1,1 @@
-export { default } from './DyadCensus';
+export { default } from './TieStrengthCensus';
