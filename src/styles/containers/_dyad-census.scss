@@ -34,13 +34,10 @@
   }
 }
 
-$choice-padding: 2rem;
-
 .dyad-census {
   @include interface-centering;
   height: 100%;
   padding: 1rem 0 2rem;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -48,7 +45,6 @@ $choice-padding: 2rem;
 
   &__wrapper {
     height: 100%;
-    overflow: hidden;
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -58,10 +54,6 @@ $choice-padding: 2rem;
     height: 8rem;
     width: 100%;
     display: flex;
-
-    .prompts__prompt {
-      --prompt-background: var(--light-background);
-    }
   }
 
   &__main {
@@ -76,7 +68,7 @@ $choice-padding: 2rem;
     max-height: 100%;
     background: var(--light-background);
     border-radius: var(--border-radius);
-    padding: $choice-padding;
+    padding: unit(4);
     min-width: 50vw;
     text-align: center;
   }
@@ -107,13 +99,12 @@ $choice-padding: 2rem;
     flex-grow: 0;
     display: flex;
     flex-direction: column;
-    background: var(--light-background);
     border-radius: var(--border-radius);
-    overflow: hidden;
     text-align: center;
-    width: 55rem;
+    width: 70vmin;
     z-index: var(--z-panel);
     position: relative;
+    padding: unit(2);
 
     &--invalid {
       border-color: var(--error);
@@ -155,10 +146,14 @@ $choice-padding: 2rem;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 0 unit(4);
 
     .form-field-boolean {
-      flex: 1 auto;
+      flex: 1 0 100%;
+      margin-bottom: 0;
+
+      .boolean__options {
+        justify-content: center;
+      }
 
       .boolean-option--selected {
 
@@ -172,20 +167,6 @@ $choice-padding: 2rem;
           }
         }
       }
-    }
-  }
-
-  &__progress {
-    padding: unit(2) unit(4);
-    width: 42rem;
-    margin: 0 auto;
-
-    .progress-bar {
-      background-color: var(--transparent-light);
-    }
-
-    .progress-container__status-text {
-      text-align: center;
     }
   }
 }

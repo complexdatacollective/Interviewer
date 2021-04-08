@@ -4,7 +4,6 @@ import { compose } from 'recompose';
 import PropTypes from 'prop-types';
 import { get } from 'lodash';
 import cx from 'classnames';
-import { ProgressBar } from '@codaco/ui';
 import BooleanOption from '@codaco/ui/lib/components/Boolean/BooleanOption';
 import { AnimatePresence, motion } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
@@ -196,6 +195,14 @@ const DyadCensus = ({
             animate="show"
             className="dyad-census__wrapper"
           >
+            <div className="dyad-census__prompt">
+              <PromptSwiper
+                forward={promptForward}
+                backward={promptBackward}
+                prompt={prompt}
+                prompts={stage.prompts}
+              />
+            </div>
             <AnimatePresence exitBeforeEnter>
               <motion.div
                 className="dyad-census__main"
@@ -228,14 +235,6 @@ const DyadCensus = ({
                     initial="hide"
                     animate="show"
                   >
-                    <div className="dyad-census__prompt">
-                      <PromptSwiper
-                        forward={promptForward}
-                        backward={promptBackward}
-                        prompt={prompt}
-                        prompts={stage.prompts}
-                      />
-                    </div>
                     <div className="dyad-census__options">
                       <AnimatePresence exitBeforeEnter>
                         <motion.div
@@ -248,7 +247,7 @@ const DyadCensus = ({
                         >
                           <div className="form-field-container form-field-boolean">
                             <div className="form-field-boolean__control">
-                              <div className="form-field-boolean">
+                              <div>
                                 <div className="boolean__options">
                                   <BooleanOption
                                     selected={!!hasEdge && hasEdge !== null}
@@ -268,9 +267,6 @@ const DyadCensus = ({
                           </div>
                         </motion.div>
                       </AnimatePresence>
-                    </div>
-                    <div className="dyad-census__progress">
-                      <ProgressBar orientation="horizontal" percentProgress={((stepsState.substep + 1) / stepsState.steps[stepsState.stage]) * 100} />
                     </div>
                   </motion.div>
                 </div>

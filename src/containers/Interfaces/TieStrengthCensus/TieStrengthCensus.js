@@ -4,7 +4,6 @@ import { compose } from 'recompose';
 import PropTypes from 'prop-types';
 import { get } from 'lodash';
 import cx from 'classnames';
-import { CircularProgressbar } from 'react-circular-progressbar';
 import BooleanOption from '@codaco/ui/lib/components/Boolean/BooleanOption';
 import { AnimatePresence, motion } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
@@ -22,8 +21,6 @@ import useSteps from './useSteps';
 import useNetworkEdgeState from './useEdgeState';
 import useAutoAdvance from './useAutoAdvance';
 import Pair from './Pair';
-
-import 'react-circular-progressbar/dist/styles.css';
 
 const fadeVariants = {
   show: { opacity: 1, transition: { duration: 0.5 } },
@@ -214,6 +211,14 @@ const TieStrengthCensus = (props) => {
             animate="show"
             className="tie-strength-census__wrapper"
           >
+            <div className="tie-strength-census__prompt">
+              <PromptSwiper
+                forward={promptForward}
+                backward={promptBackward}
+                prompt={prompt}
+                prompts={stage.prompts}
+              />
+            </div>
             <AnimatePresence exitBeforeEnter>
               <motion.div
                 className="tie-strength-census__main"
@@ -242,18 +247,15 @@ const TieStrengthCensus = (props) => {
                   <motion.div
                     className={choiceClasses}
                     variants={choiceVariants}
-                    layout
                     initial="hide"
                     animate="show"
+                    style={{
+                      // Set the max width of the container based on the number of options
+                      // This prevents them getting too wide, but also ensures that they
+                      // expand to take up all available space.
+                      maxWidth: `${((edgeVariableOptions.length + 1) * 20) + 3.6}rem`,
+                    }}
                   >
-                    <div className="tie-strength-census__prompt">
-                      <PromptSwiper
-                        forward={promptForward}
-                        backward={promptBackward}
-                        prompt={prompt}
-                        prompts={stage.prompts}
-                      />
-                    </div>
                     <div className="tie-strength-census__options">
                       <AnimatePresence exitBeforeEnter>
                         <motion.div
@@ -266,7 +268,7 @@ const TieStrengthCensus = (props) => {
                         >
                           <div className="form-field-container form-field-boolean">
                             <div className="form-field-boolean__control">
-                              <div className="form-field-boolean">
+                              <div>
                                 <div className="boolean__options">
                                   { edgeVariableOptions.map((option) => (
                                     <BooleanOption
@@ -295,22 +297,6 @@ const TieStrengthCensus = (props) => {
                 </div>
               </motion.div>
             </AnimatePresence>
-            <motion.div
-              className="tie-strength-census__progress"
-              initial={{
-                opacity: 0,
-                y: '-5rem',
-              }}
-              animate={{
-                opacity: 1,
-                y: 0,
-              }}
-            >
-              <CircularProgressbar
-                value={((stepsState.substep + 1) / stepsState.steps[stepsState.stage]) * 100}
-                text={`${Math.round(((stepsState.substep + 1) / stepsState.steps[stepsState.stage]) * 100)}%`}
-              />
-            </motion.div>
           </motion.div>
           )}
       </AnimatePresence>

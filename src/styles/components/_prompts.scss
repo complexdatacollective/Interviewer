@@ -5,7 +5,6 @@ $module-name: prompts;
   height: 100%;
   display: flex;
   flex-direction: column;
-  padding: 0 5rem;
 
   &__prompts {
     flex: 1 auto;
@@ -60,7 +59,7 @@ $module-name: prompts;
     &-header {
       font-weight: 400;
       width: 80vw;
-      max-width: 60rem;
+      max-width: 65ch;
       font-size: 1.6rem;
       font-family: var(--heading-font-family);
 
