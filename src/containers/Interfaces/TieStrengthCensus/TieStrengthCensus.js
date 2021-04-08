@@ -45,13 +45,10 @@ const introVariants = {
   hide: { opacity: 0, scale: 0 },
 };
 
-const canSkip = false;
-
 /**
   * Dyad Census Interface
   */
 const TieStrengthCensus = (props) => {
-
   const {
     registerBeforeNext,
     promptId: promptIndex, // TODO: what is going on here?
@@ -70,9 +67,9 @@ const TieStrengthCensus = (props) => {
   } = props;
 
   const {
-    createEdge,
-    edgeVariable,
-    negativeLabel
+    createEdge, // Edge type to create
+    edgeVariable, // Edge variable to set value of
+    negativeLabel, // Label for the "reject" option
   } = prompt;
 
   const [isIntroduction, setIsIntroduction] = useState(true);
@@ -86,7 +83,11 @@ const TieStrengthCensus = (props) => {
   const pair = get(pairs, stepsState.substep, null);
   const [fromNode, toNode] = getNodePair(nodes, pair);
 
-  const [hasEdge, setEdge, edgeVariableValue, isTouched, isChanged] = useNetworkEdgeState(
+  // hasEdge:
+  //  - false: user denied
+  //  - null: not yet decided
+  //  - true: edge exists
+  const [hasEdge, edgeVariableValue, setEdge, isTouched, isChanged] = useNetworkEdgeState(
     dispatch,
     edges,
     createEdge, // Type of edge to create
@@ -96,8 +97,6 @@ const TieStrengthCensus = (props) => {
     stageState,
     [stepsState.step],
   );
-
-  console.log({ hasEdge, edgeVariableValue, isTouched, isChanged});
 
   const next = () => {
     setForwards(true);
@@ -114,8 +113,10 @@ const TieStrengthCensus = (props) => {
       return;
     }
 
-    // check value has been set
-    if (!canSkip && hasEdge === null) {
+    // check that the edgeVariable has a value
+    // hasEdge is false when user has declined, but null when it doesn't exist yet
+    // edgeVariableValue is null when edge doesn't exist, or variable isn't set
+    if (hasEdge === null && edgeVariableValue === null) {
       setIsValid(false);
       return;
     }
@@ -267,7 +268,7 @@ const TieStrengthCensus = (props) => {
                             <div className="form-field-boolean__control">
                               <div className="form-field-boolean">
                                 <div className="boolean__options">
-                                  { edgeVariableOptions.map(option => (
+                                  { edgeVariableOptions.map((option) => (
                                     <BooleanOption
                                       key={option.value}
                                       selected={!!hasEdge && edgeVariableValue === option.value}
@@ -277,7 +278,8 @@ const TieStrengthCensus = (props) => {
                                   ))}
                                   <BooleanOption
                                     classes="boolean-option--no"
-                                    selected={!hasEdge && hasEdge !== null}
+                                    // Has edge is null if not set and false if user rejected
+                                    selected={!hasEdge && hasEdge === false}
                                     onClick={handleChange(false)}
                                     label={negativeLabel}
                                     negative

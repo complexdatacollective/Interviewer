@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
+import { get } from 'lodash';
 import { actionCreators as sessionsActions } from '../../../ducks/modules/sessions';
 import { entityPrimaryKeyProperty } from '../../../ducks/modules/network';
-import { get } from 'lodash';
 import { entityAttributesProperty } from '../../../utils/network-exporters/src/utils/reservedAttributes';
 
 const getEdgeInNetwork = (edges, pair, edgeType) => {
@@ -17,6 +17,8 @@ const getEdgeInNetwork = (edges, pair, edgeType) => {
 
   return edge;
 };
+
+const edgeExistsInNetwork = (edges, pair, edgeType) => !!getEdgeInNetwork(edges, pair, edgeType);
 
 export const matchEntry = (prompt, pair) => ([p, a, b]) => (
   (p === prompt && a === pair[0] && b === pair[1])
@@ -56,7 +58,7 @@ export const stageStateReducer = (state = [], { pair, prompt, value }) => {
  *
  * @param {function} dispatch - Redux dispatcher
  * @param {array} edges - List of all the edges relevant to this stage
- * @param {string} edgeState - Type of edge relevant to this prompt
+ * @param {string} edgeType - Type of edge relevant to this prompt
  * @param {array} pair - Pair of node ids in format `[a, b]`
  * @param {boolean} stageState - Tracked choices in redux state
  * @param {array} deps - If these deps are changed, reset
@@ -71,87 +73,101 @@ const useEdgeState = (
   stageState,
   deps,
 ) => {
-
+  // Internal state for if edge exists. True or False
   const [edgeState, setEdgeState] = useState(
-    getEdgeInNetwork(edges, pair, edgeType),
+    edgeExistsInNetwork(edges, pair, edgeType),
+  );
+
+  // Internal state for edge variable value. `value` or null,
+  const [edgeValueState, setEdgeValueState] = useState(
+    get(getEdgeInNetwork(edges, pair, edgeType), [entityAttributesProperty, edgeVariable], null),
   );
 
   const [isTouched, setIsTouched] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
 
-  // Return null if there is no edge, or false if previously answered no
-  // ...otherwise return edgeVariable value
+  // Translates edgeState into true/false/null using stageState
+  // True: edge exists
+  // False: user declined edge (based on stageState)
+  // Null: user hasn't decided
   const getHasEdge = () => {
     if (!pair) { return null; }
-
-    // edgeState not null means edge exists and may have a value
-    if (edgeState !== null) { return !!edgeState; }
 
     // Check if this pair was marked as no before
     if (getIsPreviouslyAnsweredNo(stageState, promptIndex, pair)) {
       return false;
     }
 
-    // Otherwise consider this blank
-    return null;
+    // If edgeState is false, edge doesn't exist.
+    return edgeState === false ? null : edgeState;
   };
 
+  // Return current edgeValue
   const getEdgeValue = () => {
-    console.log('getEdgeValue');
-    if (!pair || !getHasEdge()) { return null; }
+    if (!pair) { return null; }
 
-    return get(edgeState, [entityAttributesProperty, edgeVariable], null);
+    return edgeValueState;
+  };
 
-  }
-
-  const setEdge = (value = true) => {
+  // Update edge value
+  // False for user denying edge
+  // any value for setting edge variable value
+  const setEdge = (value) => {
     if (!pair) { return; }
+    // Determine what we need to do:
 
-    const existingEdge = getEdgeInNetwork(edges, pair, edgeType);
-    console.log('set edge', value, existingEdge);
+    // If truthy value and edge exists, we are changing an edge
+    const changeEdge = value !== false
+      && edgeExistsInNetwork(edges, pair, edgeType)
+      && value !== get(
+        getEdgeInNetwork(edges, pair, edgeType), [entityAttributesProperty, edgeVariable],
+      );
 
-    const isChanged = existingEdge && existingEdge[entityAttributesProperty][edgeVariable] !== value;
-    setIsChanged(isChanged);
-    setIsTouched(true);
+    // If truthy value but no existing edge, adding an edge
+    const addEdge = value && !edgeExistsInNetwork(edges, pair, edgeType);
 
-    const addEdge = value && !existingEdge;
-    const removeEdge = !value && existingEdge;
+    // If value is false and edge exists, removing an edge
+    const removeEdge = value === false && edgeExistsInNetwork(edges, pair, edgeType);
 
-    const newStageState = stageStateReducer(stageState, { pair, prompt: promptIndex, value });
+    const existingEdgeID = get(getEdgeInNetwork(edges, pair, edgeType), entityPrimaryKeyProperty);
 
-    if (isChanged) { // If changed, update edge variable value
-      console.log('isChanged', value);
-      dispatch(sessionsActions.updateEdge(existingEdge[entityPrimaryKeyProperty], {}, {
-        [edgeVariable]: value,
-      }));
-    } else if (addEdge) { // If addEdge, create an edge with the variable value
-      console.log('addEdge', value);
-      dispatch(sessionsActions.addEdge({
-        from: pair[0],
-        to: pair[1],
-        type: edgeType,
-      }, {
-        [edgeVariable]: value,
-      }));
-    } else if (removeEdge) { // If removeEdge, remove the edge
-      console.log('removeEdge', value);
-      dispatch(sessionsActions.removeEdge(existingEdge[entityPrimaryKeyProperty]));
+    if (changeEdge) {
+      dispatch(sessionsActions.updateEdge(existingEdgeID, {}, { [edgeVariable]: value }));
+    } else if (addEdge) {
+      dispatch(sessionsActions.addEdge(
+        { from: pair[0], to: pair[1], type: edgeType },
+        { [edgeVariable]: value },
+      ));
+    } else if (removeEdge) {
+      dispatch(sessionsActions.removeEdge(existingEdgeID));
     }
 
-    console.log('newStageStage', newStageState);
+    // We set our internal state to update the return value of the hook
+    // The interface will update before transitioning to the next step
+    setEdgeState(!!value); // Ensure edgeState is true or false
+    setEdgeValueState(value); // Store the actual value in the internal edgeValue state
+    setIsChanged(getHasEdge() !== value); // Set changed if we have a new value
+    setIsTouched(true);
+
+    // Update our private stage state
+    const newStageState = stageStateReducer(stageState, { pair, prompt: promptIndex, value });
     dispatch(sessionsActions.updateStageState(newStageState));
   };
 
   // we're only going to reset manually (when deps change), because
   // we are internally keeping track of the edge state.
   useEffect(() => {
-    console.log('useeffect');
-    setEdgeState(getEdgeInNetwork(edges, pair, edgeType));
+    setEdgeState(edgeExistsInNetwork(edges, pair, edgeType));
+    setEdgeValueState(get(getEdgeInNetwork(
+      edges,
+      pair,
+      edgeType,
+    ), [entityAttributesProperty, edgeVariable], null));
     setIsTouched(false);
     setIsChanged(false);
   }, deps);
 
-  return [getHasEdge(), setEdge, getEdgeValue(),isTouched, isChanged];
+  return [getHasEdge(), getEdgeValue(), setEdge, isTouched, isChanged];
 };
 
 export default useEdgeState;

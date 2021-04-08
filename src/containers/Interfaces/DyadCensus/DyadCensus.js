@@ -43,8 +43,6 @@ const introVariants = {
   hide: { opacity: 0, scale: 0 },
 };
 
-const canSkip = false;
-
 /**
   * Dyad Census Interface
   */
@@ -100,7 +98,7 @@ const DyadCensus = ({
     }
 
     // check value has been set
-    if (!canSkip && hasEdge === null) {
+    if (hasEdge === null) {
       setIsValid(false);
       return;
     }
