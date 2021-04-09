@@ -62,6 +62,7 @@ class Field extends PureComponent {
     const {
       label, name, validation, ...rest
     } = this.props;
+
     return (
       <ReduxFormField
         {...rest}

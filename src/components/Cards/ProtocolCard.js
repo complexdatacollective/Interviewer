@@ -38,8 +38,8 @@ const ProtocolCard = (props) => {
             This protocol uses an older version of the protocol file format, or &quot;schema&quot;.
           </p>
           <p>
-            Newer schema versions support additional features in Interviewer. During the beta
-            phase, we kindly request that you update your protocols to the latest version, and
+            Newer schema versions support additional features in Interviewer. We strongly
+            suggest that you update your protocols to the latest version, and
             evaluate the newest features as we implement them. To do this, open the original
             protocol file it in the latest version of Architect, and follow the migration
             instructions. Once migrated, install the new version of the protocol on this device.

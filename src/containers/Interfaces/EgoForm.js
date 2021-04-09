@@ -4,6 +4,7 @@ import cx from 'classnames';
 import { clamp } from 'lodash';
 import { connect } from 'react-redux';
 import { ProgressBar, Scroller } from '@codaco/ui';
+import { ALLOWED_MARKDOWN_TAGS } from '@codaco/ui/src/utils/config';
 import { submit, isValid, isDirty } from 'redux-form';
 import ReactMarkdown from 'react-markdown';
 import { isIOS } from '../../utils/Environment';
@@ -14,7 +15,6 @@ import { getSessionProgress } from '../../selectors/session';
 import defaultMarkdownRenderers from '../../utils/markdownRenderers';
 import { entityAttributesProperty } from '../../ducks/modules/network';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
-import { ALLOWED_MARKDOWN_TAGS } from '../../config';
 
 const confirmDialog = {
   type: 'Confirm',
