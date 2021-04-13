@@ -178,7 +178,7 @@ describe('sessions', () => {
       const type = 'mockType';
       const defaultProperties = {
         a: null,
-        b: false,
+        b: null,
         c: null,
       };
 
