@@ -6,7 +6,6 @@ import {
   omit,
 } from 'lodash';
 import { createSelector } from 'reselect';
-import { isPreview } from '../utils/Environment';
 import { entityAttributesProperty } from '../ducks/modules/network';
 
 const DefaultFinishStage = {
@@ -102,7 +101,6 @@ export const getProtocolCodebook = createSelector(
 
 const withFinishStage = (stages = []) => {
   if (!stages) { return []; }
-  if (isPreview()) { return stages; }
 
   return [...stages, DefaultFinishStage];
 };
