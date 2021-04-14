@@ -124,7 +124,7 @@ const useEdgeState = (
       );
 
     // If truthy value but no existing edge, adding an edge
-    const addEdge = value && !edgeExistsInNetwork(edges, pair, edgeType);
+    const addEdge = value !== false && !edgeExistsInNetwork(edges, pair, edgeType);
 
     // If value is false and edge exists, removing an edge
     const removeEdge = value === false && edgeExistsInNetwork(edges, pair, edgeType);
@@ -144,7 +144,7 @@ const useEdgeState = (
 
     // We set our internal state to update the return value of the hook
     // The interface will update before transitioning to the next step
-    setEdgeState(!!value); // Ensure edgeState is true or false
+    setEdgeState(value !== false); // Ensure edgeState is true or false
     setEdgeValueState(value); // Store the actual value in the internal edgeValue state
     setIsChanged(getHasEdge() !== value); // Set changed if we have a new value
     setIsTouched(true);
