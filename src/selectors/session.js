@@ -123,7 +123,7 @@ export const getStageSubject = () => createDeepEqualSelector(
 
 export const getStageSubjectType = () => createDeepEqualSelector(
   getStageSubject(),
-  (subject) => subject.type,
+  (subject) => subject && subject.type,
 );
 
 export const getPromptIndexForCurrentSession = createSelector(

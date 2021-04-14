@@ -1,16 +1,3 @@
-@mixin recolor-toggle($color) {
-  .form-field-togglebutton__checkbox {
-
-    &::before {
-      border-color: $color;
-    }
-
-    &::after {
-      background-color: $color;
-    }
-  }
-}
-
 @keyframes shake {
   10%,
   90% {
@@ -34,7 +21,7 @@
   }
 }
 
-.dyad-census {
+.tie-strength-census {
   @include interface-centering;
   height: 100%;
   padding: 1rem 0 2rem;
@@ -100,11 +87,11 @@
     display: flex;
     flex-direction: column;
     border-radius: var(--border-radius);
-    text-align: center;
-    width: 70vmin;
     z-index: var(--z-panel);
     position: relative;
     padding: unit(2);
+    width: 100%;
+    min-width: 65vmin;
 
     &--invalid {
       border-color: var(--error);
@@ -155,16 +142,9 @@
         justify-content: center;
       }
 
-      .boolean-option--selected {
-
-        &.boolean-option {
-          &--no {
-            border-color: var(--error);
-
-            .round-checkbox--checked {
-              background-color: var(--error);
-            }
-          }
+      .boolean-option {
+        &--no {
+          margin-left: unit(2);
         }
       }
     }

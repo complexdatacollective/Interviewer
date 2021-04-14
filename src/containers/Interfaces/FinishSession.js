@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button } from '@codaco/ui';
+import { isPreview } from '../../utils/Environment';
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
 
 const FinishSession = ({ endSession }) => {
@@ -22,11 +23,14 @@ const FinishSession = ({ endSession }) => {
             interview now.
           </p>
         </div>
-        <div className="finish-session-interface__section finish-session-interface__section--buttons">
-          <Button onClick={handleFinishSession}>
-            Finish
-          </Button>
-        </div>
+        { !isPreview()
+          && (
+            <div className="finish-session-interface__section finish-session-interface__section--buttons">
+              <Button onClick={handleFinishSession}>
+                Finish
+              </Button>
+            </div>
+          )}
       </div>
     </div>
   );

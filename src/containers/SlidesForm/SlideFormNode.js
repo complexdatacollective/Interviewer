@@ -1,8 +1,11 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { withProps } from 'recompose';
+import { filter } from 'lodash';
+import { withProps, compose } from 'recompose';
+import { connect } from 'react-redux';
 import { Scroller } from '../../components';
 import { entityAttributesProperty, entityPrimaryKeyProperty } from '../../ducks/modules/network';
+import { makeNetworkEntitiesForType } from '../../selectors/interface';
 import Node from '../Node';
 import Form from '../Form';
 
@@ -20,6 +23,7 @@ class SlideFormNode extends PureComponent {
       initialValues,
       subject,
       submitButton,
+      otherNetworkEntities,
     } = this.props;
 
     return (
@@ -36,6 +40,7 @@ class SlideFormNode extends PureComponent {
                 subject={subject}
                 onSubmit={this.handleSubmit}
                 submitButton={submitButton}
+                otherNetworkEntities={otherNetworkEntities}
               />
             </Scroller>
           </div>
@@ -51,11 +56,13 @@ SlideFormNode.propTypes = {
   item: PropTypes.object.isRequired,
   onUpdate: PropTypes.func,
   submitButton: PropTypes.object,
+  otherNetworkEntities: PropTypes.array, // used for some validation functions
 };
 
 SlideFormNode.defaultProps = {
   form: {},
   onUpdate: () => {},
+  otherNetworkEntities: [],
   submitButton: <button type="submit" key="submit" aria-label="Submit" hidden />,
 };
 
@@ -64,8 +71,18 @@ const withNodeProps = withProps(({ item }) => ({
   initialValues: item[entityAttributesProperty],
 }));
 
+const withStore = connect((state, props) => {
+  const networkEntitiesForType = makeNetworkEntitiesForType();
+  const otherNetworkEntities = filter(networkEntitiesForType(state, props), (edge) => (
+    !props.item || edge[entityPrimaryKeyProperty] !== props.item[entityPrimaryKeyProperty]));
+
+  return {
+    otherNetworkEntities,
+  };
+});
+
 const EnhancedSlideFormNode = withNodeProps(SlideFormNode);
 
 export { EnhancedSlideFormNode as SlideFormNode };
 
-export default withNodeProps(SlideFormNode);
+export default compose(withStore, withNodeProps)(SlideFormNode);

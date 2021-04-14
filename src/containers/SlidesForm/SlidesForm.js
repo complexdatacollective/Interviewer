@@ -6,13 +6,12 @@ import { connect } from 'react-redux';
 import { ProgressBar } from '@codaco/ui';
 import { submit, isValid, isDirty } from 'redux-form';
 import ReactMarkdown from 'react-markdown';
+import { ALLOWED_MARKDOWN_TAGS } from '@codaco/ui/src/utils/config';
 import Swiper from 'react-id-swiper';
 import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
 import useGetFormName from '../../hooks/useGetFormName';
-
 import defaultMarkdownRenderers from '../../utils/markdownRenderers';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
-import { ALLOWED_MARKDOWN_TAGS } from '../../config';
 
 const confirmDialog = {
   type: 'Confirm',
@@ -235,6 +234,7 @@ const SlidesForm = (props) => {
           <strong>{activeIndex}</strong>
           {' '}
           of
+          {' '}
           <strong>{items.length}</strong>
         </h6>
         <ProgressBar orientation="horizontal" percentProgress={(activeIndex / items.length) * 100} />

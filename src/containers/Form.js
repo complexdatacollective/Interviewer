@@ -137,6 +137,7 @@ Form.propTypes = {
   tooltip: PropTypes.string,
   submitButton: PropTypes.object,
   initialValues: PropTypes.object,
+  otherNetworkEntities: PropTypes.array, // used for some validation functions
 };
 
 Form.defaultProps = {
@@ -145,6 +146,7 @@ Form.defaultProps = {
   className: null,
   tooltip: 'none',
   initialValues: null,
+  otherNetworkEntities: [],
   submitButton: <button type="submit" key="submit" aria-label="Submit" hidden />,
   // redux wants a "submit" button in order to enable submit with an enter key, even if hidden
 };

@@ -94,6 +94,7 @@ const mockProtocol = {
       },
     },
   },
+  stages: [mockStage],
 };
 
 const mockProps = {
@@ -129,6 +130,7 @@ const mockState = {
     a: {
       network: { nodes, edges },
       protocolUID: 'mockProtocol',
+      sessionIndex: 0,
     },
   },
   activeSessionId: 'a',
@@ -175,6 +177,15 @@ describe('interface selector', () => {
         closeFriendNode,
       ]);
       expect(selected(mockState, emptyProps).length).toEqual(0);
+    });
+
+    it('makeNetworkEntitiesForType()', () => {
+      const selected = Interface.makeNetworkEntitiesForType();
+      expect(selected(mockState, mockProps)).toEqual([
+        personNode,
+        closeFriendNode,
+      ]);
+      expect(selected(mockState, emptyProps).length).toEqual(2);
     });
 
     it('makeNetworkNodesForPrompt()', () => {

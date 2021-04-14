@@ -32,6 +32,7 @@ export const FilterOptionsOperator = Object.freeze({
 
 // Docs: https://github.com/complexdatacollective/Network-Canvas/wiki/Input-Types
 export const FormComponent = Object.freeze({
+  Boolean: 'Boolean',
   Checkbox: 'Checkbox',
   CheckboxGroup: 'CheckboxGroup',
   Number: 'Number',
@@ -99,6 +100,7 @@ export const StageType = Object.freeze({
   EgoForm: 'EgoForm',
   AlterEdgeForm: 'AlterEdgeForm',
   DyadCensus: 'DyadCensus',
+  TieStrengthCensus: 'TieStrengthCensus',
 });
 
 // VariableTYpe imported from network-exporters submodule

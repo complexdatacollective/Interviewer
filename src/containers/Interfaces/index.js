@@ -15,8 +15,8 @@ import AlterForm from './AlterForm';
 import EgoForm from './EgoForm';
 import AlterEdgeForm from './AlterEdgeForm';
 import DyadCensus from './DyadCensus';
+import TieStrengthCensus from './TieStrengthCensus';
 import FinishSession from './FinishSession';
-
 import { StageType } from '../../protocol-consts';
 
 const interfaces = {
@@ -33,6 +33,7 @@ const interfaces = {
   [StageType.EgoForm]: EgoForm,
   [StageType.AlterEdgeForm]: AlterEdgeForm,
   [StageType.DyadCensus]: DyadCensus,
+  [StageType.TieStrengthCensus]: TieStrengthCensus,
   FinishSession,
 };
 
