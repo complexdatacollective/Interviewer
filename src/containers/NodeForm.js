@@ -41,7 +41,7 @@ class NodeForm extends Component {
       stage,
       onClose,
       useFullScreenForms,
-      entityId,
+      validationMeta,
       otherNetworkEntities,
     } = this.props;
 
@@ -52,7 +52,7 @@ class NodeForm extends Component {
       autoFocus: true,
       subject: stage.subject,
       form: reduxFormName,
-      entityId,
+      validationMeta,
       otherNetworkEntities,
     };
 
@@ -91,11 +91,13 @@ const mapStateToProps = (state, props) => {
     ...nodeAttributes,
   };
 
+  const entityId = props.node && props.node[entityPrimaryKeyProperty];
+
   return {
     form: props.stage.form,
     useFullScreenForms: state.deviceSettings.useFullScreenForms,
     initialValues,
-    entityId: props.node && props.node[entityPrimaryKeyProperty], // used for validation functions
+    validationMeta: { entityId }, // used for validation functions
   };
 };
 

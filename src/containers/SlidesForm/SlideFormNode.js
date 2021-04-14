@@ -38,7 +38,7 @@ class SlideFormNode extends PureComponent {
                 subject={subject}
                 onSubmit={this.handleSubmit}
                 submitButton={submitButton}
-                entityId={id}
+                validationMeta={{ entityId: id }}
                 otherNetworkEntities={otherNetworkEntities}
               />
             </Scroller>

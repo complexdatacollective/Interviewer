@@ -58,27 +58,33 @@ const isMatchingValue = (submittedValue, existingValue) => {
   return submittedValue === existingValue;
 };
 
-const isSomeValueMatching = (value, name, store, entityId) => {
-  const otherNetworkEntities = filter(makeNetworkEntitiesForType()(store.getState()), (node) => (
-    !entityId || node[entityPrimaryKeyProperty] !== entityId));
-  return some(otherNetworkEntities, (entity) => entity.attributes
-    && isMatchingValue(value, entity.attributes[name]));
-};
+const isSomeValueMatching = (value, otherNetworkEntities, name) => (
+  some(otherNetworkEntities, (entity) => entity.attributes
+    && isMatchingValue(value, entity.attributes[name])));
 
 const lookUpVarName = (varUuid, store) => {
   const codebookVariablesForType = getCodebookVariablesForType()(store.getState());
   return codebookVariablesForType && codebookVariablesForType[varUuid].name;
 };
 
-export const unique = (active, store) => {
-  console.log('rn generator');
-  return (value, _, props, name) => {
-    if (active && isSomeValueMatching(value, name, store, props.entityId)) {
-      return 'Your answer must be unique';
-    }
-    return undefined;
+const getOtherNetworkEntities = (entities, entityId) => filter(
+  entities,
+  (node) => (!entityId || node[entityPrimaryKeyProperty] !== entityId),
+);
+
+export const unique = (_, store) => {
+  const networkEntitiesForType = makeNetworkEntitiesForType();
+
+  return (value, __, { validationMeta }, name) => {
+    const otherNetworkEntities = getOtherNetworkEntities(
+      networkEntitiesForType(store.getState()),
+      validationMeta.entityId,
+    );
+
+    return isSomeValueMatching(value, otherNetworkEntities, name) ? 'Your answer must be unique' : undefined;
   };
 };
+
 export const differentFrom = (varUuid, store) => (value, allValues) => (isMatchingValue(value, allValues[varUuid]) ? `Your answer must be different from ${lookUpVarName(varUuid, store)}` : undefined);
 export const sameAs = (varUuid, store) => (value, allValues) => (!isMatchingValue(value, allValues[varUuid]) ? `Your answer must be the same as ${lookUpVarName(varUuid, store)}` : undefined);
 
