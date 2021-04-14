@@ -62,11 +62,6 @@ const isSomeValueMatching = (value, otherNetworkEntities, name) => (
   some(otherNetworkEntities, (entity) => entity.attributes
     && isMatchingValue(value, entity.attributes[name])));
 
-const lookUpVarName = (varUuid, store) => {
-  const codebookVariablesForType = getCodebookVariablesForType()(store.getState());
-  return codebookVariablesForType && codebookVariablesForType[varUuid].name;
-};
-
 const getOtherNetworkEntities = (entities, entityId) => filter(
   entities,
   (node) => (!entityId || node[entityPrimaryKeyProperty] !== entityId),
@@ -85,8 +80,20 @@ export const unique = (_, store) => {
   };
 };
 
-export const differentFrom = (varUuid, store) => (value, allValues) => (isMatchingValue(value, allValues[varUuid]) ? `Your answer must be different from ${lookUpVarName(varUuid, store)}` : undefined);
-export const sameAs = (varUuid, store) => (value, allValues) => (!isMatchingValue(value, allValues[varUuid]) ? `Your answer must be the same as ${lookUpVarName(varUuid, store)}` : undefined);
+const getVariableName = (variableId, store) => {
+  const codebookVariablesForType = getCodebookVariablesForType()(store.getState());
+  return codebookVariablesForType && codebookVariablesForType[variableId].name;
+};
+
+export const differentFrom = (variableId, store) => {
+  const variableName = getVariableName(variableId, store);
+  return (value, allValues) => (isMatchingValue(value, allValues[variableId]) ? `Your answer must be different from ${variableName}` : undefined);
+};
+
+export const sameAs = (variableId, store) => {
+  const variableName = getVariableName(variableId, store);
+  return (value, allValues) => (!isMatchingValue(value, allValues[variableId]) ? `Your answer must be the same as ${variableName}` : undefined);
+};
 
 export default {
   required: () => required(),
