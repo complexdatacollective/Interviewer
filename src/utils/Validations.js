@@ -1,5 +1,13 @@
 import {
-  filter, isEqual, isNil, isNumber, isString, keys, pickBy, some,
+  filter,
+  isEqual,
+  isNil,
+  isNumber,
+  isString,
+  keys,
+  pickBy,
+  some,
+  get,
 } from 'lodash';
 import { entityPrimaryKeyProperty } from '../ducks/modules/network';
 import { makeNetworkEntitiesForType } from '../selectors/interface';
@@ -82,7 +90,7 @@ export const unique = (_, store) => {
 
 const getVariableName = (variableId, store) => {
   const codebookVariablesForType = getCodebookVariablesForType()(store.getState());
-  return codebookVariablesForType && codebookVariablesForType[variableId].name;
+  return get(codebookVariablesForType, [variableId, 'name']);
 };
 
 export const differentFrom = (variableId, store) => {

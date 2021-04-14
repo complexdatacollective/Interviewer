@@ -15,10 +15,13 @@ import {
 import {
   entityAttributesProperty,
 } from '../../ducks/modules/network';
-
+import { getCodebookVariablesForType } from '../../selectors/session';
 import { makeNetworkEntitiesForType } from '../../selectors/interface';
 
 jest.mock('../../selectors/interface');
+jest.mock('../../selectors/session');
+
+const mockStore = { getState: () => ({}) };
 
 describe('Validations', () => {
   describe('required()', () => {
@@ -202,10 +205,9 @@ describe('Validations', () => {
 
   describe('unique()', () => {
     const props = {
-      validationMeta: {
-        entityId: null,
-      },
+      validationMeta: {},
     };
+
     const entities = [
       {
         [entityAttributesProperty]: {
@@ -214,7 +216,6 @@ describe('Validations', () => {
       },
     ];
     const errorMessage = 'Your answer must be unique';
-    const mockStore = { getState: () => ({}) };
 
     makeNetworkEntitiesForType.mockReturnValue(
       () => entities,
@@ -270,14 +271,26 @@ describe('Validations', () => {
 
   describe('differentFrom()', () => {
     const errorMessage = 'Your answer must be different from';
-    const subject1 = differentFrom('uid1');
-    const subject2 = differentFrom('uid2');
-    const subject3 = differentFrom('uid3');
-    const subject4 = differentFrom('uid4');
-    const subject5 = differentFrom('uid5');
+
     const allValues = {
       uid1: 1, uid2: false, uid3: 'word', uid4: [1, 2, 3], uid5: { x: 1.2, y: 2.3 },
     };
+
+    getCodebookVariablesForType.mockReturnValue(
+      () => ({
+        uid1: { name: 1 },
+        uid2: { name: false },
+        uid3: { name: 'word' },
+        uid4: { name: [1, 2, 3] },
+        uid5: { name: { x: 1.2, y: 2.3 } },
+      }),
+    );
+
+    const subject1 = differentFrom('uid1', mockStore);
+    const subject2 = differentFrom('uid2', mockStore);
+    const subject3 = differentFrom('uid3', mockStore);
+    const subject4 = differentFrom('uid4', mockStore);
+    const subject5 = differentFrom('uid5', mockStore);
 
     it('passes for null or undefined', () => {
       expect(subject1(null, allValues)).toBe(undefined);
@@ -327,14 +340,26 @@ describe('Validations', () => {
 
   describe('sameAs()', () => {
     const errorMessage = 'Your answer must be the same as';
-    const subject1 = sameAs('uid1');
-    const subject2 = sameAs('uid2');
-    const subject3 = sameAs('uid3');
-    const subject4 = sameAs('uid4');
-    const subject5 = sameAs('uid5');
+
     const allValues = {
       uid1: 1, uid2: false, uid3: 'word', uid4: [1, 2, 3], uid5: { x: 1.2, y: 2.3 },
     };
+
+    getCodebookVariablesForType.mockReturnValue(
+      () => ({
+        uid1: { name: 1 },
+        uid2: { name: false },
+        uid3: { name: 'word' },
+        uid4: { name: [1, 2, 3] },
+        uid5: { name: { x: 1.2, y: 2.3 } },
+      }),
+    );
+
+    const subject1 = sameAs('uid1', mockStore);
+    const subject2 = sameAs('uid2', mockStore);
+    const subject3 = sameAs('uid3', mockStore);
+    const subject4 = sameAs('uid4', mockStore);
+    const subject5 = sameAs('uid5', mockStore);
 
     it('fails for null or undefined', () => {
       expect(subject1(null, allValues)).toBe(`${errorMessage} 1`);
