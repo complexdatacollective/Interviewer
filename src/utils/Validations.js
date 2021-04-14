@@ -1,6 +1,9 @@
 import {
-  isEqual, isNil, isNumber, isString, keys, pickBy, some,
+  filter, isEqual, isNil, isNumber, isString, keys, pickBy, some,
 } from 'lodash';
+import { entityPrimaryKeyProperty } from '../ducks/modules/network';
+import { makeNetworkEntitiesForType } from '../selectors/interface';
+import { getCodebookVariablesForType } from '../selectors/session';
 
 const coerceArray = (value) => {
   if (value instanceof Object) {
@@ -55,13 +58,21 @@ const isMatchingValue = (submittedValue, existingValue) => {
   return submittedValue === existingValue;
 };
 
-const isSomeValueMatching = (value, otherNetworkEntities, name) => (
-  some(otherNetworkEntities, (entity) => entity.attributes
-    && isMatchingValue(value, entity.attributes[name])));
+const isSomeValueMatching = (value, name, getState, entityId) => {
+  const otherNetworkEntities = filter(makeNetworkEntitiesForType()(getState()), (node) => (
+    !entityId || node[entityPrimaryKeyProperty] !== entityId));
+  return some(otherNetworkEntities, (entity) => entity.attributes
+    && isMatchingValue(value, entity.attributes[name]));
+};
 
-export const unique = () => (value, _, props, name) => (isSomeValueMatching(value, props.otherNetworkEntities, name) ? 'Your answer must be unique' : undefined);
-export const differentFrom = (varUuid) => (value, allValues) => (isMatchingValue(value, allValues[varUuid]) ? `Your answer must be different from ${allValues[varUuid]}` : undefined);
-export const sameAs = (varUuid) => (value, allValues) => (!isMatchingValue(value, allValues[varUuid]) ? `Your answer must be the same as ${allValues[varUuid]}` : undefined);
+const lookUpVarName = (varUuid, getState) => {
+  const codebookVariablesForType = getCodebookVariablesForType()(getState());
+  return codebookVariablesForType && codebookVariablesForType[varUuid].name;
+};
+
+export const unique = (active, getState) => (value, _, props, name) => (active && isSomeValueMatching(value, name, getState, props.entityId) ? 'Your answer must be unique' : undefined);
+export const differentFrom = (varUuid, getState) => (value, allValues) => (isMatchingValue(value, allValues[varUuid]) ? `Your answer must be different from ${lookUpVarName(varUuid, getState)}` : undefined);
+export const sameAs = (varUuid, getState) => (value, allValues) => (!isMatchingValue(value, allValues[varUuid]) ? `Your answer must be the same as ${lookUpVarName(varUuid, getState)}` : undefined);
 
 export default {
   required: () => required(),

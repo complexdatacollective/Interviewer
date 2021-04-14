@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Field as ReduxFormField } from 'redux-form';
 import { map, get, toPairs } from 'lodash';
 import * as Fields from '@codaco/ui/lib/components/Fields';
+import { store } from '../ducks/store';
 import validations from '../utils/Validations';
 import { FormComponent } from '../protocol-consts';
 
@@ -15,7 +16,7 @@ const ComponentTypeNotFound = (componentType) => () => (
 );
 
 /*
-  * Returns the named field compontent, if no matching one is found
+  * Returns the named field component, if no matching one is found
   or else it just returns a text input
   * @param {object} field The properties handed down from the protocol form
   */
@@ -37,7 +38,7 @@ export const getInputComponent = (componentType = 'Text') => {
 const getValidation = (validation) => map(
   toPairs(validation),
   ([type, options]) => (
-    Object.hasOwnProperty.call(validations, type) ? validations[type](options) : () => (`Validation "${type}" not found`)
+    Object.hasOwnProperty.call(validations, type) ? validations[type](options, store.getState) : () => (`Validation "${type}" not found`)
   ),
 );
 
