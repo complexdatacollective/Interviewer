@@ -60,7 +60,7 @@ const Field = ({
   const component = useMemo(() => getInputComponent(rest.component), [rest.component]);
   const validate = useMemo(
     () => rest.validate || getValidation(validation, store),
-    [rest.validate, validation],
+    [],
   );
 
   return (
