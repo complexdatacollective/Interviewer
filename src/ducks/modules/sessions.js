@@ -152,9 +152,9 @@ const getReducer = (network) => (state = initialState, action = {}) => {
 const getDefaultAttributesForEntityType = (registryForType = {}) => {
   const defaultAttributesObject = {};
 
-  // Boolean variables are initialised as `false`, and everything else as `null`
-  Object.keys(registryForType).forEach((key) => {
-    defaultAttributesObject[key] = registryForType[key].type === 'boolean' ? false : null;
+  // ALL variables initialised as `null`
+  Object.keys(registryForType).forEach((variableUUID) => {
+    defaultAttributesObject[variableUUID] = null;
   });
 
   return defaultAttributesObject;

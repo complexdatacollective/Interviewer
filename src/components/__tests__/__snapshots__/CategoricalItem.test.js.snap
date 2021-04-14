@@ -24,27 +24,10 @@ exports[`CategoricalItem component renders unexpanded categorical item 1`] = `
           className="categorical-item__title"
         >
           <h3>
-            <ReactMarkdown
-              allowedTypes={
-                Array [
-                  "paragraph",
-                  "break",
-                  "emphasis",
-                  "strong",
-                  "text",
-                  "list",
-                  "listItem",
-                ]
-              }
-              astPlugins={Array []}
-              escapeHtml={true}
-              plugins={Array []}
-              rawSourcePos={false}
-              renderers={Object {}}
-              skipHtml={false}
-              source="undefined"
-              sourcePos={false}
-              transformLinkUri={[Function]}
+            <MarkdownLabel
+              className="form-field-label"
+              inline={true}
+              label="undefined"
             />
           </h3>
         </div>

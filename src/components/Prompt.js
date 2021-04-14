@@ -1,8 +1,7 @@
 import React from 'react';
-import ReactMarkdown from 'react-markdown';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import { ALLOWED_MARKDOWN_PROMPT_TAGS } from '../config';
+import { MarkdownLabel } from '@codaco/ui/lib/components/Fields';
 
 /**
   * Renders a single prompt.
@@ -22,11 +21,7 @@ const Prompt = (props) => {
 
   return (
     <div className={classNames}>
-      <ReactMarkdown
-        className="prompts__prompt-header"
-        source={label}
-        allowedTypes={ALLOWED_MARKDOWN_PROMPT_TAGS}
-      />
+      <MarkdownLabel label={label} inline className="prompts__prompt-header" />
     </div>
   );
 };

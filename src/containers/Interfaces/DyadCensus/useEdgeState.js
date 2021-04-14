@@ -53,8 +53,8 @@ export const stageStateReducer = (state = [], { pair, prompt, value }) => {
  * dispatch, and the passed in state (edges, edgeType, stageState).
  *
  * @param {function} dispatch - Redux dispatcher
- * @param {array} edges - List of all the edges relavent to this stage
- * @param {string} edgeState - Type of edge relevant to this prompt
+ * @param {array} edges - List of all the edges relevant to this stage
+ * @param {string} edgeType - Type of edge relevant to this prompt
  * @param {array} pair - Pair of node ids in format `[a, b]`
  * @param {boolean} stageState - Tracked choices in redux state
  * @param {array} deps - If these deps are changed, reset

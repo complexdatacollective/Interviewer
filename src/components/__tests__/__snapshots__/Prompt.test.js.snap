@@ -4,24 +4,10 @@ exports[`Prompt component renders prompt with markdown 1`] = `
 <div
   className="prompts__prompt"
 >
-  <ReactMarkdown
-    allowedTypes={
-      Array [
-        "paragraph",
-        "emphasis",
-        "strong",
-      ]
-    }
-    astPlugins={Array []}
+  <MarkdownLabel
     className="prompts__prompt-header"
-    escapeHtml={true}
-    plugins={Array []}
-    rawSourcePos={false}
-    renderers={Object {}}
-    skipHtml={false}
-    source="_prompt_ containing **markdown**"
-    sourcePos={false}
-    transformLinkUri={[Function]}
+    inline={true}
+    label="_prompt_ containing **markdown**"
   />
 </div>
 `;

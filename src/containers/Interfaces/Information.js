@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import ReactMarkdown from 'react-markdown';
+import { ALLOWED_MARKDOWN_TAGS } from '@codaco/ui/src/utils/config';
 import { Audio, BackgroundImage, Video } from '../../components';
 import defaultMarkdownRenderers from '../../utils/markdownRenderers';
 import { InformationContentType, AssetType } from '../../protocol-consts';
 import AssetMetaProvider from '../../behaviours/AssetMetaProvider';
-import { ALLOWED_MARKDOWN_TAGS } from '../../config';
 
 const getAssetComponent = (asset) => {
   switch (asset.type) {
