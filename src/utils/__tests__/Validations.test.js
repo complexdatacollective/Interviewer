@@ -196,9 +196,12 @@ describe('Validations', () => {
     });
   });
 
-  describe('unique()', () => {
-    const errorMessage = 'Your answer must be unique';
-    const subject = unique('');
+  describe.only('unique()', () => {
+    const props = {
+      validationMeta: {
+        entityId: null,
+      },
+    };
     const entities = {
       otherNetworkEntities: [{
         [entityAttributesProperty]: {
@@ -206,50 +209,56 @@ describe('Validations', () => {
         },
       }],
     };
+    const errorMessage = 'Your answer must be unique';
+    const mockStore = {
+      getState: () => ({
+      }),
+    };
+    const subject = unique(null, mockStore);
 
     it('passes for null or undefined', () => {
-      expect(subject(null, '', entities, 'uid1')).toBe(undefined);
-      expect(subject(undefined, '', entities, 'uid1')).toBe(undefined);
+      expect(subject(null, '', props, 'uid1')).toBe(undefined);
+      expect(subject(undefined, '', props, 'uid1')).toBe(undefined);
     });
 
     it('passes for a unique number', () => {
-      expect(subject(2, '', entities, 'uid1')).toBe(undefined);
+      expect(subject(2, '', props, 'uid1')).toBe(undefined);
     });
 
-    it('fails for a matching number', () => {
-      expect(subject(1, '', entities, 'uid1')).toBe(errorMessage);
+    it.only('fails for a matching number', () => {
+      expect(subject(1, '', props, 'uid1')).toBe(errorMessage);
     });
 
     it('passes for a unique string', () => {
-      expect(subject('diff', '', entities, 'uid3')).toBe(undefined);
+      expect(subject('diff', '', props, 'uid3')).toBe(undefined);
     });
 
     it('fails for a matching string', () => {
-      expect(subject('word', '', entities, 'uid3')).toBe(errorMessage);
+      expect(subject('word', '', props, 'uid3')).toBe(errorMessage);
     });
 
     it('passes for a unique array', () => {
-      expect(subject([3, 1], '', entities, 'uid4')).toBe(undefined);
+      expect(subject([3, 1], '', props, 'uid4')).toBe(undefined);
     });
 
     it('fails for a matching array', () => {
-      expect(subject([3, 1, 2], '', entities, 'uid4')).toBe(errorMessage);
+      expect(subject([3, 1, 2], '', props, 'uid4')).toBe(errorMessage);
     });
 
     it('passes for a unique boolean', () => {
-      expect(subject(true, '', entities, 'uid2')).toBe(undefined);
+      expect(subject(true, '', props, 'uid2')).toBe(undefined);
     });
 
     it('fails for a matching boolean', () => {
-      expect(subject(false, '', entities, 'uid2')).toBe(errorMessage);
+      expect(subject(false, '', props, 'uid2')).toBe(errorMessage);
     });
 
     it('passes for a unique object', () => {
-      expect(subject({ x: 2.1, y: 3.2 }, '', entities, 'uid5')).toBe(undefined);
+      expect(subject({ x: 2.1, y: 3.2 }, '', props, 'uid5')).toBe(undefined);
     });
 
     it('fails for a matching object', () => {
-      expect(subject({ y: 2.3, x: 1.2 }, '', entities, 'uid5')).toBe(errorMessage);
+      expect(subject({ y: 2.3, x: 1.2 }, '', props, 'uid5')).toBe(errorMessage);
     });
   });
 
