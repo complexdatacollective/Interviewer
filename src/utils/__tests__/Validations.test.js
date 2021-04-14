@@ -16,6 +16,10 @@ import {
   entityAttributesProperty,
 } from '../../ducks/modules/network';
 
+import { makeNetworkEntitiesForType } from '../../selectors/interface';
+
+jest.mock('../../selectors/interface');
+
 describe('Validations', () => {
   describe('required()', () => {
     const errorMessage = 'You must answer this question before continuing';
@@ -196,24 +200,26 @@ describe('Validations', () => {
     });
   });
 
-  describe.only('unique()', () => {
+  describe('unique()', () => {
     const props = {
       validationMeta: {
         entityId: null,
       },
     };
-    const entities = {
-      otherNetworkEntities: [{
+    const entities = [
+      {
         [entityAttributesProperty]: {
           uid1: 1, uid2: false, uid3: 'word', uid4: [1, 2, 3], uid5: { x: 1.2, y: 2.3 },
         },
-      }],
-    };
+      },
+    ];
     const errorMessage = 'Your answer must be unique';
-    const mockStore = {
-      getState: () => ({
-      }),
-    };
+    const mockStore = { getState: () => ({}) };
+
+    makeNetworkEntitiesForType.mockReturnValue(
+      () => entities,
+    );
+
     const subject = unique(null, mockStore);
 
     it('passes for null or undefined', () => {
@@ -225,7 +231,7 @@ describe('Validations', () => {
       expect(subject(2, '', props, 'uid1')).toBe(undefined);
     });
 
-    it.only('fails for a matching number', () => {
+    it('fails for a matching number', () => {
       expect(subject(1, '', props, 'uid1')).toBe(errorMessage);
     });
 
