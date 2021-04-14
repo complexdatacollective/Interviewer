@@ -126,6 +126,13 @@ export const getStageSubjectType = () => createDeepEqualSelector(
   (subject) => subject && subject.type,
 );
 
+export const getCodebookVariablesForType = () => createSelector(
+  (state) => getProtocolCodebook(state),
+  getStageSubject(),
+  (codebook, subject) => codebook
+    && (subject ? codebook[subject.entity][subject.type].variables : codebook.ego.variables),
+);
+
 export const getPromptIndexForCurrentSession = createSelector(
   (state) => (
     state.sessions[state.activeSessionId] && state.sessions[state.activeSessionId].promptIndex

@@ -15,6 +15,13 @@ import {
 import {
   entityAttributesProperty,
 } from '../../ducks/modules/network';
+import { getCodebookVariablesForType } from '../../selectors/session';
+import { makeNetworkEntitiesForType } from '../../selectors/interface';
+
+jest.mock('../../selectors/interface');
+jest.mock('../../selectors/session');
+
+const mockStore = { getState: () => ({}) };
 
 describe('Validations', () => {
   describe('required()', () => {
@@ -197,72 +204,93 @@ describe('Validations', () => {
   });
 
   describe('unique()', () => {
-    const errorMessage = 'Your answer must be unique';
-    const subject = unique('');
-    const entities = {
-      otherNetworkEntities: [{
+    const props = {
+      validationMeta: {},
+    };
+
+    const entities = [
+      {
         [entityAttributesProperty]: {
           uid1: 1, uid2: false, uid3: 'word', uid4: [1, 2, 3], uid5: { x: 1.2, y: 2.3 },
         },
-      }],
-    };
+      },
+    ];
+    const errorMessage = 'Your answer must be unique';
+
+    makeNetworkEntitiesForType.mockReturnValue(
+      () => entities,
+    );
+
+    const subject = unique(null, mockStore);
 
     it('passes for null or undefined', () => {
-      expect(subject(null, '', entities, 'uid1')).toBe(undefined);
-      expect(subject(undefined, '', entities, 'uid1')).toBe(undefined);
+      expect(subject(null, '', props, 'uid1')).toBe(undefined);
+      expect(subject(undefined, '', props, 'uid1')).toBe(undefined);
     });
 
     it('passes for a unique number', () => {
-      expect(subject(2, '', entities, 'uid1')).toBe(undefined);
+      expect(subject(2, '', props, 'uid1')).toBe(undefined);
     });
 
     it('fails for a matching number', () => {
-      expect(subject(1, '', entities, 'uid1')).toBe(errorMessage);
+      expect(subject(1, '', props, 'uid1')).toBe(errorMessage);
     });
 
     it('passes for a unique string', () => {
-      expect(subject('diff', '', entities, 'uid3')).toBe(undefined);
+      expect(subject('diff', '', props, 'uid3')).toBe(undefined);
     });
 
     it('fails for a matching string', () => {
-      expect(subject('word', '', entities, 'uid3')).toBe(errorMessage);
+      expect(subject('word', '', props, 'uid3')).toBe(errorMessage);
     });
 
     it('passes for a unique array', () => {
-      expect(subject([3, 1], '', entities, 'uid4')).toBe(undefined);
+      expect(subject([3, 1], '', props, 'uid4')).toBe(undefined);
     });
 
     it('fails for a matching array', () => {
-      expect(subject([3, 1, 2], '', entities, 'uid4')).toBe(errorMessage);
+      expect(subject([3, 1, 2], '', props, 'uid4')).toBe(errorMessage);
     });
 
     it('passes for a unique boolean', () => {
-      expect(subject(true, '', entities, 'uid2')).toBe(undefined);
+      expect(subject(true, '', props, 'uid2')).toBe(undefined);
     });
 
     it('fails for a matching boolean', () => {
-      expect(subject(false, '', entities, 'uid2')).toBe(errorMessage);
+      expect(subject(false, '', props, 'uid2')).toBe(errorMessage);
     });
 
     it('passes for a unique object', () => {
-      expect(subject({ x: 2.1, y: 3.2 }, '', entities, 'uid5')).toBe(undefined);
+      expect(subject({ x: 2.1, y: 3.2 }, '', props, 'uid5')).toBe(undefined);
     });
 
     it('fails for a matching object', () => {
-      expect(subject({ y: 2.3, x: 1.2 }, '', entities, 'uid5')).toBe(errorMessage);
+      expect(subject({ y: 2.3, x: 1.2 }, '', props, 'uid5')).toBe(errorMessage);
     });
   });
 
   describe('differentFrom()', () => {
     const errorMessage = 'Your answer must be different from';
-    const subject1 = differentFrom('uid1');
-    const subject2 = differentFrom('uid2');
-    const subject3 = differentFrom('uid3');
-    const subject4 = differentFrom('uid4');
-    const subject5 = differentFrom('uid5');
+
     const allValues = {
       uid1: 1, uid2: false, uid3: 'word', uid4: [1, 2, 3], uid5: { x: 1.2, y: 2.3 },
     };
+
+    getCodebookVariablesForType.mockReturnValue(
+      () => ({
+        uid1: { name: 1 },
+        uid2: { name: false },
+        uid3: { name: 'word' },
+        uid4: { name: [1, 2, 3] },
+        uid5: { name: { x: 1.2, y: 2.3 } },
+      }),
+    );
+
+    const subject1 = differentFrom('uid1', mockStore);
+    const subject2 = differentFrom('uid2', mockStore);
+    const subject3 = differentFrom('uid3', mockStore);
+    const subject4 = differentFrom('uid4', mockStore);
+    const subject5 = differentFrom('uid5', mockStore);
 
     it('passes for null or undefined', () => {
       expect(subject1(null, allValues)).toBe(undefined);
@@ -312,14 +340,26 @@ describe('Validations', () => {
 
   describe('sameAs()', () => {
     const errorMessage = 'Your answer must be the same as';
-    const subject1 = sameAs('uid1');
-    const subject2 = sameAs('uid2');
-    const subject3 = sameAs('uid3');
-    const subject4 = sameAs('uid4');
-    const subject5 = sameAs('uid5');
+
     const allValues = {
       uid1: 1, uid2: false, uid3: 'word', uid4: [1, 2, 3], uid5: { x: 1.2, y: 2.3 },
     };
+
+    getCodebookVariablesForType.mockReturnValue(
+      () => ({
+        uid1: { name: 1 },
+        uid2: { name: false },
+        uid3: { name: 'word' },
+        uid4: { name: [1, 2, 3] },
+        uid5: { name: { x: 1.2, y: 2.3 } },
+      }),
+    );
+
+    const subject1 = sameAs('uid1', mockStore);
+    const subject2 = sameAs('uid2', mockStore);
+    const subject3 = sameAs('uid3', mockStore);
+    const subject4 = sameAs('uid4', mockStore);
+    const subject5 = sameAs('uid5', mockStore);
 
     it('fails for null or undefined', () => {
       expect(subject1(null, allValues)).toBe(`${errorMessage} 1`);

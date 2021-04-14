@@ -3,7 +3,11 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
+import * as redux from 'react-redux';
 import Field, { getInputComponent } from '../Field';
+
+const spy = jest.spyOn(redux, 'useStore');
+spy.mockReturnValue(() => ({}));
 
 const attributes = {
   label: 'Name',

@@ -2,13 +2,12 @@ import React, { Component } from 'react';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import { submit } from 'redux-form';
-import { debounce, filter } from 'lodash';
+import { debounce } from 'lodash';
 import { Button } from '@codaco/ui';
 import Overlay from './Overlay';
 import Form from './Form';
 import FormWizard from './FormWizard';
 import { entityPrimaryKeyProperty, entityAttributesProperty } from '../ducks/modules/network';
-import { makeNetworkEntitiesForType } from '../selectors/interface';
 import { Scroller } from '../components';
 
 const reduxFormName = 'NODE_FORM';
@@ -42,6 +41,7 @@ class NodeForm extends Component {
       stage,
       onClose,
       useFullScreenForms,
+      validationMeta,
       otherNetworkEntities,
     } = this.props;
 
@@ -52,6 +52,7 @@ class NodeForm extends Component {
       autoFocus: true,
       subject: stage.subject,
       form: reduxFormName,
+      validationMeta,
       otherNetworkEntities,
     };
 
@@ -85,19 +86,18 @@ class NodeForm extends Component {
 
 const mapStateToProps = (state, props) => {
   const nodeAttributes = props.node ? props.node[entityAttributesProperty] : {};
-  const networkEntitiesForType = makeNetworkEntitiesForType();
-  const otherNetworkEntities = filter(networkEntitiesForType(state, props), (node) => (
-    !props.node || node[entityPrimaryKeyProperty] !== props.node[entityPrimaryKeyProperty]));
 
   const initialValues = {
     ...nodeAttributes,
   };
 
+  const entityId = props.node && props.node[entityPrimaryKeyProperty];
+
   return {
     form: props.stage.form,
     useFullScreenForms: state.deviceSettings.useFullScreenForms,
     initialValues,
-    otherNetworkEntities, // used for some validation functions
+    validationMeta: { entityId }, // used for validation functions
   };
 };
 

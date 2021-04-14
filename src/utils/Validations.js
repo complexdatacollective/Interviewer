@@ -1,6 +1,17 @@
 import {
-  isEqual, isNil, isNumber, isString, keys, pickBy, some,
+  filter,
+  isEqual,
+  isNil,
+  isNumber,
+  isString,
+  keys,
+  pickBy,
+  some,
+  get,
 } from 'lodash';
+import { entityPrimaryKeyProperty } from '../ducks/modules/network';
+import { makeNetworkEntitiesForType } from '../selectors/interface';
+import { getCodebookVariablesForType } from '../selectors/session';
 
 const coerceArray = (value) => {
   if (value instanceof Object) {
@@ -59,9 +70,38 @@ const isSomeValueMatching = (value, otherNetworkEntities, name) => (
   some(otherNetworkEntities, (entity) => entity.attributes
     && isMatchingValue(value, entity.attributes[name])));
 
-export const unique = () => (value, _, props, name) => (isSomeValueMatching(value, props.otherNetworkEntities, name) ? 'Your answer must be unique' : undefined);
-export const differentFrom = (varUuid) => (value, allValues) => (isMatchingValue(value, allValues[varUuid]) ? `Your answer must be different from ${allValues[varUuid]}` : undefined);
-export const sameAs = (varUuid) => (value, allValues) => (!isMatchingValue(value, allValues[varUuid]) ? `Your answer must be the same as ${allValues[varUuid]}` : undefined);
+const getOtherNetworkEntities = (entities, entityId) => filter(
+  entities,
+  (node) => (!entityId || node[entityPrimaryKeyProperty] !== entityId),
+);
+
+export const unique = (_, store) => {
+  const networkEntitiesForType = makeNetworkEntitiesForType();
+
+  return (value, __, { validationMeta }, name) => {
+    const otherNetworkEntities = getOtherNetworkEntities(
+      networkEntitiesForType(store.getState()),
+      validationMeta.entityId,
+    );
+
+    return isSomeValueMatching(value, otherNetworkEntities, name) ? 'Your answer must be unique' : undefined;
+  };
+};
+
+const getVariableName = (variableId, store) => {
+  const codebookVariablesForType = getCodebookVariablesForType()(store.getState());
+  return get(codebookVariablesForType, [variableId, 'name']);
+};
+
+export const differentFrom = (variableId, store) => {
+  const variableName = getVariableName(variableId, store);
+  return (value, allValues) => (isMatchingValue(value, allValues[variableId]) ? `Your answer must be different from ${variableName}` : undefined);
+};
+
+export const sameAs = (variableId, store) => {
+  const variableName = getVariableName(variableId, store);
+  return (value, allValues) => (!isMatchingValue(value, allValues[variableId]) ? `Your answer must be the same as ${variableName}` : undefined);
+};
 
 export default {
   required: () => required(),

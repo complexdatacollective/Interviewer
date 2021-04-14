@@ -1,5 +1,6 @@
-import React, { PureComponent } from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { useStore } from 'react-redux';
 import { Field as ReduxFormField } from 'redux-form';
 import { map, get, toPairs } from 'lodash';
 import * as Fields from '@codaco/ui/lib/components/Fields';
@@ -15,7 +16,7 @@ const ComponentTypeNotFound = (componentType) => () => (
 );
 
 /*
-  * Returns the named field compontent, if no matching one is found
+  * Returns the named field component, if no matching one is found
   or else it just returns a text input
   * @param {object} field The properties handed down from the protocol form
   */
@@ -34,10 +35,10 @@ export const getInputComponent = (componentType = 'Text') => {
 * which will always fail.
 * @param {string} validation The name of the validation function to return.
   */
-const getValidation = (validation) => map(
+const getValidation = (validation, store) => map(
   toPairs(validation),
   ([type, options]) => (
-    Object.hasOwnProperty.call(validations, type) ? validations[type](options) : () => (`Validation "${type}" not found`)
+    Object.hasOwnProperty.call(validations, type) ? validations[type](options, store) : () => (`Validation "${type}" not found`)
   ),
 );
 
@@ -49,31 +50,29 @@ const getValidation = (validation) => map(
   * @param {string} placeholder Presentational placeholder text
   * @param {object} validation Validation methods
   */
-class Field extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.component = getInputComponent(props.component);
-    // Use validate if it exists, enabling custom validations. Otherwise
-    // use our validation getter.
-    this.validate = props.validate || getValidation(props.validation);
-  }
+const Field = ({
+  label,
+  name,
+  validation,
+  ...rest
+}) => {
+  const store = useStore();
+  const component = useMemo(() => getInputComponent(rest.component), [rest.component]);
+  const validate = useMemo(
+    () => rest.validate || getValidation(validation, store),
+    [],
+  );
 
-  render() {
-    const {
-      label, name, validation, ...rest
-    } = this.props;
-
-    return (
-      <ReduxFormField
-        {...rest}
-        name={name}
-        label={label}
-        component={this.component}
-        validate={this.validate}
-      />
-    );
-  }
-}
+  return (
+    <ReduxFormField
+      {...rest}
+      name={name}
+      label={label}
+      component={component}
+      validate={validate}
+    />
+  );
+};
 
 Field.propTypes = {
   label: PropTypes.string,
