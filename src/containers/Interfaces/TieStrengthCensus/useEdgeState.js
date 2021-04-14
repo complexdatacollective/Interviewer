@@ -124,7 +124,7 @@ const useEdgeState = (
       );
 
     // If truthy value but no existing edge, adding an edge
-    const addEdge = value && !edgeExistsInNetwork(edges, pair, edgeType);
+    const addEdge = value !== false && !edgeExistsInNetwork(edges, pair, edgeType);
 
     // If value is false and edge exists, removing an edge
     const removeEdge = value === false && edgeExistsInNetwork(edges, pair, edgeType);
