@@ -58,21 +58,29 @@ const isMatchingValue = (submittedValue, existingValue) => {
   return submittedValue === existingValue;
 };
 
-const isSomeValueMatching = (value, name, getState, entityId) => {
-  const otherNetworkEntities = filter(makeNetworkEntitiesForType()(getState()), (node) => (
+const isSomeValueMatching = (value, name, store, entityId) => {
+  const otherNetworkEntities = filter(makeNetworkEntitiesForType()(store.getState()), (node) => (
     !entityId || node[entityPrimaryKeyProperty] !== entityId));
   return some(otherNetworkEntities, (entity) => entity.attributes
     && isMatchingValue(value, entity.attributes[name]));
 };
 
-const lookUpVarName = (varUuid, getState) => {
-  const codebookVariablesForType = getCodebookVariablesForType()(getState());
+const lookUpVarName = (varUuid, store) => {
+  const codebookVariablesForType = getCodebookVariablesForType()(store.getState());
   return codebookVariablesForType && codebookVariablesForType[varUuid].name;
 };
 
-export const unique = (active, getState) => (value, _, props, name) => (active && isSomeValueMatching(value, name, getState, props.entityId) ? 'Your answer must be unique' : undefined);
-export const differentFrom = (varUuid, getState) => (value, allValues) => (isMatchingValue(value, allValues[varUuid]) ? `Your answer must be different from ${lookUpVarName(varUuid, getState)}` : undefined);
-export const sameAs = (varUuid, getState) => (value, allValues) => (!isMatchingValue(value, allValues[varUuid]) ? `Your answer must be the same as ${lookUpVarName(varUuid, getState)}` : undefined);
+export const unique = (active, store) => {
+  console.log('rn generator');
+  return (value, _, props, name) => {
+    if (active && isSomeValueMatching(value, name, store, props.entityId)) {
+      return 'Your answer must be unique';
+    }
+    return undefined;
+  };
+};
+export const differentFrom = (varUuid, store) => (value, allValues) => (isMatchingValue(value, allValues[varUuid]) ? `Your answer must be different from ${lookUpVarName(varUuid, store)}` : undefined);
+export const sameAs = (varUuid, store) => (value, allValues) => (!isMatchingValue(value, allValues[varUuid]) ? `Your answer must be the same as ${lookUpVarName(varUuid, store)}` : undefined);
 
 export default {
   required: () => required(),
