@@ -23,13 +23,14 @@ const FinishSession = ({ endSession }) => {
             interview now.
           </p>
         </div>
-        { !isPreview() &&
-          <div className="finish-session-interface__section finish-session-interface__section--buttons">
-            <Button onClick={handleFinishSession}>
-              Finish
-            </Button>
-          </div>
-        }
+        { !isPreview()
+          && (
+            <div className="finish-session-interface__section finish-session-interface__section--buttons">
+              <Button onClick={handleFinishSession}>
+                Finish
+              </Button>
+            </div>
+          )}
       </div>
     </div>
   );
