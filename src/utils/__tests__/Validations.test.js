@@ -195,7 +195,7 @@ describe('Validations', () => {
     });
 
     it('correctly handles zero values', () => {
-      expect(subject([0, 1, 2])).toBe(errorMessage);
+      expect(subject([0, false, -1])).toBe(errorMessage);
     });
 
     it('passes for an exactly matching array', () => {
