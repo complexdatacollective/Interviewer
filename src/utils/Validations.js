@@ -54,7 +54,7 @@ export const maxValue = (max) => (value) => (isNumber(value) && value > max ? `Y
 
 export const minSelected = (min) => (value) => (!value || coerceArray(value).length < min ? `You must choose a minimum of ${min} option(s)` : undefined);
 
-export const maxSelected = (max) => (value) => (!value || coerceArray(value).length > max ? `You must choose a maximum of ${max} option(s)` : undefined);
+export const maxSelected = (max) => (value) => (value && coerceArray(value).length > max ? `You must choose a maximum of ${max} option(s)` : undefined);
 
 const isMatchingValue = (submittedValue, existingValue) => {
   if (submittedValue && existingValue && existingValue instanceof Array) {
