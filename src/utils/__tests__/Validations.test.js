@@ -194,6 +194,10 @@ describe('Validations', () => {
       expect(subject([1])).toBe(undefined);
     });
 
+    it('correctly handles zero values', () => {
+      expect(subject([0, 1, 2])).toBe(errorMessage);
+    });
+
     it('passes for an exactly matching array', () => {
       expect(subject([1, 2])).toBe(undefined);
     });

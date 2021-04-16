@@ -4,8 +4,6 @@ import {
   isNil,
   isNumber,
   isString,
-  keys,
-  pickBy,
   some,
   get,
 } from 'lodash';
@@ -13,9 +11,11 @@ import { entityPrimaryKeyProperty } from '../ducks/modules/network';
 import { makeNetworkEntitiesForType } from '../selectors/interface';
 import { getCodebookVariablesForType } from '../selectors/session';
 
+// Return an array of values given either a collection, an array,
+// or a single value
 const coerceArray = (value) => {
   if (value instanceof Object) {
-    return keys(pickBy(value));
+    return value.reduce((acc, individual) => ([...acc, individual.value]), []);
   }
   if (value instanceof Array) {
     return value;
