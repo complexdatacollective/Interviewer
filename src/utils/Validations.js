@@ -48,7 +48,7 @@ export const required = (message) => (value) => {
 };
 
 export const maxLength = (max) => (value) => (value && value.length > max ? `Your answer must be ${max} characters or less` : undefined);
-export const minLength = (min) => (value) => (value && value.length < min ? `Your answer must be ${min} characters or more` : undefined);
+export const minLength = (min) => (value) => (!value || value.length < min ? `Your answer must be ${min} characters or more` : undefined);
 export const minValue = (min) => (value) => (isNumber(value) && value < min ? `Your answer must be at least ${min}` : undefined);
 export const maxValue = (max) => (value) => (isNumber(value) && value > max ? `Your answer must be less than ${max}` : undefined);
 
