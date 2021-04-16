@@ -28,6 +28,7 @@ const SessionInformation = (props) => {
       return (
         <h6>
           No
+          {' '}
           {type}
           {' '}
           in this interview.
