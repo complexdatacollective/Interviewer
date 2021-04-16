@@ -7,7 +7,7 @@ const DEVICE_API_VERSION = '2'; // X-Device-API-Version
 
 const APP_SUPPORTED_SCHEMA_VERSIONS = [4, 5];
 
-const DEVELOPMENT_PROTOCOL_URL = 'https://github.com/complexdatacollective/development-protocol/releases/download/20210409090154-e27bf9f/Development.netcanvas';
+const DEVELOPMENT_PROTOCOL_URL = 'https://github.com/complexdatacollective/development-protocol/releases/download/20210416103142-4588f02/Development.netcanvas';
 
 module.exports = {
   PROTOCOL_EXTENSION,
