@@ -4,8 +4,6 @@ import {
   isNil,
   isNumber,
   isString,
-  keys,
-  pickBy,
   some,
   get,
 } from 'lodash';
@@ -13,9 +11,11 @@ import { entityPrimaryKeyProperty } from '../ducks/modules/network';
 import { makeNetworkEntitiesForType } from '../selectors/interface';
 import { getCodebookVariablesForType } from '../selectors/session';
 
+// Return an array of values given either a collection, an array,
+// or a single value
 const coerceArray = (value) => {
   if (value instanceof Object) {
-    return keys(pickBy(value));
+    return value.reduce((acc, individual) => ([...acc, individual.value]), []);
   }
   if (value instanceof Array) {
     return value;
@@ -48,13 +48,13 @@ export const required = (message) => (value) => {
 };
 
 export const maxLength = (max) => (value) => (value && value.length > max ? `Your answer must be ${max} characters or less` : undefined);
-export const minLength = (min) => (value) => (value && value.length < min ? `Your answer must be ${min} characters or more` : undefined);
+export const minLength = (min) => (value) => (!value || value.length < min ? `Your answer must be ${min} characters or more` : undefined);
 export const minValue = (min) => (value) => (isNumber(value) && value < min ? `Your answer must be at least ${min}` : undefined);
 export const maxValue = (max) => (value) => (isNumber(value) && value > max ? `Your answer must be less than ${max}` : undefined);
 
 export const minSelected = (min) => (value) => (!value || coerceArray(value).length < min ? `You must choose a minimum of ${min} option(s)` : undefined);
 
-export const maxSelected = (max) => (value) => (!value || coerceArray(value).length > max ? `You must choose a maximum of ${max} option(s)` : undefined);
+export const maxSelected = (max) => (value) => (value && coerceArray(value).length > max ? `You must choose a maximum of ${max} option(s)` : undefined);
 
 const isMatchingValue = (submittedValue, existingValue) => {
   if (submittedValue && existingValue && existingValue instanceof Array) {

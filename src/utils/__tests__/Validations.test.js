@@ -51,9 +51,9 @@ describe('Validations', () => {
     const errorMessage = 'Your answer must be 5 characters or more';
     const subject = minLength(5);
 
-    it('passes for null or undefined', () => {
-      expect(subject(null)).toBe(undefined);
-      expect(subject(undefined)).toBe(undefined);
+    it('fails for null or undefined', () => {
+      expect(subject(null)).toBe(errorMessage);
+      expect(subject(undefined)).toBe(errorMessage);
     });
 
     it('fails for a smaller string', () => {
@@ -181,9 +181,9 @@ describe('Validations', () => {
     const errorMessage = 'You must choose a maximum of 2 option(s)';
     const subject = maxSelected(2);
 
-    it('fails for null or undefined', () => {
-      expect(subject(null)).toBe(errorMessage);
-      expect(subject(undefined)).toBe(errorMessage);
+    it('passes for null or undefined', () => {
+      expect(subject(null)).toBe(undefined);
+      expect(subject(undefined)).toBe(undefined);
     });
 
     it('passes for an empty array', () => {
@@ -192,6 +192,10 @@ describe('Validations', () => {
 
     it('passes for a smaller array', () => {
       expect(subject([1])).toBe(undefined);
+    });
+
+    it('correctly handles zero values', () => {
+      expect(subject([0, false, -1])).toBe(errorMessage);
     });
 
     it('passes for an exactly matching array', () => {
