@@ -6,6 +6,7 @@ import cx from 'classnames';
 import { get, isEmpty } from 'lodash';
 import { Icon, window } from '@codaco/ui';
 import { Radio } from '@codaco/ui/lib/components/Fields';
+import { MarkdownLabel } from '@codaco/ui/lib/components/Fields';
 import Accordion from './Accordion';
 
 import {
@@ -99,7 +100,7 @@ class PresetSwitcherKey extends Component {
                     name="contexts"
                     color={`cat-color-seq-${index + 1}`}
                   />
-                  {option.label}
+                  <MarkdownLabel inline label={option.label} />
                 </div>
               ))}
             </Accordion>
