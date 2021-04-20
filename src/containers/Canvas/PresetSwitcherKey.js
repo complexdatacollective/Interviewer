@@ -5,8 +5,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { get, isEmpty } from 'lodash';
 import { Icon, window } from '@codaco/ui';
-import { Radio } from '@codaco/ui/lib/components/Fields';
-import { MarkdownLabel } from '@codaco/ui/lib/components/Fields';
+import { Radio, MarkdownLabel } from '@codaco/ui/lib/components/Fields';
 import Accordion from './Accordion';
 
 import {
