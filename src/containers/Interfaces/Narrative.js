@@ -49,13 +49,13 @@ class Narrative extends Component {
 
   handleToggleEdges = () => {
     this.setState((oldState) => ({
-      showConvexHulls: !oldState.showEdges,
+      showEdges: !oldState.showEdges,
     }));
   }
 
   handleToggleHighlighting = () => {
     this.setState((oldState) => ({
-      showConvexHulls: !oldState.showHighlightedNodes,
+      showHighlightedNodes: !oldState.showHighlightedNodes,
     }));
   }
 
@@ -67,7 +67,7 @@ class Narrative extends Component {
 
   handleToggleFreeze = () => {
     this.setState((oldState) => ({
-      showConvexHulls: !oldState.isFrozen,
+      isFrozen: !oldState.isFrozen,
     }));
   }
 

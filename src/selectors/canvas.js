@@ -15,7 +15,7 @@ import {
 import { getStageSubject } from './session';
 
 const getLayout = (_, props) => get(props, 'prompt.layout.layoutVariable');
-const getSortOptions = (_, props) => get(props, 'prompt.props.sortOrder');
+const getSortOptions = (_, props) => get(props, 'prompt.sortOrder');
 const getDisplayEdges = (_, props) => get(props, 'prompt.edges.display', []);
 
 /**
