@@ -107,7 +107,7 @@ const ServerAddressForm = ({
       <p>
         Visit our
         {' '}
-        <ExternalLink href="https://documentation.networkcanvas.com/docs/key-concepts/pairing/">documentation article</ExternalLink>
+        <ExternalLink href="https://documentation.networkcanvas.com/reference/key-concepts/pairing/">documentation article</ExternalLink>
         {' '}
         on pairing to learn more.
       </p>
