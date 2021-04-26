@@ -15,6 +15,7 @@ import DialogManager from '../components/DialogManager';
 import ToastManager from '../components/ToastManager';
 import { SettingsMenu } from '../components/SettingsMenu';
 import useUpdater from '../hooks/useUpdater';
+import { actionCreators as dialogActions } from '../ducks/modules/dialogs';
 
 const getElectronWindow = () => {
   if (isElectron()) {
@@ -33,7 +34,10 @@ const App = ({
   setStartFullScreen,
   interfaceScale,
   useDynamicScaling,
+  crappleWarningHeeded,
+  setCrappleWarningHeeded,
   children,
+  openDialog,
 }) => {
   const win = getElectronWindow();
   const env = getEnv();
@@ -48,6 +52,40 @@ const App = ({
   };
 
   useUpdater('https://api.github.com/repos/complexdatacollective/Interviewer/releases/latest', 2500);
+
+  // Apple rejected the app due a combination of arrogance and stupidity.
+  // This is the 'fix'.
+  if ((isIOS()) && !crappleWarningHeeded) {
+    openDialog({
+      type: 'Confirm',
+      title: 'Important requirements specific to iPad users',
+      message: (
+        <>
+          <p>
+            In compliance with App Store requirements, by using this app you confirm that all
+            research you undertake using this software has been fully scrutinized
+            and approved by an Institutional Review Board (IRB) or equivalent ethics committee. You
+            must be capable of providing proof of this approval upon request.
+          </p>
+          <p>
+            You also confirm that you have obtained full consent from participants or, in the
+            case of minors, their parent or guardian. Such consent must include the (a) nature,
+            purpose, and duration of the research; (b) procedures, risks, and benefits to the
+            participant; (c) information about confidentiality and handling of data (including any
+            sharing with third parties); (d) a point of contact for participant questions;
+            and (e) the withdrawal process.
+          </p>
+          <p>
+            If you cannot confirm the above, or are unable to comply with these terms, you
+            must cease your use of this app immediately.
+          </p>
+        </>
+      ),
+      confirmLabel: 'I confirm the above',
+      canCancel: false,
+      onConfirm: setCrappleWarningHeeded,
+    });
+  }
 
   useEffect(() => {
     if (isCordova()) {
@@ -139,6 +177,8 @@ App.defaultProps = {
 
 const mapDispatchToProps = (dispatch) => ({
   setStartFullScreen: (value) => dispatch(deviceSettingsActions.setSetting('startFullScreen', value)),
+  setCrappleWarningHeeded: () => dispatch(deviceSettingsActions.setSetting('crappleWarningHeeded', true)),
+  openDialog: (dialog) => dispatch(dialogActions.openDialog(dialog)),
 });
 
 function mapStateToProps(state) {
@@ -146,6 +186,7 @@ function mapStateToProps(state) {
     interfaceScale: state.deviceSettings.interfaceScale,
     useDynamicScaling: state.deviceSettings.useDynamicScaling,
     startFullScreen: state.deviceSettings.startFullScreen,
+    crappleWarningHeeded: state.deviceSettings.crappleWarningHeeded,
   };
 }
 

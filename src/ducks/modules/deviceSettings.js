@@ -27,6 +27,9 @@ const initialState = {
   useScreenLayoutCoordinates: false,
   screenLayoutHeight: window.screen.height,
   screenLayoutWidth: window.screen.width,
+
+  // We are required to show a dialog on app launch for iOS users
+  crappleWarningHeeded: false,
 };
 
 // This provides additional default state based on information unavailable before 'deviceready'.
