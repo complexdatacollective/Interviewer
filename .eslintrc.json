@@ -64,6 +64,8 @@
                 "mousedown",
                 "mouseup",
                 "mousemove",
+                "dragover",
+                "deviceready",
                 "datetime",
                 "graphml",
                 "networkcanvas",
