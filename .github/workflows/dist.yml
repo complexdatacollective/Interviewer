@@ -37,5 +37,5 @@ jobs:
 
       - name: Dist
         run: npm run dist:linux -- --publish always
-        with:
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
