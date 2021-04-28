@@ -2,6 +2,7 @@
 import reducer, { actionCreators, actionTypes } from '../deviceSettings';
 
 const initialState = {
+  crappleWarningHeeded: false,
   description: 'Unknown device',
   exportCSV: false,
   exportGraphML: true,

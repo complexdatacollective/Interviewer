@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="6046" id="org.codaco.NetworkCanvasInterviewer6" ios-CFBundleIdentifier="org.codaco.NetworkCanvasInterviewer6" ios-CFBundleVersion="6046" version="6.1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="6064" id="org.codaco.NetworkCanvasInterviewer6" ios-CFBundleIdentifier="org.codaco.NetworkCanvasInterviewer6" ios-CFBundleVersion="6064" version="6.1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Network Canvas Interviewer</name>
     <description>
         A tool for conducting Network Canvas Interviews.
@@ -7,7 +7,7 @@
     <author email="developers@coda.co" href="http://coda.co">
         Complex Data Collective
     </author>
-    <content src="index.html" />
+    <content src="http://172.20.10.2:3000/" />
     <access origin="*" />
     <access origin="cdvfile://*" />
     <allow-intent href="http://*/*" />
@@ -34,8 +34,9 @@
         </edit-config>
     </platform>
     <platform name="ios">
-        <preference name="WKWebViewOnly" value="true" />
         <allow-navigation href="*" />
+        <allow-navigation href="*" />
+        <preference name="WKWebViewOnly" value="true" />
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
         <config-file parent="NSBonjourServices" target="*-Info.plist">

@@ -60,7 +60,7 @@ const ServerSection = () => {
             device or the server. Fetching protocols and uploading data have
             been disabled. Use the button below for more troubleshooting information.
           </p>
-          <Button size="small" color="neon-coral" onClick={() => openExternalLink('https://documentation.networkcanvas.com/docs/key-concepts/pairing/#troubleshooting')}>More Information</Button>
+          <Button size="small" color="neon-coral" onClick={() => openExternalLink('https://documentation.networkcanvas.com/how-to/pairing/#troubleshooting')}>More Information</Button>
         </>
       );
     }
@@ -74,7 +74,7 @@ const ServerSection = () => {
             open on your remote computer, and that your network is configured
             correctly. Use the button below for more troubleshooting information.
           </p>
-          <Button size="small" color="neon-coral" onClick={() => openExternalLink('https://documentation.networkcanvas.com/docs/key-concepts/pairing/#troubleshooting')}>More Information</Button>
+          <Button size="small" color="neon-coral" onClick={() => openExternalLink('https://documentation.networkcanvas.com/how-to/pairing/#troubleshooting')}>More Information</Button>
         </>
       );
     }
@@ -131,7 +131,7 @@ const ServerSection = () => {
             )}
           </div>
           <div className="content-area__buttons">
-            <Button color="mustard--dark" disabled={!onlineStatus} onClick={() => openExternalLink('https://documentation.networkcanvas.com/docs/key-concepts/pairing/')}>View Pairing Documentation</Button>
+            <Button color="mustard--dark" disabled={!onlineStatus} onClick={() => openExternalLink('https://documentation.networkcanvas.com/reference/key-concepts/pairing')}>View Pairing Documentation</Button>
             { !pairedServer ? (
               <Button disabled={!onlineStatus} color="platinum" onClick={() => setShowServerAddressForm(true)}>Provide manual connection details...</Button>
             )

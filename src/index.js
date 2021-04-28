@@ -1,15 +1,12 @@
-/* eslint-disable */
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { PersistGate } from 'redux-persist/integration/react';
 import { ready as secureCommsReady } from 'secure-comms-api/cipher';
 import { Provider } from 'react-redux';
 import { ConnectedRouter, push } from 'connected-react-router';
-import { Spinner } from '@codaco/ui';
 import initFileOpener from './utils/initFileOpener';
 import initMenuActions from './utils/initMenuActions';
-import { history, store, persistor } from './ducks/store';
+import { history, store, persistor as storePersistor } from './ducks/store';
 import { actionCreators as deviceActions } from './ducks/modules/deviceSettings';
 import App from './containers/App';
 import { isCordova, isElectron, getEnv } from './utils/Environment';
@@ -45,7 +42,7 @@ const startApp = () => {
 
   ReactDOM.render(
     <Provider store={store}>
-      <Persist persistor={persistor}>
+      <Persist persistor={storePersistor}>
         <ConnectedRouter history={history}>
           <App>
             <AppRouter />
