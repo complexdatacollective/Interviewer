@@ -58,6 +58,8 @@ class NameGeneratorAutoComplete extends Component {
 
     const ListId = 'AUTOCOMPLETE_NODE_LIST';
 
+    stage && console.log({ stage });
+
     const searchOptions = { matchProperties: [], ...stage.searchOptions };
 
     // Map the matchproperties to add the entity attributes object, and replace names with

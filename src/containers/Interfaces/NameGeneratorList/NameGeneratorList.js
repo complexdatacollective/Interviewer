@@ -12,7 +12,7 @@ import { makeNetworkNodesForOtherPrompts } from '../../../selectors/interface';
 import { getCardAdditionalProperties } from '../../../selectors/name-generator';
 import { entityPrimaryKeyProperty, getEntityAttributes } from '../../../ducks/modules/network';
 import getParentKeyByNameValue from '../../../utils/getParentKeyByNameValue';
-import HyperList from './HyperList';
+import SearchableList from './SearchableList';
 
 const makeGetNodesForList = (props) => {
   const networkNodesForOtherPrompts = makeNetworkNodesForOtherPrompts();
@@ -81,6 +81,8 @@ const NameGeneratorList = (props) => {
       })(item),
     }));
 
+  const sortableProperties = stage.sortOptions && stage.sortOptions.sortableProperties;
+
   return (
     <div className="name-generator-list-interface">
       <div className="name-generator-list-interface__prompt">
@@ -92,9 +94,10 @@ const NameGeneratorList = (props) => {
         />
       </div>
 
-      <HyperList
+      <SearchableList
         items={items}
         itemComponent={Card}
+        sortableProperties={sortableProperties}
       />
     </div>
   );

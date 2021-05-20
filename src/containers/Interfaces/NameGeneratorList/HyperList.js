@@ -52,16 +52,20 @@ const HyperList = ({
   return (
     <div
       className="hyper-list"
-      style={{ flex: 1 }}
+      style={{ flex: 1, minHeight: '500' }}
     >
       <ListContext.Provider value={context}>
         <AutoSizer>
           {({ height, width }) => {
+            const columnCount = Math.ceil(columns);
+            const rowCount = Math.ceil(items.length || 0) / columnCount;
+            const columnWidth = width / columnCount;
+
             const gridOptions = {
-              columnCount: columns,
-              rowCount: items.length / columns,
+              columnCount,
+              rowCount,
               rowHeight,
-              columnWidth: width / columns,
+              columnWidth,
             };
 
             return (
@@ -84,7 +88,7 @@ HyperList.propTypes = {
 };
 
 HyperList.defaultProps = {
-  itemRenderer: () => null,
+  itemComponent: () => null,
   columns: 2,
   rowHeight: 300,
 };
