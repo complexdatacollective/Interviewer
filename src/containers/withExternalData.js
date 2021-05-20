@@ -113,7 +113,7 @@ const withExternalData = (sourceProperty, dataProperty) => compose(
       const sourceFile = assetFiles[sourceId];
       const { type } = assetManifest[sourceId];
 
-      loadExternalData(protocolUID, sourceFile, type)
+      const load = () => loadExternalData(protocolUID, sourceFile, type)
         .then((externalData) => {
           setExternalDataIsLoading(false);
           setExternalData({
@@ -121,6 +121,9 @@ const withExternalData = (sourceProperty, dataProperty) => compose(
                   withVariableUUIDReplacement(externalData.nodes, protocolCodebook, stageSubject),
           });
         });
+
+      // setTimeout(() => load(), 2000);
+      load();
     },
   }),
   lifecycle({
