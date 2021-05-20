@@ -94,7 +94,7 @@ const NameGeneratorList = (props) => {
 
       <HyperList
         items={items}
-        itemRenderer={Card}
+        itemComponent={Card}
       />
     </div>
   );

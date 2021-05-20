@@ -2,20 +2,21 @@ import React, { useContext, useMemo } from 'react';
 import { FixedSizeGrid as Grid } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { motion } from 'framer-motion';
+import { DragSource } from '../../../behaviours/DragAndDrop';
 
-const ListContext = React.createContext([]);
+const ListContext = React.createContext({ items: [], columns: 0 });
 
 const variants = {
   visible: { scale: 1 },
   hidden: { scale: 0 },
 };
 
-const getCellRenderer = (Component, columns) => ({
+const getCellRenderer = (Component) => ({
   columnIndex,
   rowIndex,
   style,
 }) => {
-  const items = useContext(ListContext);
+  const { items, columns } = useContext(ListContext);
   const dataIndex = (columnIndex * columns) + rowIndex;
   const data = items[dataIndex];
 
@@ -33,25 +34,27 @@ const getCellRenderer = (Component, columns) => ({
 };
 
 /**
-  * HyperCardList
+  * HyperList
   */
-const HyperCardList = ({
+const HyperList = ({
   items,
-  itemRenderer: ItemRenderer,
+  itemComponent: ItemComponent,
   columns,
   rowHeight,
 }) => {
   const CellRenderer = useMemo(
-    () => getCellRenderer(ItemRenderer, columns),
-    [ItemRenderer],
+    () => getCellRenderer(DragSource(ItemComponent)),
+    [ItemComponent, columns],
   );
+
+  const context = useMemo(() => ({ items, columns }), [items.length, columns]);
 
   return (
     <div
       className="hyper-list"
       style={{ flex: 1 }}
     >
-      <ListContext.Provider value={items}>
+      <ListContext.Provider value={context}>
         <AutoSizer>
           {({ height, width }) => {
             const gridOptions = {
@@ -77,13 +80,13 @@ const HyperCardList = ({
   );
 };
 
-HyperCardList.propTypes = {
+HyperList.propTypes = {
 };
 
-HyperCardList.defaultProps = {
+HyperList.defaultProps = {
   itemRenderer: () => null,
   columns: 2,
   rowHeight: 300,
 };
 
-export default HyperCardList;
+export default HyperList;
