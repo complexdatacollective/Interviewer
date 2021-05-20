@@ -71,15 +71,14 @@ const NameGeneratorList = (props) => {
     props,
   ));
 
-  const items = useSelector(makeGetNodesForList(props))
-    .map((item) => ({
-      label: labelGetter(item),
-      details: detailsWithVariableUUIDs({
-        ...props,
-        nodeTypeDefinition,
-        visibleSupplementaryFields,
-      })(item),
-    }));
+  const items = useSelector(makeGetNodesForList(props)).map((item) => ({
+    label: labelGetter(item),
+    details: detailsWithVariableUUIDs({
+      ...props,
+      nodeTypeDefinition,
+      visibleSupplementaryFields,
+    })(item),
+  }));
 
   const sortableProperties = stage.sortOptions && stage.sortOptions.sortableProperties;
 

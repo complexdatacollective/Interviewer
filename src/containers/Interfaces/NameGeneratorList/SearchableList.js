@@ -1,6 +1,7 @@
 import React, { useMemo, useState, useEffect } from 'react';
 /* eslint-disable import/prefer-default-export */
 import Fuse from 'fuse.js';
+import { sortBy } from 'lodash/fp';
 import HyperList from './HyperList';
 
 const defaultFuseOpts = {
@@ -62,6 +63,35 @@ const useSearch = (list, options) => {
   return [results, query, setQuery];
 };
 
+const useSort = (list, initialSortBy = 'label', initialDirection = 'desc') => {
+  const [sortByProperty, setSortByProperty] = useState(initialSortBy);
+  const [sortDirection, setSortDirection] = useState(initialDirection);
+
+  const toggleSortDirection = () => setSortDirection(
+    (d) => (d === 'desc' ? 'asc' : 'desc'),
+  );
+
+  const updateSortByProperty = (property) => {
+    if (property === sortBy) {
+      toggleSortDirection();
+      return;
+    }
+
+    setSortByProperty(property);
+    setSortDirection('desc');
+  };
+
+  const sortedList = useMemo(() => (
+    sortDirection === 'desc'
+      ? sortBy(sortByProperty)(list)
+      : sortBy(sortByProperty)(list).reverse()
+  ), [list, sortBy, sortDirection]);
+
+  console.log({ list, sortedList });
+
+  return [sortedList, updateSortByProperty, toggleSortDirection];
+};
+
 /**
   * SearchableList
   */
@@ -74,6 +104,7 @@ const SearchableList = ({
   searchOptions,
 }) => {
   const [results, query, setQuery] = useSearch(items, searchOptions);
+  const [sortedResults, sortByProperty, toggleSortDirection] = useSort(results);
 
   const handleChangeSearch = (e) => {
     setQuery(e.target.value || '');
@@ -83,12 +114,16 @@ const SearchableList = ({
     <div className="searchable-list" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
       { sortableProperties.length > 0 && (
         <div className="searchable-list__sort">
-          {JSON.stringify({ sortableProperties })}
+          {sortableProperties.map(({ variable, label }) => (
+            <button onClick={() => sortByProperty(variable)} type="button">
+              {label}
+            </button>
+          ))}
         </div>
       )}
       <div className="searchable-list__list" style={{ flex: 1, display: 'flex' }}>
         <HyperList
-          items={results}
+          items={sortedResults}
           itemComponent={itemComponent}
           columns={columns}
           rowHeight={rowHeight}
