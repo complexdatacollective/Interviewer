@@ -1,10 +1,7 @@
 import React, { useMemo, useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import Fuse from 'fuse.js';
 import { sortBy, get } from 'lodash';
 import HyperList from './HyperList';
-
-import { getProtocolCodebook } from '../../../selectors/protocol';
 
 const defaultFuseOpts = {
   threshold: 0.5,
@@ -71,7 +68,7 @@ const sorter = (attribute) => (o) => {
   return v;
 };
 
-const useSort = (list, initialSortBy = '0e75ec18-2cb1-4606-9f18-034d28b07c19', initialDirection = 'desc') => {
+const useSort = (list, initialSortBy, initialDirection = 'desc') => {
   const [sortByProperty, setSortByProperty] = useState(initialSortBy);
   const [sortDirection, setSortDirection] = useState(initialDirection);
 
@@ -89,11 +86,12 @@ const useSort = (list, initialSortBy = '0e75ec18-2cb1-4606-9f18-034d28b07c19', i
     setSortDirection('desc');
   };
 
-  const sortedList = useMemo(() => (
-    sortDirection === 'desc'
+  const sortedList = useMemo(() => {
+    if (!initialSortBy) { return list; }
+    return sortDirection === 'desc'
       ? sortBy(list, [sorter(sortByProperty)])
-      : sortBy(list, [sorter(sortByProperty)]).reverse()
-  ), [list, sortBy, sortDirection]);
+      : sortBy(list, [sorter(sortByProperty)]).reverse();
+  }, [list, sortBy, sortDirection]);
 
   return [sortedList, updateSortByProperty, toggleSortDirection];
 };
@@ -112,40 +110,15 @@ const SearchableList = ({
   const [results, query, setQuery] = useSearch(items, searchOptions);
   const [sortedResults, sortByProperty] = useSort(results);
 
-  const variableMap = useSelector((s) => {
-    const codebook = getProtocolCodebook(s);
-
-    return Object
-      .keys(codebook.node)
-      .flatMap(
-        (type) => Object
-          .keys(codebook.node[type].variables)
-          .map(
-            (id) => [id, codebook.node[type].variables[id].name],
-          ),
-      );
-  });
-
-  const sortableProperties2 = useMemo(
-    () => sortableProperties.map((item) => {
-      const [variable] = variableMap.find(([, name]) => name === item.variable);
-      return {
-        ...item,
-        variable,
-      };
-    }),
-    [sortableProperties],
-  );
-
   const handleChangeSearch = (e) => {
     setQuery(e.target.value || '');
   };
 
   return (
     <div className="searchable-list" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-      { sortableProperties2.length > 0 && (
+      { sortableProperties.length > 0 && (
         <div className="searchable-list__sort">
-          {sortableProperties2.map(({ variable, label }) => (
+          {sortableProperties.map(({ variable, label }) => (
             <button onClick={() => sortByProperty(variable)} type="button">
               {label}
             </button>

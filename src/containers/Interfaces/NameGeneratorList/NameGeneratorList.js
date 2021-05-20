@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { compose } from 'redux';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -9,6 +9,7 @@ import withExternalData from '../../withExternalData';
 import Card from '../../../components/Card';
 import { makeGetNodeLabel, makeGetNodeTypeDefinition } from '../../../selectors/network';
 import { makeNetworkNodesForOtherPrompts } from '../../../selectors/interface';
+import { getProtocolCodebook } from '../../../selectors/protocol';
 import { getCardAdditionalProperties } from '../../../selectors/name-generator';
 import { entityPrimaryKeyProperty, getEntityAttributes } from '../../../ducks/modules/network';
 import getParentKeyByNameValue from '../../../utils/getParentKeyByNameValue';
@@ -81,7 +82,37 @@ const NameGeneratorList = (props) => {
     })(item),
   }));
 
-  const sortableProperties = stage.sortOptions && stage.sortOptions.sortableProperties;
+  // const variableMap = useSelector((s) => {
+  //   const codebook = getProtocolCodebook(s);
+
+  //   return Object
+  //     .keys(codebook.node)
+  //     .flatMap(
+  //       (type) => Object
+  //         .keys(codebook.node[type].variables)
+  //         .map(
+  //           (id) => [id, codebook.node[type].variables[id].name],
+  //         ),
+  //     );
+  // });
+
+  // const sortableProperties = stage.sortOptions && stage.sortOptions.sortableProperties;
+
+  // const enhancedSortableProperties = useMemo(
+  //   () => {
+  //     if (!sortableProperties) { return []; }
+  //     return sortableProperties.map((item) => {
+  //       const ref = variableMap.find(([, name]) => name === item.variable);
+  //       const variable = ref ? ref[0] : item.variable;
+  //       return {
+  //         ...item,
+  //         variable,
+  //       };
+  //     });
+  //   },
+  //   [sortableProperties],
+  // );
+
 
   return (
     <div className="name-generator-list-interface">
@@ -97,7 +128,7 @@ const NameGeneratorList = (props) => {
       <SearchableList
         items={items}
         itemComponent={Card}
-        sortableProperties={sortableProperties}
+        // sortableProperties={enhancedSortableProperties}
       />
     </div>
   );
