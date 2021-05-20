@@ -12,7 +12,7 @@ import { makeNetworkNodesForOtherPrompts } from '../../../selectors/interface';
 import { getCardAdditionalProperties } from '../../../selectors/name-generator';
 import { entityPrimaryKeyProperty, getEntityAttributes } from '../../../ducks/modules/network';
 import getParentKeyByNameValue from '../../../utils/getParentKeyByNameValue';
-import HyperCardList from './HyperCardList';
+import HyperList from './HyperList';
 
 const makeGetNodesForList = (props) => {
   const networkNodesForOtherPrompts = makeNetworkNodesForOtherPrompts();
@@ -71,8 +71,6 @@ const NameGeneratorList = (props) => {
     props,
   ));
 
-  console.log({ nodeTypeDefinition });
-
   const items = useSelector(makeGetNodesForList(props))
     .map((item) => ({
       label: labelGetter(item),
@@ -92,11 +90,12 @@ const NameGeneratorList = (props) => {
           prompt={prompt}
           prompts={prompts}
         />
-        <HyperCardList
-          items={items}
-          itemRenderer={Card}
-        />
       </div>
+
+      <HyperList
+        items={items}
+        itemRenderer={Card}
+      />
     </div>
   );
 };
