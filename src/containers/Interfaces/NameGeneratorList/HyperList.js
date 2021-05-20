@@ -47,7 +47,7 @@ const HyperList = ({
     [ItemComponent, columns],
   );
 
-  const context = useMemo(() => ({ items, columns }), [items.length, columns]);
+  const context = useMemo(() => ({ items, columns }), [items, columns]);
 
   return (
     <div

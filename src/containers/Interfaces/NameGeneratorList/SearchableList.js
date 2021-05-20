@@ -1,8 +1,10 @@
 import React, { useMemo, useState, useEffect } from 'react';
-/* eslint-disable import/prefer-default-export */
+import { useSelector } from 'react-redux';
 import Fuse from 'fuse.js';
-import { sortBy } from 'lodash/fp';
+import { sortBy, get } from 'lodash';
 import HyperList from './HyperList';
+
+import { getProtocolCodebook } from '../../../selectors/protocol';
 
 const defaultFuseOpts = {
   threshold: 0.5,
@@ -63,7 +65,13 @@ const useSearch = (list, options) => {
   return [results, query, setQuery];
 };
 
-const useSort = (list, initialSortBy = 'label', initialDirection = 'desc') => {
+const sorter = (attribute) => (o) => {
+  const v = get(o, ['attributes', attribute], 'na');
+
+  return v;
+};
+
+const useSort = (list, initialSortBy = '0e75ec18-2cb1-4606-9f18-034d28b07c19', initialDirection = 'desc') => {
   const [sortByProperty, setSortByProperty] = useState(initialSortBy);
   const [sortDirection, setSortDirection] = useState(initialDirection);
 
@@ -72,7 +80,7 @@ const useSort = (list, initialSortBy = 'label', initialDirection = 'desc') => {
   );
 
   const updateSortByProperty = (property) => {
-    if (property === sortBy) {
+    if (property === sortByProperty) {
       toggleSortDirection();
       return;
     }
@@ -83,11 +91,9 @@ const useSort = (list, initialSortBy = 'label', initialDirection = 'desc') => {
 
   const sortedList = useMemo(() => (
     sortDirection === 'desc'
-      ? sortBy(sortByProperty)(list)
-      : sortBy(sortByProperty)(list).reverse()
+      ? sortBy(list, [sorter(sortByProperty)])
+      : sortBy(list, [sorter(sortByProperty)]).reverse()
   ), [list, sortBy, sortDirection]);
-
-  console.log({ list, sortedList });
 
   return [sortedList, updateSortByProperty, toggleSortDirection];
 };
@@ -104,7 +110,32 @@ const SearchableList = ({
   searchOptions,
 }) => {
   const [results, query, setQuery] = useSearch(items, searchOptions);
-  const [sortedResults, sortByProperty, toggleSortDirection] = useSort(results);
+  const [sortedResults, sortByProperty] = useSort(results);
+
+  const variableMap = useSelector((s) => {
+    const codebook = getProtocolCodebook(s);
+
+    return Object
+      .keys(codebook.node)
+      .flatMap(
+        (type) => Object
+          .keys(codebook.node[type].variables)
+          .map(
+            (id) => [id, codebook.node[type].variables[id].name],
+          ),
+      );
+  });
+
+  const sortableProperties2 = useMemo(
+    () => sortableProperties.map((item) => {
+      const [variable] = variableMap.find(([, name]) => name === item.variable);
+      return {
+        ...item,
+        variable,
+      };
+    }),
+    [sortableProperties],
+  );
 
   const handleChangeSearch = (e) => {
     setQuery(e.target.value || '');
@@ -112,9 +143,9 @@ const SearchableList = ({
 
   return (
     <div className="searchable-list" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-      { sortableProperties.length > 0 && (
+      { sortableProperties2.length > 0 && (
         <div className="searchable-list__sort">
-          {sortableProperties.map(({ variable, label }) => (
+          {sortableProperties2.map(({ variable, label }) => (
             <button onClick={() => sortByProperty(variable)} type="button">
               {label}
             </button>

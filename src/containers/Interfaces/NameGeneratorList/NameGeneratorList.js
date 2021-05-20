@@ -72,6 +72,7 @@ const NameGeneratorList = (props) => {
   ));
 
   const items = useSelector(makeGetNodesForList(props)).map((item) => ({
+    ...item,
     label: labelGetter(item),
     details: detailsWithVariableUUIDs({
       ...props,
