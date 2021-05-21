@@ -8,7 +8,7 @@ const defaultFuseOpts = {
   minMatchCharLength: 1,
   shouldSort: true,
   tokenize: true, // Break up query so it can match across different fields
-  keys: ['label'],
+  keys: ['props.label'], // fix this
 };
 
 const getFuseOptions = (options) => {
@@ -44,9 +44,7 @@ const useSearch = (list, options) => {
   return [results, query, setQuery];
 };
 
-const sorter = (attribute) => (o) => (
-  get(o, ['attributes', attribute]) || o._uid
-);
+const sorter = (property) => (item) => get(item, ['data', property]);
 
 const useSort = (list, initialSortBy, initialDirection = 'desc') => {
   const [sortByProperty, setSortByProperty] = useState(initialSortBy);

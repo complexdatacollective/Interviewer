@@ -19,20 +19,18 @@ const getCellRenderer = (Component) => ({
 }) => {
   const { items, columns } = useContext(ListContext);
   const dataIndex = (rowIndex * columns) + columnIndex;
-  const data = items[dataIndex];
-
-  const uid = (data && data._uid);
+  const { props, id } = items[dataIndex];
 
   return (
     <motion.div
-      className="hyper-list__card"
+      className="hyper-list__item"
       style={style}
       initial="hidden"
       animate="visible"
       variants={variants}
-      key={uid}
+      key={id}
     >
-      <Component {...data} />
+      <Component {...props} />
     </motion.div>
   );
 };
@@ -44,7 +42,6 @@ const HyperList = ({
   items,
   itemComponent: ItemComponent,
   columns,
-  rowHeight,
 }) => {
   const CellRenderer = useMemo(
     () => getCellRenderer(DragSource(ItemComponent)),

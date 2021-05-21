@@ -9,7 +9,7 @@ import React, {
 import ResizeObserver from 'resize-observer-polyfill';
 import uuid from 'uuid';
 
-const useCellMeasurer2 = (ItemComponent, columns, items) => {
+const useCellMeasurer = (ItemComponent, columns, items) => {
   const innerRef = useRef(null);
   const id = useMemo(() => uuid(), []);
   const hiddenSizingEl = useRef(null);
@@ -67,7 +67,7 @@ const useCellMeasurer2 = (ItemComponent, columns, items) => {
       const height = items.slice(start, end)
         .reduce(
           (acc, item) => {
-            hiddenSizingEl.current.innerHTML = renderToString(<ItemComponent {...item} />);
+            hiddenSizingEl.current.innerHTML = renderToString(<ItemComponent {...item.props} />);
             return (
               hiddenSizingEl.current.clientHeight > acc
                 ? hiddenSizingEl.current.clientHeight
@@ -91,4 +91,4 @@ const useCellMeasurer2 = (ItemComponent, columns, items) => {
   };
 };
 
-export default useCellMeasurer2;
+export default useCellMeasurer;

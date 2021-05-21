@@ -49,7 +49,6 @@ const detailsWithVariableUUIDs = (props) => (node) => {
   return withUUIDReplacement.map((field) => ({ [field.label]: attrs[field.variable] }));
 };
 
-
 // const searchOptions = { matchProperties: [], ...stage.searchOptions };
 
 // // Map the matchproperties to add the entity attributes object, and replace names with
@@ -93,13 +92,16 @@ const NameGeneratorList = (props) => {
   ));
 
   const items = useSelector(makeGetNodesForList(props)).map((item) => ({
-    ...item,
-    label: labelGetter(item),
-    details: detailsWithVariableUUIDs({
-      ...props,
-      nodeTypeDefinition,
-      visibleSupplementaryFields,
-    })(item),
+    id: item._uid,
+    data: { ...item.attributes },
+    props: {
+      label: labelGetter(item),
+      details: detailsWithVariableUUIDs({
+        ...props,
+        nodeTypeDefinition,
+        visibleSupplementaryFields,
+      })(item),
+    },
   }));
 
   const variableMap = useSelector((s) => {
