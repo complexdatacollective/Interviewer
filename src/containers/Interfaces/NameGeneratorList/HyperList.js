@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useRef, useEffect } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { VariableSizeGrid as Grid } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { motion } from 'framer-motion';
