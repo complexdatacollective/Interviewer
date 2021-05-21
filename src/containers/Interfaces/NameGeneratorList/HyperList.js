@@ -1,8 +1,9 @@
-import React, { useContext, useMemo } from 'react';
-import { FixedSizeGrid as Grid } from 'react-window';
+import React, { useContext, useMemo, useRef, useEffect } from 'react';
+import { VariableSizeGrid as Grid } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { motion } from 'framer-motion';
 import { DragSource } from '../../../behaviours/DragAndDrop';
+import useCellMeasurer from './useCellMeasurer';
 
 const ListContext = React.createContext({ items: [], columns: 0 });
 
@@ -51,6 +52,7 @@ const HyperList = ({
   );
 
   const context = useMemo(() => ({ items, columns }), [items, columns]);
+  const measurer = useCellMeasurer(ItemComponent, columns, items);
 
   return (
     <div
@@ -61,7 +63,7 @@ const HyperList = ({
         <AutoSizer>
           {({ height, width }) => {
             const adjustedColumns = Math.ceil(columns); // should never be 0
-            const columnWidth = width / adjustedColumns;
+            const columnWidth = () => width / adjustedColumns;
             const columnCount = (
               adjustedColumns > items.length ? items.length : adjustedColumns
             );
@@ -70,13 +72,13 @@ const HyperList = ({
             const gridOptions = {
               columnCount,
               rowCount,
-              rowHeight,
               columnWidth,
             };
 
             return (
               <Grid
                 {...gridOptions}
+                {...measurer}
                 height={height}
                 width={width}
               >
