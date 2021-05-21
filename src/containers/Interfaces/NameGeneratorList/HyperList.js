@@ -51,6 +51,12 @@ const HyperList = ({
   const context = useMemo(() => ({ items, columns }), [items, columns]);
   const measurer = useCellMeasurer(ItemComponent, columns, items);
 
+  const adjustedColumns = Math.ceil(columns); // should never be 0
+  const rowCount = Math.ceil(items.length || 0) / adjustedColumns;
+  const columnCount = (
+    adjustedColumns > items.length ? items.length : adjustedColumns
+  );
+
   return (
     <div
       className="hyper-list"
@@ -59,25 +65,16 @@ const HyperList = ({
       <ListContext.Provider value={context}>
         <AutoSizer>
           {({ height, width }) => {
-            const adjustedColumns = Math.ceil(columns); // should never be 0
             const columnWidth = () => width / adjustedColumns;
-            const columnCount = (
-              adjustedColumns > items.length ? items.length : adjustedColumns
-            );
-            const rowCount = Math.ceil(items.length || 0) / adjustedColumns;
-
-            const gridOptions = {
-              columnCount,
-              rowCount,
-              columnWidth,
-            };
 
             return (
               <Grid
-                {...gridOptions}
-                {...measurer}
                 height={height}
                 width={width}
+                columnCount={columnCount}
+                rowCount={rowCount}
+                columnWidth={columnWidth}
+                {...measurer}
               >
                 {CellRenderer}
               </Grid>
