@@ -6,14 +6,16 @@ import React, {
   useCallback,
   useState,
 } from 'react';
+import { debounce } from 'lodash';
 import ResizeObserver from 'resize-observer-polyfill';
 import uuid from 'uuid';
 
 const useCellMeasurer = (ItemComponent, columns, items) => {
   const innerRef = useRef(null);
+  const outerRef = useRef(null);
   const id = useMemo(() => uuid(), []);
   const hiddenSizingEl = useRef(null);
-  const [width, setWidth] = useState(0);
+  const [containerWidth, setContainerWidth] = useState(0);
 
   useEffect(() => {
     if (!innerRef.current) { return; }
@@ -37,25 +39,22 @@ const useCellMeasurer = (ItemComponent, columns, items) => {
   }, [innerRef.current, id]);
 
   useEffect(() => {
-    if (!innerRef.current) { return () => {}; }
+    if (!outerRef.current) { return () => {}; }
 
-    const handleResize = () => {
-      // if (!innerRef.current) { return; }
+    const handleResize = debounce(() => {
+      const { width } = outerRef.current.getBoundingClientRect();
 
-      const { width } = innerRef.current.getBoundingClientRect();
-
-      if (hiddenSizingEl) {
+      if (hiddenSizingEl && width !== containerWidth) {
         hiddenSizingEl.current.style.width = `${width / columns}px`;
+        setContainerWidth(width);
       }
-
-      setWidth(width);
-    };
+    }, 500);
 
     const resizeObserver = new ResizeObserver(handleResize);
-    resizeObserver.observe(innerRef.current);
+    resizeObserver.observe(outerRef.current);
 
     return () => resizeObserver.disconnect();
-  }, [innerRef.current]);
+  }, [outerRef.current]);
 
   const rowHeight = useCallback(
     (rowIndex) => {
@@ -82,10 +81,11 @@ const useCellMeasurer = (ItemComponent, columns, items) => {
     [hiddenSizingEl, items, columns],
   );
 
-  const key = useMemo(() => uuid(), [width, rowHeight, hiddenSizingEl]);
+  const key = useMemo(() => uuid(), [containerWidth, rowHeight, hiddenSizingEl]);
 
   return {
     innerRef,
+    outerRef,
     rowHeight,
     key,
   };
