@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import Fuse from 'fuse.js';
-import { sortBy, get } from 'lodash';
+import { sortBy, get } from 'lodash/fp';
 import HyperList from './HyperList';
 
 const defaultFuseOpts = {
@@ -22,24 +22,6 @@ const getFuseOptions = (options) => {
     threshold,
   };
 };
-// const searchOptions = { matchProperties: [], ...stage.searchOptions };
-
-// // Map the matchproperties to add the entity attributes object, and replace names with
-// // uuids, where possible.
-// searchOptions.matchProperties = searchOptions.matchProperties.map((prop) => {
-//   const nodeTypeVariables = nodeTypeDefinition.variables;
-//   const replacedProp = getParentKeyByNameValue(nodeTypeVariables, prop);
-//   return (`${entityAttributesProperty}.${replacedProp}`);
-// });
-
-// // If false, suppress candidate from appearing in search results —
-// // for example, if the node has already been selected.
-// // Assumption:
-// //   `excludedNodes` size is small, but search set may be large,
-// //   and so preferable to filter found results dynamically.
-// const isAllowedResult = (candidate) => excludedNodes.every(
-//   (excluded) => excluded[entityPrimaryKeyProperty] !== candidate[entityPrimaryKeyProperty],
-// );
 
 const useSearch = (list, options) => {
   const fuse = useMemo(
@@ -62,11 +44,9 @@ const useSearch = (list, options) => {
   return [results, query, setQuery];
 };
 
-const sorter = (attribute) => (o) => {
-  const v = get(o, ['attributes', attribute], 'na');
-
-  return v;
-};
+const sorter = (attribute) => (o) => (
+  get(o, ['attributes', attribute]) || o._uid
+);
 
 const useSort = (list, initialSortBy, initialDirection = 'desc') => {
   const [sortByProperty, setSortByProperty] = useState(initialSortBy);
@@ -87,13 +67,13 @@ const useSort = (list, initialSortBy, initialDirection = 'desc') => {
   };
 
   const sortedList = useMemo(() => {
-    if (!initialSortBy) { return list; }
+    if (!sortByProperty) { return list; }
     return sortDirection === 'desc'
-      ? sortBy(list, [sorter(sortByProperty)])
-      : sortBy(list, [sorter(sortByProperty)]).reverse();
-  }, [list, sortBy, sortDirection]);
+      ? sortBy([sorter(sortByProperty)])(list)
+      : sortBy([sorter(sortByProperty)])(list).reverse();
+  }, [list, sortByProperty, sortDirection]);
 
-  return [sortedList, updateSortByProperty, toggleSortDirection];
+  return [sortedList, sortByProperty, sortDirection, updateSortByProperty, toggleSortDirection];
 };
 
 /**
@@ -108,7 +88,7 @@ const SearchableList = ({
   searchOptions,
 }) => {
   const [results, query, setQuery] = useSearch(items, searchOptions);
-  const [sortedResults, sortByProperty] = useSort(results);
+  const [sortedResults,,, setSortByProperty] = useSort(results);
 
   const handleChangeSearch = (e) => {
     setQuery(e.target.value || '');
@@ -119,7 +99,7 @@ const SearchableList = ({
       { sortableProperties.length > 0 && (
         <div className="searchable-list__sort">
           {sortableProperties.map(({ variable, label }) => (
-            <button onClick={() => sortByProperty(variable)} type="button">
+            <button onClick={() => setSortByProperty(variable)} type="button">
               {label}
             </button>
           ))}

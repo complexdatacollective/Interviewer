@@ -17,8 +17,10 @@ const getCellRenderer = (Component) => ({
   style,
 }) => {
   const { items, columns } = useContext(ListContext);
-  const dataIndex = (columnIndex * columns) + rowIndex;
+  const dataIndex = (rowIndex * columns) + columnIndex;
   const data = items[dataIndex];
+
+  const uid = (data && data._uid);
 
   return (
     <motion.div
@@ -27,6 +29,7 @@ const getCellRenderer = (Component) => ({
       initial="hidden"
       animate="visible"
       variants={variants}
+      key={uid}
     >
       <Component {...data} />
     </motion.div>
@@ -57,9 +60,12 @@ const HyperList = ({
       <ListContext.Provider value={context}>
         <AutoSizer>
           {({ height, width }) => {
-            const columnCount = Math.ceil(columns);
-            const rowCount = Math.ceil(items.length || 0) / columnCount;
-            const columnWidth = width / columnCount;
+            const adjustedColumns = Math.ceil(columns); // should never be 0
+            const columnWidth = width / adjustedColumns;
+            const columnCount = (
+              adjustedColumns > items.length ? items.length : adjustedColumns
+            );
+            const rowCount = Math.ceil(items.length || 0) / adjustedColumns;
 
             const gridOptions = {
               columnCount,
