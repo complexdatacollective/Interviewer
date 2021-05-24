@@ -2,7 +2,7 @@ import React from 'react';
 import { get } from 'lodash';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { withHandlers, compose, withPropsOnChange } from 'recompose';
+import { withHandlers, compose } from 'recompose';
 import PropTypes from 'prop-types';
 import withPrompt from '../../behaviours/withPrompt';
 import Canvas from '../../components/Canvas/Canvas';
@@ -29,11 +29,6 @@ const withResetInterfaceHandler = withHandlers({
     });
   },
 });
-
-const withPromptIdAsKey = withPropsOnChange(
-  ['promptId'],
-  (props) => ({ key: props.promptId }),
-);
 
 /**
   * Sociogram Interface
@@ -95,6 +90,7 @@ const Sociogram = (props) => {
             allowHighlighting={allowHighlighting && !createEdge}
             allowPositioning={allowPositioning}
             createEdge={createEdge}
+            key={props.promptId} // this ensures linking resets correctly without re-rendering the whole interface
           />
           <NodeBucket
             id="NODE_BUCKET"
@@ -149,7 +145,6 @@ const makeMapStateToProps = () => {
 
 export default compose(
   withPrompt,
-  withPromptIdAsKey,
   connect(makeMapStateToProps, mapDispatchToProps),
   withResetInterfaceHandler,
 )(Sociogram);
