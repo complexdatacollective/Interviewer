@@ -39,6 +39,7 @@ const Sociogram = (props) => {
     promptForward,
     promptBackward,
     prompt,
+    promptId,
     stage,
     handleResetInterface,
     nodes,
@@ -90,7 +91,7 @@ const Sociogram = (props) => {
             allowHighlighting={allowHighlighting && !createEdge}
             allowPositioning={allowPositioning}
             createEdge={createEdge}
-            key={props.promptId} // this ensures linking resets correctly without re-rendering the whole interface
+            key={promptId} // allows linking to reset without re-rendering the whole interface
           />
           <NodeBucket
             id="NODE_BUCKET"
@@ -114,6 +115,7 @@ const Sociogram = (props) => {
 Sociogram.propTypes = {
   stage: PropTypes.object.isRequired,
   prompt: PropTypes.object.isRequired,
+  promptId: PropTypes.string.isRequired,
   promptForward: PropTypes.func.isRequired,
   promptBackward: PropTypes.func.isRequired,
   handleResetInterface: PropTypes.func.isRequired,
