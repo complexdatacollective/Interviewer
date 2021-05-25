@@ -13,7 +13,7 @@ const initialState = {};
 const protocolHasSessions = (state, protocolUID) => new Promise((resolve) => {
   const hasNotExportedSession = !!findKey(
     state.sessions,
-    (session) => session.protocolUID === protocolUID && !session.lastExportedAt,
+    (session) => session.protocolUID === protocolUID && !session.exportedAt,
   );
 
   const hasSession = !!findKey(

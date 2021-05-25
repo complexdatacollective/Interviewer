@@ -85,7 +85,7 @@ export const getSessionProgress = (state) => {
   const isLastStage = currentStage === stageCount - 1;
   const isLastScreen = currentStage === screenCount - 1; // remember, includes extra 'finish' screen
   const { startedAt } = session;
-  const { lastExportedAt } = session;
+  const { exportedAt } = session;
 
   return {
     currentStage,
@@ -102,7 +102,7 @@ export const getSessionProgress = (state) => {
     promptProgress,
     percentProgress,
     startedAt,
-    lastExportedAt,
+    exportedAt,
   };
 };
 
