@@ -7,6 +7,8 @@ import useCellMeasurer from './useCellMeasurer';
 
 const ListContext = React.createContext({ items: [], columns: 0 });
 
+const NoopComponent = () => null;
+
 const variants = {
   visible: { scale: 1 },
   hidden: { scale: 0 },
@@ -42,6 +44,7 @@ const HyperList = ({
   items,
   itemComponent: ItemComponent,
   columns,
+  emptyComponent: EmptyComponent,
 }) => {
   const CellRenderer = useMemo(
     () => getCellRenderer(DragSource(ItemComponent)),
@@ -67,6 +70,10 @@ const HyperList = ({
           {({ height, width }) => {
             const columnWidth = () => width / adjustedColumns;
 
+            if (items.length === 0) {
+              return <EmptyComponent />;
+            }
+
             return (
               <Grid
                 height={height}
@@ -91,7 +98,8 @@ HyperList.propTypes = {
 };
 
 HyperList.defaultProps = {
-  itemComponent: () => null,
+  itemComponent: NoopComponent,
+  emptyComponent: NoopComponent,
   columns: 2,
   rowHeight: 300,
 };

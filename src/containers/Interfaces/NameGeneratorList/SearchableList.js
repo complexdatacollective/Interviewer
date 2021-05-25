@@ -3,6 +3,12 @@ import useSort from './useSort';
 import useSearch from './useSearch';
 import HyperList from './HyperList';
 
+const EmptyComponent = () => (
+  <div className="empty">
+    No results...
+  </div>
+);
+
 /**
   * SearchableList
   */
@@ -14,7 +20,7 @@ const SearchableList = ({
   sortableProperties,
   searchOptions,
 }) => {
-  const [results, query, setQuery] = useSearch(items, searchOptions);
+  const [results, query, setQuery, isWaiting] = useSearch(items, searchOptions);
   const [sortedResults,,, setSortByProperty] = useSort(results);
 
   const handleChangeSearch = (e) => {
@@ -33,11 +39,17 @@ const SearchableList = ({
         </div>
       )}
       <div className="searchable-list__list" style={{ flex: 1, display: 'flex' }}>
-        <HyperList
-          items={sortedResults}
-          itemComponent={itemComponent}
-          columns={columns}
-        />
+        { isWaiting && (
+          <div className="searchable-list__waiting">Searching...</div>
+        )}
+        { !isWaiting && (
+          <HyperList
+            items={sortedResults}
+            itemComponent={itemComponent}
+            columns={columns}
+            emptyComponent={EmptyComponent}
+          />
+        )}
       </div>
       <div className="searchable-list__search">
         <input type="text" value={query} onChange={handleChangeSearch} />
