@@ -11,17 +11,24 @@
     @include interface-prompt;
   }
 
-  &__main {
-    flex: 1 auto;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    height: 100%;
-    position: relative;
-  }
+  // &__main {
+  //   flex: 1 auto;
+  //   display: flex;
+  //   justify-content: center;
+  //   align-items: flex-start;
+  //   height: 100%;
+  //   position: relative;
+  // }
 
   &__nodes {
-    flex: 3 1 auto;
+    flex-basis: 34%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__list {
+    flex-basis: 66%;
     height: 100%;
     display: flex;
     padding-left: spacing(large);
@@ -33,21 +40,25 @@
     max-height: 80vh; // Fix for Safari abs. positioned flex box child bug.
     display: flex;
   }
+}
 
-  &__add-node {
-    position: absolute;
-    bottom: 1.8rem;
-    right: 1.8rem;
-    width: 7rem;
-    height: 7rem;
+.node-drop-area
+.node-list {
+  border: 2px solid red;
+  flex: 1;
+
+  &::before {
+    content: 'Drop nodes here';
+    color: white;
   }
 
-  &__node-bin {
-    position: absolute;
-    bottom: spacing(large);
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: var(--z-tooltip);
+  &--active {
+    opacity: 1;
+    border-color: green;
+
   }
 
+  &--hover {
+    background: green;
+  }
 }

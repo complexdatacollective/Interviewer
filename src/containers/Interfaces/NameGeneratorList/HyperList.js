@@ -21,7 +21,7 @@ const getCellRenderer = (Component) => ({
 }) => {
   const { items, columns } = useContext(ListContext);
   const dataIndex = (rowIndex * columns) + columnIndex;
-  const { props, id } = items[dataIndex];
+  const { props, id, data } = items[dataIndex];
 
   return (
     <motion.div
@@ -32,7 +32,7 @@ const getCellRenderer = (Component) => ({
       variants={variants}
       key={id}
     >
-      <Component {...props} />
+      <Component {...props} meta={() => ({ data, id })} />
     </motion.div>
   );
 };

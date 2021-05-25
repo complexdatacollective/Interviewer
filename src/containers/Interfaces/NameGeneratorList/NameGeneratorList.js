@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { compose } from 'redux';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { get, differenceBy } from 'lodash';
 import withPrompt from '../../../behaviours/withPrompt';
@@ -8,12 +8,20 @@ import PromptSwiper from '../../PromptSwiper';
 import withExternalData from '../../withExternalData';
 import Card from '../../../components/Card';
 import { makeGetNodeLabel, makeGetNodeTypeDefinition } from '../../../selectors/network';
-import { makeNetworkNodesForOtherPrompts } from '../../../selectors/interface';
+import {
+  makeNetworkNodesForPrompt,
+  makeNetworkNodesForOtherPrompts,
+  makeGetAdditionalAttributes,
+} from '../../../selectors/interface';
 import { getProtocolCodebook } from '../../../selectors/protocol';
-import { getCardAdditionalProperties } from '../../../selectors/name-generator';
+import { getCardAdditionalProperties, makeGetPromptNodeModelData } from '../../../selectors/name-generator';
 import { entityPrimaryKeyProperty, getEntityAttributes } from '../../../ducks/modules/network';
+import { actionCreators as sessionsActions } from '../../../ducks/modules/sessions';
+
 import getParentKeyByNameValue from '../../../utils/getParentKeyByNameValue';
 import SearchableList from './SearchableList';
+// import NodeDropArea from './NodeDropArea';
+import NodeList from '../../../components/NodeList';
 
 const makeGetNodesForList = (props) => {
   const networkNodesForOtherPrompts = makeNetworkNodesForOtherPrompts();
@@ -84,6 +92,10 @@ const NameGeneratorList = (props) => {
     prompts,
   } = stage;
 
+  const dispatch = useDispatch();
+  const newNodeAttributes = useSelector(withProps(makeGetAdditionalAttributes(), props));
+  const newNodeModelData = useSelector(withProps(makeGetPromptNodeModelData(), props));
+  const nodesForPrompt = useSelector(withProps(makeNetworkNodesForPrompt(), props));
   const labelGetter = useSelector(withProps(makeGetNodeLabel(), props));
   const nodeTypeDefinition = useSelector(withProps(makeGetNodeTypeDefinition(), props));
   const visibleSupplementaryFields = useSelector(withProps(
@@ -135,6 +147,23 @@ const NameGeneratorList = (props) => {
     [sortableProperties],
   );
 
+  const onDrop = ({ meta }) => {
+    const { id, data } = meta;
+    const attributeData = {
+      ...newNodeAttributes,
+      ...data,
+    };
+
+    const modelData = {
+      ...newNodeModelData,
+      id,
+    };
+
+    console.log('drop', { data, modelData, attributeData });
+
+    dispatch(sessionsActions.addNode(modelData, attributeData));
+  };
+
   return (
     <div className="name-generator-list-interface">
       <div className="name-generator-list-interface__prompt">
@@ -146,11 +175,23 @@ const NameGeneratorList = (props) => {
         />
       </div>
 
-      <SearchableList
-        items={items}
-        itemComponent={Card}
-        sortableProperties={enhancedSortableProperties}
-      />
+      <div className="name-generator-list-interface__panels">
+        <div className="name-generator-list-interface__nodes">
+          <NodeList
+            id="node-drop-area"
+            accepts={() => true}
+            onDrop={onDrop}
+            items={nodesForPrompt}
+          />
+        </div>
+        <div className="name-generator-list-interface__list">
+          <SearchableList
+            items={items}
+            itemComponent={Card}
+            sortableProperties={enhancedSortableProperties}
+          />
+        </div>
+      </div>
     </div>
   );
 };
