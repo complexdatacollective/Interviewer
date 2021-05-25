@@ -1,6 +1,6 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { compose } from 'redux';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import PropTypes from 'prop-types';
 import { get, differenceBy } from 'lodash';
 import withPrompt from '../../../behaviours/withPrompt';
@@ -103,18 +103,24 @@ const NameGeneratorList = (props) => {
     props,
   ));
 
-  const items = useSelector(makeGetNodesForList(props)).map((item) => ({
-    id: item._uid,
-    data: { ...item.attributes },
-    props: {
-      label: labelGetter(item),
-      details: detailsWithVariableUUIDs({
-        ...props,
-        nodeTypeDefinition,
-        visibleSupplementaryFields,
-      })(item),
-    },
-  }));
+  // TODO: simplify
+  const items_ = useSelector(makeGetNodesForList(props), shallowEqual);
+
+  const items = useMemo(() => items_
+    .map(
+      (item) => ({
+        id: item._uid,
+        data: { ...item.attributes },
+        props: {
+          label: labelGetter(item),
+          details: detailsWithVariableUUIDs({
+            ...props,
+            nodeTypeDefinition,
+            visibleSupplementaryFields,
+          })(item),
+        },
+      }),
+    ), [items_]);
 
   const variableMap = useSelector((s) => {
     const codebook = getProtocolCodebook(s);
