@@ -25,7 +25,7 @@ const checkExistingSession = (currentName) => {
   const existingIndex = findKey(state.installedProtocols,
     protocol => protocol.name === currentName);
   const unExportedSession = findKey(state.sessions,
-    session => session.protocolUID === existingIndex && !session.lastExportedAt);
+    session => session.protocolUID === existingIndex && !session.exportedAt);
   if (unExportedSession) {
     const message = 'This protocol is already installed, and in-progress sessions using it have not yet been exported. Please export or delete these sessions before attempting to overwrite the protocol.';
     return Promise.reject(message);
