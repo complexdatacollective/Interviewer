@@ -97,7 +97,7 @@ describe('protocols reducer', () => {
 
         const store = getStore(actionListener, {
           sessions: [
-            { protocolUID, lastExportedAt: Date.now() },
+            { protocolUID, exportedAt: Date.now() },
           ],
         });
         store.dispatch(actionCreators.deleteProtocol(protocolUID));
@@ -118,7 +118,7 @@ describe('protocols reducer', () => {
 
         const store = getStore(actionListener, {
           sessions: [
-            { protocolUID, lastExportedAt: Date.now() },
+            { protocolUID, exportedAt: Date.now() },
           ],
         });
         store.dispatch(actionCreators.deleteProtocol(protocolUID));
