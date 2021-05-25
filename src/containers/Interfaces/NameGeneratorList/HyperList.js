@@ -49,7 +49,7 @@ const HyperList = ({
   );
 
   const context = useMemo(() => ({ items, columns }), [items, columns]);
-  const measurer = useCellMeasurer(ItemComponent, columns, items);
+  const { rowHeight, key } = useCellMeasurer(ItemComponent, columns, items);
 
   const adjustedColumns = Math.ceil(columns); // should never be 0
   const rowCount = Math.ceil(items.length || 0) / adjustedColumns;
@@ -74,7 +74,8 @@ const HyperList = ({
                 columnCount={columnCount}
                 rowCount={rowCount}
                 columnWidth={columnWidth}
-                {...measurer}
+                rowHeight={rowHeight(columnWidth())}
+                key={key}
               >
                 {CellRenderer}
               </Grid>
