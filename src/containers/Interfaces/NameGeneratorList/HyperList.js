@@ -1,10 +1,9 @@
 import React, { useContext, useMemo } from 'react';
-import { VariableSizeGrid as Grid } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { motion } from 'framer-motion';
 import { compose, withProps } from 'recompose';
+import AutosizableGrid from './AutosizableGrid';
 import { DragSource, DropTarget, MonitorDropTarget } from '../../../behaviours/DragAndDrop';
-import useCellMeasurer from './useCellMeasurer';
 
 const ListContext = React.createContext({ items: [], columns: 0 });
 
@@ -53,13 +52,6 @@ const HyperList = ({
   );
 
   const context = useMemo(() => ({ items, columns }), [items, columns]);
-  const { rowHeight, key } = useCellMeasurer(ItemComponent, columns, items);
-
-  const adjustedColumns = Math.ceil(columns); // should never be 0
-  const rowCount = Math.ceil(items.length || 0) / adjustedColumns;
-  const columnCount = (
-    adjustedColumns > items.length ? items.length : adjustedColumns
-  );
 
   return (
     <div
@@ -69,24 +61,20 @@ const HyperList = ({
       <ListContext.Provider value={context}>
         <AutoSizer>
           {({ height, width }) => {
-            const columnWidth = () => width / adjustedColumns;
-
             if (items.length === 0) {
               return <EmptyComponent />;
             }
 
             return (
-              <Grid
+              <AutosizableGrid
                 height={height}
                 width={width}
-                columnCount={columnCount}
-                rowCount={rowCount}
-                columnWidth={columnWidth}
-                rowHeight={rowHeight(columnWidth())}
-                key={key}
+                columns={columns}
+                items={items}
+                itemComponent={ItemComponent}
               >
                 {CellRenderer}
-              </Grid>
+              </AutosizableGrid>
             );
           }}
         </AutoSizer>
@@ -106,7 +94,7 @@ HyperList.defaultProps = {
 };
 
 export default compose(
-  withProps(({ onDrop }) => ({
+  withProps(() => ({
     id: 'hyper-list',
     accepts: () => true,
   })),

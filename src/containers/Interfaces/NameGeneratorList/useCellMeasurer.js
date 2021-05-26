@@ -6,18 +6,14 @@ import React, {
   useCallback,
   useState,
 } from 'react';
-import { debounce } from 'lodash';
 import uuid from 'uuid';
+import useDebounce from './useDebounce';
 
-const useCellMeasurer = (ItemComponent, columns, items) => {
+const useCellMeasurer = (ItemComponent, columns, columnWidth, items, defaultHeight = 150) => {
   const id = useMemo(() => uuid(), []);
   const hiddenSizingEl = useRef(null);
-  const width = useRef(0);
-  const [key, setKey] = useState(uuid());
-
-  const setWidth = useCallback(debounce((newWidth) => {
-    width.current = newWidth;
-  }, 500));
+  const width = useDebounce(columnWidth, 300);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     if (hiddenSizingEl.current) { return () => {}; }
@@ -36,16 +32,18 @@ const useCellMeasurer = (ItemComponent, columns, items) => {
 
     document.body.appendChild(newHiddenSizingEl);
 
+    setReady(true);
+
     return () => document.body.removeChild(newHiddenSizingEl);
   }, []);
 
   const rowHeight = useCallback(
-    (columnWidth) => (rowIndex) => {
-      if (!hiddenSizingEl.current) { return 0; }
+    (rowIndex) => {
+      // console.log('get row height');
+      if (!hiddenSizingEl.current) { return defaultHeight; }
 
       if (width.current !== columnWidth) {
         hiddenSizingEl.current.style.width = `${columnWidth}px`;
-        setWidth(columnWidth);
       }
 
       const start = rowIndex * columns;
@@ -61,19 +59,15 @@ const useCellMeasurer = (ItemComponent, columns, items) => {
                 : acc
             );
           },
-          0,
+          defaultHeight,
         );
-
+      // console.log('height', height);
       return height;
     },
-    [hiddenSizingEl, items, columns, setWidth],
+    [hiddenSizingEl.current, items, columnWidth],
   );
 
-  useEffect(() => {
-    setKey(uuid());
-  }, [width]);
-
-  return { rowHeight, key };
+  return { rowHeight, key: width, ready };
 };
 
 export default useCellMeasurer;
