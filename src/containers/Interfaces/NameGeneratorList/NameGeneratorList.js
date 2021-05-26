@@ -1,8 +1,8 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo, useEffect, useCallback } from 'react';
 import { compose } from 'redux';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import PropTypes from 'prop-types';
-import { get, differenceBy } from 'lodash';
+import { get, differenceBy, curryRight } from 'lodash';
 import withPrompt from '../../../behaviours/withPrompt';
 import PromptSwiper from '../../PromptSwiper';
 import withExternalData from '../../withExternalData';
@@ -23,10 +23,10 @@ import SearchableList from './SearchableList';
 // import NodeDropArea from './NodeDropArea';
 import NodeList from '../../../components/NodeList';
 
-const makeGetNodesForList = (props) => {
+const makeGetNodesForList = () => {
   const networkNodesForOtherPrompts = makeNetworkNodesForOtherPrompts();
 
-  return (state) => {
+  return (state, props) => {
     const externalNodes = get(props, 'externalData.nodes', []);
 
     // Remove nodes nominated elsewhere (previously a prop called 'showExistingNodes')
@@ -37,8 +37,6 @@ const makeGetNodesForList = (props) => {
     );
   };
 };
-
-const withProps = (fn, props) => (state) => fn(state, props);
 
 const detailsWithVariableUUIDs = (props) => (node) => {
   const {
@@ -80,6 +78,22 @@ const detailsWithVariableUUIDs = (props) => (node) => {
   * Name Generator List Interface
   */
 
+const usePropSelector = (selector, props, isFactory = false, equalityFn) => {
+  const memoizedSelector = useMemo(() => {
+    if (isFactory) { return selector(); }
+    return selector;
+  }, []);
+
+  const selectorWithProps = useCallback(
+    (state) => memoizedSelector(state, props),
+    [props],
+  );
+
+  const state = useSelector(selectorWithProps, equalityFn);
+
+  return state;
+};
+
 const NameGeneratorList = (props) => {
   const {
     prompt,
@@ -93,20 +107,17 @@ const NameGeneratorList = (props) => {
   } = stage;
 
   const dispatch = useDispatch();
-  const newNodeAttributes = useSelector(withProps(makeGetAdditionalAttributes(), props));
-  const newNodeModelData = useSelector(withProps(makeGetPromptNodeModelData(), props));
-  const nodesForPrompt = useSelector(withProps(makeNetworkNodesForPrompt(), props));
-  const labelGetter = useSelector(withProps(makeGetNodeLabel(), props));
-  const nodeTypeDefinition = useSelector(withProps(makeGetNodeTypeDefinition(), props));
-  const visibleSupplementaryFields = useSelector(withProps(
-    getCardAdditionalProperties,
-    props,
-  ));
+  const newNodeAttributes = usePropSelector(makeGetAdditionalAttributes, props, true);
+  const newNodeModelData = usePropSelector(makeGetPromptNodeModelData, props, true);
+  const nodesForPrompt = usePropSelector(makeNetworkNodesForPrompt, props, true);
 
-  // TODO: simplify
-  const items_ = useSelector(makeGetNodesForList(props), shallowEqual);
+  // TODO: Combine this and extract from NameGeneratorList
+  const labelGetter = usePropSelector(makeGetNodeLabel, props, true);
+  const nodeTypeDefinition = usePropSelector(makeGetNodeTypeDefinition, props, true);
+  const visibleSupplementaryFields = usePropSelector(getCardAdditionalProperties, props);
+  const nodes = usePropSelector(makeGetNodesForList, props, true, shallowEqual);
 
-  const items = useMemo(() => items_
+  const items = useMemo(() => nodes
     .map(
       (item) => ({
         id: item._uid,
@@ -120,7 +131,8 @@ const NameGeneratorList = (props) => {
           })(item),
         },
       }),
-    ), [items_]);
+    ), [nodes]);
+  // End TODO
 
   const variableMap = useSelector((s) => {
     const codebook = getProtocolCodebook(s);
