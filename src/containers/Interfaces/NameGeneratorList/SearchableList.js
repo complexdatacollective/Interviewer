@@ -16,6 +16,7 @@ const SearchableList = ({
   columns,
   itemComponent,
   items,
+  onDrop,
   // TODO: streamline these from protocol config - auto and list name gens
   sortableProperties,
   searchOptions,
@@ -48,6 +49,7 @@ const SearchableList = ({
             itemComponent={itemComponent}
             columns={columns}
             emptyComponent={EmptyComponent}
+            onDrop={onDrop}
           />
         )}
       </div>

@@ -2,7 +2,8 @@ import React, { useContext, useMemo } from 'react';
 import { VariableSizeGrid as Grid } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { motion } from 'framer-motion';
-import { DragSource } from '../../../behaviours/DragAndDrop';
+import { compose, withProps } from 'recompose';
+import { DragSource, DropTarget, MonitorDropTarget } from '../../../behaviours/DragAndDrop';
 import useCellMeasurer from './useCellMeasurer';
 
 const ListContext = React.createContext({ items: [], columns: 0 });
@@ -104,4 +105,11 @@ HyperList.defaultProps = {
   rowHeight: 300,
 };
 
-export default HyperList;
+export default compose(
+  withProps(({ onDrop }) => ({
+    id: 'hyper-list',
+    accepts: () => true,
+  })),
+  DropTarget,
+  MonitorDropTarget(['isOver', 'willAccept']),
+)(HyperList);

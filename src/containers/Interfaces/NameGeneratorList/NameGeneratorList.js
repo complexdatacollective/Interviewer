@@ -165,7 +165,7 @@ const NameGeneratorList = (props) => {
     [sortableProperties],
   );
 
-  const onDrop = ({ meta }) => {
+  const handleAddNode = ({ meta }) => {
     const { id, data } = meta;
     const attributeData = {
       ...newNodeAttributes,
@@ -177,9 +177,17 @@ const NameGeneratorList = (props) => {
       id,
     };
 
-    console.log('drop', { data, modelData, attributeData });
+    console.log('add', { data, modelData, attributeData });
 
     dispatch(sessionsActions.addNode(modelData, attributeData));
+  };
+
+  const handleRemoveNode = ({ meta }) => {
+    const id = meta[entityPrimaryKeyProperty];
+
+    console.log('remove', { meta });
+
+    dispatch(sessionsActions.removeNode(id));
   };
 
   return (
@@ -198,7 +206,7 @@ const NameGeneratorList = (props) => {
           <NodeList
             id="node-drop-area"
             accepts={() => true}
-            onDrop={onDrop}
+            onDrop={handleAddNode}
             items={nodesForPrompt}
           />
         </div>
@@ -207,6 +215,7 @@ const NameGeneratorList = (props) => {
             items={items}
             itemComponent={Card}
             sortableProperties={enhancedSortableProperties}
+            onDrop={handleRemoveNode}
           />
         </div>
       </div>
