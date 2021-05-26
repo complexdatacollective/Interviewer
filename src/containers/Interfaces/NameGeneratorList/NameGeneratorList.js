@@ -2,6 +2,8 @@ import React from 'react';
 import { compose } from 'redux';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
+import { motion, AnimatePresence } from 'framer-motion';
+import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
 import withPrompt from '../../../behaviours/withPrompt';
 import PromptSwiper from '../../PromptSwiper';
 import withExternalData from '../../withExternalData';
@@ -64,6 +66,16 @@ const NameGeneratorList = (props) => {
     dispatch(sessionsActions.removeNode(id));
   };
 
+  const animationDuration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
+
+  const variants = {
+    visible: {
+      scale: 1,
+      transition: { duration: animationDuration, delay: animationDuration },
+    },
+    hidden: { scale: 0, transition: { duration: animationDuration } },
+  };
+
   return (
     <div className="name-generator-list-interface">
       <div className="name-generator-list-interface__prompt">
@@ -76,29 +88,51 @@ const NameGeneratorList = (props) => {
       </div>
 
       <div className="name-generator-list-interface__panels">
-        {items.length === 0 && (
-          <div>Loading</div>
-        )}
-        {items.length > 0 && (
-          <>
-            <div className="name-generator-list-interface__nodes">
+        <AnimatePresence>
+          {items.length === 0 && (
+            <motion.div
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              variants={variants}
+              key="loading"
+            >
+              Loading
+            </motion.div>
+          )}
+          {items.length > 0 && [
+            <motion.div
+              className="name-generator-list-interface__nodes"
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              variants={variants}
+              key="node-list"
+            >
               <NodeList
                 id="node-drop-area"
                 accepts={() => true}
                 onDrop={handleAddNode}
                 items={nodesForPrompt}
               />
-            </div>
-            <div className="name-generator-list-interface__list">
+            </motion.div>,
+            <motion.div
+              className="name-generator-list-interface__list"
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              variants={variants}
+              key="search-list"
+            >
               <SearchableList
                 items={items}
                 itemComponent={Card}
                 sortableProperties={sortableProperties}
                 onDrop={handleRemoveNode}
               />
-            </div>
-          </>
-        )}
+            </motion.div>,
+          ]}
+        </AnimatePresence>
       </div>
     </div>
   );
