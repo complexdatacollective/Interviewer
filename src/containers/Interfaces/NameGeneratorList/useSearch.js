@@ -30,6 +30,28 @@ const getFuseOptions = (options) => {
   };
 };
 
+// const searchOptions = { matchProperties: [], ...stage.searchOptions };
+
+// // Map the matchproperties to add the entity attributes object, and replace names with
+// // uuids, where possible.
+// searchOptions.matchProperties = searchOptions.matchProperties.map((prop) => {
+//   const nodeTypeVariables = nodeTypeDefinition.variables;
+//   const replacedProp = getParentKeyByNameValue(nodeTypeVariables, prop);
+//   return (`${entityAttributesProperty}.${replacedProp}`);
+// });
+
+// // If false, suppress candidate from appearing in search results —
+// // for example, if the node has already been selected.
+// // Assumption:
+// //   `excludedNodes` size is small, but search set may be large,
+// //   and so preferable to filter found results dynamically.
+// const isAllowedResult = (candidate) => excludedNodes.every(
+//   (excluded) => excluded[entityPrimaryKeyProperty] !== candidate[entityPrimaryKeyProperty],
+// );
+
+
+
+
 /**
  * useSearch
  *
