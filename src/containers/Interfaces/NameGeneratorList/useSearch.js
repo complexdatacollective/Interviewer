@@ -10,7 +10,7 @@ import {
 } from 'lodash';
 import Fuse from 'fuse.js';
 
-const minDelay = 3000;
+const minDelay = 2000;
 
 const defaultFuseOpts = {
   threshold: 0.5,
@@ -79,16 +79,23 @@ const useSearch = (list, options, initialQuery = '') => {
       const endTime = new Date();
       const delay = minDelay - (endTime - startTime);
 
+      if (list.length < 100) {
+        setResults(r);
+        setIsWaiting(false);
+        return;
+      }
+
       if (delay > 0) {
         delayRef.current = setTimeout(() => {
           setResults(r);
           setIsWaiting(false);
         }, delay);
+        return;
       }
 
       setResults(r);
       setIsWaiting(false);
-    }, minDelay),
+    }, 500),
     [setIsWaiting, setResults, fuse],
   );
 
