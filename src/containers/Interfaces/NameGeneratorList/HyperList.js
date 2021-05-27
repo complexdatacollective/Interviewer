@@ -1,8 +1,16 @@
-import React, { useContext, useMemo } from 'react';
+import React, {
+  useContext,
+  useMemo,
+  useEffect,
+  useState,
+  useCallback,
+} from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { motion } from 'framer-motion';
+import { VariableSizeGrid as Grid } from 'react-window';
 import { compose, withProps } from 'recompose';
-import AutosizableGrid from './AutosizableGrid';
+// import AutosizableGrid from './AutosizableGrid';
+import useGridSizer from './useGridSizer';
 import { DragSource, DropTarget, MonitorDropTarget } from '../../../behaviours/DragAndDrop';
 
 const ListContext = React.createContext({ items: [], columns: 0 });
@@ -10,8 +18,8 @@ const ListContext = React.createContext({ items: [], columns: 0 });
 const NoopComponent = () => null;
 
 const variants = {
-  visible: { scale: 1 },
-  hidden: { scale: 0 },
+  visible: { scale: 1, transition: { duration: 3 } },
+  hidden: { scale: 0, transition: { duration: 3 } },
 };
 
 const getCellRenderer = (Component) => ({
@@ -53,28 +61,40 @@ const HyperList = ({
 
   const context = useMemo(() => ({ items, columns }), [items, columns]);
 
+  const [gridProps, ready, setWidth] = useGridSizer(ItemComponent, items, columns);
+
+  const handleResize = useCallback(({ width }) => setWidth(width), [setWidth]);
+
+  useEffect(() => {
+    console.log('items changed');
+  }, [items]);
+
+  useEffect(() => {
+    console.log('columns changed');
+  }, [columns]);
+
+  console.log('render hyperlist');
+
   return (
     <div
       className="hyper-list"
       style={{ flex: 1, minHeight: '500' }}
     >
       <ListContext.Provider value={context}>
-        <AutoSizer>
-          {({ height, width }) => {
-            if (items.length === 0) {
+        <AutoSizer onResize={handleResize}>
+          {({ width, height }) => {
+            if (items.length === 0 || !ready) {
               return <EmptyComponent />;
             }
 
             return (
-              <AutosizableGrid
+              <Grid
                 height={height}
                 width={width}
-                columns={columns}
-                items={items}
-                itemComponent={ItemComponent}
+                {...gridProps}
               >
                 {CellRenderer}
-              </AutosizableGrid>
+              </Grid>
             );
           }}
         </AutoSizer>

@@ -70,10 +70,10 @@ const NameGeneratorList = (props) => {
 
   const variants = {
     visible: {
-      scale: 1,
+      opacity: 1,
       transition: { duration: animationDuration, delay: animationDuration },
     },
-    hidden: { scale: 0, transition: { duration: animationDuration } },
+    hidden: { opacity: 0, transition: { duration: animationDuration } },
   };
 
   return (
