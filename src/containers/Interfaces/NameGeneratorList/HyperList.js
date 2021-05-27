@@ -70,7 +70,11 @@ const HyperList = ({
       <ListContext.Provider value={context}>
         <AutoSizer onResize={handleResize}>
           {({ width, height }) => {
-            if (items.length === 0 || !ready) {
+            if (!ready) { return null; }
+
+            if (items === null) { return null; }
+
+            if (items.length === 0) {
               return <EmptyComponent />;
             }
 

@@ -1,5 +1,6 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import Loading from '../../../components/Loading';
 import useSort from './useSort';
 import useSearch from './useSearch';
 import HyperList from './HyperList';
@@ -55,30 +56,46 @@ const SearchableList = ({
         </motion.div>
       )}
       <motion.div
-        className="searchable-list__list"
-        style={{ flex: 1, display: 'flex' }}
+        className="searchable-list__main"
+        style={{ flex: 1, display: 'flex', position: 'relative' }}
         variants={variants}
         initial="hidden"
         animate="visible"
       >
-        { isWaiting && (
-          <motion.div
-            className="searchable-list__waiting"
-            variants={variants}
-            initial="hidden"
-            animate="visible"
-          >
-            Searching...
-          </motion.div>
-        )}
+        <AnimatePresence>
+          { isWaiting && (
+            <motion.div
+              className="searchable-list__waiting"
+              style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+              variants={variants}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              key="loading"
+            >
+              <Loading message="searching..." />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         { !isWaiting && (
-          <HyperList
-            items={sortedResults}
-            itemComponent={itemComponent}
-            columns={columns}
-            emptyComponent={EmptyComponent}
-            onDrop={onDrop}
-          />
+          <motion.div
+            className="searchable-list__list"
+            style={{ flex: 1, display: 'flex' }}
+            // variants={variants}
+            // initial="hidden"
+            // animate="visible"
+            // exit="hidden"
+            key="list"
+          >
+            <HyperList
+              items={sortedResults}
+              itemComponent={itemComponent}
+              columns={columns}
+              emptyComponent={EmptyComponent}
+              onDrop={onDrop}
+            />
+          </motion.div>
         )}
       </motion.div>
       <motion.div

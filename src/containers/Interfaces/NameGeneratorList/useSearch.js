@@ -3,12 +3,14 @@ import {
   useState,
   useEffect,
   useCallback,
+  useRef,
 } from 'react';
 import {
   debounce,
-  delay,
 } from 'lodash';
 import Fuse from 'fuse.js';
+
+const minDelay = 3000;
 
 const defaultFuseOpts = {
   threshold: 0.5,
@@ -62,45 +64,56 @@ const useSearch = (list, options, initialQuery = '') => {
     [list, options],
   );
 
+  const delayRef = useRef();
+
   const [query, setQuery] = useState(initialQuery);
-  const [results, setResults] = useState(list);
-  const [IsWaiting, setIsWaiting] = useState(false);
+  const [results, setResults] = useState(null);
+  const [isWaiting, setIsWaiting] = useState(false);
 
   const search = useCallback(
     debounce((_query) => {
+      clearTimeout(delayRef.current);
       const startTime = new Date();
       const r = fuse.search(_query);
 
       const endTime = new Date();
-      const minDelay = 500 - (endTime - startTime);
+      const delay = minDelay - (endTime - startTime);
 
-      if (minDelay > 0) {
-        delay(() => {
+      if (delay > 0) {
+        delayRef.current = setTimeout(() => {
           setResults(r);
           setIsWaiting(false);
-        }, minDelay);
+        }, delay);
       }
 
       setResults(r);
       setIsWaiting(false);
-    }, 500),
+    }, minDelay),
     [setIsWaiting, setResults, fuse],
   );
 
   useEffect(() => {
-    if (query.length <= 1) {
-      setResults(list);
+    setResults(list);
+  }, [list]);
+
+  useEffect(() => {
+    if (query.length <= 2) {
       return;
     }
 
     if (list.length > 100) {
       setIsWaiting(true);
+      setResults(null);
     }
 
     search(query);
   }, [fuse, query, search]);
 
-  return [results, query, setQuery, IsWaiting];
+  const returnResults = useMemo(() => (
+    query.length <= 2 ? list : results
+  ), [query, list, results]);
+
+  return [returnResults, query, setQuery, isWaiting];
 };
 
 export default useSearch;
