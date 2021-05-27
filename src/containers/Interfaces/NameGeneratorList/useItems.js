@@ -3,6 +3,7 @@ import { shallowEqual } from 'react-redux';
 import { get, differenceBy } from 'lodash';
 import { makeGetNodeLabel, makeGetNodeTypeDefinition } from '../../../selectors/network';
 import {
+  makeNetworkNodesForPrompt,
   makeNetworkNodesForOtherPrompts,
 } from '../../../selectors/interface';
 import { getCardAdditionalProperties } from '../../../selectors/name-generator';
@@ -11,6 +12,7 @@ import usePropSelector from './usePropSelector';
 import { detailsWithVariableUUIDs } from './helpers';
 
 const makeGetNodesForList = () => {
+  const getNodesForPrompt = makeNetworkNodesForPrompt();
   const networkNodesForOtherPrompts = makeNetworkNodesForOtherPrompts();
 
   return (state, props) => {
@@ -19,7 +21,7 @@ const makeGetNodesForList = () => {
     // Remove nodes nominated elsewhere (previously a prop called 'showExistingNodes')
     return differenceBy(
       externalNodes,
-      networkNodesForOtherPrompts(state, props),
+      [...networkNodesForOtherPrompts(state, props), ...getNodesForPrompt(state, props)],
       entityPrimaryKeyProperty,
     );
   };

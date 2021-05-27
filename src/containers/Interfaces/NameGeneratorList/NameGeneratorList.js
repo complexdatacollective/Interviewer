@@ -50,7 +50,7 @@ const NameGeneratorList = (props) => {
 
     const modelData = {
       ...newNodeModelData,
-      id,
+      [entityPrimaryKeyProperty]: id,
     };
 
     console.log('add', { data, modelData, attributeData });
