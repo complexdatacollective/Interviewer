@@ -1,7 +1,6 @@
 import { renderToString } from 'react-dom/server';
 import React, {
   useMemo,
-  useRef,
   useEffect,
   useCallback,
   useState,
@@ -11,14 +10,12 @@ import useDebounce from './useDebounce';
 
 const useGridSizer = (ItemComponent, items, columns, defaultHeight = 150) => {
   const id = useMemo(() => uuid(), []);
-  const hiddenSizingEl = useRef(null);
+  const [hiddenSizingEl, setHiddenSizingElement] = useState(null);
   const [width, setWidth] = useState(0);
-  // const debouncedWidth = useDebounce(width, 1000);
-  const debouncedWidth = width;
-  const [ready, setReady] = useState(false);
-  const reallyReady = useMemo(() => ready && debouncedWidth > 0, [ready, debouncedWidth]);
-
-  console.log('debouncwidth', debouncedWidth);
+  const debouncedWidth = useDebounce(width, 1000);
+  const ready = useMemo(() => (
+    hiddenSizingEl && debouncedWidth > 0
+  ), [hiddenSizingEl, debouncedWidth]);
 
   const adjustedColumns = useMemo(() => Math.ceil(columns), [columns]); // should never be 0
   const rowCount = useMemo(() => (
@@ -28,16 +25,12 @@ const useGridSizer = (ItemComponent, items, columns, defaultHeight = 150) => {
     adjustedColumns > items.length ? items.length : adjustedColumns
   ), [items.length, adjustedColumns]);
 
-  // console.log('columecount', columnCount);
-
-  const columnWidth = useCallback(() => {
-    const colWidth = debouncedWidth / adjustedColumns;
-    // console.log({ colWidth });
-    return colWidth;
-  }, [debouncedWidth, adjustedColumns]);
+  const columnWidth = useCallback(() => (
+    debouncedWidth / adjustedColumns
+  ), [debouncedWidth, adjustedColumns]);
 
   useEffect(() => {
-    if (hiddenSizingEl.current) { return () => {}; }
+    if (hiddenSizingEl) { return () => {}; }
 
     const newHiddenSizingEl = document.createElement('div');
 
@@ -46,26 +39,23 @@ const useGridSizer = (ItemComponent, items, columns, defaultHeight = 150) => {
     newHiddenSizingEl.style.top = '0';
     newHiddenSizingEl.style.pointerEvents = 'none';
 
-    newHiddenSizingEl.style.zIndex = '1000000';
-    // newHiddenSizingEl.style.visibility = 'hidden';
+    // newHiddenSizingEl.style.zIndex = '1000000';
+    newHiddenSizingEl.style.visibility = 'hidden';
 
-    hiddenSizingEl.current = newHiddenSizingEl;
+    // hiddenSizingEl.current = newHiddenSizingEl;
 
     document.body.appendChild(newHiddenSizingEl);
 
-    setReady(true);
+    setHiddenSizingElement(newHiddenSizingEl);
 
     return () => document.body.removeChild(newHiddenSizingEl);
   }, []);
 
   const rowHeight = useCallback(
     (rowIndex) => {
-      // console.log('get row height');
-      if (!hiddenSizingEl.current) { return defaultHeight; }
+      if (!hiddenSizingEl) { return defaultHeight; }
 
-      if (width.current !== debouncedWidth) {
-        hiddenSizingEl.current.style.width = `${debouncedWidth}px`;
-      }
+      hiddenSizingEl.style.width = `${columnWidth()}px`;
 
       const start = rowIndex * columns;
       const end = start + columns;
@@ -73,30 +63,30 @@ const useGridSizer = (ItemComponent, items, columns, defaultHeight = 150) => {
       const height = items.slice(start, end)
         .reduce(
           (acc, item) => {
-            hiddenSizingEl.current.innerHTML = renderToString(<ItemComponent {...item.props} />);
+            hiddenSizingEl.innerHTML = renderToString(<ItemComponent {...item.props} />);
             return (
-              hiddenSizingEl.current.clientHeight > acc
-                ? hiddenSizingEl.current.clientHeight
+              hiddenSizingEl.clientHeight > acc
+                ? hiddenSizingEl.clientHeight
                 : acc
             );
           },
-          defaultHeight,
+          0,
         );
-      // console.log('height', height);
-      return height;
+
+      return height > 0 ? height : defaultHeight;
     },
-    [hiddenSizingEl.current, items, columnWidth()],
+    [hiddenSizingEl, items, columnWidth()],
   );
 
   return [
     {
-      key: id, //debouncedWidth,
+      key: debouncedWidth,
       columnCount,
       rowCount,
       columnWidth,
       rowHeight,
     },
-    reallyReady,
+    ready,
     setWidth,
   ];
 };

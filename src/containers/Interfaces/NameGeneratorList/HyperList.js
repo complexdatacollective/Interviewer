@@ -9,7 +9,6 @@ import AutoSizer from 'react-virtualized-auto-sizer';
 import { motion } from 'framer-motion';
 import { VariableSizeGrid as Grid } from 'react-window';
 import { compose, withProps } from 'recompose';
-// import AutosizableGrid from './AutosizableGrid';
 import useGridSizer from './useGridSizer';
 import { DragSource, DropTarget, MonitorDropTarget } from '../../../behaviours/DragAndDrop';
 
@@ -18,8 +17,8 @@ const ListContext = React.createContext({ items: [], columns: 0 });
 const NoopComponent = () => null;
 
 const variants = {
-  visible: { scale: 1, transition: { duration: 3 } },
-  hidden: { scale: 0, transition: { duration: 3 } },
+  visible: { scale: 1, transition: { delay: 0.15 } },
+  hidden: { scale: 0, transition: { delay: 0.15 } },
 };
 
 const getCellRenderer = (Component) => ({
@@ -64,16 +63,6 @@ const HyperList = ({
   const [gridProps, ready, setWidth] = useGridSizer(ItemComponent, items, columns);
 
   const handleResize = useCallback(({ width }) => setWidth(width), [setWidth]);
-
-  useEffect(() => {
-    console.log('items changed');
-  }, [items]);
-
-  useEffect(() => {
-    console.log('columns changed');
-  }, [columns]);
-
-  console.log('render hyperlist');
 
   return (
     <div
