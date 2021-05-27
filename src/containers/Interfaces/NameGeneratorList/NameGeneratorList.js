@@ -13,6 +13,7 @@ import { makeGetPromptNodeModelData } from '../../../selectors/name-generator';
 import { entityPrimaryKeyProperty } from '../../../ducks/modules/network';
 import { actionCreators as sessionsActions } from '../../../ducks/modules/sessions';
 import NodeList from '../../../components/NodeList';
+import Loading from '../../../components/Loading';
 import SearchableList from './SearchableList';
 import usePropSelector from './usePropSelector';
 import useItems from './useItems';
@@ -69,6 +70,10 @@ const NameGeneratorList = (props) => {
   const animationDuration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
 
   const variants = {
+    // instantVisible: {
+    //   opacity: 1,
+    //   transition: { duration: animationDuration },
+    // },
     visible: {
       opacity: 1,
       transition: { duration: animationDuration, delay: animationDuration },
@@ -76,64 +81,67 @@ const NameGeneratorList = (props) => {
     hidden: { opacity: 0, transition: { duration: animationDuration } },
   };
 
+  console.log(items.length);
+
   return (
     <div className="name-generator-list-interface">
-      <div className="name-generator-list-interface__prompt">
-        <PromptSwiper
-          forward={promptForward}
-          backward={promptBackward}
-          prompt={prompt}
-          prompts={prompts}
-        />
-      </div>
-
-      <div className="name-generator-list-interface__panels">
-        <AnimatePresence>
-          {items.length === 0 && (
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              exit="hidden"
-              variants={variants}
-              key="loading"
-            >
-              Loading
-            </motion.div>
-          )}
-          {items.length > 0 && [
-            <motion.div
-              className="name-generator-list-interface__nodes"
-              initial="hidden"
-              animate="visible"
-              exit="hidden"
-              variants={variants}
-              key="node-list"
-            >
+      <AnimatePresence>
+        {items.length === 0 && (
+          <motion.div
+            className="name-generator-list-interface__loading"
+            initial="visible"
+            animate="visible"
+            exit="hidden"
+            variants={variants}
+            key="loading"
+          >
+            <Loading message="Loading roster data..." />
+          </motion.div>
+        )}
+        {items.length > 0 && [
+          <motion.div
+            className="name-generator-list-interface__prompt"
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            variants={variants}
+            key="prompts"
+          >
+            <PromptSwiper
+              forward={promptForward}
+              backward={promptBackward}
+              prompt={prompt}
+              prompts={prompts}
+            />
+          </motion.div>,
+          <motion.div
+            className="name-generator-list-interface__panels"
+            key="panels"
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            variants={variants}
+          >
+            <div className="name-generator-list-interface__nodes">
               <NodeList
                 id="node-drop-area"
+                listId="node-drop-area"
                 accepts={() => true}
                 onDrop={handleAddNode}
                 items={nodesForPrompt}
               />
-            </motion.div>,
-            <motion.div
-              className="name-generator-list-interface__list"
-              initial="hidden"
-              animate="visible"
-              exit="hidden"
-              variants={variants}
-              key="search-list"
-            >
+            </div>
+            <div className="name-generator-list-interface__list">
               <SearchableList
                 items={items}
                 itemComponent={Card}
                 sortableProperties={sortableProperties}
                 onDrop={handleRemoveNode}
               />
-            </motion.div>,
-          ]}
-        </AnimatePresence>
-      </div>
+            </div>
+          </motion.div>,
+        ]}
+      </AnimatePresence>
     </div>
   );
 };

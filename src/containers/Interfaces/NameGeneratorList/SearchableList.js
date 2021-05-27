@@ -1,7 +1,13 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import useSort from './useSort';
 import useSearch from './useSearch';
 import HyperList from './HyperList';
+
+const variants = {
+  visible: { opacity: 1 },
+  hidden: { opacity: 0 },
+};
 
 const EmptyComponent = () => (
   <div className="empty">
@@ -31,17 +37,39 @@ const SearchableList = ({
   return (
     <div className="searchable-list" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
       { sortableProperties.length > 0 && (
-        <div className="searchable-list__sort">
+        <motion.div
+          className="searchable-list__sort"
+          variants={variants}
+          initial="hidden"
+          animate="visible"
+        >
           {sortableProperties.map(({ variable, label }) => (
-            <button onClick={() => setSortByProperty(variable)} type="button">
+            <button
+              onClick={() => setSortByProperty(variable)}
+              type="button"
+              key={variable}
+            >
               {label}
             </button>
           ))}
-        </div>
+        </motion.div>
       )}
-      <div className="searchable-list__list" style={{ flex: 1, display: 'flex' }}>
+      <motion.div
+        className="searchable-list__list"
+        style={{ flex: 1, display: 'flex' }}
+        variants={variants}
+        initial="hidden"
+        animate="visible"
+      >
         { isWaiting && (
-          <div className="searchable-list__waiting">Searching...</div>
+          <motion.div
+            className="searchable-list__waiting"
+            variants={variants}
+            initial="hidden"
+            animate="visible"
+          >
+            Searching...
+          </motion.div>
         )}
         { !isWaiting && (
           <HyperList
@@ -52,10 +80,15 @@ const SearchableList = ({
             onDrop={onDrop}
           />
         )}
-      </div>
-      <div className="searchable-list__search">
+      </motion.div>
+      <motion.div
+        className="searchable-list__search"
+        variants={variants}
+        initial="hidden"
+        animate="visible"
+      >
         <input type="text" value={query} onChange={handleChangeSearch} />
-      </div>
+      </motion.div>
     </div>
   );
 };

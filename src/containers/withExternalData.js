@@ -122,7 +122,7 @@ const withExternalData = (sourceProperty, dataProperty) => compose(
           });
         });
 
-      setTimeout(() => load(), 2000);
+      setTimeout(() => load(), 5000);
       // load();
     },
   }),

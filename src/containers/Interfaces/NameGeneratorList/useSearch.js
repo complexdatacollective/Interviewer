@@ -49,9 +49,6 @@ const getFuseOptions = (options) => {
 //   (excluded) => excluded[entityPrimaryKeyProperty] !== candidate[entityPrimaryKeyProperty],
 // );
 
-
-
-
 /**
  * useSearch
  *

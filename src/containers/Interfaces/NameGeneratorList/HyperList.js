@@ -1,8 +1,6 @@
 import React, {
   useContext,
   useMemo,
-  useEffect,
-  useState,
   useCallback,
 } from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';
