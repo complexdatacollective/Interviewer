@@ -29,7 +29,7 @@ const SearchableList = ({
   searchOptions,
 }) => {
   const [results, query, setQuery, isWaiting] = useSearch(items, searchOptions);
-  const [sortedResults,,, setSortByProperty] = useSort(results);
+  const [sortedResults,sortByProperty,sortDirection, setSortByProperty] = useSort(results);
 
   const handleChangeSearch = (e) => {
     setQuery(e.target.value || '');
@@ -51,6 +51,10 @@ const SearchableList = ({
               key={variable}
             >
               {label}
+
+              {variable === sortByProperty && (
+                sortDirection
+              )}
             </button>
           ))}
         </motion.div>

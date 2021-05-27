@@ -26,8 +26,6 @@ const useGridSizer = (ItemComponent, items, columns, defaultHeight = 150) => {
     adjustedColumns > items.length ? items.length : adjustedColumns
   ), [items.length, adjustedColumns]);
 
-  console.log('rowCount', rowCount, columnCount);
-
   const columnWidth = useCallback(() => (
     debouncedWidth / adjustedColumns
   ), [debouncedWidth, adjustedColumns]);

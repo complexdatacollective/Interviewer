@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react';
 import { sortBy, get } from 'lodash/fp';
 
+const defaultInitialDirection = 'asc';
+
 const sorter = (property) => (item) => get(item, ['data', property]);
 
 /**
@@ -11,7 +13,7 @@ const sorter = (property) => (item) => get(item, ['data', property]);
  *
  * Any properties on `data` can be specified as the `sortByProperty`.
  */
-const useSort = (list, initialSortBy, initialDirection = 'desc') => {
+const useSort = (list, initialSortBy, initialDirection = defaultInitialDirection) => {
   const [sortByProperty, setSortByProperty] = useState(initialSortBy);
   const [sortDirection, setSortDirection] = useState(initialDirection);
 
@@ -26,14 +28,14 @@ const useSort = (list, initialSortBy, initialDirection = 'desc') => {
     }
 
     setSortByProperty(property);
-    setSortDirection('desc');
+    setSortDirection(initialDirection);
   };
 
   const sortedList = useMemo(() => {
     if (!sortByProperty) { return list; }
     return sortDirection === 'desc'
-      ? sortBy([sorter(sortByProperty)])(list)
-      : sortBy([sorter(sortByProperty)])(list).reverse();
+      ? sortBy([sorter(sortByProperty)])(list).reverse()
+      : sortBy([sorter(sortByProperty)])(list);
   }, [list, sortByProperty, sortDirection]);
 
   return [sortedList, sortByProperty, sortDirection, updateSortByProperty, toggleSortDirection];
