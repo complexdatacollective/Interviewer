@@ -26,7 +26,11 @@ const getCellRenderer = (Component) => ({
 }) => {
   const { items, columns } = useContext(ListContext);
   const dataIndex = (rowIndex * columns) + columnIndex;
-  const { props, id, data } = items[dataIndex];
+  const item = items[dataIndex];
+
+  if (!item) { return null; }
+
+  const { props, id, data } = item;
 
   return (
     <motion.div

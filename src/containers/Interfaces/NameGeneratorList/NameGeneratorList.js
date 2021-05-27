@@ -81,8 +81,6 @@ const NameGeneratorList = (props) => {
     hidden: { opacity: 0, transition: { duration: animationDuration } },
   };
 
-  console.log(items.length);
-
   return (
     <div className="name-generator-list-interface">
       <AnimatePresence>

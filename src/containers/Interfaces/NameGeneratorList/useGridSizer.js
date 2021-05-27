@@ -19,11 +19,14 @@ const useGridSizer = (ItemComponent, items, columns, defaultHeight = 150) => {
 
   const adjustedColumns = useMemo(() => Math.ceil(columns), [columns]); // should never be 0
   const rowCount = useMemo(() => (
-    Math.ceil(items.length || 0) / adjustedColumns
+    Math.ceil(Math.ceil(items.length || 0) / adjustedColumns)
   ), [items.length, adjustedColumns]);
+
   const columnCount = useMemo(() => (
     adjustedColumns > items.length ? items.length : adjustedColumns
   ), [items.length, adjustedColumns]);
+
+  console.log('rowCount', rowCount, columnCount);
 
   const columnWidth = useCallback(() => (
     debouncedWidth / adjustedColumns
