@@ -2,6 +2,7 @@ import React from 'react';
 import { compose } from 'redux';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
 import withPrompt from '../../../behaviours/withPrompt';
@@ -81,6 +82,11 @@ const NameGeneratorList = (props) => {
     hidden: { opacity: 0, transition: { duration: animationDuration } },
   };
 
+  const nodeListClasses = cx(
+    'name-generator-list-interface__node-list',
+    { 'name-generator-list-interface__node-list--empty': nodesForPrompt.length === 0 },
+  );
+
   return (
     <div className="name-generator-list-interface">
       <AnimatePresence>
@@ -122,6 +128,7 @@ const NameGeneratorList = (props) => {
           >
             <div className="name-generator-list-interface__nodes">
               <NodeList
+                className={nodeListClasses}
                 id="node-drop-area"
                 listId="node-drop-area"
                 itemType="ADDED_NODES"
@@ -130,7 +137,7 @@ const NameGeneratorList = (props) => {
                 items={nodesForPrompt}
               />
             </div>
-            <div className="name-generator-list-interface__list">
+            <div className="name-generator-list-interface__search">
               <SearchableList
                 items={items}
                 itemComponent={Card}

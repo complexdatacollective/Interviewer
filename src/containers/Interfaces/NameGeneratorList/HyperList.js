@@ -87,6 +87,7 @@ const HyperList = ({
               <Grid
                 height={height}
                 width={width}
+                // useIsScrolling
                 {...gridProps}
               >
                 {CellRenderer}
