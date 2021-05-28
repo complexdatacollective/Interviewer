@@ -12,7 +12,7 @@ import usePropSelector from './usePropSelector';
 import { detailsWithVariableUUIDs } from './helpers';
 
 const makeGetNodesForList = () => {
-  const getNodesForPrompt = makeNetworkNodesForPrompt();
+  const getNodesForPrompt = makeNetworkNodesForPrompt(); // TODO: Do this filter after search
   const networkNodesForOtherPrompts = makeNetworkNodesForOtherPrompts();
 
   return (state, props) => {

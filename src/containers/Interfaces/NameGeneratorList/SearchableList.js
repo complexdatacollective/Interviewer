@@ -1,5 +1,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Button } from '@codaco/ui';
+import SearchIcon from '@material-ui/icons/SearchRounded';
 import Loading from '../../../components/Loading';
 import useSort from './useSort';
 import useSearch from './useSearch';
@@ -47,7 +49,7 @@ const SearchableList = ({
           animate="visible"
         >
           {sortableProperties.map(({ variable, label }) => (
-            <button
+            <Button
               onClick={() => setSortByProperty(variable)}
               type="button"
               key={variable}
@@ -55,9 +57,9 @@ const SearchableList = ({
               {label}
 
               {variable === sortByProperty && (
-                sortDirection
+                sortDirection === 'asc' ? ' \u25B2' : ' \u25BC'
               )}
-            </button>
+            </Button>
           ))}
         </motion.div>
       )}
@@ -88,10 +90,6 @@ const SearchableList = ({
           <motion.div
             className="searchable-list__list"
             style={{ flex: 1, display: 'flex' }}
-            // variants={variants}
-            // initial="hidden"
-            // animate="visible"
-            // exit="hidden"
             key="list"
           >
             <HyperList
@@ -113,6 +111,7 @@ const SearchableList = ({
         animate="visible"
       >
         <input type="text" value={query} onChange={handleChangeSearch} />
+        <div className="searchable-list__search-icon"><SearchIcon color="primary" /></div>
       </motion.div>
     </div>
   );

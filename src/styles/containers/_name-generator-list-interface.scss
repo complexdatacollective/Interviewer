@@ -80,6 +80,8 @@
 .hyper-list {
   @include gpu;
 
+  margin-right: -1rem;
+
   &--hover,
   &--drag {
     background-color: var(--node-list-action-bg);
@@ -98,5 +100,52 @@
     //     }
     //   }
     // }
+  }
+
+  &__item {
+    padding-bottom: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+.searchable-list {
+  &__sort {
+    padding-bottom: 1rem;
+
+    .button {
+      margin-right: 1rem;
+    }
+  }
+
+  &__search {
+    padding-top: 1rem;
+    position: relative;
+
+    input {
+      flex: 1;
+      background-color: color('white');
+      border-radius: spacing(small);
+      bottom: var(--content-padding);
+      border: 0;
+      color: palette('text-dark');
+      left: var(--content-padding);
+      padding: spacing(medium);
+      height: auto;
+      width: 100%;
+    }
+
+    &-icon {
+      position: absolute;
+      right: 1rem;
+      top: 1rem;
+      bottom: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      pointer-events: none;
+      .MuiSvgIcon-root {
+        color: var(--color-rich-black);
+      }
+    }
   }
 }

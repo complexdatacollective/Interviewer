@@ -3,6 +3,7 @@ import React, {
   useMemo,
   useCallback,
 } from 'react';
+import cx from 'classnames';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { motion } from 'framer-motion';
 import { VariableSizeGrid as Grid } from 'react-window';
@@ -12,12 +13,12 @@ import { DragSource, DropTarget, MonitorDropTarget } from '../../../behaviours/D
 
 const ListContext = React.createContext({ items: [], columns: 0 });
 
-const NoopComponent = () => null;
-
 const variants = {
   visible: { scale: 1, transition: { delay: 0.15 } },
   hidden: { scale: 0, transition: { delay: 0.15 } },
 };
+
+const NoopComponent = () => null;
 
 const getCellRenderer = (Component, itemType) => ({
   columnIndex,
@@ -61,9 +62,13 @@ const HyperList = ({
     [ItemComponent, columns],
   );
 
+  const SizeRenderer = useCallback((props) => (
+    <div className="hyper-list__item"><ItemComponent {...props} /></div>
+  ), [ItemComponent]);
+
   const context = useMemo(() => ({ items, columns }), [items, columns]);
 
-  const [gridProps, ready, setWidth] = useGridSizer(ItemComponent, items, columns);
+  const [gridProps, ready, setWidth] = useGridSizer(SizeRenderer, items, columns);
 
   const handleResize = useCallback(({ width }) => setWidth(width), [setWidth]);
 
@@ -87,7 +92,6 @@ const HyperList = ({
               <Grid
                 height={height}
                 width={width}
-                // useIsScrolling
                 {...gridProps}
               >
                 {CellRenderer}
