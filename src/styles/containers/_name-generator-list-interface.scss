@@ -19,15 +19,6 @@
     @include interface-prompt;
   }
 
-  // &__main {
-  //   flex: 1 auto;
-  //   display: flex;
-  //   justify-content: center;
-  //   align-items: flex-start;
-  //   height: 100%;
-  //   position: relative;
-  // }
-
   &__nodes {
     flex-basis: 34%;
     height: 100%;
@@ -74,101 +65,5 @@
     height: 100%;
     max-height: 80vh; // Fix for Safari abs. positioned flex box child bug.
     display: flex;
-  }
-}
-
-.hyper-list {
-  @include gpu;
-
-  margin-right: -1rem;
-
-  &--hover,
-  &--drag {
-    background-color: var(--node-list-action-bg);
-  }
-
-  &--transition {
-    @include group-transition(fade, var(--animation-duration-fast));
-
-    // &-appear,
-    // &-enter {
-    //   display: block;
-
-    //   &-active {
-    //     &.node--placeholder {
-    //       opacity: .25;
-    //     }
-    //   }
-    // }
-  }
-
-  &__item {
-    padding-bottom: 1rem;
-    padding-right: 1rem;
-  }
-}
-
-.searchable-list {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-
-  &__main {
-    flex: 1;
-    display: flex;
-    position: relative;
-  }
-
-  &__waiting {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-
-  &__sort {
-    padding-bottom: 1rem;
-
-    .button {
-      margin-right: 1rem;
-    }
-  }
-
-  &__list {
-    flex: 1;
-    display: flex;
-  }
-
-  &__search {
-    padding-top: 1rem;
-    position: relative;
-
-    input {
-      flex: 1;
-      background-color: color('white');
-      border-radius: spacing(small);
-      bottom: var(--content-padding);
-      border: 0;
-      color: palette('text-dark');
-      left: var(--content-padding);
-      padding: spacing(medium);
-      height: auto;
-      width: 100%;
-    }
-
-    &-icon {
-      position: absolute;
-      right: 1rem;
-      top: 1rem;
-      bottom: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      pointer-events: none;
-      .MuiSvgIcon-root {
-        color: var(--color-rich-black);
-      }
-    }
   }
 }
