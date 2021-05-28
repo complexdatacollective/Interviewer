@@ -124,7 +124,8 @@ const NameGeneratorList = (props) => {
               <NodeList
                 id="node-drop-area"
                 listId="node-drop-area"
-                accepts={() => true}
+                itemType="ADDED_NODES"
+                accepts={({ meta: { itemType } }) => itemType !== 'ADDED_NODES'}
                 onDrop={handleAddNode}
                 items={nodesForPrompt}
               />
@@ -134,6 +135,8 @@ const NameGeneratorList = (props) => {
                 items={items}
                 itemComponent={Card}
                 sortableProperties={sortableProperties}
+                itemType="SOURCE_NODES"
+                accepts={({ meta: { itemType } }) => itemType !== 'SOURCE_NODES'}
                 onDrop={handleRemoveNode}
               />
             </div>

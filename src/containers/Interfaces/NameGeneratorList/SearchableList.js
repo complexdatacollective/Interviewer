@@ -23,6 +23,8 @@ const SearchableList = ({
   columns,
   itemComponent,
   items,
+  itemType,
+  accepts,
   onDrop,
   // TODO: streamline these from protocol config - auto and list name gens
   sortableProperties,
@@ -97,6 +99,8 @@ const SearchableList = ({
               itemComponent={itemComponent}
               columns={columns}
               emptyComponent={EmptyComponent}
+              itemType={itemType}
+              accepts={accepts}
               onDrop={onDrop}
             />
           </motion.div>

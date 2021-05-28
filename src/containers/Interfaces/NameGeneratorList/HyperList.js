@@ -19,7 +19,7 @@ const variants = {
   hidden: { scale: 0, transition: { delay: 0.15 } },
 };
 
-const getCellRenderer = (Component) => ({
+const getCellRenderer = (Component, itemType) => ({
   columnIndex,
   rowIndex,
   style,
@@ -41,7 +41,7 @@ const getCellRenderer = (Component) => ({
       variants={variants}
       key={id}
     >
-      <Component {...props} meta={() => ({ data, id })} />
+      <Component {...props} meta={() => ({ data, id, itemType })} />
     </motion.div>
   );
 };
@@ -53,10 +53,11 @@ const HyperList = ({
   items,
   itemComponent: ItemComponent,
   columns,
+  itemType,
   emptyComponent: EmptyComponent,
 }) => {
   const CellRenderer = useMemo(
-    () => getCellRenderer(DragSource(ItemComponent)),
+    () => getCellRenderer(DragSource(ItemComponent), itemType),
     [ItemComponent, columns],
   );
 
@@ -106,12 +107,13 @@ HyperList.defaultProps = {
   emptyComponent: NoopComponent,
   columns: 2,
   rowHeight: 300,
+  itemType: 'HYPER_LIST',
 };
 
 export default compose(
   withProps(() => ({
     id: 'hyper-list',
-    accepts: () => true,
+    // accepts: () => true,
   })),
   DropTarget,
   MonitorDropTarget(['isOver', 'willAccept']),
