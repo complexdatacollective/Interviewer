@@ -14,7 +14,7 @@ const variants = {
 
 const EmptyComponent = () => (
   <div className="empty">
-    No results...
+    No results.
   </div>
 );
 
@@ -33,14 +33,14 @@ const SearchableList = ({
   searchOptions,
 }) => {
   const [results, query, setQuery, isWaiting] = useSearch(items, searchOptions);
-  const [sortedResults,sortByProperty,sortDirection, setSortByProperty] = useSort(results);
+  const [sortedResults, sortByProperty, sortDirection, setSortByProperty] = useSort(results);
 
   const handleChangeSearch = (e) => {
     setQuery(e.target.value || '');
   };
 
   return (
-    <div className="searchable-list" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+    <div className="searchable-list">
       { sortableProperties.length > 0 && (
         <motion.div
           className="searchable-list__sort"
@@ -65,7 +65,6 @@ const SearchableList = ({
       )}
       <motion.div
         className="searchable-list__main"
-        style={{ flex: 1, display: 'flex', position: 'relative' }}
         variants={variants}
         initial="hidden"
         animate="visible"
@@ -74,7 +73,6 @@ const SearchableList = ({
           { isWaiting && (
             <motion.div
               className="searchable-list__waiting"
-              style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
               variants={variants}
               initial="hidden"
               animate="visible"
@@ -89,7 +87,6 @@ const SearchableList = ({
         { !isWaiting && (
           <motion.div
             className="searchable-list__list"
-            style={{ flex: 1, display: 'flex' }}
             key="list"
           >
             <HyperList
