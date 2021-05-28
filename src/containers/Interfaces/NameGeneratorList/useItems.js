@@ -12,7 +12,6 @@ import usePropSelector from './usePropSelector';
 import { detailsWithVariableUUIDs } from './helpers';
 
 const makeGetNodesForList = () => {
-  const getNodesForPrompt = makeNetworkNodesForPrompt(); // TODO: Do this filter after search
   const networkNodesForOtherPrompts = makeNetworkNodesForOtherPrompts();
 
   return (state, props) => {
@@ -21,7 +20,7 @@ const makeGetNodesForList = () => {
     // Remove nodes nominated elsewhere (previously a prop called 'showExistingNodes')
     return differenceBy(
       externalNodes,
-      [...networkNodesForOtherPrompts(state, props), ...getNodesForPrompt(state, props)],
+      networkNodesForOtherPrompts(state, props),
       entityPrimaryKeyProperty,
     );
   };
@@ -30,8 +29,10 @@ const makeGetNodesForList = () => {
 const useItems = (props) => {
   const labelGetter = usePropSelector(makeGetNodeLabel, props, true);
   const nodeTypeDefinition = usePropSelector(makeGetNodeTypeDefinition, props, true);
+  const nodesForPrompt = usePropSelector(makeNetworkNodesForPrompt, props, true);
   const visibleSupplementaryFields = usePropSelector(getCardAdditionalProperties, props);
   const nodes = usePropSelector(makeGetNodesForList, props, true, shallowEqual);
+  const selected = nodesForPrompt.map((item) => item[entityPrimaryKeyProperty]);
 
   const items = useMemo(() => nodes
     .map(
@@ -45,9 +46,10 @@ const useItems = (props) => {
             nodeTypeDefinition,
             visibleSupplementaryFields,
           })(item),
+          selected: selected.includes(item[entityPrimaryKeyProperty]),
         },
       }),
-    ), [nodes, labelGetter, nodeTypeDefinition, visibleSupplementaryFields]);
+    ), [nodesForPrompt, nodes, labelGetter, nodeTypeDefinition, visibleSupplementaryFields]);
 
   return items;
 };

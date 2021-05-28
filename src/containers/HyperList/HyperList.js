@@ -3,13 +3,12 @@ import React, {
   useMemo,
   useCallback,
 } from 'react';
-import cx from 'classnames';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { motion } from 'framer-motion';
 import { VariableSizeGrid as Grid } from 'react-window';
 import { compose, withProps } from 'recompose';
 import useGridSizer from './useGridSizer';
-import { DragSource, DropTarget, MonitorDropTarget } from '../../../behaviours/DragAndDrop';
+import { DragSource, DropTarget, MonitorDropTarget } from '../../behaviours/DragAndDrop';
 
 const ListContext = React.createContext({ items: [], columns: 0 });
 

@@ -15,7 +15,7 @@ import { entityPrimaryKeyProperty } from '../../../ducks/modules/network';
 import { actionCreators as sessionsActions } from '../../../ducks/modules/sessions';
 import NodeList from '../../../components/NodeList';
 import Loading from '../../../components/Loading';
-import SearchableList from './SearchableList';
+import SearchableList from '../../SearchableList';
 import usePropSelector from './usePropSelector';
 import useItems from './useItems';
 import useSortableProperties from './useSortableProperties';

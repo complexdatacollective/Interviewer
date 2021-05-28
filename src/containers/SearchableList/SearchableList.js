@@ -2,10 +2,10 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@codaco/ui';
 import SearchIcon from '@material-ui/icons/SearchRounded';
-import Loading from '../../../components/Loading';
+import Loading from '../../components/Loading';
 import useSort from './useSort';
 import useSearch from './useSearch';
-import HyperList from './HyperList';
+import HyperList from '../HyperList';
 
 const variants = {
   visible: { opacity: 1 },
