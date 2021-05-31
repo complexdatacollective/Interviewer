@@ -6,7 +6,7 @@ import React, {
   useState,
 } from 'react';
 import uuid from 'uuid';
-import useDebounce from './useDebounce';
+import useDebounce from '../../hooks/useDebounce';
 
 const useGridSizer = (ItemComponent, items, columns, defaultHeight = 150) => {
   const id = useMemo(() => uuid(), []);
@@ -17,14 +17,16 @@ const useGridSizer = (ItemComponent, items, columns, defaultHeight = 150) => {
     hiddenSizingEl && debouncedWidth > 0
   ), [hiddenSizingEl, debouncedWidth]);
 
+  const itemCount = (items && items.length) || 0;
+
   const adjustedColumns = useMemo(() => Math.ceil(columns), [columns]); // should never be 0
   const rowCount = useMemo(() => (
-    Math.ceil(Math.ceil(items.length || 0) / adjustedColumns)
-  ), [items.length, adjustedColumns]);
+    Math.ceil(Math.ceil(itemCount || 0) / adjustedColumns)
+  ), [itemCount, adjustedColumns]);
 
   const columnCount = useMemo(() => (
-    adjustedColumns > items.length ? items.length : adjustedColumns
-  ), [items.length, adjustedColumns]);
+    adjustedColumns > itemCount ? itemCount : adjustedColumns
+  ), [itemCount, adjustedColumns]);
 
   const columnWidth = useCallback(() => (
     debouncedWidth / adjustedColumns

@@ -2,14 +2,23 @@ import {
   useMemo,
   useState,
   useEffect,
-  useCallback,
   useRef,
 } from 'react';
-import {
-  debounce,
-} from 'lodash';
 import Fuse from 'fuse.js';
+import useDebounce from '../../hooks/useDebounce';
 
+// TODO:
+// const searchOptions = { matchProperties: [], ...stage.searchOptions };
+
+// // Map the matchproperties to add the entity attributes object, and replace names with
+// // uuids, where possible.
+// searchOptions.matchProperties = searchOptions.matchProperties.map((prop) => {
+//   const nodeTypeVariables = nodeTypeDefinition.variables;
+//   const replacedProp = getParentKeyByNameValue(nodeTypeVariables, prop);
+//   return (`${entityAttributesProperty}.${replacedProp}`);
+// });
+
+const minQueryLength = 2;
 const minDelay = 2000;
 
 const defaultFuseOpts = {
@@ -32,24 +41,12 @@ const getFuseOptions = (options) => {
   };
 };
 
-// const searchOptions = { matchProperties: [], ...stage.searchOptions };
+const useQuery = (initialQuery) => {
+  const [query, setQuery] = useState(initialQuery);
+  const debouncedQuery = useDebounce(query, 500);
 
-// // Map the matchproperties to add the entity attributes object, and replace names with
-// // uuids, where possible.
-// searchOptions.matchProperties = searchOptions.matchProperties.map((prop) => {
-//   const nodeTypeVariables = nodeTypeDefinition.variables;
-//   const replacedProp = getParentKeyByNameValue(nodeTypeVariables, prop);
-//   return (`${entityAttributesProperty}.${replacedProp}`);
-// });
-
-// // If false, suppress candidate from appearing in search results —
-// // for example, if the node has already been selected.
-// // Assumption:
-// //   `excludedNodes` size is small, but search set may be large,
-// //   and so preferable to filter found results dynamically.
-// const isAllowedResult = (candidate) => excludedNodes.every(
-//   (excluded) => excluded[entityPrimaryKeyProperty] !== candidate[entityPrimaryKeyProperty],
-// );
+  return [debouncedQuery, setQuery, query];
+};
 
 /**
  * useSearch
@@ -59,52 +56,43 @@ const getFuseOptions = (options) => {
  * Main required option is `keys`
  */
 const useSearch = (list, options, initialQuery = '') => {
-  const fuse = useMemo(
-    () => new Fuse(list, getFuseOptions(options)),
-    [list, options],
-  );
-
   const delayRef = useRef();
 
-  const [query, setQuery] = useState(initialQuery);
+  const [query, setQuery, displayQuery] = useQuery(initialQuery);
   const [results, setResults] = useState(null);
   const [isWaiting, setIsWaiting] = useState(false);
 
-  const search = useCallback(
-    debounce((_query) => {
-      clearTimeout(delayRef.current);
-      const startTime = new Date();
-      const r = fuse.search(_query);
+  const hasQuery = query.length > minQueryLength;
 
-      const endTime = new Date();
-      const delay = minDelay - (endTime - startTime);
+  const search = (_query) => {
+    clearTimeout(delayRef.current);
+    const startTime = new Date();
+    const fuse = new Fuse(list, getFuseOptions(options));
+    const r = fuse.search(_query);
 
-      if (list.length < 100) {
-        setResults(r);
-        setIsWaiting(false);
-        return;
-      }
+    const endTime = new Date();
+    const delay = minDelay - (endTime - startTime);
 
-      if (delay > 0) {
-        delayRef.current = setTimeout(() => {
-          setResults(r);
-          setIsWaiting(false);
-        }, delay);
-        return;
-      }
-
+    if (list.length < 100) {
       setResults(r);
       setIsWaiting(false);
-    }, 500),
-    [setIsWaiting, setResults, fuse],
-  );
+      return;
+    }
+
+    if (delay > 0) {
+      delayRef.current = setTimeout(() => {
+        setResults(r);
+        setIsWaiting(false);
+      }, delay);
+      return;
+    }
+
+    setResults(r);
+    setIsWaiting(false);
+  };
 
   useEffect(() => {
-    setResults(list);
-  }, [list]);
-
-  useEffect(() => {
-    if (query.length <= 2) {
+    if (!hasQuery) {
       return;
     }
 
@@ -114,13 +102,13 @@ const useSearch = (list, options, initialQuery = '') => {
     }
 
     search(query);
-  }, [fuse, query, search]);
+  }, [query]);
 
   const returnResults = useMemo(() => (
-    query.length <= 2 ? list : results
-  ), [query, list, results]);
+    hasQuery ? results : list
+  ), [hasQuery, list, results]);
 
-  return [returnResults, query, setQuery, isWaiting];
+  return [returnResults, displayQuery, setQuery, isWaiting, hasQuery];
 };
 
 export default useSearch;

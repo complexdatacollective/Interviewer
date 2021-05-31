@@ -39,7 +39,7 @@ const NameGeneratorList = (props) => {
   const newNodeModelData = usePropSelector(makeGetPromptNodeModelData, props, true);
   const nodesForPrompt = usePropSelector(makeNetworkNodesForPrompt, props, true);
 
-  const items = useItems(props);
+  const [items, dynamicItemProperties] = useItems(props);
 
   const handleAddNode = ({ meta }) => {
     const { id, data } = meta;
@@ -138,6 +138,7 @@ const NameGeneratorList = (props) => {
             <div className="name-generator-list-interface__search">
               <SearchableList
                 items={items}
+                dynamicProperties={dynamicItemProperties}
                 itemComponent={Card}
                 sortOptions={stage.sortOptions}
                 itemType="SOURCE_NODES"

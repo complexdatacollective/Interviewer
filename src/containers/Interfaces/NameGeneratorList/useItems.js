@@ -46,12 +46,11 @@ const useItems = (props) => {
             nodeTypeDefinition,
             visibleSupplementaryFields,
           })(item),
-          disabled: selected.includes(item[entityPrimaryKeyProperty]),
         },
       }),
     ), [nodesForPrompt, nodes, labelGetter, nodeTypeDefinition, visibleSupplementaryFields]);
 
-  return items;
+  return [items, { selected }];
 };
 
 export default useItems;

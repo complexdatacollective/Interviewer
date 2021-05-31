@@ -8,6 +8,11 @@ import useSort from './useSort';
 import useSearch from './useSearch';
 import HyperList from '../HyperList';
 
+const modes = {
+  LARGE: 'LARGE',
+  SMALL: 'SMALL',
+};
+
 const variants = {
   visible: { opacity: 1 },
   hidden: { opacity: 0 },
@@ -19,6 +24,19 @@ const EmptyComponent = () => (
   </div>
 );
 
+const Status = ({ children, key }) => (
+  <motion.div
+    className="searchable-list__status"
+    variants={variants}
+    initial="hidden"
+    animate="visible"
+    exit="hidden"
+    key={key}
+  >
+    {children}
+  </motion.div>
+);
+
 /**
   * SearchableList
   */
@@ -27,12 +45,13 @@ const SearchableList = ({
   itemComponent,
   items,
   itemType,
+  dynamicProperties,
   accepts,
   onDrop,
   sortOptions,
   searchOptions,
 }) => {
-  const [results, query, setQuery, isWaiting] = useSearch(items, searchOptions);
+  const [results, query, setQuery, isWaiting, hasQuery] = useSearch(items, searchOptions);
 
   const [sortableProperties, initialSortOrder] = useSortableProperties(sortOptions);
 
@@ -46,6 +65,14 @@ const SearchableList = ({
   const handleChangeSearch = (e) => {
     setQuery(e.target.value || '');
   };
+
+  const mode = items.length > 100 ? modes.LARGE : modes.SMALL;
+
+  const showResults = (
+    !isWaiting
+    // large mode requires query, small mode does not
+    && ((mode === modes.LARGE && hasQuery) || mode === modes.SMALL)
+  );
 
   return (
     <div className="searchable-list">
@@ -79,26 +106,25 @@ const SearchableList = ({
       >
         <AnimatePresence>
           { isWaiting && (
-            <motion.div
-              className="searchable-list__waiting"
-              variants={variants}
-              initial="hidden"
-              animate="visible"
-              exit="hidden"
-              key="loading"
-            >
+            <Status key="loading">
               <Loading message="searching..." />
-            </motion.div>
+            </Status>
+          )}
+          { !isWaiting && mode === modes.LARGE && !hasQuery && (
+            <Status key="instructions">
+              <p>Enter a search term below...</p>
+            </Status>
           )}
         </AnimatePresence>
 
-        { !isWaiting && (
+        { showResults && (
           <motion.div
             className="searchable-list__list"
             key="list"
           >
             <HyperList
               items={sortedResults}
+              dynamicProperties={dynamicProperties}
               itemComponent={itemComponent}
               columns={columns}
               emptyComponent={EmptyComponent}

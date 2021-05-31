@@ -20,18 +20,26 @@ const variants = {
 
 const NoopComponent = () => null;
 
-const getCellRenderer = (Component, itemType) => ({
+const getCellRenderer = (Component) => ({
   columnIndex,
   rowIndex,
   style,
 }) => {
-  const { items, columns } = useContext(ListContext);
+  const {
+    items,
+    columns,
+    itemType,
+    dynamicProperties,
+  } = useContext(ListContext);
   const dataIndex = (rowIndex * columns) + columnIndex;
   const item = items[dataIndex];
 
   if (!item) { return null; }
 
   const { props, id, data } = item;
+  const { selected } = dynamicProperties;
+
+  const isSelected = selected.includes(id);
 
   return (
     <motion.div
@@ -45,6 +53,7 @@ const getCellRenderer = (Component, itemType) => ({
       <Component
         {...props}
         meta={() => ({ data, id, itemType })}
+        disabled={isSelected}
         allowDrag={!props.disabled}
       />
     </motion.div>
@@ -57,6 +66,7 @@ const getCellRenderer = (Component, itemType) => ({
 const HyperList = ({
   className,
   items,
+  dynamicProperties,
   itemComponent: ItemComponent,
   columns,
   itemType,
@@ -65,7 +75,7 @@ const HyperList = ({
   isOver,
 }) => {
   const CellRenderer = useMemo(
-    () => getCellRenderer(DragSource(ItemComponent), itemType),
+    () => getCellRenderer(DragSource(ItemComponent)),
     [ItemComponent, columns],
   );
 
@@ -73,7 +83,12 @@ const HyperList = ({
     <div className="hyper-list__item"><ItemComponent {...props} /></div>
   ), [ItemComponent]);
 
-  const context = useMemo(() => ({ items, columns }), [items, columns]);
+  const context = useMemo(() => ({
+    items,
+    columns,
+    dynamicProperties,
+    itemType,
+  }), [items, columns, dynamicProperties, itemType]);
 
   const [gridProps, ready, setWidth] = useGridSizer(SizeRenderer, items, columns);
 
