@@ -41,7 +41,11 @@ const getCellRenderer = (Component, itemType) => ({
       variants={variants}
       key={id}
     >
-      <Component {...props} meta={() => ({ data, id, itemType })} />
+      <Component
+        {...props}
+        meta={() => ({ data, id, itemType })}
+        allowDrag={!props.disabled}
+      />
     </motion.div>
   );
 };
