@@ -141,6 +141,7 @@ const NameGeneratorList = (props) => {
                 dynamicProperties={dynamicItemProperties}
                 itemComponent={Card}
                 sortOptions={stage.sortOptions}
+                searchOptions={stage.searchOptions}
                 itemType="SOURCE_NODES"
                 accepts={({ meta: { itemType } }) => itemType !== 'SOURCE_NODES'}
                 onDrop={handleRemoveNode}

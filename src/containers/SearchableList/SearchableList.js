@@ -24,14 +24,13 @@ const EmptyComponent = () => (
   </div>
 );
 
-const Status = ({ children, key }) => (
+const Status = ({ children }) => (
   <motion.div
     className="searchable-list__status"
     variants={variants}
     initial="hidden"
     animate="visible"
     exit="hidden"
-    key={key}
   >
     {children}
   </motion.div>

@@ -18,15 +18,16 @@ import useDebounce from '../../hooks/useDebounce';
 //   return (`${entityAttributesProperty}.${replacedProp}`);
 // });
 
-const minQueryLength = 2;
-const minDelay = 2000;
+const MIN_QUERY_LENGTH = 2;
+const SEARCH_DELAY = 1000;
+const DEBOUNCE_DELAY = 500;
 
 const defaultFuseOpts = {
-  threshold: 0.5,
-  minMatchCharLength: 1,
-  shouldSort: true,
+  threshold: 0,
+  minMatchCharLength: 2,
+  shouldSort: false,
   tokenize: true, // Break up query so it can match across different fields
-  keys: ['props.label'], // TODO: Update this
+  keys: [],
 };
 
 const getFuseOptions = (options) => {
@@ -34,16 +35,21 @@ const getFuseOptions = (options) => {
     ? defaultFuseOpts.threshold
     : options.fuzziness;
 
+  const keys = !options.matchProperties
+    ? defaultFuseOpts.keys
+    : options.matchProperties.map((variable) => ['data', variable]);
+
   return {
     ...defaultFuseOpts,
-    // keys: options.matchProperties, // TODO: Update this
     threshold,
+    keys,
   };
 };
 
-const useQuery = (initialQuery) => {
+// Variation of useState which includes a debounced value
+const useQuery = (initialQuery, delay = DEBOUNCE_DELAY) => {
   const [query, setQuery] = useState(initialQuery);
-  const debouncedQuery = useDebounce(query, 500);
+  const debouncedQuery = useDebounce(query, delay);
 
   return [debouncedQuery, setQuery, query];
 };
@@ -62,7 +68,7 @@ const useSearch = (list, options, initialQuery = '') => {
   const [results, setResults] = useState(null);
   const [isWaiting, setIsWaiting] = useState(false);
 
-  const hasQuery = query.length > minQueryLength;
+  const hasQuery = query.length > MIN_QUERY_LENGTH;
 
   const search = (_query) => {
     clearTimeout(delayRef.current);
@@ -71,7 +77,7 @@ const useSearch = (list, options, initialQuery = '') => {
     const r = fuse.search(_query);
 
     const endTime = new Date();
-    const delay = minDelay - (endTime - startTime);
+    const delay = SEARCH_DELAY - (endTime - startTime);
 
     if (list.length < 100) {
       setResults(r);
