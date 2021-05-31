@@ -7,6 +7,7 @@ import AutoSizer from 'react-virtualized-auto-sizer';
 import { motion } from 'framer-motion';
 import { VariableSizeGrid as Grid } from 'react-window';
 import { compose, withProps } from 'recompose';
+import cx from 'classnames';
 import useGridSizer from './useGridSizer';
 import { DragSource, DropTarget, MonitorDropTarget } from '../../behaviours/DragAndDrop';
 
@@ -54,11 +55,14 @@ const getCellRenderer = (Component, itemType) => ({
   * HyperList
   */
 const HyperList = ({
+  className,
   items,
   itemComponent: ItemComponent,
   columns,
   itemType,
   emptyComponent: EmptyComponent,
+  willAccept,
+  isOver,
 }) => {
   const CellRenderer = useMemo(
     () => getCellRenderer(DragSource(ItemComponent), itemType),
@@ -75,9 +79,16 @@ const HyperList = ({
 
   const handleResize = useCallback(({ width }) => setWidth(width), [setWidth]);
 
+  const classNames = cx(
+    'hyper-list',
+    className,
+    { 'hyper-list--valid': willAccept },
+    { 'hyper-list--hover': willAccept && isOver },
+  );
+
   return (
     <div
-      className="hyper-list"
+      className={classNames}
       style={{ flex: 1, minHeight: '500' }}
     >
       <ListContext.Provider value={context}>
