@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@codaco/ui';
 import SearchIcon from '@material-ui/icons/SearchRounded';
 import Loading from '../../components/Loading';
+import useSortableProperties from './useSortableProperties';
 import useSort from './useSort';
 import useSearch from './useSearch';
 import HyperList from '../HyperList';
@@ -28,12 +29,19 @@ const SearchableList = ({
   itemType,
   accepts,
   onDrop,
-  // TODO: streamline these from protocol config - auto and list name gens
-  sortableProperties,
+  sortOptions,
   searchOptions,
 }) => {
   const [results, query, setQuery, isWaiting] = useSearch(items, searchOptions);
-  const [sortedResults, sortByProperty, sortDirection, setSortByProperty] = useSort(results);
+
+  const [sortableProperties, initialSortOrder] = useSortableProperties(sortOptions);
+
+  const [
+    sortedResults,
+    sortByProperty,
+    sortDirection,
+    setSortByProperty,
+  ] = useSort(results, initialSortOrder);
 
   const handleChangeSearch = (e) => {
     setQuery(e.target.value || '');

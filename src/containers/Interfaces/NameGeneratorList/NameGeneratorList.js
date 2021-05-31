@@ -18,7 +18,6 @@ import Loading from '../../../components/Loading';
 import SearchableList from '../../SearchableList';
 import usePropSelector from './usePropSelector';
 import useItems from './useItems';
-import useSortableProperties from './useSortableProperties';
 
 /**
   * Name Generator List Interface
@@ -41,7 +40,6 @@ const NameGeneratorList = (props) => {
   const nodesForPrompt = usePropSelector(makeNetworkNodesForPrompt, props, true);
 
   const items = useItems(props);
-  const sortableProperties = useSortableProperties(stage);
 
   const handleAddNode = ({ meta }) => {
     const { id, data } = meta;
@@ -141,7 +139,7 @@ const NameGeneratorList = (props) => {
               <SearchableList
                 items={items}
                 itemComponent={Card}
-                sortableProperties={sortableProperties}
+                sortOptions={stage.sortOptions}
                 itemType="SOURCE_NODES"
                 accepts={({ meta: { itemType } }) => itemType !== 'SOURCE_NODES'}
                 onDrop={handleRemoveNode}
