@@ -135,17 +135,15 @@ const NameGeneratorList = (props) => {
             variants={variants}
           >
             <div className="name-generator-list-interface__nodes">
-              {/* <div className="name-generator-list-interface__panel"> */}
-                <NodeList
-                  className={nodeListClasses}
-                  id="node-drop-area"
-                  listId="node-drop-area"
-                  itemType="ADDED_NODES"
-                  accepts={({ meta: { itemType } }) => itemType !== 'ADDED_NODES'}
-                  onDrop={handleAddNode}
-                  items={nodesForPrompt}
-                />
-              {/* </div> */}
+              <NodeList
+                className={nodeListClasses}
+                id="node-drop-area"
+                listId="node-drop-area"
+                itemType="ADDED_NODES"
+                accepts={({ meta: { itemType } }) => itemType !== 'ADDED_NODES'}
+                onDrop={handleAddNode}
+                items={nodesForPrompt}
+              />
             </div>
             <div className="name-generator-list-interface__search">
               <SearchableList

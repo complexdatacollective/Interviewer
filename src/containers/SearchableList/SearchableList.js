@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Button } from '@codaco/ui';
 import SearchIcon from '@material-ui/icons/SearchRounded';
 import Loading from '../../components/Loading';
@@ -18,23 +18,29 @@ const variants = {
   hidden: { opacity: 0 },
 };
 
-const formatResults = (results, { mode, hasQuery }) => {
-  if (mode === modes.SMALL) { return results; }
-  if (!hasQuery) { return null; }
-  return results;
-};
-
 const EmptyComponent = () => (
-  <div className="empty">
+  <div className="searchable-list__placeholder">
     No results.
   </div>
 );
 
-const SearchingPlaceholder = () => (
-  <div style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-    <Loading message="searching..." />
-  </div>
-);
+const getPlaceholder = ({ mode, isWaiting, hasQuery }) => {
+  if (isWaiting) {
+    return (
+      <div className="searchable-list__placeholder">
+        <Loading message="searching..." />
+      </div>
+    );
+  }
+  if (mode === modes.LARGE && !hasQuery) {
+    return (
+      <div className="searchable-list__placeholder searchable-list__placeholder--dimmed">
+        <p>Plase enter your search below.</p>
+      </div>
+    );
+  }
+  return null;
+};
 
 /**
   * SearchableList
@@ -71,7 +77,7 @@ const SearchableList = ({
 
   const mode = items.length > 100 ? modes.LARGE : modes.SMALL;
 
-  const formattedResults = formatResults(sortedResults, { mode, hasQuery });
+  const placeholder = getPlaceholder({ mode, isWaiting, hasQuery });
 
   return (
     <div className="searchable-list">
@@ -104,13 +110,12 @@ const SearchableList = ({
         animate="visible"
       >
         <HyperList
-          items={formattedResults}
+          items={results}
           dynamicProperties={dynamicProperties}
           itemComponent={itemComponent}
           columns={columns}
           emptyComponent={EmptyComponent}
-          // placeholder={<SearchingPlaceholder />}
-          placeholder={(isWaiting ? <SearchingPlaceholder /> : null)}
+          placeholder={placeholder}
           itemType={itemType}
           accepts={accepts}
           onDrop={onDrop}

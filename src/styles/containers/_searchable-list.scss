@@ -14,9 +14,12 @@
       flex: 1;
       border-radius: var(--border-radius);
 
-      &.hyper-list--hover,
-      &.hyper-list--valid {
+      &.hyper-list--drag {
         background-color: var(--panel-selected-node-bg-color);
+      }
+
+      &.hyper-list--hover{
+        background-color: var(--node-list-action-bg);
       }
     }
   }
@@ -37,6 +40,17 @@
 
     .button {
       margin-right: 1rem;
+    }
+  }
+
+  &__placeholder {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &--dimmed {
+      opacity: 0.5;
     }
   }
 

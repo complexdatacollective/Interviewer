@@ -44,7 +44,7 @@
 
   &__node-list {
     &::before {
-      content: 'No items selected.';
+      content: 'Drop items here to add them';
       pointer-events: none;
       position: absolute;
       top: 0;

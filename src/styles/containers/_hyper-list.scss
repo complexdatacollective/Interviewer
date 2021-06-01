@@ -16,13 +16,9 @@
     }
   }
 
-  &--drag {
-    background-color: var(--panel-selected-node-bg-color);
-  }
-
+  &--drag,
   &--hover {
     background-color: var(--node-list-action-bg);
-    background: red;
   }
 }
 
