@@ -109,11 +109,6 @@ const SearchableList = ({
               <Loading message="searching..." />
             </Status>
           )}
-          { !isWaiting && mode === modes.LARGE && !hasQuery && (
-            <Status key="instructions">
-              <p>Enter a search term below...</p>
-            </Status>
-          )}
         </AnimatePresence>
 
         { showResults && (
@@ -140,7 +135,12 @@ const SearchableList = ({
         initial="hidden"
         animate="visible"
       >
-        <input type="text" value={query} onChange={handleChangeSearch} />
+        <input
+          type="text"
+          placeholder="Enter a search term..."
+          value={query}
+          onChange={handleChangeSearch}
+        />
         <div className="searchable-list__search-icon"><SearchIcon color="primary" /></div>
       </motion.div>
     </div>

@@ -54,7 +54,7 @@ const getCellRenderer = (Component) => ({
         {...props}
         meta={() => ({ data, id, itemType })}
         disabled={isSelected}
-        allowDrag={!props.disabled}
+        allowDrag={!isSelected}
       />
     </motion.div>
   );

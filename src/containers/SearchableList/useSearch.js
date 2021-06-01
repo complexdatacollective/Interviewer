@@ -5,6 +5,7 @@ import {
   useRef,
 } from 'react';
 import Fuse from 'fuse.js';
+import { has } from 'lodash';
 import useDebounce from '../../hooks/useDebounce';
 
 // TODO:
@@ -22,28 +23,10 @@ const MIN_QUERY_LENGTH = 2;
 const SEARCH_DELAY = 1000;
 const DEBOUNCE_DELAY = 500;
 
-const defaultFuseOpts = {
-  threshold: 0,
-  minMatchCharLength: 2,
+const defaultFuseOptions = {
+  minMatchCharLength: 1,
   shouldSort: false,
   tokenize: true, // Break up query so it can match across different fields
-  keys: [],
-};
-
-const getFuseOptions = (options) => {
-  const threshold = typeof options.fuzziness !== 'number'
-    ? defaultFuseOpts.threshold
-    : options.fuzziness;
-
-  const keys = !options.matchProperties
-    ? defaultFuseOpts.keys
-    : options.matchProperties.map((variable) => ['data', variable]);
-
-  return {
-    ...defaultFuseOpts,
-    threshold,
-    keys,
-  };
 };
 
 // Variation of useState which includes a debounced value
@@ -73,8 +56,8 @@ const useSearch = (list, options, initialQuery = '') => {
   const search = (_query) => {
     clearTimeout(delayRef.current);
     const startTime = new Date();
-    const fuse = new Fuse(list, getFuseOptions(options));
-    const r = fuse.search(_query);
+    const fuse = new Fuse(list, { ...defaultFuseOptions, ...options });
+    const r = fuse.search(_query).map(({ item }) => item);
 
     const endTime = new Date();
     const delay = SEARCH_DELAY - (endTime - startTime);

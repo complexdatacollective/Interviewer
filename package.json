@@ -105,7 +105,7 @@
     "file-loader": "1.1.11",
     "framer-motion": "^2.9.1",
     "fs-extra": "3.0.1",
-    "fuse.js": "^3.4.5",
+    "fuse.js": "~6.4.6",
     "history": "^4.7.2",
     "html-webpack-plugin": "^4.0.0-beta.4",
     "http-proxy-middleware": "0.17.3",

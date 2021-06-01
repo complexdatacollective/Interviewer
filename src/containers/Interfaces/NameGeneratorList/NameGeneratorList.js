@@ -19,6 +19,15 @@ import SearchableList from '../../SearchableList';
 import usePropSelector from './usePropSelector';
 import useItems from './useItems';
 
+const getFuseOptions = (options) => ({
+  ...(options.matchProperties && {
+    keys: options.matchProperties.map((variable) => ['data', variable]),
+  }),
+  ...(typeof options.fuzziness === 'number' && {
+    threshold: options.fuzziness,
+  }),
+});
+
 /**
   * Name Generator List Interface
   */
@@ -40,6 +49,12 @@ const NameGeneratorList = (props) => {
   const nodesForPrompt = usePropSelector(makeNetworkNodesForPrompt, props, true);
 
   const [items, dynamicItemProperties] = useItems(props);
+
+  const searchOptions = !stage.searchOptions
+    ? { keys: ['props.label'] }
+    : getFuseOptions(stage.searchOptions);
+
+  console.log(searchOptions);
 
   const handleAddNode = ({ meta }) => {
     const { id, data } = meta;
@@ -141,7 +156,7 @@ const NameGeneratorList = (props) => {
                 dynamicProperties={dynamicItemProperties}
                 itemComponent={Card}
                 sortOptions={stage.sortOptions}
-                searchOptions={stage.searchOptions}
+                searchOptions={searchOptions}
                 itemType="SOURCE_NODES"
                 accepts={({ meta: { itemType } }) => itemType !== 'SOURCE_NODES'}
                 onDrop={handleRemoveNode}

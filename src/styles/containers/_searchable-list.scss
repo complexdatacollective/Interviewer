@@ -48,6 +48,10 @@
       padding: spacing(medium);
       height: auto;
       width: 100%;
+
+      &::placeholder {
+        opacity: 0.5;
+      }
     }
 
     &-icon {
