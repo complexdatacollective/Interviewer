@@ -71,6 +71,7 @@ const HyperList = ({
   columns,
   itemType,
   emptyComponent: EmptyComponent,
+  placeholder,
   willAccept,
   isOver,
 }) => {
@@ -97,37 +98,43 @@ const HyperList = ({
   const classNames = cx(
     'hyper-list',
     className,
-    { 'hyper-list--valid': willAccept },
+    { 'hyper-list--drag': willAccept },
     { 'hyper-list--hover': willAccept && isOver },
   );
 
+  // If placeholder is provider it supercedes everything
+  const showPlaceholder = !!placeholder;
+  // If items is provided but is empty show the empty component
+  const showEmpty = !placeholder && items && items.length === 0;
+  // Otherwise show the results!
+  const showResults = !placeholder && items && items.length > 0;
+
   return (
-    <div
-      className={classNames}
-      style={{ flex: 1, minHeight: '500' }}
-    >
+    <div className={classNames}>
       <ListContext.Provider value={context}>
-        <AutoSizer onResize={handleResize}>
-          {({ width, height }) => {
-            if (!ready) { return null; }
+        <div className="hyper-list__container">
+          { showPlaceholder && placeholder }
+          { showEmpty && <EmptyComponent />}
+          <AutoSizer onResize={handleResize}>
+            {({ width, height }) => {
+              // If autosizer is not ready, items would
+              // be sized incorrectly
+              if (!ready) { return null; }
 
-            if (items === null) { return null; }
+              if (!showResults) { return null; }
 
-            if (items.length === 0) {
-              return <EmptyComponent />;
-            }
-
-            return (
-              <Grid
-                height={height}
-                width={width}
-                {...gridProps}
-              >
-                {CellRenderer}
-              </Grid>
-            );
-          }}
-        </AutoSizer>
+              return (
+                <Grid
+                  height={height}
+                  width={width}
+                  {...gridProps}
+                >
+                  {CellRenderer}
+                </Grid>
+              );
+            }}
+          </AutoSizer>
+        </div>
       </ListContext.Provider>
     </div>
   );
@@ -139,6 +146,7 @@ HyperList.propTypes = {
 HyperList.defaultProps = {
   itemComponent: NoopComponent,
   emptyComponent: NoopComponent,
+  placeholder: NoopComponent,
   columns: 2,
   rowHeight: 300,
   itemType: 'HYPER_LIST',
@@ -147,7 +155,6 @@ HyperList.defaultProps = {
 export default compose(
   withProps(() => ({
     id: 'hyper-list',
-    // accepts: () => true,
   })),
   DropTarget,
   MonitorDropTarget(['isOver', 'willAccept']),

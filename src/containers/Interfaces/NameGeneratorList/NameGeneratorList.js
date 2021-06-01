@@ -135,7 +135,7 @@ const NameGeneratorList = (props) => {
             variants={variants}
           >
             <div className="name-generator-list-interface__nodes">
-              <Panel>
+              {/* <div className="name-generator-list-interface__panel"> */}
                 <NodeList
                   className={nodeListClasses}
                   id="node-drop-area"
@@ -145,7 +145,7 @@ const NameGeneratorList = (props) => {
                   onDrop={handleAddNode}
                   items={nodesForPrompt}
                 />
-              </Panel>
+              {/* </div> */}
             </div>
             <div className="name-generator-list-interface__search">
               <SearchableList

@@ -1,6 +1,12 @@
 .hyper-list {
   @include gpu;
   margin-right: -1rem;
+  display: flex;
+
+  &__container {
+    flex: 1;
+    display: flex;
+  }
 
   &__item {
     padding-bottom: 1rem;
@@ -10,24 +16,13 @@
     }
   }
 
-  &--hover,
-  &--valid {
-    background-color: var(--node-list-action-bg);
+  &--drag {
+    background-color: var(--panel-selected-node-bg-color);
   }
 
-  &--transition {
-    @include group-transition(fade, var(--animation-duration-fast));
-
-    // &-appear,
-    // &-enter {
-    //   display: block;
-
-    //   &-active {
-    //     &.node--placeholder {
-    //       opacity: .25;
-    //     }
-    //   }
-    // }
+  &--hover {
+    background-color: var(--node-list-action-bg);
+    background: red;
   }
 }
 

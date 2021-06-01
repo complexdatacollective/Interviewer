@@ -7,6 +7,18 @@
     flex: 1;
     display: flex;
     position: relative;
+
+    .hyper-list {
+      padding: 1rem;
+      background-color: var(--panel-bg-muted);
+      flex: 1;
+      border-radius: var(--border-radius);
+
+      &.hyper-list--hover,
+      &.hyper-list--valid {
+        background-color: var(--panel-selected-node-bg-color);
+      }
+    }
   }
 
   &__status {
@@ -26,11 +38,6 @@
     .button {
       margin-right: 1rem;
     }
-  }
-
-  &__list {
-    flex: 1;
-    display: flex;
   }
 
   &__search {

@@ -18,22 +18,22 @@ const variants = {
   hidden: { opacity: 0 },
 };
 
+const formatResults = (results, { mode, hasQuery }) => {
+  if (mode === modes.SMALL) { return results; }
+  if (!hasQuery) { return null; }
+  return results;
+};
+
 const EmptyComponent = () => (
   <div className="empty">
     No results.
   </div>
 );
 
-const Status = ({ children }) => (
-  <motion.div
-    className="searchable-list__status"
-    variants={variants}
-    initial="hidden"
-    animate="visible"
-    exit="hidden"
-  >
-    {children}
-  </motion.div>
+const SearchingPlaceholder = () => (
+  <div style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <Loading message="searching..." />
+  </div>
 );
 
 /**
@@ -71,11 +71,7 @@ const SearchableList = ({
 
   const mode = items.length > 100 ? modes.LARGE : modes.SMALL;
 
-  const showResults = (
-    !isWaiting
-    // large mode requires query, small mode does not
-    && ((mode === modes.LARGE && hasQuery) || mode === modes.SMALL)
-  );
+  const formattedResults = formatResults(sortedResults, { mode, hasQuery });
 
   return (
     <div className="searchable-list">
@@ -107,31 +103,18 @@ const SearchableList = ({
         initial="hidden"
         animate="visible"
       >
-        <AnimatePresence>
-          { isWaiting && (
-            <Status key="loading">
-              <Loading message="searching..." />
-            </Status>
-          )}
-        </AnimatePresence>
-
-        { showResults && (
-          <motion.div
-            className="searchable-list__list"
-            key="list"
-          >
-            <HyperList
-              items={sortedResults}
-              dynamicProperties={dynamicProperties}
-              itemComponent={itemComponent}
-              columns={columns}
-              emptyComponent={EmptyComponent}
-              itemType={itemType}
-              accepts={accepts}
-              onDrop={onDrop}
-            />
-          </motion.div>
-        )}
+        <HyperList
+          items={formattedResults}
+          dynamicProperties={dynamicProperties}
+          itemComponent={itemComponent}
+          columns={columns}
+          emptyComponent={EmptyComponent}
+          // placeholder={<SearchingPlaceholder />}
+          placeholder={(isWaiting ? <SearchingPlaceholder /> : null)}
+          itemType={itemType}
+          accepts={accepts}
+          onDrop={onDrop}
+        />
       </motion.div>
       <motion.div
         className="searchable-list__search"

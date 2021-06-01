@@ -5,7 +5,6 @@ import {
   useRef,
 } from 'react';
 import Fuse from 'fuse.js';
-import { has } from 'lodash';
 import useDebounce from '../../hooks/useDebounce';
 
 // TODO:

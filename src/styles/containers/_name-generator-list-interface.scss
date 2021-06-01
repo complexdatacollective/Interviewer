@@ -24,6 +24,22 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+
+    .node-list {
+      padding: 1rem;
+      background-color: var(--panel-bg-muted);
+      flex: 1;
+      border-radius: var(--border-radius);
+
+      &.node-list--drag {
+        background-color: var(--panel-selected-node-bg-color);
+      }
+
+      &.node-list--hover {
+        background: red;
+        background-color: var(--node-list-action-bg);
+      }
+    }
   }
 
   &__node-list {
