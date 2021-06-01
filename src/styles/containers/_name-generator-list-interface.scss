@@ -28,9 +28,7 @@
 
   &__node-list {
     &::before {
-      @include typography('title-4');
-      font-weight: 700;
-      content: 'Drop nodes here...';
+      content: 'No items selected.';
       pointer-events: none;
       position: absolute;
       top: 0;

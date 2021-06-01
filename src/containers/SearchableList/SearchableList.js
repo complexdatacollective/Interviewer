@@ -65,6 +65,10 @@ const SearchableList = ({
     setQuery(e.target.value || '');
   };
 
+  const handleFocusSearch = () => {
+    setQuery('');
+  };
+
   const mode = items.length > 100 ? modes.LARGE : modes.SMALL;
 
   const showResults = (
@@ -140,6 +144,7 @@ const SearchableList = ({
           placeholder="Enter a search term..."
           value={query}
           onChange={handleChangeSearch}
+          onFocus={handleFocusSearch}
         />
         <div className="searchable-list__search-icon"><SearchIcon color="primary" /></div>
       </motion.div>

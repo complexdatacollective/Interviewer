@@ -14,6 +14,7 @@ import { makeGetPromptNodeModelData } from '../../../selectors/name-generator';
 import { entityPrimaryKeyProperty } from '../../../ducks/modules/network';
 import { actionCreators as sessionsActions } from '../../../ducks/modules/sessions';
 import NodeList from '../../../components/NodeList';
+import Panel from '../../../components/Panel';
 import Loading from '../../../components/Loading';
 import SearchableList from '../../SearchableList';
 import usePropSelector from './usePropSelector';
@@ -51,7 +52,7 @@ const NameGeneratorList = (props) => {
   const [items, dynamicItemProperties] = useItems(props);
 
   const searchOptions = !stage.searchOptions
-    ? { keys: ['props.label'] }
+    ? { keys: ['props.label'], threshold: 0 }
     : getFuseOptions(stage.searchOptions);
 
   const handleAddNode = ({ meta }) => {
@@ -134,15 +135,17 @@ const NameGeneratorList = (props) => {
             variants={variants}
           >
             <div className="name-generator-list-interface__nodes">
-              <NodeList
-                className={nodeListClasses}
-                id="node-drop-area"
-                listId="node-drop-area"
-                itemType="ADDED_NODES"
-                accepts={({ meta: { itemType } }) => itemType !== 'ADDED_NODES'}
-                onDrop={handleAddNode}
-                items={nodesForPrompt}
-              />
+              <Panel>
+                <NodeList
+                  className={nodeListClasses}
+                  id="node-drop-area"
+                  listId="node-drop-area"
+                  itemType="ADDED_NODES"
+                  accepts={({ meta: { itemType } }) => itemType !== 'ADDED_NODES'}
+                  onDrop={handleAddNode}
+                  items={nodesForPrompt}
+                />
+              </Panel>
             </div>
             <div className="name-generator-list-interface__search">
               <SearchableList
