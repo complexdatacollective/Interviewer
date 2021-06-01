@@ -14,8 +14,8 @@ import { DragSource, DropTarget, MonitorDropTarget } from '../../behaviours/Drag
 const ListContext = React.createContext({ items: [], columns: 0 });
 
 const variants = {
-  visible: { scale: 1, transition: { delay: 0.15 } },
-  hidden: { scale: 0, transition: { delay: 0.15 } },
+  visible: { scale: 1, opacity: 1, transition: { delay: 0.15 } },
+  hidden: { scale: 0, opacity: 0.5, transition: { delay: 0.15 } },
 };
 
 const NoopComponent = () => null;

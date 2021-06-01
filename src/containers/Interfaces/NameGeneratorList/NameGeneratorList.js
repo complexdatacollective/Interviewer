@@ -54,8 +54,6 @@ const NameGeneratorList = (props) => {
     ? { keys: ['props.label'] }
     : getFuseOptions(stage.searchOptions);
 
-  console.log(searchOptions);
-
   const handleAddNode = ({ meta }) => {
     const { id, data } = meta;
     const attributeData = {
@@ -68,7 +66,7 @@ const NameGeneratorList = (props) => {
       [entityPrimaryKeyProperty]: id,
     };
 
-    console.log('add', { data, modelData, attributeData });
+    // console.log('add', { data, modelData, attributeData });
 
     dispatch(sessionsActions.addNode(modelData, attributeData));
   };
@@ -76,7 +74,7 @@ const NameGeneratorList = (props) => {
   const handleRemoveNode = ({ meta }) => {
     const id = meta[entityPrimaryKeyProperty];
 
-    console.log('remove', { meta });
+    // console.log('remove', { meta });
 
     dispatch(sessionsActions.removeNode(id));
   };
@@ -84,10 +82,6 @@ const NameGeneratorList = (props) => {
   const animationDuration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
 
   const variants = {
-    // instantVisible: {
-    //   opacity: 1,
-    //   transition: { duration: animationDuration },
-    // },
     visible: {
       opacity: 1,
       transition: { duration: animationDuration, delay: animationDuration },
