@@ -1,4 +1,5 @@
 import React from 'react';
+import cx from 'classnames';
 import { motion } from 'framer-motion';
 import { Button } from '@codaco/ui';
 import SearchIcon from '@material-ui/icons/SearchRounded';
@@ -25,18 +26,11 @@ const EmptyComponent = () => (
   </div>
 );
 
-const getPlaceholder = ({ mode, isWaiting, hasQuery }) => {
+const getPlaceholder = ({ isWaiting }) => {
   if (isWaiting) {
     return (
       <div className="searchable-list__placeholder">
         <Loading message="searching..." />
-      </div>
-    );
-  }
-  if (mode === modes.LARGE && !hasQuery) {
-    return (
-      <div className="searchable-list__placeholder searchable-list__placeholder--dimmed">
-        <p>Plase enter your search below.</p>
       </div>
     );
   }
@@ -80,6 +74,14 @@ const SearchableList = ({
 
   const placeholder = getPlaceholder({ mode, isWaiting, hasQuery });
 
+  const showTooMany = mode === modes.LARGE && !hasQuery;
+  const canSort = sortableProperties.length > 0;
+
+  const listClasses = cx(
+    'searchable-list__list',
+    { 'searchable-list__list--can-sort': canSort },
+  );
+
   return (
     <motion.div
       variants={variants}
@@ -90,8 +92,27 @@ const SearchableList = ({
       <Panel
         title="Available to add"
         noHighlight
+        noCollapse
       >
-        { sortableProperties.length > 0 && (
+        <div className={listClasses}>
+          <HyperList
+            items={sortedResults}
+            dynamicProperties={dynamicProperties}
+            itemComponent={itemComponent}
+            columns={columns}
+            emptyComponent={EmptyComponent}
+            placeholder={placeholder}
+            itemType={itemType}
+            accepts={accepts}
+            onDrop={onDrop}
+          />
+          { showTooMany && (
+            <div className="searchable-list__too-many">
+              <h2>Too many to display. Filter the list below, to see results.</h2>
+            </div>
+          )}
+        </div>
+        { canSort && (
           <div className="searchable-list__sort">
             {sortableProperties.map(({ variable, label }) => (
               <Button
@@ -108,19 +129,6 @@ const SearchableList = ({
             ))}
           </div>
         )}
-        <div className="searchable-list__list">
-          <HyperList
-            items={sortedResults}
-            dynamicProperties={dynamicProperties}
-            itemComponent={itemComponent}
-            columns={columns}
-            emptyComponent={EmptyComponent}
-            placeholder={placeholder}
-            itemType={itemType}
-            accepts={accepts}
-            onDrop={onDrop}
-          />
-        </div>
         <div className="searchable-list__search">
           <input
             type="text"

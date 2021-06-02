@@ -2,15 +2,27 @@
   flex: 1;
   display: flex;
 
+  &__too-many {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 5.25rem);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
   &__list {
     flex: 1;
     display: flex;
     position: relative;
-    // padding: 1rem;
 
     .hyper-list {
       flex: 1;
-      padding: 1rem;
+      padding: 1rem 1rem 5.5rem 1rem;
 
       &.hyper-list--drag {
         background-color: var(--panel-selected-node-bg-color);
@@ -20,22 +32,42 @@
         background-color: var(--node-list-action-bg);
       }
     }
+
+    &--can-sort {
+      .hyper-list {
+        padding-top: 5.5rem;
+      }
+
+      .searchable-list__too-many {
+        top: 5.25rem;
+        height: calc(100% - 10.5rem);
+      }
+    }
   }
 
-  &__status {
+  .panel {
+    &__content {
+      position: relative;
+    }
+  }
+
+  // &__status {
+  //   position: absolute;
+  //   top: 0;
+  //   left: 0;
+  //   width: 100%;
+  //   height: 100%;
+  //   display: flex;
+  //   justify-content: center;
+  //   align-items: center;
+  // }
+
+  &__sort {
+    padding: 1rem;
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  &__sort {
-    // padding-bottom: 1rem;
-    padding: 1rem;
 
     .button {
       margin-right: 1rem;
@@ -55,7 +87,10 @@
 
   &__search {
     padding: 1rem;
-    position: relative;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
 
     input {
       flex: 1;

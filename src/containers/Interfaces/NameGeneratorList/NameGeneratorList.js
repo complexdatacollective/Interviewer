@@ -135,7 +135,11 @@ const NameGeneratorList = (props) => {
             variants={variants}
           >
             <div className="name-generator-list-interface__nodes">
-              <Panel title="Added to your interview" noHighlight>
+              <Panel
+                title="Added to your interview"
+                noHighlight
+                noCollapse
+              >
                 <NodeList
                   className={nodeListClasses}
                   id="node-drop-area"
