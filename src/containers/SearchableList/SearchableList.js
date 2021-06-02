@@ -27,17 +27,6 @@ const EmptyComponent = () => (
   </div>
 );
 
-const getPlaceholder = ({ isWaiting }) => {
-  if (isWaiting) {
-    return (
-      <div className="searchable-list__placeholder">
-        <Loading message="searching..." />
-      </div>
-    );
-  }
-  return null;
-};
-
 /**
   * SearchableList
   *
@@ -76,7 +65,12 @@ const SearchableList = ({
 
   const mode = items.length > 100 ? modes.LARGE : modes.SMALL;
 
-  const placeholder = getPlaceholder({ mode, isWaiting, hasQuery });
+  const placeholder = isWaiting
+    ? (
+      <div className="searchable-list__placeholder">
+        <Loading message="searching..." />
+      </div>
+    ) : null;
 
   const showTooMany = mode === modes.LARGE && !hasQuery;
   const canSort = sortableProperties.length > 0;

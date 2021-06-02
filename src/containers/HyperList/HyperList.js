@@ -4,7 +4,7 @@ import React, {
   useCallback,
 } from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { VariableSizeGrid as Grid } from 'react-window';
 import { compose, withProps } from 'recompose';
 import cx from 'classnames';
@@ -16,6 +16,11 @@ const ListContext = React.createContext({ items: [], columns: 0 });
 const variants = {
   visible: { scale: 1, opacity: 1, transition: { delay: 0.15 } },
   hidden: { scale: 0, opacity: 0.5, transition: { delay: 0.15 } },
+};
+
+const reducedMotionVariants = {
+  visible: { opacity: 1, transition: { delay: 0.15 } },
+  hidden: { opacity: 0, transition: { delay: 0.15 } },
 };
 
 const NoopComponent = () => null;
@@ -33,6 +38,7 @@ const getCellRenderer = (Component) => ({
   } = useContext(ListContext);
   const dataIndex = (rowIndex * columns) + columnIndex;
   const item = items[dataIndex];
+  const reducedMotion = useReducedMotion();
 
   if (!item) { return null; }
 
@@ -41,13 +47,17 @@ const getCellRenderer = (Component) => ({
 
   const isDisabled = disabled.includes(id);
 
+  const cellVariants = reducedMotion
+    ? reducedMotionVariants
+    : variants;
+
   return (
     <motion.div
       className="hyper-list__item"
       style={style}
       initial="hidden"
       animate="visible"
-      variants={variants}
+      variants={cellVariants}
       key={id}
     >
       <Component

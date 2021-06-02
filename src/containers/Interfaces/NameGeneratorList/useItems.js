@@ -53,7 +53,7 @@ const useItems = (props) => {
   const nodesForPrompt = usePropSelector(makeNetworkNodesForPrompt, props, true);
   const visibleSupplementaryFields = usePropSelector(getCardAdditionalProperties, props);
   const nodes = usePropSelector(makeGetNodesForList, props, true, shallowEqual);
-  const selected = nodesForPrompt.map((item) => item[entityPrimaryKeyProperty]);
+  const disabled = nodesForPrompt.map((item) => item[entityPrimaryKeyProperty]);
 
   const items = useMemo(() => nodes
     .map(
@@ -71,7 +71,7 @@ const useItems = (props) => {
       }),
     ), [nodesForPrompt, nodes, labelGetter, nodeTypeDefinition, visibleSupplementaryFields]);
 
-  return [items, { selected }];
+  return [items, { disabled }];
 };
 
 export default useItems;
