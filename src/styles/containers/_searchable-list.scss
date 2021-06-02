@@ -1,18 +1,16 @@
 .searchable-list {
   flex: 1;
   display: flex;
-  flex-direction: column;
 
-  &__main {
+  &__list {
     flex: 1;
     display: flex;
     position: relative;
+    // padding: 1rem;
 
     .hyper-list {
-      padding: 1rem;
-      background-color: var(--panel-bg-muted);
       flex: 1;
-      border-radius: var(--border-radius);
+      padding: 1rem;
 
       &.hyper-list--drag {
         background-color: var(--panel-selected-node-bg-color);
@@ -36,7 +34,8 @@
   }
 
   &__sort {
-    padding-bottom: 1rem;
+    // padding-bottom: 1rem;
+    padding: 1rem;
 
     .button {
       margin-right: 1rem;
@@ -55,7 +54,7 @@
   }
 
   &__search {
-    padding-top: 1rem;
+    padding: 1rem;
     position: relative;
 
     input {
@@ -77,8 +76,8 @@
 
     &-icon {
       position: absolute;
-      right: 1rem;
-      top: 1rem;
+      right: 2rem;
+      top: 0rem;
       bottom: 0;
       display: flex;
       justify-content: center;

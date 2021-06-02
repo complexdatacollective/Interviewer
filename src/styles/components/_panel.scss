@@ -35,10 +35,15 @@
     flex: 1 auto;
     overflow: hidden;
     display: flex;
+    flex-direction: column;
   }
 
   .node {
     font-size: calc(var(--base-node-size) * .66);
+  }
+
+  &--no-highlight {
+    border-bottom-width: 0;
   }
 
   &--minimize {

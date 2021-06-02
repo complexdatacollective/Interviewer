@@ -26,10 +26,9 @@
     flex-direction: column;
 
     .node-list {
-      padding: 1rem;
-      background-color: var(--panel-bg-muted);
+      // padding: 1rem;
+      // background-color: var(--panel-bg-muted);
       flex: 1;
-      border-radius: var(--border-radius);
 
       &.node-list--drag {
         background-color: var(--panel-selected-node-bg-color);
@@ -43,6 +42,10 @@
   }
 
   &__node-list {
+    .node {
+      font-size: calc(var(--base-node-size));
+    }
+
     &::before {
       content: 'Drop items here to add them';
       pointer-events: none;
