@@ -67,15 +67,11 @@ const NameGeneratorList = (props) => {
       [entityPrimaryKeyProperty]: id,
     };
 
-    // console.log('add', { data, modelData, attributeData });
-
     dispatch(sessionsActions.addNode(modelData, attributeData));
   };
 
   const handleRemoveNode = ({ meta }) => {
     const id = meta[entityPrimaryKeyProperty];
-
-    // console.log('remove', { meta });
 
     dispatch(sessionsActions.removeNode(id));
   };

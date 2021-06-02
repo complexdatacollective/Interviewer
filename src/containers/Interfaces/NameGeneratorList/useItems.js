@@ -7,9 +7,29 @@ import {
   makeNetworkNodesForOtherPrompts,
 } from '../../../selectors/interface';
 import { getCardAdditionalProperties } from '../../../selectors/name-generator';
-import { entityPrimaryKeyProperty } from '../../../ducks/modules/network';
+import { entityPrimaryKeyProperty, getEntityAttributes } from '../../../ducks/modules/network';
+import getParentKeyByNameValue from '../../../utils/getParentKeyByNameValue';
 import usePropSelector from './usePropSelector';
-import { detailsWithVariableUUIDs } from './helpers';
+
+/**
+ * Format details needed for list cards
+ */
+export const detailsWithVariableUUIDs = (props) => (node) => {
+  const {
+    nodeTypeDefinition,
+    visibleSupplementaryFields,
+  } = props;
+
+  const nodeTypeVariables = nodeTypeDefinition.variables;
+  const attrs = getEntityAttributes(node);
+  const fields = visibleSupplementaryFields;
+  const withUUIDReplacement = fields.map((field) => ({
+    ...field,
+    variable: getParentKeyByNameValue(nodeTypeVariables, field.variable),
+  }));
+
+  return withUUIDReplacement.map((field) => ({ [field.label]: attrs[field.variable] }));
+};
 
 const makeGetNodesForList = () => {
   const networkNodesForOtherPrompts = makeNetworkNodesForOtherPrompts();
@@ -26,6 +46,7 @@ const makeGetNodesForList = () => {
   };
 };
 
+// Returns all nodes associated with lists (external data)
 const useItems = (props) => {
   const labelGetter = usePropSelector(makeGetNodeLabel, props, true);
   const nodeTypeDefinition = usePropSelector(makeGetNodeTypeDefinition, props, true);

@@ -37,9 +37,9 @@ const getCellRenderer = (Component) => ({
   if (!item) { return null; }
 
   const { props, id, data } = item;
-  const { selected } = dynamicProperties;
+  const { disabled } = dynamicProperties;
 
-  const isSelected = selected.includes(id);
+  const isDisabled = disabled.includes(id);
 
   return (
     <motion.div
@@ -53,15 +53,33 @@ const getCellRenderer = (Component) => ({
       <Component
         {...props}
         meta={() => ({ data, id, itemType })}
-        disabled={isSelected}
-        allowDrag={!isSelected}
+        disabled={isDisabled}
+        allowDrag={!isDisabled}
       />
     </motion.div>
   );
 };
 
 /**
-  * HyperList
+  * Renders an arbitrary list of items using itemComponent.
+  *
+  * Includes drag and drop functionality.
+  *
+  * @prop {Array} items Items in format [{ id, props: {}, data: {} }, ...]
+  * @prop {Object} dynamicProperties Can be used for mutating properties,
+  * that aren't necessarily part of item data. This is because items may
+  * go through several filters before reaching HyperList, and these dynamic
+  * properties may not be relevant (e.g. recomputing search results when
+  * item values haven't changed). Currently only used to get the list of
+  * disabled items.
+  * @prop {React Component} emptyComponent React component to render when items is an empty array.
+  * @prop {React Component} itemComponent React component, rendered with `{ props }` from item.
+  * `{ data }`, `id`, and `itemType` is passed to the drag and drop state.
+  * @prop {React node} placeholder React node. If provided will override rendering of
+  * items/emptyComponent and will be rendered instead.
+  * example usage: `<HyperList placeholder={(<div>placeholder</div>)} />`
+  * @prop {number} columns Number of columns
+  * @prop {string} itemType itemType used by drag and drop functionality
   */
 const HyperList = ({
   className,

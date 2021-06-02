@@ -7,17 +7,6 @@ import {
 import Fuse from 'fuse.js';
 import useDebounce from '../../hooks/useDebounce';
 
-// TODO:
-// const searchOptions = { matchProperties: [], ...stage.searchOptions };
-
-// // Map the matchproperties to add the entity attributes object, and replace names with
-// // uuids, where possible.
-// searchOptions.matchProperties = searchOptions.matchProperties.map((prop) => {
-//   const nodeTypeVariables = nodeTypeDefinition.variables;
-//   const replacedProp = getParentKeyByNameValue(nodeTypeVariables, prop);
-//   return (`${entityAttributesProperty}.${replacedProp}`);
-// });
-
 const MIN_QUERY_LENGTH = 2;
 const SEARCH_DELAY = 1000;
 const DEBOUNCE_DELAY = 500;
@@ -41,7 +30,18 @@ const useQuery = (initialQuery, delay = DEBOUNCE_DELAY) => {
  *
  * Returns a filtered version of a list based on query term.
  *
- * Main required option is `keys`
+ * @param {Array} items A list of formatted items,
+ * @param {Object} options `keys` is essentially a required prop, see fuse.js for more settings.
+ *
+ * Usage:
+ *
+ * const [
+ *   results,
+ *   query,
+ *   updateQuery,
+ *   isWaiting,
+ *   hasQuery,
+ * ] = useSearch(items, { keys: ['name'] });
  */
 const useSearch = (list, options, initialQuery = '') => {
   const delayRef = useRef();
@@ -50,7 +50,7 @@ const useSearch = (list, options, initialQuery = '') => {
   const [results, setResults] = useState(null);
   const [isWaiting, setIsWaiting] = useState(false);
 
-  const hasQuery = query.length > MIN_QUERY_LENGTH;
+  const hasQuery = query.length >= MIN_QUERY_LENGTH;
 
   const search = (_query) => {
     clearTimeout(delayRef.current);

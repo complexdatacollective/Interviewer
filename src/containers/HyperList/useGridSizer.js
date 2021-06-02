@@ -8,6 +8,27 @@ import React, {
 import uuid from 'uuid';
 import useDebounce from '../../hooks/useDebounce';
 
+/**
+ * This is an enhancement for react-window, which allows items in a grid
+ * to have dynamic heights.
+ *
+ * Because items may flow, this actually renders the item in a hidden div
+ * taking into account the column width.
+ *
+ * Each row will be sized according to the largest item on that row.
+ *
+ * Usage:
+ *
+ * const [
+ *   gridProps,
+ *   ready, // has hidden div been rendered, ready to measure items
+ *   setWidth, // how wide is the total container width (all columns)
+ * ] = useGridSizer(ItemComponent, [{}, ...], 2);
+ *
+ * return (
+ *   <Grid {...gridProps} />
+ * );
+ */
 const useGridSizer = (ItemComponent, items, columns, defaultHeight = 150) => {
   const id = useMemo(() => uuid(), []);
   const [hiddenSizingEl, setHiddenSizingElement] = useState(null);

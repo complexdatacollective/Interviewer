@@ -6,15 +6,29 @@ const defaultSortOrder = {
   property: null,
 };
 
-const sorter = (property) => (item) => get(item, ['data', property]);
+const sorter = (property) => (item) => get(item, property);
 
 /**
- * useSort
+ * Sort a list of items
  *
  * Expects `list` to be in format:
  * `[{ data, ... }, ...]`
  *
  * Any properties on `data` can be specified as the `sortByProperty`.
+ *
+ * Sort direction is either 'asc' or 'desc'.
+ *
+ * For initialSortOrder, direction is optional.
+ *
+ * Usage:
+ *
+ * const [
+ *  sorted,
+ *  sortProperty,
+ *  sortDirection,
+ *  setProperty,
+ *  toggleDirection,
+ * ] = useSort(list, { property: 'name', direction: 'asc'});
  */
 const useSort = (list, initialSortOrder = defaultSortOrder) => {
   const { property: initialSortBy, direction: initialDirection } = initialSortOrder;

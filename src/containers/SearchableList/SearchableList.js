@@ -1,6 +1,7 @@
 import React from 'react';
 import cx from 'classnames';
 import { motion } from 'framer-motion';
+import { isEqual } from 'lodash';
 import { Button } from '@codaco/ui';
 import SearchIcon from '@material-ui/icons/SearchRounded';
 import Loading from '../../components/Loading';
@@ -39,6 +40,9 @@ const getPlaceholder = ({ isWaiting }) => {
 
 /**
   * SearchableList
+  *
+  * This adds UI around the HyperList component which enables
+  * sorting and searching.
   */
 const SearchableList = ({
   columns,
@@ -53,7 +57,7 @@ const SearchableList = ({
 }) => {
   const [results, query, setQuery, isWaiting, hasQuery] = useSearch(items, searchOptions);
 
-  const [sortableProperties, initialSortOrder] = useSortableProperties(sortOptions);
+  const [sortableProperties, initialSortOrder] = useSortableProperties(sortOptions, 'data');
 
   const [
     sortedResults,
@@ -122,7 +126,7 @@ const SearchableList = ({
               >
                 {label}
 
-                {variable === sortByProperty && (
+                {isEqual(variable, sortByProperty) && (
                   sortDirection === 'asc' ? ' \u25B2' : ' \u25BC'
                 )}
               </Button>
