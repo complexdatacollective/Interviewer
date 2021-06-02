@@ -23,13 +23,13 @@
 
     .hyper-list {
       flex: 1;
-      padding: 1rem 1rem 5.5rem 1rem;
+      padding: 1rem 1rem 5.5rem;
 
       &.hyper-list--drag {
         background-color: var(--panel-selected-node-bg-color);
       }
 
-      &.hyper-list--hover{
+      &.hyper-list--hover {
         background-color: var(--node-list-action-bg);
       }
     }
@@ -98,13 +98,14 @@
     &-icon {
       position: absolute;
       right: 2rem;
-      top: 0rem;
+      top: 0;
       bottom: 0;
       display: flex;
       justify-content: center;
       align-items: center;
       pointer-events: none;
-      .MuiSvgIcon-root {
+
+      .MuiSvgIcon-root { // sass-lint:disable-line class-name-format
         color: var(--color-rich-black);
       }
     }

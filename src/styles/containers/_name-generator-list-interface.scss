@@ -26,8 +26,6 @@
     flex-direction: column;
 
     .node-list {
-      // padding: 1rem;
-      // background-color: var(--panel-bg-muted);
       flex: 1;
 
       &.node-list--drag {
@@ -35,7 +33,6 @@
       }
 
       &.node-list--hover {
-        background: red;
         background-color: var(--node-list-action-bg);
       }
     }
