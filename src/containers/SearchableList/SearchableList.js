@@ -3,6 +3,7 @@ import cx from 'classnames';
 import { motion } from 'framer-motion';
 import { isEqual } from 'lodash';
 import { Button } from '@codaco/ui';
+import Text from '@codaco/ui/lib/components/Fields/Text';
 import SearchIcon from '@material-ui/icons/SearchRounded';
 import Loading from '../../components/Loading';
 import Panel from '../../components/Panel';
@@ -128,12 +129,14 @@ const SearchableList = ({
           </div>
         )}
         <div className="searchable-list__search">
-          <input
+          <Text
             type="text"
             placeholder="Enter a search term..."
-            value={query}
-            onChange={handleChangeSearch}
-            onFocus={handleFocusSearch}
+            input={{
+              value: query,
+              onChange: handleChangeSearch,
+              onFocus: handleFocusSearch,
+            }}
           />
           <div className="searchable-list__search-icon"><SearchIcon color="primary" /></div>
         </div>

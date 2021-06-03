@@ -1,3 +1,6 @@
+$search_height: 6rem;
+$sort_height: 5.5rem;
+
 .searchable-list {
   flex: 1;
   display: flex;
@@ -23,7 +26,7 @@
 
     .hyper-list {
       flex: 1;
-      padding: 1rem 1rem 5.5rem;
+      padding: 1rem 1rem $search_height;
 
       &.hyper-list--drag {
         background-color: var(--panel-selected-node-bg-color);
@@ -36,12 +39,12 @@
 
     &--can-sort {
       .hyper-list {
-        padding-top: 5.5rem;
+        padding-top: $sort_height;
       }
 
       .searchable-list__too-many {
-        top: 5.25rem;
-        height: calc(100% - 10.5rem);
+        top: calc(#{$sort_height} - 0.25rem);
+        height: calc(100% - #{$sort_height} - #{$search_height} + 0.5rem);
       }
     }
   }
@@ -78,21 +81,16 @@
     left: 0;
     width: 100%;
 
-    input {
+    .form-field-container {
+      margin: 0;
       flex: 1;
-      background-color: color('white');
-      border-radius: spacing(small);
-      bottom: var(--content-padding);
-      border: 0;
-      color: palette('text-dark');
-      left: var(--content-padding);
-      padding: spacing(medium);
-      height: auto;
       width: 100%;
+    }
 
-      &::placeholder {
-        opacity: 0.5;
-      }
+    .form-field-text__input {
+      flex: 1;
+      width: 100%;
+      margin: 0;
     }
 
     &-icon {
