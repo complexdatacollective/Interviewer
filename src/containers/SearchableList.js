@@ -65,10 +65,6 @@ const SearchableList = ({
     setQuery(e.target.value || '');
   };
 
-  const handleFocusSearch = () => {
-    setQuery('');
-  };
-
   const mode = items.length > 100 ? modes.LARGE : modes.SMALL;
 
   const placeholder = isWaiting
@@ -145,7 +141,6 @@ const SearchableList = ({
             input={{
               value: query,
               onChange: handleChangeSearch,
-              onFocus: handleFocusSearch,
             }}
           />
         </div>
