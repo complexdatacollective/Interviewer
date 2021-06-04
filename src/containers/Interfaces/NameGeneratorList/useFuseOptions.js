@@ -3,17 +3,22 @@ import { useSelector } from 'react-redux';
 import { get, compact } from 'lodash';
 import { getVariableMap } from './helpers';
 
+const defaultFuseOptions = {
+  keys: [['props', 'label']],
+  threshold: 0,
+};
+
 /**
  * Convert protocol config options into a format
  * usable by useSort. Essentially specific to SearchableList.
  */
-const useFuseOptions = (searchOptions, path = 'data') => {
+const useFuseOptions = (searchOptions, path = 'data', fallbackFuseOptions = defaultFuseOptions) => {
   const variableMap = useSelector(getVariableMap);
-  const matchProperties = get(searchOptions, 'matchProperties', []);
+  const matchProperties = get(searchOptions, 'matchProperties');
   const fuzziness = get(searchOptions, 'fuzziness');
 
   if (!searchOptions) {
-    return {};
+    return fallbackFuseOptions;
   }
 
   const keys = useMemo(
