@@ -12,9 +12,9 @@ const SEARCH_DELAY = 1000;
 const DEBOUNCE_DELAY = 500;
 
 const defaultFuseOptions = {
-  minMatchCharLength: 1,
+  minMatchCharLength: 2,
   shouldSort: false,
-  tokenize: true, // Break up query so it can match across different fields
+  ignoreLocation: true, // Search whole strings
 };
 
 // Variation of useState which includes a debounced value

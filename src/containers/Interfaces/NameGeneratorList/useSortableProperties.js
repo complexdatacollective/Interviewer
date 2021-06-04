@@ -1,21 +1,7 @@
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { get, compact } from 'lodash';
-import { getProtocolCodebook } from '../../selectors/protocol';
-
-export const getVariableMap = (state) => {
-  const codebook = getProtocolCodebook(state);
-
-  return Object
-    .keys(codebook.node)
-    .flatMap(
-      (type) => Object
-        .keys(codebook.node[type].variables)
-        .map(
-          (id) => [id, codebook.node[type].variables[id].name],
-        ),
-    );
-};
+import { getVariableMap } from './helpers';
 
 const withVariableId = (variableMap, path) => (item) => {
   const ref = variableMap.find(([, name]) => name === item.variable);
@@ -31,13 +17,13 @@ const withVariableId = (variableMap, path) => (item) => {
  * Convert protocol config options into a format
  * usable by useSort. Essentially specific to SearchableList.
  */
-const useSortableProperties = (sortOptions, path) => {
+const useSortableProperties = (sortOptions, path = 'data') => {
   const variableMap = useSelector(getVariableMap);
   const sortableProperties = get(sortOptions, 'sortableProperties');
   const initialSortOrder = get(sortOptions, ['sortOrder', 0]);
 
   if (!sortOptions) {
-    return [[], undefined];
+    return { sortableProperties: [], initialSortOrder: undefined };
   }
 
   const enhancedInitialSortOrder = useMemo(
@@ -60,7 +46,10 @@ const useSortableProperties = (sortOptions, path) => {
     [sortableProperties],
   );
 
-  return [enhancedSortableProperties, enhancedInitialSortOrder];
+  return {
+    sortableProperties: enhancedSortableProperties,
+    initialSortOrder: enhancedInitialSortOrder,
+  };
 };
 
 export default useSortableProperties;

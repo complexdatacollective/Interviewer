@@ -18,16 +18,9 @@ import Panel from '../../../components/Panel';
 import Loading from '../../../components/Loading';
 import SearchableList from '../../SearchableList';
 import usePropSelector from './usePropSelector';
+import useFuseOptions from './useFuseOptions';
+import useSortableProperties from './useSortableProperties';
 import useItems from './useItems';
-
-const getFuseOptions = (options) => ({
-  ...(options.matchProperties && {
-    keys: options.matchProperties.map((variable) => ['data', variable]),
-  }),
-  ...(typeof options.fuzziness === 'number' && {
-    threshold: options.fuzziness,
-  }),
-});
 
 /**
   * Name Generator List Interface
@@ -49,11 +42,14 @@ const NameGeneratorList = (props) => {
   const newNodeModelData = usePropSelector(makeGetPromptNodeModelData, props, true);
   const nodesForPrompt = usePropSelector(makeNetworkNodesForPrompt, props, true);
 
+  const sortOptions = useSortableProperties(stage.sortOptions);
+  const searchOptions = useFuseOptions(stage.searchOptions);
+
   const [items, dynamicItemProperties] = useItems(props);
 
-  const searchOptions = !stage.searchOptions
-    ? { keys: ['props.label'], threshold: 0 }
-    : getFuseOptions(stage.searchOptions);
+  // const searchOptions = !stage.searchOptions
+  //   ? { keys: ['props.label'], threshold: 0 }
+  //   : getFuseOptions(stage.searchOptions);
 
   const handleAddNode = ({ meta }) => {
     const { id, data } = meta;
@@ -152,7 +148,7 @@ const NameGeneratorList = (props) => {
                 items={items}
                 dynamicProperties={dynamicItemProperties}
                 itemComponent={Card}
-                sortOptions={stage.sortOptions}
+                sortOptions={sortOptions}
                 searchOptions={searchOptions}
                 itemType="SOURCE_NODES"
                 accepts={({ meta: { itemType } }) => itemType !== 'SOURCE_NODES'}

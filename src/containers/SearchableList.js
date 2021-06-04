@@ -4,12 +4,11 @@ import { motion } from 'framer-motion';
 import { isEqual } from 'lodash';
 import { Button } from '@codaco/ui';
 import Search from '@codaco/ui/lib/components/Fields/Search';
-import Loading from '../../components/Loading';
-import Panel from '../../components/Panel';
-import useSort from '../../hooks/useSort';
-import useSearch from '../../hooks/useSearch';
-import useSortableProperties from './useSortableProperties';
-import HyperList from '../HyperList';
+import Loading from '../components/Loading';
+import Panel from '../components/Panel';
+import useSort from '../hooks/useSort';
+import useSearch from '../hooks/useSearch';
+import HyperList from './HyperList';
 
 const modes = {
   LARGE: 'LARGE',
@@ -46,14 +45,12 @@ const SearchableList = ({
 }) => {
   const [results, query, setQuery, isWaiting, hasQuery] = useSearch(items, searchOptions);
 
-  const [sortableProperties, initialSortOrder] = useSortableProperties(sortOptions, 'data');
-
   const [
     sortedResults,
     sortByProperty,
     sortDirection,
     setSortByProperty,
-  ] = useSort(results, initialSortOrder);
+  ] = useSort(results, sortOptions.initialSortOrder);
 
   const handleChangeSearch = (e) => {
     setQuery(e.target.value || '');
@@ -73,7 +70,7 @@ const SearchableList = ({
     ) : null;
 
   const showTooMany = mode === modes.LARGE && !hasQuery;
-  const canSort = sortableProperties.length > 0;
+  const canSort = sortOptions.sortableProperties.length > 0;
 
   const listClasses = cx(
     'searchable-list__list',
@@ -112,7 +109,7 @@ const SearchableList = ({
         </div>
         { canSort && (
           <div className="searchable-list__sort">
-            {sortableProperties.map(({ variable, label }) => (
+            {sortOptions.sortableProperties.map(({ variable, label }) => (
               <Button
                 onClick={() => setSortByProperty(variable)}
                 type="button"
