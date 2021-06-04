@@ -39,10 +39,6 @@
   }
 
   &__node-list {
-    .node {
-      font-size: calc(var(--base-node-size));
-    }
-
     &::before {
       content: 'Drop cards here to add them to your network';
       pointer-events: none;

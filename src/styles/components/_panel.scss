@@ -1,4 +1,5 @@
 .panel {
+  --base-node-size: calc(var(--base-font-size) * 6.6);
   @include transition-properties((opacity flex-basis flex-grow margin-bottom border-bottom-width), var(--animation-easing), var(--animation-duration-standard));
   flex: 1 0 5rem;
   display: flex;
@@ -36,10 +37,6 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
-  }
-
-  .node {
-    font-size: calc(var(--base-node-size) * .66);
   }
 
   &--no-highlight {
