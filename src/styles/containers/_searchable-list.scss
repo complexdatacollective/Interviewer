@@ -10,8 +10,8 @@ $sort_height: 5.5rem;
     top: 0;
     left: 0;
     width: 100%;
-    height: calc(100% - 5.25rem);
-    backdrop-filter: blur(10px);
+    height: calc(100% - #{$search_height} + 1rem);
+    backdrop-filter: blur(.5em);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -43,8 +43,8 @@ $sort_height: 5.5rem;
       }
 
       .searchable-list__too-many {
-        top: calc(#{$sort_height} - 0.25rem);
-        height: calc(100% - #{$sort_height} - #{$search_height} + 0.5rem);
+        top: calc(#{$sort_height});
+        height: calc(100% - #{$sort_height} - #{$search_height} + 2rem);
       }
     }
 
