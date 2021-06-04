@@ -45,7 +45,7 @@ const NameGeneratorList = (props) => {
   const sortOptions = useSortableProperties(stage.sortOptions);
   const searchOptions = useFuseOptions(stage.searchOptions);
 
-  const [items, dynamicItemProperties] = useItems(props);
+  const [items, excludeItems] = useItems(props);
 
   // const searchOptions = !stage.searchOptions
   //   ? { keys: ['props.label'], threshold: 0 }
@@ -146,7 +146,7 @@ const NameGeneratorList = (props) => {
             <div className="name-generator-list-interface__search">
               <SearchableList
                 items={items}
-                dynamicProperties={dynamicItemProperties}
+                excludeItems={excludeItems}
                 itemComponent={Card}
                 sortOptions={sortOptions}
                 searchOptions={searchOptions}

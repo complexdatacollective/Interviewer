@@ -45,7 +45,7 @@ const getCellRenderer = (Component) => ({
   const { props, id, data } = item;
   const { disabled } = dynamicProperties;
 
-  const isDisabled = disabled.includes(id);
+  const isDisabled = disabled && disabled.includes(id);
 
   const cellVariants = reducedMotion
     ? reducedMotionVariants

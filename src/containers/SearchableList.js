@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import cx from 'classnames';
 import { motion } from 'framer-motion';
 import { isEqual } from 'lodash';
@@ -33,15 +33,16 @@ const EmptyComponent = () => (
   * sorting and searching.
   */
 const SearchableList = ({
+  accepts,
   columns,
+  dynamicProperties,
+  excludeItems,
   itemComponent,
   items,
   itemType,
-  dynamicProperties,
-  accepts,
   onDrop,
-  sortOptions,
   searchOptions,
+  sortOptions,
 }) => {
   const [results, query, setQuery, isWaiting, hasQuery] = useSearch(items, searchOptions);
 
@@ -51,6 +52,14 @@ const SearchableList = ({
     sortDirection,
     setSortByProperty,
   ] = useSort(results, sortOptions.initialSortOrder);
+
+  const filteredResults = useMemo(
+    () => {
+      if (!excludeItems || !sortedResults) { return sortedResults; }
+      return sortedResults.filter(({ id }) => !excludeItems.includes(id));
+    },
+    [sortedResults, excludeItems],
+  );
 
   const handleChangeSearch = (e) => {
     setQuery(e.target.value || '');
@@ -91,7 +100,7 @@ const SearchableList = ({
       >
         <div className={listClasses}>
           <HyperList
-            items={sortedResults}
+            items={filteredResults}
             dynamicProperties={dynamicProperties}
             itemComponent={itemComponent}
             columns={columns}
@@ -151,8 +160,10 @@ SearchableList.defaultProps = {
   columns: undefined,
   itemComponent: null,
   items: [],
-  sortableProperties: [],
   searchOptions: {},
+  sortableProperties: [],
+  dynamicProperties: {},
+  excludeItems: [],
 };
 
 export default SearchableList;
