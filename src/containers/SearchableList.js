@@ -109,19 +109,24 @@ const SearchableList = ({
         </div>
         { canSort && (
           <div className="searchable-list__sort">
-            {sortOptions.sortableProperties.map(({ variable, label }) => (
-              <Button
-                onClick={() => setSortByProperty(variable)}
-                type="button"
-                key={variable}
-              >
-                {label}
+            {sortOptions.sortableProperties.map(({ variable, label }) => {
+              const isActive = isEqual(variable, sortByProperty);
+              const color = isActive ? 'primary' : 'platinum';
+              return (
+                <Button
+                  onClick={() => setSortByProperty(variable)}
+                  type="button"
+                  key={variable}
+                  color={color}
+                >
+                  {label}
 
-                {isEqual(variable, sortByProperty) && (
-                  sortDirection === 'asc' ? ' \u25B2' : ' \u25BC'
-                )}
-              </Button>
-            ))}
+                  {isActive && (
+                    sortDirection === 'asc' ? ' \u25B2' : ' \u25BC'
+                  )}
+                </Button>
+              );
+            })}
           </div>
         )}
         <div className="searchable-list__search">
