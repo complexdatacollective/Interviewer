@@ -153,6 +153,7 @@ const HyperList = ({
 
               return (
                 <Grid
+                  className="hyper-list__grid"
                   height={height}
                   width={width}
                   {...gridProps}

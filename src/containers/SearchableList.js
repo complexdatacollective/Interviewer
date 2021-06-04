@@ -84,6 +84,7 @@ const SearchableList = ({
   const listClasses = cx(
     'searchable-list__list',
     { 'searchable-list__list--can-sort': canSort },
+    { 'searchable-list__list--too-many': showTooMany },
   );
 
   return (

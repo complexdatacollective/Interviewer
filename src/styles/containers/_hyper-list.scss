@@ -8,6 +8,10 @@
     display: flex;
   }
 
+  &__grid {
+    overflow-x: hidden !important;
+  }
+
   &__item {
     padding-bottom: 1rem;
     padding-right: 1rem;

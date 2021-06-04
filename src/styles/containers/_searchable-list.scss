@@ -47,6 +47,12 @@ $sort_height: 5.5rem;
         height: calc(100% - #{$sort_height} - #{$search_height} + 0.5rem);
       }
     }
+
+    &--too-many {
+      .hyper-list__grid {
+        overflow-y: hidden !important;
+      }
+    }
   }
 
   .panel {
