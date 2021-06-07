@@ -6,9 +6,7 @@ import { get } from 'lodash';
 import cx from 'classnames';
 import BooleanOption from '@codaco/ui/lib/components/Boolean/BooleanOption';
 import { AnimatePresence, motion } from 'framer-motion';
-import ReactMarkdown from 'react-markdown';
-import { ALLOWED_MARKDOWN_TAGS } from '@codaco/ui/src/utils/config';
-import defaultMarkdownRenderers from '../../../utils/markdownRenderers';
+import { Markdown } from '@codaco/ui/lib/components/Fields';
 import withPrompt from '../../../behaviours/withPrompt';
 import { makeNetworkNodesForType as makeGetNodes } from '../../../selectors/interface';
 import { getNetworkEdges as getEdges } from '../../../selectors/network';
@@ -178,10 +176,8 @@ const DyadCensus = ({
           key="intro"
         >
           <h1>{stage.introductionPanel.title}</h1>
-          <ReactMarkdown
-            source={stage.introductionPanel.text}
-            allowedTypes={ALLOWED_MARKDOWN_TAGS}
-            renderers={defaultMarkdownRenderers}
+          <Markdown
+            label={stage.introductionPanel.text}
           />
         </motion.div>
         )}

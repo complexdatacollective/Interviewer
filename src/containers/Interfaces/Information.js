@@ -1,10 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import ReactMarkdown from 'react-markdown';
-import { ALLOWED_MARKDOWN_TAGS } from '@codaco/ui/src/utils/config';
+import { Markdown } from '@codaco/ui/lib/components/Fields';
 import { Audio, BackgroundImage, Video } from '../../components';
-import defaultMarkdownRenderers from '../../utils/markdownRenderers';
 import { InformationContentType, AssetType } from '../../protocol-consts';
 import AssetMetaProvider from '../../behaviours/AssetMetaProvider';
 
@@ -30,10 +28,8 @@ const getItemComponent = (item) => {
   switch (item.type) {
     case InformationContentType.text:
       return (
-        <ReactMarkdown
-          source={item.content}
-          allowedTypes={ALLOWED_MARKDOWN_TAGS}
-          renderers={defaultMarkdownRenderers}
+        <Markdown
+          label={item.content}
         />
       );
     case InformationContentType.asset:
