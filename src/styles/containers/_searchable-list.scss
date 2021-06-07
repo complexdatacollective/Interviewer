@@ -95,4 +95,17 @@ $sort_height: 5.5rem;
       margin: 0;
     }
   }
+
+  &__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    background: var(--transparent-dark);
+    // backdrop-filter: blur(.5em);
+    justify-content: center;
+    align-items: center;
+  }
 }

@@ -1,6 +1,7 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef } from 'react';
+import uuid from 'uuid';
 import cx from 'classnames';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { isEqual } from 'lodash';
 import { Button } from '@codaco/ui';
 import Search from '@codaco/ui/lib/components/Fields/Search';
@@ -9,6 +10,7 @@ import Panel from '../components/Panel';
 import useSort from '../hooks/useSort';
 import useSearch from '../hooks/useSearch';
 import HyperList from './HyperList';
+import useDropMonitor from '../behaviours/DragAndDrop/useDropMonitor';
 
 const modes = {
   LARGE: 'LARGE',
@@ -26,6 +28,25 @@ const EmptyComponent = () => (
   </div>
 );
 
+const Overlay = ({ children }) => (
+  <motion.div
+    className="searchable-list__overlay"
+    variants={variants}
+    initial="hidden"
+    animate="visible"
+    exit="hidden"
+  >
+    {children}
+  </motion.div>
+);
+
+const WillAccept = () => (
+  <Overlay>Drop here to remove from your interview</Overlay>
+);
+const WillDelete = () => (
+  <Overlay>Dropping here will remove it from your interview</Overlay>
+);
+
 /**
   * SearchableList
   *
@@ -38,13 +59,14 @@ const SearchableList = ({
   dynamicProperties,
   excludeItems,
   itemComponent,
-  dragPreviewComponent,
+  dragComponent,
   items,
   itemType,
   onDrop,
   searchOptions,
   sortOptions,
 }) => {
+  const id = useRef(uuid());
   const [results, query, setQuery, isWaiting, hasQuery] = useSearch(items, searchOptions);
 
   const [
@@ -57,10 +79,13 @@ const SearchableList = ({
   const filteredResults = useMemo(
     () => {
       if (!excludeItems || !sortedResults) { return sortedResults; }
-      return sortedResults.filter(({ id }) => !excludeItems.includes(id));
+      return sortedResults.filter((item) => !excludeItems.includes(item.id));
     },
     [sortedResults, excludeItems],
   );
+
+  const { isOver, willAccept } = useDropMonitor(`hyper-list-${id}`)
+    || { isOver: false, willAccept: false };
 
   const handleChangeSearch = (e) => {
     setQuery(e.target.value || '');
@@ -75,6 +100,8 @@ const SearchableList = ({
       </div>
     ) : null;
 
+  const showWillAccept = willAccept;
+  const showWillDelete = isOver && willAccept;
   const showTooMany = mode === modes.LARGE && !hasQuery;
   const canSort = sortOptions.sortableProperties.length > 0;
 
@@ -98,10 +125,11 @@ const SearchableList = ({
       >
         <div className={listClasses}>
           <HyperList
+            id={`hyper-list-${id}`}
             items={filteredResults}
             dynamicProperties={dynamicProperties}
             itemComponent={itemComponent}
-            dragPreviewComponent={dragPreviewComponent}
+            dragComponent={dragComponent}
             columns={columns}
             emptyComponent={EmptyComponent}
             placeholder={placeholder}
@@ -146,6 +174,10 @@ const SearchableList = ({
             }}
           />
         </div>
+        <AnimatePresence>
+          { showWillAccept && <WillAccept />}
+          { showWillDelete && <WillDelete />}
+        </AnimatePresence>
       </Panel>
     </motion.div>
   );
@@ -162,7 +194,7 @@ SearchableList.defaultProps = {
   sortableProperties: [],
   dynamicProperties: {},
   excludeItems: [],
-  dragPreviewComponent: null,
+  dragComponent: null,
 };
 
 export default SearchableList;

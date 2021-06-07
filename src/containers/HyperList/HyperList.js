@@ -6,7 +6,7 @@ import React, {
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { motion, useReducedMotion } from 'framer-motion';
 import { VariableSizeGrid as Grid } from 'react-window';
-import { compose, withProps } from 'recompose';
+import { compose, defaultProps } from 'recompose';
 import cx from 'classnames';
 import useGridSizer from './useGridSizer';
 import { DragSource, DropTarget, MonitorDropTarget } from '../../behaviours/DragAndDrop';
@@ -25,7 +25,7 @@ const reducedMotionVariants = {
 
 const NoopComponent = () => null;
 
-const getCellRenderer = (Component, DragPreviewComponent) => ({
+const getCellRenderer = (Component, DragComponent) => ({
   columnIndex,
   rowIndex,
   style,
@@ -51,8 +51,8 @@ const getCellRenderer = (Component, DragPreviewComponent) => ({
     ? reducedMotionVariants
     : variants;
 
-  const preview = DragPreviewComponent
-    ? <DragPreviewComponent {...props} />
+  const preview = DragComponent
+    ? <DragComponent {...props} />
     : null;
 
   return (
@@ -101,7 +101,7 @@ const HyperList = ({
   items,
   dynamicProperties,
   itemComponent: ItemComponent,
-  dragPreviewComponent: DragPreviewComponent,
+  dragComponent: DragComponent,
   columns,
   itemType,
   emptyComponent: EmptyComponent,
@@ -110,8 +110,8 @@ const HyperList = ({
   isOver,
 }) => {
   const CellRenderer = useMemo(
-    () => getCellRenderer(DragSource(ItemComponent), DragPreviewComponent),
-    [ItemComponent, DragPreviewComponent, columns],
+    () => getCellRenderer(DragSource(ItemComponent), DragComponent),
+    [ItemComponent, DragComponent, columns],
   );
 
   const SizeRenderer = useCallback((props) => (
@@ -136,6 +136,7 @@ const HyperList = ({
     { 'hyper-list--hover': willAccept && isOver },
   );
 
+  // const showOverlay = !!OverlayComponent;
   // If placeholder is provider it supercedes everything
   const showPlaceholder = !!placeholder;
   // If items is provided but is empty show the empty component
@@ -151,8 +152,7 @@ const HyperList = ({
           { showEmpty && <EmptyComponent />}
           <AutoSizer onResize={handleResize}>
             {({ width, height }) => {
-              // If autosizer is not ready, items would
-              // be sized incorrectly
+              // If auto sizer is not ready, items would be sized incorrectly
               if (!ready) { return null; }
 
               if (!showResults) { return null; }
@@ -181,15 +181,14 @@ HyperList.propTypes = {
 HyperList.defaultProps = {
   itemComponent: NoopComponent,
   emptyComponent: NoopComponent,
-  dragComponent: Node,
-  placeholder: NoopComponent,
+  placeholder: null,
   columns: 2,
   rowHeight: 300,
   itemType: 'HYPER_LIST',
 };
 
 export default compose(
-  withProps(() => ({
+  defaultProps(() => ({
     id: 'hyper-list',
   })),
   DropTarget,
