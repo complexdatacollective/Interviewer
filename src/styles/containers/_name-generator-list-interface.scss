@@ -68,6 +68,10 @@
     height: 100%;
     display: flex;
     padding-left: spacing(large);
+
+    .card {
+      cursor: grab;
+    }
   }
 
   &__panels {
