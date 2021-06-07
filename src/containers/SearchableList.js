@@ -37,10 +37,10 @@ const Overlay = ({ children, variants }) => (
 );
 
 const WillAccept = () => (
-  <>Drop here to remove from your interview</>
+  <>Drop here to remove</>
 );
 const WillDelete = () => (
-  <>Dropping here will remove from your interview</>
+  <>Dropping here will remove</>
 );
 
 /**
@@ -104,7 +104,7 @@ const SearchableList = ({
   const animationDuration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
 
   const variants = {
-    visible: { opacity: 1, transition: { duration: animationDuration }},
+    visible: { opacity: 1, transition: { duration: animationDuration } },
     hidden: { opacity: 0 },
   };
 

@@ -41,10 +41,10 @@ const Overlay = ({ children, variants }) => (
 );
 
 const WillAccept = () => (
-  <>Drop here to add to your interview</>
+  <>Drop here to add</>
 );
 const WillDelete = () => (
-  <>Dropping here will add to your interview</>
+  <>Dropping here will add</>
 );
 
 /**
