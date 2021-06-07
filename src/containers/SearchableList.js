@@ -41,10 +41,10 @@ const Overlay = ({ children }) => (
 );
 
 const WillAccept = () => (
-  <Overlay>Drop here to remove from your interview</Overlay>
+  <>Drop here to remove from your interview</>
 );
 const WillDelete = () => (
-  <Overlay>Dropping here will remove it from your interview</Overlay>
+  <>Dropping here will remove it from your interview</>
 );
 
 /**
@@ -100,8 +100,8 @@ const SearchableList = ({
       </div>
     ) : null;
 
-  const showWillAccept = willAccept;
-  const showWillDelete = isOver && willAccept;
+  const showWillAccept = willAccept && !isOver;
+  const showWillDelete = willAccept && isOver;
   const showTooMany = mode === modes.LARGE && !hasQuery;
   const canSort = sortOptions.sortableProperties.length > 0;
 
@@ -175,8 +175,12 @@ const SearchableList = ({
           />
         </div>
         <AnimatePresence>
-          { showWillAccept && <WillAccept />}
-          { showWillDelete && <WillDelete />}
+          { willAccept && (
+            <Overlay>
+              { showWillAccept && <WillAccept />}
+              { showWillDelete && <WillDelete />}
+            </Overlay>
+          )}
         </AnimatePresence>
       </Panel>
     </motion.div>

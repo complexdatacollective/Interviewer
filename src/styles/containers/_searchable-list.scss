@@ -28,12 +28,10 @@ $sort_height: 5.5rem;
       flex: 1;
       padding: 1rem 1rem $search_height;
 
-      &.hyper-list--drag {
-        background-color: var(--panel-selected-node-bg-color);
-      }
-
+      // Using custom overlays instead
+      &.hyper-list--drag,
       &.hyper-list--hover {
-        background-color: var(--node-list-action-bg);
+        background-color: transparent;
       }
     }
 
