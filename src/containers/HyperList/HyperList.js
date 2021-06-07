@@ -25,7 +25,7 @@ const reducedMotionVariants = {
 
 const NoopComponent = () => null;
 
-const getCellRenderer = (Component) => ({
+const getCellRenderer = (Component, DragPreviewComponent) => ({
   columnIndex,
   rowIndex,
   style,
@@ -51,6 +51,10 @@ const getCellRenderer = (Component) => ({
     ? reducedMotionVariants
     : variants;
 
+  const preview = DragPreviewComponent
+    ? <DragPreviewComponent {...props} />
+    : null;
+
   return (
     <motion.div
       className="hyper-list__item"
@@ -65,6 +69,7 @@ const getCellRenderer = (Component) => ({
         meta={() => ({ data, id, itemType })}
         disabled={isDisabled}
         allowDrag={!isDisabled}
+        preview={preview}
       />
     </motion.div>
   );
@@ -96,6 +101,7 @@ const HyperList = ({
   items,
   dynamicProperties,
   itemComponent: ItemComponent,
+  dragPreviewComponent: DragPreviewComponent,
   columns,
   itemType,
   emptyComponent: EmptyComponent,
@@ -104,8 +110,8 @@ const HyperList = ({
   isOver,
 }) => {
   const CellRenderer = useMemo(
-    () => getCellRenderer(DragSource(ItemComponent)),
-    [ItemComponent, columns],
+    () => getCellRenderer(DragSource(ItemComponent), DragPreviewComponent),
+    [ItemComponent, DragPreviewComponent, columns],
   );
 
   const SizeRenderer = useCallback((props) => (
@@ -175,6 +181,7 @@ HyperList.propTypes = {
 HyperList.defaultProps = {
   itemComponent: NoopComponent,
   emptyComponent: NoopComponent,
+  dragComponent: Node,
   placeholder: NoopComponent,
   columns: 2,
   rowHeight: 300,

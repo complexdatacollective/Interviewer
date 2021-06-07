@@ -38,6 +38,7 @@ const SearchableList = ({
   dynamicProperties,
   excludeItems,
   itemComponent,
+  dragPreviewComponent,
   items,
   itemType,
   onDrop,
@@ -100,6 +101,7 @@ const SearchableList = ({
             items={filteredResults}
             dynamicProperties={dynamicProperties}
             itemComponent={itemComponent}
+            dragPreviewComponent={dragPreviewComponent}
             columns={columns}
             emptyComponent={EmptyComponent}
             placeholder={placeholder}
@@ -160,6 +162,7 @@ SearchableList.defaultProps = {
   sortableProperties: [],
   dynamicProperties: {},
   excludeItems: [],
+  dragPreviewComponent: null,
 };
 
 export default SearchableList;

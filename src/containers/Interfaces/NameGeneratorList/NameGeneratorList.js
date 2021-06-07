@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
+import { Node } from '@codaco/ui';
 import withPrompt from '../../../behaviours/withPrompt';
 import PromptSwiper from '../../PromptSwiper';
 import withExternalData from '../../withExternalData';
@@ -21,6 +22,10 @@ import usePropSelector from './usePropSelector';
 import useFuseOptions from './useFuseOptions';
 import useSortableProperties from './useSortableProperties';
 import useItems from './useItems';
+
+const NodePreview = ({ label }) => (
+  <Node label={label} />
+);
 
 /**
   * Name Generator List Interface
@@ -148,6 +153,7 @@ const NameGeneratorList = (props) => {
                 items={items}
                 excludeItems={excludeItems}
                 itemComponent={Card}
+                dragPreviewComponent={NodePreview}
                 sortOptions={sortOptions}
                 searchOptions={searchOptions}
                 itemType="SOURCE_NODES"
