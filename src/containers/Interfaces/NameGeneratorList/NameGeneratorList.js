@@ -17,6 +17,7 @@ import { actionCreators as sessionsActions } from '../../../ducks/modules/sessio
 import NodeList from '../../../components/NodeList';
 import Panel from '../../../components/Panel';
 import Loading from '../../../components/Loading';
+import useDropMonitor from '../../../behaviours/DragAndDrop/useDropMonitor';
 import SearchableList from '../../SearchableList';
 import usePropSelector from './usePropSelector';
 import useFuseOptions from './useFuseOptions';
@@ -25,6 +26,25 @@ import useItems from './useItems';
 
 const NodePreview = ({ label }) => (
   <Node label={label} />
+);
+
+const Overlay = ({ children, variants }) => (
+  <motion.div
+    className="name-generator-list-interface__overlay"
+    variants={variants}
+    initial="hidden"
+    animate="visible"
+    exit="hidden"
+  >
+    {children}
+  </motion.div>
+);
+
+const WillAccept = () => (
+  <>Drop here to remove from your interview</>
+);
+const WillDelete = () => (
+  <>Dropping here will remove it from your interview</>
 );
 
 /**
@@ -52,9 +72,8 @@ const NameGeneratorList = (props) => {
 
   const [items, excludeItems] = useItems(props);
 
-  // const searchOptions = !stage.searchOptions
-  //   ? { keys: ['props.label'], threshold: 0 }
-  //   : getFuseOptions(stage.searchOptions);
+  const { isOver, willAccept } = useDropMonitor('node-drop-area')
+    || { isOver: false, willAccept: false };
 
   const handleAddNode = ({ meta }) => {
     const { id, data } = meta;
@@ -82,10 +101,18 @@ const NameGeneratorList = (props) => {
   const variants = {
     visible: {
       opacity: 1,
-      transition: { duration: animationDuration, delay: animationDuration },
+      transition: { duration: animationDuration },
     },
     hidden: { opacity: 0, transition: { duration: animationDuration } },
   };
+
+  const overlayVariants = {
+    visible: { opacity: 1, transition: { duration: animationDuration } },
+    hidden: { opacity: 0, transition: { duration: animationDuration } },
+  };
+
+  const showWillAccept = willAccept && !isOver;
+  const showWillDelete = willAccept && isOver;
 
   const nodeListClasses = cx(
     'name-generator-list-interface__node-list',
@@ -131,24 +158,34 @@ const NameGeneratorList = (props) => {
             exit="hidden"
             variants={variants}
           >
-            <div className="name-generator-list-interface__nodes">
+            <div className="name-generator-list-interface__node-panel">
               <Panel
                 title="Added to your interview"
                 noHighlight
                 noCollapse
               >
-                <NodeList
-                  className={nodeListClasses}
-                  id="node-drop-area"
-                  listId="node-drop-area"
-                  itemType="ADDED_NODES"
-                  accepts={({ meta: { itemType } }) => itemType !== 'ADDED_NODES'}
-                  onDrop={handleAddNode}
-                  items={nodesForPrompt}
-                />
+                <div className="name-generator-list-interface__node-list">
+                  <NodeList
+                    className={nodeListClasses}
+                    id="node-drop-area"
+                    listId="node-drop-area"
+                    itemType="ADDED_NODES"
+                    accepts={({ meta: { itemType } }) => itemType !== 'ADDED_NODES'}
+                    onDrop={handleAddNode}
+                    items={nodesForPrompt}
+                  />
+                  <AnimatePresence>
+                    { willAccept && (
+                      <Overlay variants={overlayVariants}>
+                        { showWillAccept && <WillAccept />}
+                        { showWillDelete && <WillDelete />}
+                      </Overlay>
+                    )}
+                  </AnimatePresence>
+                </div>
               </Panel>
             </div>
-            <div className="name-generator-list-interface__search">
+            <div className="name-generator-list-interface__search-panel">
               <SearchableList
                 items={items}
                 excludeItems={excludeItems}

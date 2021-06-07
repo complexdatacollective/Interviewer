@@ -4,6 +4,7 @@ import cx from 'classnames';
 import { motion, AnimatePresence } from 'framer-motion';
 import { isEqual } from 'lodash';
 import { Button } from '@codaco/ui';
+import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
 import Search from '@codaco/ui/lib/components/Fields/Search';
 import Loading from '../components/Loading';
 import Panel from '../components/Panel';
@@ -17,18 +18,13 @@ const modes = {
   SMALL: 'SMALL',
 };
 
-const variants = {
-  visible: { opacity: 1 },
-  hidden: { opacity: 0 },
-};
-
 const EmptyComponent = () => (
   <div className="searchable-list__placeholder">
     No results.
   </div>
 );
 
-const Overlay = ({ children }) => (
+const Overlay = ({ children, variants }) => (
   <motion.div
     className="searchable-list__overlay"
     variants={variants}
@@ -105,6 +101,13 @@ const SearchableList = ({
   const showTooMany = mode === modes.LARGE && !hasQuery;
   const canSort = sortOptions.sortableProperties.length > 0;
 
+  const animationDuration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
+
+  const variants = {
+    visible: { opacity: 1, transition: { duration: animationDuration }},
+    hidden: { opacity: 0 },
+  };
+
   const listClasses = cx(
     'searchable-list__list',
     { 'searchable-list__list--can-sort': canSort },
@@ -176,7 +179,7 @@ const SearchableList = ({
         </div>
         <AnimatePresence>
           { willAccept && (
-            <Overlay>
+            <Overlay variants={variants}>
               { showWillAccept && <WillAccept />}
               { showWillDelete && <WillDelete />}
             </Overlay>
