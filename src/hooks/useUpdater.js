@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { Button } from '@codaco/ui';
 import { find } from 'lodash';
 import compareVersions from 'compare-versions';
-import ReactMarkdown from 'react-markdown';
+import { Markdown } from '@codaco/ui/lib/components/Fields';
 import { actionCreators as toastActions } from '../ducks/modules/toasts';
 import { actionCreators as dialogActions } from '../ducks/modules/dialogs';
 import getVersion from '../utils/getVersion';
@@ -15,8 +15,8 @@ import {
 import useDismissedUpdatesState from './useDismissedUpdatesState';
 
 // Custom renderer for links so that they open correctly in an external browser
-const renderers = {
-  link: ({ children, href }) => <ExternalLink href={href}>{children}</ExternalLink>,
+const markdownComponents = {
+  a: ({ children, href }) => <ExternalLink href={href}>{children}</ExternalLink>,
 };
 
 export const getPlatformSpecificContent = (assets) => {
@@ -123,10 +123,10 @@ const useUpdater = (updateEndpoint, timeout = 0) => {
             may impact the interview experience substantially, and in some cases may even prevent
             you from collecting data until further updates are installed.
           </p>
-          <ReactMarkdown
+          <Markdown
             className="dialog-release-notes__notes"
-            renderers={renderers}
-            source={releaseNotes}
+            markdownRenderers={markdownComponents}
+            label={releaseNotes}
           />
         </div>
       ),
