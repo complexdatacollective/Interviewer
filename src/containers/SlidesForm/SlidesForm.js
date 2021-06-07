@@ -4,6 +4,7 @@ import cx from 'classnames';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ProgressBar } from '@codaco/ui';
+import { Markdown } from '@codaco/ui/lib/components/Fields';
 import { submit, isValid, isDirty } from 'redux-form';
 import Swiper from 'react-id-swiper';
 import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';

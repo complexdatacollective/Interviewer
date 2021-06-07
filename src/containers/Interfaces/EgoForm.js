@@ -4,6 +4,7 @@ import cx from 'classnames';
 import { clamp } from 'lodash';
 import { connect } from 'react-redux';
 import { ProgressBar, Scroller } from '@codaco/ui';
+import { Markdown } from '@codaco/ui/lib/components/Fields';
 import { submit, isValid, isDirty } from 'redux-form';
 import { isIOS } from '../../utils/Environment';
 import Form from '../Form';
@@ -12,7 +13,6 @@ import { getNetworkEgo } from '../../selectors/network';
 import { getSessionProgress } from '../../selectors/session';
 import { entityAttributesProperty } from '../../ducks/modules/network';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
-import { Markdown } from '@codaco/ui/lib/components/Fields';
 
 const confirmDialog = {
   type: 'Confirm',
