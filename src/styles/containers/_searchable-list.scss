@@ -15,8 +15,12 @@ $sort_height: 5.5rem;
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
+    z-index: 2;
     text-shadow: 1px 1px .5em var(--color-rich-black);
+
+    &--no-text {
+      color: transparent;
+    }
   }
 
   &__list {
@@ -96,6 +100,7 @@ $sort_height: 5.5rem;
 
   &__overlay {
     position: absolute;
+    z-index: 3;
     top: 0;
     left: 0;
     width: 100%;

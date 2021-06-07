@@ -40,7 +40,7 @@ const WillAccept = () => (
   <>Drop here to remove from your interview</>
 );
 const WillDelete = () => (
-  <>Dropping here will remove it from your interview</>
+  <>Dropping here will remove from your interview</>
 );
 
 /**
@@ -141,7 +141,9 @@ const SearchableList = ({
             onDrop={onDrop}
           />
           { showTooMany && (
-            <div className="searchable-list__too-many">
+            <div
+              className={`searchable-list__too-many ${willAccept && 'searchable-list__too-many--no-text'}`}
+            >
               <h2>Too many to display. Filter the list below, to see results.</h2>
             </div>
           )}
