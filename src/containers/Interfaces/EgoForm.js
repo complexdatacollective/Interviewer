@@ -4,15 +4,13 @@ import cx from 'classnames';
 import { clamp } from 'lodash';
 import { connect } from 'react-redux';
 import { ProgressBar, Scroller } from '@codaco/ui';
-import { ALLOWED_MARKDOWN_TAGS } from '@codaco/ui/src/utils/config';
+import { Markdown } from '@codaco/ui/lib/components/Fields';
 import { submit, isValid, isDirty } from 'redux-form';
-import ReactMarkdown from 'react-markdown';
 import { isIOS } from '../../utils/Environment';
 import Form from '../Form';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { getNetworkEgo } from '../../selectors/network';
 import { getSessionProgress } from '../../selectors/session';
-import defaultMarkdownRenderers from '../../utils/markdownRenderers';
 import { entityAttributesProperty } from '../../ducks/modules/network';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 
@@ -132,10 +130,8 @@ class EgoForm extends Component {
           <Scroller className="ego-form__form-container-scroller" onScroll={this.handleScroll}>
             <div className="ego-form__introduction">
               <h1>{introductionPanel.title}</h1>
-              <ReactMarkdown
-                source={introductionPanel.text}
-                allowedTypes={ALLOWED_MARKDOWN_TAGS}
-                renderers={defaultMarkdownRenderers}
+              <Markdown
+                label={introductionPanel.text}
               />
             </div>
             <Form

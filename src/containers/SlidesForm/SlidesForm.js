@@ -4,13 +4,11 @@ import cx from 'classnames';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ProgressBar } from '@codaco/ui';
+import { Markdown } from '@codaco/ui/lib/components/Fields';
 import { submit, isValid, isDirty } from 'redux-form';
-import ReactMarkdown from 'react-markdown';
-import { ALLOWED_MARKDOWN_TAGS } from '@codaco/ui/src/utils/config';
 import Swiper from 'react-id-swiper';
 import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
 import useGetFormName from '../../hooks/useGetFormName';
-import defaultMarkdownRenderers from '../../utils/markdownRenderers';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 
 const confirmDialog = {
@@ -202,10 +200,8 @@ const SlidesForm = (props) => {
         <div>
           <div key="alter-form__introduction" className="slide-content alter-form__introduction">
             <h1>{stage.introductionPanel.title}</h1>
-            <ReactMarkdown
-              source={stage.introductionPanel.text}
-              allowedTypes={ALLOWED_MARKDOWN_TAGS}
-              renderers={defaultMarkdownRenderers}
+            <Markdown
+              label={stage.introductionPanel.text}
             />
           </div>
         </div>
