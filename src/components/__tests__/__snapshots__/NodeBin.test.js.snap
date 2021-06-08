@@ -7,11 +7,11 @@ exports[`NodeBin component renders ok 1`] = `
   <withProps(DropTarget)
     store={
       Object {
+        "@@observable": [Function],
         "dispatch": [Function],
         "getState": [Function],
         "replaceReducer": [Function],
         "subscribe": [Function],
-        Symbol(observable): [Function],
       }
     }
     windowRoot={null}

@@ -83,9 +83,6 @@ const getStyleLoaders = (preProcessor) => {
 };
 
 const resolveAlias = {
-  // Use the UMD version of React Markdown, so that we can keep building for
-  // electron-renderer and running other browsers
-  'react-markdown': require.resolve('react-markdown/umd/react-markdown.js'),
   // TODO: Track this issue
   // https://github.com/mapbox/concaveman/issues/18
   tinyqueue: '../tinyqueue/tinyqueue.js',

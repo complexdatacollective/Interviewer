@@ -73,8 +73,7 @@ const App = ({
   }, []);
 
   useEffect(() => {
-    // Apple rejected the app due a combination of arrogance and stupidity.
-    // This is the 'fix'.
+    // Ugh.
     if ((isIOS()) && !crappleWarningHeeded) {
       openDialog({
         type: 'Confirm',
@@ -82,22 +81,17 @@ const App = ({
         message: (
           <>
             <p>
-              In compliance with App Store requirements, by using this app you confirm that all
-              research you undertake using this software has been fully scrutinized
-              and approved by an Institutional Review Board (IRB) or equivalent ethics committee.
-              You must be capable of providing proof of this approval upon request.
-            </p>
-            <p>
-              You also confirm that you have obtained full consent from participants or, in the
-              case of minors, their parent or guardian. Such consent must include the (a) nature,
-              purpose, and duration of the research; (b) procedures, risks, and benefits to the
-              participant; (c) information about confidentiality and handling of data (including any
-              sharing with third parties); (d) a point of contact for participant questions;
-              and (e) the withdrawal process.
-            </p>
-            <p>
-              If you cannot confirm the above, or are unable to comply with these terms, you
-              must cease your use of this app immediately.
+              By using this app you confirm that you have submitted documents
+              to us that demonstrate compliance with all App Store policies regarding
+              human subjects research (including proof of full IRB or ethics board approval), and
+              have been formally approved by us (CODACO) to use this software for your specific
+              research,
+              {' '}
+              <strong>
+                and your specific research only
+              </strong>
+              . You also confirm that you will inform us immediately of
+              any changes to your IRB status that might impact our approval.
             </p>
           </>
         ),
