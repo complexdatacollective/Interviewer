@@ -4,7 +4,6 @@ import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { motion, AnimatePresence } from 'framer-motion';
-import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
 import { Node } from '@codaco/ui';
 import withPrompt from '../../../behaviours/withPrompt';
 import PromptSwiper from '../../PromptSwiper';
@@ -17,6 +16,7 @@ import { actionCreators as sessionsActions } from '../../../ducks/modules/sessio
 import NodeList from '../../../components/NodeList';
 import Panel from '../../../components/Panel';
 import Loading from '../../../components/Loading';
+import useAnimationSettings from '../../../hooks/useAnimationSettings';
 import useDropMonitor from '../../../behaviours/DragAndDrop/useDropMonitor';
 import SearchableList from '../../SearchableList';
 import usePropSelector from './usePropSelector';
@@ -28,24 +28,44 @@ const NodePreview = ({ label }) => (
   <Node label={label} />
 );
 
-const Overlay = ({ children, variants }) => (
-  <motion.div
-    className="name-generator-list-interface__overlay"
-    variants={variants}
-    initial="hidden"
-    animate="visible"
-    exit="hidden"
-  >
-    {children}
-  </motion.div>
-);
+const DropOverlay = ({ isOver }) => {
+  const { duration } = useAnimationSettings();
 
-const WillAccept = () => (
-  <>Drop here to add</>
-);
-const WillDelete = () => (
-  <>Dropping here will add</>
-);
+  const variants = {
+    visible: { opacity: 1, transition: { duration: duration.standard } },
+    hidden: { opacity: 0, transition: { duration: duration.standard } },
+  };
+
+  const iconVariants = {
+    over: {
+      scale: [1, 1.2],
+      transition: { duration: duration.slow, repeat: Infinity, repeatType: 'reverse' },
+    },
+    initial: {
+      scale: 1,
+      transition: { duration: duration.fast },
+    },
+  };
+
+  return (
+    <motion.div
+      className="name-generator-list-interface__overlay"
+      variants={variants}
+      initial="hidden"
+      animate="visible"
+      exit="hidden"
+    >
+      <motion.div
+        variants={iconVariants}
+        initial="initial"
+        animate={isOver ? 'over' : 'initial'}
+      >
+        <Node label="" />
+      </motion.div>
+      <p>Drop here to add to network</p>
+    </motion.div>
+  );
+};
 
 /**
   * Name Generator List Interface
@@ -69,6 +89,8 @@ const NameGeneratorList = (props) => {
 
   const sortOptions = useSortableProperties(stage.sortOptions);
   const searchOptions = useFuseOptions(stage.searchOptions);
+
+  const { duration } = useAnimationSettings();
 
   const [items, excludeItems] = useItems(props);
 
@@ -96,23 +118,13 @@ const NameGeneratorList = (props) => {
     dispatch(sessionsActions.removeNode(id));
   };
 
-  const animationDuration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
-
   const variants = {
     visible: {
       opacity: 1,
-      transition: { duration: animationDuration },
+      transition: { duration: duration.standard },
     },
-    hidden: { opacity: 0, transition: { duration: animationDuration } },
+    hidden: { opacity: 0, transition: { duration: duration.standard } },
   };
-
-  const overlayVariants = {
-    visible: { opacity: 1, transition: { duration: animationDuration } },
-    hidden: { opacity: 0, transition: { duration: animationDuration } },
-  };
-
-  const showWillAccept = willAccept && !isOver;
-  const showWillDelete = willAccept && isOver;
 
   const nodeListClasses = cx(
     'name-generator-list-interface__node-list',
@@ -173,13 +185,11 @@ const NameGeneratorList = (props) => {
                     accepts={({ meta: { itemType } }) => itemType !== 'ADDED_NODES'}
                     onDrop={handleAddNode}
                     items={nodesForPrompt}
+                    hoverColor="transparent"
                   />
                   <AnimatePresence>
                     { willAccept && (
-                      <Overlay variants={overlayVariants}>
-                        { showWillAccept && <WillAccept />}
-                        { showWillDelete && <WillDelete />}
-                      </Overlay>
+                      <DropOverlay isOver={isOver} />
                     )}
                   </AnimatePresence>
                 </div>
@@ -190,7 +200,7 @@ const NameGeneratorList = (props) => {
                 items={items}
                 excludeItems={excludeItems}
                 itemComponent={Card}
-                dragPreviewComponent={NodePreview}
+                dragComponent={NodePreview}
                 sortOptions={sortOptions}
                 searchOptions={searchOptions}
                 itemType="SOURCE_NODES"

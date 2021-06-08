@@ -3,7 +3,7 @@ import uuid from 'uuid';
 import cx from 'classnames';
 import { motion, AnimatePresence } from 'framer-motion';
 import { isEqual } from 'lodash';
-import { Button } from '@codaco/ui';
+import { Button, Node } from '@codaco/ui';
 import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
 import Search from '@codaco/ui/lib/components/Fields/Search';
 import Loading from '../components/Loading';
@@ -11,6 +11,7 @@ import Panel from '../components/Panel';
 import useSort from '../hooks/useSort';
 import useSearch from '../hooks/useSearch';
 import HyperList from './HyperList';
+import useAnimationSettings from '../hooks/useAnimationSettings';
 import useDropMonitor from '../behaviours/DragAndDrop/useDropMonitor';
 
 const modes = {
@@ -24,24 +25,44 @@ const EmptyComponent = () => (
   </div>
 );
 
-const Overlay = ({ children, variants }) => (
-  <motion.div
-    className="searchable-list__overlay"
-    variants={variants}
-    initial="hidden"
-    animate="visible"
-    exit="hidden"
-  >
-    {children}
-  </motion.div>
-);
+const DropOverlay = ({ isOver }) => {
+  const { duration } = useAnimationSettings();
 
-const WillAccept = () => (
-  <>Drop here to remove</>
-);
-const WillDelete = () => (
-  <>Dropping here will remove</>
-);
+  const variants = {
+    visible: { opacity: 1, transition: { duration: duration.standard } },
+    hidden: { opacity: 0, transition: { duration: duration.standard } },
+  };
+
+  const iconVariants = {
+    over: {
+      opacity: [1, 0.3],
+      transition: { duration: duration.slow, repeat: Infinity, repeatType: 'reverse' },
+    },
+    initial: {
+      scale: 1,
+      transition: { duration: duration.fast },
+    },
+  };
+
+  return (
+    <motion.div
+      className="name-generator-list-interface__overlay"
+      variants={variants}
+      initial="hidden"
+      animate="visible"
+      exit="hidden"
+    >
+      <motion.div
+        variants={iconVariants}
+        initial="initial"
+        animate={isOver ? 'over' : 'initial'}
+      >
+        <Node label="" />
+      </motion.div>
+      <p>Drop here to remove from network</p>
+    </motion.div>
+  );
+};
 
 /**
   * SearchableList
@@ -96,8 +117,6 @@ const SearchableList = ({
       </div>
     ) : null;
 
-  const showWillAccept = willAccept && !isOver;
-  const showWillDelete = willAccept && isOver;
   const showTooMany = mode === modes.LARGE && !hasQuery;
   const canSort = sortOptions.sortableProperties.length > 0;
 
@@ -181,10 +200,7 @@ const SearchableList = ({
         </div>
         <AnimatePresence>
           { willAccept && (
-            <Overlay variants={variants}>
-              { showWillAccept && <WillAccept />}
-              { showWillDelete && <WillDelete />}
-            </Overlay>
+            <DropOverlay isOver={isOver} />
           )}
         </AnimatePresence>
       </Panel>
