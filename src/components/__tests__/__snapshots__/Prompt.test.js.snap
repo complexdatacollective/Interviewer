@@ -1,13 +1,39 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Prompt component renders prompt with markdown 1`] = `
-<div
+<ForwardRef(MotionComponent)
+  animate="center"
   className="prompts__prompt"
+  custom={1}
+  exit="exit"
+  initial="enter"
+  transition={
+    Object {
+      "opacity": Object {
+        "duration": 0.2,
+      },
+      "x": Object {
+        "damping": 35,
+        "stiffness": 600,
+        "type": "spring",
+      },
+    }
+  }
+  variants={
+    Object {
+      "center": Object {
+        "opacity": 1,
+        "x": 0,
+      },
+      "enter": [Function],
+      "exit": [Function],
+    }
+  }
 >
   <MarkdownLabel
     className="prompts__prompt-header"
     inline={true}
     label="_prompt_ containing **markdown**"
   />
-</div>
+</ForwardRef(MotionComponent)>
 `;

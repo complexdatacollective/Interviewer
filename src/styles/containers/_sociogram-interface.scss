@@ -25,7 +25,6 @@
 
     .prompts {
       &:not(.prompts--minimized) {
-        @include transition-properties((width, height, visibility, padding), var(--animation-easing), var(--animation-duration-fast));
         width: 16rem;
         height: 17rem;
       }

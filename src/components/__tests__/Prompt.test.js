@@ -10,10 +10,4 @@ describe('Prompt component', () => {
 
     expect(component).toMatchSnapshot();
   });
-
-  it('renders with active class when isActive', () => {
-    expect(shallow(<Prompt isActive />).hasClass('prompts__prompt--active')).toBe(true);
-
-    expect(shallow(<Prompt isActive={false} />).hasClass('prompts__prompt--active')).toBe(false);
-  });
 });

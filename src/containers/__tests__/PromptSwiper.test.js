@@ -7,14 +7,17 @@ import { PromptSwiper } from '../PromptSwiper';
 
 jest.mock('@codaco/ui/lib/utils/CSSVariables');
 
+const prompts = [
+  { text: 'bar' },
+  { text: 'foo' },
+];
+
 const mockProps = {
   forward: () => {},
   backward: () => {},
-  prompts: [
-    { text: 'bar' },
-    { text: 'foo' },
-  ],
+  prompts,
   promptIndex: 0,
+  prompt: prompts[0],
 };
 
 describe('<PromptSwiper />', () => {
@@ -37,8 +40,10 @@ describe('<PromptSwiper />', () => {
 
 describe("when only one prompt, don't show pips", () => {
   it('renders ok', () => {
-    const prompts = [{ text: 'baz' }];
-    const component = shallow(<PromptSwiper {...mockProps} prompts={prompts} />);
+    const prompts2 = [{ text: 'baz' }];
+    const component = shallow(
+      <PromptSwiper {...mockProps} prompts={prompts2} prompt={prompts2[0]} />,
+    );
 
     expect(component.find('.prompts__pips').exists()).toBe(false);
   });

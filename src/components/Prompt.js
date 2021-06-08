@@ -1,6 +1,6 @@
 import React from 'react';
-import cx from 'classnames';
 import PropTypes from 'prop-types';
+import { motion } from 'framer-motion';
 import { MarkdownLabel } from '@codaco/ui/lib/components/Fields';
 
 /**
@@ -8,34 +8,53 @@ import { MarkdownLabel } from '@codaco/ui/lib/components/Fields';
   */
 const Prompt = (props) => {
   const {
+    key,
     label,
-    isActive,
-    isLeaving,
+    direction,
   } = props;
 
-  const classNames = cx(
-    'prompts__prompt',
-    { 'prompts__prompt--active': isActive },
-    { 'prompts__prompt--leaving': isLeaving }, // TODO: rename class
-  );
+  const variants = {
+    enter: (enterDirection = 1) => ({
+      x: enterDirection > 0 ? 400 : -400,
+      opacity: 0,
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+    },
+    exit: (exitDirection = 1) => ({
+      x: exitDirection < 0 ? 400 : -400,
+      opacity: 0,
+    }),
+  };
 
   return (
-    <div className={classNames}>
+    <motion.div
+      key={key}
+      variants={variants}
+      className="prompts__prompt"
+      custom={direction}
+      initial="enter"
+      animate="center"
+      exit="exit"
+      transition={{
+        x: { type: 'spring', stiffness: 600, damping: 35 },
+        opacity: { duration: 0.2 },
+      }}
+    >
       <MarkdownLabel label={label} inline className="prompts__prompt-header" />
-    </div>
+    </motion.div>
   );
 };
 
 Prompt.propTypes = {
   label: PropTypes.string,
-  isActive: PropTypes.bool,
-  isLeaving: PropTypes.bool,
+  direction: PropTypes.number,
 };
 
 Prompt.defaultProps = {
   label: '',
-  isActive: false,
-  isLeaving: false,
+  direction: 1,
 };
 
 export default Prompt;

@@ -14,22 +14,16 @@ exports[`<PromptSwiper /> renders ok 1`] = `
         large={false}
       />
     </div>
-    <div
-      className="prompts__prompts"
+    <AnimatePresence
+      custom={NaN}
+      exitBeforeEnter={true}
     >
       <Prompt
-        isActive={true}
-        isLeaving={false}
+        direction={NaN}
         key="0"
         label="bar"
       />
-      <Prompt
-        isActive={false}
-        isLeaving={true}
-        key="1"
-        label="foo"
-      />
-    </div>
+    </AnimatePresence>
   </div>
 </Fragment>
 `;

@@ -1,125 +1,73 @@
-import React, { Component } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { findIndex } from 'lodash';
+import { AnimatePresence } from 'framer-motion';
 import cx from 'classnames';
 import { Prompt, Pips } from '../components';
 
 /**
-  * Displays a control to swipe through prompts
-  * @extends Component
+  * Displays prompts
   */
-class PromptSwiper extends Component {
-  constructor(props) {
-    super(props);
+const PromptSwiper = (props) => {
+  const {
+    minimizable,
+    promptIndex,
+    prompts,
+    prompt,
+    floating,
+  } = props;
 
-    this.state = {
-      minimized: false,
-    };
+  const [minimized, setMinimized] = useState(false);
 
-    this.handleTap = this.handleTap.bind(this);
-    this.handleSwipe = this.handleSwipe.bind(this);
-  }
+  const prevPromptRef = useRef();
+  useEffect(() => {
+    prevPromptRef.current = promptIndex;
+  }, [promptIndex]);
+  const prevPromptIndex = prevPromptRef.current;
 
-  handleMinimize = () => {
-    const { minimized } = this.state;
-    this.setState({
-      minimized: !minimized,
-    });
-  };
+  const direction = promptIndex - prevPromptIndex;
 
-  handleSwipe(event) {
-    const {
-      forward,
-      backward,
-    } = this.props;
+  const classes = cx(
+    'prompts',
+    {
+      'prompts--floating': floating,
+      'prompts--minimized': minimized,
+    },
+  );
 
-    switch (event.direction) {
-      case 2:
-      case 3:
-        forward();
-        break;
-      case 1:
-      case 4:
-        backward();
-        break;
-      default:
-    }
-  }
+  const handleMinimize = () => setMinimized(!minimized);
 
-  handleTap() {
-    const { forward } = this.props;
-    forward();
-  }
+  const minimizeButton = (
+    <span className="prompts__minimizer" onClick={handleMinimize}>
+      {minimized ? '?' : '—'}
+    </span>
+  );
 
-  render() {
-    const {
-      minimizable,
-      promptIndex,
-      prompts,
-      floating,
-    } = this.props;
-
-    const { minimized } = this.state;
-
-    const promptsRender = prompts.map((prompt, index) => (
-      <Prompt
-        key={index}
-        label={prompt.text}
-        isActive={promptIndex === index}
-        isLeaving={promptIndex === (index - 1)}
-      />
-    ));
-
-    const classes = cx(
-      'prompts',
-      {
-        'prompts--floating': floating,
-        'prompts--minimized': minimized,
-      },
-    );
-
-    const minimizeButton = (
-      <span className="prompts__minimizer" onClick={this.handleMinimize}>
-        {minimized ? '?' : '—'}
-      </span>
-    );
-
-    if (prompts.length <= 1) {
-      return (
-        <>
-          <div className={classes}>
-            <div className="prompts__prompts">
-              {promptsRender}
-            </div>
-          </div>
-          {minimizable && minimizeButton}
-        </>
-      );
-    }
-
-    return (
-      <>
-        <div className={classes}>
+  return (
+    <>
+      <div className={classes}>
+        {(prompts.length > 1) && (
           <div className="prompts__pips">
             <Pips count={prompts.length} currentIndex={promptIndex} />
           </div>
-          {!minimized && (
-          <div className="prompts__prompts">
-            {promptsRender}
-          </div>
-          )}
-        </div>
-        {minimizable && minimizeButton}
-      </>
-    );
-  }
-}
+        )}
+        <AnimatePresence custom={direction} exitBeforeEnter>
+          <Prompt
+            key={promptIndex}
+            label={prompt.text}
+            direction={direction}
+          />
+        </AnimatePresence>
+      </div>
+      {minimizable && minimizeButton}
+    </>
+  );
+};
 
 PromptSwiper.propTypes = {
-  forward: PropTypes.func.isRequired,
-  backward: PropTypes.func.isRequired,
   prompts: PropTypes.any.isRequired,
+  prompt: PropTypes.object.isRequired,
   promptIndex: PropTypes.number.isRequired,
   floating: PropTypes.bool,
   minimizable: PropTypes.bool,
@@ -130,7 +78,7 @@ PromptSwiper.defaultProps = {
   minimizable: false,
 };
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(_, ownProps) {
   return {
     promptIndex: findIndex(ownProps.prompts, ownProps.prompt),
   };
