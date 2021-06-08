@@ -115,7 +115,7 @@ const Sociogram = (props) => {
 Sociogram.propTypes = {
   stage: PropTypes.object.isRequired,
   prompt: PropTypes.object.isRequired,
-  promptId: PropTypes.string.isRequired,
+  promptId: PropTypes.number.isRequired,
   promptForward: PropTypes.func.isRequired,
   promptBackward: PropTypes.func.isRequired,
   handleResetInterface: PropTypes.func.isRequired,

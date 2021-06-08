@@ -8,7 +8,7 @@ import { MarkdownLabel } from '@codaco/ui/lib/components/Fields';
   */
 const Prompt = (props) => {
   const {
-    key,
+    promptIndex,
     label,
     direction,
   } = props;
@@ -30,7 +30,7 @@ const Prompt = (props) => {
 
   return (
     <motion.div
-      key={key}
+      key={promptIndex}
       variants={variants}
       className="prompts__prompt"
       custom={direction}
@@ -48,11 +48,13 @@ const Prompt = (props) => {
 };
 
 Prompt.propTypes = {
+  promptIndex: PropTypes.number,
   label: PropTypes.string,
   direction: PropTypes.number,
 };
 
 Prompt.defaultProps = {
+  promptIndex: 0,
   label: '',
   direction: 1,
 };

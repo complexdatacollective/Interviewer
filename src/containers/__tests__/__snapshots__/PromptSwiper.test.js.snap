@@ -22,6 +22,7 @@ exports[`<PromptSwiper /> renders ok 1`] = `
         direction={NaN}
         key="0"
         label="bar"
+        promptIndex={0}
       />
     </AnimatePresence>
   </div>

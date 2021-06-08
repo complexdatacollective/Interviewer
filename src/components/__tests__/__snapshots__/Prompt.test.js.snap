@@ -7,6 +7,7 @@ exports[`Prompt component renders prompt with markdown 1`] = `
   custom={1}
   exit="exit"
   initial="enter"
+  key="0"
   transition={
     Object {
       "opacity": Object {

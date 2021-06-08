@@ -55,6 +55,7 @@ const PromptSwiper = (props) => {
         <AnimatePresence custom={direction} exitBeforeEnter>
           <Prompt
             key={promptIndex}
+            promptIndex={promptIndex}
             label={prompt.text}
             direction={direction}
           />
