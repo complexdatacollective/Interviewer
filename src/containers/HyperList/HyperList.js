@@ -52,7 +52,7 @@ const getCellRenderer = (Component, DragComponent) => ({
     : variants;
 
   const preview = DragComponent
-    ? <DragComponent {...props} />
+    ? <DragComponent {...props} meta={{ data, id }} />
     : null;
 
   return (

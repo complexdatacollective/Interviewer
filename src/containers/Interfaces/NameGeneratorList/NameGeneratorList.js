@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { compose } from 'redux';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -12,6 +12,7 @@ import { makeNetworkNodesForPrompt, makeGetAdditionalAttributes } from '../../..
 import { makeGetPromptNodeModelData } from '../../../selectors/name-generator';
 import { entityPrimaryKeyProperty } from '../../../ducks/modules/network';
 import { actionCreators as sessionsActions } from '../../../ducks/modules/sessions';
+import { getNodeLabel, getNodeColor } from '../../../selectors/network';
 import NodeList from '../../../components/NodeList';
 import Panel from '../../../components/Panel';
 import Loading from '../../../components/Loading';
@@ -23,11 +24,13 @@ import useFuseOptions from './useFuseOptions';
 import useSortableProperties from './useSortableProperties';
 import useItems from './useItems';
 
-const NodePreview = ({ label }) => (
-  <Node label={label} />
-);
+const nodePreviewForType = (nodeType) => ({ meta }) => {
+  const label = useSelector(getNodeLabel(nodeType, meta.data));
+  const color = useSelector(getNodeColor(nodeType));
+  return <Node label={label} color={color} />;
+};
 
-const DropOverlay = ({ isOver }) => {
+const DropOverlay = ({ isOver, nodeColor }) => {
   const { duration } = useAnimationSettings();
 
   const variants = {
@@ -59,7 +62,7 @@ const DropOverlay = ({ isOver }) => {
         initial="initial"
         animate={isOver ? 'over' : 'initial'}
       >
-        <Node label="" />
+        <Node label="" color={nodeColor} />
       </motion.div>
       <p>Drop here to add to network</p>
     </motion.div>
@@ -81,10 +84,15 @@ const NameGeneratorList = (props) => {
     prompts,
   } = stage;
 
+  const nodeType = stage && stage.subject && stage.subject.type;
+
+  const NodePreview = useMemo(() => nodePreviewForType(nodeType), [nodeType]);
+
   const dispatch = useDispatch();
   const newNodeAttributes = usePropSelector(makeGetAdditionalAttributes, props, true);
   const newNodeModelData = usePropSelector(makeGetPromptNodeModelData, props, true);
   const nodesForPrompt = usePropSelector(makeNetworkNodesForPrompt, props, true);
+  const dropNodeColor = useSelector(getNodeColor(nodeType));
 
   const sortOptions = useSortableProperties(stage.sortOptions);
   const searchOptions = useFuseOptions(stage.searchOptions);
@@ -189,7 +197,7 @@ const NameGeneratorList = (props) => {
                   />
                   <AnimatePresence>
                     { willAccept && (
-                      <DropOverlay isOver={isOver} />
+                      <DropOverlay isOver={isOver} nodeColor={dropNodeColor} />
                     )}
                   </AnimatePresence>
                 </div>
@@ -198,14 +206,15 @@ const NameGeneratorList = (props) => {
             <div className="name-generator-list-interface__search-panel">
               <SearchableList
                 items={items}
+                itemType="SOURCE_NODES" // drop type
                 excludeItems={excludeItems}
                 itemComponent={Card}
                 dragComponent={NodePreview}
                 sortOptions={sortOptions}
                 searchOptions={searchOptions}
-                itemType="SOURCE_NODES"
                 accepts={({ meta: { itemType } }) => itemType !== 'SOURCE_NODES'}
                 onDrop={handleRemoveNode}
+                dropNodeColor={dropNodeColor}
               />
             </div>
           </motion.div>,

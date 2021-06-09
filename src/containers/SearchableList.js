@@ -25,7 +25,7 @@ const EmptyComponent = () => (
   </div>
 );
 
-const DropOverlay = ({ isOver }) => {
+const DropOverlay = ({ isOver, nodeColor }) => {
   const { duration } = useAnimationSettings();
 
   const variants = {
@@ -35,7 +35,7 @@ const DropOverlay = ({ isOver }) => {
 
   const iconVariants = {
     over: {
-      opacity: [1, 0.3],
+      opacity: [1, 0.5],
       transition: { duration: duration.slow, repeat: Infinity, repeatType: 'reverse' },
     },
     initial: {
@@ -46,7 +46,7 @@ const DropOverlay = ({ isOver }) => {
 
   return (
     <motion.div
-      className="name-generator-list-interface__overlay"
+      className="searchable-list__overlay"
       variants={variants}
       initial="hidden"
       animate="visible"
@@ -57,7 +57,7 @@ const DropOverlay = ({ isOver }) => {
         initial="initial"
         animate={isOver ? 'over' : 'initial'}
       >
-        <Node label="" />
+        <Node label="" color={nodeColor} />
       </motion.div>
       <p>Drop here to remove from network</p>
     </motion.div>
@@ -82,6 +82,7 @@ const SearchableList = ({
   onDrop,
   searchOptions,
   sortOptions,
+  dropNodeColor,
 }) => {
   const id = useRef(uuid());
   const [results, query, setQuery, isWaiting, hasQuery] = useSearch(items, searchOptions);
@@ -156,7 +157,7 @@ const SearchableList = ({
             columns={columns}
             emptyComponent={EmptyComponent}
             placeholder={placeholder}
-            itemType={itemType}
+            itemType={itemType} // drop type
             accepts={accepts}
             onDrop={onDrop}
           />
@@ -201,7 +202,7 @@ const SearchableList = ({
         </div>
         <AnimatePresence>
           { willAccept && (
-            <DropOverlay isOver={isOver} />
+            <DropOverlay isOver={isOver} nodeColor={dropNodeColor} />
           )}
         </AnimatePresence>
       </Panel>
@@ -221,6 +222,7 @@ SearchableList.defaultProps = {
   dynamicProperties: {},
   excludeItems: [],
   dragComponent: null,
+  dropNodeColor: null,
 };
 
 export default SearchableList;
