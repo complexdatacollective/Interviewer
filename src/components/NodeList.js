@@ -118,7 +118,7 @@ class NodeList extends Component {
 
     const hoverBackgroundColor = hoverColor || getCSSVariableAsString('--light-background');
 
-    const styles = {}; //isHovering ? { backgroundColor: hoverBackgroundColor } : {};
+    const styles = isHovering ? { backgroundColor: hoverBackgroundColor } : {};
 
     return (
       <TransitionGroup
