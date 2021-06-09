@@ -1,5 +1,5 @@
-$search_height: 6rem;
-$sort_height: 5.5rem;
+$search-height: 6rem;
+$sort-height: 5.5rem;
 
 .searchable-list {
   flex: 1;
@@ -10,7 +10,7 @@ $sort_height: 5.5rem;
     top: 0;
     left: 0;
     width: 100%;
-    height: calc(100% - #{$search_height} + 1rem);
+    height: calc(100% - #{$search-height} + 1rem);
     backdrop-filter: blur(.5em);
     display: flex;
     justify-content: center;
@@ -30,7 +30,7 @@ $sort_height: 5.5rem;
 
     .hyper-list {
       flex: 1;
-      padding: 1rem 1rem $search_height;
+      padding: 1rem 1rem $search-height;
 
       // Using custom overlays instead
       &.hyper-list--drag,
@@ -41,18 +41,18 @@ $sort_height: 5.5rem;
 
     &--can-sort {
       .hyper-list {
-        padding-top: $sort_height;
+        padding-top: $sort-height;
       }
 
       .searchable-list__too-many {
-        top: calc(#{$sort_height});
-        height: calc(100% - #{$sort_height} - #{$search_height} + 2rem);
+        top: calc(#{$sort-height});
+        height: calc(100% - #{$sort-height} - #{$search-height} + 2rem);
       }
     }
 
     &--too-many {
       .hyper-list__grid {
-        overflow-y: hidden !important;
+        overflow-y: hidden !important; // sass-lint:disable-line no-important
       }
     }
   }

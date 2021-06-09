@@ -9,17 +9,8 @@
     position: relative;
   }
 
-  // &__overlay {
-  //   position: absolute;
-  //   top: 0;
-  //   left: 0;
-  //   width: 100%;
-  //   height: 100%;
-  //   display: flex;
-  // }
-
   &__grid {
-    overflow-x: hidden !important;
+    overflow-x: hidden !important; // sass-lint:disable-line no-important
   }
 
   &__item {
