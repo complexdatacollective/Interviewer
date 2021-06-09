@@ -7,7 +7,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Node } from '@codaco/ui';
 import withPrompt from '../../../behaviours/withPrompt';
 import PromptSwiper from '../../PromptSwiper';
-import withExternalData from '../../withExternalData';
 import Card from '../../../components/Card';
 import { makeNetworkNodesForPrompt, makeGetAdditionalAttributes } from '../../../selectors/interface';
 import { makeGetPromptNodeModelData } from '../../../selectors/name-generator';
@@ -91,8 +90,9 @@ const NameGeneratorList = (props) => {
   const searchOptions = useFuseOptions(stage.searchOptions);
 
   const { duration } = useAnimationSettings();
-
-  const [items, excludeItems] = useItems(props);
+  const [isLoading, items, excludeItems] = useItems(props);
+  // const items = [];
+  // const excludeItems = [];
 
   const { isOver, willAccept } = useDropMonitor('node-drop-area')
     || { isOver: false, willAccept: false };
@@ -134,7 +134,7 @@ const NameGeneratorList = (props) => {
   return (
     <div className="name-generator-list-interface">
       <AnimatePresence>
-        {items.length === 0 && (
+        {isLoading && (
           <motion.div
             className="name-generator-list-interface__loading"
             initial="visible"
@@ -146,7 +146,7 @@ const NameGeneratorList = (props) => {
             <Loading message="Loading roster data..." />
           </motion.div>
         )}
-        {items.length > 0 && [
+        {!isLoading && [
           <motion.div
             className="name-generator-list-interface__prompt"
             initial="hidden"
@@ -228,5 +228,5 @@ NameGeneratorList.defaultProps = {
 
 export default compose(
   withPrompt,
-  withExternalData('stage.dataSource', 'externalData'),
+  // withExternalData('stage.dataSource', 'externalData'),
 )(NameGeneratorList);

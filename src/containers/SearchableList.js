@@ -2,7 +2,7 @@ import React, { useMemo, useRef } from 'react';
 import uuid from 'uuid';
 import cx from 'classnames';
 import { motion, AnimatePresence } from 'framer-motion';
-import { isEqual } from 'lodash';
+import { isEqual, get } from 'lodash';
 import { Button, Node } from '@codaco/ui';
 import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
 import Search from '@codaco/ui/lib/components/Fields/Search';
@@ -104,8 +104,9 @@ const SearchableList = ({
   const { isOver, willAccept } = useDropMonitor(`hyper-list-${id}`)
     || { isOver: false, willAccept: false };
 
-  const handleChangeSearch = (e) => {
-    setQuery(e.target.value || '');
+  const handleChangeSearch = (eventOrValue) => {
+    const value = get(eventOrValue, ['target', 'value'], eventOrValue);
+    setQuery(value);
   };
 
   const mode = items.length > 100 ? modes.LARGE : modes.SMALL;

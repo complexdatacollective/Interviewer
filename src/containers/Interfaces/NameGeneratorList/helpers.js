@@ -8,10 +8,16 @@ export const getVariableMap = (state) => {
   return Object
     .keys(codebook.node)
     .flatMap(
-      (type) => Object
-        .keys(codebook.node[type].variables)
-        .map(
-          (id) => [id, codebook.node[type].variables[id].name],
-        ),
+      (type) => {
+        const node = codebook.node[type];
+
+        if (!node.variables) { return []; }
+
+        return Object
+          .keys(node.variables)
+          .map(
+            (id) => [id, node.variables[id].name],
+          );
+      },
     );
 };

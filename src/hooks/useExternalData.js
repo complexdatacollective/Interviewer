@@ -1,0 +1,89 @@
+/* eslint-disable no-underscore-dangle */
+
+import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import objectHash from 'object-hash';
+import { mapValues, mapKeys } from 'lodash';
+import loadExternalData from '../utils/loadExternalData';
+import getParentKeyByNameValue from '../utils/getParentKeyByNameValue';
+import { entityAttributesProperty, entityPrimaryKeyProperty } from '../ducks/modules/network';
+
+const getSessionMeta = (state) => {
+  const session = state.sessions[state.activeSessionId];
+  const { protocolUID } = session;
+  const protocolCodebook = state.installedProtocols[protocolUID].codebook;
+  const { assetManifest } = state.installedProtocols[protocolUID];
+  const assetFiles = mapValues(
+    assetManifest,
+    (asset) => asset.source,
+  );
+
+  return {
+    protocolUID,
+    assetManifest,
+    assetFiles,
+    protocolCodebook,
+  };
+};
+
+const withUUID = (node) => objectHash(node);
+
+// Replace string keys with UUIDs in codebook, according to stage subject.
+const makeVariableUUIDReplacer = (
+  protocolCodebook,
+  stageSubject,
+) => (node) => new Promise((resolve) => {
+  setTimeout(() => {
+    const stageNodeType = stageSubject.type;
+    const codebookDefinition = protocolCodebook.node[stageNodeType] || {};
+
+    const uuid = withUUID(node);
+
+    const attributes = mapKeys(
+      node.attributes,
+      (attributeValue, attributeKey) => getParentKeyByNameValue(
+        codebookDefinition.variables,
+        attributeKey,
+      ),
+    );
+
+    resolve({
+      type: stageNodeType,
+      [entityPrimaryKeyProperty]: uuid,
+      [entityAttributesProperty]: attributes,
+    });
+  }, 0);
+});
+
+const useExternalData = (dataSource, subject) => {
+  const {
+    protocolUID,
+    assetManifest,
+    assetFiles,
+    protocolCodebook,
+  } = useSelector(getSessionMeta);
+
+  const [externalData, setExternalData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (!dataSource) { return; }
+    // This is where we could set the loading state for URL assets
+    setExternalData(null);
+    setIsLoading(true);
+
+    const sourceFile = assetFiles[dataSource];
+    const { type } = assetManifest[dataSource];
+
+    const variableUUIDReplacer = makeVariableUUIDReplacer(protocolCodebook, subject);
+
+    loadExternalData(protocolUID, sourceFile, type)
+      .then(({ nodes }) => Promise.all(nodes.map(variableUUIDReplacer)))
+      .then((formattedData) => setExternalData(formattedData))
+      .then(() => setIsLoading(false));
+  }, [dataSource]);
+
+  return [externalData, isLoading];
+};
+
+export default useExternalData;
