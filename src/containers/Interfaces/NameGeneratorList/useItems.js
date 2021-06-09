@@ -1,11 +1,9 @@
 import { useMemo } from 'react';
-import { shallowEqual } from 'react-redux';
-import { differenceBy } from 'lodash';
-import { makeGetNodeLabel, makeGetNodeTypeDefinition } from '../../../selectors/network';
 import {
-  makeNetworkNodesForPrompt,
-  makeNetworkNodesForOtherPrompts,
-} from '../../../selectors/interface';
+  makeGetNodeLabel,
+  makeGetNodeTypeDefinition,
+  getNetworkNodes,
+} from '../../../selectors/network';
 import { getCardAdditionalProperties } from '../../../selectors/name-generator';
 import { entityPrimaryKeyProperty, getEntityAttributes } from '../../../ducks/modules/network';
 import getParentKeyByNameValue from '../../../utils/getParentKeyByNameValue';
@@ -37,24 +35,15 @@ const useItems = (props) => {
   const [externalData, isLoading] = useExternalData(props.stage.dataSource, props.stage.subject);
   const labelGetter = usePropSelector(makeGetNodeLabel, props, true);
   const nodeTypeDefinition = usePropSelector(makeGetNodeTypeDefinition, props, true);
-  const nodesForPrompt = usePropSelector(makeNetworkNodesForPrompt, props, true);
-  const nodesForOtherPrompts = usePropSelector(makeNetworkNodesForOtherPrompts, props, true);
+  const networkNodes = usePropSelector(getNetworkNodes, props);
   const visibleSupplementaryFields = usePropSelector(getCardAdditionalProperties, props);
+  const excludeItems = networkNodes.map((item) => item[entityPrimaryKeyProperty]);
 
-  const nodes = useMemo(() => {
-    if (externalData === null) { return []; }
+  const items = useMemo(() => {
+    if (!externalData) { return []; }
 
-    return differenceBy(
-      externalData,
-      nodesForOtherPrompts,
-      entityPrimaryKeyProperty,
-    );
-  }, [externalData, nodesForOtherPrompts]);
-  const excludeItems = nodesForPrompt.map((item) => item[entityPrimaryKeyProperty]);
-
-  const items = useMemo(() => nodes
-    .map(
-      (item) => ({
+    return externalData
+      .map((item) => ({
         id: item[entityPrimaryKeyProperty],
         data: { ...item.attributes },
         props: {
@@ -65,8 +54,8 @@ const useItems = (props) => {
             visibleSupplementaryFields,
           })(item),
         },
-      }),
-    ), [nodesForPrompt, nodes, labelGetter, nodeTypeDefinition, visibleSupplementaryFields]);
+      }));
+  }, [externalData, labelGetter, nodeTypeDefinition, visibleSupplementaryFields]);
 
   return [isLoading, items, excludeItems];
 };
