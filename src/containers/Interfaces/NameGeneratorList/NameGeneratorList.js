@@ -25,9 +25,9 @@ import useSortableProperties from './useSortableProperties';
 import useItems from './useItems';
 
 const nodePreviewForType = (nodeType) => ({ meta }) => {
-  const label = useSelector(getNodeLabel(nodeType, meta.data));
+  const getLabel = useSelector((state) => getNodeLabel(state, nodeType));
   const color = useSelector(getNodeColor(nodeType));
-  return <Node label={label} color={color} />;
+  return <Node label={getLabel(meta.data)} color={color} />;
 };
 
 const DropOverlay = ({ isOver, nodeColor }) => {

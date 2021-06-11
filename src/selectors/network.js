@@ -99,10 +99,10 @@ export const makeGetNodeLabel = () => createDeepEqualSelector(
 );
 
 // Pure state selector variant of makeGetNodeLabel
-export const getNodeLabel = (nodeType, nodeAttributes) => (state) => {
+export const getNodeLabel = (state, nodeType) => {
   const codebook = getProtocolCodebook(state);
   const nodeTypeDefinition = get(codebook, ['node', nodeType]);
-  return labelLogic(nodeTypeDefinition, nodeAttributes);
+  return (nodeAttributes) => labelLogic(nodeTypeDefinition, nodeAttributes);
 };
 
 export const makeGetNodeColor = () => createDeepEqualSelector(

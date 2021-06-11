@@ -1,8 +1,10 @@
 import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
+import { get } from 'lodash';
 import {
-  makeGetNodeLabel,
   makeGetNodeTypeDefinition,
   getNetworkNodes,
+  getNodeLabel,
 } from '../../../selectors/network';
 import { getCardAdditionalProperties } from '../../../selectors/name-generator';
 import { entityPrimaryKeyProperty, getEntityAttributes } from '../../../ducks/modules/network';
@@ -33,7 +35,8 @@ export const detailsWithVariableUUIDs = (props) => (node) => {
 // Returns all nodes associated with lists (external data)
 const useItems = (props) => {
   const [externalData, isLoading] = useExternalData(props.stage.dataSource, props.stage.subject);
-  const labelGetter = usePropSelector(makeGetNodeLabel, props, true);
+  const nodeType = get(props, 'stage.subject.type');
+  const getLabel = useSelector((state) => getNodeLabel(state, nodeType));
   const nodeTypeDefinition = usePropSelector(makeGetNodeTypeDefinition, props, true);
   const networkNodes = usePropSelector(getNetworkNodes, props);
   const visibleSupplementaryFields = usePropSelector(getCardAdditionalProperties, props);
@@ -47,7 +50,7 @@ const useItems = (props) => {
         id: item[entityPrimaryKeyProperty],
         data: { ...item.attributes },
         props: {
-          label: labelGetter(item),
+          label: getLabel(item),
           details: detailsWithVariableUUIDs({
             ...props,
             nodeTypeDefinition,
@@ -55,7 +58,7 @@ const useItems = (props) => {
           })(item),
         },
       }));
-  }, [externalData, labelGetter, nodeTypeDefinition, visibleSupplementaryFields]);
+  }, [externalData, getLabel, nodeTypeDefinition, visibleSupplementaryFields]);
 
   return [isLoading, items, excludeItems];
 };
