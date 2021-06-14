@@ -21,7 +21,7 @@ const getDataIndex = (columns, { rowIndex, columnIndex }) => (
   (rowIndex * columns) + columnIndex
 );
 
-const getCellRenderer = (Component, DragComponent, getOffset) => ({
+const getCellRenderer = (Component, DragComponent) => ({
   columnIndex,
   rowIndex,
   style,
@@ -69,16 +69,13 @@ const getCellRenderer = (Component, DragComponent, getOffset) => ({
     ? <DragComponent {...props} meta={{ data, id }} />
     : null;
 
-  const offset = getOffset(id);
-  const delay = offset < 0 ? 0 : 0.2 * duration.fast * offset;
-
   return (
     <motion.div
       className="hyper-list__item"
       style={style}
       initial="hidden"
       animate="visible"
-      transition={{ duration: duration.standard, delay }}
+      transition={{ duration: duration.slow, delay: duration.fast }}
       variants={cellVariants}
       key={id}
     >
@@ -127,37 +124,13 @@ const HyperList = ({
   willAccept,
   isOver,
 }) => {
-  const known = useRef([]);
-  const offset = useRef(0);
-  const scrollingTimer = useRef(null);
-
   const itemKey = useCallback((index) => {
     const dataIndex = getDataIndex(columns, index);
     return (items[dataIndex] && items[dataIndex].id) || dataIndex;
   }, [columns]);
 
-  const detectScroll = useCallback(() => {
-    clearTimeout(scrollingTimer.current);
-
-    scrollingTimer.current = setTimeout(() => {
-      offset.current = 0;
-      known.current = [];
-    }, 50);
-  });
-
-  const getOffset = useCallback((id) => {
-    const knownOffset = known.current.find(([knownId]) => knownId === id);
-    if (knownOffset) {
-      return knownOffset[1];
-    }
-
-    offset.current += 1;
-    known.current.push([id, offset.current]);
-    return offset.current;
-  });
-
   const CellRenderer = useMemo(
-    () => getCellRenderer(DragSource(ItemComponent), DragComponent, getOffset),
+    () => getCellRenderer(DragSource(ItemComponent), DragComponent),
     [ItemComponent, DragComponent, columns],
   );
 
@@ -209,7 +182,6 @@ const HyperList = ({
                   className="hyper-list__grid"
                   height={height}
                   width={width}
-                  onScroll={detectScroll}
                   itemKey={itemKey}
                   {...gridProps}
                 >
