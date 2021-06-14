@@ -5,12 +5,13 @@ import { withHandlers, compose } from 'recompose';
 import { push } from 'connected-react-router';
 import { motion } from 'framer-motion';
 import { Button } from '@codaco/ui/lib/components';
-import { Number } from '@codaco/ui/lib/components/Fields';
+import { Number, Toggle } from '@codaco/ui/lib/components/Fields';
 import { importProtocolFromURI } from '../../../utils/protocol/importProtocol';
 import { actionCreators as dialogsActions } from '../../../ducks/modules/dialogs';
 import { actionCreators as mockActions } from '../../../ducks/modules/mock';
 import { getAdditionalAttributesForCurrentPrompt, getNodeEntryForCurrentPrompt } from '../../../selectors/session';
 import { DEVELOPMENT_PROTOCOL_URL } from '../../../config';
+import { actionCreators as deviceSettingsActions } from '../../../ducks/modules/deviceSettings';
 import TabItemVariants from './TabItemVariants';
 
 const DeveloperTools = (props) => {
@@ -20,6 +21,8 @@ const DeveloperTools = (props) => {
     handleAddMockNodes,
     shouldShowMocksItem,
     generateMockSessions,
+    toggleSetting,
+    enableExperimentalTTS,
   } = props;
 
   const [sessionCount, setSessionCount] = useState(10);
@@ -144,6 +147,22 @@ const DeveloperTools = (props) => {
           Generate
         </Button>
       </motion.article>
+      <motion.article variants={TabItemVariants} className="settings-element">
+        <Toggle
+          input={{
+            value: enableExperimentalTTS,
+            onChange: () => toggleSetting('enableExperimentalTTS'),
+          }}
+        />
+        <div>
+          <h2>Use experimental text-to-speech for prompts</h2>
+          <p>
+            This experimental features enables prompt text to be read aloud by the devices
+            native text-to-speech (TTS) engine. This is an experimental feature that may not
+            work correctly.
+          </p>
+        </div>
+      </motion.article>
     </>
   );
 };
@@ -174,6 +193,7 @@ const mapDispatchToProps = (dispatch) => ({
   generateMockNodes: bindActionCreators(mockActions.generateMockNodes, dispatch),
   generateMockSessions: bindActionCreators(mockActions.generateMockSessions, dispatch),
   openDialog: bindActionCreators(dialogsActions.openDialog, dispatch),
+  toggleSetting: (setting) => dispatch(deviceSettingsActions.toggleSetting(setting)),
   resetState: () => dispatch(push('/reset')),
 });
 
@@ -182,6 +202,7 @@ const mapStateToProps = (state) => ({
   nodeVariableEntry: getNodeEntryForCurrentPrompt(state),
   shouldShowMocksItem: !!getNodeEntryForCurrentPrompt(state),
   additionalMockAttributes: getAdditionalAttributesForCurrentPrompt(state),
+  enableExperimentalTTS: state.deviceSettings.enableExperimentalTTS,
 });
 
 export default compose(

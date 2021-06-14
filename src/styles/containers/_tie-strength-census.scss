@@ -38,9 +38,7 @@
   }
 
   &__prompt {
-    height: 8rem;
-    width: 100%;
-    display: flex;
+    @include interface-prompt;
   }
 
   &__main {

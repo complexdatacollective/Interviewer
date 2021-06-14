@@ -1,19 +1,99 @@
-import React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { get } from 'lodash';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withHandlers, compose } from 'recompose';
+import { AnimatePresence, motion } from 'framer-motion';
 import PropTypes from 'prop-types';
+import MinimizeIcon from '@material-ui/icons/Minimize';
+import Prompts from '../../components/Prompts';
 import withPrompt from '../../behaviours/withPrompt';
 import Canvas from '../../components/Canvas/Canvas';
 import NodeBucket from '../Canvas/NodeBucket';
 import NodeLayout from '../Canvas/NodeLayout';
 import EdgeLayout from '../../components/Canvas/EdgeLayout';
 import Background from '../Canvas/Background';
-import PromptObstacle from '../Canvas/PromptObstacle';
-import ButtonObstacle from '../Canvas/ButtonObstacle';
 import { actionCreators as resetActions } from '../../ducks/modules/reset';
 import { makeGetDisplayEdges, makeGetNextUnplacedNode, makeGetPlacedNodes } from '../../selectors/canvas';
+
+const CollapsablePrompts = (props) => {
+  const {
+    prompts,
+    currentPromptIndex,
+    interfaceRef,
+  } = props;
+  const ref = useRef(null);
+  const [minimized, setMinimized] = useState(false);
+
+  const variants = {
+    minimized: {
+      height: 0,
+      transition: {
+        duration: 0.5,
+      },
+    },
+    normal: {
+      height: 'auto',
+      transition: {
+        duration: 0.5,
+        when: 'afterChildren',
+      },
+    },
+  };
+
+  // Reset the minimization when the prompt changes
+  useEffect(() => {
+    if (minimized) {
+      // There was an animation 'jank' without this additional
+      // timeout. I don't like it, but 'delay' in the variants
+      // didn't work :/
+      setTimeout(() => setMinimized(false), 250);
+    }
+  }, [currentPromptIndex]);
+
+  return (
+    <motion.div
+      ref={ref}
+      className="sociogram-interface__prompts"
+      drag
+      dragConstraints={interfaceRef}
+    >
+      <motion.div
+        className="sociogram-interface__prompts__header"
+        onTap={() => setMinimized(!minimized)}
+      >
+        { minimized ? (
+          <motion.div
+            style={{ width: '100%' }}
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto', transition: { opacity: { delay: 0.5 } } }}
+          >
+            <h4>Tap to show the prompt</h4>
+          </motion.div>
+        ) : (
+          <MinimizeIcon style={{ cursor: 'hand' }} />
+        )}
+      </motion.div>
+      <motion.div
+        animate={minimized ? 'minimized' : 'normal'}
+        variants={variants}
+      >
+        <AnimatePresence initial={false}>
+          { !minimized && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ delay: 0.5 }}
+            >
+              <Prompts prompts={prompts} currentPrompt={currentPromptIndex} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+    </motion.div>
+  );
+};
 
 const withResetInterfaceHandler = withHandlers({
   handleResetInterface: ({
@@ -36,8 +116,6 @@ const withResetInterfaceHandler = withHandlers({
   */
 const Sociogram = (props) => {
   const {
-    promptForward,
-    promptBackward,
     prompt,
     promptId,
     stage,
@@ -46,6 +124,8 @@ const Sociogram = (props) => {
     nextUnplacedNode,
     edges,
   } = props;
+
+  const interfaceRef = useRef(null);
 
   // Behaviour Configuration
   const allowHighlighting = get(prompt, 'highlight.allowHighlighting', false);
@@ -62,16 +142,12 @@ const Sociogram = (props) => {
   const skewedTowardCenter = get(stage, 'background.skewedTowardCenter');
 
   return (
-    <div className="sociogram-interface">
-      <PromptObstacle
-        id="PROMPTS_OBSTACLE"
-        className="sociogram-interface__prompts"
-        forward={promptForward}
-        backward={promptBackward}
+    <div className="sociogram-interface" ref={interfaceRef}>
+      <CollapsablePrompts
         prompts={stage.prompts}
-        prompt={prompt}
-        floating
-        minimizable
+        currentPromptIndex={prompt.id}
+        handleResetInterface={handleResetInterface}
+        interfaceRef={interfaceRef}
       />
       <div className="sociogram-interface__concentric-circles">
         <Canvas className="concentric-circles" id="concentric-circles">
@@ -100,14 +176,6 @@ const Sociogram = (props) => {
           />
         </Canvas>
       </div>
-      <div style={{ position: 'absolute', right: '3rem', bottom: '3rem' }}>
-        <ButtonObstacle
-          id="RESET_BUTTON_OBSTACLE"
-          label="RESET"
-          size="small"
-          onClick={handleResetInterface}
-        />
-      </div>
     </div>
   );
 };
@@ -116,8 +184,6 @@ Sociogram.propTypes = {
   stage: PropTypes.object.isRequired,
   prompt: PropTypes.object.isRequired,
   promptId: PropTypes.number.isRequired,
-  promptForward: PropTypes.func.isRequired,
-  promptBackward: PropTypes.func.isRequired,
   handleResetInterface: PropTypes.func.isRequired,
   nodes: PropTypes.array.isRequired,
   edges: PropTypes.array.isRequired,

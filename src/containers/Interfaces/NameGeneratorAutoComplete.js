@@ -3,6 +3,7 @@ import { map } from 'lodash';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import Prompts from '../../components/Prompts';
 import withPrompt from '../../behaviours/withPrompt';
 import Search from '../Search';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
@@ -10,7 +11,6 @@ import { entityAttributesProperty, entityPrimaryKeyProperty } from '../../ducks/
 import { makeGetSubjectType, makeNetworkNodesForPrompt, makeGetAdditionalAttributes } from '../../selectors/interface';
 import { getNetworkNodes, makeGetNodeTypeDefinition, makeGetNodeLabel } from '../../selectors/network';
 import { getCardAdditionalProperties, makeGetNodeIconName, makeGetPromptNodeModelData } from '../../selectors/name-generator';
-import PromptSwiper from '../PromptSwiper';
 import { NodeBin, NodeList } from '../../components';
 import getParentKeyByNameValue from '../../utils/getParentKeyByNameValue';
 
@@ -46,8 +46,6 @@ class NameGeneratorAutoComplete extends Component {
       nodesForPrompt,
       nodeType,
       prompt,
-      promptBackward,
-      promptForward,
       stage,
       details,
       nodeTypeDefinition,
@@ -71,10 +69,8 @@ class NameGeneratorAutoComplete extends Component {
     return (
       <div className={baseClass}>
         <div className={`${baseClass}__prompt`}>
-          <PromptSwiper
-            forward={promptForward}
-            backward={promptBackward}
-            prompt={prompt}
+          <Prompts
+            currentPrompt={prompt.id}
             prompts={stage.prompts}
           />
         </div>
@@ -129,8 +125,6 @@ NameGeneratorAutoComplete.propTypes = {
   nodeIconName: PropTypes.string.isRequired,
   nodeType: PropTypes.string.isRequired,
   prompt: PropTypes.object.isRequired,
-  promptBackward: PropTypes.func.isRequired,
-  promptForward: PropTypes.func.isRequired,
   stage: PropTypes.object.isRequired,
   details: PropTypes.array.isRequired,
 };

@@ -18,26 +18,37 @@
   }
 
   &__prompts {
+    display: flex;
+    flex-direction: column;
     position: absolute;
     z-index: var(--z-panel);
-    bottom: 0;
-    right: 0;
+    background: var(--light-background);
+    width: 20rem;
+    bottom: unit(1);
+    right: unit(2);
+    border-bottom: 5px solid var(--primary);
+    border-radius: var(--border-radius);
+    box-shadow: 0 0 4rem 0 var(--modal-window-box-shadow);
+    cursor: move;
+    overflow: hidden;
+
+    &__header {
+      display: flex;
+      justify-content: flex-end;
+      text-align: center;
+      padding: unit(1) unit(2);
+    }
 
     .prompts {
-      &:not(.prompts--minimized) {
-        width: 16rem;
-        height: 17rem;
-      }
+      --number-of-lines: 13;
+      --prompt-text-size: 1.4rem;
 
-      &__prompt-header {
-        p {
-          height: auto;
-          overflow: hidden;
+      padding: 0 unit(2);
+      padding-bottom: unit(2);
+      line-height: 1.1;
 
-          &::after {
-            display: none;
-          }
-        }
+      .prompt {
+        flex: 0 0 auto;
       }
     }
   }

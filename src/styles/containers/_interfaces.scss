@@ -1,7 +1,11 @@
 // Shared mixins for interfaces.
 
 @mixin interface-prompt {
-  flex: 0 0 var(--interface-prompt-flex-basis);
+  // flex: 0 0 var(--interface-prompt-flex-basis);
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @mixin interface-centering($margins: true) {
