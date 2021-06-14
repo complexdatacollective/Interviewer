@@ -5,9 +5,9 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Node } from '@codaco/ui';
+import { DataCard } from '@codaco/ui/lib/components/Cards';
 import withPrompt from '../../../behaviours/withPrompt';
 import PromptSwiper from '../../PromptSwiper';
-import Card from '../../../components/Card';
 import { makeNetworkNodesForPrompt, makeGetAdditionalAttributes } from '../../../selectors/interface';
 import { makeGetPromptNodeModelData } from '../../../selectors/name-generator';
 import { entityPrimaryKeyProperty } from '../../../ducks/modules/network';
@@ -99,8 +99,6 @@ const NameGeneratorList = (props) => {
 
   const { duration } = useAnimationSettings();
   const [isLoading, items, excludeItems] = useItems(props);
-  // const items = [];
-  // const excludeItems = [];
 
   const { isOver, willAccept } = useDropMonitor('node-drop-area')
     || { isOver: false, willAccept: false };
@@ -208,7 +206,7 @@ const NameGeneratorList = (props) => {
                 items={items}
                 itemType="SOURCE_NODES" // drop type
                 excludeItems={excludeItems}
-                itemComponent={Card}
+                itemComponent={DataCard}
                 dragComponent={NodePreview}
                 sortOptions={sortOptions}
                 searchOptions={searchOptions}

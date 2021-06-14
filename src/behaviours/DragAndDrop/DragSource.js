@@ -111,7 +111,11 @@ const dragSource = (WrappedComponent) => ({
 
   return (
     <div style={styles()} className="draggable" ref={node}>
-      <WrappedComponent {...rest} scrollDirection={scrollDirection} />
+      <WrappedComponent
+        {...rest}
+        allowDrag={allowDrag}
+        scrollDirection={scrollDirection}
+      />
       { preview && (
         <div
           ref={previewRef}

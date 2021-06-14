@@ -29,7 +29,13 @@ export const detailsWithVariableUUIDs = (props) => (node) => {
     variable: getParentKeyByNameValue(nodeTypeVariables, field.variable),
   }));
 
-  return withUUIDReplacement.map((field) => ({ [field.label]: attrs[field.variable] }));
+  return withUUIDReplacement.reduce(
+    (memo, field) => ({
+      ...memo,
+      [field.label]: attrs[field.variable],
+    }),
+    {},
+  );
 };
 
 // Returns all nodes associated with lists (external data)
@@ -50,8 +56,8 @@ const useItems = (props) => {
         id: item[entityPrimaryKeyProperty],
         data: { ...item.attributes },
         props: {
-          label: getLabel(item),
-          details: detailsWithVariableUUIDs({
+          label: getLabel(item.attributes),
+          data: detailsWithVariableUUIDs({
             ...props,
             nodeTypeDefinition,
             visibleSupplementaryFields,
