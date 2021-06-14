@@ -2,6 +2,7 @@ import React, {
   useContext,
   useMemo,
   useCallback,
+  useRef,
 } from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { motion, useReducedMotion } from 'framer-motion';
@@ -10,33 +11,46 @@ import { compose, defaultProps } from 'recompose';
 import cx from 'classnames';
 import useGridSizer from './useGridSizer';
 import { DragSource, DropTarget, MonitorDropTarget } from '../../behaviours/DragAndDrop';
+import useAnimationSettings from '../../hooks/useAnimationSettings';
 
 const ListContext = React.createContext({ items: [], columns: 0 });
 
-const variants = {
-  visible: { scale: 1, opacity: 1, transition: { delay: 0.15 } },
-  hidden: { scale: 0, opacity: 0.5, transition: { delay: 0.15 } },
-};
-
-const reducedMotionVariants = {
-  visible: { opacity: 1, transition: { delay: 0.15 } },
-  hidden: { opacity: 0, transition: { delay: 0.15 } },
-};
-
 const NoopComponent = () => null;
 
-const getCellRenderer = (Component, DragComponent) => ({
+const getDataIndex = (columns, { rowIndex, columnIndex }) => (
+  (rowIndex * columns) + columnIndex
+);
+
+const getCellRenderer = (Component, DragComponent, getOffset) => ({
   columnIndex,
   rowIndex,
   style,
 }) => {
+  const { duration } = useAnimationSettings();
+
+  const variants = {
+    visible: {
+      scale: 1,
+      opacity: 1,
+    },
+    hidden: {
+      scale: 0,
+      opacity: 0.5,
+    },
+  };
+
+  const reducedMotionVariants = {
+    visible: { opacity: 1 },
+    hidden: { opacity: 0 },
+  };
+
   const {
     items,
     columns,
     itemType,
     dynamicProperties,
   } = useContext(ListContext);
-  const dataIndex = (rowIndex * columns) + columnIndex;
+  const dataIndex = getDataIndex(columns, { rowIndex, columnIndex });
   const item = items[dataIndex];
   const reducedMotion = useReducedMotion();
 
@@ -55,12 +69,16 @@ const getCellRenderer = (Component, DragComponent) => ({
     ? <DragComponent {...props} meta={{ data, id }} />
     : null;
 
+  const offset = getOffset(id);
+  const delay = offset < 0 ? 0 : 0.2 * duration.fast * offset;
+
   return (
     <motion.div
       className="hyper-list__item"
       style={style}
       initial="hidden"
       animate="visible"
+      transition={{ duration: duration.standard, delay }}
       variants={cellVariants}
       key={id}
     >
@@ -109,8 +127,37 @@ const HyperList = ({
   willAccept,
   isOver,
 }) => {
+  const known = useRef([]);
+  const offset = useRef(0);
+  const scrollingTimer = useRef(null);
+
+  const itemKey = useCallback((index) => {
+    const dataIndex = getDataIndex(columns, index);
+    return (items[dataIndex] && items[dataIndex].id) || dataIndex;
+  }, [columns]);
+
+  const detectScroll = useCallback(() => {
+    clearTimeout(scrollingTimer.current);
+
+    scrollingTimer.current = setTimeout(() => {
+      offset.current = 0;
+      known.current = [];
+    }, 50);
+  });
+
+  const getOffset = useCallback((id) => {
+    const knownOffset = known.current.find(([knownId]) => knownId === id);
+    if (knownOffset) {
+      return knownOffset[1];
+    }
+
+    offset.current += 1;
+    known.current.push([id, offset.current]);
+    return offset.current;
+  });
+
   const CellRenderer = useMemo(
-    () => getCellRenderer(DragSource(ItemComponent), DragComponent),
+    () => getCellRenderer(DragSource(ItemComponent), DragComponent, getOffset),
     [ItemComponent, DragComponent, columns],
   );
 
@@ -162,6 +209,8 @@ const HyperList = ({
                   className="hyper-list__grid"
                   height={height}
                   width={width}
+                  onScroll={detectScroll}
+                  itemKey={itemKey}
                   {...gridProps}
                 >
                   {CellRenderer}
