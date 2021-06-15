@@ -1,5 +1,6 @@
 $search-height: 6rem;
 $sort-height: 5.5rem;
+$overlay-color: rgb(54, 49, 95);
 
 .searchable-list {
   flex: 1;
@@ -11,8 +12,7 @@ $sort-height: 5.5rem;
     left: 0;
     width: 100%;
     height: calc(100% - #{$search-height} + 1rem);
-    background: rgb(54, 49, 95);
-    background: linear-gradient(180deg, rgba(54, 49, 95, .33) 0%, rgba(54, 49, 95, 1) 100%);
+    background: linear-gradient(180deg, transparentize($overlay-color, 0.66) 0%, $overlay-color 100%);
     backdrop-filter: blur(.5em);
     display: flex;
     justify-content: center;
