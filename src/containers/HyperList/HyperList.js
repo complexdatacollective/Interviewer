@@ -2,7 +2,6 @@ import React, {
   useContext,
   useMemo,
   useCallback,
-  useRef,
 } from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { motion, useReducedMotion } from 'framer-motion';
@@ -75,7 +74,7 @@ const getCellRenderer = (Component, DragComponent) => ({
       style={style}
       initial="hidden"
       animate="visible"
-      transition={{ duration: duration.slow, delay: duration.fast }}
+      transition={{ duration: duration.slow }}
       variants={cellVariants}
       key={id}
     >
