@@ -118,7 +118,7 @@ class NameGeneratorList extends Component {
       <div className="name-generator-list-interface">
         <div className="name-generator-list-interface__prompt">
           <Prompts
-            currentPromptIndex={prompt.id}
+            currentPrompt={prompt.id}
             prompts={prompts}
           />
         </div>

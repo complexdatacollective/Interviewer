@@ -1,8 +1,6 @@
 .name-generator-interface {
   @include interface-centering;
-
   height: 100%;
-  padding: 1rem 0 2rem;
   overflow: hidden;
   display: flex;
   flex-direction: column;

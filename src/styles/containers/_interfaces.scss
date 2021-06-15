@@ -9,6 +9,7 @@
 }
 
 @mixin interface-centering($margins: true) {
+  padding: unit(2) 0;
   $margin: if($margins, unit(4), 0px); // sass-lint:disable-line zero-unit
   margin-left: calc(#{$margin} + var(--session-panel-width));
   margin-right: $margin;
