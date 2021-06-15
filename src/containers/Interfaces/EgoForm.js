@@ -93,9 +93,7 @@ const EgoForm = ({
     // iOS inertial scrolling takes values out of range
     const clampedScrollProgress = clamp(newScrollProgress, 0, 1);
 
-    const nextIsReady = clampedScrollProgress === 1;
-
-    console.log({ clampedScrollProgress, nextIsReady });
+    const nextIsReady = isFormValid() && clampedScrollProgress === 1;
 
     updateIsReady(nextIsReady);
   };
