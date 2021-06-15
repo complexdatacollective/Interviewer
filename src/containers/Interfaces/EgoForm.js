@@ -1,18 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import cx from 'classnames';
 import { clamp } from 'lodash';
 import { connect } from 'react-redux';
-import { ProgressBar, Scroller } from '@codaco/ui';
+import { Scroller } from '@codaco/ui';
 import { Markdown } from '@codaco/ui/lib/components/Fields';
 import { submit, isValid, isDirty } from 'redux-form';
-import { isIOS } from '../../utils/Environment';
 import Form from '../Form';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { getNetworkEgo } from '../../selectors/network';
 import { getSessionProgress } from '../../selectors/session';
 import { entityAttributesProperty } from '../../ducks/modules/network';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
+import useReadyForNextStage from '../../hooks/useReadyForNextStage';
 
 const confirmDialog = {
   type: 'Confirm',
@@ -37,9 +36,7 @@ const EgoForm = ({
   submitForm: reduxFormSubmit,
   updateEgo,
 }) => {
-  const [state, setState] = useState({ scrollProgress: 0 });
-
-  const { scrollProgress } = state;
+  const [, updateIsReady] = useReadyForNextStage();
 
   const submitForm = () => {
     reduxFormSubmit(formName);
@@ -96,17 +93,12 @@ const EgoForm = ({
     // iOS inertial scrolling takes values out of range
     const clampedScrollProgress = clamp(newScrollProgress, 0, 1);
 
-    if (scrollProgress !== clampedScrollProgress) {
-      setState({ scrollProgress: clampedScrollProgress });
-    }
-  };
+    const nextIsReady = clampedScrollProgress === 1;
 
-  const progressClasses = cx(
-    'progress-container',
-    {
-      'progress-container--show': isIOS() || scrollProgress > 0,
-    },
-  );
+    console.log({ clampedScrollProgress, nextIsReady });
+
+    updateIsReady(nextIsReady);
+  };
 
   return (
     <div className="ego-form alter-form">
@@ -126,13 +118,6 @@ const EgoForm = ({
             onSubmit={handleSubmitForm}
           />
         </Scroller>
-      </div>
-      <div className={progressClasses}>
-        { (!isIOS() && scrollProgress === 1) && (<span className="progress-container__status-text">&#10003; When ready, click next to continue...</span>)}
-        <ProgressBar
-          orientation="horizontal"
-          percentProgress={scrollProgress * 100}
-        />
       </div>
     </div>
   );
