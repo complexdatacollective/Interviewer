@@ -16,7 +16,6 @@
     align-items: flex-start;
     height: 100%;
     position: relative;
-    margin-top: 1rem;
     min-height: 0;
   }
 
@@ -30,7 +29,6 @@
   &__panels {
     flex: 0 0 auto;
     height: 100%;
-    max-height: 80vh; // Fix for Safari abs. positioned flex box child bug.
     display: flex;
   }
 

@@ -8,7 +8,6 @@ $search-z-index: var(--z-global-ui);
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 1rem 0;
 
   &__prompt {
     @include interface-prompt;

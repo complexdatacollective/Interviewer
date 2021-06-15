@@ -23,9 +23,9 @@
     position: absolute;
     z-index: var(--z-panel);
     background: var(--light-background);
-    width: 20rem;
-    bottom: unit(1);
-    right: unit(2);
+    width: unit(40);
+    bottom: spacing(large);
+    right: spacing(large);
     border-bottom: 5px solid var(--primary);
     border-radius: var(--border-radius);
     box-shadow: 0 0 4rem 0 var(--modal-window-box-shadow);
@@ -36,7 +36,8 @@
       display: flex;
       justify-content: flex-end;
       text-align: center;
-      padding: unit(1) unit(2);
+      padding: 0 unit(2);
+      flex: 0 0 unit(4);
     }
 
     .prompts {
@@ -44,7 +45,6 @@
       --prompt-text-size: 1.2rem;
 
       padding: 0 unit(2);
-      padding-bottom: unit(2);
       line-height: 1.1;
 
       .prompt {

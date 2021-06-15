@@ -1,12 +1,9 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import { get } from 'lodash';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withHandlers, compose } from 'recompose';
-import { AnimatePresence, motion } from 'framer-motion';
 import PropTypes from 'prop-types';
-import MinimizeIcon from '@material-ui/icons/Minimize';
-import Prompts from '../../components/Prompts';
 import withPrompt from '../../behaviours/withPrompt';
 import Canvas from '../../components/Canvas/Canvas';
 import NodeBucket from '../Canvas/NodeBucket';
@@ -15,85 +12,7 @@ import EdgeLayout from '../../components/Canvas/EdgeLayout';
 import Background from '../Canvas/Background';
 import { actionCreators as resetActions } from '../../ducks/modules/reset';
 import { makeGetDisplayEdges, makeGetNextUnplacedNode, makeGetPlacedNodes } from '../../selectors/canvas';
-
-const CollapsablePrompts = (props) => {
-  const {
-    prompts,
-    currentPromptIndex,
-    interfaceRef,
-  } = props;
-  const ref = useRef(null);
-  const [minimized, setMinimized] = useState(false);
-
-  const variants = {
-    minimized: {
-      height: 0,
-      transition: {
-        duration: 0.5,
-      },
-    },
-    normal: {
-      height: 'auto',
-      transition: {
-        duration: 0.5,
-        when: 'afterChildren',
-      },
-    },
-  };
-
-  // Reset the minimization when the prompt changes
-  useEffect(() => {
-    if (minimized) {
-      // There was an animation 'jank' without this additional
-      // timeout. I don't like it, but 'delay' in the variants
-      // didn't work :/
-      setTimeout(() => setMinimized(false), 250);
-    }
-  }, [currentPromptIndex]);
-
-  return (
-    <motion.div
-      ref={ref}
-      className="sociogram-interface__prompts"
-      drag
-      dragConstraints={interfaceRef}
-    >
-      <motion.div
-        className="sociogram-interface__prompts__header"
-        onTap={() => setMinimized(!minimized)}
-      >
-        { minimized ? (
-          <motion.div
-            style={{ width: '100%' }}
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto', transition: { opacity: { delay: 0.5 } } }}
-          >
-            <h4>Tap to show the prompt</h4>
-          </motion.div>
-        ) : (
-          <MinimizeIcon style={{ cursor: 'hand' }} />
-        )}
-      </motion.div>
-      <motion.div
-        animate={minimized ? 'minimized' : 'normal'}
-        variants={variants}
-      >
-        <AnimatePresence initial={false}>
-          { !minimized && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ delay: 0.5 }}
-            >
-              <Prompts prompts={prompts} currentPrompt={currentPromptIndex} />
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.div>
-    </motion.div>
-  );
-};
+import CollapsablePrompts from '../../components/CollapsablePrompts';
 
 const withResetInterfaceHandler = withHandlers({
   handleResetInterface: ({
