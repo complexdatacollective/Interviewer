@@ -13,6 +13,7 @@ import { getSessionProgress } from '../../selectors/session';
 import { entityAttributesProperty } from '../../ducks/modules/network';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import useReadyForNextStage from '../../hooks/useReadyForNextStage';
+import useFlipflop from '../../hooks/useFlipflop';
 
 const confirmDialog = {
   type: 'Confirm',
@@ -39,6 +40,7 @@ const EgoForm = ({
 }) => {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [, isReadyForNext] = useReadyForNextStage();
+  const [showScrollStatus, setShowScrollStatus] = useFlipflop(true, 5000);
 
   const submitForm = () => {
     reduxFormSubmit(formName);
@@ -94,6 +96,7 @@ const EgoForm = ({
   const handleScroll = (_, progress) => {
     const nextIsReady = isFormValid() && progress === 1;
 
+    setShowScrollStatus(false);
     setScrollProgress(progress);
 
     isReadyForNext(nextIsReady);
@@ -103,7 +106,7 @@ const EgoForm = ({
     'progress-container',
     'progress-container--status-only',
     {
-      'progress-container--show': !isIOS() && scrollProgress === 0,
+      'progress-container--show': !isIOS() && scrollProgress !== 1 && showScrollStatus,
     },
   );
 
