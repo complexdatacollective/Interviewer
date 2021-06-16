@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { clamp } from 'lodash';
 import { Scroller as UIScroller } from '@codaco/ui/lib/components';
 import PropTypes from 'prop-types';
 
@@ -17,7 +18,10 @@ class Scroller extends Component {
     const maxScrollPosition = element.scrollHeight - element.clientHeight;
     const scrollAmount = scrollTop / maxScrollPosition;
 
-    onScroll(scrollTop, scrollAmount);
+    // iOS inertial scrolling takes values out of range
+    const clampedScrollAmount = clamp(scrollAmount, 0, 1);
+
+    onScroll(scrollTop, clampedScrollAmount, scrollAmount);
   }
 
   render() {

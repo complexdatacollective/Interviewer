@@ -26,6 +26,7 @@ class SlideFormEdge extends PureComponent {
       submitButton,
       id,
       otherNetworkEntities,
+      onScroll,
     } = this.props;
 
     return (
@@ -35,7 +36,7 @@ class SlideFormEdge extends PureComponent {
           <div className="fake-edge" style={{ backgroundColor: `var(--${edgeColor})` }} />
           <Node {...toNode} />
           <div className="alter-form__form-container alter-edge-form__form-container">
-            <Scroller>
+            <Scroller onScroll={onScroll}>
               <Form
                 {...form}
                 className="alter-form__form alter-edge-form__form"
@@ -58,12 +59,14 @@ class SlideFormEdge extends PureComponent {
 SlideFormEdge.propTypes = {
   form: PropTypes.object.isRequired,
   onUpdate: PropTypes.func.isRequired,
+  onScroll: PropTypes.func,
   subject: PropTypes.object.isRequired,
   item: PropTypes.object.isRequired,
   submitButton: PropTypes.object,
 };
 
 SlideFormEdge.defaultProps = {
+  onScroll: () => {},
   submitButton: <button type="submit" key="submit" aria-label="Submit" hidden />,
 };
 

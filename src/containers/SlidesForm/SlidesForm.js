@@ -10,6 +10,7 @@ import Swiper from 'react-id-swiper';
 import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
 import useGetFormName from '../../hooks/useGetFormName';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
+import useReadyForNextStage from '../../hooks/useReadyForNextStage';
 
 const confirmDialog = {
   type: 'Confirm',
@@ -35,6 +36,7 @@ const SlidesForm = (props) => {
   } = props;
 
   const getFormName = useGetFormName(stage);
+  const [, setIsReadyForNext] = useReadyForNextStage();
 
   const [pendingDirection, setPendingDirection] = useState(null);
   const [pendingStage, setPendingStage] = useState(-1);
@@ -168,6 +170,16 @@ const SlidesForm = (props) => {
     return false;
   };
 
+  const handleScroll = (_, scrollProgress) => {
+    const nextIsReady = isFormValid() && scrollProgress === 1;
+
+    setIsReadyForNext(nextIsReady);
+  };
+
+  useEffect(() => {
+    setIsReadyForNext(false);
+  }, [activeIndex]);
+
   const handleUpdate = (...update) => {
     updateItem(...update);
 
@@ -219,6 +231,7 @@ const SlidesForm = (props) => {
               subject={stage.subject}
               item={item}
               onUpdate={handleUpdate}
+              onScroll={handleScroll}
               form={slideForm}
               submitButton={<button type="submit" key="submit" aria-label="Submit" hidden onClick={handleEnterSubmit} />}
             />
@@ -233,7 +246,7 @@ const SlidesForm = (props) => {
           {' '}
           <strong>{items.length}</strong>
         </h6>
-        <ProgressBar orientation="horizontal" percentProgress={(activeIndex / items.length) * 100} />
+        <ProgressBar orientation="horizontal" percentProgress={(activeIndex / items.length) * 100} nudge={false} />
       </div>
     </div>
   );

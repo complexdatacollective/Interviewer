@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { clamp } from 'lodash';
 import { connect } from 'react-redux';
 import { Scroller } from '@codaco/ui';
 import { Markdown } from '@codaco/ui/lib/components/Fields';
@@ -36,7 +35,7 @@ const EgoForm = ({
   submitForm: reduxFormSubmit,
   updateEgo,
 }) => {
-  const [, updateIsReady] = useReadyForNextStage();
+  const [, isReadyForNext] = useReadyForNextStage();
 
   const submitForm = () => {
     reduxFormSubmit(formName);
@@ -89,13 +88,10 @@ const EgoForm = ({
     onComplete();
   };
 
-  const handleScroll = (scrollTop, newScrollProgress) => {
-    // iOS inertial scrolling takes values out of range
-    const clampedScrollProgress = clamp(newScrollProgress, 0, 1);
+  const handleScroll = (_, scrollProgress) => {
+    const nextIsReady = isFormValid() && scrollProgress === 1;
 
-    const nextIsReady = isFormValid() && clampedScrollProgress === 1;
-
-    updateIsReady(nextIsReady);
+    isReadyForNext(nextIsReady);
   };
 
   return (
