@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { withProps } from 'recompose';
-import { Scroller } from '../../components';
+import { Scroller } from '@codaco/ui';
 import { entityAttributesProperty, entityPrimaryKeyProperty } from '../../ducks/modules/network';
 import Node from '../Node';
 import Form from '../Form';

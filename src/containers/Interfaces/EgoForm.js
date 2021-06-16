@@ -91,6 +91,8 @@ const EgoForm = ({
   const handleScroll = (_, scrollProgress) => {
     const nextIsReady = isFormValid() && scrollProgress === 1;
 
+    console.log({ valid: isFormValid(), nextIsReady, scrollProgress });
+
     isReadyForNext(nextIsReady);
   };
 
