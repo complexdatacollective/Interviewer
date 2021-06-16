@@ -110,6 +110,14 @@
       opacity: 1;
     }
 
+    &--status-only {
+      background: var(--modal-background);
+      border-radius: 5rem;
+      box-shadow: 1px 1px 0.5rem rgba(0, 0, 0, 0.1);
+      width: auto;
+      padding: 1rem 1.5rem;
+    }
+
     .progress {
       width: 20rem;
       height: 1.5rem;

@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 import { connect } from 'react-redux';
 import { Scroller } from '@codaco/ui';
 import { Markdown } from '@codaco/ui/lib/components/Fields';
 import { submit, isValid, isDirty } from 'redux-form';
+import { isIOS } from '../../utils/Environment';
 import Form from '../Form';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { getNetworkEgo } from '../../selectors/network';
@@ -35,6 +37,7 @@ const EgoForm = ({
   submitForm: reduxFormSubmit,
   updateEgo,
 }) => {
+  const [scrollProgress, setScrollProgress] = useState(0);
   const [, isReadyForNext] = useReadyForNextStage();
 
   const submitForm = () => {
@@ -88,13 +91,21 @@ const EgoForm = ({
     onComplete();
   };
 
-  const handleScroll = (_, scrollProgress) => {
-    const nextIsReady = isFormValid() && scrollProgress === 1;
+  const handleScroll = (_, progress) => {
+    const nextIsReady = isFormValid() && progress === 1;
 
-    console.log({ valid: isFormValid(), nextIsReady, scrollProgress });
+    setScrollProgress(progress);
 
     isReadyForNext(nextIsReady);
   };
+
+  const progressClasses = cx(
+    'progress-container',
+    'progress-container--status-only',
+    {
+      'progress-container--show': !isIOS() && scrollProgress === 0,
+    },
+  );
 
   return (
     <div className="ego-form alter-form">
@@ -114,6 +125,9 @@ const EgoForm = ({
             onSubmit={handleSubmitForm}
           />
         </Scroller>
+      </div>
+      <div className={progressClasses}>
+        Scroll to see more questions...
       </div>
     </div>
   );
