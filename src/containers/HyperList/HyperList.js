@@ -7,6 +7,7 @@ import AutoSizer from 'react-virtualized-auto-sizer';
 import { motion, useReducedMotion } from 'framer-motion';
 import { VariableSizeGrid as Grid } from 'react-window';
 import { compose, defaultProps } from 'recompose';
+import uuid from 'uuid';
 import cx from 'classnames';
 import useGridSizer from './useGridSizer';
 import { DragSource, DropTarget, MonitorDropTarget } from '../../behaviours/DragAndDrop';
@@ -125,8 +126,16 @@ const HyperList = ({
 }) => {
   const itemKey = useCallback((index) => {
     const dataIndex = getDataIndex(columns, index);
-    return (items[dataIndex] && items[dataIndex].id) || dataIndex;
-  }, [columns]);
+    const key = items[dataIndex] && items[dataIndex].id;
+
+    if (!key) {
+      // Something went wrong, this is a failsafe but will force a rerender every time
+      console.debug('`itemKey()` returned undefined in `<HyperList />`'); // eslint-disable-line no-console
+      return uuid();
+    }
+
+    return key;
+  }, [columns, items]);
 
   const CellRenderer = useMemo(
     () => getCellRenderer(DragSource(ItemComponent), DragComponent),
