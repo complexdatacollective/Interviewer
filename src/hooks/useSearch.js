@@ -52,10 +52,12 @@ const useSearch = (list, options, initialQuery = '') => {
 
   const hasQuery = query.length >= MIN_QUERY_LENGTH;
 
+  const fuseOptions = { ...defaultFuseOptions, ...options };
+
   const search = (_query) => {
     clearTimeout(delayRef.current);
     const startTime = new Date();
-    const fuse = new Fuse(list, { ...defaultFuseOptions, ...options });
+    const fuse = new Fuse(list, fuseOptions);
     const r = fuse.search(_query).map(({ item }) => item);
 
     const endTime = new Date();
