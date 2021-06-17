@@ -78,6 +78,7 @@ const SearchableList = ({
   itemComponent,
   dragComponent,
   items,
+  placeholder,
   itemType,
   onDrop,
   searchOptions,
@@ -112,12 +113,15 @@ const SearchableList = ({
 
   const mode = items.length > 100 ? modes.LARGE : modes.SMALL;
 
-  const placeholder = isWaiting
-    ? (
-      <div className="searchable-list__placeholder">
-        <Loading message="searching..." />
-      </div>
-    ) : null;
+  const hyperListPlaceholder = placeholder || (
+    isWaiting
+      ? (
+        <div className="searchable-list__placeholder">
+          <Loading message="searching..." />
+        </div>
+      )
+      : null
+  );
 
   const showTooMany = mode === modes.LARGE && !hasQuery;
   const canSort = sortOptions.sortableProperties.length > 0;
@@ -156,7 +160,7 @@ const SearchableList = ({
             dragComponent={dragComponent}
             columns={columns}
             emptyComponent={EmptyComponent}
-            placeholder={placeholder}
+            placeholder={hyperListPlaceholder}
             itemType={itemType} // drop type
             accepts={accepts}
             onDrop={onDrop}
@@ -217,6 +221,7 @@ SearchableList.defaultProps = {
   columns: undefined,
   itemComponent: null,
   items: [],
+  placeholder: null,
   searchOptions: {},
   sortableProperties: [],
   dynamicProperties: {},

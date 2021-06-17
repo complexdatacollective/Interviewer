@@ -69,6 +69,22 @@ const DropOverlay = ({ isOver, nodeColor }) => {
   );
 };
 
+const ErrorMessage = ({ error }) => (
+  <div
+    style={{
+      flex: 1,
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+    }}
+  >
+    <h1>Something went wrong</h1>
+    <p>External data could not be loaded.</p>
+    <p><small>{error.toString()}</small></p>
+  </div>
+);
+
 /**
   * Name Generator List Interface
   */
@@ -98,7 +114,7 @@ const NameGeneratorList = (props) => {
   const searchOptions = useFuseOptions(stage.searchOptions);
 
   const { duration } = useAnimationSettings();
-  const [isLoading, items, excludeItems] = useItems(props);
+  const [itemsStatus, items, excludeItems] = useItems(props);
 
   const { isOver, willAccept } = useDropMonitor('node-drop-area')
     || { isOver: false, willAccept: false };
@@ -140,7 +156,7 @@ const NameGeneratorList = (props) => {
   return (
     <div className="name-generator-list-interface">
       <AnimatePresence>
-        {isLoading && (
+        {itemsStatus.isLoading && (
           <motion.div
             className="name-generator-list-interface__loading"
             initial="visible"
@@ -152,7 +168,7 @@ const NameGeneratorList = (props) => {
             <Loading message="Loading roster data..." />
           </motion.div>
         )}
-        {!isLoading && [
+        {!itemsStatus.isLoading && [
           <motion.div
             className="name-generator-list-interface__prompt"
             initial="hidden"
@@ -204,6 +220,7 @@ const NameGeneratorList = (props) => {
             <div className="name-generator-list-interface__search-panel">
               <SearchableList
                 items={items}
+                placeholder={itemsStatus.error && <ErrorMessage error={itemsStatus.error} />}
                 itemType="SOURCE_NODES" // drop type
                 excludeItems={excludeItems}
                 itemComponent={DataCard}

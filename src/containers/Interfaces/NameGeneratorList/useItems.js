@@ -40,7 +40,7 @@ export const detailsWithVariableUUIDs = (props) => (node) => {
 
 // Returns all nodes associated with lists (external data)
 const useItems = (props) => {
-  const [externalData, isLoading] = useExternalData(props.stage.dataSource, props.stage.subject);
+  const [externalData, status] = useExternalData(props.stage.dataSource, props.stage.subject);
   const nodeType = get(props, 'stage.subject.type');
   const getLabel = useSelector((state) => getNodeLabel(state, nodeType));
   const nodeTypeDefinition = usePropSelector(makeGetNodeTypeDefinition, props, true);
@@ -66,7 +66,7 @@ const useItems = (props) => {
       }));
   }, [externalData, getLabel, nodeTypeDefinition, visibleSupplementaryFields]);
 
-  return [isLoading, items, excludeItems];
+  return [status, items, excludeItems];
 };
 
 export default useItems;

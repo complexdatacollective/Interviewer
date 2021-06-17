@@ -126,6 +126,10 @@ const HyperList = ({
 }) => {
   const itemKey = useCallback((index) => {
     const dataIndex = getDataIndex(columns, index);
+
+    // If last row is shorter than number of columns
+    if (dataIndex >= items.length) { return null; }
+
     const key = items[dataIndex] && items[dataIndex].id;
 
     if (!key) {

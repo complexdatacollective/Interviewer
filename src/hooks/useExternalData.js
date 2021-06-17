@@ -64,13 +64,14 @@ const useExternalData = (dataSource, subject) => {
   } = useSelector(getSessionMeta);
 
   const [externalData, setExternalData] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [status, setStatus] = useState({ isLoading: false, error: null });
+  const updateStatus = (newStatus) => setStatus((s) => ({ ...s, ...newStatus }));
 
   useEffect(() => {
     if (!dataSource) { return; }
     // This is where we could set the loading state for URL assets
     setExternalData(null);
-    setIsLoading(true);
+    updateStatus({ isLoading: true, error: null });
 
     const sourceFile = assetFiles[dataSource];
     const { type } = assetManifest[dataSource];
@@ -80,10 +81,11 @@ const useExternalData = (dataSource, subject) => {
     loadExternalData(protocolUID, sourceFile, type)
       .then(({ nodes }) => Promise.all(nodes.map(variableUUIDReplacer)))
       .then((formattedData) => setExternalData(formattedData))
-      .then(() => setIsLoading(false));
+      .then(() => updateStatus({ isLoading: true }))
+      .catch((e) => updateStatus({ isLoading: false, error: e }));
   }, [dataSource]);
 
-  return [externalData, isLoading];
+  return [externalData, status];
 };
 
 export default useExternalData;
