@@ -81,7 +81,7 @@ const useExternalData = (dataSource, subject) => {
     loadExternalData(protocolUID, sourceFile, type)
       .then(({ nodes }) => Promise.all(nodes.map(variableUUIDReplacer)))
       .then((formattedData) => setExternalData(formattedData))
-      .then(() => updateStatus({ isLoading: true }))
+      .then(() => updateStatus({ isLoading: false }))
       .catch((e) => updateStatus({ isLoading: false, error: e }));
   }, [dataSource]);
 

@@ -220,6 +220,7 @@ const NameGeneratorList = (props) => {
             <div className="name-generator-list-interface__search-panel">
               <SearchableList
                 items={items}
+                title="Available to add"
                 placeholder={itemsStatus.error && <ErrorMessage error={itemsStatus.error} />}
                 itemType="SOURCE_NODES" // drop type
                 excludeItems={excludeItems}

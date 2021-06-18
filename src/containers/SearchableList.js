@@ -1,4 +1,5 @@
 import React, { useMemo, useRef } from 'react';
+import PropTypes from 'prop-types';
 import uuid from 'uuid';
 import cx from 'classnames';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -73,6 +74,7 @@ const DropOverlay = ({ isOver, nodeColor }) => {
 const SearchableList = ({
   accepts,
   columns,
+  title,
   dynamicProperties,
   excludeItems,
   itemComponent,
@@ -147,7 +149,7 @@ const SearchableList = ({
       className="searchable-list"
     >
       <Panel
-        title="Available to add"
+        title={title}
         noHighlight
         noCollapse
       >
@@ -215,6 +217,16 @@ const SearchableList = ({
 };
 
 SearchableList.propTypes = {
+  columns: PropTypes.number,
+  itemComponent: PropTypes.func,
+  items: PropTypes.array,
+  placeholder: PropTypes.node,
+  searchOptions: PropTypes.object,
+  sortableProperties: PropTypes.array,
+  dynamicProperties: PropTypes.object,
+  excludeItems: PropTypes.array,
+  dragComponent: PropTypes.func,
+  dropNodeColor: PropTypes.string,
 };
 
 SearchableList.defaultProps = {

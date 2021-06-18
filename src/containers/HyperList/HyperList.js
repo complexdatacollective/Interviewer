@@ -3,6 +3,7 @@ import React, {
   useMemo,
   useCallback,
 } from 'react';
+import PropTypes from 'prop-types';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { motion, useReducedMotion } from 'framer-motion';
 import { VariableSizeGrid as Grid } from 'react-window';
@@ -209,6 +210,12 @@ const HyperList = ({
 };
 
 HyperList.propTypes = {
+  itemComponent: PropTypes.func,
+  emptyComponent: PropTypes.func,
+  placeholder: PropTypes.node,
+  columns: PropTypes.number,
+  rowHeight: PropTypes.number,
+  itemType: PropTypes.string,
 };
 
 HyperList.defaultProps = {
