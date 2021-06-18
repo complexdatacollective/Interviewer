@@ -2,6 +2,7 @@ import React, {
   useContext,
   useMemo,
   useCallback,
+  useState,
 } from 'react';
 import PropTypes from 'prop-types';
 import AutoSizer from 'react-virtualized-auto-sizer';
@@ -13,6 +14,7 @@ import cx from 'classnames';
 import useGridSizer from './useGridSizer';
 import { DragSource, DropTarget, MonitorDropTarget } from '../../behaviours/DragAndDrop';
 import useAnimationSettings from '../../hooks/useAnimationSettings';
+import useDebounce from '../../hooks/useDebounce';
 
 const ListContext = React.createContext({ items: [], columns: 0 });
 
@@ -22,6 +24,22 @@ const getDataIndex = (columns, { rowIndex, columnIndex }) => (
   (rowIndex * columns) + columnIndex
 );
 
+const variants = {
+  visible: {
+    scale: 1,
+    opacity: 1,
+  },
+  hidden: {
+    scale: 0,
+    opacity: 0.5,
+  },
+};
+
+const reducedMotionVariants = {
+  visible: { opacity: 1 },
+  hidden: { opacity: 0 },
+};
+
 const getCellRenderer = (Component, DragComponent) => ({
   columnIndex,
   rowIndex,
@@ -29,29 +47,15 @@ const getCellRenderer = (Component, DragComponent) => ({
 }) => {
   const { duration } = useAnimationSettings();
 
-  const variants = {
-    visible: {
-      scale: 1,
-      opacity: 1,
-    },
-    hidden: {
-      scale: 0,
-      opacity: 0.5,
-    },
-  };
-
-  const reducedMotionVariants = {
-    visible: { opacity: 1 },
-    hidden: { opacity: 0 },
-  };
-
   const {
     items,
     columns,
     itemType,
     dynamicProperties,
   } = useContext(ListContext);
+
   const dataIndex = getDataIndex(columns, { rowIndex, columnIndex });
+
   const item = items[dataIndex];
   const reducedMotion = useReducedMotion();
 
@@ -125,8 +129,25 @@ const HyperList = ({
   willAccept,
   isOver,
 }) => {
+  const [width, setWidth] = useState(0);
+  const debouncedWidth = useDebounce(width, 1000);
+  const columnCount = useMemo(() => {
+    if (!debouncedWidth) { return 1; }
+    return typeof columns === 'number'
+      ? columns
+      : columns(debouncedWidth);
+  }, [columns, debouncedWidth]);
+
+  const SizeRenderer = useCallback((props) => (
+    <div className="hyper-list__item"><ItemComponent {...props} /></div>
+  ), [ItemComponent]);
+
+  const [gridProps, ready] = useGridSizer(SizeRenderer, items, columnCount, debouncedWidth);
+
+  const handleResize = useCallback(({ width: newWidth }) => setWidth(newWidth), [setWidth]);
+
   const itemKey = useCallback((index) => {
-    const dataIndex = getDataIndex(columns, index);
+    const dataIndex = getDataIndex(columnCount, index);
 
     // If last row is shorter than number of columns
     if (dataIndex >= items.length) { return null; }
@@ -140,27 +161,19 @@ const HyperList = ({
     }
 
     return key;
-  }, [columns, items]);
+  }, [columnCount, items]);
 
   const CellRenderer = useMemo(
     () => getCellRenderer(DragSource(ItemComponent), DragComponent),
-    [ItemComponent, DragComponent, columns],
+    [ItemComponent, DragComponent, columnCount],
   );
-
-  const SizeRenderer = useCallback((props) => (
-    <div className="hyper-list__item"><ItemComponent {...props} /></div>
-  ), [ItemComponent]);
 
   const context = useMemo(() => ({
     items,
-    columns,
+    columns: columnCount,
     dynamicProperties,
     itemType,
-  }), [items, columns, dynamicProperties, itemType]);
-
-  const [gridProps, ready, setWidth] = useGridSizer(SizeRenderer, items, columns);
-
-  const handleResize = useCallback(({ width }) => setWidth(width), [setWidth]);
+  }), [items, columnCount, dynamicProperties, itemType]);
 
   const classNames = cx(
     'hyper-list',
@@ -184,7 +197,7 @@ const HyperList = ({
           { showPlaceholder && placeholder }
           { showEmpty && <EmptyComponent />}
           <AutoSizer onResize={handleResize}>
-            {({ width, height }) => {
+            {(containerSize) => {
               // If auto sizer is not ready, items would be sized incorrectly
               if (!ready) { return null; }
 
@@ -193,8 +206,8 @@ const HyperList = ({
               return (
                 <Grid
                   className="hyper-list__grid"
-                  height={height}
-                  width={width}
+                  height={containerSize.height}
+                  width={containerSize.width}
                   itemKey={itemKey}
                   {...gridProps}
                 >

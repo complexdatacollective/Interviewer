@@ -24,6 +24,10 @@ import useFuseOptions from './useFuseOptions';
 import useSortableProperties from './useSortableProperties';
 import useItems from './useItems';
 
+const countColumns = (width) => (
+  width < 140 ? 1 : Math.floor(width / 450)
+);
+
 const nodePreviewForType = (nodeType) => ({ meta }) => {
   const getLabel = useSelector((state) => getNodeLabel(state, nodeType));
   const color = useSelector(getNodeColor(nodeType));
@@ -221,6 +225,7 @@ const NameGeneratorList = (props) => {
               <SearchableList
                 items={items}
                 title="Available to add"
+                columns={countColumns}
                 placeholder={itemsStatus.error && <ErrorMessage error={itemsStatus.error} />}
                 itemType="SOURCE_NODES" // drop type
                 excludeItems={excludeItems}

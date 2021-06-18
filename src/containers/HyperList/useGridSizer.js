@@ -6,7 +6,6 @@ import React, {
   useState,
 } from 'react';
 import uuid from 'uuid';
-import useDebounce from '../../hooks/useDebounce';
 
 /**
  * This is an enhancement for react-window, which allows items in a grid
@@ -29,14 +28,12 @@ import useDebounce from '../../hooks/useDebounce';
  *   <Grid {...gridProps} />
  * );
  */
-const useGridSizer = (ItemComponent, items, columns, defaultHeight = 150) => {
+const useGridSizer = (ItemComponent, items, columns, width, defaultHeight = 150) => {
   const id = useMemo(() => uuid(), []);
   const [hiddenSizingEl, setHiddenSizingElement] = useState(null);
-  const [width, setWidth] = useState(0);
-  const debouncedWidth = useDebounce(width, 1000);
   const ready = useMemo(() => (
-    hiddenSizingEl && debouncedWidth > 0
-  ), [hiddenSizingEl, debouncedWidth]);
+    hiddenSizingEl && width > 0
+  ), [hiddenSizingEl, width]);
 
   const itemCount = (items && items.length) || 0;
 
@@ -50,8 +47,8 @@ const useGridSizer = (ItemComponent, items, columns, defaultHeight = 150) => {
   ), [itemCount, adjustedColumns]);
 
   const columnWidth = useCallback(() => (
-    debouncedWidth / adjustedColumns
-  ), [debouncedWidth, adjustedColumns]);
+    width / adjustedColumns
+  ), [width, adjustedColumns]);
 
   useEffect(() => {
     if (hiddenSizingEl) { return () => {}; }
@@ -104,14 +101,13 @@ const useGridSizer = (ItemComponent, items, columns, defaultHeight = 150) => {
 
   return [
     {
-      key: debouncedWidth,
+      key: width,
       columnCount,
       rowCount,
       columnWidth,
       rowHeight,
     },
     ready,
-    setWidth,
   ];
 };
 
