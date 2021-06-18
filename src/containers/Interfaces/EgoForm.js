@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { debounce } from 'lodash';
@@ -42,13 +42,25 @@ const EgoForm = ({
   const [scrollProgress, setScrollProgress] = useState(0);
   const [, setIsReadyForNext] = useReadyForNextStage();
   const [showScrollStatus, setShowScrollStatus] = useFlipflop(true, 5000);
+  const formState = useRef({
+    isFormDirty,
+    isFormValid,
+  });
+
+  useEffect(() => {
+    formState.current = {
+      isFormDirty,
+      isFormValid,
+    };
+  }, [isFormDirty, isFormValid]);
 
   const submitForm = () => {
     reduxFormSubmit(formName);
   };
 
   const checkShouldProceed = () => {
-    if (!isFormDirty) { return Promise.resolve(true); }
+    console.log({ formState });
+    if (!formState.current.isFormDirty) { return Promise.resolve(true); }
     return openDialog(confirmDialog);
   };
 
@@ -69,7 +81,7 @@ const EgoForm = ({
     const isBackwards = direction < 0;
 
     if (isPendingStageChange) {
-      if (isFormValid) {
+      if (formState.current.isFormValid) {
         submitForm();
       } else {
         checkAndProceed();
@@ -77,7 +89,7 @@ const EgoForm = ({
       return;
     }
 
-    if (!isFirstStage && isBackwards && !isFormValid) {
+    if (!isFirstStage && isBackwards && !formState.current.isFormValid) {
       checkAndProceed();
       return;
     }
@@ -161,7 +173,7 @@ function mapStateToProps(state, props) {
   const ego = getNetworkEgo(state);
   const formName = getFormName(props.stageIndex);
   const isFormValid = isValid(formName)(state);
-  const isFormDirty = isDirty(formName)(state);
+  const isFormDirty = () => isDirty(formName)(state);
   const { isFirstStage } = getSessionProgress(state);
 
   return {
