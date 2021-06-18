@@ -100,7 +100,7 @@ class CategoricalList extends Component {
     const categoryColor = this.colorPresets[itemNumber % this.colorPresets.length];
 
     if (isSpecialValue(bin.value)) {
-      return color(getCSSVariableAsString('--color-rich-black')).mix(color(categoryColor), 0.8);
+      return color(categoryColor).desaturate(0.75).darken(0.25);
     }
 
     return categoryColor;
