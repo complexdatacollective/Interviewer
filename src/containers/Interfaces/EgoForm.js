@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import { debounce } from 'lodash';
 import { connect } from 'react-redux';
 import { Scroller } from '@codaco/ui';
 import { Markdown } from '@codaco/ui/lib/components/Fields';
@@ -39,7 +40,7 @@ const EgoForm = ({
   updateEgo,
 }) => {
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [, isReadyForNext] = useReadyForNextStage();
+  const [, setIsReadyForNext] = useReadyForNextStage();
   const [showScrollStatus, setShowScrollStatus] = useFlipflop(true, 5000);
 
   const submitForm = () => {
@@ -47,7 +48,7 @@ const EgoForm = ({
   };
 
   const checkShouldProceed = () => {
-    if (!isFormDirty()) { return Promise.resolve(true); }
+    if (!isFormDirty) { return Promise.resolve(true); }
     return openDialog(confirmDialog);
   };
 
@@ -68,7 +69,7 @@ const EgoForm = ({
     const isBackwards = direction < 0;
 
     if (isPendingStageChange) {
-      if (isFormValid()) {
+      if (isFormValid) {
         submitForm();
       } else {
         checkAndProceed();
@@ -76,7 +77,7 @@ const EgoForm = ({
       return;
     }
 
-    if (!isFirstStage && isBackwards && !isFormValid()) {
+    if (!isFirstStage && isBackwards && !isFormValid) {
       checkAndProceed();
       return;
     }
@@ -93,14 +94,21 @@ const EgoForm = ({
     onComplete();
   };
 
-  const handleScroll = (_, progress) => {
-    const nextIsReady = isFormValid() && progress === 1;
+  const updateReadyStatus = useCallback(debounce((progress) => {
+    const nextIsReady = isFormValid && progress === 1;
+    setIsReadyForNext(nextIsReady);
+  }, 200), [isFormValid, setIsReadyForNext]);
 
+  const handleScroll = useCallback((_, progress) => {
     setShowScrollStatus(false);
     setScrollProgress(progress);
 
-    isReadyForNext(nextIsReady);
-  };
+    updateReadyStatus(progress);
+  }, [isFormValid, setShowScrollStatus, setScrollProgress, updateReadyStatus]);
+
+  useEffect(() => {
+    if (!isFormValid) { setIsReadyForNext(false); }
+  }, [isFormValid]);
 
   const progressClasses = cx(
     'progress-container',
@@ -152,8 +160,8 @@ EgoForm.defaultProps = {
 function mapStateToProps(state, props) {
   const ego = getNetworkEgo(state);
   const formName = getFormName(props.stageIndex);
-  const isFormValid = () => isValid(formName)(state);
-  const isFormDirty = () => isDirty(formName)(state);
+  const isFormValid = isValid(formName)(state);
+  const isFormDirty = isDirty(formName)(state);
   const { isFirstStage } = getSessionProgress(state);
 
   return {
