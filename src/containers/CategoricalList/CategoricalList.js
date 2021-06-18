@@ -18,7 +18,8 @@ import CategoricalListItem from './CategoricalListItem';
 import { getItemSize, getExpandedSize } from './helpers';
 
 const isSpecialValue = (value) => {
-  if (typeof value === 'string' && value.toLowerCase() === 'other') {
+  console.log({ value });
+  if (value === null) {
     return true;
   }
   if (typeof value === 'number' && value < 0) {
