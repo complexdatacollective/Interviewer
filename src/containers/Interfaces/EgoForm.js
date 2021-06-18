@@ -1,4 +1,9 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import React, {
+  useEffect,
+  useState,
+  useCallback,
+  useRef,
+} from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { debounce } from 'lodash';
@@ -59,7 +64,6 @@ const EgoForm = ({
   };
 
   const checkShouldProceed = () => {
-    console.log({ formState });
     if (!formState.current.isFormDirty) { return Promise.resolve(true); }
     return openDialog(confirmDialog);
   };
