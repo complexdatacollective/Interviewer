@@ -194,6 +194,7 @@ const NameGeneratorList = (props) => {
               >
                 <div className="name-generator-list-interface__node-list">
                   <List
+                    id="node-list"
                     className={nodeListClasses}
                     itemType="ADDED_NODES"
                     accepts={({ meta: { itemType } }) => itemType !== 'ADDED_NODES'}
@@ -217,6 +218,7 @@ const NameGeneratorList = (props) => {
             </div>
             <div className="name-generator-list-interface__search-panel">
               <SearchableList
+                id="searchable-list"
                 items={items}
                 title="Available to add"
                 columns={countColumns}

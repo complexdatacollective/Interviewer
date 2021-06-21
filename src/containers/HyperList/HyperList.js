@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { motion, useReducedMotion } from 'framer-motion';
 import { VariableSizeGrid as Grid } from 'react-window';
-import { compose, defaultProps } from 'recompose';
+import { compose } from 'recompose';
 import uuid from 'uuid';
 import cx from 'classnames';
 import useGridSizer from './useGridSizer';
@@ -223,10 +223,13 @@ const HyperList = ({
 };
 
 HyperList.propTypes = {
-  itemComponent: PropTypes.func,
-  emptyComponent: PropTypes.func,
+  itemComponent: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
+  emptyComponent: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
   placeholder: PropTypes.node,
-  columns: PropTypes.number,
+  columns: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.func,
+  ]),
   rowHeight: PropTypes.number,
   itemType: PropTypes.string,
 };
@@ -241,9 +244,6 @@ HyperList.defaultProps = {
 };
 
 export default compose(
-  defaultProps(() => ({
-    id: 'hyper-list',
-  })),
   DropTarget,
   MonitorDropTarget(['isOver', 'willAccept']),
 )(HyperList);

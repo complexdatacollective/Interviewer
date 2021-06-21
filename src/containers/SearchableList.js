@@ -217,15 +217,18 @@ const SearchableList = ({
 };
 
 SearchableList.propTypes = {
-  columns: PropTypes.number,
-  itemComponent: PropTypes.func,
+  columns: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.func,
+  ]),
+  itemComponent: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
+  dragComponent: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
   items: PropTypes.array,
   placeholder: PropTypes.node,
   searchOptions: PropTypes.object,
   sortableProperties: PropTypes.array,
   dynamicProperties: PropTypes.object,
   excludeItems: PropTypes.array,
-  dragComponent: PropTypes.func,
   dropNodeColor: PropTypes.string,
 };
 

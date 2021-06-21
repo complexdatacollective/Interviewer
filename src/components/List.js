@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import { motion, useReducedMotion } from 'framer-motion';
-import { compose, defaultProps } from 'recompose';
+import { compose } from 'recompose';
 import cx from 'classnames';
 import { DragSource, DropTarget, MonitorDropTarget } from '../behaviours/DragAndDrop';
 import useAnimationSettings from '../hooks/useAnimationSettings';
@@ -143,8 +143,8 @@ const List = ({
 };
 
 List.propTypes = {
-  itemComponent: PropTypes.func,
-  emptyComponent: PropTypes.func,
+  itemComponent: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
+  emptyComponent: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
   placeholder: PropTypes.node,
   itemType: PropTypes.string,
 };
@@ -157,9 +157,6 @@ List.defaultProps = {
 };
 
 export default compose(
-  defaultProps(() => ({
-    id: 'list',
-  })),
   DropTarget,
   MonitorDropTarget(['isOver', 'willAccept']),
 )(List);
