@@ -71,8 +71,10 @@ const getCellRenderer = (Component, DragComponent) => ({
     : variants;
 
   const preview = DragComponent
-    ? <DragComponent {...props} meta={{ data, id }} />
+    ? <DragComponent {...props} />
     : null;
+
+    // meta={{ data, id }}
 
   return (
     <motion.div

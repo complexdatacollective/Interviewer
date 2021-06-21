@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Node } from '@codaco/ui';
+import { Node as UINode } from '@codaco/ui';
 import { DataCard } from '@codaco/ui/lib/components/Cards';
 import withPrompt from '../../../behaviours/withPrompt';
 import PromptSwiper from '../../PromptSwiper';
@@ -13,11 +13,12 @@ import { makeGetPromptNodeModelData } from '../../../selectors/name-generator';
 import { entityPrimaryKeyProperty } from '../../../ducks/modules/network';
 import { actionCreators as sessionsActions } from '../../../ducks/modules/sessions';
 import { getNodeLabel, getNodeColor } from '../../../selectors/network';
-import NodeList from '../../../components/NodeList';
+import List from '../../../components/List';
 import Panel from '../../../components/Panel';
 import Loading from '../../../components/Loading';
 import useAnimationSettings from '../../../hooks/useAnimationSettings';
 import useDropMonitor from '../../../behaviours/DragAndDrop/useDropMonitor';
+import Node from '../../Node';
 import SearchableList from '../../SearchableList';
 import usePropSelector from './usePropSelector';
 import useFuseOptions from './useFuseOptions';
@@ -29,9 +30,10 @@ const countColumns = (width) => (
 );
 
 const nodePreviewForType = (nodeType) => ({ meta }) => {
-  const getLabel = useSelector((state) => getNodeLabel(state, nodeType));
-  const color = useSelector(getNodeColor(nodeType));
-  return <Node label={getLabel(meta.data)} color={color} />;
+  // const getLabel = useSelector((state) => getNodeLabel(state, nodeType));
+  // const color = useSelector(getNodeColor(nodeType));
+  // return <Node label={getLabel(meta.data)} color={color} />;
+  return <UINode />;
 };
 
 const DropOverlay = ({ isOver, nodeColor }) => {
@@ -66,7 +68,7 @@ const DropOverlay = ({ isOver, nodeColor }) => {
         initial="initial"
         animate={isOver ? 'over' : 'initial'}
       >
-        <Node label="" color={nodeColor} />
+        <UINode label="" color={nodeColor} />
       </motion.div>
       <p>Drop here to add to network</p>
     </motion.div>
@@ -138,9 +140,7 @@ const NameGeneratorList = (props) => {
     dispatch(sessionsActions.addNode(modelData, attributeData));
   };
 
-  const handleRemoveNode = ({ meta }) => {
-    const id = meta[entityPrimaryKeyProperty];
-
+  const handleRemoveNode = ({ meta: { id } }) => {
     dispatch(sessionsActions.removeNode(id));
   };
 
@@ -156,6 +156,8 @@ const NameGeneratorList = (props) => {
     'name-generator-list-interface__node-list',
     { 'name-generator-list-interface__node-list--empty': nodesForPrompt.length === 0 },
   );
+
+console.log(nodesForPrompt);
 
   return (
     <div className="name-generator-list-interface">
@@ -203,14 +205,20 @@ const NameGeneratorList = (props) => {
                 noCollapse
               >
                 <div className="name-generator-list-interface__node-list">
-                  <NodeList
+                  <List
                     className={nodeListClasses}
-                    id="node-drop-area"
-                    listId="node-drop-area"
+                    // id="node-drop-area"
+                    // listId="node-drop-area"
                     itemType="ADDED_NODES"
                     accepts={({ meta: { itemType } }) => itemType !== 'ADDED_NODES'}
                     onDrop={handleAddNode}
-                    items={nodesForPrompt}
+                    items={nodesForPrompt.map(
+                      (item) => ({
+                        id: item._uid,
+                        data: item,
+                      }),
+                    )}
+                    itemComponent={Node}
                     hoverColor="transparent"
                   />
                   <AnimatePresence>
