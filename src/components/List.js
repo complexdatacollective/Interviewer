@@ -1,13 +1,9 @@
 import React, {
-  useContext,
   useMemo,
-  useCallback,
-  useState,
 } from 'react';
 import PropTypes from 'prop-types';
 import { motion, useReducedMotion } from 'framer-motion';
 import { compose, defaultProps } from 'recompose';
-import uuid from 'uuid';
 import cx from 'classnames';
 import { DragSource, DropTarget, MonitorDropTarget } from '../behaviours/DragAndDrop';
 import useAnimationSettings from '../hooks/useAnimationSettings';
@@ -38,6 +34,7 @@ const getItemRenderer = (ItemComponent, DragComponent) => {
   return ({
     id,
     data,
+    props,
     itemType,
   }) => {
     const { duration } = useAnimationSettings();
@@ -54,12 +51,12 @@ const getItemRenderer = (ItemComponent, DragComponent) => {
     return (
       <motion.div
         className="list__item"
-        transition={{ duration: duration.slow }}
+        transition={{ duration: duration.standard }}
         variants={cellVariants}
         key={id}
       >
         <Component
-          {...data}
+          {...props}
           meta={() => ({ data, id, itemType })}
           preview={preview}
         />
@@ -95,7 +92,15 @@ const List = ({
 }) => {
   const { duration } = useAnimationSettings();
 
-  console.log({ items });
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: duration.fast / 2,
+      },
+    },
+  };
 
   const classNames = cx(
     'list',
@@ -119,21 +124,11 @@ const List = ({
   // Otherwise show the results!
   const showResults = !placeholder && items && items.length > 0;
 
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: duration.fast / 2,
-      },
-    },
-  };
-
   return (
     <ListContext.Provider value={context}>
       <motion.div
         className={classNames}
-        variants={container}
+        variants={containerVariants}
         initial="hidden"
         animate="show"
       >

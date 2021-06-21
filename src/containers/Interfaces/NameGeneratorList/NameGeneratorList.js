@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { compose } from 'redux';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -12,7 +12,7 @@ import { makeNetworkNodesForPrompt, makeGetAdditionalAttributes } from '../../..
 import { makeGetPromptNodeModelData } from '../../../selectors/name-generator';
 import { entityPrimaryKeyProperty } from '../../../ducks/modules/network';
 import { actionCreators as sessionsActions } from '../../../ducks/modules/sessions';
-import { getNodeLabel, getNodeColor } from '../../../selectors/network';
+import { getNodeColor } from '../../../selectors/network';
 import List from '../../../components/List';
 import Panel from '../../../components/Panel';
 import Loading from '../../../components/Loading';
@@ -28,14 +28,6 @@ import useItems from './useItems';
 const countColumns = (width) => (
   width < 140 ? 1 : Math.floor(width / 450)
 );
-
-const nodePreviewForType = (nodeType) => ({ meta }) => {
-  // const getLabel = useSelector((state) => getNodeLabel(state, nodeType));
-  // const color = useSelector(getNodeColor(nodeType));
-  // return <Node label={getLabel(meta.data)} color={color} />;
-  return <UINode />;
-};
-
 const DropOverlay = ({ isOver, nodeColor }) => {
   const { duration } = useAnimationSettings();
 
@@ -108,8 +100,6 @@ const NameGeneratorList = (props) => {
 
   const nodeType = stage && stage.subject && stage.subject.type;
 
-  const NodePreview = useMemo(() => nodePreviewForType(nodeType), [nodeType]);
-
   const dispatch = useDispatch();
   const newNodeAttributes = usePropSelector(makeGetAdditionalAttributes, props, true);
   const newNodeModelData = usePropSelector(makeGetPromptNodeModelData, props, true);
@@ -129,7 +119,7 @@ const NameGeneratorList = (props) => {
     const { id, data } = meta;
     const attributeData = {
       ...newNodeAttributes,
-      ...data,
+      ...data.attributes,
     };
 
     const modelData = {
@@ -156,8 +146,6 @@ const NameGeneratorList = (props) => {
     'name-generator-list-interface__node-list',
     { 'name-generator-list-interface__node-list--empty': nodesForPrompt.length === 0 },
   );
-
-console.log(nodesForPrompt);
 
   return (
     <div className="name-generator-list-interface">
@@ -207,19 +195,17 @@ console.log(nodesForPrompt);
                 <div className="name-generator-list-interface__node-list">
                   <List
                     className={nodeListClasses}
-                    // id="node-drop-area"
-                    // listId="node-drop-area"
                     itemType="ADDED_NODES"
                     accepts={({ meta: { itemType } }) => itemType !== 'ADDED_NODES'}
                     onDrop={handleAddNode}
                     items={nodesForPrompt.map(
                       (item) => ({
-                        id: item._uid,
+                        id: item._uid, // eslint-disable-line no-underscore-dangle
                         data: item,
+                        props: item,
                       }),
                     )}
                     itemComponent={Node}
-                    hoverColor="transparent"
                   />
                   <AnimatePresence>
                     { willAccept && (
@@ -238,7 +224,7 @@ console.log(nodesForPrompt);
                 itemType="SOURCE_NODES" // drop type
                 excludeItems={excludeItems}
                 itemComponent={DataCard}
-                dragComponent={NodePreview}
+                dragComponent={Node}
                 sortOptions={sortOptions}
                 searchOptions={searchOptions}
                 accepts={({ meta: { itemType } }) => itemType !== 'SOURCE_NODES'}
@@ -266,5 +252,4 @@ NameGeneratorList.defaultProps = {
 
 export default compose(
   withPrompt,
-  // withExternalData('stage.dataSource', 'externalData'),
 )(NameGeneratorList);

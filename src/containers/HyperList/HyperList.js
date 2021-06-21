@@ -61,7 +61,7 @@ const getCellRenderer = (Component, DragComponent) => ({
 
   if (!item) { return null; }
 
-  const { props, id, data } = item;
+  const { id, data, props } = item;
   const { disabled } = dynamicProperties;
 
   const isDisabled = disabled && disabled.includes(id);
@@ -71,10 +71,8 @@ const getCellRenderer = (Component, DragComponent) => ({
     : variants;
 
   const preview = DragComponent
-    ? <DragComponent {...props} />
+    ? <DragComponent {...data} />
     : null;
-
-    // meta={{ data, id }}
 
   return (
     <motion.div
@@ -82,7 +80,7 @@ const getCellRenderer = (Component, DragComponent) => ({
       style={style}
       initial="hidden"
       animate="visible"
-      transition={{ duration: duration.slow }}
+      transition={{ duration: duration.standard }}
       variants={cellVariants}
       key={id}
     >
