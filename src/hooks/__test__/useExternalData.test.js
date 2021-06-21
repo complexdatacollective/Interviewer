@@ -48,32 +48,38 @@ const mockResult = {
 const mockSource = 'bar';
 
 const MockComponent = ({ callback, source, subject }) => {
-  const [data, isLoading] = useExternalData(source, subject);
+  const [data, status] = useExternalData(source, subject);
   useEffect(() => {
-    callback(data, isLoading);
-  }, [isLoading]);
+    callback(data, status);
+  }, [status]);
   return null;
 };
 
-loadExternalData
-  .mockImplementation(() => Promise.resolve(mockResult));
-
 describe('useExternalData', () => {
   it('It fetches the external data based on the source prop', (done) => {
+    loadExternalData
+      .mockImplementationOnce(() => Promise.resolve(mockResult));
+
     let count = 0;
 
-    const callback = (data, isLoading) => {
+    const callback = (data, status) => {
       count += 1;
 
       switch (count) {
         case 1: {
           expect(data).toBe(null);
-          expect(isLoading).toBe(false);
+          expect(status).toEqual({
+            isLoading: false,
+            error: null,
+          });
           break;
         }
         case 2: {
           expect(data).toBe(null);
-          expect(isLoading).toBe(true);
+          expect(status).toEqual({
+            isLoading: true,
+            error: null,
+          });
           break;
         }
         case 3: {
@@ -84,7 +90,62 @@ describe('useExternalData', () => {
               type: 'person',
             },
           ]);
-          expect(isLoading).toBe(false);
+          expect(status).toEqual({
+            isLoading: false,
+            error: null,
+          });
+          break;
+        }
+        default:
+      }
+      if (count === 3) {
+        done();
+      }
+    };
+
+    mount((
+      <Provider store={createStore(mockReducer)}>
+        <MockComponent
+          callback={callback}
+          source={mockSource}
+          subject={{ entity: 'node', type: 'person' }}
+        />
+      </Provider>
+    ));
+  });
+
+  it('It catches errors', (done) => {
+    const error = new Error('broken');
+    loadExternalData
+      .mockImplementationOnce(() => Promise.reject(error));
+    let count = 0;
+
+    const callback = (data, status) => {
+      count += 1;
+
+      switch (count) {
+        case 1: {
+          expect(data).toBe(null);
+          expect(status).toEqual({
+            isLoading: false,
+            error: null,
+          });
+          break;
+        }
+        case 2: {
+          expect(data).toBe(null);
+          expect(status).toEqual({
+            isLoading: true,
+            error: null,
+          });
+          break;
+        }
+        case 3: {
+          expect(data).toEqual(null);
+          expect(status).toEqual({
+            isLoading: false,
+            error,
+          });
           break;
         }
         default:
