@@ -10,7 +10,7 @@ const defaultFuseOptions = {
  * Convert protocol config options into a format
  * usable by useSort. Essentially specific to SearchableList.
  */
-const useFuseOptions = (searchOptions, path = 'data', fallbackFuseOptions = defaultFuseOptions) => {
+const useFuseOptions = (searchOptions, fallbackFuseOptions = defaultFuseOptions, path = ['data', 'attributes']) => {
   const matchProperties = get(searchOptions, 'matchProperties');
   const fuzziness = get(searchOptions, 'fuzziness');
 
@@ -19,7 +19,7 @@ const useFuseOptions = (searchOptions, path = 'data', fallbackFuseOptions = defa
   }
 
   const keys = useMemo(
-    () => matchProperties.map((property) => compact([path, property])),
+    () => matchProperties.map((property) => compact([...path, property])),
     [matchProperties],
   );
 

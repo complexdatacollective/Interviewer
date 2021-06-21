@@ -1,24 +1,12 @@
 import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import { get, compact } from 'lodash';
-import { getVariableMap } from './helpers';
-
-const withVariableId = (variableMap, path) => (item) => {
-  const ref = variableMap.find(([, name]) => name === item.variable);
-  const variable = ref ? ref[0] : item.variable;
-
-  return {
-    ...item,
-    variable: compact([path, variable]),
-  };
-};
+import { convertNamesToUUIDs } from './helpers';
 
 /**
  * Convert protocol config options into a format
  * usable by useSort. Essentially specific to SearchableList.
  */
-const useSortableProperties = (sortOptions, path = 'data') => {
-  const variableMap = useSelector(getVariableMap);
+const useSortableProperties = (variableDefinitions, sortOptions, path = ['data', 'attributes']) => {
   const sortableProperties = get(sortOptions, 'sortableProperties');
   const initialSortOrder = get(sortOptions, ['sortOrder', 0]);
 
@@ -28,11 +16,10 @@ const useSortableProperties = (sortOptions, path = 'data') => {
 
   const enhancedInitialSortOrder = useMemo(
     () => {
-      const ref = variableMap.find(([, name]) => name === initialSortOrder.property);
-      const property = ref ? ref[0] : initialSortOrder.property;
+      const property = convertNamesToUUIDs(variableDefinitions, initialSortOrder.property);
       return {
         ...initialSortOrder,
-        property: compact([path, property]),
+        property: compact([...path, property]),
       };
     },
     [initialSortOrder],
@@ -41,7 +28,14 @@ const useSortableProperties = (sortOptions, path = 'data') => {
   const enhancedSortableProperties = useMemo(
     () => {
       if (!sortableProperties) { return []; }
-      return sortableProperties.map(withVariableId(variableMap, path));
+      return sortableProperties
+        .map(({ variable, label }) => {
+          const uuid = convertNamesToUUIDs(variableDefinitions, variable);
+          return {
+            variable: compact([...path, uuid]),
+            label,
+          };
+        });
     },
     [sortableProperties],
   );

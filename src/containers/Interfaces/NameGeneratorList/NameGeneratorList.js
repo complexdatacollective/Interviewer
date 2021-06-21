@@ -4,11 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { motion, AnimatePresence } from 'framer-motion';
+import { get } from 'lodash';
 import { Node as UINode } from '@codaco/ui';
 import { DataCard } from '@codaco/ui/lib/components/Cards';
 import withPrompt from '../../../behaviours/withPrompt';
 import PromptSwiper from '../../PromptSwiper';
-import { makeNetworkNodesForPrompt, makeGetAdditionalAttributes } from '../../../selectors/interface';
+import { makeNetworkNodesForPrompt, makeGetAdditionalAttributes, makeGetNodeVariables } from '../../../selectors/interface';
 import { makeGetPromptNodeModelData } from '../../../selectors/name-generator';
 import { entityPrimaryKeyProperty } from '../../../ducks/modules/network';
 import { actionCreators as sessionsActions } from '../../../ducks/modules/sessions';
@@ -24,6 +25,7 @@ import usePropSelector from './usePropSelector';
 import useFuseOptions from './useFuseOptions';
 import useSortableProperties from './useSortableProperties';
 import useItems from './useItems';
+import { convertNamesToUUIDs } from './helpers';
 
 const countColumns = (width) => (
   width < 140 ? 1 : Math.floor(width / 450)
@@ -98,19 +100,36 @@ const NameGeneratorList = (props) => {
     prompts,
   } = stage;
 
-  const nodeType = stage && stage.subject && stage.subject.type;
-
   const dispatch = useDispatch();
+  const { duration } = useAnimationSettings();
+
   const newNodeAttributes = usePropSelector(makeGetAdditionalAttributes, props, true);
   const newNodeModelData = usePropSelector(makeGetPromptNodeModelData, props, true);
   const nodesForPrompt = usePropSelector(makeNetworkNodesForPrompt, props, true);
+  const nodeVariables = usePropSelector(makeGetNodeVariables, props, true);
+  const nodeType = stage && stage.subject && stage.subject.type;
   const dropNodeColor = useSelector(getNodeColor(nodeType));
 
-  const sortOptions = useSortableProperties(stage.sortOptions);
-  const searchOptions = useFuseOptions(stage.searchOptions);
+  const sortOptions = useSortableProperties(nodeVariables, stage.sortOptions);
 
-  const { duration } = useAnimationSettings();
+  const searchOptions = useFuseOptions(
+    ((options) => {
+      if (!options) { return options; }
+
+      return {
+        ...options,
+        matchProperties: convertNamesToUUIDs(nodeVariables, get(stage, 'searchOptions.matchProperties')),
+      };
+    })(stage.searchOptions),
+    {
+      keys: [['props', 'label']],
+      threshold: 0,
+    },
+  );
+
   const [itemsStatus, items, excludeItems] = useItems(props);
+
+  console.log({ items, searchOptions });
 
   const { isOver, willAccept } = useDropMonitor('node-drop-area')
     || { isOver: false, willAccept: false };
