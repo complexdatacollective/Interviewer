@@ -47,10 +47,10 @@ const useSearch = (list, options, initialQuery = '') => {
   const delayRef = useRef();
 
   const [query, setQuery, displayQuery] = useQuery(initialQuery);
-  const [results, setResults] = useState(null);
+  const [results, setResults] = useState(list);
   const [isWaiting, setIsWaiting] = useState(false);
 
-  const hasQuery = query.length >= MIN_QUERY_LENGTH;
+  const hasQuery = displayQuery.length >= MIN_QUERY_LENGTH;
 
   const fuseOptions = { ...defaultFuseOptions, ...options };
 
@@ -88,7 +88,6 @@ const useSearch = (list, options, initialQuery = '') => {
 
     if (list.length > 100) {
       setIsWaiting(true);
-      setResults(null);
     }
 
     search(query);

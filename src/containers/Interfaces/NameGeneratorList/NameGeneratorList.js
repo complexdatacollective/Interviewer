@@ -129,8 +129,6 @@ const NameGeneratorList = (props) => {
 
   const [itemsStatus, items, excludeItems] = useItems(props);
 
-  console.log({ items, searchOptions });
-
   const { isOver, willAccept } = useDropMonitor('node-drop-area')
     || { isOver: false, willAccept: false };
 
