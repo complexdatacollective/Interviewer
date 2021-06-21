@@ -45,7 +45,7 @@ const getCellRenderer = (Component, DragComponent) => ({
   rowIndex,
   style,
 }) => {
-  const { duration } = useAnimationSettings();
+  const { duration, easing } = useAnimationSettings();
 
   const {
     items,
@@ -80,7 +80,7 @@ const getCellRenderer = (Component, DragComponent) => ({
       style={style}
       initial="hidden"
       animate="visible"
-      transition={{ duration: duration.standard }}
+      transition={{ duration: duration.standard, easing }}
       variants={cellVariants}
       key={id}
     >

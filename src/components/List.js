@@ -14,12 +14,12 @@ const NoopComponent = () => null;
 
 const variants = {
   show: {
-    scale: 1,
-    opacity: 1,
+    translateY: ['-50%', '0%'],
+    opacity: [0, 1],
   },
   hidden: {
-    scale: 0,
-    opacity: 0.5,
+    translateY: 0,
+    opacity: 0,
   },
 };
 
@@ -37,7 +37,7 @@ const getItemRenderer = (ItemComponent, DragComponent) => {
     props,
     itemType,
   }) => {
-    const { duration } = useAnimationSettings();
+    const { duration, easing } = useAnimationSettings();
     const reducedMotion = useReducedMotion();
 
     const cellVariants = reducedMotion
@@ -51,7 +51,7 @@ const getItemRenderer = (ItemComponent, DragComponent) => {
     return (
       <motion.div
         className="list__item"
-        transition={{ duration: duration.standard }}
+        transition={{ duration: duration.standard, ease: easing }}
         variants={cellVariants}
         key={id}
       >
@@ -93,9 +93,8 @@ const List = ({
   const { duration } = useAnimationSettings();
 
   const containerVariants = {
-    hidden: { opacity: 0 },
+    hidden: {},
     show: {
-      opacity: 1,
       transition: {
         staggerChildren: duration.fast / 2,
       },
