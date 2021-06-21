@@ -4,6 +4,8 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import * as framer from 'framer-motion';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 import SessionNavigation from '../SessionNavigation';
 
 describe('Session Navigation Component', () => {
@@ -16,16 +18,24 @@ describe('Session Navigation Component', () => {
 
   let component = null;
 
+  const mockStore = createStore(() => ({
+    ui: {
+      FORM_IS_READY: false,
+    },
+  }));
+
   beforeEach(() => {
-    component = mount(
-      <SessionNavigation
-        percentProgress="40"
-        onClickBack={backMock}
-        onClickNext={nextMock}
-        setShowSubMenu={showSubMenuMock}
-        setExpanded={setExpandedMock}
-      />,
-    );
+    component = mount((
+      <Provider store={mockStore}>
+        <SessionNavigation
+          percentProgress="40"
+          onClickBack={backMock}
+          onClickNext={nextMock}
+          setShowSubMenu={showSubMenuMock}
+          setExpanded={setExpandedMock}
+        />
+      </Provider>
+    ));
   });
 
   it('toggles menu on timeline click', () => {

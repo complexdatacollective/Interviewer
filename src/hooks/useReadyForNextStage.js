@@ -1,5 +1,6 @@
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { get } from 'lodash';
 import { actionCreators as uiActions } from '../ducks/modules/ui';
 
 const useReadyForNextStage = () => {
@@ -9,7 +10,7 @@ const useReadyForNextStage = () => {
     dispatch(uiActions.update({ FORM_IS_READY: isReady }));
   }, [dispatch]);
 
-  const isReady = useSelector((state) => state.ui.FORM_IS_READY);
+  const isReady = useSelector((state) => get(state, ['ui', 'FORM_IS_READY'], false));
 
   useEffect(() => {
     updateReady(false);
