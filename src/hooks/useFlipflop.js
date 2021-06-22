@@ -14,7 +14,7 @@ const useFlipflop = (restValue, delay) => {
 
     _setState(value);
 
-    setTimeout(() => {
+    timer.current = setTimeout(() => {
       _setState(restValue);
     }, delay);
   }, [delay, restValue]);
