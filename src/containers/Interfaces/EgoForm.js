@@ -46,7 +46,7 @@ const EgoForm = ({
 }) => {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [, setIsReadyForNext] = useReadyForNextStage();
-  const [showScrollStatus, setShowScrollStatus] = useFlipflop(true, 5000);
+  const [showScrollStatus, setShowScrollStatus] = useFlipflop(true, 7000);
   const formState = useRef({
     isFormDirty,
     isFormValid,
