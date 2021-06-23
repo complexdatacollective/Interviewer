@@ -26,6 +26,12 @@
   &__main {
     flex: 1;
     background: linear-gradient(#404088, var(--color-cyber-grape));
+
+    &--centered {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
   }
 
   &__footer {

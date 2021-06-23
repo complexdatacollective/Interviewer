@@ -4,8 +4,6 @@ import { motion } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@codaco/ui';
 import { SessionCard } from '@codaco/ui/lib/components/Cards';
-import { exportToFile, exportToServer } from '../../utils/exportProcess';
-import Section from '../StartScreen/Section';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import useServerConnectionStatus from '../../hooks/useServerConnectionStatus';
@@ -16,7 +14,7 @@ import formatDatestamp from '../../utils/formatDatestamp';
 
 const oneBasedIndex = (i) => parseInt(i || 0, 10) + 1;
 
-const SessionSelect = () => {
+const SessionSelect = ({ onComplete, onContinue }) => {
   const sessions = useSelector((state) => state.sessions);
   const [filterTerm, setFilterTerm] = useState(null);
   const [selectedSessions, setSelectedSessions] = useState([]);
@@ -39,6 +37,7 @@ const SessionSelect = () => {
       onConfirm: () => {
         selectedSessions.map((session) => deleteSession(session));
         setSelectedSessions([]);
+        onComplete();
       },
       message: (
         <p>
@@ -106,8 +105,6 @@ const SessionSelect = () => {
   }, [filterTerm, selectedSessions]);
 
   const exportSessions = (toServer = false) => {
-    const exportFunction = toServer ? exportToServer : exportToFile;
-
     const sessionsToExport = selectedSessions
       .map((session) => {
         const sessionProtocol = installedProtocols[sessions[session].protocolUID];
@@ -119,7 +116,7 @@ const SessionSelect = () => {
         );
       });
 
-    exportFunction(sessionsToExport);
+    onContinue(sessionsToExport, toServer);
   };
 
   if (Object.keys(sessions).length === 0) { return null; }
