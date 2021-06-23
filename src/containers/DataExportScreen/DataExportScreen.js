@@ -35,12 +35,22 @@ const DataExportScreen = ({ show, onClose }) => {
   const [step, setStep] = useState(2);
   const [sessionsToExport, setSessionsToExport] = useState(null);
 
-  const nextStep = () => setStep((s) => s + 1);
+  const reset = () => {
+    setSessionsToExport(null);
+    setStep(1);
+  };
+
+  const complete = () => {
+    reset();
+    onClose();
+  };
 
   const handleSessionSelect = (sessions, toServer = false) => {
     if (toServer) {
       setStep(3);
-      exportToServer(sessions);
+      exportToServer(sessions)
+        .then(complete)
+        .catch(() => onClose());
       return;
     }
 
@@ -50,26 +60,33 @@ const DataExportScreen = ({ show, onClose }) => {
 
   const handleOptionsContinue = () => {
     setStep(3);
-    exportToFile(sessionsToExport);
+    exportToFile(sessionsToExport)
+      .then(complete)
+      .catch((e) => {
+        console.log('caught error');
+        console.error(e);
+        onClose();
+      });
   };
 
   useEffect(() => {
     if (!show) {
-      setSessionsToExport(null);
-      setStep(1);
+      reset();
     }
   }, [show]);
 
   return (
     <Modal show={show}>
       <div className="data-export-screen">
-        <button
-          className="data-export-screen__close"
-          type="button"
-          onClick={onClose}
-        >
-          Close
-        </button>
+        { step !== 3 && (
+          <button
+            className="data-export-screen__close"
+            type="button"
+            onClick={onClose}
+          >
+            Close
+          </button>
+        )}
         <AnimatePresence>
           <Steps index={step}>
             <Step key="select">

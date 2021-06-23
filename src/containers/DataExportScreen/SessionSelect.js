@@ -160,10 +160,10 @@ const SessionSelect = ({ onComplete, onContinue }) => {
 
   return (
     <>
+      <motion.header layout>
+        <h2>Export &amp; Manage Interview Data</h2>
+      </motion.header>
       <motion.main layout className="data-export-screen__main data-export-screen__session-select">
-        <motion.header layout>
-          <h2>Export &amp; Manage Interview Data</h2>
-        </motion.header>
         <motion.div layout className="content-area">
           Select one or more interview sessions by tapping them, and then delete or export
           using the buttons provided. Remember that you can change export options from the

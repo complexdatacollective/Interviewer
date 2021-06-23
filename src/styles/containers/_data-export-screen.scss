@@ -25,6 +25,9 @@
 
   &__main {
     flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
     background: linear-gradient(#404088, var(--color-cyber-grape));
 
     &--centered {
@@ -32,6 +35,10 @@
       justify-content: center;
       align-items: center;
     }
+  }
+
+  > header {
+    padding: unit(4) unit(6) 0;
   }
 
   &__footer {
@@ -54,10 +61,6 @@
   }
 
   &__session-select {
-    > header {
-      padding: unit(4) unit(6) 0;
-    }
-
     .content-area {
       padding: unit(1) unit(6);
     }
@@ -85,4 +88,16 @@
       }
     }
   }
+
+  .settings-element {
+    display: flex;
+    margin-bottom: 2rem;
+
+    & > .form-field-container .form-field {
+      padding: 0 2rem 0 0;
+      background: rgba(0, 0, 0, 0);
+      width: auto;
+    }
+  }
+
 }

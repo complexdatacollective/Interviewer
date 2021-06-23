@@ -111,6 +111,7 @@ export const exportToFile = (sessionList) => {
     }
 
     errors.push(error);
+    reject(new Error('broken'));
   });
 
   fileExportManager.on('finished', () => {
@@ -175,7 +176,7 @@ export const exportToFile = (sessionList) => {
       [getRemoteProtocolID(protocol.name)]: protocol,
     }), {});
 
-  fileExportManager.exportSessions(sessionList, reformatedProtocols)
+  return fileExportManager.exportSessions(sessionList, reformatedProtocols)
     .then(({ run, abort }) => {
       // Attatch the dismisshandler to the toast now that we have exportPromise defined.
       dispatch(toastActions.updateToast(toastUUID, {
