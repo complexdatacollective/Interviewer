@@ -19,6 +19,7 @@ const Overlay = (props) => {
     title,
     footer,
     fullheight,
+    fullscreen,
     useFullScreenForms,
     forceDisableFullScreen,
     className,
@@ -31,6 +32,7 @@ const Overlay = (props) => {
     // eslint-disable-next-line @codaco/spellcheck/spell-checker
     { 'overlay--fullheight': fullheight },
     { 'overlay--fullscreen': !forceDisableFullScreen && useFullScreenForms },
+    { 'overlay--fullscreen': fullscreen },
     className,
   );
 

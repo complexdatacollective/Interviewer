@@ -8,6 +8,7 @@ import ImportSection from './ImportSection';
 import ServerSection from './ServerSection';
 import WhatsNewSection from './WhatsNewSection';
 import DataExportSection from './DataExportSection';
+import Overlay from '../Overlay';
 
 const StartScreen = ({
   activeSessionId,
@@ -44,6 +45,7 @@ const StartScreen = ({
         <DataExportSection />
         <ImportSection />
         <ServerSection />
+        {/* <Overlay show fullscreen> full screen </Overlay> */}
       </motion.div>
     </div>
   );
