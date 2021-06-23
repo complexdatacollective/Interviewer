@@ -202,7 +202,7 @@ const mapStateToProps = (state) => ({
   nodeVariableEntry: getNodeEntryForCurrentPrompt(state),
   shouldShowMocksItem: !!getNodeEntryForCurrentPrompt(state),
   additionalMockAttributes: getAdditionalAttributesForCurrentPrompt(state),
-  enableExperimentalTTS: state.deviceSettings.enableExperimentalTTS,
+  enableExperimentalTTS: !!state.deviceSettings.enableExperimentalTTS, // boolean value for Toggle
 });
 
 export default compose(
