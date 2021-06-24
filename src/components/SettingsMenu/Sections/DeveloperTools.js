@@ -5,7 +5,8 @@ import { withHandlers, compose } from 'recompose';
 import { push } from 'connected-react-router';
 import { motion } from 'framer-motion';
 import { Button } from '@codaco/ui/lib/components';
-import { Number, Toggle } from '@codaco/ui/lib/components/Fields';
+import { Number } from '@codaco/ui/lib/components/Fields';
+import Toggle from '@codaco/ui/lib/components/Fields/Toggle';
 import { importProtocolFromURI } from '../../../utils/protocol/importProtocol';
 import { actionCreators as dialogsActions } from '../../../ducks/modules/dialogs';
 import { actionCreators as mockActions } from '../../../ducks/modules/mock';
@@ -13,6 +14,7 @@ import { getAdditionalAttributesForCurrentPrompt, getNodeEntryForCurrentPrompt }
 import { DEVELOPMENT_PROTOCOL_URL } from '../../../config';
 import { actionCreators as deviceSettingsActions } from '../../../ducks/modules/deviceSettings';
 import TabItemVariants from './TabItemVariants';
+import { isAndroid } from '../../../utils/Environment';
 
 const DeveloperTools = (props) => {
   const {
@@ -30,6 +32,23 @@ const DeveloperTools = (props) => {
 
   return (
     <>
+      <motion.article variants={TabItemVariants} className="settings-element">
+        <Toggle
+          disabled={!!isAndroid()}
+          input={{
+            value: enableExperimentalTTS,
+            onChange: () => toggleSetting('enableExperimentalTTS'),
+          }}
+        />
+        <div>
+          <h2>Use experimental text-to-speech for prompts</h2>
+          <p>
+            This experimental features enables prompt text to be read aloud by the devices
+            native text-to-speech (TTS) engine. This is an experimental feature that may not
+            work correctly.
+          </p>
+        </div>
+      </motion.article>
       <motion.article variants={TabItemVariants} className="settings-element">
         <div className="form-field-container">
           <div className="form-field">
@@ -146,22 +165,6 @@ const DeveloperTools = (props) => {
         >
           Generate
         </Button>
-      </motion.article>
-      <motion.article variants={TabItemVariants} className="settings-element">
-        <Toggle
-          input={{
-            value: enableExperimentalTTS,
-            onChange: () => toggleSetting('enableExperimentalTTS'),
-          }}
-        />
-        <div>
-          <h2>Use experimental text-to-speech for prompts</h2>
-          <p>
-            This experimental features enables prompt text to be read aloud by the devices
-            native text-to-speech (TTS) engine. This is an experimental feature that may not
-            work correctly.
-          </p>
-        </div>
       </motion.article>
     </>
   );
