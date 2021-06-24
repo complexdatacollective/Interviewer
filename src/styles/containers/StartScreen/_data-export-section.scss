@@ -1,35 +1,34 @@
 .data-export-section {
   background: linear-gradient(#404088, var(--color-cyber-grape)); //sass-lint:disable-line no-color-literals
 
+  // &__main {
+  //   > header {
+  //     padding: unit(4) unit(6) 0;
+  //   }
+  // }
+
   &__main {
-    > header {
-      padding: unit(4) unit(6) 0;
-    }
+    padding: unit(4) unit(6);
 
-    .content-area {
-      padding: unit(1) unit(6);
-    }
-
-    .selection-status {
-      margin: unit(2) unit(4);
+    > .content-buttons {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-direction: row-reverse;
-      height: unit(6);
+      justify-content: space-around;
 
-      .header-toggle {
-        margin-left: 2rem;
+      .graphic-button {
+        max-width: 30rem;
       }
-    }
 
-    .new-filterable-list {
-      margin: unit(4);
-      margin-bottom: 0;
+      > :only-child {
+        max-width: 30rem;
+        margin-left: -50% !important; //sass-lint:disable-line no-important
+      }
 
-      &__main {
-        max-height: 45vh;
-        min-height: 16rem;
+      > :first-child {
+        margin-right: unit(2);
+      }
+
+      > :last-child {
+        margin-left: unit(2);
       }
     }
   }

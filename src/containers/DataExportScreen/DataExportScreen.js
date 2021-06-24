@@ -32,7 +32,7 @@ const Step = ({ children }) => (
 );
 
 const DataExportScreen = ({ show, onClose }) => {
-  const [step, setStep] = useState(2);
+  const [step, setStep] = useState(1);
   const [sessionsToExport, setSessionsToExport] = useState(null);
 
   const reset = () => {
@@ -87,6 +87,7 @@ const DataExportScreen = ({ show, onClose }) => {
           </div>
         )}
         <AnimatePresence>
+          <p>hi {step}</p>
           <Steps index={step}>
             <Step key="select">
               <SessionManager

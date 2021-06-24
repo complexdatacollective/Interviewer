@@ -111,7 +111,6 @@ export const exportToFile = (sessionList) => {
     }
 
     errors.push(error);
-    reject(new Error('broken'));
   });
 
   fileExportManager.on('finished', () => {
