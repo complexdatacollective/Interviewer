@@ -11,6 +11,7 @@ import { Switch } from '../../components';
 import NewFilterableListWrapper, { getFilteredList } from '../../components/NewFilterableListWrapper';
 import { asNetworkWithSessionVariables } from '../../utils/networkFormat';
 import formatDatestamp from '../../utils/formatDatestamp';
+import Scroller from '../../components/Scroller';
 
 const oneBasedIndex = (i) => parseInt(i || 0, 10) + 1;
 
@@ -161,7 +162,7 @@ const SessionSelect = ({ onComplete, onContinue }) => {
   return (
     <>
       <motion.header layout>
-        <h2>Export &amp; Manage Interview Data</h2>
+        <h1>Export &amp; Manage Interview Data</h1>
       </motion.header>
       <motion.main layout className="data-export-screen__main data-export-screen__session-select">
         <motion.div layout className="content-area">

@@ -7,9 +7,9 @@ import ExportSettings from '../../components/SettingsMenu/Sections/ExportOptions
 const ExportOptions = ({ onContinue }) => (
   <>
     <motion.header layout>
-      <h2>Export Options</h2>
+      <h1>Export Options</h1>
     </motion.header>
-    <motion.main layout className="data-export-screen__main data-export-screen__session-select">
+    <motion.main layout className="data-export-screen__main data-export-screen__session-select data-export-screen__main--scrollable">
       <Scroller>
         <motion.div layout className="content-area">
           <ExportSettings />

@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import ExportSprite from '@codaco/ui/lib/components/Sprites/ExportSprite';
 import { Steps } from '@codaco/ui/lib/components/Wizard';
-import { Modal } from '@codaco/ui';
+import { Modal, Icon } from '@codaco/ui';
 import { exportToFile, exportToServer } from '../../utils/exportProcess';
-import SessionSelect from './SessionSelect';
+import SessionManager from './SessionManager';
 import ExportOptions from './ExportOptions';
 
 // const exportSessions = (sessionsToExport, toServer = false) => {
@@ -79,18 +79,17 @@ const DataExportScreen = ({ show, onClose }) => {
     <Modal show={show}>
       <div className="data-export-screen">
         { step !== 3 && (
-          <button
+          <div
             className="data-export-screen__close"
-            type="button"
             onClick={onClose}
           >
-            Close
-          </button>
+            <Icon name="close" />
+          </div>
         )}
         <AnimatePresence>
           <Steps index={step}>
             <Step key="select">
-              <SessionSelect
+              <SessionManager
                 onContinue={handleSessionSelect}
                 onComplete={onClose}
               />

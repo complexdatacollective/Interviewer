@@ -3,6 +3,7 @@
   height: 100vh;
   display: flex;
   position: relative;
+  background: var(--color-cyber-grape);
 
   .steps {
     flex: 1;
@@ -11,10 +12,16 @@
 
   &__close {
     position: absolute;
-    top: 1rem;
-    right: 1rem;
+    top: 2rem;
+    right: 2rem;
     width: 2rem;
     height: 2rem;
+    cursor: pointer;
+
+    .icon {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
   }
 
   &__step {
@@ -28,17 +35,28 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    background: linear-gradient(#404088, var(--color-cyber-grape));
+    padding: 2rem 0;
+    background: linear-gradient(rgb(64, 64, 136), var(--color-cyber-grape));
 
     &--centered {
       display: flex;
       justify-content: center;
       align-items: center;
     }
+
+    &--scrollable {
+      padding: 0;
+    }
+
+    .scrollable {
+      padding: 2rem 0 0;
+    }
   }
 
-  > header {
-    padding: unit(4) unit(6) 0;
+  header {
+    // padding: unit(4) unit(6) 0;
+    padding: unit(1) unit(6);
+    background: rgba(0, 0, 0, 0.2);
   }
 
   &__footer {
