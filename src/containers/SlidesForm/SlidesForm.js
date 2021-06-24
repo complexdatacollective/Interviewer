@@ -1,15 +1,22 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState, useEffect } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+} from 'react';
 import cx from 'classnames';
+import uuid from 'uuid';
 import PropTypes from 'prop-types';
+import { debounce } from 'lodash';
 import { connect } from 'react-redux';
 import { ProgressBar } from '@codaco/ui';
 import { Markdown } from '@codaco/ui/lib/components/Fields';
 import { submit, isValid, isDirty } from 'redux-form';
 import Swiper from 'react-id-swiper';
 import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
-import useGetFormName from '../../hooks/useGetFormName';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
+import useReadyForNextStage from '../../hooks/useReadyForNextStage';
 
 const confirmDialog = {
   type: 'Confirm',
@@ -29,12 +36,19 @@ const SlidesForm = (props) => {
     registerBeforeNext,
     onComplete,
     openDialog,
-    getIsFormValid,
-    getIsFormDirty,
+    getFormName,
+    isFormValid,
+    isFormDirty,
     updateItem,
   } = props;
 
-  const getFormName = useGetFormName(stage);
+  const formState = useRef({
+    isFormValid,
+    isFormDirty,
+  });
+
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [, setIsReadyForNext] = useReadyForNextStage();
 
   const [pendingDirection, setPendingDirection] = useState(null);
   const [pendingStage, setPendingStage] = useState(-1);
@@ -77,18 +91,26 @@ const SlidesForm = (props) => {
     submitForm();
   };
 
-  const isFormValid = () => {
-    const formName = getFormName(getItemIndex());
-    return getIsFormValid(formName);
-  };
+  const getIsFormValid = () => (
+    formState.current.isFormValid[getItemIndex()]
+  );
 
-  const isFormDirty = () => {
-    const formName = getFormName(getItemIndex());
-    return getIsFormDirty(formName);
-  };
+  const getIsFormDirty = () => (
+    formState.current.isFormDirty[getItemIndex()]
+  );
+
+  useEffect(() => {
+    formState.current = {
+      isFormValid,
+      isFormDirty,
+    };
+
+    const nextIsReady = getIsFormValid() && scrollProgress === 1;
+    setIsReadyForNext(nextIsReady);
+  }, [...isFormValid, ...isFormDirty, setIsReadyForNext, scrollProgress]);
 
   const confirmIfChanged = () => {
-    if (!isFormDirty()) { return Promise.resolve(true); }
+    if (!getIsFormDirty()) { return Promise.resolve(true); }
     return openDialog(confirmDialog);
   };
 
@@ -102,7 +124,7 @@ const SlidesForm = (props) => {
   const beforeNext = (direction, index = -1) => {
     const isPendingStageChange = (index !== -1);
     if (isPendingStageChange) {
-      if (isFormValid() && isFormDirty()) {
+      if (getIsFormValid() && getIsFormDirty()) {
         setPendingStage(index);
         submitForm(); // submit and handleUpdate will complete
       } else {
@@ -130,7 +152,7 @@ const SlidesForm = (props) => {
       return;
     }
 
-    if (direction < 0 && !isFormValid()) {
+    if (direction < 0 && !getIsFormValid()) {
       confirmIfChanged()
         .then(handleConfirmBack);
       return;
@@ -167,6 +189,17 @@ const SlidesForm = (props) => {
     if (stageIndex !== -1) { return true; }
     return false;
   };
+
+  const handleScroll = useCallback(debounce((_, progress) => {
+    setScrollProgress(progress);
+    const nextIsReady = getIsFormValid() && progress === 1;
+
+    setIsReadyForNext(nextIsReady);
+  }, 200), [setIsReadyForNext, setScrollProgress]);
+
+  useEffect(() => {
+    setIsReadyForNext(false);
+  }, [activeIndex]);
 
   const handleUpdate = (...update) => {
     updateItem(...update);
@@ -219,6 +252,7 @@ const SlidesForm = (props) => {
               subject={stage.subject}
               item={item}
               onUpdate={handleUpdate}
+              onScroll={handleScroll}
               form={slideForm}
               submitButton={<button type="submit" key="submit" aria-label="Submit" hidden onClick={handleEnterSubmit} />}
             />
@@ -233,7 +267,7 @@ const SlidesForm = (props) => {
           {' '}
           <strong>{items.length}</strong>
         </h6>
-        <ProgressBar orientation="horizontal" percentProgress={(activeIndex / items.length) * 100} />
+        <ProgressBar orientation="horizontal" percentProgress={(activeIndex / items.length) * 100} nudge={false} />
       </div>
     </div>
   );
@@ -259,14 +293,26 @@ SlidesForm.defaultProps = {
   itemName: '',
 };
 
-const mapStateToProps = (state, props) => {
-  const getIsFormValid = (formName) => isValid(formName)(state);
-  const getIsFormDirty = (formName) => isDirty(formName)(state);
+const makeMapStateToProps = () => {
+  const formPrefix = uuid();
 
-  return {
-    form: props.stage.form,
-    getIsFormValid,
-    getIsFormDirty,
+  const getFormName = (formId) => (formId ? `${formPrefix}_${formId}` : formPrefix);
+
+  return (state, props) => {
+    const isFormValid = props.items.map(
+      (_, index) => isValid(getFormName(index))(state),
+    );
+
+    const isFormDirty = props.items.map(
+      (_, index) => isDirty(getFormName(index))(state),
+    );
+
+    return {
+      form: props.stage.form,
+      getFormName,
+      isFormValid,
+      isFormDirty,
+    };
   };
 };
 
@@ -275,7 +321,7 @@ const mapDispatchToProps = {
   openDialog: dialogActions.openDialog,
 };
 
-const withStore = connect(mapStateToProps, mapDispatchToProps);
+const withStore = connect(makeMapStateToProps, mapDispatchToProps);
 
 export { SlidesForm };
 

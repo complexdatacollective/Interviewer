@@ -4,9 +4,9 @@ import { Text } from '@codaco/ui/lib/components/Fields';
 import { connect } from 'react-redux';
 import { motion, AnimatePresence, AnimateSharedLayout } from 'framer-motion';
 import { compose } from 'recompose';
+import { Scroller } from '@codaco/ui';
 import { getCSSVariableAsNumber, getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
 import { getProtocolStages } from '../../selectors/protocol';
-import Scroller from '../Scroller';
 import StagePreview from './StagePreview';
 import { currentStageIndex as getCurrentStageIndex } from '../../utils/matchSessionPath';
 
@@ -184,7 +184,7 @@ const StagesMenu = (props) => {
         className="stages-menu__wrapper"
       >
         {renderMenuItems.length > 0 ? (
-          <Scroller useSmoothScrolling={false} forwardedRef={scrollerRef}>
+          <Scroller useSmoothScrolling={false} ref={scrollerRef}>
             <AnimateSharedLayout>
               <AnimatePresence>
                 { renderMenuItems }
