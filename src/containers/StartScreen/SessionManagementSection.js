@@ -14,8 +14,8 @@ const SessionManagementSection = () => {
 
   return (
     <>
-      <Section className="start-screen-section data-export-section">
-        <main className="data-export-section__main">
+      <Section className="start-screen-section session-management-section">
+        <main className="session-management-section__main">
           <header>
             <h2>Manage and export sessions</h2>
           </header>

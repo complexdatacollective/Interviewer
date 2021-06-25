@@ -9,14 +9,14 @@ const ExportOptions = ({ onContinue }) => (
     <motion.header layout>
       <h1>Export Options</h1>
     </motion.header>
-    <motion.main layout className="data-export-screen__main data-export-screen__session-select data-export-screen__main--scrollable">
+    <motion.main layout className="session-management-screen__main session-management-screen__session-select session-management-screen__main--scrollable">
       <Scroller>
         <motion.div layout className="content-area">
           <ExportSettings />
         </motion.div>
       </Scroller>
     </motion.main>
-    <motion.footer layout className="data-export-screen__footer">
+    <motion.footer layout className="session-management-screen__footer">
       <div />
       <div className="action-buttons">
         <Button color="platinum" onClick={onContinue}>Create Export</Button>

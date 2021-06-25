@@ -6,7 +6,7 @@ import { Steps } from '@codaco/ui/lib/components/Wizard';
 import { Modal, Icon } from '@codaco/ui';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { exportToFile, exportToServer } from '../../utils/exportProcess';
-import SessionManager from './SessionSelect';
+import SessionSelect from './SessionSelect';
 import ExportOptions from './ExportOptions';
 
 const stepVariants = {
@@ -17,7 +17,7 @@ const stepVariants = {
 
 const Step = ({ children }) => (
   <motion.div
-    className="data-export-screen__step"
+    className="session-management-screen__step"
     variants={stepVariants}
     initial="initial"
     animate="show"
@@ -94,10 +94,10 @@ const DataExportScreen = ({ show, onClose, mode }) => {
 
   return (
     <Modal show={show}>
-      <div className="data-export-screen">
+      <div className="session-management-screen">
         { step !== 3 && (
           <div
-            className="data-export-screen__close"
+            className="session-management-screen__close"
             onClick={handleClose}
           >
             <Icon name="close" />
@@ -106,7 +106,7 @@ const DataExportScreen = ({ show, onClose, mode }) => {
         <AnimatePresence>
           <Steps index={step}>
             <Step key="select">
-              <SessionManager
+              <SessionSelect
                 onContinue={handleSessionSelect}
                 onComplete={onClose}
                 mode={mode}
@@ -116,7 +116,7 @@ const DataExportScreen = ({ show, onClose, mode }) => {
               <ExportOptions onContinue={handleOptionsContinue} />
             </Step>
             <Step key="export">
-              <div className="data-export-screen__main data-export-screen__main--centered">
+              <div className="session-management-screen__main session-management-screen__main--centered">
                 <ExportSprite size={500} />
               </div>
             </Step>
