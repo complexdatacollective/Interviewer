@@ -4,7 +4,7 @@ import ExportSprite from '@codaco/ui/lib/components/Sprites/ExportSprite';
 import { Steps } from '@codaco/ui/lib/components/Wizard';
 import { Modal, Icon } from '@codaco/ui';
 import { exportToFile, exportToServer } from '../../utils/exportProcess';
-import SessionManager from './SessionManager';
+import SessionManager from './SessionSelect';
 import ExportOptions from './ExportOptions';
 
 // const exportSessions = (sessionsToExport, toServer = false) => {
@@ -31,7 +31,7 @@ const Step = ({ children }) => (
   </motion.div>
 );
 
-const DataExportScreen = ({ show, onClose }) => {
+const DataExportScreen = ({ show, onClose, mode }) => {
   const [step, setStep] = useState(1);
   const [sessionsToExport, setSessionsToExport] = useState(null);
 
@@ -87,12 +87,12 @@ const DataExportScreen = ({ show, onClose }) => {
           </div>
         )}
         <AnimatePresence>
-          <p>hi {step}</p>
           <Steps index={step}>
             <Step key="select">
               <SessionManager
                 onContinue={handleSessionSelect}
                 onComplete={onClose}
+                mode={mode}
               />
             </Step>
             <Step key="options">

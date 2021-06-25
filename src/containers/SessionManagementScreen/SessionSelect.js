@@ -11,11 +11,15 @@ import { Switch } from '../../components';
 import NewFilterableListWrapper, { getFilteredList } from '../../components/NewFilterableListWrapper';
 import { asNetworkWithSessionVariables } from '../../utils/networkFormat';
 import formatDatestamp from '../../utils/formatDatestamp';
-import Scroller from '../../components/Scroller';
+
+export const MODES = {
+  manage: 'MANAGE',
+  export: 'EXPORT',
+};
 
 const oneBasedIndex = (i) => parseInt(i || 0, 10) + 1;
 
-const SessionSelect = ({ onComplete, onContinue }) => {
+const SessionSelect = ({ onComplete, onContinue, mode = MODES.export }) => {
   const sessions = useSelector((state) => state.sessions);
   const [filterTerm, setFilterTerm] = useState(null);
   const [selectedSessions, setSelectedSessions] = useState([]);
@@ -159,6 +163,8 @@ const SessionSelect = ({ onComplete, onContinue }) => {
     setSelectedSessions([]);
   };
 
+  if (!mode) { return null; }
+
   return (
     <>
       <motion.header layout>
@@ -223,11 +229,20 @@ const SessionSelect = ({ onComplete, onContinue }) => {
         </motion.div>
       </motion.main>
       <motion.footer layout className="data-export-screen__footer">
-        <Button color="neon-coral--dark" onClick={handleDeleteSessions} disabled={selectedSessions.length === 0}>Delete Selected</Button>
-        <div className="action-buttons">
-          { pairedServerConnection === 'ok' && (<Button onClick={() => exportSessions(true)} color="mustard" disabled={pairedServerConnection !== 'ok' || selectedSessions.length === 0}>Export Selected To Server</Button>)}
-          <Button color="platinum" onClick={() => exportSessions(false)} disabled={selectedSessions.length === 0}>Export Selected To File</Button>
-        </div>
+        <div />
+
+        { mode === MODES.manage && (
+          <div className="action-buttons">
+            <Button color="neon-coral--dark" onClick={handleDeleteSessions} disabled={selectedSessions.length === 0}>Delete Selected</Button>
+          </div>
+        )}
+
+        { mode === MODES.export && (
+          <div className="action-buttons">
+            { pairedServerConnection === 'ok' && (<Button onClick={() => exportSessions(true)} color="mustard" disabled={pairedServerConnection !== 'ok' || selectedSessions.length === 0}>Export Selected To Server</Button>)}
+            <Button color="platinum" onClick={() => exportSessions(false)} disabled={selectedSessions.length === 0}>Export Selected To File</Button>
+          </div>
+        )}
       </motion.footer>
     </>
   );
