@@ -117,7 +117,7 @@ const DataExportScreen = ({ show, onClose, mode }) => {
             </Step>
             <Step key="export">
               <div className="data-export-screen__main data-export-screen__main--centered">
-                <ExportSprite size={300} />
+                <ExportSprite size={500} />
               </div>
             </Step>
           </Steps>
