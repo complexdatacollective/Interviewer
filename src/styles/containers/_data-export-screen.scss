@@ -36,7 +36,7 @@
     display: flex;
     flex-direction: column;
     padding: 2rem 0;
-    background: linear-gradient(rgb(64, 64, 136), var(--color-cyber-grape));
+    background: linear-gradient(rgb(64, 64, 136), var(--color-cyber-grape)); //sass-lint:disable-line no-color-literals
 
     &--centered {
       display: flex;
@@ -54,9 +54,8 @@
   }
 
   header {
-    // padding: unit(4) unit(6) 0;
     padding: unit(1) unit(6);
-    background: rgba(0, 0, 0, 0.2);
+    background: var(--transparent-dark);
   }
 
   &__footer {
@@ -111,10 +110,12 @@
     display: flex;
     margin-bottom: 2rem;
 
-    & > .form-field-container .form-field {
-      padding: 0 2rem 0 0;
-      background: rgba(0, 0, 0, 0);
-      width: auto;
+    & > .form-field-container {
+      .form-field {
+        padding: 0 2rem 0 0;
+        background: transparent;
+        width: auto;
+      }
     }
   }
 
