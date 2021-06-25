@@ -1,17 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useDispatch } from 'react-redux';
 import ExportSprite from '@codaco/ui/lib/components/Sprites/ExportSprite';
 import { Steps } from '@codaco/ui/lib/components/Wizard';
 import { Modal, Icon } from '@codaco/ui';
+import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { exportToFile, exportToServer } from '../../utils/exportProcess';
 import SessionManager from './SessionSelect';
 import ExportOptions from './ExportOptions';
-
-// const exportSessions = (sessionsToExport, toServer = false) => {
-//   const exportFunction = toServer ? exportToServer : exportToFile;
-
-//   exportFunction(sessionsToExport);
-// };
 
 const stepVariants = {
   initial: { opacity: 0, position: 'static' },
@@ -35,6 +31,9 @@ const DataExportScreen = ({ show, onClose, mode }) => {
   const [step, setStep] = useState(1);
   const [sessionsToExport, setSessionsToExport] = useState(null);
 
+  const dispatch = useDispatch();
+  const openDialog = (dialog) => dispatch(dialogActions.openDialog(dialog));
+
   const reset = () => {
     setSessionsToExport(null);
     setStep(1);
@@ -50,7 +49,7 @@ const DataExportScreen = ({ show, onClose, mode }) => {
       setStep(3);
       exportToServer(sessions)
         .then(complete)
-        .catch(() => onClose());
+        .catch((e) => { onClose(); throw e; });
       return;
     }
 
@@ -62,11 +61,29 @@ const DataExportScreen = ({ show, onClose, mode }) => {
     setStep(3);
     exportToFile(sessionsToExport)
       .then(complete)
-      .catch((e) => {
-        console.log('caught error');
-        console.error(e);
+      .catch((e) => { onClose(); throw e; });
+  };
+
+  const handleClose = () => {
+    if (step === 1) {
+      onClose();
+      return;
+    }
+
+    openDialog({
+      type: 'Confirm',
+      title: 'Cancel Export?',
+      confirmLabel: 'Cancel Export',
+      onConfirm: () => {
         onClose();
-      });
+      },
+      message: (
+        <p>
+          This action will clear any previously selected sessions and cannot be undone.
+          Are you sure you want to continue?
+        </p>
+      ),
+    });
   };
 
   useEffect(() => {
@@ -81,7 +98,7 @@ const DataExportScreen = ({ show, onClose, mode }) => {
         { step !== 3 && (
           <div
             className="data-export-screen__close"
-            onClick={onClose}
+            onClick={handleClose}
           >
             <Icon name="close" />
           </div>
