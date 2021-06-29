@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { compose } from 'redux';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -11,7 +11,7 @@ import withPrompt from '../../../behaviours/withPrompt';
 import PromptSwiper from '../../PromptSwiper';
 import { makeNetworkNodesForPrompt, makeGetAdditionalAttributes, makeGetNodeVariables } from '../../../selectors/interface';
 import { makeGetPromptNodeModelData } from '../../../selectors/name-generator';
-import { entityPrimaryKeyProperty } from '../../../ducks/modules/network';
+import { entityPrimaryKeyProperty, entityAttributesProperty } from '../../../ducks/modules/network';
 import { actionCreators as sessionsActions } from '../../../ducks/modules/sessions';
 import { getNodeColor } from '../../../selectors/network';
 import List from '../../../components/List';
@@ -110,24 +110,35 @@ const NameGeneratorList = (props) => {
   const nodeType = stage && stage.subject && stage.subject.type;
   const dropNodeColor = useSelector(getNodeColor(nodeType));
 
+  const [itemsStatus, items, excludeItems] = useItems(props);
+
   const sortOptions = useSortableProperties(nodeVariables, stage.sortOptions);
 
-  const searchOptions = useFuseOptions(
-    ((options) => {
-      if (!options) { return options; }
+  const searchOptions = ((options) => {
+    if (!options) { return options; }
 
-      return {
-        ...options,
-        matchProperties: convertNamesToUUIDs(nodeVariables, get(stage, 'searchOptions.matchProperties')),
-      };
-    })(stage.searchOptions),
+    return {
+      ...options,
+      matchProperties: convertNamesToUUIDs(nodeVariables, get(stage, 'searchOptions.matchProperties')),
+    };
+  })(stage.searchOptions);
+
+  const fallbackKeys = useMemo(
+    () => Object
+      .keys(
+        get(items, [0, 'data', entityAttributesProperty], {}),
+      )
+      .map((attribute) => ['data', entityAttributesProperty, attribute]),
+    [items],
+  );
+
+  const fuseOptions = useFuseOptions(
+    searchOptions,
     {
-      keys: [['props', 'label']],
+      keys: fallbackKeys,
       threshold: 0,
     },
   );
-
-  const [itemsStatus, items, excludeItems] = useItems(props);
 
   const { isOver, willAccept } = useDropMonitor('node-drop-area')
     || { isOver: false, willAccept: false };
@@ -245,7 +256,7 @@ const NameGeneratorList = (props) => {
                 itemComponent={DataCard}
                 dragComponent={Node}
                 sortOptions={sortOptions}
-                searchOptions={searchOptions}
+                searchOptions={fuseOptions}
                 accepts={({ meta: { itemType } }) => itemType !== 'SOURCE_NODES'}
                 onDrop={handleRemoveNode}
                 dropNodeColor={dropNodeColor}
