@@ -11,7 +11,6 @@
   }
 
   &__grid {
-    padding-right: 20px;
     @include scrollable;
     overflow-x: hidden !important; // sass-lint:disable-line no-important
   }
