@@ -1,15 +1,17 @@
 .hyper-list {
   @include gpu;
-  margin-right: -1rem;
+  // margin-right: -1rem;
   display: flex;
 
-  &__container {
+  &__container,
+  &__sizer {
     flex: 1;
     display: flex;
     position: relative;
   }
 
   &__grid {
+    padding-right: 20px;
     @include scrollable;
     overflow-x: hidden !important; // sass-lint:disable-line no-important
   }

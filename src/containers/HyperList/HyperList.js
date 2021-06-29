@@ -16,6 +16,8 @@ import { DragSource, DropTarget, MonitorDropTarget } from '../../behaviours/Drag
 import useAnimationSettings from '../../hooks/useAnimationSettings';
 import useDebounce from '../../hooks/useDebounce';
 
+const SCROLL_BORDER = 14; // ~1rem
+
 const ListContext = React.createContext({ items: [], columns: 0 });
 
 const NoopComponent = () => null;
@@ -144,7 +146,10 @@ const HyperList = ({
 
   const [gridProps, ready] = useGridSizer(SizeRenderer, items, columnCount, debouncedWidth);
 
-  const handleResize = useCallback(({ width: newWidth }) => setWidth(newWidth), [setWidth]);
+  const handleResize = useCallback(
+    ({ width: newWidth }) => setWidth(newWidth - SCROLL_BORDER),
+    [setWidth],
+  );
 
   const itemKey = useCallback((index) => {
     const dataIndex = getDataIndex(columnCount, index);
@@ -196,26 +201,28 @@ const HyperList = ({
         <div className="hyper-list__container">
           { showPlaceholder && placeholder }
           { showEmpty && <EmptyComponent />}
-          <AutoSizer onResize={handleResize}>
-            {(containerSize) => {
-              // If auto sizer is not ready, items would be sized incorrectly
-              if (!ready) { return null; }
+          <div className="hyper-list__sizer">
+            <AutoSizer onResize={handleResize}>
+              {(containerSize) => {
+                // If auto sizer is not ready, items would be sized incorrectly
+                if (!ready) { return null; }
 
-              if (!showResults) { return null; }
+                if (!showResults) { return null; }
 
-              return (
-                <Grid
-                  className="hyper-list__grid"
-                  height={containerSize.height}
-                  width={containerSize.width}
-                  itemKey={itemKey}
-                  {...gridProps}
-                >
-                  {CellRenderer}
-                </Grid>
-              );
-            }}
-          </AutoSizer>
+                return (
+                  <Grid
+                    className="hyper-list__grid"
+                    height={containerSize.height}
+                    width={containerSize.width}
+                    itemKey={itemKey}
+                    {...gridProps}
+                  >
+                    {CellRenderer}
+                  </Grid>
+                );
+              }}
+            </AutoSizer>
+          </div>
         </div>
       </ListContext.Provider>
     </div>
