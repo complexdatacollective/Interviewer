@@ -199,9 +199,9 @@ const HyperList = ({
     <div className={classNames}>
       <ListContext.Provider value={context}>
         <div className="hyper-list__container">
-          { showPlaceholder && placeholder }
-          { showEmpty && <EmptyComponent />}
           <div className="hyper-list__sizer">
+            { showPlaceholder && placeholder }
+            { showEmpty && <EmptyComponent />}
             <AutoSizer onResize={handleResize}>
               {(containerSize) => {
                 // If auto sizer is not ready, items would be sized incorrectly

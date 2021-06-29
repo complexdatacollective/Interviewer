@@ -50,7 +50,7 @@ const useSearch = (list, options, initialQuery = '') => {
   const [results, setResults] = useState(list);
   const [isWaiting, setIsWaiting] = useState(false);
 
-  const hasQuery = displayQuery.length >= MIN_QUERY_LENGTH;
+  const hasQuery = query.length >= MIN_QUERY_LENGTH;
 
   const fuseOptions = { ...defaultFuseOptions, ...options };
 
@@ -82,12 +82,13 @@ const useSearch = (list, options, initialQuery = '') => {
   };
 
   useEffect(() => {
+    if (displayQuery.length < MIN_QUERY_LENGTH) { return; }
+    setIsWaiting(true);
+  }, [displayQuery]);
+
+  useEffect(() => {
     if (!hasQuery) {
       return;
-    }
-
-    if (list.length > 100) {
-      setIsWaiting(true);
     }
 
     search(query);
