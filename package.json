@@ -136,7 +136,6 @@
     "react-router-dom": "^5.2.0",
     "react-transform-hmr": "^1.0.4",
     "react-transition-group": "^2.5.0",
-    "react-virtualized": "~9.22.3",
     "react-virtualized-auto-sizer": "~1.0.5",
     "react-window": "~1.8.6",
     "recompose": "^0.26.0",
