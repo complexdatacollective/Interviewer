@@ -39,10 +39,13 @@
     padding: 2rem 0;
     background: linear-gradient(rgb(64, 64, 136), var(--color-cyber-grape)); //sass-lint:disable-line no-color-literals
 
-    &--centered {
+    &--export {
       display: flex;
       justify-content: center;
       align-items: center;
+      font-family: var(--heading-font-family);
+      font-weight: 600;
+      font-size: 1.05rem;
     }
 
     &--scrollable {

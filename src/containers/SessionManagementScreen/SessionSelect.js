@@ -19,7 +19,11 @@ export const MODES = {
 
 const oneBasedIndex = (i) => parseInt(i || 0, 10) + 1;
 
-const SessionSelect = ({ onComplete, onContinue, mode = MODES.export }) => {
+const SessionSelect = ({
+  onComplete,
+  onContinue,
+  mode,
+}) => {
   const sessions = useSelector((state) => state.sessions);
   const [filterTerm, setFilterTerm] = useState(null);
   const [selectedSessions, setSelectedSessions] = useState([]);
@@ -242,6 +246,10 @@ const SessionSelect = ({ onComplete, onContinue, mode = MODES.export }) => {
       </motion.footer>
     </>
   );
+};
+
+SessionSelect.defaultProps = {
+  mode: MODES.export,
 };
 
 export default SessionSelect;

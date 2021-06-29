@@ -26,6 +26,9 @@ const ExportOptions = (props) => {
 
   return (
     <>
+      <motion.article className="settings-element">
+        Choose which format to export the selected session in, along with any options.
+      </motion.article>
       <motion.article variants={TabItemVariants} className="settings-element">
         <Toggle
           input={{

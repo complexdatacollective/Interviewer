@@ -116,8 +116,9 @@ const DataExportScreen = ({ show, onClose, mode }) => {
               <ExportOptions onContinue={handleOptionsContinue} />
             </Step>
             <Step key="export">
-              <div className="session-management-screen__main session-management-screen__main--centered">
+              <div className="session-management-screen__main session-management-screen__main--export">
                 <ExportSprite size={500} />
+                Exporting...
               </div>
             </Step>
           </Steps>
