@@ -124,8 +124,6 @@ const SessionSelect = ({ onComplete, onContinue, mode = MODES.export }) => {
     onContinue(sessionsToExport, toServer);
   };
 
-  if (Object.keys(sessions).length === 0) { return null; }
-
   const isSelectAll = (
     selectedSessions.length > 0
     && selectedSessions.length === filteredIds.length
@@ -162,8 +160,6 @@ const SessionSelect = ({ onComplete, onContinue, mode = MODES.export }) => {
 
     setSelectedSessions([]);
   };
-
-  if (!mode) { return null; }
 
   return (
     <>
