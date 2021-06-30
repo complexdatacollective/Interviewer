@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { get } from 'lodash';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -14,6 +14,7 @@ import PromptObstacle from '../Canvas/PromptObstacle';
 import ButtonObstacle from '../Canvas/ButtonObstacle';
 import { actionCreators as resetActions } from '../../ducks/modules/reset';
 import { makeGetDisplayEdges, makeGetNextUnplacedNode, makeGetPlacedNodes } from '../../selectors/canvas';
+import useForceSimulation from '../../hooks/useForceSimulation';
 
 const withResetInterfaceHandler = withHandlers({
   handleResetInterface: ({
@@ -50,6 +51,29 @@ const Sociogram = (props) => {
     nextUnplacedNode,
     edges,
   } = props;
+
+  const handler = (event) => {
+    console.log({ event });
+    switch (event.data.type) {
+      case 'tick':
+        break;
+      case 'end':
+        break;
+      default:
+    }
+  };
+
+  const [initLayoutEngine] = useForceSimulation(handler);
+
+  useEffect(() => {
+    console.log('hi');
+    initLayoutEngine({
+      data: {
+        nodes: [],
+        links: [],
+      },
+    });
+  }, []);
 
   // Behaviour Configuration
   const allowHighlighting = get(prompt, 'highlight.allowHighlighting', false);
