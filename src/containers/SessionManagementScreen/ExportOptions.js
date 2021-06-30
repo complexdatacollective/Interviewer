@@ -1,7 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Button } from '@codaco/ui';
-import Scroller from '../../components/Scroller';
+import { Button, Scroller } from '@codaco/ui';
 import ExportSettings from '../../components/SettingsMenu/Sections/ExportOptions';
 
 const ExportOptions = ({ onContinue }) => (
