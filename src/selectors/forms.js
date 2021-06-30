@@ -4,7 +4,7 @@ import { getProtocolCodebook } from './protocol';
 
 // Prop selectors
 
-const propFields = (_, props) => props.fields;
+const propFields = (_, props) => props.fields || [];
 const propStageSubject = (_, props) => props.subject || { entity: 'ego' };
 
 // MemoedSelectors

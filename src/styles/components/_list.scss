@@ -1,0 +1,14 @@
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  align-content: flex-start;
+  min-height: 100%;
+  width: 100%;
+
+  &--hover,
+  &--drag {
+    background-color: var(--node-list-action-bg);
+  }
+}

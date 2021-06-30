@@ -1,5 +1,6 @@
 .alter-form {
   @include interface-centering;
+  // $box-shadow: rgba(0, 0, 0, 0.1);;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -108,6 +109,14 @@
 
     &--show {
       opacity: 1;
+    }
+
+    &--status-only {
+      background: var(--modal-background);
+      border-radius: 5rem;
+      box-shadow: 1px 1px 0.5rem var(--drop-shadow-color);
+      width: auto;
+      padding: 1rem 1.5rem;
     }
 
     .progress {

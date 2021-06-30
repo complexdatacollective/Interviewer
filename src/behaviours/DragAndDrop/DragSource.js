@@ -11,11 +11,13 @@ const dragSource = (WrappedComponent) => ({
   allowDrag = true,
   meta = () => ({}),
   scrollDirection = VERTICAL_SCROLL,
+  preview,
   ...rest
 }) => {
   const node = useRef();
+  const previewRef = useRef();
   let dragManager = null;
-  let preview = null;
+  let previewEl = null;
 
   const [isDragging, setIsDragging] = useState(false);
 
@@ -27,26 +29,30 @@ const dragSource = (WrappedComponent) => ({
   };
 
   const cleanupPreview = () => {
-    if (preview) {
-      preview.cleanup();
-      preview = null;
+    if (previewEl) {
+      previewEl.cleanup();
+      previewEl = null;
     }
   };
 
   const createPreview = () => {
-    const draggablePreview = new DragPreview(node.current);
-    preview = draggablePreview;
+    if (!preview) {
+      previewEl = new DragPreview(node.current);
+      return;
+    }
+
+    previewEl = new DragPreview(previewRef.current);
   };
 
   const updatePreview = ({ x, y }) => {
-    if (preview) {
-      preview.position({ x, y });
+    if (previewEl) {
+      previewEl.position({ x, y });
     }
   };
 
   const setValidMove = (valid) => {
-    if (!preview) return;
-    preview.setValidMove(valid);
+    if (!previewEl) return;
+    previewEl.setValidMove(valid);
   };
 
   const onDragStart = (movement) => {
@@ -105,7 +111,24 @@ const dragSource = (WrappedComponent) => ({
 
   return (
     <div style={styles()} className="draggable" ref={node}>
-      <WrappedComponent {...rest} scrollDirection={scrollDirection} />
+      <WrappedComponent
+        {...rest}
+        allowDrag={allowDrag}
+        scrollDirection={scrollDirection}
+      />
+      { preview && (
+        <div
+          ref={previewRef}
+          style={{
+            display: 'none',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+          }}
+        >
+          {preview}
+        </div>
+      )}
     </div>
   );
 };

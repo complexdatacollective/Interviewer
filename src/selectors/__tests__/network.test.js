@@ -92,4 +92,20 @@ describe('network selector', () => {
       expect(label).toEqual('First');
     });
   });
+
+  describe('getNodeLabel(nodeType)(state, nodeAttributes)', () => {
+    const mockCodebook = { node: { person: mockNodeCodebookDefinition } };
+    const mockState = {
+      activeSessionId: 'mock',
+      sessions: { mock: { protocolUID: 'mock' } },
+      installedProtocols: {
+        mock: {
+          codebook: mockCodebook,
+        },
+      },
+    };
+
+    expect(Network.getNodeLabel(mockState, 'person')(mockNode1))
+      .toEqual('Node Label');
+  });
 });
