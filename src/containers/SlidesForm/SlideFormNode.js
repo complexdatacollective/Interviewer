@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { withProps } from 'recompose';
-import { Scroller } from '../../components';
+import { Scroller } from '@codaco/ui';
 import { entityAttributesProperty, entityPrimaryKeyProperty } from '../../ducks/modules/network';
 import Node from '../Node';
 import Form from '../Form';
@@ -22,6 +22,7 @@ class SlideFormNode extends PureComponent {
       submitButton,
       id,
       otherNetworkEntities,
+      onScroll,
     } = this.props;
 
     return (
@@ -29,7 +30,7 @@ class SlideFormNode extends PureComponent {
         <div className="slide-content">
           <Node {...item} />
           <div className="alter-form__form-container">
-            <Scroller>
+            <Scroller onScroll={onScroll}>
               <Form
                 {...form}
                 className="alter-form__form"
@@ -54,12 +55,14 @@ SlideFormNode.propTypes = {
   subject: PropTypes.object.isRequired,
   item: PropTypes.object.isRequired,
   onUpdate: PropTypes.func,
+  onScroll: PropTypes.func,
   submitButton: PropTypes.object,
 };
 
 SlideFormNode.defaultProps = {
   form: {},
   onUpdate: () => {},
+  onScroll: () => {},
   submitButton: <button type="submit" key="submit" aria-label="Submit" hidden />,
 };
 

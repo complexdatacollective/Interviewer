@@ -2,12 +2,16 @@ import React, { useState } from 'react';
 import { countBy } from 'lodash';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import { Node, Icon, Button } from '@codaco/ui';
+import {
+  Node,
+  Icon,
+  Button,
+  Scroller,
+} from '@codaco/ui';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { getCaseId, getSessionProgress } from '../../selectors/session';
 import { getActiveProtocolName, getProtocolCodebook } from '../../selectors/protocol';
 import { getNetwork } from '../../selectors/network';
-import Scroller from '../Scroller';
 import { Overlay } from '../../containers/Overlay';
 import Form from '../../containers/Form';
 import useInterval from '../../hooks/useInterval';

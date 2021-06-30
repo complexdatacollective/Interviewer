@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Flipper } from 'react-flip-toolkit';
 import cx from 'classnames';
+import color from 'color';
 import { getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
 import {
   makeNetworkNodesForType, makeGetVariableOptions, makeGetPromptVariable, getPromptOtherVariable,
@@ -15,6 +16,16 @@ import { entityAttributesProperty } from '../../ducks/modules/network';
 import getAbsoluteBoundingRect from '../../utils/getAbsoluteBoundingRect';
 import CategoricalListItem from './CategoricalListItem';
 import { getItemSize, getExpandedSize } from './helpers';
+
+const isSpecialValue = (value) => {
+  if (value === null) {
+    return true;
+  }
+  if (typeof value === 'number' && value < 0) {
+    return true;
+  }
+  return false;
+};
 
 /**
   * CategoricalList: Renders a list of categorical bin items
@@ -84,9 +95,15 @@ class CategoricalList extends Component {
     return expandedBinIndex !== null;
   }
 
-  getCatColor = (itemNumber) => {
-    if (itemNumber >= 0) { return this.colorPresets[itemNumber % this.colorPresets.length]; }
-    return null;
+  getCatColor = (itemNumber, bin) => {
+    if (itemNumber < 0) { return null; }
+    const categoryColor = this.colorPresets[itemNumber % this.colorPresets.length];
+
+    if (isSpecialValue(bin.value)) {
+      return color(categoryColor).desaturate(0.6).darken(0.5).toString();
+    }
+
+    return categoryColor;
   };
 
   getBinSize = (index) => {
@@ -121,7 +138,7 @@ class CategoricalList extends Component {
           size={this.getBinSize(index)}
           activePromptVariable={activePromptVariable}
           promptOtherVariable={promptOtherVariable}
-          accentColor={this.getCatColor(index)}
+          accentColor={this.getCatColor(index, bin)}
           onExpandBin={onExpandBin}
           isExpanded={expandedBinIndex === index}
           sortOrder={prompt.binSortOrder}

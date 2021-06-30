@@ -1,16 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 import { Icon, ProgressBar } from '@codaco/ui';
 import { motion } from 'framer-motion';
+import useReadyForNextStage from '../../hooks/useReadyForNextStage';
 
-const SessionNavigation = (props) => {
-  const {
-    onClickBack,
-    onClickNext,
-    percentProgress,
-    setExpanded,
-    setShowSubMenu,
-  } = props;
+const SessionNavigation = ({
+  onClickBack,
+  onClickNext,
+  percentProgress,
+  setExpanded,
+  setShowSubMenu,
+}) => {
+  const [isReadyForNextStage] = useReadyForNextStage();
 
   const variants = {
     normal: {
@@ -75,7 +77,10 @@ const SessionNavigation = (props) => {
       <motion.div
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
-        className="session-navigation__button session-navigation__button--next"
+        className={cx(
+          'session-navigation__button session-navigation__button--next',
+          { 'session-navigation__button--nudge': isReadyForNextStage },
+        )}
         onClick={(e) => {
           if (e) {
             e.stopPropagation();
