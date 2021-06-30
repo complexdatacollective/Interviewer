@@ -98,6 +98,13 @@ export const makeGetNodeLabel = () => createDeepEqualSelector(
   (nodeTypeDefinition) => (node) => labelLogic(nodeTypeDefinition, getEntityAttributes(node)),
 );
 
+// Pure state selector variant of makeGetNodeLabel
+export const getNodeLabel = (state, nodeType) => {
+  const codebook = getProtocolCodebook(state);
+  const nodeTypeDefinition = get(codebook, ['node', nodeType]);
+  return (nodeAttributes) => labelLogic(nodeTypeDefinition, nodeAttributes);
+};
+
 export const makeGetNodeColor = () => createDeepEqualSelector(
   getProtocolCodebook,
   (_, props) => props.type,
@@ -106,6 +113,13 @@ export const makeGetNodeColor = () => createDeepEqualSelector(
     return (nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].color) || 'node-color-seq-1';
   },
 );
+
+// Pure state selector variant of makeGetNodeColor
+export const getNodeColor = (nodeType) => (state) => {
+  const codebook = getProtocolCodebook(state);
+  const nodeInfo = codebook.node;
+  return (nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].color) || 'node-color-seq-1';
+};
 
 export const makeGetEdgeLabel = () => createDeepEqualSelector(
   getProtocolCodebook,

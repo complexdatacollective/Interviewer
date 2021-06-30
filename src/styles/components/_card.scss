@@ -15,7 +15,10 @@
     height: 2rem;
     width: 2rem;
     margin-right: .5rem;
-    transition: fill var(--animation-duration-fast) var(--animation-easing);
+    // transition: fill var(--animation-duration-fast) var(--animation-easing);
+    transition-property: fill, opacity;
+    transition-duration: var(--animation-duration-fast);
+    transition-timing-function: var(--animation-easing);
     position: absolute;
     bottom: 2rem;
     right: 2rem;
@@ -37,6 +40,11 @@
         fill: palette('primary');
       }
     }
+  }
+
+  &--disabled {
+    opacity: 0.4;
+    cursor: default;
   }
 
   &__attribute {

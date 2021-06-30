@@ -72,16 +72,19 @@ const fileExtension = (fileName) => fileName.split('.').pop();
  * @returns {object} Network object in format { nodes, edges }
  *
  */
-const loadExternalData = (protocolUID, fileName, type) => {
+const loadExternalData = (protocolUID, fileName, type) => new Promise((resolve, reject) => {
   const fileType = fileExtension(fileName) === 'csv' ? 'csv' : 'json';
+
+  // return reject(new Error('Nope'));
 
   switch (type) {
     case 'network':
       return getAssetUrl(protocolUID, fileName)
-        .then((url) => fetchNetwork(url, fileType));
+        .then((url) => fetchNetwork(url, fileType))
+        .then(resolve);
     default:
-      return new Error('You must specify an external data type.');
+      return reject(new Error('You must specify an external data type.'));
   }
-};
+});
 
 export default loadExternalData;
