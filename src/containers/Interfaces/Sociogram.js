@@ -14,7 +14,7 @@ import PromptObstacle from '../Canvas/PromptObstacle';
 import ButtonObstacle from '../Canvas/ButtonObstacle';
 import { actionCreators as resetActions } from '../../ducks/modules/reset';
 import { makeGetDisplayEdges, makeGetNextUnplacedNode, makeGetPlacedNodes } from '../../selectors/canvas';
-import useForceSimulation from '../../hooks/useForceSimulation';
+import useAutoLayout from './useAutoLayout';
 
 const withResetInterfaceHandler = withHandlers({
   handleResetInterface: ({
@@ -52,28 +52,7 @@ const Sociogram = (props) => {
     edges,
   } = props;
 
-  const handler = (event) => {
-    console.log({ event });
-    switch (event.data.type) {
-      case 'tick':
-        break;
-      case 'end':
-        break;
-      default:
-    }
-  };
-
-  const [initLayoutEngine] = useForceSimulation(handler);
-
-  useEffect(() => {
-    console.log('hi');
-    initLayoutEngine({
-      data: {
-        nodes: [],
-        links: [],
-      },
-    });
-  }, []);
+  const [_nodes, _edges] = useAutoLayout(undefined, nodes, edges);
 
   // Behaviour Configuration
   const allowHighlighting = get(prompt, 'highlight.allowHighlighting', false);
@@ -109,10 +88,10 @@ const Sociogram = (props) => {
             image={backgroundImage}
           />
           <EdgeLayout
-            edges={edges}
+            edges={_edges}
           />
           <NodeLayout
-            nodes={nodes}
+            nodes={_nodes}
             id="NODE_LAYOUT"
             highlightAttribute={highlightAttribute}
             layoutVariable={layoutVariable}

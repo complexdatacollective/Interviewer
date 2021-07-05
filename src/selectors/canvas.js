@@ -74,6 +74,7 @@ const edgeCoords = (edge, { nodes, layout }) => {
 
   return {
     key: `${edge.from}_${edge.type}_${edge.to}`,
+    ids: { from: edge.from, to: edge.to },
     type: edge.type,
     from: from[entityAttributesProperty][layout],
     to: to[entityAttributesProperty][layout],

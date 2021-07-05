@@ -1,5 +1,6 @@
 import { useRef, useCallback, useEffect } from 'react';
-import ForceSimulationWorker from './forceSimulation.worker.js';
+// import { throttle } from '
+import ForceSimulationWorker from './forceSimulation.worker';
 
 // example listener:
 // function (event) {
@@ -9,18 +10,41 @@ import ForceSimulationWorker from './forceSimulation.worker.js';
 //   }
 // };
 
+let count = 0;
+
 const useForceSimulation = (listener) => {
   const worker = useRef(new ForceSimulationWorker());
+  const rAF = useRef(null);
 
-  const init = useCallback(({ nodes, links }) => {
+  const tick = useCallback(() => {
+    count += 1;
+    // console.log('tick');
     worker.current.postMessage({
-      nodes,
-      links,
+      type: 'tick',
     });
+
+    if (count > 100) { return; }
+    rAF.current = requestAnimationFrame(tick);
+  });
+
+  const init = useCallback(({ nodes, edges }) => {
+    worker.current.postMessage({
+      type: 'init',
+      nodes,
+      edges,
+    });
+
+    count = 0;
+
+    tick();
   });
 
   useEffect(() => {
     worker.current.onmessage = (event) => {
+      if (event.data.type === 'end') {
+        cancelAnimationFrame(rAF);
+      }
+
       listener(event);
     };
   }, []);
