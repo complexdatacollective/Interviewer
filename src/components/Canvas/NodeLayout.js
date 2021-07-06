@@ -29,7 +29,7 @@ const NodeLayout = React.forwardRef(({
 
   return (
     <div className="node-layout" ref={ref}>
-      { nodes.map((node, index) => {
+      { nodes.map((node, index) => (
         <LayoutNode
           key={node[entityPrimaryKeyProperty]}
           node={node}
@@ -43,7 +43,7 @@ const NodeLayout = React.forwardRef(({
           areaWidth={width}
           areaHeight={height}
         />
-      })}
+      ))}
     </div>
   );
 });

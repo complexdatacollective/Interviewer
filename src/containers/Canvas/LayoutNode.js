@@ -23,6 +23,7 @@ class LayoutNode extends PureComponent {
       onSelected,
     } = this.props;
     // const nodeAttributes = getEntityAttributes(node);
+    console.log({ position });
 
     const { x, y } = position;
 

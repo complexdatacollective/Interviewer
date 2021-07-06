@@ -53,6 +53,7 @@ const Sociogram = (props) => {
   } = props;
 
   const [nodePositions] = useAutoLayout(undefined, nodes, edges);
+  // console.log({ nodePositions });
 
   // Behaviour Configuration
   const allowHighlighting = get(prompt, 'highlight.allowHighlighting', false);
