@@ -18,9 +18,10 @@ onmessage = function (event) {
 
   switch (event.data.type) {
     case 'initialize': {
+      console.log({ links });
       simulation = forceSimulation(nodes)
         .force('charge', forceManyBody())
-        .force('link', forceLink(links).distance(20).strength(1))
+        .force('link', forceLink(links).distance(10).strength(1))
         .force('x', forceX())
         .force('y', forceY())
         .stop();

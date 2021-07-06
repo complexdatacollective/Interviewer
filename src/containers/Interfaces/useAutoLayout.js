@@ -22,8 +22,8 @@ const useAutoLayout = (layout, nodes, edges) => {
   const update = useRef(() => {});
   const indexes = getIndexes(nodes);
   const links = edges.map(asLinks(indexes));
-  const [positionedNodes, setPositionedNodes] = useState(nodes);
-  const [positionedEdges, setPositionedEdges] = useState(edges);
+  const [positionedNodes, setPositionedNodes] = useState(nodes.map(asXY()));
+  const [positionedEdges, setPositionedEdges] = useState(links);
 
   const [
     layoutEngineState,
@@ -32,12 +32,7 @@ const useAutoLayout = (layout, nodes, edges) => {
     startLayoutEngine,
   ] = useForceSimulation();
 
-  update.current = () => {
-    if (isRunning) {
-      window.requestAnimationFrame(() => update.current());
-    }
-
-    if (!layoutEngineState.current) { return; }
+  const updatePositions = () => {
     const engineNodes = layoutEngineState.current.nodes;
 
     const mmd = engineNodes.reduce((memo, coords, index) => {
@@ -83,6 +78,16 @@ const useAutoLayout = (layout, nodes, edges) => {
 
     setPositionedNodes(nodePositions);
     setPositionedEdges(edgePositions);
+  };
+
+  update.current = () => {
+    if (isRunning) {
+      window.requestAnimationFrame(() => update.current());
+    }
+
+    if (!layoutEngineState.current) { return; }
+
+    updatePositions();
   };
 
   useEffect(() => {

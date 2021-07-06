@@ -14,11 +14,11 @@ const useForceSimulation = (listener) => {
   const state = useRef(null);
   const [isRunning, setIsRunning] = useState(false);
 
-  const init = useCallback(({ nodes, edges }) => {
+  const init = useCallback(({ nodes, links }) => {
     worker.current.postMessage({
       type: 'initialize',
       nodes,
-      edges,
+      links,
     });
   });
 
