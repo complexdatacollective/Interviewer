@@ -101,10 +101,10 @@ const ExportOptions = (props) => {
             of GraphML you will receive a single GraphML file with
             multiple
             {' '}
-            <code>graph</code>
+            <code>&lt;graph&gt;</code>
             {' '}
-            elements. Please note that most software does not yet
-            support multiple graphs in a single GraphML file.
+            elements. Please note that with the exception of Network Canvas Server, most
+            software does not yet support multiple graphs in a single GraphML file.
           </p>
         </div>
       </motion.article>

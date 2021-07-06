@@ -1,11 +1,12 @@
 import React from 'react';
-import Scroller from '../../components/Scroller';
+import Scroller from '@codaco/ui/lib/components/Scroller';
 import ExportSettings from '../../components/SettingsMenu/Sections/ExportOptions';
 
 const ExportOptions = () => (
   <Scroller>
     <div style={{
-      width: '60rem',
+      width: '65rem',
+      margin: '0 auto',
     }}
     >
       <ExportSettings />

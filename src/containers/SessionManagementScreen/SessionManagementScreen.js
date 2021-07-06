@@ -8,9 +8,10 @@ import { exportToFile, exportToServer } from '../../utils/exportProcess';
 import { asNetworkWithSessionVariables } from '../../utils/networkFormat';
 import SessionSelect from './SessionSelect';
 import ExportOptions from './ExportOptions';
+import { Modal } from '@codaco/ui/lib/components/Modal';
 
 const DataExportScreen = ({ show, onClose }) => {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(3);
   const [selectedSessions, setSelectedSessions] = useState([]);
 
   const dispatch = useDispatch();
@@ -63,12 +64,11 @@ const DataExportScreen = ({ show, onClose }) => {
   };
 
   const handleOptionsContinue = () => {
-    console.log('yoo');
-    exportToFile(getExportableSessions())
-      .then(complete)
-      .catch((e) => { onClose(); throw e; });
+    // exportToFile(getExportableSessions())
+    //   .then(complete)
+    //   .catch((e) => { onClose(); throw e; });
 
-    // setStep(3);
+    setStep(3);
   };
 
   const handleClose = () => {
@@ -119,7 +119,7 @@ const DataExportScreen = ({ show, onClose }) => {
           }}
         >
           <Button color="platinum" onClick={backward} icon="arrow-left">Back to Selection</Button>
-          <Button color="primary" onClick={handleOptionsContinue}>Export</Button>
+          <Button color="primary" onClick={handleOptionsContinue}>Start Export Process</Button>
         </div>
       );
     }
@@ -131,28 +131,29 @@ const DataExportScreen = ({ show, onClose }) => {
 
   return (
     <>
+      <Modal show>
+        {/* <div className="session-management-screen__main session-management-screen__main--centered"> */}
+        <ExportSprite size={500} />
+        <Button color="neon-coral" onClick={handleClose}>Cancel Export</Button>
+        {/* </div> */}
+      </Modal>
+      <Overlay
+        show={step !== 3}
+        onClose={handleClose}
+        title={ step === 2 ? 'Confirm File Export Options' : 'Exporting...'}
+        footer={renderFooter()}
+        fullscreen
+        className="export-settings-wizard"
+      >
+        <ExportOptions />
+      </Overlay>
       <SessionSelect // SessionPicker
         show={step === 1}
         selectedSessions={selectedSessions}
         onClose={onClose}
         onContinue={handleSessionSelect} // Selected sessions
       />
-      <Overlay
-        show={step !== 1}
-        onClose={handleClose}
-        title={ step === 2 ? 'Confirm File Export Options' : 'Exporting...'}
-        footer={renderFooter()}
-        className="export-settings-wizard"
-      >
-        { step === 2 && (
-          <ExportOptions />
-        )}
-        { step === 3 && (
-          <div className="session-management-screen__main session-management-screen__main--centered">
-            <ExportSprite size={500} />
-          </div>
-        )}
-      </Overlay>
+
     </>
   );
 };

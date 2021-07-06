@@ -8,7 +8,6 @@ import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import useServerConnectionStatus from '../../hooks/useServerConnectionStatus';
 import { Switch } from '../../components';
 import { getFilteredList } from '../../components/NewFilterableListWrapper';
-import { asNetworkWithSessionVariables } from '../../utils/networkFormat';
 import formatDatestamp from '../../utils/formatDatestamp';
 import Picker from '../../components/Picker';
 
@@ -111,8 +110,6 @@ const SessionSelect = ({
     onContinue(selectedSessions, toServer);
   };
 
-  if (Object.keys(sessions).length === 0) { return null; }
-
   const isSelectAll = (
     selectedSessions.length > 0
     && selectedSessions.length === filteredIds.length
@@ -150,11 +147,33 @@ const SessionSelect = ({
     setSelectedSessions([]);
   };
 
+  const exportedSessions = filteredSessions
+    .reduce((acc, { exportedAt, sessionUUID }) => {
+      if (!exportedAt) { return acc; }
+      return [...acc, sessionUUID];
+    }, []);
+
+  const isExportedSelected = (
+    exportedSessions.length > 0
+    && selectedSessions.length > 0
+    && selectedSessions.length === exportedSessions.length
+    && difference(selectedSessions, exportedSessions).length === 0
+  );
+
+  const toggleSelectExported = () => {
+    if (!isExportedSelected) {
+      setSelectedSessions(exportedSessions);
+      return;
+    }
+
+    setSelectedSessions([]);
+  };
+
   return (
     <Picker
       show={show}
       onClose={onClose}
-      title="Select Interview Sessions"
+      title="Select Interview Sessions to Delete or Export"
       ItemComponent={SessionCard}
       items={filteredSessions}
       propertyPath={null}
@@ -186,6 +205,11 @@ const SessionSelect = ({
         >
           <div className="selection-controls">
             <div>
+              <Switch
+                label="Select exported"
+                on={isExportedSelected}
+                onChange={toggleSelectExported}
+              />
               <Switch
                 label="Select un-exported"
                 on={isUnexportedSelected}

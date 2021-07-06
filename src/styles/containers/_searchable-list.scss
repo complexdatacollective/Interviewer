@@ -1,0 +1,115 @@
+$search-height: 6rem;
+$sort-height: 5.5rem;
+$overlay-color: rgb(54, 49, 95);
+
+.searchable-list {
+  flex: 1;
+  display: flex;
+
+  &__too-many {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(100% - #{$search-height} + 1rem);
+    background: linear-gradient(180deg, transparentize($overlay-color, 0.66) 0%, $overlay-color 100%);
+    backdrop-filter: blur(.5em);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+    text-shadow: 1px 1px .5em var(--color-rich-black);
+
+    &--no-text {
+      display: none;
+    }
+  }
+
+  &__list {
+    flex: 1;
+    display: flex;
+    position: relative;
+
+    .hyper-list {
+      flex: 1;
+      padding: 1rem 1rem $search-height;
+
+      // Using custom overlays instead
+      &.hyper-list--drag,
+      &.hyper-list--hover {
+        background-color: transparent;
+      }
+    }
+
+    &--can-sort {
+      .hyper-list {
+        padding-top: $sort-height;
+      }
+
+      .searchable-list__too-many {
+        top: calc(#{$sort-height});
+        height: calc(100% - #{$sort-height} - #{$search-height} + 2rem);
+      }
+    }
+
+    &--too-many {
+      .hyper-list__grid {
+        overflow-y: hidden !important; // sass-lint:disable-line no-important
+      }
+    }
+  }
+
+  .panel {
+    &__content {
+      position: relative;
+    }
+  }
+
+  &__sort {
+    padding: 1rem;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+
+    .button {
+      margin-right: 1rem;
+    }
+  }
+
+  &__placeholder {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__search {
+    padding: 1rem;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+
+    .form-field-container {
+      margin: 0;
+    }
+
+    .form-field-text__input {
+      margin: 0;
+    }
+  }
+
+  &__overlay {
+    position: absolute;
+    z-index: 3;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    background: var(--overlay-background);
+    justify-content: center;
+    align-items: center;
+  }
+}

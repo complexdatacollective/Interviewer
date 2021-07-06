@@ -68,37 +68,18 @@ $close-button-size: 1rem;
   }
 
   &--fullscreen {
-    display: block;
     width: 100vw;
     max-width: none;
     height: 100vh;
     max-height: unset;
     border-radius: 0;
-    padding: unit(10) unit(20);
     margin: 0;
 
-    .overlay__close {
-      position: absolute;
-      top: unit(4);
-      right: unit(4);
-    }
-
-    .overlay__content {
-      height: 100%;
-    }
-
-    .input__container--hidden {
-      position: absolute;
-    }
-
-    .form {
-      &__button-container {
-        display: flex;
-        justify-content: flex-end;
-
-        .toggle__container {
-          padding-left: unit(4);
-        }
+    @media screen and (min-width: 80rem) {
+      .new-filterable-list__main > * {
+        width: 33.3%;
+        float: left;
+        padding: 0.6rem;
       }
     }
   }

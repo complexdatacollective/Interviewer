@@ -14,6 +14,7 @@ class Card extends PureComponent {
       label,
       selected,
       onSelected,
+      disabled,
     } = this.props;
 
     const attributes = details.map(
@@ -32,6 +33,7 @@ class Card extends PureComponent {
     const classes = cx({
       card: true,
       'card--selected': selected,
+      'card--disabled': disabled,
     });
 
     return (
