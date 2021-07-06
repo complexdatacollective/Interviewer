@@ -1,44 +1,36 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { GraphicButton } from '@codaco/ui';
 import Section from './Section';
-import SessionManagementScreen, { MODES } from '../SessionManagementScreen';
+import SessionManagementScreen from '../SessionManagementScreen/SessionManagementScreen';
 import exportIcon from '../../images/undraw_export_files.svg';
-import manageIcon from '../../images/undraw_file_manager.svg';
 
 const SessionManagementSection = () => {
   const [showSessionManagement, setShowSessionManagement] = useState(false);
 
-  const openExport = () => setShowSessionManagement(MODES.export);
-  const openManage = () => setShowSessionManagement(MODES.manage);
   const closeSessionManagement = () => setShowSessionManagement(false);
+
+  const sessions = useSelector((state) => state.sessions);
+
+  if (Object.keys(sessions).length === 0) { return null; }
 
   return (
     <>
       <Section className="start-screen-section session-management-section">
         <main className="session-management-section__main">
           <header>
-            <h2>Manage and export sessions</h2>
+            <h2>Manage and Export Session Data</h2>
           </header>
           <div className="content-buttons">
             <GraphicButton
-              color="mustard--dark"
-              onClick={openExport}
+              color="sea-serpent"
+              onClick={() => setShowSessionManagement(true)}
               graphicSize="10.5rem"
               graphicPosition="5% 0%"
               graphic={exportIcon}
             >
-              <h3>Session</h3>
-              <h2>Export</h2>
-            </GraphicButton>
-            <GraphicButton
-              color="charcoal"
-              onClick={openManage}
-              graphicSize="12rem"
-              graphicPosition="5% 100%"
-              graphic={manageIcon}
-            >
-              <h3>Session</h3>
-              <h2>Management</h2>
+              <h3>Manage or Export</h3>
+              <h2>Sessions</h2>
             </GraphicButton>
           </div>
         </main>
@@ -46,7 +38,6 @@ const SessionManagementSection = () => {
       <SessionManagementScreen
         show={!!showSessionManagement}
         onClose={closeSessionManagement}
-        mode={showSessionManagement}
       />
     </>
   );

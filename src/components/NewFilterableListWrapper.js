@@ -4,7 +4,7 @@ import objectHash from 'object-hash';
 import { motion, AnimatePresence } from 'framer-motion';
 import PropTypes from 'prop-types';
 import { Button, Spinner } from '@codaco/ui';
-import { Text } from '@codaco/ui/lib/components/Fields';
+import { Search } from '@codaco/ui/lib/components/Fields';
 import { entityAttributesProperty } from '../ducks/modules/network';
 import sortOrder from '../utils/sortOrder';
 
@@ -125,8 +125,7 @@ const NewFilterableListWrapper = (props) => {
             )}
         </section>
         <section className="new-filterable-list__header-section new-filterable-list__header-section--filter">
-          <h4>Filter: </h4>
-          <Text
+          <Search
             type="search"
             placeholder="Filter..."
             className="new-filterable-list__filter"

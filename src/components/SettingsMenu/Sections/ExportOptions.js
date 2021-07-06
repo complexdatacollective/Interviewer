@@ -6,7 +6,6 @@ import { motion } from 'framer-motion';
 import { Button } from '@codaco/ui';
 import { Toggle, Number } from '@codaco/ui/lib/components/Fields';
 import { actionCreators as deviceSettingsActions } from '../../../ducks/modules/deviceSettings';
-import TabItemVariants from './TabItemVariants';
 
 const ExportOptions = (props) => {
   const {
@@ -26,7 +25,7 @@ const ExportOptions = (props) => {
 
   return (
     <>
-      <motion.article variants={TabItemVariants} className="settings-element">
+      <motion.article className="settings-element">
         <Toggle
           input={{
             value: exportGraphML,
@@ -48,7 +47,7 @@ const ExportOptions = (props) => {
           </p>
         </div>
       </motion.article>
-      <motion.article variants={TabItemVariants} className="settings-element">
+      <motion.article className="settings-element">
         <Toggle
           input={{
             value: exportCSV,
@@ -86,7 +85,7 @@ const ExportOptions = (props) => {
           </p>
         </div>
       </motion.article>
-      <motion.article variants={TabItemVariants} className="settings-element">
+      <motion.article className="settings-element">
         <Toggle
           input={{
             value: unifyNetworks,
@@ -109,7 +108,7 @@ const ExportOptions = (props) => {
           </p>
         </div>
       </motion.article>
-      <motion.article variants={TabItemVariants} className="settings-element">
+      <motion.article className="settings-element">
         <Toggle
           input={{
             value: useScreenLayoutCoordinates,
@@ -125,7 +124,7 @@ const ExportOptions = (props) => {
             with the same origin.
           </p>
           { useScreenLayoutCoordinates && (
-            <motion.article variants={TabItemVariants} className="settings-element--sub-item">
+            <motion.article className="settings-element--sub-item">
               <div>
                 <h3>Screen Size</h3>
                 <p>

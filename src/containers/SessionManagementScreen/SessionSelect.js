@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { get, difference } from 'lodash';
-import { motion } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@codaco/ui';
 import { SessionCard } from '@codaco/ui/lib/components/Cards';
@@ -8,21 +7,22 @@ import { actionCreators as sessionsActions } from '../../ducks/modules/sessions'
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import useServerConnectionStatus from '../../hooks/useServerConnectionStatus';
 import { Switch } from '../../components';
-import NewFilterableListWrapper, { getFilteredList } from '../../components/NewFilterableListWrapper';
+import { getFilteredList } from '../../components/NewFilterableListWrapper';
 import { asNetworkWithSessionVariables } from '../../utils/networkFormat';
 import formatDatestamp from '../../utils/formatDatestamp';
-
-export const MODES = {
-  manage: 'MANAGE',
-  export: 'EXPORT',
-};
+import Picker from '../../components/Picker';
 
 const oneBasedIndex = (i) => parseInt(i || 0, 10) + 1;
 
-const SessionSelect = ({ onComplete, onContinue, mode = MODES.export }) => {
+const SessionSelect = ({
+  show,
+  selectedSessions: previouslySelectedSessions = [],
+  onClose,
+  onContinue,
+}) => {
   const sessions = useSelector((state) => state.sessions);
   const [filterTerm, setFilterTerm] = useState(null);
-  const [selectedSessions, setSelectedSessions] = useState([]);
+  const [selectedSessions, setSelectedSessions] = useState(previouslySelectedSessions);
 
   const pairedServer = useSelector((state) => state.pairedServer);
   const pairedServerConnection = useServerConnectionStatus(pairedServer);
@@ -42,7 +42,6 @@ const SessionSelect = ({ onComplete, onContinue, mode = MODES.export }) => {
       onConfirm: () => {
         selectedSessions.map((session) => deleteSession(session));
         setSelectedSessions([]);
-        onComplete();
       },
       message: (
         <p>
@@ -101,7 +100,6 @@ const SessionSelect = ({ onComplete, onContinue, mode = MODES.export }) => {
 
   const [filteredSessions, setFilteredSessions] = useState(formattedSessions);
   const filteredIds = filteredSessions.map(({ sessionUUID }) => sessionUUID);
-  // const selectedFilteredIds = intersection(selectedSessions, filteredIds);
 
   useEffect(() => {
     const newFilteredSessions = getFilteredList(formattedSessions, filterTerm, null);
@@ -110,18 +108,7 @@ const SessionSelect = ({ onComplete, onContinue, mode = MODES.export }) => {
   }, [filterTerm, selectedSessions]);
 
   const exportSessions = (toServer = false) => {
-    const sessionsToExport = selectedSessions
-      .map((session) => {
-        const sessionProtocol = installedProtocols[sessions[session].protocolUID];
-
-        return asNetworkWithSessionVariables(
-          session,
-          sessions[session],
-          sessionProtocol,
-        );
-      });
-
-    onContinue(sessionsToExport, toServer);
+    onContinue(selectedSessions, toServer);
   };
 
   if (Object.keys(sessions).length === 0) { return null; }
@@ -163,88 +150,80 @@ const SessionSelect = ({ onComplete, onContinue, mode = MODES.export }) => {
     setSelectedSessions([]);
   };
 
-  if (!mode) { return null; }
-
   return (
-    <>
-      <motion.header layout>
-        <h1>Export &amp; Manage Interview Data</h1>
-      </motion.header>
-      <motion.main layout className="session-management-screen__main session-management-screen__session-select">
-        <motion.div layout className="content-area">
-          Select one or more interview sessions by tapping them, and then delete or export
-          using the buttons provided. Remember that you can change export options from the
-          settings menu, which can be opened from the header at the top of this screen.
-        </motion.div>
-        <NewFilterableListWrapper
-          ItemComponent={SessionCard}
-          items={filteredSessions}
-          propertyPath={null}
-          initialSortProperty="updatedAt"
-          initialSortDirection="desc"
-          onFilterChange={handleFilterChange}
-          sortableProperties={[
-            {
-              label: 'Last Changed',
-              variable: 'updatedAt',
-            },
-            {
-              label: 'Case ID',
-              variable: 'caseId',
-            },
-            {
-              label: 'Progress',
-              variable: 'progress',
-            },
-          ]}
-        />
-        <motion.div
+    <Picker
+      show={show}
+      onClose={onClose}
+      title="Select Interview Sessions"
+      ItemComponent={SessionCard}
+      items={filteredSessions}
+      propertyPath={null}
+      initialSortProperty="updatedAt"
+      initialSortDirection="desc"
+      onFilterChange={handleFilterChange}
+      sortableProperties={[
+        {
+          label: 'Last Changed',
+          variable: 'updatedAt',
+        },
+        {
+          label: 'Case ID',
+          variable: 'caseId',
+        },
+        {
+          label: 'Progress',
+          variable: 'progress',
+        },
+      ]}
+      footer={(
+        <div
           className="selection-status"
-          layout
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            flex: '1',
+          }}
         >
-          <div>
-            <Switch
-              className="header-toggle"
-              label="Select un-exported"
-              on={isUnexportedSelected}
-              onChange={toggleSelectUnexported}
-            />
-            <Switch
-              className="header-toggle"
-              label="Select all"
-              on={isSelectAll}
-              onChange={toggleSelectAll}
-            />
-          </div>
-          { selectedSessions.length > 0
-            && (
-            <span>
-              { selectedSessions.length}
-              {' '}
-              selected session
-              { selectedSessions.length > 1 ? ('s') : null }
-              .
-            </span>
+          <div className="selection-controls">
+            <div>
+              <Switch
+                label="Select un-exported"
+                on={isUnexportedSelected}
+                onChange={toggleSelectUnexported}
+              />
+              <Switch
+                label="Select all"
+                on={isSelectAll}
+                onChange={toggleSelectAll}
+              />
+            </div>
+            { selectedSessions.length > 0 && (
+              <span>
+                { selectedSessions.length}
+                {' '}
+                selected session
+                { selectedSessions.length > 1 ? ('s') : null }
+                .
+              </span>
             )}
-        </motion.div>
-      </motion.main>
-      <motion.footer layout className="session-management-screen__footer">
-        <div />
-
-        { mode === MODES.manage && (
-          <div className="action-buttons">
-            <Button color="neon-coral--dark" onClick={handleDeleteSessions} disabled={selectedSessions.length === 0}>Delete Selected</Button>
           </div>
-        )}
-
-        { mode === MODES.export && (
-          <div className="action-buttons">
-            { pairedServerConnection === 'ok' && (<Button onClick={() => exportSessions(true)} color="mustard" disabled={pairedServerConnection !== 'ok' || selectedSessions.length === 0}>Export Selected To Server</Button>)}
-            <Button color="platinum" onClick={() => exportSessions(false)} disabled={selectedSessions.length === 0}>Export Selected To File</Button>
+          <div
+            className="action-buttons"
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              flex: '1',
+            }}
+          >
+            <Button color="neon-coral" onClick={handleDeleteSessions} disabled={selectedSessions.length === 0} icon="menu-purge-data">Delete Selected</Button>
+            <div>
+              { pairedServerConnection === 'ok' && (<Button onClick={() => exportSessions(true)} color="mustard" disabled={pairedServerConnection !== 'ok' || selectedSessions.length === 0}>Export Selected To Server</Button>)}
+              <Button color="platinum" onClick={() => exportSessions(false)} disabled={selectedSessions.length === 0}>Export Selected To File</Button>
+            </div>
           </div>
-        )}
-      </motion.footer>
-    </>
+        </div>
+      )}
+    />
   );
 };
 

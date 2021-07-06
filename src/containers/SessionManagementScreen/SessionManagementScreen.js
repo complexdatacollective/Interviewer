@@ -1,42 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import Button from '@codaco/ui/lib/components/Button';
 import ExportSprite from '@codaco/ui/lib/components/Sprites/ExportSprite';
-import { Steps } from '@codaco/ui/lib/components/Wizard';
-import { Modal, Icon } from '@codaco/ui';
+import { Overlay } from '../Overlay';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { exportToFile, exportToServer } from '../../utils/exportProcess';
+import { asNetworkWithSessionVariables } from '../../utils/networkFormat';
 import SessionSelect from './SessionSelect';
 import ExportOptions from './ExportOptions';
 
-const stepVariants = {
-  initial: { opacity: 0, position: 'static' },
-  exit: { opacity: 0, position: 'absolute' },
-  show: { opacity: 1, position: 'static' },
-};
-
-const Step = ({ children }) => (
-  <motion.div
-    className="session-management-screen__step"
-    variants={stepVariants}
-    initial="initial"
-    animate="show"
-    exit="exit"
-  >
-    {children}
-  </motion.div>
-);
-
-const DataExportScreen = ({ show, onClose, mode }) => {
+const DataExportScreen = ({ show, onClose }) => {
   const [step, setStep] = useState(1);
-  const [sessionsToExport, setSessionsToExport] = useState(null);
+  const [selectedSessions, setSelectedSessions] = useState([]);
 
   const dispatch = useDispatch();
   const openDialog = (dialog) => dispatch(dialogActions.openDialog(dialog));
 
   const reset = () => {
-    setSessionsToExport(null);
+    setSelectedSessions([]);
     setStep(1);
+  };
+
+  const forward = () => {
+    setStep(step + 1);
+  };
+
+  const backward = () => {
+    setStep(step - 1);
   };
 
   const complete = () => {
@@ -44,24 +34,41 @@ const DataExportScreen = ({ show, onClose, mode }) => {
     onClose();
   };
 
-  const handleSessionSelect = (sessions, toServer = false) => {
+  const sessions = useSelector((state) => state.sessions);
+  const installedProtocols = useSelector((state) => state.installedProtocols);
+
+  const getExportableSessions = () => selectedSessions
+    .map((session) => {
+      const sessionProtocol = installedProtocols[sessions[session].protocolUID];
+
+      return asNetworkWithSessionVariables(
+        session,
+        sessions[session],
+        sessionProtocol,
+      );
+    });
+
+  const handleSessionSelect = (selectedSessionIDs, toServer = false) => {
     if (toServer) {
-      setStep(3);
-      exportToServer(sessions)
+      exportToServer(getExportableSessions())
         .then(complete)
         .catch((e) => { onClose(); throw e; });
+
+      setStep(3);
       return;
     }
 
-    setSessionsToExport(sessions);
-    setStep(2);
+    setSelectedSessions(selectedSessionIDs);
+    forward();
   };
 
   const handleOptionsContinue = () => {
-    setStep(3);
-    exportToFile(sessionsToExport)
+    console.log('yoo');
+    exportToFile(getExportableSessions())
       .then(complete)
       .catch((e) => { onClose(); throw e; });
+
+    // setStep(3);
   };
 
   const handleClose = () => {
@@ -92,38 +99,61 @@ const DataExportScreen = ({ show, onClose, mode }) => {
     }
   }, [show]);
 
+  if (!show) {
+    return null;
+  }
+
+  console.log({
+    step,
+    selectedSessions,
+  });
+
+  const renderFooter = () => {
+    if (step === 2) {
+      return (
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            flex: '1',
+          }}
+        >
+          <Button color="platinum" onClick={backward} icon="arrow-left">Back to Selection</Button>
+          <Button color="primary" onClick={handleOptionsContinue}>Export</Button>
+        </div>
+      );
+    }
+
+    return (
+      <Button color="neon-coral" onClick={handleClose}>Cancel Export</Button>
+    );
+  };
+
   return (
-    <Modal show={show}>
-      <div className="session-management-screen">
-        { step !== 3 && (
-          <div
-            className="session-management-screen__close"
-            onClick={handleClose}
-          >
-            <Icon name="close" />
+    <>
+      <SessionSelect // SessionPicker
+        show={step === 1}
+        selectedSessions={selectedSessions}
+        onClose={onClose}
+        onContinue={handleSessionSelect} // Selected sessions
+      />
+      <Overlay
+        show={step !== 1}
+        onClose={handleClose}
+        title={ step === 2 ? 'Confirm File Export Options' : 'Exporting...'}
+        footer={renderFooter()}
+        className="export-settings-wizard"
+      >
+        { step === 2 && (
+          <ExportOptions />
+        )}
+        { step === 3 && (
+          <div className="session-management-screen__main session-management-screen__main--centered">
+            <ExportSprite size={500} />
           </div>
         )}
-        <AnimatePresence>
-          <Steps index={step}>
-            <Step key="select">
-              <SessionSelect
-                onContinue={handleSessionSelect}
-                onComplete={onClose}
-                mode={mode}
-              />
-            </Step>
-            <Step key="options">
-              <ExportOptions onContinue={handleOptionsContinue} />
-            </Step>
-            <Step key="export">
-              <div className="session-management-screen__main session-management-screen__main--centered">
-                <ExportSprite size={500} />
-              </div>
-            </Step>
-          </Steps>
-        </AnimatePresence>
-      </div>
-    </Modal>
+      </Overlay>
+    </>
   );
 };
 

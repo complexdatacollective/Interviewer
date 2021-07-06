@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { NewFilterableListWrapper, NodeBin } from '../../components';
+import Button from '@codaco/ui/lib/components/Button';
 import { actionCreators as installedProtocolActions } from '../../ducks/modules/installedProtocols';
-import { Overlay } from '../Overlay';
-import { DragSource } from '../../behaviours/DragAndDrop';
 import { ProtocolCard } from '../../components/Cards';
 import { entityAttributesProperty } from '../../ducks/modules/network';
+import Picker from '../../components/Picker';
 
 const ManageProtocolsOverlay = ({
   show,
@@ -35,46 +34,43 @@ const ManageProtocolsOverlay = ({
     };
   });
 
-  const DraggableProtocolCard = DragSource(ProtocolCard);
+  // dropHandler={({ protocolUID }) => deleteProtocol(protocolUID)}
 
   return (
-    <Overlay
+    <Picker
       show={show}
       onClose={onClose}
-      title="Installed Protocols"
-    >
-      <p>
-        These are the protocols that are currently installed on this device. To
-        delete a protocol, drag it with your mouse or finger into the bin that
-        will appear at the bottom of the screen.
-      </p>
-      <NewFilterableListWrapper
-        ItemComponent={DraggableProtocolCard}
-        items={formattedProtocols}
-        propertyPath={entityAttributesProperty}
-        initialSortProperty="name"
-        initialSortDirection="asc"
-        sortableProperties={[
-          {
-            label: 'Name',
-            variable: 'name',
-          },
-          {
-            label: 'Installed',
-            variable: 'installationDate',
-          },
-          {
-            label: 'Modified',
-            variable: 'lastModified',
-          },
-        ]}
-      />
-      <NodeBin
-        accepts={() => true}
-        dropHandler={({ protocolUID }) => deleteProtocol(protocolUID)}
-        id="PROTOCOL_BIN"
-      />
-    </Overlay>
+      title="Select Protocols to Delete"
+      header={(
+        <p>
+          These are the protocols that are currently installed on this device. To
+          delete a protocol, drag it with your mouse or finger into the bin that
+          will appear at the bottom of the screen.
+        </p>
+      )}
+      footer={(
+        <Button color="neon-coral" icon="menu-purge-data">Delete Selected</Button>
+      )}
+      ItemComponent={ProtocolCard}
+      items={formattedProtocols}
+      propertyPath={entityAttributesProperty}
+      initialSortProperty="name"
+      initialSortDirection="asc"
+      sortableProperties={[
+        {
+          label: 'Name',
+          variable: 'name',
+        },
+        {
+          label: 'Installed',
+          variable: 'installationDate',
+        },
+        {
+          label: 'Modified',
+          variable: 'lastModified',
+        },
+      ]}
+    />
   );
 };
 

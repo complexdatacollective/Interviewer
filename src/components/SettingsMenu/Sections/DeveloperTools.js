@@ -11,7 +11,6 @@ import { actionCreators as dialogsActions } from '../../../ducks/modules/dialogs
 import { actionCreators as mockActions } from '../../../ducks/modules/mock';
 import { getAdditionalAttributesForCurrentPrompt, getNodeEntryForCurrentPrompt } from '../../../selectors/session';
 import { DEVELOPMENT_PROTOCOL_URL } from '../../../config';
-import TabItemVariants from './TabItemVariants';
 
 const DeveloperTools = (props) => {
   const {
@@ -27,7 +26,7 @@ const DeveloperTools = (props) => {
 
   return (
     <>
-      <motion.article variants={TabItemVariants} className="settings-element">
+      <motion.article className="settings-element">
         <div className="form-field-container">
           <div className="form-field">
             <Button
@@ -50,7 +49,7 @@ const DeveloperTools = (props) => {
       {
         shouldShowMocksItem
         && (
-        <motion.article variants={TabItemVariants} className="settings-element">
+        <motion.article className="settings-element">
           <div className="form-field-container">
             <div className="form-field">
               <Button
@@ -71,7 +70,7 @@ const DeveloperTools = (props) => {
         </motion.article>
         )
       }
-      <motion.article variants={TabItemVariants} className="settings-element">
+      <motion.article className="settings-element">
         <div className="form-field-container">
           <div className="form-field">
             <Button
@@ -89,7 +88,7 @@ const DeveloperTools = (props) => {
           </p>
         </div>
       </motion.article>
-      <motion.article variants={TabItemVariants} className="settings-element--sub-item">
+      <motion.article className="settings-element--sub-item">
         <div>
           <h2>Generate test sessions</h2>
           <p>

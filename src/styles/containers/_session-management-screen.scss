@@ -1,112 +1,4 @@
-.session-management-screen {
-  $header-background: rgba(0, 0, 0, 0.2);
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  position: relative;
-  background: var(--color-cyber-grape);
-
-  .steps {
-    flex: 1;
-    display: flex;
-  }
-
-  &__close {
-    position: absolute;
-    top: 2rem;
-    right: 2rem;
-    width: 2rem;
-    height: 2rem;
-    cursor: pointer;
-
-    .icon {
-      width: 1.5rem;
-      height: 1.5rem;
-    }
-  }
-
-  &__step {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  }
-
-  &__main {
-    flex: 1;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    padding: 2rem 0;
-    background: linear-gradient(rgb(64, 64, 136), var(--color-cyber-grape)); //sass-lint:disable-line no-color-literals
-
-    &--centered {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    &--scrollable {
-      padding: 0;
-    }
-
-    .scrollable {
-      padding: 2rem 0 0;
-    }
-  }
-
-  header {
-    padding: unit(1) unit(6);
-    background: $header-background;
-  }
-
-  &__footer {
-    padding: unit(2) unit(6);
-    background-color: var(--color-neon-coral);
-    display: flex;
-    justify-content: space-between;
-
-    .action-buttons {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-
-      .button {
-        &:last-child {
-          margin-left: unit(2);
-        }
-      }
-    }
-  }
-
-  &__session-select {
-    .content-area {
-      padding: unit(1) unit(6);
-    }
-
-    .selection-status {
-      margin: unit(2) unit(4);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-direction: row-reverse;
-      height: unit(6);
-
-      .header-toggle {
-        margin-left: 2rem;
-      }
-    }
-
-    .new-filterable-list {
-      margin: unit(4);
-      margin-bottom: 0;
-
-      &__main {
-        max-height: 45vh;
-        min-height: 16rem;
-      }
-    }
-  }
-
+.export-settings-wizard {
   .settings-element {
     display: flex;
     margin-bottom: 2rem;
@@ -119,5 +11,16 @@
       }
     }
   }
+}
 
+.selection-controls {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row-reverse;
+  align-content: center;
+  margin-bottom: unit(2);
+
+  .switch {
+    margin-right: unit(4);
+  }
 }

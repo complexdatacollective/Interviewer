@@ -38,22 +38,22 @@ const Overlay = (props) => {
 
   return (
     <Modal show={show} onBlur={onBlur}>
-      <motion.div className={overlayClasses}>
+      <motion.article className={overlayClasses} layout>
         { title && (
-          <div className="overlay__title">
+          <header className="overlay__title">
             <h1>{title}</h1>
             <CloseButton className="overlay__close" onClick={onClose} />
-          </div>
+          </header>
         )}
-        <motion.div className="overlay__content">
+        <motion.main className="overlay__content">
           {children}
-        </motion.div>
+        </motion.main>
         { footer && (
-          <motion.div className="overlay__footer">
+          <motion.footer className="overlay__footer">
             {footer}
-          </motion.div>
+          </motion.footer>
         )}
-      </motion.div>
+      </motion.article>
     </Modal>
   );
 };
