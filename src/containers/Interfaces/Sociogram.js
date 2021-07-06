@@ -52,8 +52,12 @@ const Sociogram = (props) => {
     edges,
   } = props;
 
-  const [nodePositions, edgePositions] = useAutoLayout(undefined, nodes, edges);
+  const [nodePositions, edgePositions, startLayout] = useAutoLayout(undefined, nodes, edges);
   // console.log({ nodePositions });
+
+  useEffect(() => {
+    startLayout();
+  }, []);
 
   // Behaviour Configuration
   const allowHighlighting = get(prompt, 'highlight.allowHighlighting', false);
@@ -88,7 +92,7 @@ const Sociogram = (props) => {
             skewedTowardCenter={skewedTowardCenter}
             image={backgroundImage}
           />
-          <EdgeLayout
+          {/* <EdgeLayout
             edges={edges}
             positions={edgePositions}
           />
@@ -101,7 +105,7 @@ const Sociogram = (props) => {
             allowHighlighting={allowHighlighting && !createEdge}
             allowPositioning={allowPositioning}
             createEdge={createEdge}
-          />
+          /> */}
           <NodeBucket
             id="NODE_BUCKET"
             node={nextUnplacedNode}

@@ -18,13 +18,11 @@ onmessage = function (event) {
 
   switch (event.data.type) {
     case 'initialize': {
-      console.log({ links });
       simulation = forceSimulation(nodes)
         .force('charge', forceManyBody())
         .force('link', forceLink(links).distance(10).strength(1))
         .force('x', forceX())
-        .force('y', forceY())
-        .stop();
+        .force('y', forceY());
 
       simulation.on('tick', () => {
         postMessage({
@@ -46,12 +44,12 @@ onmessage = function (event) {
       simulation.stop();
       break;
     }
-    case 'start': {
-      console.log('start', { simulation });
-      if (!simulation) { return; }
-      simulation.restart();
-      break;
-    }
+    // case 'start': {
+    //   console.log('start', { simulation });
+    //   if (!simulation) { return; }
+    //   simulation.restart();
+    //   break;
+    // }
     default:
   }
 };

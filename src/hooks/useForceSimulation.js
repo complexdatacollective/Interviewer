@@ -1,29 +1,28 @@
-import { useRef, useCallback, useEffect, useState } from 'react';
+import {
+  useRef,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import ForceSimulationWorker from './forceSimulation.worker';
 
-// example listener:
-// function (event) {
-//   switch (event.data.type) {
-//     case "tick": return ticked(event.data);
-//     case "end": return ended(event.data);
-//   }
-// };
-
-const useForceSimulation = (listener) => {
+const useForceSimulation = () => {
   const worker = useRef(new ForceSimulationWorker());
   const state = useRef(null);
   const [isRunning, setIsRunning] = useState(false);
 
-  const init = useCallback(({ nodes, links }) => {
+  const start = useCallback(({ nodes, links }) => {
     worker.current.postMessage({
       type: 'initialize',
       nodes,
       links,
     });
-  });
 
-  const start = useCallback(() => {
-    worker.current.postMessage({ type: 'start' });
+    state.current = {
+      links,
+      nodes,
+    };
+
     setIsRunning(true);
   });
 
@@ -34,12 +33,12 @@ const useForceSimulation = (listener) => {
 
   useEffect(() => {
     worker.current.onmessage = (event) => {
-      // listener(event);
       switch (event.data.type) {
         case 'tick':
-          state.current = event.data;
+          state.current.nodes = event.data.nodes;
           break;
         case 'end':
+          console.log({ finish: state.current });
           setIsRunning(false);
           break;
         default:
@@ -47,7 +46,7 @@ const useForceSimulation = (listener) => {
     };
   }, []);
 
-  return [state, isRunning, init, start, stop];
+  return [state, isRunning, start, stop];
 };
 
 export default useForceSimulation;
