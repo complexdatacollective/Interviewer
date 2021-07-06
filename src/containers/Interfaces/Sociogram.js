@@ -52,7 +52,7 @@ const Sociogram = (props) => {
     edges,
   } = props;
 
-  const [nodePositions] = useAutoLayout(undefined, nodes, edges);
+  const [nodePositions, edgePositions] = useAutoLayout(undefined, nodes, edges);
   // console.log({ nodePositions });
 
   // Behaviour Configuration
@@ -90,6 +90,7 @@ const Sociogram = (props) => {
           />
           <EdgeLayout
             edges={edges}
+            positions={edgePositions}
           />
           <NodeLayout
             nodes={nodes}

@@ -71,19 +71,18 @@ const useAutoLayout = (layout, nodes, edges) => {
       maxY: null,
     });
 
-    const renderNodes = nodes.map((_, index) => ({
+    const nodePositions = nodes.map((_, index) => ({
       x: 0.1 + (engineNodes[index].x - mmd.minX) / mmd.dX * 0.8,
       y: 0.1 + (engineNodes[index].y - mmd.minY) / mmd.dY * 0.8,
     }));
 
-    // const renderEdges = edges.map((edge, index) => ({
-    //   ...edge,
-    //   from: renderNodes[links[index].source].attributes[LAYOUT],
-    //   to: renderNodes[links[index].target].attributes[LAYOUT],
-    // }));
+    const edgePositions = links.map(({ source, target }) => ({
+      from: nodePositions[source],
+      to: nodePositions[target],
+    }));
 
-    setPositionedNodes(renderNodes);
-    // setPositionedEdges(renderEdges);
+    setPositionedNodes(nodePositions);
+    setPositionedEdges(edgePositions);
   };
 
   useEffect(() => {
@@ -103,7 +102,7 @@ const useAutoLayout = (layout, nodes, edges) => {
     return () => window.cancelAnimationFrame(animation.current);
   }, [isRunning]);
 
-  return [positionedNodes];
+  return [positionedNodes, positionedEdges];
 };
 
 export default useAutoLayout;

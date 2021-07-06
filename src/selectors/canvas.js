@@ -70,7 +70,7 @@ const edgeCoords = (edge, { nodes, layout }) => {
   const from = nodes.find((n) => n[entityPrimaryKeyProperty] === edge.from);
   const to = nodes.find((n) => n[entityPrimaryKeyProperty] === edge.to);
 
-  if (!from || !to) { return { from: null, to: null }; }
+  if (!from || !to) { return null; }
 
   return {
     key: `${edge.from}_${edge.type}_${edge.to}`,
@@ -81,11 +81,20 @@ const edgeCoords = (edge, { nodes, layout }) => {
   };
 };
 
-export const edgesToCoords = (edges, { nodes, layout }) => edges.map(
-  (edge) => edgeCoords(
-    edge,
-    { nodes, layout },
-  ),
+export const edgesToCoords = (edges, { nodes, layout }) => (
+  edges.reduce(
+    (acc, edge) => {
+      const edgeWithCoords = edgeCoords(
+        edge,
+        { nodes, layout },
+      );
+
+      if (!edgeWithCoords) { return acc; }
+
+      return [...acc, edgeWithCoords];
+    },
+    [],
+  )
 );
 
 /**
