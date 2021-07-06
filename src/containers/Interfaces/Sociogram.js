@@ -52,7 +52,7 @@ const Sociogram = (props) => {
     edges,
   } = props;
 
-  const [_nodes, _edges] = useAutoLayout(undefined, nodes, edges);
+  const [nodePositions] = useAutoLayout(undefined, nodes, edges);
 
   // Behaviour Configuration
   const allowHighlighting = get(prompt, 'highlight.allowHighlighting', false);
@@ -88,10 +88,11 @@ const Sociogram = (props) => {
             image={backgroundImage}
           />
           <EdgeLayout
-            edges={_edges}
+            edges={edges}
           />
           <NodeLayout
-            nodes={_nodes}
+            nodes={nodes}
+            positions={nodePositions}
             id="NODE_LAYOUT"
             highlightAttribute={highlightAttribute}
             layoutVariable={layoutVariable}

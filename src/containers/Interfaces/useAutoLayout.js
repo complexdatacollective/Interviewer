@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import useForceSimulation from '../../hooks/useForceSimulation';
 
 const LAYOUT = 'ee090c9b-2b70-4648-a6db-328d4ef4dbfe';
@@ -18,92 +18,92 @@ const asLinks = (indexes) => (edge) => ({
 });
 
 const useAutoLayout = (layout, nodes, edges) => {
+  const animation = useRef(null);
+  const update = useRef(() => {});
   const indexes = getIndexes(nodes);
-  const _nodes = nodes.map(asXY());
-  const _links = edges.map(asLinks(indexes));
+  const links = edges.map(asLinks(indexes));
+  const [positionedNodes, setPositionedNodes] = useState(nodes);
+  const [positionedEdges, setPositionedEdges] = useState(edges);
 
-  const [nodeCoords, setNodeCoords] = useState(
-    nodes.map(asXY()),
-  );
+  const [
+    layoutEngineState,
+    isRunning,
+    initLayoutEngine,
+    startLayoutEngine,
+  ] = useForceSimulation();
 
-  const handler = (event) => {
-    switch (event.data.type) {
-      case 'tick':
-        setNodeCoords(event.data.nodes);
-        break;
-      case 'end':
-        setNodeCoords(event.data.nodes);
-        break;
-      default:
+  update.current = () => {
+    if (isRunning) {
+      window.requestAnimationFrame(() => update.current());
     }
-  };
 
-  const [initLayoutEngine] = useForceSimulation(handler);
+    if (!layoutEngineState.current) { return; }
+    const engineNodes = layoutEngineState.current.nodes;
 
-  useEffect(() => {
-    setTimeout(() => {
-      initLayoutEngine({
-        nodes: _nodes,
-        links: _links,
-      });
-    }, 5000);
-  }, []);
+    const mmd = engineNodes.reduce((memo, coords, index) => {
+      const minX = memo.minX === null || coords.x < memo.minX ? coords.x : memo.minX;
+      const minY = memo.minY === null || coords.y < memo.minY ? coords.y : memo.minY;
+      const maxX = memo.maxX === null || coords.x > memo.maxX ? coords.x : memo.maxX;
+      const maxY = memo.maxY === null || coords.y > memo.maxY ? coords.y : memo.maxY;
 
-  const start = () => {};
-  const stop = () => {};
-  const running = false;
+      if (index === engineNodes.length - 1) {
+        const dX = maxX - minX;
+        const dY = maxY - minY;
 
-  const mmd = nodeCoords.reduce((memo, coords, index) => {
-    const minX = memo.minX === null || coords.x < memo.minX ? coords.x : memo.minX;
-    const minY = memo.minY === null || coords.y < memo.minY ? coords.y : memo.minY;
-    const maxX = memo.maxX === null || coords.x > memo.maxX ? coords.x : memo.maxX;
-    const maxY = memo.maxY === null || coords.y > memo.maxY ? coords.y : memo.maxY;
-
-    if (index === nodeCoords.length - 1) {
-      const dX = maxX - minX;
-      const dY = maxY - minY;
+        return {
+          dX,
+          dY,
+          minY,
+          minX,
+        };
+      }
 
       return {
-        dX,
-        dY,
-        minY,
         minX,
+        minY,
+        maxX,
+        maxY,
       };
-    }
+    }, {
+      minX: null,
+      maxX: null,
+      minY: null,
+      maxY: null,
+    });
 
-    return {
-      minX,
-      minY,
-      maxX,
-      maxY,
-    };
-  }, {
-    minX: null,
-    maxX: null,
-    minY: null,
-    maxY: null,
-  });
+    const renderNodes = nodes.map((_, index) => ({
+      x: 0.1 + (engineNodes[index].x - mmd.minX) / mmd.dX * 0.8,
+      y: 0.1 + (engineNodes[index].y - mmd.minY) / mmd.dY * 0.8,
+    }));
 
-  const __nodes = nodes.map((node, index) => ({
-    ...node,
-    attributes: {
-      ...node.attributes,
-      [LAYOUT]: {
-        x: 0.1 + (nodeCoords[index].x - mmd.minX) / mmd.dX * 0.8,
-        y: 0.1 + (nodeCoords[index].y - mmd.minY) / mmd.dY * 0.8,
-      },
-    },
-  }));
+    // const renderEdges = edges.map((edge, index) => ({
+    //   ...edge,
+    //   from: renderNodes[links[index].source].attributes[LAYOUT],
+    //   to: renderNodes[links[index].target].attributes[LAYOUT],
+    // }));
 
-  const __edges = edges.map((edge, index) => ({
-    ...edge,
-    from: __nodes[_links[index].source].attributes[LAYOUT],
-    to: __nodes[_links[index].target].attributes[LAYOUT],
-  }));
+    setPositionedNodes(renderNodes);
+    // setPositionedEdges(renderEdges);
+  };
 
-  console.log(__edges);
+  useEffect(() => {
+    initLayoutEngine({
+      nodes: nodes.map(asXY()),
+      links,
+    });
 
-  return [__nodes, __edges];
+    setTimeout(() => {
+      startLayoutEngine();
+    }, 2000);
+  }, []);
+
+  useEffect(() => {
+    if (!animation.current) { update.current(); }
+
+    return () => window.cancelAnimationFrame(animation.current);
+  }, [isRunning]);
+
+  return [positionedNodes];
 };
 
 export default useAutoLayout;

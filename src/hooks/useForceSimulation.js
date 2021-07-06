@@ -1,5 +1,4 @@
-import { useRef, useCallback, useEffect } from 'react';
-// import { throttle } from '
+import { useRef, useCallback, useEffect, useState } from 'react';
 import ForceSimulationWorker from './forceSimulation.worker';
 
 // example listener:
@@ -10,46 +9,45 @@ import ForceSimulationWorker from './forceSimulation.worker';
 //   }
 // };
 
-let count = 0;
-
 const useForceSimulation = (listener) => {
   const worker = useRef(new ForceSimulationWorker());
-  const rAF = useRef(null);
-
-  const tick = useCallback(() => {
-    count += 1;
-    // console.log('tick');
-    worker.current.postMessage({
-      type: 'tick',
-    });
-
-    if (count > 100) { return; }
-    rAF.current = requestAnimationFrame(tick);
-  });
+  const state = useRef(null);
+  const [isRunning, setIsRunning] = useState(false);
 
   const init = useCallback(({ nodes, edges }) => {
     worker.current.postMessage({
-      type: 'init',
+      type: 'initialize',
       nodes,
       edges,
     });
+  });
 
-    count = 0;
+  const start = useCallback(() => {
+    worker.current.postMessage({ type: 'start' });
+    setIsRunning(true);
+  });
 
-    tick();
+  const stop = useCallback(() => {
+    worker.current.postMessage({ type: 'stop' });
+    setIsRunning(false);
   });
 
   useEffect(() => {
     worker.current.onmessage = (event) => {
-      if (event.data.type === 'end') {
-        cancelAnimationFrame(rAF);
+      // listener(event);
+      switch (event.data.type) {
+        case 'tick':
+          state.current = event.data;
+          break;
+        case 'end':
+          setIsRunning(false);
+          break;
+        default:
       }
-
-      listener(event);
     };
   }, []);
 
-  return [init];
+  return [state, isRunning, init, start, stop];
 };
 
 export default useForceSimulation;
