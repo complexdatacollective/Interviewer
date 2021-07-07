@@ -52,7 +52,7 @@ const Sociogram = (props) => {
     edges,
   } = props;
 
-  const [enableAutoLayout, setEnableAutoLayout] = useState(true);
+  const [enableAutoLayout, setEnableAutoLayout] = useState(false);
 
   // Behaviour Configuration
   const allowHighlighting = get(prompt, 'highlight.allowHighlighting', false);

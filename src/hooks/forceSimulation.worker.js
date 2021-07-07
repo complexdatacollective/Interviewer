@@ -8,6 +8,8 @@ import {
 
 let simulation;
 
+console.log('new force simulation worker!');
+
 onmessage = function (event) {
   const {
     data: {

@@ -146,6 +146,7 @@ const useAutoLayout = (layout, nodes, edges, enabled) => {
   useEffect(() => {
     if (!enabled) {
       window.cancelAnimationFrame(animation.current);
+      return;
     }
 
     start();

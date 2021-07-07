@@ -1,38 +1,23 @@
 import {
   useRef,
   useCallback,
-  useEffect,
   useState,
 } from 'react';
 import ForceSimulationWorker from './forceSimulation.worker';
 
 const useForceSimulation = () => {
-  const worker = useRef(new ForceSimulationWorker());
+  const worker = useRef(null);
   const state = useRef(null);
   const [isRunning, setIsRunning] = useState(false);
 
   const start = useCallback(({ nodes, links }) => {
     worker.current = new ForceSimulationWorker();
-    worker.current.postMessage({
-      type: 'initialize',
-      nodes,
-      links,
-    });
 
     state.current = {
       links,
       nodes,
     };
 
-    setIsRunning(true);
-  });
-
-  const stop = useCallback(() => {
-    worker.current.postMessage({ type: 'stop' });
-    setIsRunning(false);
-  });
-
-  useEffect(() => {
     worker.current.onmessage = (event) => {
       switch (event.data.type) {
         case 'tick':
@@ -45,7 +30,20 @@ const useForceSimulation = () => {
         default:
       }
     };
-  }, []);
+
+    worker.current.postMessage({
+      type: 'initialize',
+      nodes,
+      links,
+    });
+
+    setIsRunning(true);
+  });
+
+  const stop = useCallback(() => {
+    worker.current.postMessage({ type: 'stop' });
+    setIsRunning(false);
+  });
 
   return [state, isRunning, start, stop];
 };
