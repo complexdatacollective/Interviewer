@@ -4,6 +4,7 @@ import {
   useMemo,
   useRef,
 } from 'react';
+import { noop } from 'lodash';
 import { entityPrimaryKeyProperty, entityAttributesProperty } from '../../ducks/modules/network';
 import useForceSimulation from '../../hooks/useForceSimulation';
 
@@ -94,7 +95,7 @@ export const transformLayout = (layout, nodes, edges, nodePositions, links) => {
   ];
 };
 
-const useAutoLayout = (layout, nodes, edges) => {
+const useAutoLayout = (layout, nodes, edges, enabled) => {
   const animation = useRef(null);
   const update = useRef(() => {});
   const indexes = useMemo(() => getIndexes(nodes), [nodes]);
@@ -141,6 +142,18 @@ const useAutoLayout = (layout, nodes, edges) => {
 
     return () => window.cancelAnimationFrame(animation.current);
   }, [isSimulationRunning]);
+
+  useEffect(() => {
+    if (!enabled) {
+      window.cancelAnimationFrame(animation.current);
+    }
+
+    start();
+  }, [enabled]);
+
+  if (!enabled) {
+    return [nodes, edges, noop];
+  }
 
   return [positionedNodes, positionedEdges, start];
 };

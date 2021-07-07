@@ -12,6 +12,7 @@ const useForceSimulation = () => {
   const [isRunning, setIsRunning] = useState(false);
 
   const start = useCallback(({ nodes, links }) => {
+    worker.current = new ForceSimulationWorker();
     worker.current.postMessage({
       type: 'initialize',
       nodes,

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { get } from 'lodash';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -52,6 +52,8 @@ const Sociogram = (props) => {
     edges,
   } = props;
 
+  const [enableAutoLayout, setEnableAutoLayout] = useState(true);
+
   // Behaviour Configuration
   const allowHighlighting = get(prompt, 'highlight.allowHighlighting', false);
   const createEdge = get(prompt, 'edges.create');
@@ -71,7 +73,7 @@ const Sociogram = (props) => {
     autoLayoutNodes,
     autoLayoutEdges,
     startLayout,
-  ] = useAutoLayout(layoutVariable, nodes, edges);
+  ] = useAutoLayout(layoutVariable, nodes, edges, enableAutoLayout);
 
   useEffect(() => {
     startLayout();
@@ -121,6 +123,12 @@ const Sociogram = (props) => {
           label="RESET"
           size="small"
           onClick={handleResetInterface}
+        />
+        <ButtonObstacle
+          id="ENABLE_AUTO_LAYOUT"
+          label="Enable auto layout"
+          size="small"
+          onClick={() => setEnableAutoLayout((v) => !v)}
         />
       </div>
     </div>
