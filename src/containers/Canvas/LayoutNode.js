@@ -13,18 +13,17 @@ const EnhancedNode = compose(
 class LayoutNode extends PureComponent {
   render() {
     const {
-      position,
       allowPositioning,
       allowSelect,
-      // layoutVariable,
+      layoutVariable,
       linking,
       node,
       selected,
       onSelected,
     } = this.props;
-    // const nodeAttributes = getEntityAttributes(node);
+    const nodeAttributes = getEntityAttributes(node);
 
-    const { x, y } = position;
+    const { x, y } = nodeAttributes[layoutVariable];
 
     const styles = {
       left: `${100 * x}%`,

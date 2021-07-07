@@ -52,13 +52,6 @@ const Sociogram = (props) => {
     edges,
   } = props;
 
-  const [nodePositions, edgePositions, startLayout] = useAutoLayout(undefined, nodes, edges);
-  // console.log({ nodePositions });
-
-  useEffect(() => {
-    startLayout();
-  }, []);
-
   // Behaviour Configuration
   const allowHighlighting = get(prompt, 'highlight.allowHighlighting', false);
   const createEdge = get(prompt, 'edges.create');
@@ -72,6 +65,14 @@ const Sociogram = (props) => {
   const backgroundImage = get(stage, 'background.image');
   const concentricCircles = get(stage, 'background.concentricCircles');
   const skewedTowardCenter = get(stage, 'background.skewedTowardCenter');
+
+  // Automatic Layout
+  const [autoLayoutNodes, edgePositions, startLayout] = useAutoLayout(layoutVariable, nodes, edges);
+
+  useEffect(() => {
+    startLayout();
+  }, []);
+
 
   return (
     <div className="sociogram-interface">
@@ -95,17 +96,16 @@ const Sociogram = (props) => {
           {/* <EdgeLayout
             edges={edges}
             positions={edgePositions}
-          />
+          />*/}
           <NodeLayout
-            nodes={nodes}
-            positions={nodePositions}
+            nodes={autoLayoutNodes}
             id="NODE_LAYOUT"
             highlightAttribute={highlightAttribute}
             layoutVariable={layoutVariable}
             allowHighlighting={allowHighlighting && !createEdge}
             allowPositioning={allowPositioning}
             createEdge={createEdge}
-          /> */}
+          />
           <NodeBucket
             id="NODE_BUCKET"
             node={nextUnplacedNode}

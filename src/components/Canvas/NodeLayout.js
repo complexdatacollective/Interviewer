@@ -6,7 +6,6 @@ import { entityPrimaryKeyProperty, entityAttributesProperty } from '../../ducks/
 
 const NodeLayout = React.forwardRef(({
   nodes,
-  positions,
   allowPositioning,
   highlightAttribute,
   connectFrom,
@@ -29,11 +28,10 @@ const NodeLayout = React.forwardRef(({
 
   return (
     <div className="node-layout" ref={ref}>
-      { nodes.map((node, index) => (
+      { nodes.map((node) => (
         <LayoutNode
           key={node[entityPrimaryKeyProperty]}
           node={node}
-          position={positions[index]}
           layoutVariable={layoutVariable}
           onSelected={() => onSelected(node)}
           selected={isHighlighted(node)}

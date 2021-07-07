@@ -98,8 +98,8 @@ const useAutoLayout = (layout, nodes, edges) => {
   const animation = useRef(null);
   const update = useRef(() => {});
   const indexes = useMemo(() => getIndexes(nodes), [nodes]);
-  const [positionedNodes, setPositionedNodes] = useState();
-  const [positionedEdges, setPositionedEdges] = useState();
+  const [positionedNodes, setPositionedNodes] = useState(nodes);
+  const [positionedEdges, setPositionedEdges] = useState(edges);
 
   const [
     simulationState,
