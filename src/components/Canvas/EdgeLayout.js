@@ -5,16 +5,17 @@ import Edge from '../Edge';
 const viewBoxScale = 100;
 
 class EdgeLayout extends PureComponent {
-  renderEdge = (edge, index) => {
+  renderEdge = (edge) => {
     if (!['key', 'from', 'to', 'type'].every((prop) => prop in edge)) {
       return null;
     }
 
     const {
-      key, type,
+      key,
+      type,
+      from,
+      to,
     } = edge;
-
-    const { from, to } = this.props.positions[index];
 
     return (
       <Edge key={key} from={from} to={to} type={type} viewBoxScale={viewBoxScale} />

@@ -67,12 +67,15 @@ const Sociogram = (props) => {
   const skewedTowardCenter = get(stage, 'background.skewedTowardCenter');
 
   // Automatic Layout
-  const [autoLayoutNodes, edgePositions, startLayout] = useAutoLayout(layoutVariable, nodes, edges);
+  const [
+    autoLayoutNodes,
+    autoLayoutEdges,
+    startLayout,
+  ] = useAutoLayout(layoutVariable, nodes, edges);
 
   useEffect(() => {
     startLayout();
   }, []);
-
 
   return (
     <div className="sociogram-interface">
@@ -93,10 +96,9 @@ const Sociogram = (props) => {
             skewedTowardCenter={skewedTowardCenter}
             image={backgroundImage}
           />
-          {/* <EdgeLayout
-            edges={edges}
-            positions={edgePositions}
-          />*/}
+          <EdgeLayout
+            edges={autoLayoutEdges}
+          />
           <NodeLayout
             nodes={autoLayoutNodes}
             id="NODE_LAYOUT"
