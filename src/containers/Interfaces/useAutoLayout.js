@@ -4,17 +4,18 @@ import {
   useMemo,
   useRef,
 } from 'react';
+import { entityPrimaryKeyProperty, entityAttributesProperty } from '../../ducks/modules/network';
 import useForceSimulation from '../../hooks/useForceSimulation';
 
 const LAYOUT = 'ee090c9b-2b70-4648-a6db-328d4ef4dbfe';
 
 const asXY = (layout = LAYOUT) => (node) => ({
-  x: node.attributes[layout].x,
-  y: node.attributes[layout].y,
+  x: node[entityAttributesProperty][layout].x,
+  y: node[entityAttributesProperty][layout].y,
 });
 
 const getIndexes = (nodes) => nodes
-  .reduce((memo, node, index) => ({ ...memo, [node._uid]: index }), {});
+  .reduce((memo, node, index) => ({ ...memo, [node[entityPrimaryKeyProperty]]: index }), {});
 
 const asLinks = (indexes) => (edge) => ({
   id: edge.key,
@@ -63,15 +64,21 @@ const getScaledPositions = (nodePositions) => {
 export const transformLayout = (layout, nodes, edges, nodePositions, links) => {
   const scaledPositions = getScaledPositions(nodePositions);
 
-  const transformedNodes = nodes.map((node, index) => ({
-    ...node,
-    attributes: {
-      ...node.attributes,
-      [layout]: scaledPositions[index],
-    },
-  }));
+  const transformedNodes = nodes.map((node, index) => {
+    if (!scaledPositions[index]) { return node; }
+
+    return {
+      ...node,
+      [entityAttributesProperty]: {
+        ...node[entityAttributesProperty],
+        [layout]: scaledPositions[index],
+      },
+    };
+  });
 
   const transformedEdges = edges.map((edge, index) => {
+    if (!links[index]) { return edge; }
+
     const { source, target } = links[index];
 
     return {
