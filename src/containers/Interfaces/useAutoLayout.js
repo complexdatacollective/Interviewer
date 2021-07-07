@@ -106,6 +106,7 @@ const useAutoLayout = (layout, nodes, edges, enabled) => {
     simulationState,
     isSimulationRunning,
     startSimulation,
+    stopSimulation,
   ] = useForceSimulation();
 
   const start = () => {
@@ -113,50 +114,65 @@ const useAutoLayout = (layout, nodes, edges, enabled) => {
       nodes: nodes.map(asXY()),
       links: edges.map(asLinks(indexes)),
     });
+
+    update.current();
   };
 
   update.current = () => {
-    if (isSimulationRunning) {
-      window.requestAnimationFrame(() => update.current());
+    console.log('update', isSimulationRunning);
+
+    if (simulationState.current) {
+      const [
+        transformedNodes,
+        transformedEdges,
+      ] = transformLayout(
+        layout,
+        nodes,
+        edges,
+        simulationState.current.nodes,
+        simulationState.current.links,
+      );
+
+      setPositionedNodes(transformedNodes);
+      setPositionedEdges(transformedEdges);
     }
 
-    if (!simulationState.current) { return; }
-
-    const [
-      transformedNodes,
-      transformedEdges,
-    ] = transformLayout(
-      layout,
-      nodes,
-      edges,
-      simulationState.current.nodes,
-      simulationState.current.links,
-    );
-
-    setPositionedNodes(transformedNodes);
-    setPositionedEdges(transformedEdges);
+    if (isSimulationRunning && enabled) {
+      console.log(isSimulationRunning, enabled);
+      window.requestAnimationFrame(() => update.current());
+    }
   };
 
   useEffect(() => {
-    if (!animation.current) { update.current(); }
-
-    return () => window.cancelAnimationFrame(animation.current);
-  }, [isSimulationRunning]);
+    if (enabled) {
+      start();
+    } else {
+      stopSimulation();
+    }
+  }, [enabled]);
 
   useEffect(() => {
-    if (!enabled) {
+    const end = () => {
+      console.log('end');
       window.cancelAnimationFrame(animation.current);
-      return;
+    };
+
+    console.log('isSimulationRunning');
+
+    if (isSimulationRunning) {
+      update.current();
+    } else {
+      end();
     }
 
-    start();
-  }, [enabled]);
+    return end;
+  }, [isSimulationRunning]);
 
   if (!enabled) {
     return [nodes, edges, noop];
   }
 
-  return [positionedNodes, positionedEdges, start];
+  return [positionedNodes, positionedEdges];
 };
 
 export default useAutoLayout;

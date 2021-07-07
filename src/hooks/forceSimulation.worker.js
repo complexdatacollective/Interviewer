@@ -20,6 +20,7 @@ onmessage = function (event) {
 
   switch (event.data.type) {
     case 'initialize': {
+      console.debug('worker:initialize');
       simulation = forceSimulation(nodes)
         .force('charge', forceManyBody())
         .force('link', forceLink(links).distance(10).strength(1))
@@ -27,6 +28,7 @@ onmessage = function (event) {
         .force('y', forceY());
 
       simulation.on('tick', () => {
+        console.debug('worker:tick');
         postMessage({
           type: 'tick',
           nodes: simulation.nodes(),
@@ -34,6 +36,7 @@ onmessage = function (event) {
       });
 
       simulation.on('end', () => {
+        console.debug('worker:end');
         postMessage({
           type: 'end',
           nodes: simulation.nodes(),

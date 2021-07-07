@@ -72,12 +72,7 @@ const Sociogram = (props) => {
   const [
     autoLayoutNodes,
     autoLayoutEdges,
-    startLayout,
   ] = useAutoLayout(layoutVariable, nodes, edges, enableAutoLayout);
-
-  useEffect(() => {
-    startLayout();
-  }, []);
 
   return (
     <div className="sociogram-interface">

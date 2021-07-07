@@ -11,6 +11,7 @@ const useForceSimulation = () => {
   const [isRunning, setIsRunning] = useState(false);
 
   const start = useCallback(({ nodes, links }) => {
+    console.log('intialize worker');
     worker.current = new ForceSimulationWorker();
 
     state.current = {
@@ -24,7 +25,6 @@ const useForceSimulation = () => {
           state.current.nodes = event.data.nodes;
           break;
         case 'end':
-          console.log({ finish: state.current });
           setIsRunning(false);
           break;
         default:
@@ -41,7 +41,9 @@ const useForceSimulation = () => {
   });
 
   const stop = useCallback(() => {
+    if (!worker.current) { return; }
     worker.current.postMessage({ type: 'stop' });
+    worker.current = null;
     setIsRunning(false);
   });
 
