@@ -13,14 +13,21 @@
   }
 }
 
-.selection-controls {
+.selection-status {
   display: flex;
-  justify-content: space-between;
-  flex-direction: row-reverse;
-  align-content: center;
-  margin-bottom: unit(2);
+  flex-direction: column;
+  flex: 0 0 auto;
+  margin-top: unit(2);
 
-  .switch {
-    margin-right: unit(4);
+  .selection-controls {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+    align-content: center;
+
+    .switch {
+      margin-right: unit(4);
+    }
   }
 }
+

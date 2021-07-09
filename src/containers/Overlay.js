@@ -1,7 +1,7 @@
 import React from 'react';
 import cx from 'classnames';
+import { useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Modal } from '@codaco/ui';
 import CloseButton from '../components/CloseButton';
@@ -20,10 +20,11 @@ const Overlay = (props) => {
     footer,
     fullheight,
     fullscreen,
-    useFullScreenForms,
     forceDisableFullScreen,
     className,
   } = props;
+
+  const useFullScreenForms = useSelector((state) => state.deviceSettings.useFullScreenForms);
 
   if (!show) { return false; }
 
@@ -38,12 +39,12 @@ const Overlay = (props) => {
 
   return (
     <Modal show={show} onBlur={onBlur}>
-      <motion.article className={overlayClasses} layout>
+      <motion.article className={overlayClasses}>
         { title && (
-          <header className="overlay__title">
+          <motion.header className="overlay__title">
             <h1>{title}</h1>
             <CloseButton className="overlay__close" onClick={onClose} />
-          </header>
+          </motion.header>
         )}
         <motion.main className="overlay__content">
           {children}
@@ -65,7 +66,6 @@ Overlay.propTypes = {
   show: PropTypes.bool,
   children: PropTypes.any,
   footer: PropTypes.any,
-  useFullScreenForms: PropTypes.bool,
   fullheight: PropTypes.bool,
   forceDisableFullScreen: PropTypes.bool,
   className: PropTypes.string,
@@ -81,15 +81,10 @@ Overlay.defaultProps = {
   footer: null,
   fullheight: false,
   forceDisableFullScreen: false,
-  useFullScreenForms: false,
 };
 
 export {
   Overlay,
 };
 
-const mapStateToProps = (state) => ({
-  useFullScreenForms: state.deviceSettings.useFullScreenForms,
-});
-
-export default connect(mapStateToProps)(Overlay);
+export default Overlay;

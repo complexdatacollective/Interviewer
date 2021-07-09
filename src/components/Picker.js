@@ -14,27 +14,23 @@ const Picker = ({
   sortableProperties,
   footer,
   header,
-}) => {
-  return (
-    <Overlay
-      show={show}
-      onClose={onClose}
-      title={title}
-      fullheight
-      fullscreen
-      footer={footer}
-    >
-      { header }
-      <NewFilterableListWrapper
-        ItemComponent={ItemComponent}
-        items={items}
-        propertyPath={propertyPath}
-        initialSortProperty={initialSortProperty}
-        initialSortDirection={initialSortDirection}
-        sortableProperties={sortableProperties}
-      />
-    </Overlay>
-  );
-};
+}) => (
+  <Overlay
+    show={show}
+    onClose={onClose}
+    title={title}
+    footer={footer}
+  >
+    { header }
+    <NewFilterableListWrapper
+      ItemComponent={ItemComponent}
+      items={items}
+      propertyPath={propertyPath}
+      initialSortProperty={initialSortProperty}
+      initialSortDirection={initialSortDirection}
+      sortableProperties={sortableProperties}
+    />
+  </Overlay>
+);
 
 export default Picker;

@@ -44,8 +44,7 @@ $close-button-size: 1rem;
 
   &__footer {
     width: 100%;
-    padding: 0 unit(4);
-    padding-bottom: unit(4);
+    padding: unit(2) unit(4);
     display: flex;
     flex-direction: row-reverse;
     align-items: center;

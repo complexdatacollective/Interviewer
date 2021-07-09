@@ -1,7 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import Button from '@codaco/ui/lib/components/Button';
+import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { actionCreators as installedProtocolActions } from '../../ducks/modules/installedProtocols';
 import { ProtocolCard } from '../../components/Cards';
 import { entityAttributesProperty } from '../../ducks/modules/network';
@@ -10,9 +10,10 @@ import Picker from '../../components/Picker';
 const ManageProtocolsOverlay = ({
   show,
   onClose,
-  installedProtocols,
-  deleteProtocol,
 }) => {
+  const [selectedProtocols, setSelectedProtocols] = useState([]);
+  const installedProtocols = useSelector((state) => state.installedProtocols);
+
   const formattedProtocols = [...Object.keys(installedProtocols)].map((protocolUID) => {
     const {
       schemaVersion,
@@ -23,6 +24,8 @@ const ManageProtocolsOverlay = ({
     } = installedProtocols[protocolUID];
 
     return {
+      uid: protocolUID,
+      selected: selectedProtocols.includes(protocolUID),
       [entityAttributesProperty]: {
         schemaVersion,
         lastModified,
@@ -30,28 +33,67 @@ const ManageProtocolsOverlay = ({
         name,
         description,
       },
-      meta: () => ({ protocolUID }),
     };
   });
 
-  // dropHandler={({ protocolUID }) => deleteProtocol(protocolUID)}
+  const dispatch = useDispatch();
+  const deleteProtocol = (id) => dispatch(installedProtocolActions.deleteProtocol(id));
+  const openDialog = (dialog) => dispatch(dialogActions.openDialog(dialog));
+
+  const handleDeleteProtocols = () => {
+    openDialog({
+      type: 'Warning',
+      title: `Delete ${selectedProtocols.length} Interview Session${selectedProtocols.length > 1 ? 's' : ''}?`,
+      confirmLabel: 'Permanently Delete',
+      onConfirm: () => {
+        selectedProtocols.map((protocol) => deleteProtocol(protocol.id));
+        setSelectedProtocols([]);
+      },
+      message: (
+        <p>
+          This action will delete the selected interview data and cannot be undone.
+          Are you sure you want to continue?
+        </p>
+      ),
+    });
+  };
+
+  const handleProtocolCardClick = (protocolUUID) => {
+    if (selectedProtocols.includes(protocolUUID)) {
+      setSelectedProtocols([
+        ...selectedProtocols.filter((protocol) => protocol !== protocolUUID),
+      ]);
+
+      return;
+    }
+
+    setSelectedProtocols((alreadySelected) => [
+      ...alreadySelected,
+      protocolUUID,
+    ]);
+  };
+
+  const SelectableProtocolCard = (props) => {
+    console.log(props);
+    return (
+      <React.Fragment key={props.uid}>
+        <ProtocolCard
+          {...props}
+          onClickHandler={() => handleProtocolCardClick(props.uid)}
+        />
+      </React.Fragment>
+    );
+  };
 
   return (
     <Picker
       show={show}
       onClose={onClose}
       title="Select Protocols to Delete"
-      header={(
-        <p>
-          These are the protocols that are currently installed on this device. To
-          delete a protocol, drag it with your mouse or finger into the bin that
-          will appear at the bottom of the screen.
-        </p>
-      )}
       footer={(
-        <Button color="neon-coral" icon="menu-purge-data">Delete Selected</Button>
+        <Button disabled={!selectedProtocols.length > 0} color="neon-coral" icon="menu-purge-data" onClick={handleDeleteProtocols}>Delete Selected</Button>
       )}
-      ItemComponent={ProtocolCard}
+      ItemComponent={SelectableProtocolCard}
       items={formattedProtocols}
       propertyPath={entityAttributesProperty}
       initialSortProperty="name"
@@ -74,18 +116,4 @@ const ManageProtocolsOverlay = ({
   );
 };
 
-ManageProtocolsOverlay.propTypes = {
-  installedProtocols: PropTypes.object.isRequired,
-};
-
-function mapStateToProps(state) {
-  return {
-    installedProtocols: state.installedProtocols,
-  };
-}
-
-const mapDispatchToProps = {
-  deleteProtocol: installedProtocolActions.deleteProtocol,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ManageProtocolsOverlay);
+export default ManageProtocolsOverlay;

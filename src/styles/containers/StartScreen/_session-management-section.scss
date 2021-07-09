@@ -1,49 +1,26 @@
 .session-management-section {
   background: linear-gradient(#404088, var(--color-cyber-grape)); //sass-lint:disable-line no-color-literals
 
-  // &__main {
-  //   > header {
-  //     padding: unit(4) unit(6) 0;
-  //   }
-  // }
-
   &__main {
     padding: unit(4) unit(6);
 
     > .content-buttons {
       display: flex;
-      justify-content: space-around;
 
       .graphic-button {
         max-width: 30rem;
       }
-
-      > :only-child {
-        max-width: 30rem;
-        margin-left: -50% !important; //sass-lint:disable-line no-important
-      }
-
-      > :first-child {
-        margin-right: unit(2);
-      }
-
-      > :last-child {
-        margin-left: unit(2);
-      }
     }
   }
+}
 
-  &__footer {
-    padding: unit(2) unit(6);
-    background-color: var(--color-neon-coral);
+.export-settings-wizard {
+  .action-buttons {
     display: flex;
-    justify-content: space-between;
+    align-items: center;
+    justify-content: flex-end;
 
-    .action-buttons {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-
+    .export-buttons {
       .button {
         &:last-child {
           margin-left: unit(2);
