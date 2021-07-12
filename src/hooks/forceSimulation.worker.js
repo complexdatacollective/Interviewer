@@ -49,12 +49,15 @@ onmessage = function (event) {
       simulation.stop();
       break;
     }
-    // case 'start': {
-    //   console.log('start', { simulation });
-    //   if (!simulation) { return; }
-    //   simulation.restart();
-    //   break;
-    // }
+    case 'update': {
+      if (!simulation) { return; }
+      const newNodes = simulation.nodes();
+      event.data.nodes.forEach((node) => {
+        newNodes[node.index] = node;
+      });
+      simulation.nodes(newNodes);
+      break;
+    }
     default:
   }
 };

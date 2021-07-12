@@ -48,7 +48,12 @@ const useForceSimulation = (listener) => {
     setIsRunning(false);
   });
 
-  return [state, isRunning, start, stop];
+  const update = useCallback((nodes = []) => {
+    if (!worker.current) { return; }
+    worker.current.postMessage({ type: 'update', nodes });
+  });
+
+  return [state, isRunning, start, stop, update];
 };
 
 export default useForceSimulation;
