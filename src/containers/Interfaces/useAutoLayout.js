@@ -1,4 +1,5 @@
-import { useRef } from 'react';
+import { useRef, useCallback } from 'react';
+import { get } from 'lodash';
 import { entityPrimaryKeyProperty, entityAttributesProperty } from '../../ducks/modules/network';
 import useForceSimulation from '../../hooks/useForceSimulation';
 
@@ -57,8 +58,8 @@ export const translatePositions = (positions) => {
   const translatedPositions = positions.reduce((acc, position) => ({
     ...acc,
     [position.id]: {
-      x: 0.1 + (position.x - scale.minX) / scale.dX * 0.8,
-      y: 0.1 + (position.y - scale.minY) / scale.dY * 0.8,
+      x: (position.x - scale.minX) / scale.dX,
+      y: (position.y - scale.minY) / scale.dY,
     },
   }), {});
 
@@ -68,22 +69,64 @@ export const translatePositions = (positions) => {
   ];
 };
 
-const useAutoLayout = () => {
+const useScaledPositions = () => {
   const positions = useRef([]);
   const scale = useRef({});
 
-  const onUpdate = ({ type, data: { nodes } }) => {
+  const update = useCallback((nodes) => {
+    const [
+      translatedPositions,
+      translationScale,
+    ] = translatePositions(
+      nodes,
+    );
+
+    positions.current = translatedPositions;
+    scale.current = translationScale;
+  });
+
+  return [positions, scale, update];
+};
+
+const useAutoLayout = (layoutOptions = {}, simulationOptions = {}) => {
+  const nodes = useRef([]);
+  const edges = useRef([]);
+  const indexes = useRef({});
+  const links = useRef([]);
+  const [positions, scale, updatePositions] = useScaledPositions();
+
+  const updateHandler = ({ type, data }) => {
     switch (type) {
       case 'tick': {
-        const [
-          translatedPositions,
-          translationScale,
-        ] = translatePositions(
-          nodes,
-        );
+        updatePositions(data.nodes);
 
-        positions.current = translatedPositions;
-        scale.current = translationScale;
+        nodes.current.map((node) => {
+          const originalPosition = get(node, [entityPrimaryKeyProperty, layoutOptions.layout]);
+          const key = get(indexes.current, [node[entityPrimaryKeyProperty]]);
+          const position = get(positions, [key], originalPosition);
+
+          return {
+            ...node,
+            [entityAttributesProperty]: {
+              ...node[entityAttributesProperty],
+              [layoutOptions.layout]: position,
+            },
+          };
+        });
+
+        edges.current.map((edge) => {
+          const fromKey = get(indexes.current, edge.ids.from);
+          const toKey = get(indexes.current, edge.ids.to);
+          const from = get(positions, [fromKey], edge.from);
+          const to = get(positions, [toKey], edge.to);
+
+          return {
+            ...edge,
+            from,
+            to,
+          };
+        });
+
         break;
       }
       default:
@@ -92,28 +135,46 @@ const useAutoLayout = () => {
 
   const [
     simulationState,
-    isSimulationRunning,
+    isRunning,
     startSimulation,
     stopSimulation,
     updateSimulation,
-  ] = useForceSimulation(onUpdate);
+  ] = useForceSimulation(updateHandler);
 
-  const start = ({ nodes, edges }) => {
-    const indexes = getIndexes(nodes);
+  const start = useCallback((network) => {
+    nodes.current = network.nodes;
+    edges.current = network.edges;
+    indexes.current = getIndexes(nodes);
+    links.current = edges.map(asLinks(indexes));
 
     startSimulation({
-      nodes: nodes.map(asXY()),
-      links: edges.map(asLinks(indexes)),
+      nodes: nodes.current.map(asXY()),
+      links: links.current,
     });
-  };
+  });
+
+  const stop = stopSimulation;
+
+  const update = useCallback((network) => {
+    nodes.current = network.nodes;
+    edges.current = network.edges;
+    indexes.current = getIndexes(nodes);
+    links.current = edges.map(asLinks(indexes));
+
+    updateSimulation({
+      nodes: nodes.current.map(asXY()),
+      links: links.current,
+    });
+  });
 
   return [
-    positions,
+    nodes.current,
+    edges.current,
     scale,
-    isSimulationRunning,
+    isRunning,
     start,
-    stopSimulation,
-    updateSimulation,
+    stop,
+    update,
   ];
 };
 
