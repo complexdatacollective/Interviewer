@@ -5,7 +5,7 @@ import {
 } from 'react';
 import ForceSimulationWorker from './forceSimulation.worker';
 
-const useForceSimulation = () => {
+const useForceSimulation = (listener) => {
   const worker = useRef(null);
   const state = useRef(null);
   const [isRunning, setIsRunning] = useState(false);
@@ -23,6 +23,7 @@ const useForceSimulation = () => {
       switch (event.data.type) {
         case 'tick':
           state.current.nodes = event.data.nodes;
+          listener({ type: 'tick', data: event.data.nodes });
           break;
         case 'end':
           setIsRunning(false);

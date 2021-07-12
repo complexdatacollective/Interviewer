@@ -95,42 +95,43 @@ export const transformLayout = (layout, nodes, edges, nodePositions, links) => {
   ];
 };
 
-const useAutoLayout = (layout, nodes, edges, enabled) => {
-  const animation = useRef(null);
-  const update = useRef(() => {});
-  const indexes = useMemo(() => getIndexes(nodes), [nodes]);
-  const [positionedNodes, setPositionedNodes] = useState(nodes);
-  const [positionedEdges, setPositionedEdges] = useState(edges);
+const useAutoLayout = (options) => {
+  const state = useRef({
+    positions: [],
+    factors: {},
+  });
 
   const [
     simulationState,
     isSimulationRunning,
     startSimulation,
-    stopSimulation,
-  ] = useForceSimulation();
+    // stopSimulation,
+  ] = useForceSimulation(({ data: { nodes } }) => {
+    const [
+      translatedPositions,
+      translationFactors,
+    ] = translateLayout(
+      nodes,
+    );
+    state.current.positions.current = translatedPositions;
+    state.current.factors.current = translationFactors;
+  });
 
-  const start = () => {
+  const start = ({ nodes, edges }) => {
+    const indexes = getIndexes(nodes);
     startSimulation({
       nodes: nodes.map(asXY()),
       links: edges.map(asLinks(indexes)),
     });
-
-    update.current();
   };
 
   update.current = () => {
-    console.log('update', isSimulationRunning);
-
     if (simulationState.current) {
       const [
-        transformedNodes,
-        transformedEdges,
-      ] = transformLayout(
-        layout,
-        nodes,
-        edges,
+        translatedPositions,
+        translationFactors,
+      ] = translateLayout(
         simulationState.current.nodes,
-        simulationState.current.links,
       );
 
       setPositionedNodes(transformedNodes);
@@ -138,41 +139,33 @@ const useAutoLayout = (layout, nodes, edges, enabled) => {
     }
 
     if (isSimulationRunning && enabled) {
-      console.log(isSimulationRunning, enabled);
+      // console.log(isSimulationRunning, enabled);
       window.requestAnimationFrame(() => update.current());
     }
   };
 
-  useEffect(() => {
-    if (enabled) {
-      start();
-    } else {
-      stopSimulation();
-    }
-  }, [enabled]);
+  // useEffect(() => {
+  //   const end = () => {
+  //     console.log('end');
+  //     window.cancelAnimationFrame(animation.current);
+  //   };
 
-  useEffect(() => {
-    const end = () => {
-      console.log('end');
-      window.cancelAnimationFrame(animation.current);
-    };
+  //   console.log('isSimulationRunning');
 
-    console.log('isSimulationRunning');
+  //   if (isSimulationRunning) {
+  //     update.current();
+  //   } else {
+  //     end();
+  //   }
 
-    if (isSimulationRunning) {
-      update.current();
-    } else {
-      end();
-    }
+  //   return end;
+  // }, [isSimulationRunning]);
 
-    return end;
-  }, [isSimulationRunning]);
+  // if (!enabled) {
+  //   return [nodes, edges, noop];
+  // }
 
-  if (!enabled) {
-    return [nodes, edges, noop];
-  }
-
-  return [positionedNodes, positionedEdges];
+  return [positions, translationFactor, start, stop, update];
 };
 
 export default useAutoLayout;
