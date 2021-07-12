@@ -96,9 +96,10 @@ const useAutoLayout = (layoutOptions = {}, simulationOptions = {}) => {
   const [positions, scale, updatePositions] = useScaledPositions();
 
   const updateHandler = ({ type, data }) => {
+    console.log('tick');
     switch (type) {
       case 'tick': {
-        updatePositions(data.nodes);
+        updatePositions(data);
 
         nodes.current.map((node) => {
           const originalPosition = get(node, [entityPrimaryKeyProperty, layoutOptions.layout]);
@@ -144,8 +145,8 @@ const useAutoLayout = (layoutOptions = {}, simulationOptions = {}) => {
   const start = useCallback((network) => {
     nodes.current = network.nodes;
     edges.current = network.edges;
-    indexes.current = getIndexes(nodes);
-    links.current = edges.map(asLinks(indexes));
+    indexes.current = getIndexes(nodes.current);
+    links.current = edges.current.map(asLinks(indexes.current));
 
     startSimulation({
       nodes: nodes.current.map(asXY()),

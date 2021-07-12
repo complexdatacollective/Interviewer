@@ -22,7 +22,7 @@ const useForceSimulation = (listener) => {
     worker.current.onmessage = (event) => {
       switch (event.data.type) {
         case 'tick':
-          state.current.nodes = event.data.nodes;
+          state.current.positions = event.data.nodes;
           listener({ type: 'tick', data: event.data.nodes });
           break;
         case 'end':

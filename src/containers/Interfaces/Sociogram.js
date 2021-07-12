@@ -52,8 +52,6 @@ const Sociogram = (props) => {
     edges,
   } = props;
 
-  const [enableAutoLayout, setEnableAutoLayout] = useState(false);
-
   // Behaviour Configuration
   const allowHighlighting = get(prompt, 'highlight.allowHighlighting', false);
   const createEdge = get(prompt, 'edges.create');
@@ -70,9 +68,32 @@ const Sociogram = (props) => {
 
   // Automatic Layout
   const [
-    autoLayoutNodes,
-    autoLayoutEdges,
-  ] = useAutoLayout(layoutVariable, nodes, edges, enableAutoLayout);
+    positionedNodes,
+    positionedEdges,
+    scale,
+    isLayoutRunning,
+    startLayout,
+    stopLayout,
+    updateLayout,
+  ] = useAutoLayout();
+
+  const enableAutoLayout = true;
+
+  const displayNodes = enableAutoLayout ? positionedNodes : nodes;
+  const displayEdges = enableAutoLayout ? positionedEdges : edges;
+
+  useEffect(() => {
+    if (nodes.length < 1) { return; }
+    startLayout({
+      nodes,
+      edges,
+    });
+
+    setInterval(() => {
+      console.log(positionedNodes.current && positionedNodes.current[0]);
+    }, 1000);
+  }, [nodes.length]);
+
 
   return (
     <div className="sociogram-interface">
@@ -94,10 +115,10 @@ const Sociogram = (props) => {
             image={backgroundImage}
           />
           <EdgeLayout
-            edges={autoLayoutEdges}
+            edges={displayEdges}
           />
           <NodeLayout
-            nodes={autoLayoutNodes}
+            nodes={displayNodes}
             id="NODE_LAYOUT"
             highlightAttribute={highlightAttribute}
             layoutVariable={layoutVariable}
