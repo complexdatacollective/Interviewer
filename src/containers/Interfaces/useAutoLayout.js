@@ -6,15 +6,16 @@ import useForceSimulation from '../../hooks/useForceSimulation';
 const LAYOUT = 'ee090c9b-2b70-4648-a6db-328d4ef4dbfe';
 
 const asXY = (layout = LAYOUT) => (node) => ({
-  x: node[entityAttributesProperty][layout].x,
-  y: node[entityAttributesProperty][layout].y,
+  key: node[entityPrimaryKeyProperty],
+  x: node[entityAttributesProperty][layout].x * 500,
+  y: node[entityAttributesProperty][layout].y * 500,
 });
 
 const getIndexes = (nodes) => nodes
   .reduce((memo, node, index) => ({ ...memo, [node[entityPrimaryKeyProperty]]: index }), {});
 
 const asLinks = (indexes) => (edge) => ({
-  id: edge.key,
+  key: edge.key,
   source: indexes[edge.ids.from],
   target: indexes[edge.ids.to],
 });
@@ -55,13 +56,10 @@ export const translatePositions = (positions) => {
     dX: null,
   });
 
-  const translatedPositions = positions.reduce((acc, position) => ({
-    ...acc,
-    [position.id]: {
-      x: (position.x - scale.minX) / scale.dX,
-      y: (position.y - scale.minY) / scale.dY,
-    },
-  }), {});
+  const translatedPositions = positions.map((position) => ({
+    x: (position.x - scale.minX) / scale.dX,
+    y: (position.y - scale.minY) / scale.dY,
+  }));
 
   return [
     translatedPositions,
@@ -96,15 +94,14 @@ const useAutoLayout = (layoutOptions = {}, simulationOptions = {}) => {
   const [positions, scale, updatePositions] = useScaledPositions();
 
   const updateHandler = ({ type, data }) => {
-    console.log('tick');
     switch (type) {
       case 'tick': {
         updatePositions(data);
 
-        nodes.current.map((node) => {
-          const originalPosition = get(node, [entityPrimaryKeyProperty, layoutOptions.layout]);
+        nodes.current = nodes.current.map((node) => {
+          const originalPosition = get(node, [entityAttributesProperty, layoutOptions.layout]);
           const key = get(indexes.current, [node[entityPrimaryKeyProperty]]);
-          const position = get(positions, [key], originalPosition);
+          const position = get(positions.current, [key], originalPosition);
 
           return {
             ...node,
@@ -115,7 +112,7 @@ const useAutoLayout = (layoutOptions = {}, simulationOptions = {}) => {
           };
         });
 
-        edges.current.map((edge) => {
+        edges.current = edges.current.map((edge) => {
           const fromKey = get(indexes.current, edge.ids.from);
           const toKey = get(indexes.current, edge.ids.to);
           const from = get(positions, [fromKey], edge.from);
@@ -169,8 +166,8 @@ const useAutoLayout = (layoutOptions = {}, simulationOptions = {}) => {
   });
 
   return [
-    nodes.current,
-    edges.current,
+    nodes,
+    edges,
     scale,
     isRunning,
     start,

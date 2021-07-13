@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { get } from 'lodash';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -35,6 +35,23 @@ const withPromptIdAsKey = withPropsOnChange(
   ['promptId'],
   (props) => ({ key: props.promptId }),
 );
+
+const useRafState = (initialState, getValue) => {
+  const [state, setState] = useState(initialState);
+  const raf = useRef();
+
+  const loop = () => {
+    setState(getValue());
+    raf.current = window.requestAnimationFrame(loop);
+  };
+
+  useEffect(() => {
+    loop();
+    return () => window.cancelAnimationFrame(raf.current);
+  }, []);
+
+  return state;
+};
 
 /**
   * Sociogram Interface
@@ -75,25 +92,23 @@ const Sociogram = (props) => {
     startLayout,
     stopLayout,
     updateLayout,
-  ] = useAutoLayout();
+  ] = useAutoLayout(
+    { layout: layoutVariable },
+  );
 
-  const enableAutoLayout = true;
-
-  const displayNodes = enableAutoLayout ? positionedNodes : nodes;
-  const displayEdges = enableAutoLayout ? positionedEdges : edges;
+  const displayNodes = useRafState([], () => positionedNodes.current);
+  const displayEdges = useRafState([], () => displayEdges.current);
 
   useEffect(() => {
-    if (nodes.length < 1) { return; }
+    if (nodes.length < 1) { return () => {}; }
+
     startLayout({
       nodes,
       edges,
     });
 
-    setInterval(() => {
-      console.log(positionedNodes.current && positionedNodes.current[0]);
-    }, 1000);
+    return () => stopLayout();
   }, [nodes.length]);
-
 
   return (
     <div className="sociogram-interface">
