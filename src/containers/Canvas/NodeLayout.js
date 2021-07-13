@@ -1,32 +1,44 @@
-import { bindActionCreators } from 'redux';
+import React, { useState, useCallback } from 'react';
 import { isNil } from 'lodash';
 import { connect } from 'react-redux';
-import { compose, withHandlers, withState } from 'recompose';
+import { compose } from 'redux';
 import { withBounds } from '../../behaviours';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { entityPrimaryKeyProperty, entityAttributesProperty } from '../../ducks/modules/network';
 import { DropTarget } from '../../behaviours/DragAndDrop';
-import NodeLayout from '../../components/Canvas/NodeLayout';
+import NodeLayoutComponent from '../../components/Canvas/NodeLayout';
 
 const relativeCoords = (container, node) => ({
   x: (node.x - container.x) / container.width,
   y: (node.y - container.y) / container.height,
 });
 
-const withConnectFrom = withState('connectFrom', 'setConnectFrom', null);
+const DroppableNodeLayout = DropTarget(NodeLayoutComponent);
 
-const withConnectFromHandler = withHandlers({
-  handleConnectFrom: ({ setConnectFrom }) => (id) => setConnectFrom(id),
-  handleResetConnectFrom: ({ setConnectFrom }) => () => setConnectFrom(null),
-});
+const accepts = ({ meta }) => meta.itemType === 'POSITIONED_NODE';
 
-const withRerenderCount = withState('rerenderCount', 'setRerenderCount', 0);
+const NodeLayout = (props) => {
+  const {
+    createEdge,
+    updateNode,
+    toggleEdge,
+    allowHighlighting,
+    highlightAttribute,
+    toggleHighlight,
+    layoutVariable,
+    width,
+    height,
+    x,
+    y,
+  } = props;
 
-const withDropHandlers = withHandlers({
-  accepts: () => ({ meta }) => meta.itemType === 'POSITIONED_NODE',
-  onDrop: ({
-    updateNode, layoutVariable, setRerenderCount, rerenderCount, width, height, x, y,
-  }) => (item) => {
+  const [connectFrom, setConnectFrom] = useState(null);
+  const [rerenderCount, setRerenderCount] = useState(null);
+  // Horrible hack for performance (only re-render nodes on drop, not on drag)
+  const incrementRerenderCount = useCallback(() => setRerenderCount((c) => c + 1), []);
+  const resetConnectFrom = useCallback(() => setConnectFrom(null), []);
+
+  const onDrop = useCallback((item) => {
     updateNode(
       item.meta[entityPrimaryKeyProperty],
       {},
@@ -37,12 +49,10 @@ const withDropHandlers = withHandlers({
       },
     );
 
-    // Horrible hack for performance (only re-render nodes on drop, not on drag)
-    setRerenderCount(rerenderCount + 1);
-  },
-  onDrag: ({
-    layoutVariable, updateNode, width, height, x, y,
-  }) => (item) => {
+    incrementRerenderCount();
+  }, [layoutVariable, updateNode, incrementRerenderCount]);
+
+  const onDrag = useCallback((item) => {
     if (isNil(item.meta[entityAttributesProperty][layoutVariable])) { return; }
     updateNode(
       item.meta[entityPrimaryKeyProperty],
@@ -53,92 +63,82 @@ const withDropHandlers = withHandlers({
         }, item),
       },
     );
-  },
-  onDragEnd: ({ setRerenderCount, rerenderCount }) => () => {
+  }, [layoutVariable, updateNode]);
+
+  const onDragEnd = useCallback(() => {
     // make sure to also re-render nodes that were updated on drag end
-    setRerenderCount(rerenderCount + 1);
-  },
-});
+    incrementRerenderCount();
+  }, [incrementRerenderCount]);
 
-const withSelectHandlers = compose(
-  withHandlers({
-    connectNode: ({
-      createEdge,
-      connectFrom,
-      handleConnectFrom,
-      toggleEdge,
-    }) => (nodeId) => {
-      // If edge creation is disabled, return
-      if (!createEdge) { return; }
+  const connectNode = useCallback((nodeId) => {
+    // If edge creation is disabled, return
+    if (!createEdge) { return; }
 
-      // If the target and source node are the same, deselect
-      if (connectFrom === nodeId) {
-        handleConnectFrom(null);
-        return;
-      }
+    // If the target and source node are the same, deselect
+    if (connectFrom === nodeId) {
+      resetConnectFrom();
+      return;
+    }
 
-      // If there isn't a target node yet, set the selected node into the linking state
-      if (!connectFrom) {
-        handleConnectFrom(nodeId);
-        return;
-      }
+    // If there isn't a target node yet, set the selected node into the linking state
+    if (!connectFrom) {
+      setConnectFrom(nodeId);
+      return;
+    }
 
-      // Either add or remove an edge
-      if (connectFrom !== nodeId) {
-        toggleEdge({
-          from: connectFrom,
-          to: nodeId,
-          type: createEdge,
-        });
-      }
+    // Either add or remove an edge
+    if (connectFrom !== nodeId) {
+      toggleEdge({
+        from: connectFrom,
+        to: nodeId,
+        type: createEdge,
+      });
+    }
 
-      // Reset the node linking state
-      handleConnectFrom(null);
-    },
-    toggleHighlightAttribute: ({
-      allowHighlighting, highlightAttribute, toggleHighlight,
-    }) => (node) => {
-      if (!allowHighlighting) { return; }
-      const newVal = !node[entityAttributesProperty][highlightAttribute];
-      toggleHighlight(
-        node[entityPrimaryKeyProperty],
-        { [highlightAttribute]: newVal },
-      );
-    },
-  }),
-  withHandlers({
-    onSelected: ({
-      allowHighlighting,
-      connectNode,
-      toggleHighlightAttribute,
-      setRerenderCount,
-      rerenderCount,
-    }) => (node) => {
-      if (!allowHighlighting) {
-        connectNode(node[entityPrimaryKeyProperty]);
-      } else {
-        toggleHighlightAttribute(node);
-      }
-      setRerenderCount(rerenderCount + 1);
-    },
-  }),
-);
+    // Reset the node linking state
+    resetConnectFrom();
+  }, [createEdge, connectFrom, resetConnectFrom, setConnectFrom, toggleEdge]);
 
-function mapDispatchToProps(dispatch) {
-  return {
-    toggleHighlight: bindActionCreators(sessionsActions.toggleNodeAttributes, dispatch),
-    toggleEdge: bindActionCreators(sessionsActions.toggleEdge, dispatch),
-    updateNode: bindActionCreators(sessionsActions.updateNode, dispatch),
-  };
-}
+  const toggleHighlightAttribute = useCallback((node) => {
+    if (!allowHighlighting) { return; }
+
+    const newVal = !node[entityAttributesProperty][highlightAttribute];
+
+    toggleHighlight(
+      node[entityPrimaryKeyProperty],
+      { [highlightAttribute]: newVal },
+    );
+  }, [allowHighlighting, highlightAttribute, toggleHighlight]);
+
+  const onSelected = useCallback((node) => {
+    if (!allowHighlighting) {
+      connectNode(node[entityPrimaryKeyProperty]);
+    } else {
+      toggleHighlightAttribute(node);
+    }
+    incrementRerenderCount();
+  }, [allowHighlighting, incrementRerenderCount, connectNode, toggleHighlightAttribute]);
+
+  return (
+    <DroppableNodeLayout
+      accepts={accepts}
+      onDrag={onDrag}
+      onDragEnd={onDragEnd}
+      onDrop={onDrop}
+      onSelected={onSelected}
+      rerenderCount={rerenderCount}
+      {...props}
+    />
+  );
+};
+
+const mapDispatchToProps = {
+  toggleHighlight: sessionsActions.toggleNodeAttributes,
+  toggleEdge: sessionsActions.toggleEdge,
+  updateNode: sessionsActions.updateNode,
+};
 
 export default compose(
-  withConnectFrom,
-  withConnectFromHandler,
   connect(null, mapDispatchToProps),
   withBounds,
-  withRerenderCount,
-  withDropHandlers,
-  withSelectHandlers,
-  DropTarget,
 )(NodeLayout);

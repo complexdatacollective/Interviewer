@@ -36,7 +36,7 @@ const withPromptIdAsKey = withPropsOnChange(
   (props) => ({ key: props.promptId }),
 );
 
-const useRafState = (initialState, getValue) => {
+const useAnimatedState = (initialState, getValue) => {
   const [state, setState] = useState(initialState);
   const raf = useRef();
 
@@ -96,8 +96,8 @@ const Sociogram = (props) => {
     { layout: layoutVariable },
   );
 
-  const displayNodes = useRafState([], () => positionedNodes.current);
-  const displayEdges = useRafState([], () => positionedEdges.current);
+  const displayNodes = useAnimatedState([], () => positionedNodes.current);
+  const displayEdges = useAnimatedState([], () => positionedEdges.current);
 
   useEffect(() => {
     if (nodes.length < 1) { return () => {}; }
