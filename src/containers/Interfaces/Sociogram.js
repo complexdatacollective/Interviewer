@@ -97,7 +97,7 @@ const Sociogram = (props) => {
   );
 
   const displayNodes = useRafState([], () => positionedNodes.current);
-  const displayEdges = useRafState([], () => displayEdges.current);
+  const displayEdges = useRafState([], () => positionedEdges.current);
 
   useEffect(() => {
     if (nodes.length < 1) { return () => {}; }

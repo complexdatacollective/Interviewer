@@ -115,8 +115,8 @@ const useAutoLayout = (layoutOptions = {}, simulationOptions = {}) => {
         edges.current = edges.current.map((edge) => {
           const fromKey = get(indexes.current, edge.ids.from);
           const toKey = get(indexes.current, edge.ids.to);
-          const from = get(positions, [fromKey], edge.from);
-          const to = get(positions, [toKey], edge.to);
+          const from = get(positions.current, [fromKey], edge.from);
+          const to = get(positions.current, [toKey], edge.to);
 
           return {
             ...edge,
