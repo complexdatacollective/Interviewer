@@ -179,13 +179,13 @@ const SessionSelect = ({
             />
           </div>
           { selectedSessions.length > 0 && (
-            <span>
+            <strong>
               { selectedSessions.length}
               {' '}
               selected session
               { selectedSessions.length > 1 ? ('s') : null }
               .
-            </span>
+            </strong>
           )}
         </div>
       </div>

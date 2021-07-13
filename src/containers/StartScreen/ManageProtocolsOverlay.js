@@ -14,7 +14,7 @@ const ManageProtocolsOverlay = ({
   const [selectedProtocols, setSelectedProtocols] = useState([]);
   const installedProtocols = useSelector((state) => state.installedProtocols);
 
-  const formattedProtocols = [...Object.keys(installedProtocols)].map((protocolUID) => {
+  const formattedProtocols = () => [...Object.keys(installedProtocols)].map((protocolUID) => {
     const {
       schemaVersion,
       lastModified,
@@ -25,6 +25,7 @@ const ManageProtocolsOverlay = ({
 
     return {
       uid: protocolUID,
+      key: protocolUID,
       selected: selectedProtocols.includes(protocolUID),
       [entityAttributesProperty]: {
         schemaVersion,
@@ -43,15 +44,20 @@ const ManageProtocolsOverlay = ({
   const handleDeleteProtocols = () => {
     openDialog({
       type: 'Warning',
-      title: `Delete ${selectedProtocols.length} Interview Session${selectedProtocols.length > 1 ? 's' : ''}?`,
+      title: `Delete ${selectedProtocols.length} Interview Protocol${selectedProtocols.length > 1 ? 's' : ''}?`,
       confirmLabel: 'Permanently Delete',
-      onConfirm: () => {
-        selectedProtocols.map((protocol) => deleteProtocol(protocol.id));
+      onConfirm: async () => {
+        // eslint-disable-next-line no-restricted-syntax
+        for (const protocol of selectedProtocols) {
+          // eslint-disable-next-line no-await-in-loop
+          await deleteProtocol(protocol);
+        }
+
         setSelectedProtocols([]);
       },
       message: (
         <p>
-          This action will delete the selected interview data and cannot be undone.
+          This action will delete the selected protocols and cannot be undone.
           Are you sure you want to continue?
         </p>
       ),
@@ -73,17 +79,12 @@ const ManageProtocolsOverlay = ({
     ]);
   };
 
-  const SelectableProtocolCard = (props) => {
-    console.log(props);
-    return (
-      <React.Fragment key={props.uid}>
-        <ProtocolCard
-          {...props}
-          onClickHandler={() => handleProtocolCardClick(props.uid)}
-        />
-      </React.Fragment>
-    );
-  };
+  const SelectableProtocolCard = (props) => (
+    <ProtocolCard
+      {...props}
+      onClickHandler={() => handleProtocolCardClick(props.uid)}
+    />
+  );
 
   return (
     <Picker
@@ -94,7 +95,7 @@ const ManageProtocolsOverlay = ({
         <Button disabled={!selectedProtocols.length > 0} color="neon-coral" icon="menu-purge-data" onClick={handleDeleteProtocols}>Delete Selected</Button>
       )}
       ItemComponent={SelectableProtocolCard}
-      items={formattedProtocols}
+      items={formattedProtocols()}
       propertyPath={entityAttributesProperty}
       initialSortProperty="name"
       initialSortDirection="asc"

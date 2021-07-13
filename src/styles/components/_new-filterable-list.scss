@@ -39,6 +39,7 @@
         flex: 1 1 auto;
         padding: 0 unit(2);
         display: flex;
+        max-width: 30rem;
       }
 
       .filter-button {
@@ -78,14 +79,6 @@
 
       input {
         margin-bottom: 0;
-      }
-
-      &__filter {
-        width: 13rem;
-
-        input {
-          margin-bottom: 0;
-        }
       }
     }
   }

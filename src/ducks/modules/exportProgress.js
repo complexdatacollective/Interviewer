@@ -23,7 +23,7 @@ export default function reducer(state = initialState, action = {}) {
   }
 }
 
-function update({ statusText, percentProgress}) {
+function update({ statusText, percentProgress }) {
   return {
     type: UPDATE_PROGRESS,
     statusText,

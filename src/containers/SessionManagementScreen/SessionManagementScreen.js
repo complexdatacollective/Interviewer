@@ -16,6 +16,7 @@ import { exportToFile, exportToServer } from '../../utils/exportProcess';
 import { asNetworkWithSessionVariables } from '../../utils/networkFormat';
 import SessionSelect from './SessionSelect';
 import ExportOptions from '../../components/SettingsMenu/Sections/ExportOptions';
+import { isCordova } from '../../utils/Environment';
 
 const fatalExportErrorAction = withErrorDialog((error) => ({
   type: 'SESSION_EXPORT_FATAL_ERROR',
@@ -26,7 +27,7 @@ const DataExportScreen = ({ show, onClose }) => {
   const [step, setStep] = useState(3);
   const [selectedSessions, setSelectedSessions] = useState([]);
   const [filename, setFilename] = useState('networkCanvasExport');
-  let abortHandler;
+  const [abortHandler, setAbortHandler] = useState(null);
 
   const pairedServer = useSelector((state) => state.pairedServer);
   const pairedServerConnection = useServerConnectionStatus(pairedServer);
@@ -49,11 +50,6 @@ const DataExportScreen = ({ show, onClose }) => {
     setStep(step - 1);
   };
 
-  const complete = () => {
-    reset();
-    onClose();
-  };
-
   const sessions = useSelector((state) => state.sessions);
   const installedProtocols = useSelector((state) => state.installedProtocols);
 
@@ -73,18 +69,18 @@ const DataExportScreen = ({ show, onClose }) => {
 
     if (toServer) {
       exportToServer(getExportableSessions())
-        .then(complete)
+        .then(onClose)
         .catch((e) => { onClose(); throw e; });
       return;
     }
 
     exportToFile(getExportableSessions(), filename)
       .then(({ run, abort }) => {
-        // Attatch the dismisshandler to the toast now that we have exportPromise defined.
-        abortHandler = abort;
+        // Attatch the dismisshandler so we can abort through cancel button
+        setAbortHandler(() => abort);
         return run();
       })
-      .then(complete)
+      .then(onClose)
       .catch((error) => {
         // Fatal error handling
         dispatch(fatalExportErrorAction(error));
@@ -166,23 +162,17 @@ const DataExportScreen = ({ show, onClose }) => {
       );
     }
 
-    if (step === 2) {
-      return (
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            flex: '1',
-          }}
-        >
-          <Button color="platinum" onClick={backward} icon="arrow-left">Back to Selection</Button>
-          <Button color="primary" onClick={() => exportSessions(false)}>Start Export Process</Button>
-        </div>
-      );
-    }
-
     return (
-      <Button color="neon-coral" onClick={handleClose}>Cancel Export</Button>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          flex: '1',
+        }}
+      >
+        <Button color="platinum" onClick={backward} icon="arrow-left">Back to Selection</Button>
+        <Button color="primary" onClick={() => exportSessions(false)}>Start Export Process</Button>
+      </div>
     );
   };
 
@@ -194,15 +184,15 @@ const DataExportScreen = ({ show, onClose }) => {
 
   return (
     <>
-      <Modal show>
-        <>
+      <Modal show={!!statusText}>
+        <div style={{ textAlign: 'center' }}>
           <ExportSprite
             size={500}
             statusText={statusText}
             percentProgress={percentProgress}
           />
           <Button color="neon-coral" onClick={handleClose}>Cancel Export</Button>
-        </>
+        </div>
       </Modal>
       <Overlay
         show={step !== 3}
@@ -220,23 +210,40 @@ const DataExportScreen = ({ show, onClose }) => {
         { step === 2 && (
           <Scroller>
             <div style={{
-              width: '65rem',
+              maxWidth: '65rem',
+              padding: '0 2.4rem',
               margin: '0 auto',
             }}
             >
-              <h2>Filename for export:</h2>
-              <Text
-                placeholder="Enter a file name..."
-                input={{
-                  value: filename,
-                  onChange: handleChangeFilename,
-                }}
-                adornmentRight={(
-                  <div style={{ height: '100%', display: 'flex', alignItems: 'center'}}>
-                    <pre style={{ margin: 0 }}>.ZIP</pre>
-                  </div>
-                )}
-              />
+              { isCordova() && (
+                <>
+                  <h2>Filename for export:</h2>
+                  <p>
+                    Your data will be saved to your device in a zip file called&nbsp;
+                    <code>
+                      networkCanvasExport
+                    </code>
+                    . If you wish to change this name, you can do so here. Do not
+                    add a file extension ( such as&nbsp;
+                    <code>
+                      .ZIP
+                    </code>
+                    ) – this will be added automatically.
+                  </p>
+                  <Text
+                    placeholder="Enter a file name..."
+                    input={{
+                      value: filename,
+                      onChange: handleChangeFilename,
+                    }}
+                    adornmentRight={(
+                      <div style={{ height: '100%', display: 'flex', alignItems: 'center' }}>
+                        <pre style={{ margin: 0 }}>.ZIP</pre>
+                      </div>
+                    )}
+                  />
+                </>
+              )}
               <ExportOptions />
             </div>
           </Scroller>

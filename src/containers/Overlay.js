@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import cx from 'classnames';
 import { useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
 import PropTypes from 'prop-types';
+import ExpandLessIcon from '@material-ui/icons/ExpandLessRounded';
 import { Modal } from '@codaco/ui';
 import CloseButton from '../components/CloseButton';
 
@@ -19,10 +20,12 @@ const Overlay = (props) => {
     title,
     footer,
     fullheight,
-    fullscreen,
+    fullscreen: startFullScreen,
     forceDisableFullScreen,
     className,
   } = props;
+
+  const [fullscreen, setFullscreen] = useState(!!startFullScreen);
 
   const useFullScreenForms = useSelector((state) => state.deviceSettings.useFullScreenForms);
 
@@ -37,11 +40,26 @@ const Overlay = (props) => {
     className,
   );
 
+  const handleFullScreenChange = () => {
+    setFullscreen(!fullscreen);
+  };
+
   return (
     <Modal show={show} onBlur={onBlur}>
       <motion.article className={overlayClasses}>
         { title && (
           <motion.header className="overlay__title">
+            { !forceDisableFullScreen && (
+            <motion.div
+              style={{ cursor: 'pointer', display: 'flex' }}
+              onClick={handleFullScreenChange}
+              animate={!fullscreen ? { rotate: 0 } : { rotate: 180 }}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <ExpandLessIcon style={{ fontSize: '4rem' }} />
+            </motion.div>
+            )}
             <h1>{title}</h1>
             <CloseButton className="overlay__close" onClick={onClose} />
           </motion.header>

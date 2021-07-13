@@ -20,6 +20,7 @@ const Picker = ({
     onClose={onClose}
     title={title}
     footer={footer}
+    fullheight
   >
     { header }
     <NewFilterableListWrapper

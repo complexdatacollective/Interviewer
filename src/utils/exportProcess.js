@@ -1,7 +1,6 @@
 import React from 'react';
-import uuid from 'uuid';
 import { batch } from 'react-redux';
-import { ProgressBar, Icon } from '@codaco/ui';
+import { Icon } from '@codaco/ui';
 import { store } from '../ducks/store';
 import { actionCreators as toastActions } from '../ducks/modules/toasts';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
@@ -84,6 +83,11 @@ export const exportToFile = (sessionList, filename) => {
     }));
   });
 
+  fileExportManager.on('cancelled', () => {
+    dispatch(exportProgressActions.reset());
+    showCancellationToast();
+  });
+
   fileExportManager.on('session-exported', (sessionId) => {
     if (!sessionId || typeof sessionId !== 'string') {
       // eslint-disable-next-line no-console
@@ -98,6 +102,8 @@ export const exportToFile = (sessionList, filename) => {
   });
 
   fileExportManager.on('finished', () => {
+    dispatch(exportProgressActions.reset());
+
     if (succeeded.length > 0) {
       batch(() => {
         succeeded.forEach(
@@ -161,7 +167,6 @@ export const exportToFile = (sessionList, filename) => {
 };
 
 export const exportToServer = (sessionList) => {
-  const toastUUID = uuid();
   const errors = [];
   const succeeded = [];
 
@@ -171,17 +176,13 @@ export const exportToServer = (sessionList) => {
   client.addTrustedCert();
 
   client.on('begin', () => {
-    setInitialExportStatus(toastUUID);
+    setInitialExportStatus();
   });
 
   client.on('update', ({ statusText, progress }) => {
-    dispatch(toastActions.updateToast(toastUUID, {
-      content: (
-        <>
-          <p>{statusText}</p>
-          <ProgressBar orientation="horizontal" percentProgress={progress} />
-        </>
-      ),
+    dispatch(exportProgressActions.update({
+      statusText,
+      percentProgress: progress,
     }));
   });
 
@@ -190,18 +191,11 @@ export const exportToServer = (sessionList) => {
   });
 
   client.on('error', (error) => {
-    // If this is the first error, update the toast type to 'warning'
-    if (errors.length === 0) {
-      dispatch(toastActions.updateToast(toastUUID, {
-        type: 'warning',
-      }));
-    }
-
     errors.push(error);
   });
 
   client.on('finished', () => {
-    dispatch(toastActions.removeToast(toastUUID));
+    dispatch(exportProgressActions.reset());
 
     if (succeeded.length > 0) {
       batch(() => {
@@ -254,17 +248,7 @@ export const exportToServer = (sessionList) => {
 
   const exportPromise = client.exportSessions(sessionList);
 
-  // Attatch the dismisshandler to the toast not that we have exportPromise defined.
-  dispatch(toastActions.updateToast(toastUUID, {
-    dismissHandler: () => {
-      showCancellationToast();
-      exportPromise.abort();
-    },
-  }));
-
   exportPromise.catch((error) => {
-    // Close the progress toast
-    dispatch(toastActions.removeToast(toastUUID));
     dispatch(fatalExportErrorAction(error));
     exportPromise.abort();
   });
