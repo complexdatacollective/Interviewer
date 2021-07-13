@@ -110,6 +110,16 @@ const Sociogram = (props) => {
     return () => stopLayout();
   }, [nodes.length]);
 
+  const callback = ({ type, data }) => {
+    switch (type) {
+      case 'node':
+        break;
+      case 'edge':
+        break;
+      default:
+    }
+  };
+
   return (
     <div className="sociogram-interface">
       <PromptObstacle
@@ -140,6 +150,7 @@ const Sociogram = (props) => {
             allowHighlighting={allowHighlighting && !createEdge}
             allowPositioning={allowPositioning}
             createEdge={createEdge}
+            onChange={callback}
           />
           <NodeBucket
             id="NODE_BUCKET"

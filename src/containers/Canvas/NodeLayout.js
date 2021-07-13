@@ -19,6 +19,7 @@ const accepts = ({ meta }) => meta.itemType === 'POSITIONED_NODE';
 
 const NodeLayout = (props) => {
   const {
+    onChange,
     createEdge,
     updateNode,
     toggleEdge,
@@ -39,8 +40,10 @@ const NodeLayout = (props) => {
   const resetConnectFrom = useCallback(() => setConnectFrom(null), []);
 
   const onDrop = useCallback((item) => {
+    const id = item.meta[entityPrimaryKeyProperty];
+
     updateNode(
-      item.meta[entityPrimaryKeyProperty],
+      id,
       {},
       {
         [layoutVariable]: relativeCoords({
@@ -48,14 +51,20 @@ const NodeLayout = (props) => {
         }, item),
       },
     );
+
+    onChange({
+      type: 'node',
+      id,
+    });
 
     incrementRerenderCount();
   }, [layoutVariable, updateNode, incrementRerenderCount]);
 
   const onDrag = useCallback((item) => {
     if (isNil(item.meta[entityAttributesProperty][layoutVariable])) { return; }
+    const id = item.meta[entityPrimaryKeyProperty];
     updateNode(
-      item.meta[entityPrimaryKeyProperty],
+      id,
       {},
       {
         [layoutVariable]: relativeCoords({
@@ -63,6 +72,11 @@ const NodeLayout = (props) => {
         }, item),
       },
     );
+
+    onChange({
+      type: 'node',
+      id,
+    });
   }, [layoutVariable, updateNode]);
 
   const onDragEnd = useCallback(() => {
@@ -93,6 +107,12 @@ const NodeLayout = (props) => {
         to: nodeId,
         type: createEdge,
       });
+
+      onChange({
+        type: 'edge',
+        from: connectFrom,
+        to: nodeId,
+      });
     }
 
     // Reset the node linking state
@@ -111,6 +131,7 @@ const NodeLayout = (props) => {
   }, [allowHighlighting, highlightAttribute, toggleHighlight]);
 
   const onSelected = useCallback((node) => {
+    console.log({ node, allowHighlighting });
     if (!allowHighlighting) {
       connectNode(node[entityPrimaryKeyProperty]);
     } else {
@@ -127,6 +148,7 @@ const NodeLayout = (props) => {
       onDrop={onDrop}
       onSelected={onSelected}
       rerenderCount={rerenderCount}
+      connectFrom={connectFrom}
       {...props}
     />
   );
