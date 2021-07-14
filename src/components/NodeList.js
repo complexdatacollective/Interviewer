@@ -93,6 +93,7 @@ class NodeList extends Component {
       willAccept,
       meta,
       hoverColor,
+      className,
     } = this.props;
 
     const {
@@ -111,6 +112,7 @@ class NodeList extends Component {
 
     const classNames = cx(
       'node-list',
+      className,
       { 'node-list--drag': isValidTarget },
     );
 
@@ -148,33 +150,35 @@ class NodeList extends Component {
 }
 
 NodeList.propTypes = {
-  items: PropTypes.array,
+  className: PropTypes.string,
   hoverColor: PropTypes.string,
-  onItemClick: PropTypes.func,
+  id: PropTypes.string.isRequired,
+  isDragging: PropTypes.bool,
+  isOver: PropTypes.bool,
+  items: PropTypes.array,
   itemType: PropTypes.string,
   label: PropTypes.func,
-  isOver: PropTypes.bool,
-  isDragging: PropTypes.bool,
-  willAccept: PropTypes.bool,
-  meta: PropTypes.object,
-  id: PropTypes.string.isRequired,
   listId: PropTypes.string.isRequired,
-  sortOrder: PropTypes.array,
+  meta: PropTypes.object,
   onDrop: PropTypes.func,
+  onItemClick: PropTypes.func,
+  sortOrder: PropTypes.array,
+  willAccept: PropTypes.bool,
 };
 
 NodeList.defaultProps = {
-  items: [],
+  className: null,
   hoverColor: null,
-  label: () => (''),
-  onItemClick: () => {},
-  onDrop: () => {},
-  itemType: 'NODE',
-  isOver: false,
-  willAccept: false,
   isDragging: false,
+  isOver: false,
+  items: [],
+  itemType: 'NODE',
+  label: () => (''),
   meta: {},
+  onDrop: () => {},
+  onItemClick: () => {},
   sortOrder: [],
+  willAccept: false,
 };
 
 export default compose(

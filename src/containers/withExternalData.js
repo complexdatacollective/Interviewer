@@ -114,12 +114,12 @@ const withExternalData = (sourceProperty, dataProperty) => compose(
       const { type } = assetManifest[sourceId];
 
       loadExternalData(protocolUID, sourceFile, type)
-        .then((externalData) => {
+        .then((externalData) => (
+          withVariableUUIDReplacement(externalData.nodes, protocolCodebook, stageSubject)
+        ))
+        .then((nodes) => {
           setExternalDataIsLoading(false);
-          setExternalData({
-            nodes:
-                  withVariableUUIDReplacement(externalData.nodes, protocolCodebook, stageSubject),
-          });
+          setExternalData({ nodes });
         });
     },
   }),

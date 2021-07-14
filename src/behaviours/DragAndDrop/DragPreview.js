@@ -11,7 +11,15 @@ const getSize = (element) => {
   };
 };
 
-const styles = (width, height, x, y) => `width: ${width}px; height: ${height}px; display: inline-block; position: absolute; left: 0px; top: 0px; transform: translate(${x}px, ${y}px);`;
+const styles = (width, height, x, y) => `
+width: ${width}px; \
+height: ${height}px; \
+display: inline-block; \
+position: absolute; \
+left: 0px; \
+top: 0px; \
+transform: translate(${x}px, ${y}px);\
+`;
 
 const body = () => document.getElementsByTagName('body')[0];
 
@@ -24,7 +32,7 @@ export default class DraggablePreview {
 
     this.update();
 
-    const clone = node.cloneNode(true);
+    const clone = node.firstChild.cloneNode(true);
 
     this.node.appendChild(clone);
 
@@ -33,17 +41,25 @@ export default class DraggablePreview {
 
   size() {
     if (!this.node) { return { width: 0, height: 0 }; }
-    if (!this._size) { this._size = getSize(this.node); }
-    return this._size;
+    const element = this.node.firstChild;
+    const size = getSize(element);
+    return size;
   }
 
   center() {
+    if (!this.node) { return { x: 0, y: 0 }; }
+
     if (!this._center) {
-      this._center = {
-        x: Math.floor(this.size().width / 2),
-        y: Math.floor(this.size().height / 2),
+      const size = this.size();
+
+      const center = {
+        x: Math.floor(size.width / 2),
+        y: Math.floor(size.height / 2),
       };
+
+      this._center = center;
     }
+
     return this._center;
   }
 
