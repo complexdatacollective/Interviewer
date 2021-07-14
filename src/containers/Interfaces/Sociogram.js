@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { get } from 'lodash';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -10,10 +10,9 @@ import NodeBucket from '../Canvas/NodeBucket';
 import NodeLayout from '../Canvas/NodeLayout';
 import EdgeLayout from '../../components/Canvas/EdgeLayout';
 import Background from '../Canvas/Background';
-import PromptObstacle from '../Canvas/PromptObstacle';
-import ButtonObstacle from '../Canvas/ButtonObstacle';
 import { actionCreators as resetActions } from '../../ducks/modules/reset';
 import { makeGetDisplayEdges, makeGetNextUnplacedNode, makeGetPlacedNodes } from '../../selectors/canvas';
+import CollapsablePrompts from '../../components/CollapsablePrompts';
 
 const withResetInterfaceHandler = withHandlers({
   handleResetInterface: ({
@@ -36,8 +35,6 @@ const withResetInterfaceHandler = withHandlers({
   */
 const Sociogram = (props) => {
   const {
-    promptForward,
-    promptBackward,
     prompt,
     promptId,
     stage,
@@ -46,6 +43,8 @@ const Sociogram = (props) => {
     nextUnplacedNode,
     edges,
   } = props;
+
+  const interfaceRef = useRef(null);
 
   // Behaviour Configuration
   const allowHighlighting = get(prompt, 'highlight.allowHighlighting', false);
@@ -62,16 +61,12 @@ const Sociogram = (props) => {
   const skewedTowardCenter = get(stage, 'background.skewedTowardCenter');
 
   return (
-    <div className="sociogram-interface">
-      <PromptObstacle
-        id="PROMPTS_OBSTACLE"
-        className="sociogram-interface__prompts"
-        forward={promptForward}
-        backward={promptBackward}
+    <div className="sociogram-interface" ref={interfaceRef}>
+      <CollapsablePrompts
         prompts={stage.prompts}
-        prompt={prompt}
-        floating
-        minimizable
+        currentPromptIndex={prompt.id}
+        handleResetInterface={handleResetInterface}
+        interfaceRef={interfaceRef}
       />
       <div className="sociogram-interface__concentric-circles">
         <Canvas className="concentric-circles" id="concentric-circles">
@@ -100,14 +95,6 @@ const Sociogram = (props) => {
           />
         </Canvas>
       </div>
-      <div style={{ position: 'absolute', right: '3rem', bottom: '3rem' }}>
-        <ButtonObstacle
-          id="RESET_BUTTON_OBSTACLE"
-          label="RESET"
-          size="small"
-          onClick={handleResetInterface}
-        />
-      </div>
     </div>
   );
 };
@@ -116,8 +103,6 @@ Sociogram.propTypes = {
   stage: PropTypes.object.isRequired,
   prompt: PropTypes.object.isRequired,
   promptId: PropTypes.number.isRequired,
-  promptForward: PropTypes.func.isRequired,
-  promptBackward: PropTypes.func.isRequired,
   handleResetInterface: PropTypes.func.isRequired,
   nodes: PropTypes.array.isRequired,
   edges: PropTypes.array.isRequired,

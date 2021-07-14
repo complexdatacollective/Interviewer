@@ -3,9 +3,8 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { isNil } from 'lodash';
-
+import Prompts from '../../components/Prompts';
 import withPrompt from '../../behaviours/withPrompt';
-import PromptSwiper from '../PromptSwiper';
 import OrdinalBins from '../OrdinalBins';
 import { makeGetPromptVariable, makeNetworkNodesForType } from '../../selectors/interface';
 import { MultiNodeBucket } from '../../components';
@@ -15,8 +14,6 @@ import { entityAttributesProperty } from '../../ducks/modules/network';
   * OrdinalBin Interface
   */
 const OrdinalBin = ({
-  promptForward,
-  promptBackward,
   prompt,
   nodesForPrompt,
   stage,
@@ -28,11 +25,9 @@ const OrdinalBin = ({
   return (
     <div className="ordinal-bin-interface">
       <div className="ordinal-bin-interface__prompt">
-        <PromptSwiper
-          forward={promptForward}
-          backward={promptBackward}
-          prompt={prompt}
+        <Prompts
           prompts={prompts}
+          currentPrompt={prompt.id}
         />
       </div>
       <div className="ordinal-bin-interface__bucket">
@@ -53,8 +48,6 @@ const OrdinalBin = ({
 OrdinalBin.propTypes = {
   stage: PropTypes.object.isRequired,
   prompt: PropTypes.object.isRequired,
-  promptForward: PropTypes.func.isRequired,
-  promptBackward: PropTypes.func.isRequired,
   nodesForPrompt: PropTypes.array.isRequired,
 };
 

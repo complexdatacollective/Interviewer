@@ -3,6 +3,7 @@ import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { differenceBy, omit, get } from 'lodash';
+import Prompts from '../../components/Prompts';
 import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { entityPrimaryKeyProperty, getEntityAttributes, entityAttributesProperty } from '../../ducks/modules/network';
@@ -14,7 +15,6 @@ import {
   getInitialSortOrder,
   makeGetPromptNodeModelData,
 } from '../../selectors/name-generator';
-import PromptSwiper from '../PromptSwiper';
 import { FilterableListWrapper, CardList } from '../../components';
 import withExternalData from '../withExternalData';
 import getParentKeyByNameValue from '../../utils/getParentKeyByNameValue';
@@ -110,8 +110,6 @@ class NameGeneratorList extends Component {
       getCardTitle,
       nodesForList,
       prompt,
-      promptBackward,
-      promptForward,
       sortFields,
       stage: { prompts },
     } = this.props;
@@ -119,10 +117,8 @@ class NameGeneratorList extends Component {
     return (
       <div className="name-generator-list-interface">
         <div className="name-generator-list-interface__prompt">
-          <PromptSwiper
-            forward={promptForward}
-            backward={promptBackward}
-            prompt={prompt}
+          <Prompts
+            currentPrompt={prompt.id}
             prompts={prompts}
           />
         </div>
@@ -157,8 +153,6 @@ NameGeneratorList.propTypes = {
   nodesForList: PropTypes.array,
   selectedNodes: PropTypes.array.isRequired,
   prompt: PropTypes.object.isRequired,
-  promptForward: PropTypes.func.isRequired,
-  promptBackward: PropTypes.func.isRequired,
   nodeTypeDefinition: PropTypes.object.isRequired,
   removeNode: PropTypes.func.isRequired,
   sortFields: PropTypes.array.isRequired,

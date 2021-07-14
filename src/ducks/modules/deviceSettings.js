@@ -30,6 +30,9 @@ const initialState = {
 
   // We are required to show a dialog on app launch for iOS users
   crappleWarningHeeded: false,
+
+  // Experimental TTS feature for reading prompts
+  enableExperimentalTTS: false,
 };
 
 // This provides additional default state based on information unavailable before 'deviceready'.

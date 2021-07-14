@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Icon } from '@codaco/ui';
-import { Pips } from '../components';
+import Pips from '@codaco/ui/lib/components/Prompts/Pips';
 import Form from './Form';
 
 class FormWizard extends Component {

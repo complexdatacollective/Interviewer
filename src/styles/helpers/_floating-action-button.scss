@@ -2,10 +2,10 @@
 // which contains one of the "add-*" SVG icons from Network Canvas UI.
 @mixin floating-action-button {
   position: absolute;
-  bottom: spacing(large);
-  right: spacing(large);
-  width: 7rem;
-  height: 7rem;
+  bottom: unit(2);
+  right: unit(4);
+  width: unit(13);
+  height: unit(13);
   z-index: var(--z-global-ui);
   cursor: pointer;
 }

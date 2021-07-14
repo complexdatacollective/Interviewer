@@ -28,13 +28,14 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    padding: unit(4) 0;
 
     .slide-content {
+      --base-node-size: #{unit(15)};
       display: flex;
       max-height: 80%;
       min-height: 30%;
       width: 100%;
+      max-width: 60rem;
       padding: unit(1) unit(4) unit(2);
       border-radius: var(--border-radius);
       background: var(--light-background);
@@ -47,7 +48,7 @@
         max-width: 55rem; // Same as ego form container with - for readability
         background: var(--form-intro-panel-background);
         width: 100%;
-        padding: unit(6);
+        padding: unit(2) unit(4);
         left: 0;
         overflow-x: hidden;
         overflow-y: auto;
@@ -100,10 +101,11 @@
     flex-direction: column;
     width: 20rem;
     position: absolute;
-    bottom: unit(3);
+    bottom: unit(2);
 
     &__status-text {
-      margin-bottom: unit(3);
+      margin: 0;
+      margin-bottom: unit(1);
     }
 
     &--show {
@@ -124,7 +126,7 @@
   .fake-edge {
     position: absolute;
     left: calc(50% - 5rem);
-    top: -0.25rem;
+    top: -1rem;
     height: 0.5rem;
     width: 10rem;
     z-index: 1;
