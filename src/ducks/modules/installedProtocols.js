@@ -71,7 +71,7 @@ const deleteProtocolAction = (protocolUID) => (dispatch, getState) =>
         return dispatch(dialogActions.openDialog(hasSessionDialog(protocolName)));
       }
 
-      return true;
+      return Promise.resolve(true);
     })
     .then((confirmed) => {
       if (!confirmed) { return; }
