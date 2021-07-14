@@ -34,8 +34,10 @@ const useForceSimulation = (listener) => {
 
     worker.current.postMessage({
       type: 'initialize',
-      nodes,
-      links,
+      network: {
+        nodes,
+        links,
+      },
     });
 
     setIsRunning(true);
@@ -48,9 +50,21 @@ const useForceSimulation = (listener) => {
     setIsRunning(false);
   });
 
-  const update = useCallback((nodes = []) => {
+  const update = useCallback(({ nodes, links }) => {
     if (!worker.current) { return; }
-    worker.current.postMessage({ type: 'update', nodes });
+
+    state.current = {
+      links,
+      nodes,
+    };
+
+    worker.current.postMessage({
+      type: 'update',
+      network: {
+        nodes,
+        links,
+      },
+    });
   });
 
   return [state, isRunning, start, stop, update];

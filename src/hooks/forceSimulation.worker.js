@@ -10,16 +10,15 @@ let simulation;
 
 console.log('new force simulation worker!');
 
-onmessage = function (event) {
-  const {
-    data: {
-      nodes,
-      links,
-    },
-  } = event;
-
-  switch (event.data.type) {
+onmessage = function ({ data }) {
+  switch (data.type) {
     case 'initialize': {
+      const {
+        network: {
+          nodes,
+          links,
+        },
+      } = data;
       console.debug('worker:initialize');
       simulation = forceSimulation(nodes)
         .force('charge', forceManyBody())
@@ -51,11 +50,17 @@ onmessage = function (event) {
     }
     case 'update': {
       if (!simulation) { return; }
-      const newNodes = simulation.nodes();
-      event.data.nodes.forEach((node) => {
-        newNodes[node.index] = node;
-      });
-      simulation.nodes(newNodes);
+      const {
+        network: {
+          nodes,
+          links,
+        },
+      } = data;
+
+      simulation
+        .nodes(nodes)
+        .alpha(1)
+        .force('link', forceLink(links).distance(10).strength(1));
       break;
     }
     default:

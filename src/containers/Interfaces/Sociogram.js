@@ -110,7 +110,15 @@ const Sociogram = (props) => {
     return () => stopLayout();
   }, [nodes.length]);
 
-  const callback = ({ type, data }) => {
+  const callback = ({
+    type,
+    data,
+  }) => {
+    updateLayout({
+      nodes,
+      edges,
+    });
+
     switch (type) {
       case 'node':
         break;

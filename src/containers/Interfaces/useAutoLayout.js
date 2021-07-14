@@ -3,22 +3,75 @@ import { get } from 'lodash';
 import { entityPrimaryKeyProperty, entityAttributesProperty } from '../../ducks/modules/network';
 import useForceSimulation from '../../hooks/useForceSimulation';
 
-const LAYOUT = 'ee090c9b-2b70-4648-a6db-328d4ef4dbfe';
+const asXY = (layout, scale) => {
+  const dX = scale.dX || 500;
+  const dY = scale.dY || 500;
+  const minX = scale.minX || 0;
+  const minY = scale.minY || 0;
 
-const asXY = (layout = LAYOUT) => (node) => ({
-  key: node[entityPrimaryKeyProperty],
-  x: node[entityAttributesProperty][layout].x * 500,
-  y: node[entityAttributesProperty][layout].y * 500,
-});
+  return (node) => {
+    console.log({ entityAttributesProperty, layout });
 
-const getIndexes = (nodes) => nodes
-  .reduce((memo, node, index) => ({ ...memo, [node[entityPrimaryKeyProperty]]: index }), {});
+    const {
+      x,
+      y,
+    } = node[entityAttributesProperty][layout];
 
-const asLinks = (indexes) => (edge) => ({
-  key: edge.key,
-  source: indexes[edge.ids.from],
-  target: indexes[edge.ids.to],
-});
+    return {
+      key: node[entityPrimaryKeyProperty],
+      x: x * dX - minX,
+      y: y * dY - minY,
+    };
+  };
+};
+
+const filterWithLayout = (layout, nodes) => nodes
+  .reduce(
+    (acc, node) => {
+      const {
+        x,
+        y,
+      } = node[entityAttributesProperty][layout];
+
+      if (x === null || y === null) { return acc; }
+
+      return [
+        ...acc,
+        node,
+      ];
+    },
+    [],
+  );
+
+const asXYs = (layout, scale, nodes) => nodes.map(asXY(layout, scale));
+
+const getIndexes = (layout, nodes) => nodes
+  .reduce(
+    (acc, node, index) => ({
+      ...acc,
+      [node[entityPrimaryKeyProperty]]: index,
+    }),
+    {},
+  );
+
+const asLink = (indexes, edge) => {
+  if (!indexes[edge.ids.from] || !indexes[edge.ids.to]) {
+    return null;
+  }
+
+  return {
+    key: edge.key,
+    source: indexes[edge.ids.from],
+    target: indexes[edge.ids.to],
+  };
+};
+
+const asLinks = (indexes, edges) => edges
+  .reduce((acc, edge) => {
+    const link = asLink(indexes, edge);
+    if (!link) { return acc; }
+    return [...acc, link];
+  }, []);
 
 export const translatePositions = (positions) => {
   const scale = positions.reduce((memo, coords, index) => {
@@ -93,6 +146,10 @@ const useAutoLayout = (layoutOptions = {}, simulationOptions = {}) => {
   const links = useRef([]);
   const [positions, scale, updatePositions] = useScaledPositions();
 
+  const {
+    layout,
+  } = layoutOptions;
+
   const updateHandler = ({ type, data }) => {
     switch (type) {
       case 'tick': {
@@ -140,30 +197,39 @@ const useAutoLayout = (layoutOptions = {}, simulationOptions = {}) => {
   ] = useForceSimulation(updateHandler);
 
   const start = useCallback((network) => {
-    nodes.current = network.nodes;
+    nodes.current = filterWithLayout(layout, network.nodes);
     edges.current = network.edges;
-    indexes.current = getIndexes(nodes.current);
-    links.current = edges.current.map(asLinks(indexes.current));
+    indexes.current = getIndexes(layout, nodes.current);
+    links.current = asLinks(indexes.current, edges.current);
+
+    const simulationNodes = asXYs(layout, scale, nodes.current);
+
+    console.log({ simulationNodes, nodes: nodes.current, links: links.current });
 
     startSimulation({
-      nodes: nodes.current.map(asXY()),
+      nodes: simulationNodes,
       links: links.current,
     });
-  });
+  }, [scale]);
 
   const stop = stopSimulation;
 
   const update = useCallback((network) => {
-    nodes.current = network.nodes;
+    nodes.current = filterWithLayout(layout, network.nodes);
     edges.current = network.edges;
-    indexes.current = getIndexes(nodes);
-    links.current = edges.map(asLinks(indexes));
+    indexes.current = getIndexes(layout, nodes.current);
+    links.current = asLinks(indexes.current, edges.current);
+
+    const simulationNodes = asXYs(layout, scale, nodes.current);
+
+    console.log({ simulationNodes, nodes: nodes.current, links });
 
     updateSimulation({
-      nodes: nodes.current.map(asXY()),
+      nodes: simulationNodes,
+      // nodes: nodes.current.map(asXY(layoutOptions.layout, scale)),
       links: links.current,
     });
-  });
+  }, [scale]);
 
   return [
     nodes,
