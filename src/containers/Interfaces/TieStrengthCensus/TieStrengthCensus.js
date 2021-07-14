@@ -7,13 +7,14 @@ import cx from 'classnames';
 import BooleanOption from '@codaco/ui/lib/components/Boolean/BooleanOption';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Markdown } from '@codaco/ui/lib/components/Fields';
+import Prompts from '../../../components/Prompts';
 import withPrompt from '../../../behaviours/withPrompt';
 import { makeNetworkNodesForType as makeGetNodes } from '../../../selectors/interface';
 import { getNetworkEdges as getEdges } from '../../../selectors/network';
 import { getStageState } from '../../../selectors/session';
 import { getProtocolCodebook } from '../../../selectors/protocol';
 import { actionCreators as navigateActions } from '../../../ducks/modules/navigate';
-import PromptSwiper from '../../PromptSwiper';
+
 import { getPairs, getNodePair } from './helpers';
 import useSteps from './useSteps';
 import useNetworkEdgeState from './useEdgeState';
@@ -48,8 +49,6 @@ const TieStrengthCensus = (props) => {
     registerBeforeNext,
     promptId: promptIndex, // TODO: what is going on here?
     prompt,
-    promptBackward,
-    promptForward,
     stage,
     pairs,
     nodes,
@@ -208,10 +207,8 @@ const TieStrengthCensus = (props) => {
             className="tie-strength-census__wrapper"
           >
             <div className="tie-strength-census__prompt">
-              <PromptSwiper
-                forward={promptForward}
-                backward={promptBackward}
-                prompt={prompt}
+              <Prompts
+                currentPrompt={stage.prompts[promptIndex].id}
                 prompts={stage.prompts}
               />
             </div>
@@ -302,8 +299,6 @@ const TieStrengthCensus = (props) => {
 
 TieStrengthCensus.propTypes = {
   prompt: PropTypes.object.isRequired,
-  promptBackward: PropTypes.func.isRequired,
-  promptForward: PropTypes.func.isRequired,
   stage: PropTypes.object.isRequired,
 };
 

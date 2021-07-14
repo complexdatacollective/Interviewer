@@ -7,11 +7,7 @@ exports[`CategoricalBin renders CategoricalBin interface 1`] = `
   <div
     className="categorical-bin-interface__prompt"
   >
-    <Connect(PromptSwiper)
-      backward={[MockFunction]}
-      forward={[MockFunction]}
-      prompt={Object {}}
-    />
+    <Prompts />
   </div>
   <div
     className="categorical-bin-interface__bucket"

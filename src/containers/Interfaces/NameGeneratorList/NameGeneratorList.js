@@ -7,8 +7,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { get } from 'lodash';
 import { Node as UINode } from '@codaco/ui';
 import { DataCard } from '@codaco/ui/lib/components/Cards';
+import Prompts from '../../../components/Prompts';
 import withPrompt from '../../../behaviours/withPrompt';
-import PromptSwiper from '../../PromptSwiper';
 import { makeNetworkNodesForPrompt, makeGetAdditionalAttributes, makeGetNodeVariables } from '../../../selectors/interface';
 import { makeGetPromptNodeModelData } from '../../../selectors/name-generator';
 import { entityPrimaryKeyProperty, entityAttributesProperty } from '../../../ducks/modules/network';
@@ -91,8 +91,6 @@ const ErrorMessage = ({ error }) => (
 const NameGeneratorList = (props) => {
   const {
     prompt,
-    promptBackward,
-    promptForward,
     stage,
   } = props;
 
@@ -199,11 +197,9 @@ const NameGeneratorList = (props) => {
             variants={variants}
             key="prompts"
           >
-            <PromptSwiper
-              forward={promptForward}
-              backward={promptBackward}
-              prompt={prompt}
+            <Prompts
               prompts={prompts}
+              currentPrompt={prompt.id}
             />
           </motion.div>,
           <motion.div
@@ -271,8 +267,6 @@ const NameGeneratorList = (props) => {
 
 NameGeneratorList.propTypes = {
   prompt: PropTypes.object.isRequired,
-  promptForward: PropTypes.func.isRequired,
-  promptBackward: PropTypes.func.isRequired,
   stage: PropTypes.object.isRequired,
 };
 

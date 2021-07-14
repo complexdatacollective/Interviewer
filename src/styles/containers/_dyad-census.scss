@@ -37,7 +37,6 @@
 .dyad-census {
   @include interface-centering;
   height: 100%;
-  padding: 1rem 0 2rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -51,16 +50,13 @@
   }
 
   &__prompt {
-    height: 8rem;
-    width: 100%;
-    display: flex;
+    @include interface-prompt;
   }
 
   &__main {
     position: relative;
     flex: 1 auto;
     height: 100%;
-    margin-top: 1rem;
     min-height: 0;
   }
 
@@ -68,7 +64,7 @@
     max-height: 100%;
     background: var(--light-background);
     border-radius: var(--border-radius);
-    padding: unit(4);
+    padding: unit(2) unit(4);
     min-width: 50vw;
     text-align: center;
   }

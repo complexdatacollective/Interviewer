@@ -3,8 +3,8 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withStateHandlers } from 'recompose';
 import PropTypes from 'prop-types';
+import Prompts from '../../components/Prompts';
 import withPrompt from '../../behaviours/withPrompt';
-import PromptSwiper from '../PromptSwiper';
 import CategoricalList from '../CategoricalList';
 import { makeGetPromptVariable, getPromptOtherVariable, makeNetworkNodesForType } from '../../selectors/interface';
 import MultiNodeBucket from '../../components/MultiNodeBucket';
@@ -23,8 +23,6 @@ const categoricalBinStateHandler = withStateHandlers(
   * CategoricalBin Interface
   */
 const CategoricalBin = ({
-  promptForward,
-  promptBackward,
   prompt,
   uncategorizedNodes,
   expandedBinIndex,
@@ -37,11 +35,9 @@ const CategoricalBin = ({
   return (
     <div className="categorical-bin-interface">
       <div className="categorical-bin-interface__prompt">
-        <PromptSwiper
-          forward={promptForward}
-          backward={promptBackward}
-          prompt={prompt}
+        <Prompts
           prompts={prompts}
+          currentPrompt={prompt.id}
         />
       </div>
       <div className="categorical-bin-interface__bucket" onClick={() => handleExpandBin()}>
@@ -65,8 +61,6 @@ const CategoricalBin = ({
 CategoricalBin.propTypes = {
   stage: PropTypes.object.isRequired,
   prompt: PropTypes.object.isRequired,
-  promptForward: PropTypes.func.isRequired,
-  promptBackward: PropTypes.func.isRequired,
   uncategorizedNodes: PropTypes.array.isRequired,
   expandedBinIndex: PropTypes.number,
   handleExpandBin: PropTypes.func.isRequired,

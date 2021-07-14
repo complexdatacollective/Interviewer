@@ -1,8 +1,6 @@
 export { default as Card } from './Card';
 export { default as FilterableListWrapper } from './FilterableListWrapper';
 export { default as NewFilterableListWrapper } from './NewFilterableListWrapper';
-export { default as Pips } from './Pips';
-export { default as Prompt } from './Prompt';
 export { default as Edge } from './Edge';
 export { default as NodeList } from './NodeList';
 export { default as Switch } from './Switch';

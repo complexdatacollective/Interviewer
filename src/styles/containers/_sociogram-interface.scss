@@ -18,27 +18,36 @@
   }
 
   &__prompts {
+    display: flex;
+    flex-direction: column;
     position: absolute;
     z-index: var(--z-panel);
-    bottom: 0;
-    right: 0;
+    background: var(--light-background);
+    width: unit(40);
+    bottom: spacing(large);
+    right: spacing(large);
+    border-bottom: 5px solid var(--primary);
+    border-radius: var(--border-radius);
+    box-shadow: 0 0 4rem 0 var(--modal-window-box-shadow);
+    cursor: move;
+
+    &__header {
+      display: flex;
+      justify-content: flex-end;
+      text-align: center;
+      padding: 0 unit(2);
+      flex: 0 0 unit(4);
+    }
 
     .prompts {
-      &:not(.prompts--minimized) {
-        @include transition-properties((width, height, visibility, padding), var(--animation-easing), var(--animation-duration-fast));
-        width: 16rem;
-        height: 17rem;
-      }
+      --number-of-lines: 13;
+      --prompt-text-size: 1.2rem;
 
-      &__prompt-header {
-        p {
-          height: auto;
-          overflow: hidden;
+      padding: 0 unit(2);
+      line-height: 1.1;
 
-          &::after {
-            display: none;
-          }
-        }
+      .prompt {
+        flex: 0 0 auto;
       }
     }
   }

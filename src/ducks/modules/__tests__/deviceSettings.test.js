@@ -4,6 +4,7 @@ import reducer, { actionCreators, actionTypes } from '../deviceSettings';
 const initialState = {
   crappleWarningHeeded: false,
   description: 'Unknown device',
+  enableExperimentalTTS: false,
   exportCSV: true,
   exportGraphML: true,
   interfaceScale: 100,
