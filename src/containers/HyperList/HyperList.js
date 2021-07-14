@@ -11,6 +11,7 @@ import { VariableSizeGrid as Grid } from 'react-window';
 import { compose } from 'recompose';
 import uuid from 'uuid';
 import cx from 'classnames';
+import { isNil } from 'lodash';
 import useGridSizer from './useGridSizer';
 import { DragSource, DropTarget, MonitorDropTarget } from '../../behaviours/DragAndDrop';
 import useAnimationSettings from '../../hooks/useAnimationSettings';
@@ -159,7 +160,7 @@ const HyperList = ({
 
     const key = items[dataIndex] && items[dataIndex].id;
 
-    if (!key) {
+    if (isNil(key)) {
       // Something went wrong, this is a failsafe but will force a rerender every time
       console.debug('`itemKey()` returned undefined in `<HyperList />`'); // eslint-disable-line no-console
       return uuid();
