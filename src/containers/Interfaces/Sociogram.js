@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { get } from 'lodash';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { withHandlers, compose, withPropsOnChange } from 'recompose';
+import { withHandlers, compose } from 'recompose';
 import PropTypes from 'prop-types';
 import withPrompt from '../../behaviours/withPrompt';
 import Canvas from '../../components/Canvas/Canvas';
@@ -10,10 +10,9 @@ import NodeBucket from '../Canvas/NodeBucket';
 import NodeLayout from '../Canvas/NodeLayout';
 import EdgeLayout from '../../components/Canvas/EdgeLayout';
 import Background from '../Canvas/Background';
-import PromptObstacle from '../Canvas/PromptObstacle';
-import ButtonObstacle from '../Canvas/ButtonObstacle';
 import { actionCreators as resetActions } from '../../ducks/modules/reset';
 import { makeGetDisplayEdges, makeGetNextUnplacedNode, makeGetPlacedNodes } from '../../selectors/canvas';
+import CollapsablePrompts from '../../components/CollapsablePrompts';
 
 const withResetInterfaceHandler = withHandlers({
   handleResetInterface: ({
@@ -30,26 +29,22 @@ const withResetInterfaceHandler = withHandlers({
   },
 });
 
-const withPromptIdAsKey = withPropsOnChange(
-  ['promptId'],
-  (props) => ({ key: props.promptId }),
-);
-
 /**
   * Sociogram Interface
   * @extends Component
   */
 const Sociogram = (props) => {
   const {
-    promptForward,
-    promptBackward,
     prompt,
+    promptId,
     stage,
     handleResetInterface,
     nodes,
     nextUnplacedNode,
     edges,
   } = props;
+
+  const interfaceRef = useRef(null);
 
   // Behaviour Configuration
   const allowHighlighting = get(prompt, 'highlight.allowHighlighting', false);
@@ -66,16 +61,12 @@ const Sociogram = (props) => {
   const skewedTowardCenter = get(stage, 'background.skewedTowardCenter');
 
   return (
-    <div className="sociogram-interface">
-      <PromptObstacle
-        id="PROMPTS_OBSTACLE"
-        className="sociogram-interface__prompts"
-        forward={promptForward}
-        backward={promptBackward}
+    <div className="sociogram-interface" ref={interfaceRef}>
+      <CollapsablePrompts
         prompts={stage.prompts}
-        prompt={prompt}
-        floating
-        minimizable
+        currentPromptIndex={prompt.id}
+        handleResetInterface={handleResetInterface}
+        interfaceRef={interfaceRef}
       />
       <div className="sociogram-interface__concentric-circles">
         <Canvas className="concentric-circles" id="concentric-circles">
@@ -95,6 +86,7 @@ const Sociogram = (props) => {
             allowHighlighting={allowHighlighting && !createEdge}
             allowPositioning={allowPositioning}
             createEdge={createEdge}
+            key={promptId} // allows linking to reset without re-rendering the whole interface
           />
           <NodeBucket
             id="NODE_BUCKET"
@@ -103,14 +95,6 @@ const Sociogram = (props) => {
           />
         </Canvas>
       </div>
-      <div style={{ position: 'absolute', right: '3rem', bottom: '3rem' }}>
-        <ButtonObstacle
-          id="RESET_BUTTON_OBSTACLE"
-          label="RESET"
-          size="small"
-          onClick={handleResetInterface}
-        />
-      </div>
     </div>
   );
 };
@@ -118,8 +102,7 @@ const Sociogram = (props) => {
 Sociogram.propTypes = {
   stage: PropTypes.object.isRequired,
   prompt: PropTypes.object.isRequired,
-  promptForward: PropTypes.func.isRequired,
-  promptBackward: PropTypes.func.isRequired,
+  promptId: PropTypes.number.isRequired,
   handleResetInterface: PropTypes.func.isRequired,
   nodes: PropTypes.array.isRequired,
   edges: PropTypes.array.isRequired,
@@ -149,7 +132,6 @@ const makeMapStateToProps = () => {
 
 export default compose(
   withPrompt,
-  withPromptIdAsKey,
   connect(makeMapStateToProps, mapDispatchToProps),
   withResetInterfaceHandler,
 )(Sociogram);

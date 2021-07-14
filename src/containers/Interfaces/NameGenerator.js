@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { get, has, omit } from 'lodash';
 import { Icon } from '@codaco/ui';
+import Prompts from '../../components/Prompts';
 import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { makeNetworkNodesForPrompt, makeGetAdditionalAttributes } from '../../selectors/interface';
 import { makeGetPromptNodeModelData, makeGetNodeIconName } from '../../selectors/name-generator';
-import PromptSwiper from '../PromptSwiper';
 import NodePanels from '../NodePanels';
 import NodeForm from '../NodeForm';
 import { NodeList, NodeBin } from '../../components';
@@ -125,8 +125,6 @@ class NameGenerator extends Component {
       nodesForPrompt,
       nodeIconName,
       prompt,
-      promptBackward,
-      promptForward,
       stage,
       removeNode,
     } = this.props;
@@ -144,11 +142,9 @@ class NameGenerator extends Component {
     return (
       <div className="name-generator-interface">
         <div className="name-generator-interface__prompt">
-          <PromptSwiper
-            forward={promptForward}
-            backward={promptBackward}
-            prompt={prompt}
+          <Prompts
             prompts={prompts}
+            currentPrompt={prompt.id}
           />
         </div>
         <div className="name-generator-interface__main">
@@ -212,8 +208,6 @@ NameGenerator.propTypes = {
   nodesForPrompt: PropTypes.array.isRequired,
   nodeIconName: PropTypes.string.isRequired,
   prompt: PropTypes.object.isRequired,
-  promptBackward: PropTypes.func.isRequired,
-  promptForward: PropTypes.func.isRequired,
   stage: PropTypes.object.isRequired,
   updateNode: PropTypes.func.isRequired,
   removeNode: PropTypes.func.isRequired,

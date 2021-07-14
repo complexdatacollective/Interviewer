@@ -38,6 +38,7 @@ function createWindow() {
       webPreferences: {
         nodeIntegration: true,
         spellcheck: false,
+        backgroundThrottling: false, // animations continue when the app isn't focused.
       },
       ...minDimensions,
       ...titlebarParameters,

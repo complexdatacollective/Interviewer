@@ -1,7 +1,7 @@
 .quick-add {
   position: absolute;
-  bottom: 1.8rem;
-  right: 2.8rem;
+  bottom: unit(2);
+  right: unit(4);
   display: flex;
   align-items: center;
 
@@ -37,8 +37,8 @@
   }
 
   .flip-button {
-    width: 7rem;
-    height: 7rem;
+    width: unit(13); // Keep same as floating-action-buttin mixin
+    height: unit(13);
     perspective: 1000px;
     cursor: pointer;
   }

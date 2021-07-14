@@ -1,6 +1,7 @@
 /* eslint-disable @codaco/spellcheck/spell-checker */
 import { createStore, applyMiddleware, compose } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
+import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import thunk from 'redux-thunk';
 import { routerMiddleware } from 'connected-react-router';
 import { createHashHistory as createHistory } from 'history';
@@ -26,6 +27,7 @@ const getStorageEngine = () => {
 
 const persistConfig = {
   key: 'networkCanvas6',
+  autoMergeLevel2,
   storage: getStorageEngine(),
   whitelist: [
     'deviceSettings',
