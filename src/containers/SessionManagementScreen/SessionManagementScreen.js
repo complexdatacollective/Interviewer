@@ -27,7 +27,7 @@ const DataExportScreen = ({ show, onClose }) => {
   const [step, setStep] = useState(3);
   const [selectedSessions, setSelectedSessions] = useState([]);
   const [filename, setFilename] = useState('networkCanvasExport');
-  const [abortHandler, setAbortHandler] = useState(null);
+  const [abortHandlers, setAbortHandlers] = useState(null);
 
   const pairedServer = useSelector((state) => state.pairedServer);
   const pairedServerConnection = useServerConnectionStatus(pairedServer);
@@ -70,14 +70,21 @@ const DataExportScreen = ({ show, onClose }) => {
     if (toServer) {
       exportToServer(getExportableSessions())
         .then(onClose)
-        .catch((e) => { onClose(); throw e; });
+        .catch((error) => {
+          // Fatal error handling
+          dispatch(fatalExportErrorAction(error));
+          onClose();
+        });
       return;
     }
 
     exportToFile(getExportableSessions(), filename)
-      .then(({ run, abort }) => {
-        // Attatch the dismisshandler so we can abort through cancel button
-        setAbortHandler(() => abort);
+      .then(({ run, abort, setConsideringAbort }) => {
+        setAbortHandlers({
+          abort,
+          setConsideringAbort,
+        });
+
         return run();
       })
       .then(onClose)
@@ -95,20 +102,29 @@ const DataExportScreen = ({ show, onClose }) => {
       return;
     }
 
+    if (abortHandlers) {
+      abortHandlers.setConsideringAbort(true);
+    }
+
     openDialog({
       type: 'Confirm',
       title: 'Cancel Export?',
       confirmLabel: 'Cancel Export',
       onConfirm: () => {
-        if (abortHandler) {
-          abortHandler();
+        if (abortHandlers) {
+          abortHandlers.abort();
         }
         onClose();
       },
+      onCancel: () => {
+        if (abortHandlers) {
+          abortHandlers.setConsideringAbort(false);
+        }
+      },
       message: (
         <p>
-          This action will clear any previously selected sessions and cannot be undone.
-          Are you sure you want to continue?
+          This will cancel the export process, as well as clear any previously selected sessions.
+          It cannot be undone. Are you sure you want to continue?
         </p>
       ),
     });
