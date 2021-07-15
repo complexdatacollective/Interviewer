@@ -1,19 +1,17 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import { isNil } from 'lodash';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { withBounds } from '../../behaviours';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { entityPrimaryKeyProperty, entityAttributesProperty } from '../../ducks/modules/network';
-import { DropTarget } from '../../behaviours/DragAndDrop';
+// import { DropTarget } from '../../behaviours/DragAndDrop';
 import NodeLayoutComponent from '../../components/Canvas/NodeLayout';
+import useSize from '../../hooks/useSize';
 
 const relativeCoords = (container, node) => ({
   x: (node.x - container.x) / container.width,
   y: (node.y - container.y) / container.height,
 });
-
-const DroppableNodeLayout = DropTarget(NodeLayoutComponent);
 
 const accepts = ({ meta }) => meta.itemType === 'POSITIONED_NODE';
 
@@ -27,11 +25,10 @@ const NodeLayout = (props) => {
     highlightAttribute,
     toggleHighlight,
     layoutVariable,
-    width,
-    height,
-    x,
-    y,
   } = props;
+
+  const ref = useRef();
+  const size = useSize(ref);
 
   const [connectFrom, setConnectFrom] = useState(null);
   const [rerenderCount, setRerenderCount] = useState(null);
@@ -39,16 +36,25 @@ const NodeLayout = (props) => {
   const incrementRerenderCount = useCallback(() => setRerenderCount((c) => c + 1), []);
   const resetConnectFrom = useCallback(() => setConnectFrom(null), []);
 
-  const onDrop = useCallback((item) => {
+  const onDrop = (item) => {
     const id = item.meta[entityPrimaryKeyProperty];
+    const {
+      width,
+      height,
+      x,
+      y,
+    } = size.current;
 
     updateNode(
       id,
       {},
       {
-        [layoutVariable]: relativeCoords({
-          width, height, x, y,
-        }, item),
+        [layoutVariable]: relativeCoords(
+          {
+            width, height, x, y,
+          },
+          item,
+        ),
       },
     );
 
@@ -58,11 +64,17 @@ const NodeLayout = (props) => {
     });
 
     incrementRerenderCount();
-  }, [layoutVariable, updateNode, incrementRerenderCount]);
+  };
 
-  const onDrag = useCallback((item) => {
+  const onDrag = (item) => {
     if (isNil(item.meta[entityAttributesProperty][layoutVariable])) { return; }
     const id = item.meta[entityPrimaryKeyProperty];
+    const {
+      width,
+      height,
+      x,
+      y,
+    } = size.current;
     updateNode(
       id,
       {},
@@ -77,12 +89,12 @@ const NodeLayout = (props) => {
       type: 'node',
       id,
     });
-  }, [layoutVariable, updateNode]);
+  };
 
-  const onDragEnd = useCallback(() => {
+  const onDragEnd = () => {
     // make sure to also re-render nodes that were updated on drag end
     incrementRerenderCount();
-  }, [incrementRerenderCount]);
+  };
 
   const connectNode = useCallback((nodeId) => {
     // If edge creation is disabled, return
@@ -141,7 +153,7 @@ const NodeLayout = (props) => {
   }, [allowHighlighting, incrementRerenderCount, connectNode, toggleHighlightAttribute]);
 
   return (
-    <DroppableNodeLayout
+    <NodeLayoutComponent
       accepts={accepts}
       onDrag={onDrag}
       onDragEnd={onDragEnd}
@@ -149,6 +161,7 @@ const NodeLayout = (props) => {
       onSelected={onSelected}
       rerenderCount={rerenderCount}
       connectFrom={connectFrom}
+      ref={ref}
       {...props}
     />
   );
@@ -162,5 +175,4 @@ const mapDispatchToProps = {
 
 export default compose(
   connect(null, mapDispatchToProps),
-  withBounds,
 )(NodeLayout);

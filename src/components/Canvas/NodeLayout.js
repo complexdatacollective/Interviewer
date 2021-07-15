@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { isEmpty, get } from 'lodash';
 import LayoutNode from '../../containers/Canvas/LayoutNode';
 import { entityPrimaryKeyProperty, entityAttributesProperty } from '../../ducks/modules/network';
+import useDropTarget from '../../hooks/useDropTarget';
 
 const NodeLayout = React.forwardRef(({
   nodes,
@@ -14,7 +15,25 @@ const NodeLayout = React.forwardRef(({
   layoutVariable,
   width,
   height,
+  id,
+  meta,
+  accepts,
+  onDrop,
+  onDrag,
+  onDragEnd,
 }, ref) => {
+  useDropTarget(
+    ref,
+    {
+      id,
+      accepts,
+      meta,
+      onDrop,
+      onDrag,
+      onDragEnd,
+    },
+  );
+
   const isHighlighted = useCallback(
     (node) => !isEmpty(highlightAttribute)
         && get(node, [entityAttributesProperty, highlightAttribute]) === true,

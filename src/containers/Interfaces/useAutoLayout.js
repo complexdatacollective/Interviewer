@@ -10,8 +10,6 @@ const asXY = (layout, scale) => {
   const minY = scale.minY || 0;
 
   return (node) => {
-    console.log({ entityAttributesProperty, layout });
-
     const {
       x,
       y,
