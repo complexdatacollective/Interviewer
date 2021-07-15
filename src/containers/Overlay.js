@@ -20,14 +20,18 @@ const Overlay = (props) => {
     title,
     footer,
     fullheight,
-    fullscreen: startFullScreen,
-    forceDisableFullScreen,
+    fullscreen: fullscreenProp,
+    forceDisableFullscreen,
     className,
   } = props;
 
-  const [fullscreen, setFullscreen] = useState(!!startFullScreen);
+  const useFullScreenFormsPref = useSelector((state) => state.deviceSettings.useFullScreenForms);
 
-  const useFullScreenForms = useSelector((state) => state.deviceSettings.useFullScreenForms);
+  // Start full screen if user preference is for full screen forms, or we have the full screen prop,
+  // UNLESS we have the forceDisableFullscreen prop
+  const startFullScreen = !forceDisableFullscreen && (useFullScreenFormsPref || fullscreenProp);
+
+  const [fullscreen, setFullscreen] = useState(!!startFullScreen);
 
   if (!show) { return false; }
 
@@ -35,7 +39,6 @@ const Overlay = (props) => {
     'overlay',
     // eslint-disable-next-line @codaco/spellcheck/spell-checker
     { 'overlay--fullheight': fullheight },
-    { 'overlay--fullscreen': !forceDisableFullScreen && useFullScreenForms },
     { 'overlay--fullscreen': fullscreen },
     className,
   );
@@ -49,7 +52,7 @@ const Overlay = (props) => {
       <motion.article className={overlayClasses}>
         { title && (
           <motion.header className="overlay__title">
-            { !forceDisableFullScreen && (
+            { !forceDisableFullscreen && (
             <motion.div
               style={{ cursor: 'pointer', display: 'flex' }}
               onClick={handleFullScreenChange}
@@ -85,7 +88,7 @@ Overlay.propTypes = {
   children: PropTypes.any,
   footer: PropTypes.any,
   fullheight: PropTypes.bool,
-  forceDisableFullScreen: PropTypes.bool,
+  forceDisableFullscreen: PropTypes.bool,
   className: PropTypes.string,
 };
 
@@ -98,7 +101,7 @@ Overlay.defaultProps = {
   children: null,
   footer: null,
   fullheight: false,
-  forceDisableFullScreen: false,
+  forceDisableFullscreen: false,
 };
 
 export {
