@@ -118,19 +118,29 @@ const Sociogram = (props) => {
     type,
     data,
   }) => {
+    // updateLayout({
+    //   nodes,
+    //   edges,
+    // });
+
+    // switch (type) {
+    //   case 'node':
+    //     break;
+    //   case 'edge':
+    //     break;
+    //   default:
+    // }
+  };
+
+
+
+  useEffect(() => {
+    console.log(nodes);
     updateLayout({
       nodes,
       edges,
     });
-
-    switch (type) {
-      case 'node':
-        break;
-      case 'edge':
-        break;
-      default:
-    }
-  };
+  }, [nodes, edges]);
 
   return (
     <div className="sociogram-interface">
