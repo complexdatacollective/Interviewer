@@ -61,7 +61,8 @@ class NodeForm extends Component {
         title={form.title}
         onClose={onClose}
         className="node-form"
-        footer={(<Button key="submit" aria-label="Submit" type="submit" onClick={submitForm}>Finished</Button>)}
+        forceEnableFullscreen={useFullScreenForms}
+        footer={!useFullScreenForms && (<Button key="submit" aria-label="Submit" type="submit" onClick={submitForm}>Finished</Button>)}
       >
         { useFullScreenForms
           ? (

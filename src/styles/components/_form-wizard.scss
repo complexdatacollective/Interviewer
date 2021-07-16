@@ -1,65 +1,68 @@
 .form-wizard {
-  &__pips {
-    left: 50%;
-    position: absolute;
-    top: 2rem;
-    transform: translateX(-50%);
+  --button-size: #{unit(10)};
+
+  margin: 0 calc(var(--button-size));
+  justify-self: center;
+  flex: 1;
+  width: 100%;
+
+  form {
+    max-width: 60rem;
+    margin: 0 auto;
   }
 
-  .icon {
-    &[name='form-arrow-left'],
-    &[name='form-arrow-right'] {
-      height: 5rem;
-
-      .cls-2 {
-        fill: palette('light-background');
-      }
-
-      .cls-3 {
-        fill: palette('primary');
-      }
-    }
+  // Used to hide the visible button
+  .form__next-button {
+    background: none;
+    border: 0;
+    line-height: 0;
+    margin: 0;
+    padding: 0;
   }
 
-  &__previous {
-    left: 0;
-  }
-
-  &__previous,
-  .form__button-container {
+  .wizard-navigation-button {
+    @include clickable;
+    height: var(--button-size);
+    width: var(--button-size);
     display: flex;
-    max-width: 25%;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--button-size);
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-  }
 
-  // On last step, contains "Finished"
-  .form__button-container {
-    right: 0;
+    &--left {
+      left: 0;
+      border-bottom-left-radius: 0;
+      border-top-left-radius: 0;
+      background-color: var(--color-platinum);
+    }
 
-    .button {
-      border-radius: 5rem;
+    &--right {
+      right: 0;
       border-bottom-right-radius: 0;
       border-top-right-radius: 0;
-      margin-bottom: 1em;
-      min-height: 5rem;
-      width: 90%;
+      background-color: var(--primary);
     }
 
-    .form__next-button {
-      background: none;
-      border: 0;
-      line-height: 0;
-      margin: 0;
-      padding: 0;
+    .icon {
+      height: calc(var(--button-size) / 2);
+
+      &[name='tick'],
+      &[name='chevron-right'] {
+        .cls-1  {
+          fill: var(--color-white);
+        }
+      }
+
+
+      &[name='chevron-left'] {
+        .cls-2 {
+          fill: var(--color-charcoal);
+        }
+      }
     }
   }
 
-  form {
-    > div {
-      margin-left: auto;
-      margin-right: auto;
-    }
-  }
 }

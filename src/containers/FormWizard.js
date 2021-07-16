@@ -1,8 +1,43 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Icon } from '@codaco/ui';
+import { Icon } from '@codaco/ui';
+import { motion } from 'framer-motion';
+import cx from 'classnames';
 import Pips from '@codaco/ui/lib/components/Prompts/Pips';
 import Form from './Form';
+
+const NavigationButton = ({
+  icon, left, right, onClickHandler,
+}) => {
+  const classes = cx(
+    'wizard-navigation-button',
+    {
+      'wizard-navigation-button--left': left,
+      'wizard-navigation-button--right': right,
+    },
+  );
+
+  const variants = {
+    hidden: {
+      x: left ? '-100%' : '100%',
+    },
+    show: {
+      x: 0,
+    },
+  };
+
+  return (
+    <motion.div
+      className={classes}
+      onTap={onClickHandler}
+      variants={variants}
+      initial="hidden"
+      animate="show"
+    >
+      <Icon name={icon} />
+    </motion.div>
+  );
+};
 
 class FormWizard extends Component {
   constructor(props) {
@@ -65,22 +100,26 @@ class FormWizard extends Component {
     const { fieldIndex } = this.state;
 
     let nextButton = (
-      <div className="form__button-container">
-        <button
-          key="next"
-          className="form__next-button"
-          aria-label="Submit"
-          type="submit"
-        >
-          <Icon name="form-arrow-right" />
-        </button>
-      </div>
+      <button
+        key="next"
+        className="form__next-button"
+        aria-label="Next"
+        type="submit"
+      >
+        <NavigationButton right icon="chevron-right" />
+      </button>
     );
+
     if (!this.shouldShowNextButton()) {
       nextButton = (
-        <div className="form__button-container">
-          <Button type="submit" key="submit" aria-label="Submit">Finished</Button>
-        </div>
+        <button
+          className="form__next-button"
+          type="submit"
+          key="submit"
+          aria-label="Finished"
+        >
+          <NavigationButton right icon="tick" />
+        </button>
       );
     }
 
@@ -92,16 +131,16 @@ class FormWizard extends Component {
 
     return (
       <div className="form-wizard">
-        <div className="form-wizard__pips">
-          <Pips count={this.shownFields().length} currentIndex={fieldIndex} large />
-        </div>
         <div className="form-wizard__previous">
-          {fieldIndex !== 0 && <Icon name="form-arrow-left" onClick={this.previousField} />}
+          {fieldIndex !== 0 && <NavigationButton left onClickHandler={this.previousField} icon="chevron-left" />}
         </div>
         <Form
           {...formProps}
           submitButton={nextButton}
         />
+        <div className="form-wizard__pips">
+          <Pips count={this.shownFields().length} currentIndex={fieldIndex} />
+        </div>
       </div>
     );
   }

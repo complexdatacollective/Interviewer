@@ -22,14 +22,17 @@ const Overlay = (props) => {
     fullheight,
     fullscreen: fullscreenProp,
     forceDisableFullscreen,
+    forceEnableFullscreen,
     className,
   } = props;
 
   const useFullScreenFormsPref = useSelector((state) => state.deviceSettings.useFullScreenForms);
 
-  // Start full screen if user preference is for full screen forms, or we have the full screen prop,
+  // Start full screen if forceEnableFullScreen prop,
+  // or user preference is for full screen forms, or we have the full screen prop,
   // UNLESS we have the forceDisableFullscreen prop
-  const startFullScreen = !forceDisableFullscreen && (useFullScreenFormsPref || fullscreenProp);
+  const startFullScreen = forceEnableFullscreen
+  || (!forceDisableFullscreen && (useFullScreenFormsPref || fullscreenProp));
 
   const [fullscreen, setFullscreen] = useState(!!startFullScreen);
 
@@ -52,7 +55,7 @@ const Overlay = (props) => {
       <motion.article className={overlayClasses}>
         { title && (
           <motion.header className="overlay__title">
-            { !forceDisableFullscreen && (
+            { (!forceDisableFullscreen && !forceEnableFullscreen) && (
             <motion.div
               style={{ cursor: 'pointer', display: 'flex' }}
               onClick={handleFullScreenChange}
@@ -89,6 +92,7 @@ Overlay.propTypes = {
   footer: PropTypes.any,
   fullheight: PropTypes.bool,
   forceDisableFullscreen: PropTypes.bool,
+  forceEnableFullscreen: PropTypes.bool,
   className: PropTypes.string,
 };
 
@@ -102,6 +106,7 @@ Overlay.defaultProps = {
   footer: null,
   fullheight: false,
   forceDisableFullscreen: false,
+  forceEnableFullscreen: false,
 };
 
 export {
