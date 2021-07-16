@@ -19,13 +19,14 @@ const useDropTarget = (
   },
 ) => {
   const raf = useRef();
+  const update = useRef();
 
-  const update = () => {
+  update.current = () => {
     if (!ref.current) { return; }
 
-    const boundingClientRect = getAbsoluteBoundingRect(ref.current);
+    // console.log('update', funcId);
 
-    console.log(' update ');
+    const boundingClientRect = getAbsoluteBoundingRect(ref.current);
 
     store.dispatch(
       actions.upsertTarget({
@@ -42,7 +43,7 @@ const useDropTarget = (
       }),
     );
 
-    raf.current = requestAnimationFrame(update);
+    raf.current = requestAnimationFrame(() => update.current());
   };
 
   const removeTarget = () => {
@@ -53,7 +54,7 @@ const useDropTarget = (
 
   useEffect(() => {
     if (ref.current) {
-      update();
+      update.current();
     }
 
     return () => {

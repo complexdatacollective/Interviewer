@@ -75,6 +75,7 @@ const NodeLayout = (props) => {
       x,
       y,
     } = size.current;
+
     updateNode(
       id,
       {},

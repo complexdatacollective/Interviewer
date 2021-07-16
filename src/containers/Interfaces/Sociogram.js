@@ -1,4 +1,8 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, {
+  useEffect,
+  useState,
+  useRef,
+} from 'react';
 import { get } from 'lodash';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -99,18 +103,18 @@ const Sociogram = (props) => {
   const displayNodes = useAnimatedState([], () => positionedNodes.current);
   const displayEdges = useAnimatedState([], () => positionedEdges.current);
 
-  useEffect(() => {
-    if (nodes.length < 1) { return () => {}; }
+  // useEffect(() => {
+  //   if (nodes.length < 1) { return () => {}; }
 
-    startLayout({
-      nodes,
-      edges,
-    });
+  //   startLayout({
+  //     nodes,
+  //     edges,
+  //   });
 
-    return () => stopLayout();
-  }, [nodes.length]);
+  //   return () => stopLayout();
+  // }, [nodes.length]);
 
-  const callback = ({
+  const handleLayoutChange = ({
     type,
     data,
   }) => {
@@ -158,7 +162,7 @@ const Sociogram = (props) => {
             allowHighlighting={allowHighlighting && !createEdge}
             allowPositioning={allowPositioning}
             createEdge={createEdge}
-            onChange={callback}
+            onChange={handleLayoutChange}
           />
           <NodeBucket
             id="NODE_BUCKET"
