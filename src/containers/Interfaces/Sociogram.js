@@ -73,6 +73,9 @@ const Sociogram = (props) => {
     edges,
   } = props;
 
+  const [enableAutoLayout, setEnableAutoLayout] = useState(false);
+  const toggleEnableAutoLayout = () => setEnableAutoLayout((v) => !v);
+
   // Behaviour Configuration
   const allowHighlighting = get(prompt, 'highlight.allowHighlighting', false);
   const createEdge = get(prompt, 'edges.create');
@@ -103,39 +106,20 @@ const Sociogram = (props) => {
   const displayNodes = useAnimatedState([], () => positionedNodes.current);
   const displayEdges = useAnimatedState([], () => positionedEdges.current);
 
-  // useEffect(() => {
-  //   if (nodes.length < 1) { return () => {}; }
+  useEffect(() => {
+    if (enableAutoLayout) {
+      startLayout({
+        nodes,
+        edges,
+      });
+    } else {
+      stopLayout();
+    }
 
-  //   startLayout({
-  //     nodes,
-  //     edges,
-  //   });
-
-  //   return () => stopLayout();
-  // }, [nodes.length]);
-
-  const handleLayoutChange = ({
-    type,
-    data,
-  }) => {
-    // updateLayout({
-    //   nodes,
-    //   edges,
-    // });
-
-    // switch (type) {
-    //   case 'node':
-    //     break;
-    //   case 'edge':
-    //     break;
-    //   default:
-    // }
-  };
-
-
+    return () => stopLayout();
+  }, [enableAutoLayout]);
 
   useEffect(() => {
-    console.log(nodes);
     updateLayout({
       nodes,
       edges,
@@ -172,7 +156,6 @@ const Sociogram = (props) => {
             allowHighlighting={allowHighlighting && !createEdge}
             allowPositioning={allowPositioning}
             createEdge={createEdge}
-            onChange={handleLayoutChange}
           />
           <NodeBucket
             id="NODE_BUCKET"
@@ -192,7 +175,7 @@ const Sociogram = (props) => {
           id="ENABLE_AUTO_LAYOUT"
           label="Enable auto layout"
           size="small"
-          onClick={() => setEnableAutoLayout((v) => !v)}
+          onClick={toggleEnableAutoLayout}
         />
       </div>
     </div>

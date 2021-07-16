@@ -17,7 +17,6 @@ const accepts = ({ meta }) => meta.itemType === 'POSITIONED_NODE';
 
 const NodeLayout = (props) => {
   const {
-    onChange,
     createEdge,
     updateNode,
     toggleEdge,
@@ -58,11 +57,6 @@ const NodeLayout = (props) => {
       },
     );
 
-    onChange({
-      type: 'node',
-      id,
-    });
-
     incrementRerenderCount();
   };
 
@@ -85,11 +79,6 @@ const NodeLayout = (props) => {
         }, item),
       },
     );
-
-    onChange({
-      type: 'node',
-      id,
-    });
   };
 
   const onDragEnd = () => {
@@ -119,12 +108,6 @@ const NodeLayout = (props) => {
         from: connectFrom,
         to: nodeId,
         type: createEdge,
-      });
-
-      onChange({
-        type: 'edge',
-        from: connectFrom,
-        to: nodeId,
       });
     }
 

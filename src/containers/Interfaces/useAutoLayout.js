@@ -224,7 +224,6 @@ const useAutoLayout = (layoutOptions = {}, simulationOptions = {}) => {
 
     updateSimulation({
       nodes: simulationNodes,
-      // nodes: nodes.current.map(asXY(layoutOptions.layout, scale)),
       links: links.current,
     });
   }, [scale]);
