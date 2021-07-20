@@ -202,8 +202,6 @@ const useAutoLayout = (layoutOptions = {}, simulationOptions = {}) => {
 
     const simulationNodes = asXYs(layout, scale, nodes.current);
 
-    console.log({ simulationNodes, nodes: nodes.current, links: links.current });
-
     startSimulation({
       nodes: simulationNodes,
       links: links.current,
@@ -218,9 +216,9 @@ const useAutoLayout = (layoutOptions = {}, simulationOptions = {}) => {
     indexes.current = getIndexes(layout, nodes.current);
     links.current = asLinks(indexes.current, edges.current);
 
-    const simulationNodes = asXYs(layout, scale, nodes.current);
+    console.log({ scale: scale.current, n: nodes.current });
 
-    console.log({ simulationNodes, nodes: nodes.current, links });
+    const simulationNodes = asXYs(layout, scale, nodes.current);
 
     updateSimulation({
       nodes: simulationNodes,

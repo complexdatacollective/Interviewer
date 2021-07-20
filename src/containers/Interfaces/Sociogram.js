@@ -3,7 +3,7 @@ import React, {
   useState,
   useRef,
 } from 'react';
-import { get } from 'lodash';
+import { get, omit } from 'lodash';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withHandlers, compose, withPropsOnChange } from 'recompose';
@@ -16,6 +16,8 @@ import EdgeLayout from '../../components/Canvas/EdgeLayout';
 import Background from '../Canvas/Background';
 import PromptObstacle from '../Canvas/PromptObstacle';
 import ButtonObstacle from '../Canvas/ButtonObstacle';
+import { entityPrimaryKeyProperty, entityAttributesProperty } from '../../ducks/modules/network';
+import { actionCreators as sessionActions } from '../../ducks/modules/sessions';
 import { actionCreators as resetActions } from '../../ducks/modules/reset';
 import { makeGetDisplayEdges, makeGetNextUnplacedNode, makeGetPlacedNodes } from '../../selectors/canvas';
 import useAutoLayout from './useAutoLayout';
@@ -71,6 +73,7 @@ const Sociogram = (props) => {
     nodes,
     nextUnplacedNode,
     edges,
+    updateNodes,
   } = props;
 
   const [enableAutoLayout, setEnableAutoLayout] = useState(false);
@@ -125,6 +128,19 @@ const Sociogram = (props) => {
       edges,
     });
   }, [nodes, edges]);
+
+  useEffect(() => {
+    const newNodes = displayNodes.map((node) => {
+      const nodeId = node[entityPrimaryKeyProperty];
+      const attributeData = node[entityAttributesProperty];
+      const modelData = omit(node, [entityPrimaryKeyProperty, entityAttributesProperty]);
+      return [nodeId, modelData, attributeData];
+    });
+
+    // console.log(newNodes);
+
+    updateNodes(newNodes);
+  }, [displayNodes]);
 
   return (
     <div className="sociogram-interface">
@@ -195,10 +211,11 @@ Sociogram.propTypes = {
 Sociogram.defaultProps = {
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  resetEdgesOfType: bindActionCreators(resetActions.resetEdgesOfType, dispatch),
-  resetPropertyForAllNodes: bindActionCreators(resetActions.resetPropertyForAllNodes, dispatch),
-});
+const mapDispatchToProps = {
+  resetEdgesOfType: resetActions.resetEdgesOfType,
+  resetPropertyForAllNodes: resetActions.resetPropertyForAllNodes,
+  updateNodes: sessionActions.updateNodes,
+};
 
 const makeMapStateToProps = () => {
   const getDisplayEdges = makeGetDisplayEdges();

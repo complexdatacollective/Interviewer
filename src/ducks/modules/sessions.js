@@ -235,6 +235,18 @@ const updateNode = (nodeId, newModelData = {}, newAttributeData = {}) => (dispat
   });
 };
 
+const updateNodes = (nodes = []) => (dispatch) => {
+  nodes.forEach(
+    (nodeId, newModelData = {}, newAttributeData = {}) => {
+      dispatch(updateNode(
+        nodeId,
+        newModelData,
+        newAttributeData,
+      ));
+    },
+  );
+};
+
 const toggleNodeAttributes = (uid, attributes) => (dispatch, getState) => {
   const { activeSessionId } = getState();
 
@@ -445,6 +457,7 @@ const actionCreators = {
   addNode,
   batchAddNodes,
   updateNode,
+  updateNodes,
   removeNode,
   removeNodeFromPrompt,
   updateEgo,
