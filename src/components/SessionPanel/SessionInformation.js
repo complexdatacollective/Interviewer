@@ -96,6 +96,8 @@ const SessionInformation = (props) => {
         show={showCaseIDRename}
         onClose={() => setShowCaseIDRename(false)}
         title="Change Case ID"
+        className="case-id-form-overlay"
+        forceDisableFullscreen
       >
         <div className="case-id-form">
           <p>

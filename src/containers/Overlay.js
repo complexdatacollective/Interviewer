@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import cx from 'classnames';
 import { useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
@@ -23,20 +23,32 @@ const Overlay = (props) => {
     fullscreen: fullscreenProp,
     forceDisableFullscreen,
     forceEnableFullscreen,
+    allowMaximize,
     className,
   } = props;
-
   const useFullScreenFormsPref = useSelector((state) => state.deviceSettings.useFullScreenForms);
 
   // Start full screen if forceEnableFullScreen prop,
   // or user preference is for full screen forms, or we have the full screen prop,
   // UNLESS we have the forceDisableFullscreen prop
-  const startFullScreen = forceEnableFullscreen
-  || (!forceDisableFullscreen && (useFullScreenFormsPref || fullscreenProp));
+  const startFullscreen = useMemo(
+    () => forceEnableFullscreen
+    || (!forceDisableFullscreen && (useFullScreenFormsPref || fullscreenProp)),
+    [
+      forceEnableFullscreen,
+      forceDisableFullscreen,
+      useFullScreenFormsPref,
+      fullscreenProp,
+    ],
+  );
 
-  const [fullscreen, setFullscreen] = useState(!!startFullScreen);
+  const [fullscreen, setFullscreen] = useState(startFullscreen);
 
-  if (!show) { return false; }
+  useEffect(() => {
+    if (fullscreen !== startFullscreen) {
+      setFullscreen(startFullscreen);
+    }
+  }, [startFullscreen]);
 
   const overlayClasses = cx(
     'overlay',
@@ -52,10 +64,10 @@ const Overlay = (props) => {
 
   return (
     <Modal show={show} onBlur={onBlur}>
-      <motion.article className={overlayClasses}>
+      <article className={overlayClasses}>
         { title && (
-          <motion.header className="overlay__title">
-            { (!forceDisableFullscreen && !forceEnableFullscreen) && (
+          <header className="overlay__title">
+            { allowMaximize && (!forceDisableFullscreen && !forceEnableFullscreen) && (
             <motion.div
               style={{ cursor: 'pointer', display: 'flex' }}
               onClick={handleFullScreenChange}
@@ -68,17 +80,17 @@ const Overlay = (props) => {
             )}
             <h1>{title}</h1>
             <CloseButton className="overlay__close" onClick={onClose} />
-          </motion.header>
+          </header>
         )}
-        <motion.main className="overlay__content">
+        <main className="overlay__content">
           {children}
-        </motion.main>
+        </main>
         { footer && (
-          <motion.footer className="overlay__footer">
+          <footer className="overlay__footer">
             {footer}
-          </motion.footer>
+          </footer>
         )}
-      </motion.article>
+      </article>
     </Modal>
   );
 };
@@ -93,6 +105,7 @@ Overlay.propTypes = {
   fullheight: PropTypes.bool,
   forceDisableFullscreen: PropTypes.bool,
   forceEnableFullscreen: PropTypes.bool,
+  allowMaximize: PropTypes.bool,
   className: PropTypes.string,
 };
 
@@ -107,6 +120,7 @@ Overlay.defaultProps = {
   fullheight: false,
   forceDisableFullscreen: false,
   forceEnableFullscreen: false,
+  allowMaximize: true,
 };
 
 export {

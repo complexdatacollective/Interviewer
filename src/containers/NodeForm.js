@@ -63,6 +63,7 @@ class NodeForm extends Component {
         className="node-form"
         forceEnableFullscreen={useFullScreenForms}
         footer={!useFullScreenForms && (<Button key="submit" aria-label="Submit" type="submit" onClick={submitForm}>Finished</Button>)}
+        allowMaximize={false}
       >
         { useFullScreenForms
           ? (

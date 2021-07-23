@@ -1,6 +1,8 @@
 .overlay {
+
   &:not(.overlay--fullscreen) {
     &.node-form {
+      max-width: 65rem;
 
       &.overlay--fullscreen {
         max-height: 100%;
