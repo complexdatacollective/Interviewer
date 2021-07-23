@@ -1,6 +1,6 @@
 import React, { useState, useRef, useLayoutEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Text } from '@codaco/ui/lib/components/Fields';
+import { Search } from '@codaco/ui/lib/components/Fields';
 import { connect } from 'react-redux';
 import { motion, AnimatePresence, AnimateSharedLayout } from 'framer-motion';
 import { compose } from 'recompose';
@@ -201,8 +201,7 @@ const StagesMenu = (props) => {
         transition={{ duration: baseAnimationDuration, delay: baseAnimationDuration }}
         className="stages-menu__footer"
       >
-        <Text
-          type="search"
+        <Search
           placeholder="Filter..."
           input={{
             onChange: onFilterChange,
