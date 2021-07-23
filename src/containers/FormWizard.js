@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Icon } from '@codaco/ui';
 import { motion } from 'framer-motion';
 import cx from 'classnames';
-import Pips from '@codaco/ui/lib/components/Prompts/Pips';
 import Form from './Form';
 
 const NavigationButton = ({
@@ -138,9 +137,6 @@ class FormWizard extends Component {
           {...formProps}
           submitButton={nextButton}
         />
-        <div className="form-wizard__pips">
-          <Pips count={this.shownFields().length} currentIndex={fieldIndex} />
-        </div>
       </div>
     );
   }

@@ -1,4 +1,11 @@
+.overlay {
+  &.protocol-url-form-overlay {
+    max-width: 65rem;
+  }
+}
+
 .protocol-url-form {
+  flex: 1;
 
   .form-field-container {
     background: var(--background);

@@ -48,6 +48,8 @@ const ProtocolUrlForm = ({
       show={show}
       onClose={handleClose}
       title="Import Protocol from URL"
+      className="protocol-url-form-overlay"
+      forceDisableFullscreen
     >
       <div className="protocol-url-form">
         <p>
