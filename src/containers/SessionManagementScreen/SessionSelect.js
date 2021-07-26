@@ -134,7 +134,10 @@ const SessionSelect = ({
   };
 
   return (
-    <div className="session-select" style={{ display: 'flex', flexDirection: 'column' }}>
+    <div
+      className="session-select"
+      style={{ display: 'flex', flexDirection: 'column', flex: 1 }}
+    >
       <NewFilterableListWrapper
         ItemComponent={SessionCard}
         items={filteredSessions}
