@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import cx from 'classnames';
+import { useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import ExpandLessIcon from '@material-ui/icons/ExpandLessRounded';
 import { Modal } from '@codaco/ui';
 import CloseButton from '../components/CloseButton';
 
@@ -19,39 +20,77 @@ const Overlay = (props) => {
     title,
     footer,
     fullheight,
-    useFullScreenForms,
-    forceDisableFullScreen,
+    fullscreen: fullscreenProp,
+    forceDisableFullscreen,
+    forceEnableFullscreen,
+    allowMaximize,
     className,
   } = props;
+  const useFullScreenFormsPref = useSelector((state) => state.deviceSettings.useFullScreenForms);
 
-  if (!show) { return false; }
+  // Start full screen if forceEnableFullScreen prop,
+  // or user preference is for full screen forms, or we have the full screen prop,
+  // UNLESS we have the forceDisableFullscreen prop
+  const startFullscreen = useMemo(
+    () => forceEnableFullscreen
+    || (!forceDisableFullscreen && (useFullScreenFormsPref || fullscreenProp)),
+    [
+      forceEnableFullscreen,
+      forceDisableFullscreen,
+      useFullScreenFormsPref,
+      fullscreenProp,
+    ],
+  );
+
+  const [fullscreen, setFullscreen] = useState(startFullscreen);
+
+  useEffect(() => {
+    if (fullscreen !== startFullscreen) {
+      setFullscreen(startFullscreen);
+    }
+  }, [startFullscreen]);
 
   const overlayClasses = cx(
     'overlay',
     // eslint-disable-next-line @codaco/spellcheck/spell-checker
     { 'overlay--fullheight': fullheight },
-    { 'overlay--fullscreen': !forceDisableFullScreen && useFullScreenForms },
+    { 'overlay--fullscreen': fullscreen },
     className,
   );
 
+  const handleFullScreenChange = () => {
+    setFullscreen(!fullscreen);
+  };
+
   return (
     <Modal show={show} onBlur={onBlur}>
-      <motion.div className={overlayClasses}>
+      <article className={overlayClasses}>
         { title && (
-          <div className="overlay__title">
+          <header className="overlay__title">
+            { allowMaximize && (!forceDisableFullscreen && !forceEnableFullscreen) && (
+            <motion.div
+              style={{ cursor: 'pointer', display: 'flex' }}
+              onClick={handleFullScreenChange}
+              animate={!fullscreen ? { rotate: 0 } : { rotate: 180 }}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <ExpandLessIcon style={{ fontSize: '4rem' }} />
+            </motion.div>
+            )}
             <h1>{title}</h1>
             <CloseButton className="overlay__close" onClick={onClose} />
-          </div>
+          </header>
         )}
-        <motion.div className="overlay__content">
+        <main className="overlay__content">
           {children}
-        </motion.div>
+        </main>
         { footer && (
-          <motion.div className="overlay__footer">
+          <footer className="overlay__footer">
             {footer}
-          </motion.div>
+          </footer>
         )}
-      </motion.div>
+      </article>
     </Modal>
   );
 };
@@ -63,9 +102,10 @@ Overlay.propTypes = {
   show: PropTypes.bool,
   children: PropTypes.any,
   footer: PropTypes.any,
-  useFullScreenForms: PropTypes.bool,
   fullheight: PropTypes.bool,
-  forceDisableFullScreen: PropTypes.bool,
+  forceDisableFullscreen: PropTypes.bool,
+  forceEnableFullscreen: PropTypes.bool,
+  allowMaximize: PropTypes.bool,
   className: PropTypes.string,
 };
 
@@ -78,16 +118,13 @@ Overlay.defaultProps = {
   children: null,
   footer: null,
   fullheight: false,
-  forceDisableFullScreen: false,
-  useFullScreenForms: false,
+  forceDisableFullscreen: false,
+  forceEnableFullscreen: false,
+  allowMaximize: true,
 };
 
 export {
   Overlay,
 };
 
-const mapStateToProps = (state) => ({
-  useFullScreenForms: state.deviceSettings.useFullScreenForms,
-});
-
-export default connect(mapStateToProps)(Overlay);
+export default Overlay;

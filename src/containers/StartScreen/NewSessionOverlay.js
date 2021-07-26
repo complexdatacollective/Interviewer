@@ -32,7 +32,8 @@ const NewSessionOverlay = ({
       show={show}
       title="Enter a Case ID"
       onClose={onClose}
-      forceDisableFullScreen
+      forceDisableFullscreen
+      className="case-id-form-overlay"
     >
       <div className="case-id-form">
         <p>

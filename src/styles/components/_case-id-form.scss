@@ -1,5 +1,11 @@
+.overlay {
+  &.case-id-form-overlay {
+    max-width: 65rem;
+  }
+}
+
 .case-id-form {
-  padding-bottom: unit(4);
+  flex: 1;
 
   .form-field-container {
     background: var(--background);
