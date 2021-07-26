@@ -6,7 +6,7 @@ const defaultSortOrder = {
   property: null,
 };
 
-const sorter = (property) => (item) => get(item, property);
+const getProperty = (property) => get(property);
 
 /**
  * Sort a list of items
@@ -52,8 +52,8 @@ const useSort = (list, initialSortOrder = defaultSortOrder) => {
   const sortedList = useMemo(() => {
     if (!sortByProperty) { return list; }
     return sortDirection === 'desc'
-      ? sortBy([sorter(sortByProperty)])(list).reverse()
-      : sortBy([sorter(sortByProperty)])(list);
+      ? sortBy([getProperty(sortByProperty)])(list).reverse()
+      : sortBy([getProperty(sortByProperty)])(list);
   }, [list, sortByProperty, sortDirection]);
 
   return [sortedList, sortByProperty, sortDirection, updateSortByProperty, toggleSortDirection];
