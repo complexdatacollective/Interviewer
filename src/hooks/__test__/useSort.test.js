@@ -35,6 +35,11 @@ const list = [
   },
 ];
 
+const sortOrder = {
+  property: ['data', 'name'],
+  direction: 'desc',
+};
+
 const TestConsumer = (props) => {
   const [
     sortedList,
@@ -62,15 +67,10 @@ const TestConsumer = (props) => {
 
 describe('useSort', () => {
   it('returns correct interface', () => {
-    const initialSortProperty = ['data', 'name'];
-    const initialSortDirection = 'desc';
     const subject = mount((
       <TestConsumer
         list={list}
-        initialSortOrder={{
-          property: initialSortProperty,
-          direction: initialSortDirection,
-        }}
+        initialSortOrder={sortOrder}
       />
     ));
 
@@ -83,12 +83,99 @@ describe('useSort', () => {
     } = subject.find('div').prop('useSort');
 
     expect(sortedList).toBeInstanceOf(Array);
-    expect(sortByProperty).toEqual(initialSortProperty);
-    expect(sortDirection).toEqual(initialSortDirection);
+    expect(sortByProperty).toEqual(sortOrder.property);
+    expect(sortDirection).toEqual(sortOrder.direction);
     expect(updateSortByProperty).toBeInstanceOf(Function);
     expect(toggleSortDirection).toBeInstanceOf(Function);
   });
 
-  it.todo('can toggle direction');
-  it.todo('can change sort property');
+  it('can toggle direction', () => {
+    const subject = mount((
+      <TestConsumer
+        list={list}
+        initialSortOrder={sortOrder}
+      />
+    ));
+
+    const {
+      sortedList,
+      toggleSortDirection,
+      sortDirection: initialSortDirection,
+    } = subject.find('div').prop('useSort');
+
+    expect(initialSortDirection).toEqual('desc');
+
+    toggleSortDirection();
+
+    subject.update();
+
+    const {
+      sortedList: reversedSortedList,
+      sortDirection,
+    } = subject.find('div').prop('useSort');
+
+    expect(sortedList.reverse()).toEqual(reversedSortedList);
+    expect(sortDirection).toEqual('asc');
+  });
+
+  it('can change sort property', () => {
+    const subject = mount((
+      <TestConsumer
+        list={list}
+        initialSortOrder={sortOrder}
+      />
+    ));
+
+    const {
+      updateSortByProperty,
+    } = subject.find('div').prop('useSort');
+
+    const {
+      sortDirection: changedSortDirection,
+    } = subject.find('div').prop('useSort');
+
+    expect(changedSortDirection).toEqual('desc');
+
+    updateSortByProperty(['data', 'last_name']);
+
+    subject.update();
+
+    const {
+      sortedList,
+      sortByProperty,
+      sortDirection: resetSortDirection,
+    } = subject.find('div').prop('useSort');
+
+    expect(resetSortDirection).toEqual('asc');
+    expect(sortByProperty).toEqual(['data', 'last_name']);
+    expect(sortedList).toEqual([
+      {
+        data: {
+          last_name: 'Kirk',
+          name: 'James',
+        },
+        id: 3,
+      },
+      {
+        data: {
+          last_name: 'Scott',
+          name: 'Montgomery',
+        },
+        id: 4,
+      },
+      {
+        data: {
+          last_name: 'Uhura',
+          name: 'Nyota',
+        },
+        id: 2,
+      },
+      {
+        data: {
+          name: 'Spock',
+        },
+        id: 1,
+      },
+    ]);
+  });
 });
