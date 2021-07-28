@@ -1,10 +1,11 @@
+/* eslint-disable @codaco/spellcheck/spell-checker */
 /* eslint-env jest */
 
 import React from 'react';
 import { mount } from 'enzyme';
 import useSort from '../useSort';
 
-const list = [
+const mockList = [
   {
     id: 1,
     data: {
@@ -40,7 +41,7 @@ const sortOrder = {
   direction: 'desc',
 };
 
-const TestConsumer = (props) => {
+const TestConsumer = ({ list, initialSortOrder }) => {
   const [
     sortedList,
     sortByProperty,
@@ -48,8 +49,8 @@ const TestConsumer = (props) => {
     updateSortByProperty,
     toggleSortDirection,
   ] = useSort(
-    props.list,
-    props.initialSortOrder,
+    list,
+    initialSortOrder,
   );
 
   return (
@@ -69,7 +70,7 @@ describe('useSort', () => {
   it('returns correct interface', () => {
     const subject = mount((
       <TestConsumer
-        list={list}
+        list={mockList}
         initialSortOrder={sortOrder}
       />
     ));
@@ -92,7 +93,7 @@ describe('useSort', () => {
   it('can toggle direction', () => {
     const subject = mount((
       <TestConsumer
-        list={list}
+        list={mockList}
         initialSortOrder={sortOrder}
       />
     ));
@@ -121,7 +122,7 @@ describe('useSort', () => {
   it('can change sort property', () => {
     const subject = mount((
       <TestConsumer
-        list={list}
+        list={mockList}
         initialSortOrder={sortOrder}
       />
     ));
