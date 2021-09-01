@@ -10,11 +10,14 @@ import {
 } from 'recompose';
 import {
   get,
+  includes,
   mapValues,
   mapKeys,
+  toNumber,
 } from 'lodash';
 import loadExternalData from '../utils/loadExternalData';
 import getParentKeyByNameValue from '../utils/getParentKeyByNameValue';
+import ProtocolConsts from '../protocol-consts';
 import { entityAttributesProperty, entityPrimaryKeyProperty } from '../ducks/modules/network';
 
 const mapStateToProps = (state) => {
@@ -60,6 +63,109 @@ const withVariableUUIDReplacement = (nodeList, protocolCodebook, stageSubject) =
     };
   },
 );
+
+// compile list of attributes from a nodelist that aren't already in the codebook
+const getUniqueAttributeKeys = (nodeList, protocolCodebook, stageSubject) => (
+  nodeList.reduce((attributeKeys, node) => {
+    const stageNodeType = stageSubject.type;
+    const codebookDefinition = protocolCodebook.node[stageNodeType] || {};
+    const variables = Object.keys(node.attributes);
+    const nonCodebookVariables = variables.filter(
+      (attributeKey) => !get(codebookDefinition, `variables[${attributeKey}]`),
+    );
+    const novelVariables = nonCodebookVariables.filter(
+      (attributeKey) => !attributeKeys.includes(attributeKey),
+    );
+    return [...attributeKeys, ...novelVariables];
+  }, [])
+);
+
+// use column data to determine best guess for attribute type
+const deriveAttributeTypesFromData = (uniqueAttributeKeys, nodeList) => (
+  uniqueAttributeKeys.reduce((keyTypeMap, attributeKey) => {
+    const derivedType = nodeList.reduce((previousType, node) => {
+      const currentValue = get(node, `[${entityAttributesProperty}][${attributeKey}]`);
+      if (!currentValue || previousType === ProtocolConsts.VariableType.text) {
+        return previousType;
+      }
+      let currentType = '';
+      if (!Number.isNaN(toNumber(currentValue))) {
+        currentType = ProtocolConsts.VariableType.number;
+      }
+      if (String(currentValue).toLowerCase() === 'true' || String(currentValue).toLowerCase() === 'false') {
+        currentType = ProtocolConsts.VariableType.boolean;
+      }
+      // could insert regex for array/object detection, but not helpful if not in the codebook
+
+      // fallback to text if a conflict emerges, or first instance of non-null data
+      if ((previousType !== '' && currentType !== previousType) || (currentType === '' && !!currentValue)) {
+        return ProtocolConsts.VariableType.text;
+      }
+      return currentType;
+    }, '');
+    return { ...keyTypeMap, [attributeKey]: derivedType };
+  }, {})
+);
+
+const getNodeListUsingTypes = (nodeList, protocolCodebook, stageSubject, derivedAttributeTypes) => (
+  nodeList.map(
+    (node) => {
+      const stageNodeType = stageSubject.type;
+      const codebookDefinition = protocolCodebook.node[stageNodeType] || {};
+
+      const attributes = mapValues(
+        node.attributes,
+        (attributeValue, attributeKey) => {
+          let codebookType = get(codebookDefinition, `variables[${attributeKey}].type`);
+          if (!includes(ProtocolConsts.VariableType, codebookType)) {
+            // use type based on column data because the codebook type wasn't valid
+            codebookType = derivedAttributeTypes[attributeKey];
+          }
+
+          switch (codebookType) {
+            case ProtocolConsts.VariableType.boolean: {
+              return String(attributeValue).toLowerCase() === 'true';
+            }
+            case ProtocolConsts.VariableType.number:
+            case ProtocolConsts.VariableType.scalar: {
+              return toNumber(attributeValue);
+            }
+            case ProtocolConsts.VariableType.categorical:
+            case ProtocolConsts.VariableType.ordinal:
+            case ProtocolConsts.VariableType.layout: {
+              try {
+                // do special characters need to be sanitized/escaped?
+                return JSON.parse(attributeValue);
+              } catch (e) {
+                return attributeValue;
+              }
+            }
+            case ProtocolConsts.VariableType.datetime:
+            case ProtocolConsts.VariableType.text:
+            default:
+              return attributeValue;
+          }
+        },
+      );
+
+      return {
+        ...node,
+        [entityAttributesProperty]: attributes,
+      };
+    },
+  )
+);
+
+// Cast types for data based on codebook and data, according to stage subject.
+const withTypeReplacement = (nodeList, protocolCodebook, stageSubject) => {
+  const uniqueAttributeKeys = getUniqueAttributeKeys(nodeList, protocolCodebook, stageSubject);
+
+  // look up best guess for type of each key based on the column data
+  const derivedAttributeTypes = deriveAttributeTypesFromData(uniqueAttributeKeys, nodeList);
+
+  // make substitutes using codebook first, then column data derivation
+  return getNodeListUsingTypes(nodeList, protocolCodebook, stageSubject, derivedAttributeTypes);
+};
 
 /**
  * Creates a higher order component which can be used to load data from network assets in
@@ -117,6 +223,14 @@ const withExternalData = (sourceProperty, dataProperty) => compose(
         .then((externalData) => (
           withVariableUUIDReplacement(externalData.nodes, protocolCodebook, stageSubject)
         ))
+        .then((uuidData) => {
+          const fileExtension = (fileName) => fileName.split('.').pop();
+          const fileType = fileExtension(sourceFile) === 'csv' ? 'csv' : 'json';
+          if (fileType === 'csv') {
+            return withTypeReplacement(uuidData, protocolCodebook, stageSubject);
+          }
+          return uuidData;
+        })
         .then((nodes) => {
           setExternalDataIsLoading(false);
           setExternalData({ nodes });
