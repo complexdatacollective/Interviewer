@@ -131,7 +131,7 @@ const ServerSection = () => {
             )}
           </div>
           <div className="content-area__buttons">
-            <Button color="mustard--dark" disabled={!onlineStatus} onClick={() => openExternalLink('https://documentation.networkcanvas.com/reference/key-concepts/pairing')}>View Pairing Documentation</Button>
+            <Button color="mustard--dark" disabled={!onlineStatus} onClick={() => openExternalLink('https://documentation.networkcanvas.com/key-concepts/pairing')}>View Pairing Documentation</Button>
             { !pairedServer ? (
               <Button disabled={!onlineStatus} color="platinum" onClick={() => setShowServerAddressForm(true)}>Provide manual connection details...</Button>
             )
