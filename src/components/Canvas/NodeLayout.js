@@ -3,10 +3,14 @@ import cx from 'classnames';
 import PropTypes from 'prop-types';
 import { isEmpty, get } from 'lodash';
 import LayoutNode from '../../containers/Canvas/LayoutNode';
+import useForceSimulation from '../../hooks/useForceSimulation';
 import { entityPrimaryKeyProperty, entityAttributesProperty } from '../../ducks/modules/network';
 
+const LABEL = '0e75ec18-2cb1-4606-9f18-034d28b07c19';
+const LAYOUT = 'd13ca72d-aefe-4f48-841d-09f020e0e988';
+
 const Node = ({
-  label,
+  label = '',
   color,
   inactive,
   selected,
@@ -126,6 +130,93 @@ const Node = ({
   return { el: container, layout: { ...layout } };
 };
 
+function isTouch(event) {
+  if (typeof TouchEvent !== 'undefined' && event instanceof TouchEvent) {
+    return true;
+  }
+  return false;
+}
+
+function getCoords(event) {
+  if (isTouch(event)) {
+    const touch = event.changedTouches.item(0);
+    return {
+      x: touch.clientX,
+      y: touch.clientY,
+    };
+  }
+
+  return {
+    x: event.clientX,
+    y: event.clientY,
+  };
+}
+
+function moveDelta(start, end) {
+  return {
+    dy: end.y - start.y,
+    dx: end.x - start.x,
+  };
+}
+
+let lastPosition;
+let hasMoved;
+let move;
+let elIndex;
+let zoom = 1;
+let center = { x: 0.5, y: 0.5 };
+let pixels = 1000;
+
+// 0 - 3000 space, 1500 center
+const calcGrid = ({ x, y }) => ({
+  x: x * 3000,
+  y: y * 3000,
+});
+
+// 0 - 3000 space, 1500 center
+const calcRel = ({ x, y }) => ({
+  x: x / 3000,
+  y: y / 3000,
+});
+
+// takes a relative position
+const calcScreen = ({ x, y }) => {
+  const factor = pixels * zoom;
+
+  return {
+    x: ((x - center.x) * factor) + (0.5 * factor),
+    y: ((y - center.y) * factor) + (0.5 * factor),
+  };
+};
+
+const getMove = (e) => {
+  const { x, y } = getCoords(e);
+  const { dy, dx } = moveDelta(lastPosition, { x, y });
+  return { x, y, dy, dx };
+};
+
+const handleDragStart = (e, index) => {
+  elIndex = index;
+  lastPosition = getCoords(e);
+  console.log('start');
+};
+
+const handleDragMove = (e) => {
+  if (!elIndex) { return; }
+  move = getMove(e);
+  hasMoved = true;
+  console.log('move');
+};
+
+const handleDragEnd = (e) => {
+  if (!elIndex) { return; }
+  elIndex = null;
+  // hasMoved = false;
+  // move = null;
+  // move = getMove(e);
+  console.log('end', getMove(e));
+};
+
 const NodeLayout = React.forwardRef(({
   nodes,
   allowPositioning,
@@ -136,86 +227,81 @@ const NodeLayout = React.forwardRef(({
   layoutVariable,
   width,
   height,
-}, ref) => {
-  const isHighlighted = useCallback(
-    (node) => !isEmpty(highlightAttribute)
-        && get(node, [entityAttributesProperty, highlightAttribute]) === true,
-    [highlightAttribute],
-  );
-
-  const isLinking = useCallback(
-    (node) => get(node, entityPrimaryKeyProperty) === connectFrom,
-    [connectFrom],
-  );
-
-  const [state, setState] = useState(nodes);
+}, oref) => {
+  const ref = useRef();
+  const layoutNodes = useRef([]);
+  const [state, isRunning, start, stop, updateNode] = useForceSimulation();
 
   const timer = useRef();
-  const domNodes = useRef([]);
 
   const update = useRef(() => {
-    domNodes.current = domNodes.current.map((n) => {
-      const { layout } = n;
+    if (state.current.positions) {
+      state.current.positions.forEach((position, index) => {
+        if (index === elIndex && hasMoved) {
+          updateNode({
+            y: position.y + move.dy,
+            x: position.x + move.dx,
+          }, index);
 
-      const newN = {
-        ...n,
-        layout: {
-          x: layout.x + (Math.random() * 0.001 - 0.0005),
-          y: layout.y + (Math.random() * 0.001 - 0.0005),
-        },
-      };
+          lastPosition = { x: move.x, y: move.y };
+          hasMoved = false;
+        }
 
-      newN.el.style = `left: ${100 * layout.x}%; top: ${100 * layout.y}%; transform: 'translate(-50%, -50%)';`;
+        // console.log(position, calcRel(position), calcScreen(calcRel(position)));
 
-      return newN;
-    });
+        const screenPosition = calcScreen(calcRel(position));
+        // console.log(screenPosition);
+
+        layoutNodes.current[index].el.style = `left: ${screenPosition.x}px; top: ${screenPosition.y}px; transform: 'translate(-50%, -50%)';`;
+      });
+
+      // return;
+    }
 
     timer.current = requestAnimationFrame(() => update.current());
   });
 
   useEffect(() => {
-    domNodes.current = nodes.map((n) => {
+    if (!ref.current) { return () => {}; }
+
+    layoutNodes.current = nodes.map((n) => {
       const a = n.attributes;
 
       return Node({
         color: 'color-neon-coral',
-        label: a['c7053a78-bcd5-44bb-bfca-36c8aefa793f'],
-        layout: a['88271ba2-301d-402c-8407-cfa89446ca1d'],
+        label: a[LABEL],
+        layout: a[LAYOUT],
       });
     });
 
     const container = document.createElement('div');
     container.className = 'nodes-layout';
     container.setAttribute('style', 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 200;');
-    domNodes.current.forEach((n) => {
+
+    layoutNodes.current.forEach((n, index) => {
       container.appendChild(n.el);
+
+      n.el.addEventListener('mousedown', (e) => handleDragStart(e, index));
     });
 
-    document.body.appendChild(container);
+    window.addEventListener('mousemove', handleDragMove);
+    window.addEventListener('mouseup', handleDragEnd);
 
-    // update.current();
+    ref.current.appendChild(container);
+
+    const simNodes = layoutNodes.current.map(({ layout }) => calcGrid(layout));
+    // console.log(simNodes);
+    start({ nodes: simNodes });
 
     timer.current = requestAnimationFrame(() => update.current());
     return () => cancelAnimationFrame(timer.current);
   }, []);
 
   return (
-    <div className="node-layout" ref={ref}>
-      { state.map((node) => (
-        <LayoutNode
-          key={node[entityPrimaryKeyProperty]}
-          node={node}
-          layoutVariable={layoutVariable}
-          onSelected={() => onSelected(node)}
-          selected={isHighlighted(node)}
-          linking={isLinking(node)}
-          allowPositioning={allowPositioning}
-          allowSelect={allowSelect}
-          areaWidth={width}
-          areaHeight={height}
-        />
-      ))}
-    </div>
+    <>
+      <div className="node-layout" ref={ref} />
+      <div ref={oref} />
+    </>
   );
 });
 
