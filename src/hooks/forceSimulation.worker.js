@@ -21,6 +21,7 @@ onmessage = function ({ data }) {
         },
       } = data;
       startLinks = links;
+
       console.debug('worker:initialize');
       simulation = forceSimulation(nodes)
         .force('charge', forceManyBody())
@@ -62,7 +63,8 @@ onmessage = function ({ data }) {
       simulation
         .nodes(nodes)
         .alpha(1)
-        .force('link', forceLink(links).distance(10).strength(1));
+        .force('link', forceLink(links).distance(10).strength(1))
+        .restart();
       break;
     }
     case 'update_node': {
@@ -76,10 +78,13 @@ onmessage = function ({ data }) {
         };
       });
 
+      console.log('update node');
+
       simulation
         .nodes(nodes)
         .alpha(1)
-        .force('link', forceLink(startLinks).distance(10).strength(1));
+        // .force('link', forceLink(startLinks).distance(10).strength(1))
+        .restart();
       break;
     }
     default:

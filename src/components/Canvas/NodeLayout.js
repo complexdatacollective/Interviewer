@@ -69,6 +69,8 @@ const Node = ({
 
   const container = document.createElement('div');
   container.className = classes;
+  container.style.position = 'absolute';
+  container.style.transform = 'translate(-50%, -50%)';
   container.onClick = handleClick;
   // container.setAttribute('style', 'width: 1em; height: 1em;');
 
@@ -167,16 +169,29 @@ let zoom = 1;
 let center = { x: 0.5, y: 0.5 };
 let pixels = 1000;
 
+const zoomIn = () => {
+  zoom *= 1.5;
+};
+
+const zoomOut = () => {
+  zoom *= 0.67;
+};
+
+const moveLeft = () => { center = { ...center, x: center.x - (0.1 / zoom) }; };
+const moveDown = () => { center = { ...center, y: center.y + (0.1 / zoom) }; };
+const moveUp = () => { center = { ...center, y: center.y - (0.1 / zoom) }; };
+const moveRight = () => { center = { ...center, x: center.x + (0.1 / zoom) }; };
+
 // 0 - 3000 space, 1500 center
 const calcGrid = ({ x, y }) => ({
-  x: x * 3000,
-  y: y * 3000,
+  x: x * 2000,
+  y: y * 2000,
 });
 
 // 0 - 3000 space, 1500 center
 const calcRel = ({ x, y }) => ({
-  x: x / 3000,
-  y: y / 3000,
+  x: x / 2000,
+  y: y / 2000,
 });
 
 // takes a relative position
@@ -238,21 +253,25 @@ const NodeLayout = React.forwardRef(({
     if (state.current.positions) {
       state.current.positions.forEach((position, index) => {
         if (index === elIndex && hasMoved) {
-          updateNode({
-            y: position.y + move.dy,
-            x: position.x + move.dx,
-          }, index);
+          const newPosition = {
+            y: position.y + (move.dy / zoom),
+            x: position.x + (move.dx / zoom),
+          };
 
           lastPosition = { x: move.x, y: move.y };
+
+          updateNode(newPosition, index);
+
+          // console.log('update', zoom, newPosition, lastPosition, index);
           hasMoved = false;
         }
 
+        const screenPosition = calcScreen(calcRel(position));
+
         // console.log(position, calcRel(position), calcScreen(calcRel(position)));
 
-        const screenPosition = calcScreen(calcRel(position));
-        // console.log(screenPosition);
-
-        layoutNodes.current[index].el.style = `left: ${screenPosition.x}px; top: ${screenPosition.y}px; transform: 'translate(-50%, -50%)';`;
+        layoutNodes.current[index].el.style.left = `${screenPosition.x}px`;
+        layoutNodes.current[index].el.style.top = `${screenPosition.y}px`;
       });
 
       // return;
@@ -300,6 +319,14 @@ const NodeLayout = React.forwardRef(({
   return (
     <>
       <div className="node-layout" ref={ref} />
+      <div style={{ position: 'absolute', top: 0, left: 0 }}>
+        <button type="button" onClick={zoomIn}>in</button>
+        <button type="button" onClick={zoomOut}>out</button>
+        <button type="button" onClick={moveLeft}>left</button>
+        <button type="button" onClick={moveDown}>down</button>
+        <button type="button" onClick={moveUp}>up</button>
+        <button type="button" onClick={moveRight}>right</button>
+      </div>
       <div ref={oref} />
     </>
   );
