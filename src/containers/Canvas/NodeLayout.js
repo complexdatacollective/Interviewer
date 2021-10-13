@@ -6,7 +6,7 @@ import { withBounds } from '../../behaviours';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { entityPrimaryKeyProperty, entityAttributesProperty } from '../../ducks/modules/network';
 import { DropTarget } from '../../behaviours/DragAndDrop';
-import NodeLayout from '../../components/Canvas/NodeLayout';
+import NodeLayout from '../../components/RealtimeCanvas/NodeLayout';
 
 const relativeCoords = (container, node) => ({
   x: (node.x - container.x) / container.width,
