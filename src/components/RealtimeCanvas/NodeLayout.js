@@ -10,8 +10,6 @@ import LayoutNode from './LayoutNode';
 const LABEL = '0e75ec18-2cb1-4606-9f18-034d28b07c19';
 const LAYOUT = 'd13ca72d-aefe-4f48-841d-09f020e0e988';
 
-let frames = 100;
-
 const NodeLayout = React.forwardRef(({
   nodes,
   allowPositioning,
@@ -59,20 +57,6 @@ const NodeLayout = React.forwardRef(({
         layoutNodes.current[index].el.style.left = `${screenPosition.x}px`;
         layoutNodes.current[index].el.style.top = `${screenPosition.y}px`;
       });
-
-      frames -= 1;
-    }
-
-    if (frames === 0) {
-      forceSimulation.current.positions.forEach((position) => {
-        console.log(
-          position,
-          calculateRelativeCoords(position),
-          calculateScreenCoords(calculateRelativeCoords(position)),
-        );
-      });
-
-      // return;
     }
 
     timer.current = requestAnimationFrame(() => update.current());
