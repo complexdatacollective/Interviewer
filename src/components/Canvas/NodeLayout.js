@@ -5,6 +5,7 @@ import { isEmpty, get } from 'lodash';
 import LayoutNode from '../../containers/Canvas/LayoutNode';
 import useForceSimulation from '../../hooks/useForceSimulation';
 import { entityPrimaryKeyProperty, entityAttributesProperty } from '../../ducks/modules/network';
+import getAbsoluteBoundingRect from '../../utils/getAbsoluteBoundingRect';
 
 const LABEL = '0e75ec18-2cb1-4606-9f18-034d28b07c19';
 const LAYOUT = 'd13ca72d-aefe-4f48-841d-09f020e0e988';
@@ -167,7 +168,7 @@ let move;
 let elIndex;
 let zoom = 1;
 let center = { x: 0.5, y: 0.5 };
-let pixels = 1000;
+let screen;
 
 const zoomIn = () => {
   zoom *= 1.5;
@@ -182,32 +183,34 @@ const moveDown = () => { center = { ...center, y: center.y + (0.1 / zoom) }; };
 const moveUp = () => { center = { ...center, y: center.y - (0.1 / zoom) }; };
 const moveRight = () => { center = { ...center, x: center.x + (0.1 / zoom) }; };
 
-// 0 - 3000 space, 1500 center
+// -1000 - -1000 space, 0,0 center
 const calcGrid = ({ x, y }) => ({
-  x: x * 2000,
-  y: y * 2000,
+  x: (x - 0.5) * 2000,
+  y: (y - 0.5) * 2000,
 });
 
-// 0 - 3000 space, 1500 center
+// -1000 - -1000 space, 0,0 center
 const calcRel = ({ x, y }) => ({
-  x: x / 2000,
-  y: y / 2000,
+  x: (x / 2000) + 0.5,
+  y: (y / 2000) + 0.5,
 });
 
 // takes a relative position
-const calcScreen = ({ x, y }) => {
-  const factor = pixels * zoom;
-
-  return {
-    x: ((x - center.x) * factor) + (0.5 * factor),
-    y: ((y - center.y) * factor) + (0.5 * factor),
-  };
-};
+const calcScreen = ({ x, y }) => ({
+  x: ((x - center.x) * screen.width * zoom) + (0.5 * screen.width),
+  y: ((y - center.y) * screen.height * zoom) + (0.5 * screen.height),
+});
 
 const getMove = (e) => {
   const { x, y } = getCoords(e);
   const { dy, dx } = moveDelta(lastPosition, { x, y });
-  return { x, y, dy, dx };
+
+  return {
+    x,
+    y,
+    dy,
+    dx,
+  };
 };
 
 const handleDragStart = (e, index) => {
@@ -231,6 +234,8 @@ const handleDragEnd = (e) => {
   // move = getMove(e);
   console.log('end', getMove(e));
 };
+
+let frames = 100;
 
 const NodeLayout = React.forwardRef(({
   nodes,
@@ -274,6 +279,14 @@ const NodeLayout = React.forwardRef(({
         layoutNodes.current[index].el.style.top = `${screenPosition.y}px`;
       });
 
+      frames -= 1;
+    }
+
+    if (frames === 0) {
+      state.current.positions.forEach((position) => {
+        console.log(position, calcRel(position), calcScreen(calcRel(position)));
+      });
+
       // return;
     }
 
@@ -282,6 +295,15 @@ const NodeLayout = React.forwardRef(({
 
   useEffect(() => {
     if (!ref.current) { return () => {}; }
+
+    const container = document.createElement('div');
+    container.className = 'nodes-layout';
+    container.setAttribute('style', 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 200;');
+    ref.current.appendChild(container);
+
+    screen = getAbsoluteBoundingRect(container);
+
+    console.log(screen);
 
     layoutNodes.current = nodes.map((n) => {
       const a = n.attributes;
@@ -293,9 +315,6 @@ const NodeLayout = React.forwardRef(({
       });
     });
 
-    const container = document.createElement('div');
-    container.className = 'nodes-layout';
-    container.setAttribute('style', 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 200;');
 
     layoutNodes.current.forEach((n, index) => {
       container.appendChild(n.el);
@@ -306,10 +325,8 @@ const NodeLayout = React.forwardRef(({
     window.addEventListener('mousemove', handleDragMove);
     window.addEventListener('mouseup', handleDragEnd);
 
-    ref.current.appendChild(container);
-
     const simNodes = layoutNodes.current.map(({ layout }) => calcGrid(layout));
-    // console.log(simNodes);
+    console.log(simNodes);
     start({ nodes: simNodes });
 
     timer.current = requestAnimationFrame(() => update.current());
