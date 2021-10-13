@@ -26,7 +26,7 @@ const NodeLayout = React.forwardRef(({
   const ref = useRef();
   const layoutNodes = useRef([]);
   const [forceSimulation, isRunning, start, stop, updateNode] = useForceSimulation();
-  const [dragState, handleDragStart, handleDragMove, handleDragEnd] = useDrag();
+  const [getDelta, handleDragStart, handleDragMove, handleDragEnd] = useDrag();
   const [
     viewportState,
     moveViewport,
@@ -41,22 +41,15 @@ const NodeLayout = React.forwardRef(({
 
   const update = useRef(() => {
     if (forceSimulation.current.positions) {
+      const delta = getDelta();
       forceSimulation.current.positions.forEach((position, index) => {
-        if (index === dragState.current.id && dragState.current.hasMoved) {
+        if (index === delta.id && delta.hasMoved) {
           const newPosition = {
-            y: position.y + (dragState.current.move.dy / viewportState.current.zoom),
-            x: position.x + (dragState.current.move.dx / viewportState.current.zoom),
-          };
-
-          dragState.current.lastPosition = {
-            x: dragState.current.move.x,
-            y: dragState.current.move.y,
+            y: position.y + (delta.dy / viewportState.current.zoom),
+            x: position.x + (delta.dx / viewportState.current.zoom),
           };
 
           updateNode(newPosition, index);
-
-          // console.log('update', zoom, newPosition, lastPosition, index);
-          dragState.current.hasMoved = false; // TODO: make this a read function of useDrag
         }
 
         const screenPosition = calculateScreenCoords(calculateRelativeCoords(position));
