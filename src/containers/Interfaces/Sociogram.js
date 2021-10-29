@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { withHandlers, compose } from 'recompose';
 import PropTypes from 'prop-types';
 import withPrompt from '../../behaviours/withPrompt';
+import LayoutContext from '../../contexts/LayoutContext';
 import Canvas from '../../components/Canvas/Canvas';
 import NodeBucket from '../Canvas/NodeBucket';
 import NodeLayout from '../Canvas/NodeLayout';
@@ -69,31 +70,37 @@ const Sociogram = (props) => {
         interfaceRef={interfaceRef}
       />
       <div className="sociogram-interface__concentric-circles">
-        <Canvas className="concentric-circles" id="concentric-circles">
-          <Background
-            concentricCircles={concentricCircles}
-            skewedTowardCenter={skewedTowardCenter}
-            image={backgroundImage}
-          />
-          <EdgeLayout
-            edges={edges}
-          />
-          <NodeLayout
-            nodes={nodes}
-            id="NODE_LAYOUT"
-            highlightAttribute={highlightAttribute}
-            layoutVariable={layoutVariable}
-            allowHighlighting={allowHighlighting && !createEdge}
-            allowPositioning={allowPositioning}
-            createEdge={createEdge}
-            key={promptId} // allows linking to reset without re-rendering the whole interface
-          />
-          <NodeBucket
-            id="NODE_BUCKET"
-            node={nextUnplacedNode}
-            allowPositioning={allowPositioning}
-          />
-        </Canvas>
+        <LayoutProvider
+          layout={layoutVariable}
+          nodes={nodes}
+          edges={edges}
+        >
+          <Canvas className="concentric-circles" id="concentric-circles">
+            <Background
+              concentricCircles={concentricCircles}
+              skewedTowardCenter={skewedTowardCenter}
+              image={backgroundImage}
+            />
+            <EdgeLayout
+              edges={edges}
+            />
+            <NodeLayout
+              nodes={nodes}
+              id="NODE_LAYOUT"
+              highlightAttribute={highlightAttribute}
+              layoutVariable={layoutVariable}
+              allowHighlighting={allowHighlighting && !createEdge}
+              allowPositioning={allowPositioning}
+              createEdge={createEdge}
+              key={promptId} // allows linking to reset without re-rendering the whole interface
+            />
+            <NodeBucket
+              id="NODE_BUCKET"
+              node={nextUnplacedNode}
+              allowPositioning={allowPositioning}
+            />
+          </Canvas>
+        </LayoutProvider>
       </div>
     </div>
   );

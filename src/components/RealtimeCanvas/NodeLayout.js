@@ -82,7 +82,6 @@ const NodeLayout = React.forwardRef(({
       });
     });
 
-
     layoutNodes.current.forEach((n, index) => {
       container.appendChild(n.el);
 
