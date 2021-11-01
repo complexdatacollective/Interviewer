@@ -37,10 +37,8 @@ const NodeLayout = React.forwardRef(({
     if (id && hasMoved) {
       forceSimulation.updateNodeByDelta({ dy, dx }, id);
     }
-    // console.log('update', forceSimulation.simulation.current);
 
     if (forceSimulation.simulation.current.nodes) {
-      // console.log('update', forceSimulation.simulation.current.nodes[0]);
       forceSimulation.simulation.current.nodes.forEach((position, index) => {
         const screenPosition = viewport.calculateScreenCoords(
           viewport.calculateRelativeCoords(position),
@@ -70,7 +68,6 @@ const NodeLayout = React.forwardRef(({
       return LayoutNode({
         color: 'color-neon-coral',
         label: a[LABEL],
-        layout: a[LAYOUT],
       });
     });
 
@@ -106,18 +103,12 @@ const NodeLayout = React.forwardRef(({
 NodeLayout.propTypes = {
   nodes: PropTypes.array.isRequired,
   onSelected: PropTypes.func.isRequired,
-  connectFrom: PropTypes.string,
-  highlightAttribute: PropTypes.string,
   allowPositioning: PropTypes.bool.isRequired,
   allowSelect: PropTypes.bool,
-  layoutVariable: PropTypes.string.isRequired,
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
 };
 
 NodeLayout.defaultProps = {
-  connectFrom: null,
-  highlightAttribute: null,
+  allowPositioning: true,
   allowSelect: true,
 };
 

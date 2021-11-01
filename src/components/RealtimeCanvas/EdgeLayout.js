@@ -1,32 +1,54 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Edge from '../Edge';
 
 const viewBoxScale = 100;
 
-class EdgeLayout extends PureComponent {
-  renderEdge = (edge) => {
-    if (!['key', 'from', 'to', 'type'].every((prop) => prop in edge)) {
-      return null;
+const EdgeLayout = () => {
+  const lines = useRef();
+  const svg = useRef();
+  const { forceSimulation, viewport, edges } = useContext(LayoutContext);
+  const timer = useRef();
+
+  const update = useRef(() => {
+    if (forceSimulation.simulation.current.nodes) {
+      forceSimulation.simulation.current.nodes.forEach((position, index) => {
+        const screenPosition = viewport.calculateScreenCoords(
+          viewport.calculateRelativeCoords(position),
+        );
+
+        layoutNodes.current[index].el.style.left = `${screenPosition.x}px`;
+        layoutNodes.current[index].el.style.top = `${screenPosition.y}px`;
+      });
     }
 
-    const {
-      key, from, to, type,
-    } = edge;
+    timer.current = requestAnimationFrame(() => update.current());
+  });
 
-    return (
-      <Edge key={key} from={from} to={to} type={type} viewBoxScale={viewBoxScale} />
-    );
-  };
+  useEffect(() => {
+    if (!svg.current) { return () => {}; }
 
-  render() {
-    const { edges } = this.props;
+    lines.current = edges.map(() => {
+      const svgNS = svg.current.namespaceURI;
+      const line = document.createElementNS(svgNS, 'line');
+      line.setAttributeNS(null, 'x1', from.x * viewBoxScale);
+      line.setAttributeNS(null, 'y1', from.y * viewBoxScale);
+      line.setAttributeNS(null, 'x2', to.x * viewBoxScale);
+      line.setAttributeNS(null, 'y2', to.y * viewBoxScale);
+      line.setAttributeNS(null, 'stroke', `var(--${color})`);
+    });
+
+    lines.current.map(svg.appendChild);
+  }, []);
 
     return (
       <div className="edge-layout">
-        <svg viewBox={`0 0 ${viewBoxScale} ${viewBoxScale}`} xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-          { edges.map(this.renderEdge) }
-        </svg>
+        <svg
+          viewBox={`0 0 ${viewBoxScale} ${viewBoxScale}`}
+          xmlns="http://www.w3.org/2000/svg"
+          preserveAspectRatio="none"
+          ref={svg}
+        />
       </div>
     );
   }
