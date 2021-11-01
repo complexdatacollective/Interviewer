@@ -10,7 +10,7 @@ const useForceSimulation = (listener = () => {}) => {
   const state = useRef(null);
   const [isRunning, setIsRunning] = useState(false);
 
-  const start = useCallback(({ nodes, links }) => {
+  const start = useCallback(({ nodes = [], links = [] }) => {
     console.log('intialize worker');
     worker.current = new ForceSimulationWorker();
 
@@ -23,7 +23,7 @@ const useForceSimulation = (listener = () => {}) => {
       switch (event.data.type) {
         case 'tick':
           // console.log('tick');
-          state.current.positions = event.data.nodes;
+          state.current.nodes = event.data.nodes;
           listener({ type: 'tick', data: event.data.nodes });
           break;
         case 'end':

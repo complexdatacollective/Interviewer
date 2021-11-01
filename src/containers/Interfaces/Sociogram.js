@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { withHandlers, compose } from 'recompose';
 import PropTypes from 'prop-types';
 import withPrompt from '../../behaviours/withPrompt';
-import LayoutContext from '../../contexts/LayoutContext';
+import { LayoutProvider } from '../../contexts/LayoutContext';
 import Canvas from '../../components/Canvas/Canvas';
 import NodeBucket from '../Canvas/NodeBucket';
 import NodeLayout from '../Canvas/NodeLayout';

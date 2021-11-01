@@ -73,6 +73,7 @@ const useDrag = () => {
         hasMoved: state.current.hasMoved,
       };
     }
+
     const delta = {
       id: state.current.id,
       dy: state.current.move.dy,

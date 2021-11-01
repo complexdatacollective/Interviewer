@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useEffect } from 'react';
 import useForceSimulation from '../hooks/useForceSimulation';
 import useViewport from '../components/RealtimeCanvas/useViewport';
 
-const LAYOUT = 'd13ca72d-aefe-4f48-841d-09f020e0e988';
+const DEFAULT_LAYOUT = 'd13ca72d-aefe-4f48-841d-09f020e0e988'; // TODO: remove
 
 const LayoutContext = React.createContext('layout ');
 
@@ -10,7 +10,7 @@ export const LayoutProvider = ({
   children,
   nodes,
   edges,
-  layout = LAYOUT,
+  layout = DEFAULT_LAYOUT,
 }) => {
   const [forceSimulation, isRunning, start, stop, updateNode] = useForceSimulation();
 
@@ -24,8 +24,8 @@ export const LayoutProvider = ({
     measureCanvas,
   ] = useViewport();
 
-  const updateNodeDelta = useCallback((delta, id) => {
-    const position = forceSimulation.current.positions[id];
+  const updateNodeByDelta = useCallback((delta, id) => {
+    const position = forceSimulation.current.nodes[id];
 
     const newPosition = {
       y: position.y + (delta.dy / viewportState.current.zoom),
@@ -41,7 +41,8 @@ export const LayoutProvider = ({
       isRunning,
       start,
       stop,
-      updateNodeDelta,
+      updateNodeByDelta,
+      // TODO: updateNode() accounting for viewport?
     },
     viewport: {
       moveViewport,
@@ -60,6 +61,8 @@ export const LayoutProvider = ({
     const simulationNodes = nodes.map(
       ({ attributes }) => calculateLayoutCoords(attributes[layout]),
     );
+
+    // console.log({ simulationNodes });
 
     // TODO: calculate edges
 

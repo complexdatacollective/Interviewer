@@ -40,24 +40,24 @@ const withDropHandlers = withHandlers({
     // Horrible hack for performance (only re-render nodes on drop, not on drag)
     setRerenderCount(rerenderCount + 1);
   },
-  onDrag: ({
-    layoutVariable, updateNode, width, height, x, y,
-  }) => (item) => {
-    if (isNil(item.meta[entityAttributesProperty][layoutVariable])) { return; }
-    updateNode(
-      item.meta[entityPrimaryKeyProperty],
-      {},
-      {
-        [layoutVariable]: relativeCoords({
-          width, height, x, y,
-        }, item),
-      },
-    );
-  },
-  onDragEnd: ({ setRerenderCount, rerenderCount }) => () => {
-    // make sure to also re-render nodes that were updated on drag end
-    setRerenderCount(rerenderCount + 1);
-  },
+  // onDrag: ({
+  //   layoutVariable, updateNode, width, height, x, y,
+  // }) => (item) => {
+  //   if (isNil(item.meta[entityAttributesProperty][layoutVariable])) { return; }
+  //   updateNode(
+  //     item.meta[entityPrimaryKeyProperty],
+  //     {},
+  //     {
+  //       [layoutVariable]: relativeCoords({
+  //         width, height, x, y,
+  //       }, item),
+  //     },
+  //   );
+  // },
+  // onDragEnd: ({ setRerenderCount, rerenderCount }) => () => {
+  //   // make sure to also re-render nodes that were updated on drag end
+  //   setRerenderCount(rerenderCount + 1);
+  // },
 });
 
 const withSelectHandlers = compose(
