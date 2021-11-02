@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useEffect } from 'react';
+import React, { useRef, useCallback, useMemo, useEffect } from 'react';
 import useForceSimulation from '../hooks/useForceSimulation';
 import useViewport from '../components/RealtimeCanvas/useViewport';
 
@@ -12,7 +12,26 @@ export const LayoutProvider = ({
   edges,
   layout = DEFAULT_LAYOUT,
 }) => {
-  const [forceSimulation, isRunning, start, stop, updateNode] = useForceSimulation();
+  const state = useRef({ nodes: [], edges: [] });
+
+  const handleSimulationMessage = ({ data }) => {
+    for (let index = 0; index < state.current.nodes.length; index += 1) {
+      state.current.nodes[index].position = data[index];
+    }
+
+    for (let index = 0; index < state.current.edges.length; index += 1) {
+      // state.current.edges[index].start = state.current.nodes[startIndex].position;
+      // state.current.edges[index].end = state.current.nodes[endIndex].position;
+    }
+  };
+
+  const [
+    forceSimulation,
+    isRunning,
+    start,
+    stop,
+    updateNode,
+  ] = useForceSimulation(handleSimulationMessage);
 
   const [
     viewportState,
@@ -52,19 +71,17 @@ export const LayoutProvider = ({
       calculateScreenCoords,
       measureCanvas,
     },
-    nodes,
-    edges,
+    state,
     layout,
-  }), [nodes, edges, layout]);
+  }), [layout]);
 
   useEffect(() => {
     const simulationNodes = nodes.map(
       ({ attributes }) => calculateLayoutCoords(attributes[layout]),
     );
 
-    // console.log({ simulationNodes });
-
-    // TODO: calculate edges
+    state.current.nodes = nodes.map((node) => ({ data: node }));
+    state.current.edges = edges.map((edge) => ({ data: edge }));
 
     start({ nodes: simulationNodes });
   }, [nodes, edges, layout]);

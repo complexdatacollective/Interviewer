@@ -21,7 +21,7 @@ const NodeLayout = React.forwardRef(({
 }, oref) => {
   const ref = useRef();
   const layoutNodes = useRef([]);
-  const { forceSimulation, viewport } = useContext(LayoutContext);
+  const { forceSimulation, viewport, state } = useContext(LayoutContext);
   const [getDelta, handleDragStart, handleDragMove, handleDragEnd] = useDrag();
 
   const timer = useRef();
