@@ -62,7 +62,7 @@ const EdgeLayout = () => {
     timer.current = requestAnimationFrame(() => update.current());
 
     return () => {
-      debugger;
+      // debugger;
       els.forEach((el) => svg.current.removeChild(el));
       cancelAnimationFrame(timer.current);
     };

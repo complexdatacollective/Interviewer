@@ -50,20 +50,17 @@ const useForceSimulation = (listener = () => {}) => {
     setIsRunning(false);
   });
 
-  const update = useCallback(({ nodes, links }) => {
+  const update = useCallback((network) => {
     if (!worker.current) { return; }
 
     state.current = {
-      links,
-      nodes,
+      ...state.current,
+      ...network,
     };
 
     worker.current.postMessage({
       type: 'update',
-      network: {
-        nodes,
-        links,
-      },
+      network: state.current,
     });
   });
 

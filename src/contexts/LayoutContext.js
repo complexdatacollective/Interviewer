@@ -37,6 +37,7 @@ export const LayoutProvider = ({
     start,
     stop,
     updateNode,
+    update,
   ] = useForceSimulation(handleSimulationMessage);
 
   const [
@@ -124,10 +125,37 @@ export const LayoutProvider = ({
       ({ from, to }) => ({ source: nodeIdMap[from], target: nodeIdMap[to] }),
     );
 
+    start({ nodes: simulationNodes, links: simulationLinks });
+  }, []);
+
+  useEffect(() => {
+    debugger;
+    const simulationNodes = nodes.map(
+      ({ attributes }) => calculateLayoutCoords(attributes[layout]),
+    );
+
+    update({ nodes: simulationNodes });
+  }, [nodes, layout]);
+
+  useEffect(() => {
     debugger;
 
-    start({ nodes: simulationNodes, links: simulationLinks });
-  }, [nodes, edges, layout]);
+    const nodeIdMap = nodes.reduce(
+      (memo, { _uid }, index) => ({
+        ...memo,
+        [_uid]: index,
+      }),
+      {},
+    );
+
+    const simulationLinks = edges.map(
+      ({ from, to }) => ({ source: nodeIdMap[from], target: nodeIdMap[to] }),
+    );
+
+    // debugger;
+
+    update({ links: simulationLinks });
+  }, [nodes, edges]);
 
   return (
     <LayoutContext.Provider value={value}>
