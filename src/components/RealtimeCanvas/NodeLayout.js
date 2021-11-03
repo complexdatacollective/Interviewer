@@ -9,20 +9,24 @@ const LABEL = '0e75ec18-2cb1-4606-9f18-034d28b07c19';
 const LAYOUT = 'd13ca72d-aefe-4f48-841d-09f020e0e988';
 
 const NodeLayout = React.forwardRef(({
-  nodes,
+  // nodes,
   // allowPositioning,
   // highlightAttribute,
   // connectFrom,
   // allowSelect,
-  // onSelected,
+  onSelected,
   // layoutVariable,
   // width,
   // height,
 }, oref) => {
   const ref = useRef();
   const layoutNodes = useRef([]);
-  const { forceSimulation, viewport, state } = useContext(LayoutContext);
+  const { forceSimulation, viewport, nodes } = useContext(LayoutContext);
   const [getDelta, handleDragStart, handleDragMove, handleDragEnd] = useDrag();
+
+  const handleClick = (e, index) => {
+    onSelected(nodes[index]);
+  };
 
   const timer = useRef();
 
@@ -40,7 +44,7 @@ const NodeLayout = React.forwardRef(({
 
     if (forceSimulation.simulation.current.nodes) {
       forceSimulation.simulation.current.nodes.forEach((position, index) => {
-        const screenPosition = viewport.calculateScreenCoords(
+        const screenPosition = viewport.calculateViewportScreenCoords(
           viewport.calculateRelativeCoords(position),
         );
 
@@ -55,12 +59,29 @@ const NodeLayout = React.forwardRef(({
   useEffect(() => {
     if (!ref.current) { return () => {}; }
 
+    debugger;
+
     const container = document.createElement('div');
     container.className = 'nodes-layout';
+    container.setAttribute('id', 'nodes_layout');
     container.setAttribute('style', 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 200;');
+
     ref.current.appendChild(container);
 
     viewport.measureCanvas(container);
+
+    return () => {
+      debugger;
+      ref.current.removeChild(container);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!ref.current) { return () => cancelAnimationFrame(timer.current); }
+
+    debugger;
+
+    const container = document.getElementById('nodes_layout');
 
     layoutNodes.current = nodes.map((n) => {
       const a = n.attributes;
@@ -71,18 +92,30 @@ const NodeLayout = React.forwardRef(({
       });
     });
 
-    layoutNodes.current.forEach((n, index) => {
-      container.appendChild(n.el);
+    const els = layoutNodes.current.map(({ el }) => el);
 
-      n.el.addEventListener('mousedown', (e) => handleDragStart(e, index));
+    els.forEach((el, index) => {
+      container.appendChild(el);
+
+      el.addEventListener('mousedown', (e) => handleDragStart(e, index));
+      el.addEventListener('click', (e) => handleClick(e, index));
     });
 
     window.addEventListener('mousemove', handleDragMove);
     window.addEventListener('mouseup', handleDragEnd);
 
     timer.current = requestAnimationFrame(() => update.current());
-    return () => cancelAnimationFrame(timer.current);
-  }, [viewport.measureCanvas, forceSimulation.start, viewport.calculateLayoutCoords]);
+
+    return () => {
+      debugger;
+      els.forEach((el) => container.removeChild(el));
+
+      window.removeEventListener('mousemove', handleDragMove);
+      window.removeEventListener('mouseup', handleDragEnd);
+
+      cancelAnimationFrame(timer.current);
+    };
+  }, [nodes]);
 
   return (
     <>

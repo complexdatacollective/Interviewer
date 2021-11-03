@@ -93,6 +93,21 @@ export const edgesToCoords = (edges, { nodes, layout }) => edges.map(
  * requires:
  * { subject, layout, displayEdges } props
  */
+export const getEdges = createDeepEqualSelector(
+  getNetworkEdges,
+  getDisplayEdges,
+  (edges, displayEdges) => edges.filter(
+    (edge) => displayEdges.includes(edge.type),
+  ),
+);
+
+/**
+ * Selector for edges.
+ *
+ * requires:
+ * { subject, layout, displayEdges } props
+ */
+// TODO: makeGetDisplayEdgeCoords
 export const makeGetDisplayEdges = () => {
   const getPlacedNodes = makeGetPlacedNodes();
 

@@ -9,10 +9,10 @@ import { LayoutProvider } from '../../contexts/LayoutContext';
 import Canvas from '../../components/Canvas/Canvas';
 import NodeBucket from '../Canvas/NodeBucket';
 import NodeLayout from '../Canvas/NodeLayout';
-import EdgeLayout from '../../components/Canvas/EdgeLayout';
+import EdgeLayout from '../../components/RealtimeCanvas/EdgeLayout';
 import Background from '../Canvas/Background';
 import { actionCreators as resetActions } from '../../ducks/modules/reset';
-import { makeGetDisplayEdges, makeGetNextUnplacedNode, makeGetPlacedNodes } from '../../selectors/canvas';
+import { getEdges, makeGetNextUnplacedNode, makeGetPlacedNodes } from '../../selectors/canvas';
 import CollapsablePrompts from '../../components/CollapsablePrompts';
 
 const withResetInterfaceHandler = withHandlers({
@@ -124,12 +124,12 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const makeMapStateToProps = () => {
-  const getDisplayEdges = makeGetDisplayEdges();
+  // const getDisplayEdges = makeGetDisplayEdges();
   const getPlacedNodes = makeGetPlacedNodes();
   const getNextUnplacedNode = makeGetNextUnplacedNode();
 
   const mapStateToProps = (state, ownProps) => ({
-    edges: getDisplayEdges(state, ownProps),
+    edges: getEdges(state, ownProps),
     nodes: getPlacedNodes(state, ownProps),
     nextUnplacedNode: getNextUnplacedNode(state, ownProps),
   });

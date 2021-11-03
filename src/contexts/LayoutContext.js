@@ -1,4 +1,9 @@
-import React, { useRef, useCallback, useMemo, useEffect } from 'react';
+import React, {
+  useRef,
+  useCallback,
+  useMemo,
+  useEffect,
+} from 'react';
 import useForceSimulation from '../hooks/useForceSimulation';
 import useViewport from '../components/RealtimeCanvas/useViewport';
 
@@ -12,17 +17,18 @@ export const LayoutProvider = ({
   edges,
   layout = DEFAULT_LAYOUT,
 }) => {
-  const state = useRef({ nodes: [], edges: [] });
+  // const state = useRef({ nodes: [], edges: [] });
 
   const handleSimulationMessage = ({ data }) => {
-    for (let index = 0; index < state.current.nodes.length; index += 1) {
-      state.current.nodes[index].position = data[index];
-    }
+    // console.log('handle sim data', { data });
+    // for (let index = 0; index < state.current.nodes.length; index += 1) {
+    //   state.current.nodes[index].position = data[index];
+    // }
 
-    for (let index = 0; index < state.current.edges.length; index += 1) {
-      // state.current.edges[index].start = state.current.nodes[startIndex].position;
-      // state.current.edges[index].end = state.current.nodes[endIndex].position;
-    }
+    // for (let index = 0; index < state.current.edges.length; index += 1) {
+    //   // state.current.edges[index].start = state.current.nodes[startIndex].position;
+    //   // state.current.edges[index].end = state.current.nodes[endIndex].position;
+    // }
   };
 
   const [
@@ -39,7 +45,8 @@ export const LayoutProvider = ({
     zoomViewport,
     calculateLayoutCoords,
     calculateRelativeCoords,
-    calculateScreenCoords,
+    calculateViewportRelativeCoords,
+    calculateViewportScreenCoords,
     measureCanvas,
   ] = useViewport();
 
@@ -54,7 +61,30 @@ export const LayoutProvider = ({
     updateNode(newPosition, id);
   }, [updateNode]);
 
-  const value = useMemo(() => ({
+  // const value = useMemo(() => ({
+  //   forceSimulation: {
+  //     simulation: forceSimulation,
+  //     isRunning,
+  //     start,
+  //     stop,
+  //     updateNodeByDelta,
+  //     // TODO: updateNode() accounting for viewport?
+  //   },
+  //   viewport: {
+  //     moveViewport,
+  //     zoomViewport,
+  //     calculateLayoutCoords,
+  //     calculateRelativeCoords,
+  //     calculateViewportRelativeCoords,
+  //     calculateViewportScreenCoords,
+  //     measureCanvas,
+  //   },
+  //   nodes,
+  //   edges,
+  //   layout,
+  // }), [layout, nodes, edges]);
+
+  const value = {
     forceSimulation: {
       simulation: forceSimulation,
       isRunning,
@@ -68,22 +98,35 @@ export const LayoutProvider = ({
       zoomViewport,
       calculateLayoutCoords,
       calculateRelativeCoords,
-      calculateScreenCoords,
+      calculateViewportRelativeCoords,
+      calculateViewportScreenCoords,
       measureCanvas,
     },
-    state,
+    nodes,
+    edges,
     layout,
-  }), [layout]);
+  };
 
   useEffect(() => {
     const simulationNodes = nodes.map(
       ({ attributes }) => calculateLayoutCoords(attributes[layout]),
     );
 
-    state.current.nodes = nodes.map((node) => ({ data: node }));
-    state.current.edges = edges.map((edge) => ({ data: edge }));
+    const nodeIdMap = nodes.reduce(
+      (memo, { _uid }, index) => ({
+        ...memo,
+        [_uid]: index,
+      }),
+      {},
+    );
 
-    start({ nodes: simulationNodes });
+    const simulationLinks = edges.map(
+      ({ from, to }) => ({ source: nodeIdMap[from], target: nodeIdMap[to] }),
+    );
+
+    debugger;
+
+    start({ nodes: simulationNodes, links: simulationLinks });
   }, [nodes, edges, layout]);
 
   return (

@@ -20,6 +20,7 @@ onmessage = function ({ data }) {
           links,
         },
       } = data;
+
       startLinks = links;
 
       console.debug('worker:initialize');
