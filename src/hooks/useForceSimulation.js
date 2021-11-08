@@ -41,14 +41,14 @@ const useForceSimulation = (listener = () => {}) => {
     });
 
     setIsRunning(true);
-  });
+  }, [setIsRunning]);
 
   const stop = useCallback(() => {
     if (!worker.current) { return; }
     worker.current.postMessage({ type: 'stop' });
     worker.current = null;
     setIsRunning(false);
-  });
+  }, [setIsRunning]);
 
   const update = useCallback((network) => {
     if (!worker.current) { return; }
@@ -62,7 +62,7 @@ const useForceSimulation = (listener = () => {}) => {
       type: 'update',
       network: state.current,
     });
-  });
+  }, []);
 
   const updateNode = useCallback((node, index) => {
     if (!worker.current) { return; }
@@ -72,7 +72,7 @@ const useForceSimulation = (listener = () => {}) => {
       node,
       index,
     });
-  });
+  }, []);
 
   return [state, isRunning, start, stop, updateNode, update];
 };

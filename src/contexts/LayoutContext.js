@@ -42,57 +42,44 @@ export const LayoutProvider = ({
 
   const [
     viewportState,
+    initializeViewport,
     moveViewport,
     zoomViewport,
     calculateLayoutCoords,
     calculateRelativeCoords,
     calculateViewportRelativeCoords,
     calculateViewportScreenCoords,
-    measureCanvas,
   ] = useViewport();
 
-  const updateNodeByDelta = useCallback((delta, id) => {
+  const moveNode = useCallback((delta, id) => {
     const position = forceSimulation.current.nodes[id];
 
-    const newPosition = {
-      y: position.y + (delta.dy / viewportState.current.zoom),
-      x: position.x + (delta.dx / viewportState.current.zoom),
+    // const newPosition = {
+    //   y: position.y + (delta.dy / viewportState.current.zoom),
+    //   x: position.x + (delta.dx / viewportState.current.zoom),
+    //   dy: 0,
+    //   dx: 0,
+    // };
+
+    const newDelta = {
+      // fy: (delta.dy / viewportState.current.zoom),
+      // fx: (delta.dx / viewportState.current.zoom),
+      fy: position.y + (delta.dy / viewportState.current.zoom),
+      fx: position.x + (delta.dx / viewportState.current.zoom),
     };
 
-    updateNode(newPosition, id);
+    updateNode(newDelta, id);
   }, [updateNode]);
 
-  // const value = useMemo(() => ({
-  //   forceSimulation: {
-  //     simulation: forceSimulation,
-  //     isRunning,
-  //     start,
-  //     stop,
-  //     updateNodeByDelta,
-  //     // TODO: updateNode() accounting for viewport?
-  //   },
-  //   viewport: {
-  //     moveViewport,
-  //     zoomViewport,
-  //     calculateLayoutCoords,
-  //     calculateRelativeCoords,
-  //     calculateViewportRelativeCoords,
-  //     calculateViewportScreenCoords,
-  //     measureCanvas,
-  //   },
-  //   nodes,
-  //   edges,
-  //   layout,
-  // }), [layout, nodes, edges]);
+  const releaseNode = useCallback((id) => {
+    updateNode({ fx: null, fy: null }, id);
+  }, [updateNode]);
 
   const value = {
-    forceSimulation: {
-      simulation: forceSimulation,
-      isRunning,
-      start,
-      stop,
-      updateNodeByDelta,
-      // TODO: updateNode() accounting for viewport?
+    network: {
+      nodes,
+      edges,
+      layout,
     },
     viewport: {
       moveViewport,
@@ -101,11 +88,17 @@ export const LayoutProvider = ({
       calculateRelativeCoords,
       calculateViewportRelativeCoords,
       calculateViewportScreenCoords,
-      measureCanvas,
+      initializeViewport,
     },
-    nodes,
-    edges,
-    layout,
+    simulation: {
+      simulation: forceSimulation,
+      isRunning,
+      start,
+      stop,
+      moveNode,
+      releaseNode,
+      // TODO: updateNode() accounting for viewport?
+    },
   };
 
   useEffect(() => {

@@ -9,15 +9,15 @@ const viewBoxScale = 100;
 const EdgeLayout = () => {
   const lines = useRef();
   const svg = useRef();
-  const { forceSimulation, viewport, edges } = useContext(LayoutContext);
+  const { network: { edges }, viewport, simulation: { simulation } } = useContext(LayoutContext);
   const timer = useRef();
 
   const update = useRef(() => {
     // debugger;
-    if (forceSimulation.simulation.current.links) {
-      forceSimulation.simulation.current.links.forEach((link, index) => {
-        const from = forceSimulation.simulation.current.nodes[link.source];
-        const to = forceSimulation.simulation.current.nodes[link.target];
+    if (simulation.current.links) {
+      simulation.current.links.forEach((link, index) => {
+        const from = simulation.current.nodes[link.source];
+        const to = simulation.current.nodes[link.target];
 
         const fromNodeScreenPosition = viewport.calculateViewportRelativeCoords(
           viewport.calculateRelativeCoords(from),

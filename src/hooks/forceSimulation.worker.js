@@ -2,12 +2,12 @@ import {
   forceSimulation,
   forceX,
   forceY,
+  forceCollide,
   forceManyBody,
   forceLink,
 } from 'd3-force';
 
 let simulation;
-let startLinks;
 
 console.log('new force simulation worker!');
 
@@ -21,12 +21,15 @@ onmessage = function ({ data }) {
         },
       } = data;
 
-      startLinks = links;
+      console.log(links);
 
       console.debug('worker:initialize');
       simulation = forceSimulation(nodes)
-        .force('charge', forceManyBody())
-        .force('link', forceLink(links).distance(10).strength(1))
+        // .alphaTarget(0.3) // stay hot
+        .velocityDecay(0.1) // low friction
+        .force('charge', forceManyBody().strength(-60))
+        // .force('collide', forceCollide().radius(50).iterations(3))
+        .force('links', forceLink(links))
         .force('x', forceX())
         .force('y', forceY());
 
@@ -62,9 +65,14 @@ onmessage = function ({ data }) {
       } = data;
 
       simulation
-        .nodes(nodes)
-        .alpha(1)
-        .force('link', forceLink(links).distance(10).strength(1))
+        .nodes(nodes);
+
+      simulation
+        .force('links')
+        .links(links);
+
+      simulation
+        .alpha(0.3)
         .restart();
       break;
     }
@@ -73,18 +81,22 @@ onmessage = function ({ data }) {
 
       const nodes = simulation.nodes().map((node, index) => {
         if (index !== data.index) { return node; }
-        return {
+
+        const newNode = {
           ...node,
           ...data.node,
         };
+
+        // console.log('updatenode', JSON.stringify({ node, data, newNode }));
+
+        return newNode;
       });
 
-      console.log('update node');
+      simulation
+        .nodes(nodes);
 
       simulation
-        .nodes(nodes)
-        .alpha(1)
-        // .force('link', forceLink(startLinks).distance(10).strength(1))
+        .alpha(0.3)
         .restart();
       break;
     }

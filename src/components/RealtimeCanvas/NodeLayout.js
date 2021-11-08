@@ -21,8 +21,12 @@ const NodeLayout = React.forwardRef(({
 }, oref) => {
   const ref = useRef();
   const layoutNodes = useRef([]);
-  const { forceSimulation, viewport, nodes } = useContext(LayoutContext);
-  const [getDelta, handleDragStart, handleDragMove, handleDragEnd] = useDrag();
+  const {
+    network: { nodes },
+    viewport,
+    simulation: { simulation, moveNode, releaseNode, },
+  } = useContext(LayoutContext);
+  const drag = useDrag();
 
   const handleClick = (e, index) => {
     onSelected(nodes[index]);
@@ -30,20 +34,27 @@ const NodeLayout = React.forwardRef(({
 
   const timer = useRef();
 
+  const handleDragEnd = (e) => {
+    if (drag.state.current.id) {
+      releaseNode(drag.state.current.id);
+    }
+    drag.handleDragEnd(e);
+  };
+
   const update = useRef(() => {
     const {
       hasMoved,
       id,
       dy,
       dx,
-    } = getDelta();
+    } = drag.getDelta();
 
     if (id && hasMoved) {
-      forceSimulation.updateNodeByDelta({ dy, dx }, id);
+      moveNode({ dy, dx }, id);
     }
 
-    if (forceSimulation.simulation.current.nodes) {
-      forceSimulation.simulation.current.nodes.forEach((position, index) => {
+    if (simulation.current.nodes) {
+      simulation.current.nodes.forEach((position, index) => {
         const screenPosition = viewport.calculateViewportScreenCoords(
           viewport.calculateRelativeCoords(position),
         );
@@ -55,8 +66,8 @@ const NodeLayout = React.forwardRef(({
 
     // debugger;
 
-    // timer.current = requestAnimationFrame(() => update.current());
-    timer.current = setTimeout(() => update.current(), 100);
+    timer.current = requestAnimationFrame(() => update.current());
+    // timer.current = setTimeout(() => update.current(), 100);
   });
 
   useEffect(() => {
@@ -71,7 +82,7 @@ const NodeLayout = React.forwardRef(({
 
     ref.current.appendChild(container);
 
-    viewport.measureCanvas(container);
+    viewport.initializeViewport(container);
 
     return () => {
       debugger;
@@ -101,25 +112,25 @@ const NodeLayout = React.forwardRef(({
     els.forEach((el, index) => {
       container.appendChild(el);
 
-      el.addEventListener('mousedown', (e) => handleDragStart(e, index));
+      el.addEventListener('mousedown', (e) => drag.handleDragStart(e, index));
       el.addEventListener('click', (e) => handleClick(e, index));
     });
 
-    window.addEventListener('mousemove', handleDragMove);
+    window.addEventListener('mousemove', drag.handleDragMove);
     window.addEventListener('mouseup', handleDragEnd);
 
-    // timer.current = requestAnimationFrame(() => update.current());
-    timer.current = setTimeout(() => update.current(), 100);
+    timer.current = requestAnimationFrame(() => update.current());
+    // timer.current = setTimeout(() => update.current(), 100);
 
     return () => {
       // debugger;
       els.forEach((el) => container.removeChild(el));
 
-      window.removeEventListener('mousemove', handleDragMove);
+      window.removeEventListener('mousemove', drag.handleDragMove);
       window.removeEventListener('mouseup', handleDragEnd);
 
-      // cancelAnimationFrame(timer.current);
-      clearTimeout(timer.current);
+      cancelAnimationFrame(timer.current);
+      // clearTimeout(timer.current);
     };
   }, [nodes]);
 

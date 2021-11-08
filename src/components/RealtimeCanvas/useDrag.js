@@ -91,7 +91,13 @@ const useDrag = () => {
     return delta;
   });
 
-  return [getDelta, handleDragStart, handleDragMove, handleDragEnd];
+  return {
+    state,
+    getDelta,
+    handleDragStart,
+    handleDragMove,
+    handleDragEnd,
+  };
 };
 
 export default useDrag;
