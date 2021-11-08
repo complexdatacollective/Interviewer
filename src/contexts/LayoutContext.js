@@ -19,8 +19,8 @@ export const LayoutProvider = ({
 }) => {
   // const state = useRef({ nodes: [], edges: [] });
 
-  const handleSimulationMessage = ({ data }) => {
-    // console.log('handle sim data', { data });
+  const handleSimulationMessage = ({ type, data }) => {
+    // console.log('handle sim data', { data }); // auto zoom?
     // for (let index = 0; index < state.current.nodes.length; index += 1) {
     //   state.current.nodes[index].position = data[index];
     // }
@@ -54,21 +54,12 @@ export const LayoutProvider = ({
   const moveNode = useCallback((delta, id) => {
     const position = forceSimulation.current.nodes[id];
 
-    // const newPosition = {
-    //   y: position.y + (delta.dy / viewportState.current.zoom),
-    //   x: position.x + (delta.dx / viewportState.current.zoom),
-    //   dy: 0,
-    //   dx: 0,
-    // };
-
-    const newDelta = {
-      // fy: (delta.dy / viewportState.current.zoom),
-      // fx: (delta.dx / viewportState.current.zoom),
+    const nodeAttributes = {
       fy: position.y + (delta.dy / viewportState.current.zoom),
       fx: position.x + (delta.dx / viewportState.current.zoom),
     };
 
-    updateNode(newDelta, id);
+    updateNode(nodeAttributes, id);
   }, [updateNode]);
 
   const releaseNode = useCallback((id) => {
@@ -97,7 +88,6 @@ export const LayoutProvider = ({
       stop,
       moveNode,
       releaseNode,
-      // TODO: updateNode() accounting for viewport?
     },
   };
 
@@ -122,7 +112,6 @@ export const LayoutProvider = ({
   }, []);
 
   useEffect(() => {
-    debugger;
     const simulationNodes = nodes.map(
       ({ attributes }) => calculateLayoutCoords(attributes[layout]),
     );
@@ -131,8 +120,6 @@ export const LayoutProvider = ({
   }, [nodes, layout]);
 
   useEffect(() => {
-    debugger;
-
     const nodeIdMap = nodes.reduce(
       (memo, { _uid }, index) => ({
         ...memo,
@@ -144,8 +131,6 @@ export const LayoutProvider = ({
     const simulationLinks = edges.map(
       ({ from, to }) => ({ source: nodeIdMap[from], target: nodeIdMap[to] }),
     );
-
-    // debugger;
 
     update({ links: simulationLinks });
   }, [nodes, edges]);

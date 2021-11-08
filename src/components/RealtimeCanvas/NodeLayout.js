@@ -3,13 +3,10 @@ import PropTypes from 'prop-types';
 import LayoutContext from '../../contexts/LayoutContext';
 import useDrag from './useDrag';
 import LayoutNode from './LayoutNode';
-// import getAbsoluteBoundingRect from '../../utils/getAbsoluteBoundingRect';
 
 const LABEL = '0e75ec18-2cb1-4606-9f18-034d28b07c19';
-const LAYOUT = 'd13ca72d-aefe-4f48-841d-09f020e0e988';
 
 const NodeLayout = React.forwardRef(({
-  // nodes,
   // allowPositioning,
   // highlightAttribute,
   // connectFrom,
@@ -24,7 +21,7 @@ const NodeLayout = React.forwardRef(({
   const {
     network: { nodes },
     viewport,
-    simulation: { simulation, moveNode, releaseNode, },
+    simulation: { simulation, moveNode, releaseNode },
   } = useContext(LayoutContext);
   const drag = useDrag();
 
@@ -32,14 +29,14 @@ const NodeLayout = React.forwardRef(({
     onSelected(nodes[index]);
   };
 
-  const timer = useRef();
-
   const handleDragEnd = (e) => {
     if (drag.state.current.id) {
       releaseNode(drag.state.current.id);
     }
     drag.handleDragEnd(e);
   };
+
+  const timer = useRef();
 
   const update = useRef(() => {
     const {
@@ -64,16 +61,11 @@ const NodeLayout = React.forwardRef(({
       });
     }
 
-    // debugger;
-
     timer.current = requestAnimationFrame(() => update.current());
-    // timer.current = setTimeout(() => update.current(), 100);
   });
 
   useEffect(() => {
     if (!ref.current) { return () => {}; }
-
-    // debugger;
 
     const container = document.createElement('div');
     container.className = 'nodes-layout';
@@ -85,16 +77,12 @@ const NodeLayout = React.forwardRef(({
     viewport.initializeViewport(container);
 
     return () => {
-      debugger;
       ref.current.removeChild(container);
     };
   }, []);
 
   useEffect(() => {
-    // if (!ref.current) { return () => cancelAnimationFrame(timer.current); }
     if (!ref.current) { return () => clearTimeout(timer.current); }
-
-    // debugger;
 
     const container = document.getElementById('nodes_layout');
 
@@ -112,7 +100,10 @@ const NodeLayout = React.forwardRef(({
     els.forEach((el, index) => {
       container.appendChild(el);
 
-      el.addEventListener('mousedown', (e) => drag.handleDragStart(e, index));
+      el.addEventListener('mousedown', (e) => {
+        drag.handleDragStart(e, index);
+        e.stopPropagation();
+      });
       el.addEventListener('click', (e) => handleClick(e, index));
     });
 
@@ -120,17 +111,14 @@ const NodeLayout = React.forwardRef(({
     window.addEventListener('mouseup', handleDragEnd);
 
     timer.current = requestAnimationFrame(() => update.current());
-    // timer.current = setTimeout(() => update.current(), 100);
 
     return () => {
-      // debugger;
       els.forEach((el) => container.removeChild(el));
 
       window.removeEventListener('mousemove', drag.handleDragMove);
       window.removeEventListener('mouseup', handleDragEnd);
 
       cancelAnimationFrame(timer.current);
-      // clearTimeout(timer.current);
     };
   }, [nodes]);
 
@@ -151,7 +139,6 @@ const NodeLayout = React.forwardRef(({
 });
 
 NodeLayout.propTypes = {
-  nodes: PropTypes.array.isRequired,
   onSelected: PropTypes.func.isRequired,
   allowPositioning: PropTypes.bool.isRequired,
   allowSelect: PropTypes.bool,
