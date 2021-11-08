@@ -20,7 +20,11 @@ export const LayoutProvider = ({
   // const state = useRef({ nodes: [], edges: [] });
 
   const handleSimulationMessage = ({ type, data }) => {
-    // console.log('handle sim data', { data }); // auto zoom?
+    switch (type) {
+      case 'end':
+        console.log('handle sim data', { type, data }); // auto zoom?
+      default:
+    }
     // for (let index = 0; index < state.current.nodes.length; index += 1) {
     //   state.current.nodes[index].position = data[index];
     // }
@@ -116,6 +120,8 @@ export const LayoutProvider = ({
       ({ attributes }) => calculateLayoutCoords(attributes[layout]),
     );
 
+    console.debug('update sim nodes');
+
     update({ nodes: simulationNodes });
   }, [nodes, layout]);
 
@@ -131,6 +137,8 @@ export const LayoutProvider = ({
     const simulationLinks = edges.map(
       ({ from, to }) => ({ source: nodeIdMap[from], target: nodeIdMap[to] }),
     );
+
+    console.debug('update sim links');
 
     update({ links: simulationLinks });
   }, [nodes, edges]);

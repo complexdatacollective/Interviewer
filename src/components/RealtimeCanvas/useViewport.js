@@ -1,4 +1,5 @@
 import { useRef, useCallback } from 'react';
+import { clamp } from 'lodash';
 import getAbsoluteBoundingRect from '../../utils/getAbsoluteBoundingRect';
 
 // -1000 - 1000 space, 0,0 center
@@ -36,8 +37,8 @@ const useViewport = () => {
 
   // Convert pixel coordinates into relative coordinates (0-1)
   const calculateRelativeCoords = useCallback(({ x, y }) => ({
-    x: (x / LAYOUT_SPACE) + 0.5,
-    y: (y / LAYOUT_SPACE) + 0.5,
+    x: clamp((x / LAYOUT_SPACE) + 0.5, 0 , 1),
+    y: clamp((y / LAYOUT_SPACE) + 0.5, 0 , 1),
   }), []);
 
   // Calculate relative position accounting for viewport
@@ -45,8 +46,8 @@ const useViewport = () => {
     const { center, zoom } = state.current;
 
     return {
-      x: (((x - center.x) * zoom) + 0.5),
-      y: (((y - center.y) * zoom) + 0.5),
+      x: clamp(((x - center.x) * zoom) + 0.5, 0, 1),
+      y: clamp(((y - center.y) * zoom) + 0.5, 0, 1),
     };
   }, []);
 

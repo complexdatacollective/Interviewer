@@ -1,5 +1,7 @@
 import React, { useRef, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import LayoutContext from '../../contexts/LayoutContext';
 import useDrag from './useDrag';
 import LayoutNode from './LayoutNode';
@@ -16,14 +18,35 @@ const NodeLayout = React.forwardRef(({
   // width,
   // height,
 }, oref) => {
-  const ref = useRef();
-  const layoutNodes = useRef([]);
   const {
-    network: { nodes },
+    network: { nodes, layout },
     viewport,
-    simulation: { simulation, moveNode, releaseNode },
+    simulation: {
+      simulation,
+      moveNode,
+      isRunning,
+      releaseNode,
+    },
   } = useContext(LayoutContext);
   const drag = useDrag();
+  const ref = useRef();
+  const timer = useRef();
+  const layoutNodes = useRef([]);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (isRunning || !simulation.current) { return; }
+    nodes.forEach((node, index) => {
+      const { x, y } = simulation.current.nodes[index];
+      const nodePosition = viewport.calculateRelativeCoords({ x, y });
+      const newAttributes = { [layout]: nodePosition };
+      const updateNodeAction = sessionsActions.updateNode(node._uid, undefined, newAttributes);
+      console.debug(updateNodeAction);
+      dispatch(updateNodeAction);
+    });
+    //
+  }, [layout, nodes, isRunning]);
 
   const handleClick = (e, index) => {
     onSelected(nodes[index]);
@@ -35,8 +58,6 @@ const NodeLayout = React.forwardRef(({
     }
     drag.handleDragEnd(e);
   };
-
-  const timer = useRef();
 
   const update = useRef(() => {
     const {

@@ -11,7 +11,6 @@ const useForceSimulation = (listener = () => {}) => {
   const [isRunning, setIsRunning] = useState(false);
 
   const start = useCallback(({ nodes = [], links = [] }) => {
-    console.log('intialize worker');
     worker.current = new ForceSimulationWorker();
 
     state.current = {
@@ -22,10 +21,12 @@ const useForceSimulation = (listener = () => {}) => {
     worker.current.onmessage = (event) => {
       switch (event.data.type) {
         case 'tick':
+          setIsRunning(true);
           state.current.nodes = event.data.nodes;
           listener({ type: 'tick', data: event.data.nodes });
           break;
         case 'end':
+          listener({ type: 'end', data: event.data.nodes });
           setIsRunning(false);
           break;
         default:

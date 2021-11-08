@@ -3,6 +3,7 @@ import {
   forceX,
   forceY,
   forceCollide,
+  forceCenter,
   forceManyBody,
   forceLink,
 } from 'd3-force';
@@ -21,17 +22,16 @@ onmessage = function ({ data }) {
         },
       } = data;
 
-      console.log(links);
-
       console.debug('worker:initialize');
       simulation = forceSimulation(nodes)
         // .alphaTarget(0.3) // stay hot
         .velocityDecay(0.1) // low friction
-        .force('charge', forceManyBody().strength(-60))
+        .force('charge', forceManyBody())
         // .force('collide', forceCollide().radius(50).iterations(3))
         .force('links', forceLink(links))
         .force('x', forceX())
         .force('y', forceY());
+        // .force('center', forceCenter());
 
       simulation.on('tick', () => {
         console.debug('worker:tick');
@@ -86,8 +86,6 @@ onmessage = function ({ data }) {
           ...node,
           ...data.node,
         };
-
-        // console.log('updatenode', JSON.stringify({ node, data, newNode }));
 
         return newNode;
       });
