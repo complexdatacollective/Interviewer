@@ -104,7 +104,7 @@ const NodeLayout = React.forwardRef(({
       });
     }
 
-    // timer.current = requestAnimationFrame(() => update.current());
+    timer.current = requestAnimationFrame(() => update.current());
   });
 
   useEffect(() => {

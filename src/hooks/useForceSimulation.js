@@ -2,6 +2,7 @@ import {
   useRef,
   useCallback,
   useState,
+  useEffect,
 } from 'react';
 import ForceSimulationWorker from './forceSimulation.worker';
 import useViewport from './useViewport';
@@ -15,8 +16,13 @@ const useForceSimulation = (listener = () => {}) => {
     calculateRelativeCoords,
   ] = useViewport();
   const worker = useRef(null);
+  const simNodes = useRef(null);
   const state = useRef(null);
   const [isRunning, setIsRunning] = useState(false);
+
+  const recalculate = useCallback(() => {
+    state.current.nodes = simNodes.current.map(calculateRelativeCoords);
+  }, []);
 
   const initialize = useCallback(({ nodes = [], links = [] }) => {
     worker.current = new ForceSimulationWorker();
@@ -26,32 +32,34 @@ const useForceSimulation = (listener = () => {}) => {
       nodes,
     };
 
-    console.log(1, state.current);
-
     worker.current.onmessage = (event) => {
       switch (event.data.type) {
         case 'tick': {
           setIsRunning(true);
           const protocolNodes = event.data.nodes.map(calculateRelativeCoords);
-          console.log(3, protocolNodes);
+          simNodes.current = event.data.nodes;
           state.current.nodes = protocolNodes;
           listener({ type: 'tick', data: protocolNodes });
           break;
         }
-        case 'end':
-          listener({ type: 'end', data: event.data.nodes.map(calculateRelativeCoords) });
+        case 'end': {
+          const protocolNodes = event.data.nodes.map(calculateRelativeCoords);
+          simNodes.current = event.data.nodes;
+          state.current.nodes = protocolNodes;
+          listener({ type: 'end', data: protocolNodes });
           setIsRunning(false);
           break;
+        }
         default:
       }
     };
 
-    const simNodes = nodes.map(calculateLayoutCoords);
+    simNodes.current = nodes.map(calculateLayoutCoords);
 
     worker.current.postMessage({
       type: 'initialize',
       network: {
-        nodes: simNodes,
+        nodes: simNodes.current,
         links,
       },
     });
@@ -86,8 +94,6 @@ const useForceSimulation = (listener = () => {}) => {
       ...(network.nodes && { nodes: network.nodes.map(calculateLayoutCoords) }),
     };
 
-    console.log(2, state.current, simNetwork);
-
     worker.current.postMessage({
       type: 'update',
       network: simNetwork,
@@ -105,7 +111,7 @@ const useForceSimulation = (listener = () => {}) => {
   }, []);
 
   const moveNode = useCallback(({ dy, dx }, nodeIndex) => {
-    const position = state.current.nodes[nodeIndex];
+    const position = state.current.nodes[nodeIndex]; // ?? simNodes?
 
     // TODO: provide as decimal delta?
     const nodeAttributes = {
@@ -122,8 +128,14 @@ const useForceSimulation = (listener = () => {}) => {
 
   return {
     viewport: {
-      moveViewport,
-      zoomViewport,
+      moveViewport: (...args) => {
+        moveViewport(...args);
+        recalculate();
+      },
+      zoomViewport: (...args) => {
+        zoomViewport(...args);
+        recalculate();
+      },
     },
     state,
     isRunning,
