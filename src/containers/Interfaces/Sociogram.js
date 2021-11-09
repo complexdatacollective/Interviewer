@@ -81,9 +81,9 @@ const Sociogram = (props) => {
               skewedTowardCenter={skewedTowardCenter}
               image={backgroundImage}
             />
-            <EdgeLayout
+            {/* <EdgeLayout
               edges={edges}
-            />
+            /> */}
             <NodeLayout
               nodes={nodes}
               id="NODE_LAYOUT"

@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import LayoutContext from '../../contexts/LayoutContext';
 import useDrag from './useDrag';
+import useScreen from './useScreen';
 import LayoutNode from './LayoutNode';
 
 const LABEL = '0e75ec18-2cb1-4606-9f18-034d28b07c19';
@@ -23,11 +24,14 @@ const NodeLayout = React.forwardRef(({
     viewport,
     simulation: {
       simulation,
+      start,
       moveNode,
       isRunning,
       releaseNode,
     },
   } = useContext(LayoutContext);
+
+  const screen = useScreen();
   const drag = useDrag();
   const ref = useRef();
   const timer = useRef();
@@ -59,6 +63,24 @@ const NodeLayout = React.forwardRef(({
     drag.handleDragEnd(e);
   };
 
+  useEffect(() => {
+    if (!ref.current) { return () => {}; }
+
+    const container = document.createElement('div');
+    container.className = 'nodes-layout';
+    container.setAttribute('id', 'nodes_layout');
+    container.setAttribute('style', 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 200;');
+
+    ref.current.appendChild(container);
+
+    screen.initialize(container);
+    start();
+
+    return () => {
+      ref.current.removeChild(container);
+    };
+  }, []);
+
   const update = useRef(() => {
     const {
       hasMoved,
@@ -73,34 +95,17 @@ const NodeLayout = React.forwardRef(({
 
     if (simulation.current.nodes) {
       simulation.current.nodes.forEach((position, index) => {
-        const screenPosition = viewport.calculateViewportScreenCoords(
-          viewport.calculateRelativeCoords(position),
-        );
+        const screenPosition = screen.calculateScreenCoords(position);
+
+        // console.log(position, screenPosition);
 
         layoutNodes.current[index].el.style.left = `${screenPosition.x}px`;
         layoutNodes.current[index].el.style.top = `${screenPosition.y}px`;
       });
     }
 
-    timer.current = requestAnimationFrame(() => update.current());
+    // timer.current = requestAnimationFrame(() => update.current());
   });
-
-  useEffect(() => {
-    if (!ref.current) { return () => {}; }
-
-    const container = document.createElement('div');
-    container.className = 'nodes-layout';
-    container.setAttribute('id', 'nodes_layout');
-    container.setAttribute('style', 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 200;');
-
-    ref.current.appendChild(container);
-
-    viewport.initializeViewport(container);
-
-    return () => {
-      ref.current.removeChild(container);
-    };
-  }, []);
 
   useEffect(() => {
     if (!ref.current) { return () => clearTimeout(timer.current); }

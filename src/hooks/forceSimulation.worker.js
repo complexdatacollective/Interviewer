@@ -27,10 +27,11 @@ onmessage = function ({ data }) {
         // .alphaTarget(0.3) // stay hot
         .velocityDecay(0.1) // low friction
         .force('charge', forceManyBody())
-        // .force('collide', forceCollide().radius(50).iterations(3))
+        // .force('collide', forceCollide().radius(50).iterations(2))
         .force('links', forceLink(links))
         .force('x', forceX())
-        .force('y', forceY());
+        .force('y', forceY())
+        .stop();
         // .force('center', forceCenter());
 
       simulation.on('tick', () => {
@@ -71,9 +72,9 @@ onmessage = function ({ data }) {
         .force('links')
         .links(links);
 
-      simulation
-        .alpha(0.3)
-        .restart();
+      // simulation
+      //   .alpha(0.3)
+      //   .restart();
       break;
     }
     case 'update_node': {
@@ -93,9 +94,9 @@ onmessage = function ({ data }) {
       simulation
         .nodes(nodes);
 
-      simulation
-        .alpha(0.3)
-        .restart();
+      // simulation
+      //   .alpha(0.3)
+      //   .restart();
       break;
     }
     default:
