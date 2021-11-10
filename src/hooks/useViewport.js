@@ -1,22 +1,35 @@
 import { useRef, useCallback } from 'react';
 import { clamp } from 'lodash';
 
-const LAYOUT_SPACE = 2000;
+const LAYOUT_SPACE = 1000;
 
 const useViewport = (layoutSpace = LAYOUT_SPACE) => {
   const state = useRef({
     zoom: 1,
-    center: { x: 0.5, y: 0.5 },
+    center: { x: 0, y: 0 },
   });
 
-  const zoomViewport = useCallback((factor = 1.5) => {
+  const zoomViewport = useCallback((factor = 1.5, absolute = false) => {
+    if (absolute) {
+      state.current.zoom = factor;
+      return;
+    }
+
     state.current.zoom *= factor;
   }, []);
 
-  const moveViewport = useCallback((x = 0, y = 0) => {
+  const moveViewport = useCallback((x = 0, y = 0, absolute = false) => {
+    if (absolute) {
+      state.current.center = {
+        x: x * layoutSpace,
+        y: y * layoutSpace,
+      };
+      return;
+    }
+
     state.current.center = {
-      x: state.current.center.x + (x / state.current.zoom),
-      y: state.current.center.y + (y / state.current.zoom),
+      x: state.current.center.x + (x * layoutSpace / state.current.zoom),
+      y: state.current.center.y + (y * layoutSpace / state.current.zoom),
     };
   }, []);
 
@@ -26,8 +39,8 @@ const useViewport = (layoutSpace = LAYOUT_SPACE) => {
     const { center, zoom } = state.current;
 
     return {
-      x: (((x - 0.5) / zoom) + center.x) * layoutSpace,
-      y: (((y - 0.5) / zoom) + center.y) * layoutSpace,
+      x: (((x - 0.5) / zoom) * layoutSpace) + center.x,
+      y: (((y - 0.5) / zoom) * layoutSpace) + center.y,
     };
   }, []);
 
@@ -36,18 +49,18 @@ const useViewport = (layoutSpace = LAYOUT_SPACE) => {
     const { center, zoom } = state.current;
 
     return {
-      x: clamp((((x / layoutSpace) - center.x) * zoom) + 0.5, 0, 1),
-      y: clamp((((y / layoutSpace) - center.y) * zoom) + 0.5, 0, 1),
+      x: clamp((((x - center.x) / layoutSpace) * zoom) + 0.5, 0, 1),
+      y: clamp((((y - center.y) / layoutSpace) * zoom) + 0.5, 0, 1),
     };
   }, []);
 
-  return [
-    state,
+  return {
+    viewport: state,
     moveViewport,
     zoomViewport,
     calculateLayoutCoords,
     calculateRelativeCoords,
-  ];
+  };
 };
 
 export default useViewport;
