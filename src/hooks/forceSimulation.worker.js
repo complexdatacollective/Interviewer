@@ -26,11 +26,11 @@ onmessage = function ({ data }) {
       simulation = forceSimulation(nodes)
         // .alphaTarget(0.3) // stay hot
         .velocityDecay(0.1) // low friction
-        .force('charge', forceManyBody())
+        .force('charge', forceManyBody().strength(-100))
         // .force('collide', forceCollide().radius(50).iterations(2))
         .force('links', forceLink(links))
-        .force('x', forceX()) // 0 as center
-        .force('y', forceY()); // 0 as center
+        .force('x', forceX().strength(0.03)) // 0 as center
+        .force('y', forceY().strength(0.03)); // 0 as center
 
       // do not auto run
       simulation

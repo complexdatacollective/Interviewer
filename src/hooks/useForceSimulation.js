@@ -2,11 +2,12 @@ import {
   useRef,
   useCallback,
   useState,
-  useEffect,
 } from 'react';
 import { get } from 'lodash';
 import ForceSimulationWorker from './forceSimulation.worker';
 import useViewport from './useViewport';
+
+const VIEWPORT_SPACE_PX = 500;
 
 const useForceSimulation = (listener = () => {}) => {
   const {
@@ -15,7 +16,7 @@ const useForceSimulation = (listener = () => {}) => {
     zoomViewport,
     calculateLayoutCoords,
     calculateRelativeCoords,
-  } = useViewport();
+  } = useViewport(VIEWPORT_SPACE_PX);
   const worker = useRef(null);
   const simNetwork = useRef(null);
   const state = useRef(null);
