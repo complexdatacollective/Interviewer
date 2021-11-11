@@ -25,6 +25,7 @@ const NodeLayout = React.forwardRef(({
     simulation: {
       simulation,
       start,
+      stop,
       moveNode,
       isRunning,
       releaseNode,
@@ -41,13 +42,12 @@ const NodeLayout = React.forwardRef(({
 
   useEffect(() => {
     if (isRunning || !simulation.current) { return; }
+
     nodes.forEach((node, index) => {
       const { x, y } = simulation.current.nodes[index];
-      const nodePosition = viewport.calculateRelativeCoords({ x, y });
-      const newAttributes = { [layout]: nodePosition };
-      const updateNodeAction = sessionsActions.updateNode(node._uid, undefined, newAttributes);
-      console.debug(updateNodeAction);
-      dispatch(updateNodeAction);
+      console.log({ x, y });
+      const newAttributes = { [layout]: { x, y } };
+      dispatch(sessionsActions.updateNode(node._uid, undefined, newAttributes));
     });
     //
   }, [layout, nodes, isRunning]);
@@ -74,7 +74,7 @@ const NodeLayout = React.forwardRef(({
     ref.current.appendChild(container);
 
     screen.initialize(container);
-    start();
+    // start();
 
     return () => {
       ref.current.removeChild(container);
@@ -152,6 +152,8 @@ const NodeLayout = React.forwardRef(({
     <>
       <div className="node-layout" ref={ref} />
       <div style={{ position: 'absolute', top: 0, left: 0 }}>
+        <button type="button" onClick={() => start()}>start</button>
+        <button type="button" onClick={() => stop()}>stop</button>
         <button type="button" onClick={() => viewport.zoomViewport(1.5)}>in</button>
         <button type="button" onClick={() => viewport.zoomViewport(0.67)}>out</button>
         <button type="button" onClick={() => viewport.moveViewport(-0.1, 0)}>left</button>

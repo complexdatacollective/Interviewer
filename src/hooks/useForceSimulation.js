@@ -8,13 +8,13 @@ import ForceSimulationWorker from './forceSimulation.worker';
 import useViewport from './useViewport';
 
 const useForceSimulation = (listener = () => {}) => {
-  const [
+  const {
     viewport,
     moveViewport,
     zoomViewport,
     calculateLayoutCoords,
     calculateRelativeCoords,
-  ] = useViewport();
+  } = useViewport();
   const worker = useRef(null);
   const simNodes = useRef(null);
   const state = useRef(null);
@@ -46,6 +46,7 @@ const useForceSimulation = (listener = () => {}) => {
           const protocolNodes = event.data.nodes.map(calculateRelativeCoords);
           simNodes.current = event.data.nodes;
           state.current.nodes = protocolNodes;
+          console.debug('end', simNodes.current, protocolNodes, viewport);
           listener({ type: 'end', data: protocolNodes });
           setIsRunning(false);
           break;
@@ -55,6 +56,8 @@ const useForceSimulation = (listener = () => {}) => {
     };
 
     simNodes.current = nodes.map(calculateLayoutCoords);
+
+    console.debug(nodes.map(calculateLayoutCoords), nodes, simNodes.current);
 
     worker.current.postMessage({
       type: 'initialize',
@@ -70,14 +73,12 @@ const useForceSimulation = (listener = () => {}) => {
   const start = useCallback(() => {
     if (!worker.current) { return; }
     worker.current.postMessage({ type: 'start' });
-    setIsRunning(true);
   }, [setIsRunning]);
 
   const stop = useCallback(() => {
     if (!worker.current) { return; }
     worker.current.postMessage({ type: 'stop' });
     // worker.current = null;
-    setIsRunning(false);
   }, [setIsRunning]);
 
   const updateNetwork = useCallback((network) => {
@@ -111,7 +112,9 @@ const useForceSimulation = (listener = () => {}) => {
   }, []);
 
   const moveNode = useCallback(({ dy, dx }, nodeIndex) => {
-    const position = state.current.nodes[nodeIndex]; // ?? simNodes?
+    const position = simNodes.current[nodeIndex]; // ?? simNodes?
+
+    console.log({ position, dy, dx });
 
     // TODO: provide as decimal delta?
     const nodeAttributes = {

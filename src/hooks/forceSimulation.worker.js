@@ -29,10 +29,13 @@ onmessage = function ({ data }) {
         .force('charge', forceManyBody())
         // .force('collide', forceCollide().radius(50).iterations(2))
         .force('links', forceLink(links))
-        .force('x', forceX())
-        .force('y', forceY())
+        .force('x', forceX()) // 0 as center
+        .force('y', forceY()); // 0 as center
+
+      // do not auto run
+      simulation
+        .alpha(0)
         .stop();
-        // .force('center', forceCenter());
 
       simulation.on('tick', () => {
         console.debug('worker:tick');
@@ -53,7 +56,16 @@ onmessage = function ({ data }) {
     }
     case 'stop': {
       if (!simulation) { return; }
+      console.debug('worker:stop');
       simulation.stop();
+      break;
+    }
+    case 'start': {
+      if (!simulation) { return; }
+      console.debug('worker:start');
+      simulation
+        .alpha(1)
+        .restart();
       break;
     }
     case 'update': {
@@ -72,6 +84,7 @@ onmessage = function ({ data }) {
         .force('links')
         .links(links);
 
+      // TODO: don't run this on "first run"?
       // simulation
       //   .alpha(0.3)
       //   .restart();
@@ -94,9 +107,9 @@ onmessage = function ({ data }) {
       simulation
         .nodes(nodes);
 
-      // simulation
-      //   .alpha(0.3)
-      //   .restart();
+      simulation
+        .alpha(0.3)
+        .restart();
       break;
     }
     default:
