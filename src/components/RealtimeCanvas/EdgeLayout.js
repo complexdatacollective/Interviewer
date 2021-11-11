@@ -9,7 +9,7 @@ const viewBoxScale = 100;
 const EdgeLayout = () => {
   const lines = useRef();
   const svg = useRef();
-  const { network: { edges }, viewport, simulation: { simulation } } = useContext(LayoutContext);
+  const { network: { edges }, simulation: { simulation } } = useContext(LayoutContext);
   const timer = useRef();
 
   const update = useRef(() => {
@@ -19,18 +19,10 @@ const EdgeLayout = () => {
         const from = simulation.current.nodes[link.source];
         const to = simulation.current.nodes[link.target];
 
-        const fromNodeScreenPosition = viewport.calculateViewportRelativeCoords(
-          viewport.calculateRelativeCoords(from),
-        );
-
-        const toNodeScreenPosition = viewport.calculateViewportRelativeCoords(
-          viewport.calculateRelativeCoords(to),
-        );
-
-        lines.current[index].el.setAttributeNS(null, 'x1', fromNodeScreenPosition.x * 100);
-        lines.current[index].el.setAttributeNS(null, 'y1', fromNodeScreenPosition.y * 100);
-        lines.current[index].el.setAttributeNS(null, 'x2', toNodeScreenPosition.x * 100);
-        lines.current[index].el.setAttributeNS(null, 'y2', toNodeScreenPosition.y * 100);
+        lines.current[index].el.setAttributeNS(null, 'x1', from.x * 100);
+        lines.current[index].el.setAttributeNS(null, 'y1', from.y * 100);
+        lines.current[index].el.setAttributeNS(null, 'x2', to.x * 100);
+        lines.current[index].el.setAttributeNS(null, 'y2', to.y * 100);
       });
     }
 
