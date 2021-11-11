@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useContext } from 'react';
+import React, { useRef, useEffect, useContext, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
@@ -18,7 +18,7 @@ const NodeLayout = React.forwardRef(({
   // layoutVariable,
   // width,
   // height,
-}, oref) => {
+}, sendRef) => {
   const {
     network: { nodes, layout },
     viewport,
@@ -44,13 +44,14 @@ const NodeLayout = React.forwardRef(({
     if (isRunning || !simulation.current) { return; }
 
     nodes.forEach((node, index) => {
-      const { x, y } = simulation.current.nodes[index];
-      console.log({ x, y });
-      const newAttributes = { [layout]: { x, y } };
+      const position = simulation.current.nodes[index];
+      // if node is not in the simulation let, do not try to update in in the session
+      if (!position) { return; }
+      const newAttributes = { [layout]: position };
       dispatch(sessionsActions.updateNode(node._uid, undefined, newAttributes));
     });
     //
-  }, [layout, nodes, isRunning]);
+  }, [layout, isRunning]);
 
   const handleClick = (e, index) => {
     onSelected(nodes[index]);
@@ -148,9 +149,15 @@ const NodeLayout = React.forwardRef(({
     };
   }, [nodes]);
 
+  const shareRef = useCallback((el) => {
+    if (!el) { return; }
+    sendRef(el);
+    ref.current = el;
+  }, []);
+
   return (
     <>
-      <div className="node-layout" ref={ref} />
+      <div className="node-layout" ref={shareRef} />
       <div style={{ position: 'absolute', top: 0, left: 0 }}>
         <button type="button" onClick={() => start()}>start</button>
         <button type="button" onClick={() => stop()}>stop</button>
@@ -161,7 +168,7 @@ const NodeLayout = React.forwardRef(({
         <button type="button" onClick={() => viewport.moveViewport(0, -0.1)}>up</button>
         <button type="button" onClick={() => viewport.moveViewport(0.1, 0)}>right</button>
       </div>
-      <div ref={oref} />
+      {/* <div ref={oref} /> */}
     </>
   );
 });
