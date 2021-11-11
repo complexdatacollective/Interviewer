@@ -68,10 +68,10 @@ onmessage = function ({ data }) {
         .restart();
       break;
     }
-    case 'update': {
+    case 'update_network': {
       if (!simulation) { return; }
 
-      console.log('update', { data });
+      console.log('update network', { data });
 
       const {
         network: {
@@ -87,10 +87,12 @@ onmessage = function ({ data }) {
         .force('links')
         .links(links);
 
+      if (data.restart) {
       // TODO: don't run this on "first run"?
-      simulation
-        .alpha(0.3)
-        .restart();
+        simulation
+          .alpha(0.3)
+          .restart();
+      }
       break;
     }
     case 'update_node': {

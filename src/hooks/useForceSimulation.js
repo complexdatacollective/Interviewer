@@ -4,6 +4,7 @@ import {
   useState,
   useEffect,
 } from 'react';
+import { get } from 'lodash';
 import ForceSimulationWorker from './forceSimulation.worker';
 import useViewport from './useViewport';
 
@@ -86,6 +87,7 @@ const useForceSimulation = (listener = () => {}) => {
     // worker.current = null;
   }, [setIsRunning]);
 
+  // TODO: separate update nodes and update links?
   const updateNetwork = useCallback((network) => {
     if (!worker.current) { return; }
 
@@ -100,9 +102,15 @@ const useForceSimulation = (listener = () => {}) => {
       ...(network.nodes && { nodes: network.nodes.map(calculateLayoutCoords) }),
     };
 
+    const shouldRestart = (
+      (!!network.nodes && get(network, 'nodes', []).length !== get(simNetwork, 'current.nodes', []).length)
+      || (!!network.links && get(network, 'links', []).length !== get(simNetwork, 'current.links', []).length)
+    );
+
     worker.current.postMessage({
-      type: 'update',
+      type: 'update_network',
       network: newSimNetwork,
+      restart: shouldRestart,
     });
   }, []);
 
