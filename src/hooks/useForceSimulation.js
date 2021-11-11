@@ -107,6 +107,9 @@ const useForceSimulation = (listener = () => {}) => {
       || (!!network.links && get(network, 'links', []).length !== get(simNetwork, 'current.links', []).length)
     );
 
+    simNetwork.current.nodes = newSimNetwork.nodes;
+    simNetwork.current.links = newSimNetwork.links;
+
     worker.current.postMessage({
       type: 'update_network',
       network: newSimNetwork,
