@@ -1,4 +1,10 @@
-import React, { useRef, useEffect, useContext, useCallback } from 'react';
+import React, {
+  useRef,
+  useEffect,
+  useContext,
+  useCallback,
+  useState,
+} from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
@@ -24,11 +30,13 @@ const NodeLayout = React.forwardRef(({
     viewport,
     simulation: {
       simulation,
-      start,
-      stop,
+      refresh,
       moveNode,
       isRunning,
       releaseNode,
+      getPosition,
+      simulationEnabled,
+      toggleSimulation,
     },
   } = useContext(LayoutContext);
 
@@ -44,7 +52,7 @@ const NodeLayout = React.forwardRef(({
     if (isRunning || !simulation.current) { return; }
 
     nodes.forEach((node, index) => {
-      const position = simulation.current.nodes[index];
+      const position = getPosition.current(index); // simulation.current.nodes[index];
       // if node is not in the simulation let, do not try to update in in the session
       if (!position) { return; }
       const newAttributes = { [layout]: position };
@@ -96,9 +104,8 @@ const NodeLayout = React.forwardRef(({
 
     if (simulation.current.nodes) {
       simulation.current.nodes.forEach((position, index) => {
-        const screenPosition = screen.calculateScreenCoords(position);
-
-        // console.log(position, screenPosition);
+        // const screenPosition = screen.calculateScreenCoords(position);
+        const screenPosition = screen.calculateScreenCoords(getPosition.current(index));
 
         layoutNodes.current[index].el.style.left = `${screenPosition.x}px`;
         layoutNodes.current[index].el.style.top = `${screenPosition.y}px`;
@@ -159,16 +166,22 @@ const NodeLayout = React.forwardRef(({
     <>
       <div className="node-layout" ref={shareRef} />
       <div style={{ position: 'absolute', top: 0, left: 0 }}>
-        <button type="button" onClick={() => start()}>start</button>
-        <button type="button" onClick={() => stop()}>stop</button>
-        <button type="button" onClick={() => viewport.zoomViewport(1.5)}>in</button>
-        <button type="button" onClick={() => viewport.zoomViewport(0.67)}>out</button>
-        <button type="button" onClick={() => viewport.moveViewport(-0.1, 0)}>left</button>
-        <button type="button" onClick={() => viewport.moveViewport(0, 0.1)}>down</button>
-        <button type="button" onClick={() => viewport.moveViewport(0, -0.1)}>up</button>
-        <button type="button" onClick={() => viewport.moveViewport(0.1, 0)}>right</button>
+        { !simulationEnabled && (
+          <button type="button" onClick={() => toggleSimulation.current()}>enable simulation</button>
+        )}
+        { simulationEnabled && (
+          <>
+            <button type="button" onClick={() => toggleSimulation.current()}>disable simulation</button>
+            <button type="button" onClick={() => refresh()}>start</button>
+            <button type="button" onClick={() => viewport.zoomViewport(1.5)}>in</button>
+            <button type="button" onClick={() => viewport.zoomViewport(0.67)}>out</button>
+            <button type="button" onClick={() => viewport.moveViewport(-0.1, 0)}>left</button>
+            <button type="button" onClick={() => viewport.moveViewport(0, 0.1)}>down</button>
+            <button type="button" onClick={() => viewport.moveViewport(0, -0.1)}>up</button>
+            <button type="button" onClick={() => viewport.moveViewport(0.1, 0)}>right</button>
+          </>
+        )}
       </div>
-      {/* <div ref={oref} /> */}
     </>
   );
 });
