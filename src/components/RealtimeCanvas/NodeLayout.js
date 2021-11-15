@@ -15,6 +15,20 @@ import LayoutNode from './LayoutNode';
 
 const LABEL = '0e75ec18-2cb1-4606-9f18-034d28b07c19';
 
+const renderNodes = (nodes) => nodes.map((node) => {
+  const { attributes } = node;
+
+  console.log({ attributes });
+
+  const el = LayoutNode(
+    attributes,
+    // color: 'color-neon-coral',
+    // label: a[LABEL],
+  );
+
+  return { el, layout: attributes.layout };
+});
+
 const NodeLayout = React.forwardRef(({
   // allowPositioning,
   // highlightAttribute,
@@ -120,14 +134,7 @@ const NodeLayout = React.forwardRef(({
 
     const container = document.getElementById('nodes_layout');
 
-    layoutNodes.current = nodes.map((n) => {
-      const a = n.attributes;
-
-      return LayoutNode({
-        color: 'color-neon-coral',
-        label: a[LABEL],
-      });
-    });
+    layoutNodes.current = renderNodes(nodes);
 
     const els = layoutNodes.current.map(({ el }) => el);
 
