@@ -1,8 +1,8 @@
 import React, { useRef, useContext, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { thru } from 'lodash';
+import { useSelector } from 'react-redux';
+import { get } from 'lodash';
 import LayoutContext from '../../contexts/LayoutContext';
-import Edge from '../Edge';
+import { getProtocolCodebook } from '../../selectors/protocol';
 
 const viewBoxScale = 100;
 
@@ -11,6 +11,7 @@ const EdgeLayout = () => {
   const svg = useRef();
   const { network: { edges }, simulation: { simulation } } = useContext(LayoutContext);
   const timer = useRef();
+  const edgeDefinitions = useSelector((state) => getProtocolCodebook(state).edge);
 
   const update = useRef(() => {
     // debugger;
@@ -35,15 +36,14 @@ const EdgeLayout = () => {
     // debugger;
 
     lines.current = edges.map((edge) => {
-      // console.log({ edge });
       const svgNS = svg.current.namespaceURI;
       const line = document.createElementNS(svgNS, 'line');
+      const color = get(edgeDefinitions, [edge.type, 'color'], 'edge-color-seq-1');
       // line.setAttributeNS(null, 'x1', from.x * viewBoxScale);
       // line.setAttributeNS(null, 'y1', from.y * viewBoxScale);
       // line.setAttributeNS(null, 'x2', to.x * viewBoxScale);
       // line.setAttributeNS(null, 'y2', to.y * viewBoxScale);
-      // line.setAttributeNS(null, 'stroke', `var(--${color})`);
-      line.setAttributeNS(null, 'stroke', 'red');
+      line.setAttributeNS(null, 'stroke', `var(--${color})`);
       return { ...edge, el: line };
     });
 
@@ -58,7 +58,7 @@ const EdgeLayout = () => {
       els.forEach((el) => svg.current.removeChild(el));
       cancelAnimationFrame(timer.current);
     };
-  }, [edges]);
+  }, [edges, edgeDefinitions]);
 
   return (
     <div className="edge-layout">
@@ -70,14 +70,6 @@ const EdgeLayout = () => {
       />
     </div>
   );
-};
-
-EdgeLayout.propTypes = {
-  edges: PropTypes.array,
-};
-
-EdgeLayout.defaultProps = {
-  edges: [],
 };
 
 export { EdgeLayout };
