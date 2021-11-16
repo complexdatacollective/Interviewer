@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useRef } from 'react';
+import React, { useEffect, useCallback, useRef, useState } from 'react';
 import useForceSimulation from '../hooks/useForceSimulation';
 
 const LayoutContext = React.createContext('layout');
@@ -24,19 +24,21 @@ export const LayoutProvider = ({
     },
   } = useForceSimulation();
 
-  const simulationEnabled = useRef(false);
+  const useSimulationPosition = useRef(false);
+  const [simulationEnabled, setSimulationEnabled] = useState(false);
 
   const getPosition = useRef((index) => {
-    if (!simulationEnabled.current) {
+    if (!useSimulationPosition.current) {
       return nodes[index].attributes[layout];
     }
 
     return forceSimulation.current.nodes[index];
-  });
+  }, [simulationEnabled]);
 
-  const toggleSimulation = useRef(() => {
-    simulationEnabled.current = !simulationEnabled.current;
-  });
+  const toggleSimulation = useCallback(() => {
+    useSimulationPosition.current = !useSimulationPosition.current;
+    setSimulationEnabled((enabled) => !enabled);
+  }, [setSimulationEnabled]);
 
   const value = {
     network: {

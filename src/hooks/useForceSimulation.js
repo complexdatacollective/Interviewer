@@ -131,7 +131,7 @@ const useForceSimulation = (listener = () => {}) => {
   const moveNode = useCallback(({ dy, dx }, nodeIndex) => {
     const position = simNetwork.current.nodes[nodeIndex]; // ?? simNetwork?
 
-    console.log({ position, dy, dx });
+    console.debug({ position, dy, dx });
 
     // TODO: provide as decimal delta?
     const nodeAttributes = {

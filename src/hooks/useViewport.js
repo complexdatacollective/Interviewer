@@ -5,7 +5,7 @@ const LAYOUT_SPACE = 1000;
 
 const useViewport = (layoutSpace = LAYOUT_SPACE) => {
   const state = useRef({
-    zoom: 1,
+    zoom: 4,
     center: { x: 0, y: 0 },
   });
 

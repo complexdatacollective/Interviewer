@@ -58,7 +58,8 @@ const NodeLayout = React.forwardRef(({
   const drag = useDrag();
   const ref = useRef();
   const timer = useRef();
-  const layoutNodes = useRef([]);
+  // const layoutNodes = useRef([]);
+  const layoutEls = useRef([]);
 
   const dispatch = useDispatch();
 
@@ -96,6 +97,8 @@ const NodeLayout = React.forwardRef(({
 
     ref.current.appendChild(container);
 
+    console.log('append container');
+
     screen.initialize(container);
     // start();
 
@@ -117,35 +120,41 @@ const NodeLayout = React.forwardRef(({
     }
 
     if (simulation.current.nodes) {
-      simulation.current.nodes.forEach((position, index) => {
-        // const screenPosition = screen.calculateScreenCoords(position);
+      simulation.current.nodes.forEach((_, index) => {
         const screenPosition = screen.calculateScreenCoords(getPosition.current(index));
 
-        layoutNodes.current[index].el.style.left = `${screenPosition.x}px`;
-        layoutNodes.current[index].el.style.top = `${screenPosition.y}px`;
+        const el = layoutEls.current[index];
+
+        if (!el) { return; }
+
+        el.style.left = `${screenPosition.x}px`;
+        el.style.top = `${screenPosition.y}px`;
       });
     }
 
     timer.current = requestAnimationFrame(() => update.current());
+    // timer.current = setTimeout(() => update.current(), 5000);
   });
 
   useEffect(() => {
-    if (!ref.current) { return () => clearTimeout(timer.current); }
+    if (!ref.current) { return () => cancelAnimationFrame(timer.current); }
 
     const container = document.getElementById('nodes_layout');
 
-    layoutNodes.current = renderNodes(nodes);
+    console.log('append nodes');
 
-    const els = layoutNodes.current.map(({ el }) => el);
+    layoutEls.current = nodes.map((_, index) => {
+      const nodeEl = document.createElement('div');
+      nodeEl.style.position = 'absolute';
+      nodeEl.style.transform = 'translate(-50%, -50%)';
 
-    els.forEach((el, index) => {
-      container.appendChild(el);
-
-      el.addEventListener('mousedown', (e) => {
+      nodeEl.addEventListener('mousedown', (e) => {
         drag.handleDragStart(e, index);
         e.stopPropagation();
       });
-      el.addEventListener('click', (e) => handleClick(e, index));
+      nodeEl.addEventListener('click', (e) => handleClick(e, index));
+      container.append(nodeEl);
+      return nodeEl;
     });
 
     window.addEventListener('mousemove', drag.handleDragMove);
@@ -154,14 +163,15 @@ const NodeLayout = React.forwardRef(({
     timer.current = requestAnimationFrame(() => update.current());
 
     return () => {
-      els.forEach((el) => container.removeChild(el));
+      // els.forEach((el) => container.removeChild(el));
 
       window.removeEventListener('mousemove', drag.handleDragMove);
       window.removeEventListener('mouseup', handleDragEnd);
 
       cancelAnimationFrame(timer.current);
     };
-  }, [nodes]);
+  }, []);
+  // }, [nodes]);
 
   const shareRef = useCallback((el) => {
     if (!el) { return; }
@@ -171,14 +181,20 @@ const NodeLayout = React.forwardRef(({
 
   return (
     <>
-      <div className="node-layout" ref={shareRef} />
+      <div className="node-layout" ref={shareRef}>
+        {nodes.map((node, index) => {
+          const el = layoutEls.current[index];
+          if (!el) { return null; }
+          return <LayoutNode {...node} portal={el} />;
+        })}
+      </div>
       <div style={{ position: 'absolute', top: 0, left: 0 }}>
         { !simulationEnabled && (
-          <button type="button" onClick={() => toggleSimulation.current()}>enable simulation</button>
+          <button type="button" onClick={() => toggleSimulation()}>enable simulation</button>
         )}
         { simulationEnabled && (
           <>
-            <button type="button" onClick={() => toggleSimulation.current()}>disable simulation</button>
+            <button type="button" onClick={() => toggleSimulation()}>disable simulation</button>
             <button type="button" onClick={() => refresh()}>start</button>
             <button type="button" onClick={() => viewport.zoomViewport(1.5)}>in</button>
             <button type="button" onClick={() => viewport.zoomViewport(0.67)}>out</button>
