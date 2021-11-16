@@ -87,26 +87,6 @@ const NodeLayout = React.forwardRef(({
     drag.handleDragEnd(e);
   };
 
-  useEffect(() => {
-    if (!ref.current) { return () => {}; }
-
-    const container = document.createElement('div');
-    container.className = 'nodes-layout';
-    container.setAttribute('id', 'nodes_layout');
-    container.setAttribute('style', 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 200;');
-
-    ref.current.appendChild(container);
-
-    console.log('append container');
-
-    screen.initialize(container);
-    // start();
-
-    return () => {
-      ref.current.removeChild(container);
-    };
-  }, []);
-
   const update = useRef(() => {
     const {
       hasMoved,
@@ -121,29 +101,26 @@ const NodeLayout = React.forwardRef(({
 
     if (simulation.current.nodes) {
       simulation.current.nodes.forEach((_, index) => {
-        const screenPosition = screen.calculateScreenCoords(getPosition.current(index));
-
         const el = layoutEls.current[index];
+        const relativePosition = getPosition.current(index);
+        if (!relativePosition || !el) { return; }
 
-        if (!el) { return; }
-
+        const screenPosition = screen.calculateScreenCoords(relativePosition);
         el.style.left = `${screenPosition.x}px`;
         el.style.top = `${screenPosition.y}px`;
       });
     }
 
     timer.current = requestAnimationFrame(() => update.current());
-    // timer.current = setTimeout(() => update.current(), 5000);
+    // timer.current = setTimeout(() => update.current(), 10000);
   });
 
   useEffect(() => {
-    if (!ref.current) { return () => cancelAnimationFrame(timer.current); }
-
-    const container = document.getElementById('nodes_layout');
-
-    console.log('append nodes');
+    if (!ref.current) { return; }
 
     layoutEls.current = nodes.map((_, index) => {
+      if (layoutEls.current[index]) { return layoutEls.current[index]; }
+
       const nodeEl = document.createElement('div');
       nodeEl.style.position = 'absolute';
       nodeEl.style.transform = 'translate(-50%, -50%)';
@@ -152,40 +129,46 @@ const NodeLayout = React.forwardRef(({
         drag.handleDragStart(e, index);
         e.stopPropagation();
       });
+
       nodeEl.addEventListener('click', (e) => handleClick(e, index));
-      container.append(nodeEl);
+      ref.current.append(nodeEl);
       return nodeEl;
     });
+  }, [nodes]);
 
+  useEffect(() => () => {
+    if (!ref.current) { return; }
+    layoutEls.current.forEach((el) => ref.current.removeChild(el));
+  }, []);
+
+  useEffect(() => {
     window.addEventListener('mousemove', drag.handleDragMove);
     window.addEventListener('mouseup', handleDragEnd);
 
     timer.current = requestAnimationFrame(() => update.current());
 
     return () => {
-      // els.forEach((el) => container.removeChild(el));
-
       window.removeEventListener('mousemove', drag.handleDragMove);
       window.removeEventListener('mouseup', handleDragEnd);
 
       cancelAnimationFrame(timer.current);
     };
-  }, []);
-  // }, [nodes]);
+  }, [nodes]);
 
-  const shareRef = useCallback((el) => {
+  const initializeLayout = useCallback((el) => {
     if (!el) { return; }
     sendRef(el);
     ref.current = el;
+    screen.initialize(el);
   }, []);
 
   return (
     <>
-      <div className="node-layout" ref={shareRef}>
+      <div className="node-layout" ref={initializeLayout}>
         {nodes.map((node, index) => {
           const el = layoutEls.current[index];
           if (!el) { return null; }
-          return <LayoutNode {...node} portal={el} />;
+          return <LayoutNode {...node} portal={el} key={index} />;
         })}
       </div>
       <div style={{ position: 'absolute', top: 0, left: 0 }}>

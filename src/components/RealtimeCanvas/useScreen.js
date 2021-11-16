@@ -12,7 +12,7 @@ const useScreen = () => {
   }, []);
 
   // Convert a relative coordinate into position on the screen accounting for viewport
-  const calculateScreenCoords = useCallback(({ x, y }) => {
+  const calculateScreenCoords = useCallback(({ x, y } = { x: 0.5, y: 0.5 }) => {
     const { width, height } = state.current;
 
     return {

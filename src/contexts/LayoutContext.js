@@ -1,4 +1,10 @@
-import React, { useEffect, useCallback, useRef, useState } from 'react';
+import React, {
+  useEffect,
+  useCallback,
+  useRef,
+  useState,
+} from 'react';
+import { get } from 'lodash';
 import useForceSimulation from '../hooks/useForceSimulation';
 
 const LayoutContext = React.createContext('layout');
@@ -24,45 +30,26 @@ export const LayoutProvider = ({
     },
   } = useForceSimulation();
 
-  const useSimulationPosition = useRef(false);
   const [simulationEnabled, setSimulationEnabled] = useState(false);
 
-  const getPosition = useRef((index) => {
-    if (!useSimulationPosition.current) {
-      return nodes[index].attributes[layout];
-    }
+  const getPosition = useRef(() => undefined);
 
-    return forceSimulation.current.nodes[index];
-  }, [simulationEnabled]);
+  // TODO: this seems like a misguided approach, mixing "reactive"
+  // and "constant" values. Any other ideas?
+  useEffect(() => {
+    getPosition.current = (index) => {
+      if (!simulationEnabled) {
+        // console.log({ node: get(nodes, [index, 'attributes']), layout: get(nodes, [index, 'attributes', layout]) });
+        return get(nodes, [index, 'attributes', layout]);
+      }
+
+      return get(forceSimulation.current.nodes, [index]);
+    };
+  }, [nodes, simulationEnabled]);
 
   const toggleSimulation = useCallback(() => {
-    useSimulationPosition.current = !useSimulationPosition.current;
     setSimulationEnabled((enabled) => !enabled);
   }, [setSimulationEnabled]);
-
-  const value = {
-    network: {
-      nodes,
-      edges,
-      layout,
-    },
-    viewport: {
-      moveViewport,
-      zoomViewport,
-    },
-    simulation: {
-      simulation: forceSimulation,
-      isRunning,
-      initialize,
-      start,
-      stop,
-      moveNode,
-      releaseNode,
-      getPosition,
-      simulationEnabled,
-      toggleSimulation,
-    },
-  };
 
   useEffect(() => {
     const simulationNodes = nodes.map(
@@ -111,6 +98,30 @@ export const LayoutProvider = ({
 
     updateNetwork({ links: simulationLinks });
   }, [nodes, edges]);
+
+  const value = {
+    network: {
+      nodes,
+      edges,
+      layout,
+    },
+    viewport: {
+      moveViewport,
+      zoomViewport,
+    },
+    simulation: {
+      simulation: forceSimulation,
+      isRunning,
+      initialize,
+      start,
+      stop,
+      moveNode,
+      releaseNode,
+      getPosition,
+      simulationEnabled,
+      toggleSimulation,
+    },
+  };
 
   return (
     <LayoutContext.Provider value={value}>
