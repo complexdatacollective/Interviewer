@@ -9,7 +9,7 @@ const viewBoxScale = 100;
 const EdgeLayout = () => {
   const lines = useRef();
   const svg = useRef();
-  const { network: { edges }, simulation: { simulation } } = useContext(LayoutContext);
+  const { network: { edges }, simulation: { simulation, getPosition } } = useContext(LayoutContext);
   const timer = useRef();
   const edgeDefinitions = useSelector((state) => getProtocolCodebook(state).edge);
 
@@ -17,8 +17,8 @@ const EdgeLayout = () => {
     // debugger;
     if (simulation.current.links) {
       simulation.current.links.forEach((link, index) => {
-        const from = simulation.current.nodes[link.source];
-        const to = simulation.current.nodes[link.target];
+        const from = getPosition.current(link.source);
+        const to = getPosition.current(link.target);
 
         lines.current[index].el.setAttributeNS(null, 'x1', from.x * 100);
         lines.current[index].el.setAttributeNS(null, 'y1', from.y * 100);
