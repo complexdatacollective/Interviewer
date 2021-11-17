@@ -3,31 +3,13 @@ import React, {
   useEffect,
   useContext,
   useCallback,
-  useState,
 } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import LayoutContext from '../../contexts/LayoutContext';
-import useDrag from './useDrag';
 import useScreen from './useScreen';
 import LayoutNode from './LayoutNode';
-
-const LABEL = '0e75ec18-2cb1-4606-9f18-034d28b07c19';
-
-const renderNodes = (nodes) => nodes.map((node) => {
-  const { attributes } = node;
-
-  console.log({ attributes });
-
-  const el = LayoutNode(
-    attributes,
-    // color: 'color-neon-coral',
-    // label: a[LABEL],
-  );
-
-  return { el, layout: attributes.layout };
-});
 
 const NodeLayout = React.forwardRef(({
   // allowPositioning,
@@ -55,10 +37,8 @@ const NodeLayout = React.forwardRef(({
   } = useContext(LayoutContext);
 
   const screen = useScreen();
-  const drag = useDrag();
   const ref = useRef();
   const timer = useRef();
-  // const layoutNodes = useRef([]);
   const layoutEls = useRef([]);
 
   const dispatch = useDispatch();
@@ -76,29 +56,30 @@ const NodeLayout = React.forwardRef(({
     //
   }, [layout, isRunning]);
 
-  const handleClick = (e, index) => {
-    onSelected(nodes[index]);
-  };
+  // const handleClick = (e, index) => {
+  //   onSelected(nodes[index]);
+  // };
 
-  const handleDragEnd = (e) => {
-    if (drag.state.current.id) {
-      releaseNode(drag.state.current.id);
-    }
-    drag.handleDragEnd(e);
-  };
+  // const handleDragEnd = (e) => {
+  //   if (drag.state.current.id) {
+  //     releaseNode(drag.state.current.id);
+  //   }
+  //   drag.handleDragEnd(e);
+  // };
+
+  const handleDragStart = useCallback((index, { dy, dx }) => {
+    moveNode({ dy, dx }, index);
+  }, []);
+
+  const handleDragMove = useCallback((index, { dy, dx }) => {
+    moveNode({ dy, dx }, index);
+  }, []);
+
+  const handleDragEnd = useCallback((index) => {
+    releaseNode(index);
+  }, []);
 
   const update = useRef(() => {
-    const {
-      hasMoved,
-      id,
-      dy,
-      dx,
-    } = drag.getDelta();
-
-    if (id && hasMoved) {
-      moveNode({ dy, dx }, id);
-    }
-
     if (simulation.current.nodes) {
       simulation.current.nodes.forEach((_, index) => {
         const el = layoutEls.current[index];
@@ -124,14 +105,8 @@ const NodeLayout = React.forwardRef(({
       const nodeEl = document.createElement('div');
       nodeEl.style.position = 'absolute';
       nodeEl.style.transform = 'translate(-50%, -50%)';
-
-      nodeEl.addEventListener('mousedown', (e) => {
-        drag.handleDragStart(e, index);
-        e.stopPropagation();
-      });
-
-      nodeEl.addEventListener('click', (e) => handleClick(e, index));
       ref.current.append(nodeEl);
+
       return nodeEl;
     });
   }, [nodes]);
@@ -142,15 +117,9 @@ const NodeLayout = React.forwardRef(({
   }, []);
 
   useEffect(() => {
-    window.addEventListener('mousemove', drag.handleDragMove);
-    window.addEventListener('mouseup', handleDragEnd);
-
     timer.current = requestAnimationFrame(() => update.current());
 
     return () => {
-      window.removeEventListener('mousemove', drag.handleDragMove);
-      window.removeEventListener('mouseup', handleDragEnd);
-
       cancelAnimationFrame(timer.current);
     };
   }, [nodes]);
@@ -168,7 +137,17 @@ const NodeLayout = React.forwardRef(({
         {nodes.map((node, index) => {
           const el = layoutEls.current[index];
           if (!el) { return null; }
-          return <LayoutNode {...node} portal={el} key={index} />;
+          return (
+            <LayoutNode
+              {...node}
+              portal={el}
+              index={index}
+              key={index}
+              onDragStart={handleDragStart}
+              onDragMove={handleDragMove}
+              onDragEnd={handleDragEnd}
+            />
+          );
         })}
       </div>
       <div style={{ position: 'absolute', top: 0, left: 0 }}>

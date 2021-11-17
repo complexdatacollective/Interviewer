@@ -1,14 +1,31 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import { renderToString } from 'react-dom/server';
-// import UINode from '@codaco/ui/lib/components/Node';
 import UINode from '../../containers/Node';
+import DragManager from '../../behaviours/DragAndDrop/DragManager';
 
-const LayoutNode = ({ portal, ...props }) => {
-  // // container.onClick = handleClick;
-  // container.innerHTML = renderToString(<UINode {...props} store={() => ({})} />);
+const LayoutNode = ({
+  portal,
+  onDragStart,
+  onDragMove,
+  onDragEnd,
+  index,
+  ...props
+}) => {
+  const dragManager = useRef();
 
-  // return container; //{ el: container, layout: { ...layout } };
+  useEffect(() => {
+    dragManager.current = new DragManager({
+      el: portal,
+      onDragStart: (data) => onDragStart(index, data),
+      onDragMove: (data) => onDragMove(index, data),
+      onDragEnd: (data) => onDragEnd(index, data),
+    });
+
+    return () => {
+      dragManager.current.unmount();
+    };
+  }, [portal]);
+
   return ReactDOM.createPortal(
     <UINode {...props} />,
     portal,
