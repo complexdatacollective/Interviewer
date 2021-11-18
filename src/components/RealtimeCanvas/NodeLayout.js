@@ -6,16 +6,18 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
+import { isEmpty, get } from 'lodash';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import LayoutContext from '../../contexts/LayoutContext';
+import { entityPrimaryKeyProperty, entityAttributesProperty } from '../../ducks/modules/network';
 import useScreen from './useScreen';
 import LayoutNode from './LayoutNode';
 
 const NodeLayout = React.forwardRef(({
-  // allowPositioning,
-  // highlightAttribute,
-  // connectFrom,
-  // allowSelect,
+  allowPositioning,
+  highlightAttribute,
+  connectFrom,
+  allowSelect,
   onSelected,
   // layoutVariable,
   // width,
@@ -51,21 +53,14 @@ const NodeLayout = React.forwardRef(({
       // if node is not in the simulation let, do not try to update in in the session
       if (!position) { return; }
       const newAttributes = { [layout]: position };
-      dispatch(sessionsActions.updateNode(node._uid, undefined, newAttributes));
+      dispatch(sessionsActions.updateNode(
+        node[entityPrimaryKeyProperty],
+        undefined,
+        newAttributes,
+      ));
     });
     //
   }, [layout, isRunning]);
-
-  // const handleClick = (e, index) => {
-  //   onSelected(nodes[index]);
-  // };
-
-  // const handleDragEnd = (e) => {
-  //   if (drag.state.current.id) {
-  //     releaseNode(drag.state.current.id);
-  //   }
-  //   drag.handleDragEnd(e);
-  // };
 
   const handleDragStart = useCallback((index, { dy, dx }) => {
     moveNode({ dy, dx }, index);
@@ -131,6 +126,17 @@ const NodeLayout = React.forwardRef(({
     screen.initialize(el);
   }, []);
 
+  const isHighlighted = useCallback(
+    (node) => !isEmpty(highlightAttribute)
+        && get(node, [entityAttributesProperty, highlightAttribute]) === true,
+    [highlightAttribute],
+  );
+
+  const isLinking = useCallback(
+    (node) => get(node, entityPrimaryKeyProperty) === connectFrom,
+    [connectFrom],
+  );
+
   return (
     <>
       <div className="node-layout" ref={initializeLayout}>
@@ -139,13 +145,18 @@ const NodeLayout = React.forwardRef(({
           if (!el) { return null; }
           return (
             <LayoutNode
-              {...node}
+              node={node}
               portal={el}
               index={index}
               key={index}
               onDragStart={handleDragStart}
               onDragMove={handleDragMove}
               onDragEnd={handleDragEnd}
+              allowPositioning={allowPositioning}
+              allowSelect={allowSelect}
+              onSelected={onSelected}
+              selected={isHighlighted(node)}
+              linking={isLinking(node)}
             />
           );
         })}
@@ -173,7 +184,7 @@ const NodeLayout = React.forwardRef(({
 
 NodeLayout.propTypes = {
   onSelected: PropTypes.func.isRequired,
-  allowPositioning: PropTypes.bool.isRequired,
+  allowPositioning: PropTypes.bool,
   allowSelect: PropTypes.bool,
 };
 
