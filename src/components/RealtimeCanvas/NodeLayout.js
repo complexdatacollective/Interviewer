@@ -13,6 +13,21 @@ import { entityPrimaryKeyProperty, entityAttributesProperty } from '../../ducks/
 import useScreen from './useScreen';
 import LayoutNode from './LayoutNode';
 
+// const relativeCoords = (container, node) => ({
+//   x: (node.x - container.x) / container.width,
+//   y: (node.y - container.y) / container.height,
+// });
+
+// updateNode(
+//   item.meta[entityPrimaryKeyProperty],
+//   {},
+//   {
+//     [layoutVariable]: relativeCoords({
+//       width, height, x, y,
+//     }, item),
+//   },
+// );
+
 const NodeLayout = React.forwardRef(({
   allowPositioning,
   highlightAttribute,
@@ -52,27 +67,45 @@ const NodeLayout = React.forwardRef(({
       const position = getPosition.current(index); // simulation.current.nodes[index];
       // if node is not in the simulation let, do not try to update in in the session
       if (!position) { return; }
-      const newAttributes = { [layout]: position };
+
       dispatch(sessionsActions.updateNode(
         node[entityPrimaryKeyProperty],
         undefined,
-        newAttributes,
+        { [layout]: position },
       ));
     });
     //
   }, [layout, isRunning]);
 
-  const handleDragStart = useCallback((index, { dy, dx }) => {
-    moveNode({ dy, dx }, index);
-  }, []);
+  const handleDragStart = useCallback((uuid, index, { dy, dx }) => {
+    // moveNode({ dy, dx }, index);
+  }, [simulationEnabled]);
 
-  const handleDragMove = useCallback((index, { dy, dx }) => {
-    moveNode({ dy, dx }, index);
-  }, []);
+  const handleDragMove = useCallback((uuid, index, { dy, dx, x, y }) => {
+    if (simulationEnabled) {
+      moveNode({ dy, dx }, index);
+      return;
+    }
 
-  const handleDragEnd = useCallback((index) => {
-    releaseNode(index);
-  }, []);
+    dispatch(sessionsActions.updateNode(
+      uuid,
+      undefined,
+      { [layout]: screen.calculateRelativeCoords({ x, y }) },
+    ));
+  }, [layout, simulationEnabled, screen.calculateRelativeCoords]);
+
+  const handleDragEnd = useCallback((uuid, index, { x, y }) => {
+    if (simulationEnabled) {
+      releaseNode(index);
+      return;
+    }
+
+    dispatch(sessionsActions.updateNode(
+      uuid,
+      undefined,
+      { [layout]: screen.calculateRelativeCoords({ x, y }) },
+    ));
+  }, [layout, simulationEnabled, screen.calculateRelativeCoords]);
 
   const update = useRef(() => {
     if (simulation.current.nodes) {

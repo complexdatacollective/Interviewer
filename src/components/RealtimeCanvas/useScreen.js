@@ -5,6 +5,8 @@ const useScreen = () => {
   const state = useRef({
     width: 0,
     height: 0,
+    x: 0,
+    y: 0,
   });
 
   const initialize = useCallback((el) => {
@@ -21,9 +23,25 @@ const useScreen = () => {
     };
   }, []);
 
+  // Given a position on the screen calculate the relative coordinate for the viewport
+  const calculateRelativeCoords = useCallback(({ x, y } = { x: 0, y: 0 }) => {
+    const {
+      width,
+      height,
+      left: viewportX,
+      top: viewportY,
+    } = state.current;
+
+    return {
+      x: (x - viewportX) / width,
+      y: (y - viewportY) / height,
+    };
+  }, []);
+
   return {
     initialize,
     calculateScreenCoords,
+    calculateRelativeCoords,
   };
 };
 

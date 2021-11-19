@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import UINode from '../../containers/Node';
 import DragManager from '../../behaviours/DragAndDrop/DragManager';
+import { entityPrimaryKeyProperty } from '../../ducks/modules/network';
 
 const LayoutNode = ({
   node,
@@ -14,17 +15,18 @@ const LayoutNode = ({
   selected,
   linking,
   index,
-  ...props
 }) => {
   const dragManager = useRef();
 
   useEffect(() => {
     if (portal && allowPositioning) {
+      const uuid = node[entityPrimaryKeyProperty];
+
       dragManager.current = new DragManager({
         el: portal,
-        onDragStart: (data) => onDragStart(index, data),
-        onDragMove: (data) => onDragMove(index, data),
-        onDragEnd: (data) => onDragEnd(index, data),
+        onDragStart: (data) => onDragStart(uuid, index, data),
+        onDragMove: (data) => onDragMove(uuid, index, data),
+        onDragEnd: (data) => onDragEnd(uuid, index, data),
       });
     }
 
@@ -33,7 +35,7 @@ const LayoutNode = ({
         dragManager.current.unmount();
       }
     };
-  }, [portal, index]);
+  }, [portal, index, onDragStart, onDragMove, onDragEnd]);
 
   useEffect(() => {
     console.log('ran me');

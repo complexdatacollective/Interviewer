@@ -9,23 +9,23 @@ const viewBoxScale = 100;
 const EdgeLayout = () => {
   const lines = useRef();
   const svg = useRef();
-  const { network: { edges }, simulation: { simulation, getPosition } } = useContext(LayoutContext);
+  const { network: { edges, links }, simulation: { simulation, getPosition } } = useContext(LayoutContext);
   const timer = useRef();
   const edgeDefinitions = useSelector((state) => getProtocolCodebook(state).edge);
 
   const update = useRef(() => {
     // debugger;
-    if (simulation.current.links) {
-      simulation.current.links.forEach((link, index) => {
-        const from = getPosition.current(link.source);
-        const to = getPosition.current(link.target);
+    lines.current.forEach((line) => {
+      if (!line.link) { return; }
 
-        lines.current[index].el.setAttributeNS(null, 'x1', from.x * 100);
-        lines.current[index].el.setAttributeNS(null, 'y1', from.y * 100);
-        lines.current[index].el.setAttributeNS(null, 'x2', to.x * 100);
-        lines.current[index].el.setAttributeNS(null, 'y2', to.y * 100);
-      });
-    }
+      const from = getPosition.current(line.link.source);
+      const to = getPosition.current(line.link.target);
+
+      line.el.setAttributeNS(null, 'x1', from.x * 100);
+      line.el.setAttributeNS(null, 'y1', from.y * 100);
+      line.el.setAttributeNS(null, 'x2', to.x * 100);
+      line.el.setAttributeNS(null, 'y2', to.y * 100);
+    });
 
     timer.current = requestAnimationFrame(() => update.current());
   });
@@ -33,18 +33,14 @@ const EdgeLayout = () => {
   useEffect(() => {
     if (!svg.current) { return () => cancelAnimationFrame(timer.current); }
 
-    // debugger;
+    debugger;
 
-    lines.current = edges.map((edge) => {
+    lines.current = edges.map((edge, index) => {
       const svgNS = svg.current.namespaceURI;
       const line = document.createElementNS(svgNS, 'line');
       const color = get(edgeDefinitions, [edge.type, 'color'], 'edge-color-seq-1');
-      // line.setAttributeNS(null, 'x1', from.x * viewBoxScale);
-      // line.setAttributeNS(null, 'y1', from.y * viewBoxScale);
-      // line.setAttributeNS(null, 'x2', to.x * viewBoxScale);
-      // line.setAttributeNS(null, 'y2', to.y * viewBoxScale);
       line.setAttributeNS(null, 'stroke', `var(--${color})`);
-      return { ...edge, el: line };
+      return { ...edge, el: line, link: links[index] };
     });
 
     const els = lines.current.map(({ el }) => el);
@@ -58,7 +54,7 @@ const EdgeLayout = () => {
       els.forEach((el) => svg.current.removeChild(el));
       cancelAnimationFrame(timer.current);
     };
-  }, [edges, edgeDefinitions]);
+  }, [edges, links, edgeDefinitions]);
 
   return (
     <div className="edge-layout">

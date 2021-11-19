@@ -9,6 +9,20 @@ import useForceSimulation from '../hooks/useForceSimulation';
 
 const LayoutContext = React.createContext('layout');
 
+const getLinks = ({ nodes, edges }) => {
+  const nodeIdMap = nodes.reduce(
+    (memo, { _uid }, index) => ({
+      ...memo,
+      [_uid]: index,
+    }),
+    {},
+  );
+
+  return edges.map(
+    ({ from, to }) => ({ source: nodeIdMap[from], target: nodeIdMap[to] }),
+  );
+};
+
 export const LayoutProvider = ({
   children,
   nodes,
@@ -31,6 +45,7 @@ export const LayoutProvider = ({
   } = useForceSimulation();
 
   const [simulationEnabled, setSimulationEnabled] = useState(false);
+  const [links, setLinks] = useState([]);
 
   const getPosition = useRef(() => undefined);
 
@@ -39,7 +54,6 @@ export const LayoutProvider = ({
   useEffect(() => {
     getPosition.current = (index) => {
       if (!simulationEnabled) {
-        // console.log({ node: get(nodes, [index, 'attributes']), layout: get(nodes, [index, 'attributes', layout]) });
         return get(nodes, [index, 'attributes', layout]);
       }
 
@@ -56,22 +70,14 @@ export const LayoutProvider = ({
       ({ attributes }) => attributes[layout],
     );
 
-    const nodeIdMap = nodes.reduce(
-      (memo, { _uid }, index) => ({
-        ...memo,
-        [_uid]: index,
-      }),
-      {},
-    );
-
-    const simulationLinks = edges.map(
-      ({ from, to }) => ({ source: nodeIdMap[from], target: nodeIdMap[to] }),
-    );
+    const simulationLinks = getLinks({ nodes, edges });
 
     initialize({ nodes: simulationNodes, links: simulationLinks });
   }, []);
 
   useEffect(() => {
+    if (!simulationEnabled) { return; }
+
     const simulationNodes = nodes.map(
       ({ attributes }) => attributes[layout],
     );
@@ -79,31 +85,28 @@ export const LayoutProvider = ({
     console.debug('update sim nodes');
 
     updateNetwork({ nodes: simulationNodes });
-  }, [nodes, layout]);
+  }, [simulationEnabled, nodes, layout]);
 
   useEffect(() => {
-    const nodeIdMap = nodes.reduce(
-      (memo, { _uid }, index) => ({
-        ...memo,
-        [_uid]: index,
-      }),
-      {},
-    );
+    const nextLinks = getLinks({ nodes, edges });
 
-    const simulationLinks = edges.map(
-      ({ from, to }) => ({ source: nodeIdMap[from], target: nodeIdMap[to] }),
-    );
+    setLinks(nextLinks);
+  }, [nodes, edges]);
+
+  useEffect(() => {
+    if (!simulationEnabled) { return; }
 
     console.debug('update sim links');
 
-    updateNetwork({ links: simulationLinks });
-  }, [nodes, edges]);
+    updateNetwork({ links });
+  }, [simulationEnabled, links]);
 
   const value = {
     network: {
       nodes,
       edges,
       layout,
+      links,
     },
     viewport: {
       moveViewport,
