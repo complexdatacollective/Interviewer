@@ -68,6 +68,14 @@ onmessage = function ({ data }) {
         .restart();
       break;
     }
+    case 'reheat': {
+      if (!simulation) { return; }
+      console.debug('worker:start');
+      simulation
+        .alpha(0.3)
+        .restart();
+      break;
+    }
     case 'update_network': {
       if (!simulation) { return; }
 

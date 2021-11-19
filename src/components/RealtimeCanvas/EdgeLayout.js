@@ -33,7 +33,7 @@ const EdgeLayout = () => {
   useEffect(() => {
     if (!svg.current) { return () => cancelAnimationFrame(timer.current); }
 
-    debugger;
+    // debugger;
 
     lines.current = edges.map((edge, index) => {
       const svgNS = svg.current.namespaceURI;

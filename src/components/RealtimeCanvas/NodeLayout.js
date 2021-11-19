@@ -43,7 +43,8 @@ const NodeLayout = React.forwardRef(({
     viewport,
     simulation: {
       simulation,
-      refresh,
+      reheat,
+      stop,
       moveNode,
       isRunning,
       releaseNode,
@@ -61,7 +62,8 @@ const NodeLayout = React.forwardRef(({
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (isRunning || !simulation.current) { return; }
+    if (!simulation.current) { return; }
+    if (isRunning && simulationEnabled) { return; }
 
     nodes.forEach((node, index) => {
       const position = getPosition.current(index); // simulation.current.nodes[index];
@@ -75,7 +77,7 @@ const NodeLayout = React.forwardRef(({
       ));
     });
     //
-  }, [layout, isRunning]);
+  }, [layout, isRunning, simulationEnabled]);
 
   const handleDragStart = useCallback((uuid, index, { dy, dx }) => {
     // moveNode({ dy, dx }, index);
@@ -201,7 +203,8 @@ const NodeLayout = React.forwardRef(({
         { simulationEnabled && (
           <>
             <button type="button" onClick={() => toggleSimulation()}>disable simulation</button>
-            <button type="button" onClick={() => refresh()}>start</button>
+            <button type="button" onClick={() => reheat()}>reheat</button>
+            <button type="button" onClick={() => stop()}>stop</button>
             <button type="button" onClick={() => viewport.zoomViewport(1.5)}>in</button>
             <button type="button" onClick={() => viewport.zoomViewport(0.67)}>out</button>
             <button type="button" onClick={() => viewport.moveViewport(-0.1, 0)}>left</button>

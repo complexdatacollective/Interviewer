@@ -33,6 +33,7 @@ export const LayoutProvider = ({
     state: forceSimulation,
     isRunning,
     start,
+    reheat,
     stop,
     initialize,
     moveNode,
@@ -62,8 +63,15 @@ export const LayoutProvider = ({
   }, [nodes, simulationEnabled]);
 
   const toggleSimulation = useCallback(() => {
-    setSimulationEnabled((enabled) => !enabled);
-  }, [setSimulationEnabled]);
+    if (!simulationEnabled) {
+      setSimulationEnabled(true);
+      reheat();
+      return;
+    }
+
+    setSimulationEnabled(false);
+    stop();
+  }, [simulationEnabled, setSimulationEnabled]);
 
   useEffect(() => {
     const simulationNodes = nodes.map(
@@ -117,6 +125,7 @@ export const LayoutProvider = ({
       isRunning,
       initialize,
       start,
+      reheat,
       stop,
       moveNode,
       releaseNode,

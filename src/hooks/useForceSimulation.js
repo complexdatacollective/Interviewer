@@ -82,6 +82,11 @@ const useForceSimulation = (listener = () => {}) => {
     worker.current.postMessage({ type: 'start' });
   }, [setIsRunning]);
 
+  const reheat = useCallback(() => {
+    if (!worker.current) { return; }
+    worker.current.postMessage({ type: 'reheat' });
+  }, [setIsRunning]);
+
   const stop = useCallback(() => {
     if (!worker.current) { return; }
     worker.current.postMessage({ type: 'stop' });
@@ -162,6 +167,7 @@ const useForceSimulation = (listener = () => {}) => {
     initialize,
     start,
     stop,
+    reheat,
     moveNode,
     releaseNode,
     updateNetwork,
