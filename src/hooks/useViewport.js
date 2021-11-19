@@ -1,61 +1,53 @@
-import { useRef, useCallback } from 'react';
+import { useCallback } from 'react';
+import { useSpring } from 'framer-motion';
 import { clamp } from 'lodash';
 
 const LAYOUT_SPACE = 1000;
 
 const useViewport = (layoutSpace = LAYOUT_SPACE) => {
-  const state = useRef({
-    zoom: 4,
-    center: { x: 0, y: 0 },
-  });
+  const zoom = useSpring(4);
+  const centerX = useSpring(0);
+  const centerY = useSpring(0);
 
   const zoomViewport = useCallback((factor = 1.5, absolute = false) => {
     if (absolute) {
-      state.current.zoom = factor;
+      zoom.set(factor);
       return;
     }
 
-    state.current.zoom *= factor;
+    zoom.set(zoom.get() * factor);
   }, []);
 
   const moveViewport = useCallback((x = 0, y = 0, absolute = false) => {
     if (absolute) {
-      state.current.center = {
-        x: x * layoutSpace,
-        y: y * layoutSpace,
-      };
+      centerX.set(centerX.get() * layoutSpace);
+      centerY.set(centerY.get() * layoutSpace);
       return;
     }
 
-    state.current.center = {
-      x: state.current.center.x + (x * layoutSpace / state.current.zoom),
-      y: state.current.center.y + (y * layoutSpace / state.current.zoom),
-    };
+    centerX.set(centerX.get() + (x * layoutSpace / zoom.get()));
+    centerY.set(centerY.get() + (y * layoutSpace / zoom.get()));
   }, []);
 
   // Convert relative coordinates (0-1) into pixel coordinates for d3-force accounting for viewport
   // -1000 - -1000 space, 0,0 center
-  const calculateLayoutCoords = useCallback(({ x, y }) => {
-    const { center, zoom } = state.current;
-
-    return {
-      x: (((x - 0.5) / zoom) * layoutSpace) + center.x,
-      y: (((y - 0.5) / zoom) * layoutSpace) + center.y,
-    };
-  }, []);
+  const calculateLayoutCoords = useCallback(({ x, y }) => ({
+    x: (((x - 0.5) / zoom.get()) * layoutSpace) + centerX.get(),
+    y: (((y - 0.5) / zoom.get()) * layoutSpace) + centerY.get(),
+  }), []);
 
   // Calculate relative position accounting for viewport
-  const calculateRelativeCoords = useCallback(({ x, y }) => {
-    const { center, zoom } = state.current;
-
-    return {
-      x: clamp((((x - center.x) / layoutSpace) * zoom) + 0.5, 0, 1),
-      y: clamp((((y - center.y) / layoutSpace) * zoom) + 0.5, 0, 1),
-    };
-  }, []);
+  const calculateRelativeCoords = useCallback(({ x, y }) => ({
+    x: clamp((((x - centerX.get()) / layoutSpace) * zoom.get()) + 0.5, 0, 1),
+    y: clamp((((y - centerY.get()) / layoutSpace) * zoom.get()) + 0.5, 0, 1),
+  }), []);
 
   return {
-    viewport: state,
+    viewport: {
+      zoom,
+      centerX,
+      centerY,
+    },
     moveViewport,
     zoomViewport,
     calculateLayoutCoords,

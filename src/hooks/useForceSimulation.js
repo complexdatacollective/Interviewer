@@ -22,8 +22,6 @@ const useForceSimulation = (listener = () => {}) => {
   const state = useRef(null);
   const [isRunning, setIsRunning] = useState(false);
 
-  console.log({ viewport });
-
   const recalculate = useCallback(() => {
     state.current.nodes = simNetwork.current.nodes.map(calculateRelativeCoords);
   }, []);
@@ -50,7 +48,6 @@ const useForceSimulation = (listener = () => {}) => {
           const protocolNodes = event.data.nodes.map(calculateRelativeCoords);
           simNetwork.current.nodes = event.data.nodes;
           state.current.nodes = protocolNodes;
-          console.debug('end', simNetwork.current, protocolNodes, viewport);
           listener({ type: 'end', data: protocolNodes });
           setIsRunning(false);
           break;
@@ -140,8 +137,8 @@ const useForceSimulation = (listener = () => {}) => {
 
     // TODO: provide as decimal delta?
     const nodeAttributes = {
-      fy: position.y + (dy / viewport.current.zoom),
-      fx: position.x + (dx / viewport.current.zoom),
+      fy: position.y + (dy / viewport.zoom.get()),
+      fx: position.x + (dx / viewport.zoom.get()),
     };
 
     updateNode(nodeAttributes, nodeIndex);
