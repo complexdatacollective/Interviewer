@@ -2,6 +2,7 @@ import {
   useRef,
   useCallback,
   useState,
+  useEffect,
 } from 'react';
 import { get } from 'lodash';
 import ForceSimulationWorker from './forceSimulation.worker';
@@ -25,6 +26,8 @@ const useForceSimulation = (listener = () => {}) => {
   const recalculate = useCallback(() => {
     state.current.nodes = simNetwork.current.nodes.map(calculateRelativeCoords);
   }, []);
+
+  useEffect(() => viewport.zoom.onChange(() => recalculate()), [recalculate]);
 
   const initialize = useCallback(({ nodes = [], links = [] }) => {
     worker.current = new ForceSimulationWorker();

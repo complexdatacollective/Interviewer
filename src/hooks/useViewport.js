@@ -5,7 +5,7 @@ import { clamp } from 'lodash';
 const LAYOUT_SPACE = 1000;
 
 const useViewport = (layoutSpace = LAYOUT_SPACE) => {
-  const zoom = useSpring(4);
+  const zoom = useSpring(3);
   // Don't use spring for centering since this functionality isn't exposed in UI
   const centerX = useMotionValue(0);
   const centerY = useMotionValue(0);
