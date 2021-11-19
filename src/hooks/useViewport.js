@@ -1,13 +1,14 @@
 import { useCallback } from 'react';
-import { useSpring } from 'framer-motion';
+import { useSpring, useMotionValue } from 'framer-motion';
 import { clamp } from 'lodash';
 
 const LAYOUT_SPACE = 1000;
 
 const useViewport = (layoutSpace = LAYOUT_SPACE) => {
   const zoom = useSpring(4);
-  const centerX = useSpring(0);
-  const centerY = useSpring(0);
+  // Don't use spring for centering since this functionality isn't exposed in UI
+  const centerX = useMotionValue(0);
+  const centerY = useMotionValue(0);
 
   const zoomViewport = useCallback((factor = 1.5, absolute = false) => {
     if (absolute) {

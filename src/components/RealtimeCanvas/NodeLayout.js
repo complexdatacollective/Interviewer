@@ -207,10 +207,6 @@ const NodeLayout = React.forwardRef(({
             <button type="button" onClick={() => stop()}>stop</button>
             <button type="button" onClick={() => viewport.zoomViewport(1.5)}>in</button>
             <button type="button" onClick={() => viewport.zoomViewport(0.67)}>out</button>
-            <button type="button" onClick={() => viewport.moveViewport(-0.1, 0)}>left</button>
-            <button type="button" onClick={() => viewport.moveViewport(0, 0.1)}>down</button>
-            <button type="button" onClick={() => viewport.moveViewport(0, -0.1)}>up</button>
-            <button type="button" onClick={() => viewport.moveViewport(0.1, 0)}>right</button>
           </>
         )}
       </div>
