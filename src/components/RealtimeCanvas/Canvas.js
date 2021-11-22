@@ -5,7 +5,10 @@ import PropTypes from 'prop-types';
 /**
  * Wrapper component for consistent positioning between canvas modules
  */
-const Canvas = ({ children, className, nodes, edges }) => (
+const Canvas = ({
+  children,
+  className,
+}) => (
   <div className={cx('canvas', className)}>
     {children}
   </div>

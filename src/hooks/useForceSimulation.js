@@ -64,8 +64,6 @@ const useForceSimulation = (listener = () => {}) => {
       links,
     };
 
-    console.debug(nodes.map(calculateLayoutCoords), nodes, simNetwork.current);
-
     worker.current.postMessage({
       type: 'initialize',
       network: {
@@ -134,9 +132,7 @@ const useForceSimulation = (listener = () => {}) => {
   }, []);
 
   const moveNode = useCallback(({ dy, dx }, nodeIndex) => {
-    const position = simNetwork.current.nodes[nodeIndex]; // ?? simNetwork?
-
-    console.debug({ position, dy, dx });
+    const position = simNetwork.current.nodes[nodeIndex];
 
     // TODO: provide as decimal delta?
     const nodeAttributes = {

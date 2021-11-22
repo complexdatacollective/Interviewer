@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import React, {
   useRef,
   useEffect,
@@ -13,30 +14,12 @@ import { entityPrimaryKeyProperty, entityAttributesProperty } from '../../ducks/
 import useScreen from './useScreen';
 import LayoutNode from './LayoutNode';
 
-// const relativeCoords = (container, node) => ({
-//   x: (node.x - container.x) / container.width,
-//   y: (node.y - container.y) / container.height,
-// });
-
-// updateNode(
-//   item.meta[entityPrimaryKeyProperty],
-//   {},
-//   {
-//     [layoutVariable]: relativeCoords({
-//       width, height, x, y,
-//     }, item),
-//   },
-// );
-
 const NodeLayout = React.forwardRef(({
   allowPositioning,
   highlightAttribute,
   connectFrom,
   allowSelect,
   onSelected,
-  // layoutVariable,
-  // width,
-  // height,
 }, sendRef) => {
   const {
     network: { nodes, layout },
@@ -76,14 +59,20 @@ const NodeLayout = React.forwardRef(({
         { [layout]: position },
       ));
     });
-    //
   }, [layout, isRunning, simulationEnabled]);
 
-  const handleDragStart = useCallback((uuid, index, { dy, dx }) => {
-    // moveNode({ dy, dx }, index);
+  // (uuid, index, { dy, dx, x, y })
+  const handleDragStart = useCallback(() => {
   }, [simulationEnabled]);
 
-  const handleDragMove = useCallback((uuid, index, { dy, dx, x, y }) => {
+  const handleDragMove = useCallback((uuid, index, delta) => {
+    const {
+      dy,
+      dx,
+      x,
+      y,
+    } = delta;
+
     if (simulationEnabled) {
       moveNode({ dy, dx }, index);
       return;
@@ -111,7 +100,6 @@ const NodeLayout = React.forwardRef(({
 
   const update = useRef(() => {
     if (layoutEls.current) {
-      console.log(simulation.current.nodes.length);
       layoutEls.current.forEach((el, index) => {
         // const el = layoutEls.current[index];
         const relativePosition = getPosition.current(index);
@@ -187,7 +175,7 @@ const NodeLayout = React.forwardRef(({
               node={node}
               portal={el}
               index={index}
-              key={`${node._uid}_${index}`}
+              key={`${node[entityPrimaryKeyProperty]}_${index}`}
               onDragStart={handleDragStart}
               onDragMove={handleDragMove}
               onDragEnd={handleDragEnd}

@@ -9,7 +9,10 @@ const viewBoxScale = 100;
 const EdgeLayout = () => {
   const lines = useRef();
   const svg = useRef();
-  const { network: { edges, links }, simulation: { simulation, getPosition } } = useContext(LayoutContext);
+  const {
+    network: { edges, links },
+    simulation: { getPosition },
+  } = useContext(LayoutContext);
   const timer = useRef();
   const edgeDefinitions = useSelector((state) => getProtocolCodebook(state).edge);
 

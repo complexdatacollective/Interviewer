@@ -38,7 +38,6 @@ const LayoutNode = ({
   }, [portal, index, onDragStart, onDragMove, onDragEnd]);
 
   useEffect(() => {
-    console.log('ran me');
     const handleSelected = () => onSelected(node);
 
     portal.addEventListener('click', handleSelected);

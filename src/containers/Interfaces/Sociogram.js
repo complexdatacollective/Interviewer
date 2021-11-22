@@ -6,7 +6,7 @@ import { withHandlers, compose } from 'recompose';
 import PropTypes from 'prop-types';
 import withPrompt from '../../behaviours/withPrompt';
 import { LayoutProvider } from '../../contexts/LayoutContext';
-import Canvas from '../../components/Canvas/Canvas';
+import Canvas from '../../components/RealtimeCanvas/Canvas';
 import NodeBucket from '../Canvas/NodeBucket';
 import NodeLayout from '../Canvas/NodeLayout';
 import EdgeLayout from '../../components/RealtimeCanvas/EdgeLayout';

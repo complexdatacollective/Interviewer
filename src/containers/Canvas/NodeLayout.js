@@ -1,5 +1,4 @@
 import { bindActionCreators } from 'redux';
-import { isNil } from 'lodash';
 import { connect } from 'react-redux';
 import { compose, withHandlers, withState } from 'recompose';
 import { withBounds } from '../../behaviours';

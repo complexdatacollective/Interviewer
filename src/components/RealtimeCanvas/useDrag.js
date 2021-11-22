@@ -54,14 +54,14 @@ const useDrag = () => {
     state.current.hasMoved = true;
   });
 
-  const handleDragEnd = useCallback((e) => {
+  const handleDragEnd = useCallback(() => {
     if (!state.current.id) { return; }
     state.current.id = null;
     // TODO: capture last move
     // hasMoved = false;
     // move = null;
     // move = getMove(e);
-    console.log('end', getMove(e));
+    // console.log('end', getMove(e));
   });
 
   const getDelta = useCallback(() => {

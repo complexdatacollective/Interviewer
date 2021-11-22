@@ -1,9 +1,8 @@
+/* eslint-disable no-console, func-names */
 import {
   forceSimulation,
   forceX,
   forceY,
-  forceCollide,
-  forceCenter,
   forceManyBody,
   forceLink,
 } from 'd3-force';

@@ -90,7 +90,7 @@ export const LayoutProvider = ({
       ({ attributes }) => attributes[layout],
     );
 
-    console.debug('update sim nodes');
+    // console.debug('update sim nodes');
 
     updateNetwork({ nodes: simulationNodes });
   }, [simulationEnabled, nodes, layout]);
@@ -104,7 +104,7 @@ export const LayoutProvider = ({
   useEffect(() => {
     if (!simulationEnabled) { return; }
 
-    console.debug('update sim links');
+    // console.debug('update sim links');
 
     updateNetwork({ links });
   }, [simulationEnabled, links]);
