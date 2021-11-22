@@ -110,15 +110,17 @@ const NodeLayout = React.forwardRef(({
   }, [layout, simulationEnabled, screen.calculateRelativeCoords]);
 
   const update = useRef(() => {
-    if (simulation.current.nodes) {
-      simulation.current.nodes.forEach((_, index) => {
-        const el = layoutEls.current[index];
+    if (layoutEls.current) {
+      console.log(simulation.current.nodes.length);
+      layoutEls.current.forEach((el, index) => {
+        // const el = layoutEls.current[index];
         const relativePosition = getPosition.current(index);
         if (!relativePosition || !el) { return; }
 
         const screenPosition = screen.calculateScreenCoords(relativePosition);
         el.style.left = `${screenPosition.x}px`;
         el.style.top = `${screenPosition.y}px`;
+        el.style.display = 'block';
       });
     }
 
@@ -135,6 +137,7 @@ const NodeLayout = React.forwardRef(({
       const nodeEl = document.createElement('div');
       nodeEl.style.position = 'absolute';
       nodeEl.style.transform = 'translate(-50%, -50%)';
+      nodeEl.style.display = 'none';
       ref.current.append(nodeEl);
 
       return nodeEl;
@@ -147,6 +150,7 @@ const NodeLayout = React.forwardRef(({
   }, []);
 
   useEffect(() => {
+    cancelAnimationFrame(timer.current);
     timer.current = requestAnimationFrame(() => update.current());
 
     return () => {
@@ -183,7 +187,7 @@ const NodeLayout = React.forwardRef(({
               node={node}
               portal={el}
               index={index}
-              key={index}
+              key={`${node._uid}_${index}`}
               onDragStart={handleDragStart}
               onDragMove={handleDragMove}
               onDragEnd={handleDragEnd}
