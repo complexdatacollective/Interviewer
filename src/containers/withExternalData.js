@@ -11,9 +11,11 @@ import {
 import {
   get,
   includes,
+  isNil,
   mapValues,
   mapKeys,
   toNumber,
+  reduce,
 } from 'lodash';
 import loadExternalData from '../utils/loadExternalData';
 import getParentKeyByNameValue from '../utils/getParentKeyByNameValue';
@@ -40,11 +42,19 @@ const mapStateToProps = (state) => {
 
 const withUUID = (node) => objectHash(node);
 
+const getCodebookDefinition = (protocolCodebook, stageSubject) => {
+  const stageNodeType = stageSubject.type;
+  const entityType = stageSubject.entity;
+  if (entityType === 'ego') {
+    return protocolCodebook[entityType] || {};
+  }
+  return protocolCodebook[entityType][stageNodeType] || {};
+};
+
 // Replace string keys with UUIDs in codebook, according to stage subject.
 const withVariableUUIDReplacement = (nodeList, protocolCodebook, stageSubject) => nodeList.map(
   (node) => {
-    const stageNodeType = stageSubject.type;
-    const codebookDefinition = protocolCodebook.node[stageNodeType] || {};
+    const codebookDefinition = getCodebookDefinition(protocolCodebook, stageSubject);
 
     const uuid = withUUID(node);
 
@@ -57,7 +67,7 @@ const withVariableUUIDReplacement = (nodeList, protocolCodebook, stageSubject) =
     );
 
     return {
-      type: stageNodeType,
+      type: stageSubject.type,
       [entityPrimaryKeyProperty]: uuid,
       [entityAttributesProperty]: attributes,
     };
@@ -67,8 +77,7 @@ const withVariableUUIDReplacement = (nodeList, protocolCodebook, stageSubject) =
 // compile list of attributes from a nodelist that aren't already in the codebook
 const getUniqueAttributeKeys = (nodeList, protocolCodebook, stageSubject) => (
   nodeList.reduce((attributeKeys, node) => {
-    const stageNodeType = stageSubject.type;
-    const codebookDefinition = protocolCodebook.node[stageNodeType] || {};
+    const codebookDefinition = getCodebookDefinition(protocolCodebook, stageSubject);
     const variables = Object.keys(node.attributes);
     const nonCodebookVariables = variables.filter(
       (attributeKey) => !get(codebookDefinition, `variables[${attributeKey}]`),
@@ -81,41 +90,65 @@ const getUniqueAttributeKeys = (nodeList, protocolCodebook, stageSubject) => (
 );
 
 // use column data to determine best guess for attribute type
-const deriveAttributeTypesFromData = (uniqueAttributeKeys, nodeList) => (
-  uniqueAttributeKeys.reduce((keyTypeMap, attributeKey) => {
-    const derivedType = nodeList.reduce((previousType, node) => {
-      const currentValue = get(node, `[${entityAttributesProperty}][${attributeKey}]`);
-      if (!currentValue || previousType === ProtocolConsts.VariableType.text) {
-        return previousType;
-      }
-      let currentType = '';
-      if (!Number.isNaN(toNumber(currentValue))) {
-        currentType = ProtocolConsts.VariableType.number;
-      }
-      if (String(currentValue).toLowerCase() === 'true' || String(currentValue).toLowerCase() === 'false') {
-        currentType = ProtocolConsts.VariableType.boolean;
-      }
-      // could insert regex for array/object detection, but not helpful if not in the codebook
+const deriveAttributeTypeFromData = (attributeKey, nodeList) => (
+  nodeList.reduce((previousType, node) => {
+    const currentValue = get(node, `[${entityAttributesProperty}][${attributeKey}]`);
+    if (!currentValue || previousType === ProtocolConsts.VariableType.text) {
+      return previousType;
+    }
+    let currentType = '';
+    if (!Number.isNaN(toNumber(currentValue))) {
+      currentType = ProtocolConsts.VariableType.number;
+    }
+    if (String(currentValue).toLowerCase() === 'true' || String(currentValue).toLowerCase() === 'false') {
+      currentType = ProtocolConsts.VariableType.boolean;
+    }
+    // could insert regex for array/object detection, but not helpful if not in the codebook
 
-      // fallback to text if a conflict emerges, or first instance of non-null data
-      if ((previousType !== '' && currentType !== previousType) || (currentType === '' && !!currentValue)) {
-        return ProtocolConsts.VariableType.text;
+    // fallback to text if a conflict emerges, or first instance of non-null data
+    if ((previousType !== '' && currentType !== previousType) || (currentType === '' && !!currentValue)) {
+      return ProtocolConsts.VariableType.text;
+    }
+    return currentType;
+  }, '')
+);
+
+const getAttributeTypes = (uniqueAttributeKeys, nodeList, protocolCodebook, stageSubject) => (
+  uniqueAttributeKeys.reduce((derivedTypes, attributeKey) => {
+    const codebookDefinition = getCodebookDefinition(protocolCodebook, stageSubject);
+    let codebookType = get(codebookDefinition, `variables[${attributeKey}].type`);
+    if (includes(ProtocolConsts.VariableType, codebookType)) {
+      return { ...derivedTypes, [attributeKey]: codebookType };
+    }
+    // possible categorical or layout variable
+    if (attributeKey.includes('_')) {
+      const uuid = attributeKey.substring(0, attributeKey.indexOf('_'));
+      const option = attributeKey.substring(attributeKey.indexOf('_'));
+      codebookType = get(codebookDefinition, `variables[${uuid}].type`);
+      if (includes(ProtocolConsts.VariableType, codebookType)) {
+        if (option === '_x' || option === '_y') {
+          return { ...derivedTypes, [attributeKey]: `${codebookType}${option}` };
+        }
+        return { ...derivedTypes, [attributeKey]: `${codebookType}_option` };
       }
-      return currentType;
-    }, '');
-    return { ...keyTypeMap, [attributeKey]: derivedType };
+    }
+    // use type based on column data because the codebook type wasn't valid
+    codebookType = deriveAttributeTypeFromData(attributeKey, nodeList);
+    return { ...derivedTypes, [attributeKey]: codebookType };
   }, {})
 );
 
 const getNodeListUsingTypes = (nodeList, protocolCodebook, stageSubject, derivedAttributeTypes) => (
   nodeList.map(
     (node) => {
-      const stageNodeType = stageSubject.type;
-      const codebookDefinition = protocolCodebook.node[stageNodeType] || {};
-
-      const attributes = mapValues(
+      const codebookDefinition = getCodebookDefinition(protocolCodebook, stageSubject);
+      const attributes = reduce(
         node.attributes,
-        (attributeValue, attributeKey) => {
+        (consolidatedAttributes, attributeValue, attributeKey) => {
+          if (isNil(attributeValue) || attributeValue === '') {
+            return consolidatedAttributes;
+          }
+
           let codebookType = get(codebookDefinition, `variables[${attributeKey}].type`);
           if (!includes(ProtocolConsts.VariableType, codebookType)) {
             // use type based on column data because the codebook type wasn't valid
@@ -124,28 +157,58 @@ const getNodeListUsingTypes = (nodeList, protocolCodebook, stageSubject, derived
 
           switch (codebookType) {
             case ProtocolConsts.VariableType.boolean: {
-              return String(attributeValue).toLowerCase() === 'true';
+              return { ...consolidatedAttributes, [attributeKey]: String(attributeValue).toLowerCase() === 'true' };
             }
             case ProtocolConsts.VariableType.number:
             case ProtocolConsts.VariableType.scalar: {
-              return toNumber(attributeValue);
+              return { ...consolidatedAttributes, [attributeKey]: toNumber(attributeValue) };
             }
             case ProtocolConsts.VariableType.categorical:
             case ProtocolConsts.VariableType.ordinal:
             case ProtocolConsts.VariableType.layout: {
               try {
                 // do special characters need to be sanitized/escaped?
-                return JSON.parse(attributeValue);
+                return { ...consolidatedAttributes, [attributeKey]: JSON.parse(attributeValue) };
               } catch (e) {
-                return attributeValue;
+                return { ...consolidatedAttributes, [attributeKey]: attributeValue };
               }
+            }
+            case `${ProtocolConsts.VariableType.layout}_x`: {
+              const uuid = attributeKey.substring(0, attributeKey.indexOf('_'));
+              return {
+                ...consolidatedAttributes,
+                [uuid]: { ...consolidatedAttributes[uuid], x: toNumber(attributeValue) },
+              };
+            }
+            case `${ProtocolConsts.VariableType.layout}_y`: {
+              const uuid = attributeKey.substring(0, attributeKey.indexOf('_'));
+              return {
+                ...consolidatedAttributes,
+                [uuid]: { ...consolidatedAttributes[uuid], y: toNumber(attributeValue) },
+              };
+            }
+            case `${ProtocolConsts.VariableType.categorical}_option`: {
+              if (String(attributeValue).toLowerCase() === 'true') {
+                const uuid = attributeKey.substring(0, attributeKey.indexOf('_'));
+                const option = attributeKey.substring(attributeKey.indexOf('_') + 1);
+                const previousOptions = consolidatedAttributes[uuid] || [];
+                try {
+                  return {
+                    ...consolidatedAttributes,
+                    [uuid]: [...previousOptions, JSON.parse(option)],
+                  };
+                } catch (e) {
+                  return { ...consolidatedAttributes, [uuid]: [...previousOptions, option] };
+                }
+              }
+              return consolidatedAttributes;
             }
             case ProtocolConsts.VariableType.datetime:
             case ProtocolConsts.VariableType.text:
             default:
-              return attributeValue;
+              return { ...consolidatedAttributes, [attributeKey]: attributeValue };
           }
-        },
+        }, {},
       );
 
       return {
@@ -160,11 +223,12 @@ const getNodeListUsingTypes = (nodeList, protocolCodebook, stageSubject, derived
 const withTypeReplacement = (nodeList, protocolCodebook, stageSubject) => {
   const uniqueAttributeKeys = getUniqueAttributeKeys(nodeList, protocolCodebook, stageSubject);
 
-  // look up best guess for type of each key based on the column data
-  const derivedAttributeTypes = deriveAttributeTypesFromData(uniqueAttributeKeys, nodeList);
+  const codebookAttributeTypes = getAttributeTypes(
+    uniqueAttributeKeys, nodeList, protocolCodebook, stageSubject,
+  );
 
   // make substitutes using codebook first, then column data derivation
-  return getNodeListUsingTypes(nodeList, protocolCodebook, stageSubject, derivedAttributeTypes);
+  return getNodeListUsingTypes(nodeList, protocolCodebook, stageSubject, codebookAttributeTypes);
 };
 
 /**
