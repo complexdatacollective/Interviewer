@@ -1,4 +1,3 @@
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { compose, withHandlers, withState } from 'recompose';
 import { withBounds } from '../../behaviours';
@@ -19,12 +18,10 @@ const withConnectFromHandler = withHandlers({
   handleResetConnectFrom: ({ setConnectFrom }) => () => setConnectFrom(null),
 });
 
-const withRerenderCount = withState('rerenderCount', 'setRerenderCount', 0);
-
 const withDropHandlers = withHandlers({
   accepts: () => ({ meta }) => meta.itemType === 'POSITIONED_NODE',
   onDrop: ({
-    updateNode, layoutVariable, setRerenderCount, rerenderCount, width, height, x, y,
+    updateNode, layoutVariable, width, height, x, y,
   }) => (item) => {
     updateNode(
       item.meta[entityPrimaryKeyProperty],
@@ -35,28 +32,7 @@ const withDropHandlers = withHandlers({
         }, item),
       },
     );
-
-    // Horrible hack for performance (only re-render nodes on drop, not on drag)
-    setRerenderCount(rerenderCount + 1);
   },
-  // onDrag: ({
-  //   layoutVariable, updateNode, width, height, x, y,
-  // }) => (item) => {
-  //   if (isNil(item.meta[entityAttributesProperty][layoutVariable])) { return; }
-  //   updateNode(
-  //     item.meta[entityPrimaryKeyProperty],
-  //     {},
-  //     {
-  //       [layoutVariable]: relativeCoords({
-  //         width, height, x, y,
-  //       }, item),
-  //     },
-  //   );
-  // },
-  // onDragEnd: ({ setRerenderCount, rerenderCount }) => () => {
-  //   // make sure to also re-render nodes that were updated on drag end
-  //   setRerenderCount(rerenderCount + 1);
-  // },
 });
 
 const withSelectHandlers = compose(
@@ -110,33 +86,27 @@ const withSelectHandlers = compose(
       allowHighlighting,
       connectNode,
       toggleHighlightAttribute,
-      setRerenderCount,
-      rerenderCount,
     }) => (node) => {
       if (!allowHighlighting) {
         connectNode(node[entityPrimaryKeyProperty]);
       } else {
         toggleHighlightAttribute(node);
       }
-      setRerenderCount(rerenderCount + 1);
     },
   }),
 );
 
-function mapDispatchToProps(dispatch) {
-  return {
-    toggleHighlight: bindActionCreators(sessionsActions.toggleNodeAttributes, dispatch),
-    toggleEdge: bindActionCreators(sessionsActions.toggleEdge, dispatch),
-    updateNode: bindActionCreators(sessionsActions.updateNode, dispatch),
-  };
-}
+const mapDispatchToProps = {
+  toggleHighlight: sessionsActions.toggleNodeAttributes,
+  toggleEdge: sessionsActions.toggleEdge,
+  updateNode: sessionsActions.updateNode,
+};
 
 export default compose(
   withConnectFrom,
   withConnectFromHandler,
   connect(null, mapDispatchToProps),
   withBounds,
-  withRerenderCount,
   withDropHandlers,
   withSelectHandlers,
   DropTarget,

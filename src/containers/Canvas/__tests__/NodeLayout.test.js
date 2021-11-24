@@ -7,6 +7,9 @@ import { Provider } from 'react-redux';
 
 import NodeLayout from '../NodeLayout';
 
+jest.mock('../../../hooks/forceSimulation.worker');
+// jest.mock('../../../hooks/useForceSimulation');
+
 describe('Connect(NodeLayout)', () => {
   const mockState = {
     sessions: {},

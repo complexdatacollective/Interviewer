@@ -2,26 +2,26 @@
 /* eslint-disable @codaco/spellcheck/spell-checker */
 
 import React from 'react';
-import { shallow } from 'enzyme';
+import { act } from 'react-dom/test-utils';
+import { shallow, mount } from 'enzyme';
+import { createStore } from 'redux';
+import { noop } from 'lodash';
+import { Provider } from 'react-redux';
 import NodeLayout from '../NodeLayout';
 import {
   entityPrimaryKeyProperty,
   entityAttributesProperty,
 } from '../../../ducks/modules/network';
+import LayoutContext from '../../../contexts/LayoutContext';
+
+jest.mock('../../../hooks/forceSimulation.worker');
+// jest.mock('../../../hooks/useForceSimulation');
+
+jest.useFakeTimers();
 
 const layout = 'foo';
 
 const mockProps = {
-  nodes: [
-    {
-      [entityPrimaryKeyProperty]: 123,
-      [entityAttributesProperty]: { isOn: true, [layout]: { x: 0, y: 0 } },
-    },
-    {
-      [entityPrimaryKeyProperty]: 1,
-      [entityAttributesProperty]: { isOn: false, [layout]: { x: 0, y: 0 } },
-    },
-  ],
   updateNode: () => {},
   toggleEdge: () => {},
   toggleHighlight: () => {},
@@ -39,18 +39,78 @@ const mockProps = {
   sortOrder: [],
   concentricCircles: 0,
   skewedTowardCenter: false,
+  ref: () => {},
 };
 
+const ref = (value) => ({ current: value });
+
+const mockContext = {
+  network: {
+    nodes: [
+      {
+        [entityPrimaryKeyProperty]: 123,
+        [entityAttributesProperty]: { isOn: true, [layout]: { x: 0, y: 0 } },
+      },
+      {
+        [entityPrimaryKeyProperty]: 1,
+        [entityAttributesProperty]: { isOn: false, [layout]: { x: 0, y: 0 } },
+      },
+    ],
+    edges: [],
+  },
+  viewport: {},
+  simulation: {
+    simulation: ref({}),
+    getPosition: ref(noop),
+  },
+};
+
+const mockStore = createStore((s) => s, {});
+
+const WithContext = ({
+  children,
+  store = mockStore,
+  layoutContext = mockContext,
+}) => (
+  <Provider store={store}>
+    <LayoutContext.Provider value={layoutContext}>
+      {children}
+    </LayoutContext.Provider>
+  </Provider>
+);
+
 describe('<NodeLayout />', () => {
+  beforeEach(() => {
+    jest.useFakeTimers();
+    window.requestAnimationFrame = (f) => setTimeout(() => f(), 0);
+  });
+
   it('renders ok', () => {
-    const component = shallow(<NodeLayout {...mockProps} />);
+    const component = mount((
+      <WithContext>
+        <NodeLayout {...mockProps} />
+      </WithContext>
+    ));
 
     expect(component).toMatchSnapshot();
   });
 
-  describe('isLinking', () => {
-    it('detects connecting state', () => {
-      const subject = shallow(<NodeLayout {...mockProps} connectFrom={1} />);
+  describe.only('isLinking', () => {
+    it('detects connecting state', async () => {
+      const subject = mount((
+        <WithContext>
+          <NodeLayout {...mockProps} connectFrom={1} />
+        </WithContext>
+      ));
+      // await act(() => new Promise(setImmediate));
+      // await act(() => new Promise(setImmediate));
+      // await act(() => new Promise(setImmediate));
+      // subject.update();
+      // subject.render();
+      jest.runOnlyPendingTimers();
+      subject.update();
+      subject.render();
+      console.log(subject.html());
       const result = subject.find('LayoutNode').map((n) => {
         const node = n.prop('node');
         return [
@@ -58,14 +118,14 @@ describe('<NodeLayout />', () => {
           n.prop('linking'),
         ];
       });
-      expect(result).toEqual([
+      return expect(result).toEqual([
         [123, false],
         [1, true],
       ]);
     });
   });
 
-  describe.only('highlighting', () => {
+  describe('highlighting', () => {
     const subject = shallow(<NodeLayout {...mockProps} highlightAttribute="isOn" />);
 
     it('detects highlight state', () => {

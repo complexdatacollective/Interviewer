@@ -10,13 +10,13 @@ const useViewport = (layoutSpace = LAYOUT_SPACE) => {
   const centerX = useMotionValue(0);
   const centerY = useMotionValue(0);
 
-  const getViewport = useCallback(() => ({
-    zoom: zoom.get(),
+  const viewport = {
+    zoom,
     center: {
-      x: centerX.get(),
-      y: centerY.get(),
+      x: centerX,
+      y: centerY,
     },
-  }), []);
+  };
 
   const zoomViewport = useCallback((factor = 1.5, absolute = false) => {
     if (absolute) {
@@ -52,7 +52,7 @@ const useViewport = (layoutSpace = LAYOUT_SPACE) => {
   }), []);
 
   return {
-    viewport: getViewport,
+    viewport,
     moveViewport,
     zoomViewport,
     calculateLayoutCoords,

@@ -4,10 +4,34 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { get } from 'lodash';
+import { get, noop } from 'lodash';
 import useForceSimulation from '../hooks/useForceSimulation';
 
-const LayoutContext = React.createContext('layout');
+const LayoutContext = React.createContext({
+  network: {
+    nodes: [],
+    edges: [],
+    layout: undefined,
+    links: [],
+  },
+  viewport: {
+    moveViewport: noop,
+    zoomViewport: noop,
+  },
+  simulation: {
+    simulation: {},
+    isRunning: false,
+    initialize: noop,
+    start: noop,
+    reheat: noop,
+    stop: noop,
+    moveNode: noop,
+    releaseNode: noop,
+    getPosition: noop,
+    simulationEnabled: false,
+    toggleSimulation: noop,
+  },
+});
 
 const getLinks = ({ nodes, edges }) => {
   const nodeIdMap = nodes.reduce(

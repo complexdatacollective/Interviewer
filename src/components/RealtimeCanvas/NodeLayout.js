@@ -1,71 +1,100 @@
 /* eslint-disable no-param-reassign */
-import React, {
-  useRef,
-  useEffect,
-  useContext,
-  useCallback,
-} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
 import { isEmpty, get } from 'lodash';
-import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import LayoutContext from '../../contexts/LayoutContext';
 import { entityPrimaryKeyProperty, entityAttributesProperty } from '../../ducks/modules/network';
-import useScreen from './useScreen';
+import ScreenManager from './ScreenManager';
 import LayoutNode from './LayoutNode';
 
-const NodeLayout = React.forwardRef(({
-  allowPositioning,
-  highlightAttribute,
-  connectFrom,
-  allowSelect,
-  onSelected,
-}, sendRef) => {
-  const {
-    network: { nodes, layout },
-    viewport,
-    simulation: {
-      simulation,
-      reheat,
-      stop,
-      moveNode,
-      isRunning,
-      releaseNode,
-      getPosition,
-      simulationEnabled,
-      toggleSimulation,
-    },
-  } = useContext(LayoutContext);
+class NodeLayout extends React.Component {
+  constructor(props) {
+    super(props);
 
-  const screen = useScreen();
-  const ref = useRef();
-  const timer = useRef();
-  const layoutEls = useRef([]);
+    this.ref = React.createRef();
+    this.timer = undefined;
+    this.layoutEls = [];
+    this.screen = ScreenManager();
+  }
 
-  const dispatch = useDispatch();
+  componentDidMount() {
+    // this.timer = requestAnimationFrame(() => this.update());
+  }
 
-  useEffect(() => {
-    if (!simulation.current) { return; }
-    if (isRunning && simulationEnabled) { return; }
+  componentDidUpdate(prevProps) {
+    const { nodes } = this.props;
 
-    nodes.forEach((node, index) => {
-      const position = getPosition.current(index); // simulation.current.nodes[index];
-      // if node is not in the simulation let, do not try to update in in the session
-      if (!position) { return; }
+    if (!prevProps.nodes === nodes) { return; }
 
-      dispatch(sessionsActions.updateNode(
-        node[entityPrimaryKeyProperty],
-        undefined,
-        { [layout]: position },
-      ));
+    this.layoutEls = nodes.map((_, index) => {
+      if (this.layoutEls[index]) { return this.layoutEls[index]; }
+
+      const nodeEl = document.createElement('div');
+      nodeEl.style.position = 'absolute';
+      nodeEl.style.transform = 'translate(-50%, -50%)';
+      nodeEl.style.display = 'none';
+      this.ref.current.append(nodeEl);
+
+      return nodeEl;
     });
-  }, [layout, isRunning, simulationEnabled]);
+  }
+
+  componentWillUnmount() {
+    cancelAnimationFrame(this.timer);
+  }
+
+  update = () => {
+    const {
+      simulation: {
+        getPosition,
+      },
+    } = this.context;
+
+    this.layoutEls.forEach((el, index) => {
+      // const el = layoutEls.current[index];
+      const relativePosition = getPosition.current(index);
+      if (!relativePosition || !el) { return; }
+
+      const screenPosition = this.screen.calculateScreenCoords(relativePosition);
+      // const screenPosition = { x: 0.5, y: 0.5 };
+      el.style.left = `${screenPosition.x}px`;
+      el.style.top = `${screenPosition.y}px`;
+      el.style.display = 'block';
+    });
+
+    this.timer = requestAnimationFrame(() => this.update());
+  }
+
+  isLinking = (node) => {
+    const { connectFrom } = this.props;
+    return get(node, entityPrimaryKeyProperty) === connectFrom;
+  };
+
+  isHighlighted = (node) => {
+    const { highlightAttribute } = this.props;
+    return (
+      !isEmpty(highlightAttribute)
+      && get(node, [entityAttributesProperty, highlightAttribute]) === true
+    );
+  };
+
+  initializeLayout = (el) => {
+    if (!el) { return; }
+    this.ref.current = el;
+    this.screen.initialize(el);
+  };
 
   // (uuid, index, { dy, dx, x, y })
-  const handleDragStart = useCallback(() => {
-  }, [simulationEnabled]);
+  handleDragStart = () => {};
 
-  const handleDragMove = useCallback((uuid, index, delta) => {
+  handleDragMove = (uuid, index, delta) => {
+    const {
+      network: { layout },
+      simulation: { simulationEnabled, moveNode },
+    } = this.context;
+
+    const { updateNode } = this.props;
+
     const {
       dy,
       dx,
@@ -78,97 +107,74 @@ const NodeLayout = React.forwardRef(({
       return;
     }
 
-    dispatch(sessionsActions.updateNode(
+    updateNode(
       uuid,
       undefined,
-      { [layout]: screen.calculateRelativeCoords({ x, y }) },
-    ));
-  }, [layout, simulationEnabled, screen.calculateRelativeCoords]);
+      { [layout]: this.screen.calculateRelativeCoords({ x, y }) },
+    );
+  };
 
-  const handleDragEnd = useCallback((uuid, index, { x, y }) => {
+  handleDragEnd = (uuid, index, { x, y }) => {
+    const {
+      network: { layout },
+      simulation: { simulationEnabled, releaseNode },
+    } = this.context;
+
+    const {
+      updateNode,
+    } = this.props;
+
     if (simulationEnabled) {
       releaseNode(index);
       return;
     }
 
-    dispatch(sessionsActions.updateNode(
+    updateNode(
       uuid,
       undefined,
-      { [layout]: screen.calculateRelativeCoords({ x, y }) },
-    ));
-  }, [layout, simulationEnabled, screen.calculateRelativeCoords]);
+      { [layout]: this.screen.calculateRelativeCoords({ x, y }) },
+    );
+  };
 
-  const update = useRef(() => {
-    if (layoutEls.current) {
-      layoutEls.current.forEach((el, index) => {
-        // const el = layoutEls.current[index];
-        const relativePosition = getPosition.current(index);
-        if (!relativePosition || !el) { return; }
+  render() {
+    const {
+      network: { nodes },
+      viewport,
+      simulation: {
+        reheat,
+        stop,
+        simulationEnabled,
+        toggleSimulation,
+      },
+    } = this.context;
 
-        const screenPosition = screen.calculateScreenCoords(relativePosition);
-        el.style.left = `${screenPosition.x}px`;
-        el.style.top = `${screenPosition.y}px`;
-        el.style.display = 'block';
-      });
-    }
+    const {
+      allowPositioning,
+      allowSelect,
+      onSelected,
+    } = this.props;
 
-    timer.current = requestAnimationFrame(() => update.current());
-    // timer.current = setTimeout(() => update.current(), 10000);
-  });
+    return (
+      <>
+        <div className="node-layout" ref={this.initializeLayout} />
 
-  useEffect(() => {
-    if (!ref.current) { return; }
+        <div style={{ position: 'absolute', top: 0, left: 0 }}>
+          { !simulationEnabled && (
+            <button type="button" onClick={() => toggleSimulation()}>enable simulation</button>
+          )}
+          { simulationEnabled && (
+            <>
+              <button type="button" onClick={() => toggleSimulation()}>disable simulation</button>
+              <button type="button" onClick={() => reheat()}>reheat</button>
+              <button type="button" onClick={() => stop()}>stop</button>
+              <button type="button" onClick={() => viewport.zoomViewport(1.5)}>in</button>
+              <button type="button" onClick={() => viewport.zoomViewport(0.67)}>out</button>
+            </>
+          )}
+        </div>
 
-    layoutEls.current = nodes.map((_, index) => {
-      if (layoutEls.current[index]) { return layoutEls.current[index]; }
-
-      const nodeEl = document.createElement('div');
-      nodeEl.style.position = 'absolute';
-      nodeEl.style.transform = 'translate(-50%, -50%)';
-      nodeEl.style.display = 'none';
-      ref.current.append(nodeEl);
-
-      return nodeEl;
-    });
-  }, [nodes]);
-
-  useEffect(() => () => {
-    if (!ref.current) { return; }
-    layoutEls.current.forEach((el) => ref.current.removeChild(el));
-  }, []);
-
-  useEffect(() => {
-    cancelAnimationFrame(timer.current);
-    timer.current = requestAnimationFrame(() => update.current());
-
-    return () => {
-      cancelAnimationFrame(timer.current);
-    };
-  }, [nodes]);
-
-  const initializeLayout = useCallback((el) => {
-    if (!el) { return; }
-    sendRef(el);
-    ref.current = el;
-    screen.initialize(el);
-  }, []);
-
-  const isHighlighted = useCallback(
-    (node) => !isEmpty(highlightAttribute)
-        && get(node, [entityAttributesProperty, highlightAttribute]) === true,
-    [highlightAttribute],
-  );
-
-  const isLinking = useCallback(
-    (node) => get(node, entityPrimaryKeyProperty) === connectFrom,
-    [connectFrom],
-  );
-
-  return (
-    <>
-      <div className="node-layout" ref={initializeLayout}>
         {nodes.map((node, index) => {
-          const el = layoutEls.current[index];
+          const el = this.layoutEls[index];
           if (!el) { return null; }
           return (
             <LayoutNode
@@ -176,35 +182,21 @@ const NodeLayout = React.forwardRef(({
               portal={el}
               index={index}
               key={`${node[entityPrimaryKeyProperty]}_${index}`}
-              onDragStart={handleDragStart}
-              onDragMove={handleDragMove}
-              onDragEnd={handleDragEnd}
+              onDragStart={this.handleDragStart}
+              onDragMove={this.handleDragMove}
+              onDragEnd={this.handleDragEnd}
               allowPositioning={allowPositioning}
               allowSelect={allowSelect}
               onSelected={onSelected}
-              selected={isHighlighted(node)}
-              linking={isLinking(node)}
+              selected={this.isHighlighted(node)}
+              linking={this.isLinking(node)}
             />
           );
         })}
-      </div>
-      <div style={{ position: 'absolute', top: 0, left: 0 }}>
-        { !simulationEnabled && (
-          <button type="button" onClick={() => toggleSimulation()}>enable simulation</button>
-        )}
-        { simulationEnabled && (
-          <>
-            <button type="button" onClick={() => toggleSimulation()}>disable simulation</button>
-            <button type="button" onClick={() => reheat()}>reheat</button>
-            <button type="button" onClick={() => stop()}>stop</button>
-            <button type="button" onClick={() => viewport.zoomViewport(1.5)}>in</button>
-            <button type="button" onClick={() => viewport.zoomViewport(0.67)}>out</button>
-          </>
-        )}
-      </div>
-    </>
-  );
-});
+      </>
+    );
+  }
+}
 
 NodeLayout.propTypes = {
   onSelected: PropTypes.func.isRequired,
@@ -216,6 +208,8 @@ NodeLayout.defaultProps = {
   allowPositioning: true,
   allowSelect: true,
 };
+
+NodeLayout.contextType = LayoutContext;
 
 export { NodeLayout };
 
