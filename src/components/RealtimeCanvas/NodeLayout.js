@@ -12,19 +12,30 @@ class NodeLayout extends React.Component {
     super(props);
 
     this.ref = React.createRef();
-    this.timer = undefined;
+    this.updateRAF = undefined;
     this.layoutEls = [];
     this.screen = ScreenManager();
   }
 
   componentDidMount() {
-    // this.timer = requestAnimationFrame(() => this.update());
+    this.createLayoutEls();
+    this.updateRAF = requestAnimationFrame(() => this.update());
   }
 
   componentDidUpdate(prevProps) {
     const { nodes } = this.props;
 
-    if (!prevProps.nodes === nodes) { return; }
+    if (prevProps.nodes.length !== nodes.length) {
+      this.createLayoutEls();
+    }
+  }
+
+  componentWillUnmount() {
+    cancelAnimationFrame(this.updateRAF);
+  }
+
+  createLayoutEls = () => {
+    const { nodes } = this.props;
 
     this.layoutEls = nodes.map((_, index) => {
       if (this.layoutEls[index]) { return this.layoutEls[index]; }
@@ -39,10 +50,6 @@ class NodeLayout extends React.Component {
     });
   }
 
-  componentWillUnmount() {
-    cancelAnimationFrame(this.timer);
-  }
-
   update = () => {
     const {
       simulation: {
@@ -51,18 +58,16 @@ class NodeLayout extends React.Component {
     } = this.context;
 
     this.layoutEls.forEach((el, index) => {
-      // const el = layoutEls.current[index];
       const relativePosition = getPosition.current(index);
       if (!relativePosition || !el) { return; }
 
       const screenPosition = this.screen.calculateScreenCoords(relativePosition);
-      // const screenPosition = { x: 0.5, y: 0.5 };
       el.style.left = `${screenPosition.x}px`;
       el.style.top = `${screenPosition.y}px`;
       el.style.display = 'block';
     });
 
-    this.timer = requestAnimationFrame(() => this.update());
+    this.updateRAF = requestAnimationFrame(() => this.update());
   }
 
   isLinking = (node) => {

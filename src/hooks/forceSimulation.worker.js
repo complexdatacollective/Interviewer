@@ -57,6 +57,10 @@ onmessage = function ({ data }) {
       if (!simulation) { return; }
       console.debug('worker:stop');
       simulation.stop();
+      postMessage({
+        type: 'end',
+        nodes: simulation.nodes(),
+      });
       break;
     }
     case 'start': {

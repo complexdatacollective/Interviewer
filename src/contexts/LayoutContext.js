@@ -4,7 +4,10 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import { useDispatch } from 'react-redux';
 import { get, noop } from 'lodash';
+import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
+import { entityPrimaryKeyProperty } from '../ducks/modules/network';
 import useForceSimulation from '../hooks/useForceSimulation';
 
 const LayoutContext = React.createContext({
@@ -86,6 +89,33 @@ export const LayoutProvider = ({
     };
   }, [nodes, simulationEnabled]);
 
+  const dispatch = useDispatch();
+
+  const updateNetworkInStore = useCallback(() => {
+    if (!forceSimulation.current) { return; }
+    nodes.forEach((node, index) => {
+      const position = get(forceSimulation.current.nodes, [index]);
+      if (!position) { return; }
+      const { x, y } = position;
+      dispatch(
+        sessionsActions.updateNode(
+          node[entityPrimaryKeyProperty],
+          undefined,
+          { [layout]: { x, y } },
+        ),
+      );
+    });
+  }, [dispatch, nodes, layout]);
+
+  const previousIsRunning = useRef(false);
+
+  useEffect(() => {
+    if (!isRunning && previousIsRunning.current) {
+      updateNetworkInStore();
+    }
+    previousIsRunning.current = isRunning;
+  }, [isRunning, updateNetworkInStore]);
+
   const toggleSimulation = useCallback(() => {
     if (!simulationEnabled) {
       setSimulationEnabled(true);
@@ -93,9 +123,10 @@ export const LayoutProvider = ({
       return;
     }
 
+    updateNetworkInStore(); // Prevent old redraw
     setSimulationEnabled(false);
     stop();
-  }, [simulationEnabled, setSimulationEnabled]);
+  }, [simulationEnabled, setSimulationEnabled, updateNetworkInStore]);
 
   useEffect(() => {
     const simulationNodes = nodes.map(

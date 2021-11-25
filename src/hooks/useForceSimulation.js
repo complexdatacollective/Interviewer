@@ -78,18 +78,18 @@ const useForceSimulation = (listener = () => {}) => {
   const start = useCallback(() => {
     if (!worker.current) { return; }
     worker.current.postMessage({ type: 'start' });
-  }, [setIsRunning]);
+  }, []);
 
   const reheat = useCallback(() => {
     if (!worker.current) { return; }
     worker.current.postMessage({ type: 'reheat' });
-  }, [setIsRunning]);
+  }, []);
 
   const stop = useCallback(() => {
     if (!worker.current) { return; }
     worker.current.postMessage({ type: 'stop' });
     // worker.current = null;
-  }, [setIsRunning]);
+  }, []);
 
   // TODO: separate update nodes and update links?
   const updateNetwork = useCallback((network) => {
