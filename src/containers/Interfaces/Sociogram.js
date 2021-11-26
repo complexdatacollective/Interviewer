@@ -8,7 +8,7 @@ import withPrompt from '../../behaviours/withPrompt';
 import { LayoutProvider } from '../../contexts/LayoutContext';
 import Canvas from '../../components/RealtimeCanvas/Canvas';
 import NodeBucket from '../Canvas/NodeBucket';
-import NodeLayout from '../Canvas/NodeLayout';
+import NodeLayout from '../RealtimeCanvas/NodeLayout';
 import EdgeLayout from '../../components/RealtimeCanvas/EdgeLayout';
 import Background from '../Canvas/Background';
 import { actionCreators as resetActions } from '../../ducks/modules/reset';

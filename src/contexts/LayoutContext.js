@@ -37,6 +37,8 @@ const LayoutContext = React.createContext({
 });
 
 const getLinks = ({ nodes, edges }) => {
+  if (nodes.length === 0 || edges.length === 0) { return []; }
+
   const nodeIdMap = nodes.reduce(
     (memo, { _uid }, index) => ({
       ...memo,
@@ -45,9 +47,17 @@ const getLinks = ({ nodes, edges }) => {
     {},
   );
 
-  return edges.map(
-    ({ from, to }) => ({ source: nodeIdMap[from], target: nodeIdMap[to] }),
+  const links = edges.reduce(
+    (acc, { from, to }) => {
+      const source = nodeIdMap[from];
+      const target = nodeIdMap[to];
+      if (!source || !target) { return acc; }
+      return [...acc, { source, target }];
+    },
+    [],
   );
+
+  return links;
 };
 
 export const LayoutProvider = ({
@@ -154,7 +164,7 @@ export const LayoutProvider = ({
     const nextLinks = getLinks({ nodes, edges });
 
     setLinks(nextLinks);
-  }, [nodes, edges]);
+  }, [edges, nodes]);
 
   useEffect(() => {
     if (!simulationEnabled) { return; }

@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<NodeLayout /> renders ok 1`] = `
+<div
+  className="node-layout"
+/>
+`;

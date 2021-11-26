@@ -18,16 +18,16 @@ const EdgeLayout = () => {
 
   const update = useRef(() => {
     // debugger;
-    lines.current.forEach((line) => {
-      if (!line.link) { return; }
+    lines.current.forEach(({ link, el }) => {
+      if (!link) { return; }
 
-      const from = getPosition.current(line.link.source);
-      const to = getPosition.current(line.link.target);
+      const from = getPosition.current(link.source);
+      const to = getPosition.current(link.target);
 
-      line.el.setAttributeNS(null, 'x1', from.x * 100);
-      line.el.setAttributeNS(null, 'y1', from.y * 100);
-      line.el.setAttributeNS(null, 'x2', to.x * 100);
-      line.el.setAttributeNS(null, 'y2', to.y * 100);
+      el.setAttributeNS(null, 'x1', from.x * 100);
+      el.setAttributeNS(null, 'y1', from.y * 100);
+      el.setAttributeNS(null, 'x2', to.x * 100);
+      el.setAttributeNS(null, 'y2', to.y * 100);
     });
 
     timer.current = requestAnimationFrame(() => update.current());
@@ -40,21 +40,19 @@ const EdgeLayout = () => {
 
     lines.current = edges.map((edge, index) => {
       const svgNS = svg.current.namespaceURI;
-      const line = document.createElementNS(svgNS, 'line');
+      const el = document.createElementNS(svgNS, 'line');
       const color = get(edgeDefinitions, [edge.type, 'color'], 'edge-color-seq-1');
-      line.setAttributeNS(null, 'stroke', `var(--${color})`);
-      return { ...edge, el: line, link: links[index] };
+      el.setAttributeNS(null, 'stroke', `var(--${color})`);
+      return { edge, el, link: links[index] };
     });
 
-    const els = lines.current.map(({ el }) => el);
-
-    els.forEach((el) => svg.current.appendChild(el));
+    lines.current.forEach(({ el }) => svg.current.appendChild(el));
 
     timer.current = requestAnimationFrame(() => update.current());
 
     return () => {
       // debugger;
-      els.forEach((el) => svg.current.removeChild(el));
+      lines.current.forEach(({ el }) => svg.current.removeChild(el));
       cancelAnimationFrame(timer.current);
     };
   }, [edges, links, edgeDefinitions]);
