@@ -10,10 +10,44 @@
     @include gpu;
     position: absolute;
     transform: translate(-50%, -50%);
+  }
 
-    .node {
-      margin: 0;
-      font-size: calc(var(--base-node-size) * .55);
+  .node {
+    margin: 0;
+    font-size: calc(var(--base-node-size) * .55);
+  }
+}
+
+.node-layout-simulation-controls {
+  position: absolute;
+  z-index: var(--z-panel);
+  background: var(--light-background);
+  width: unit(40);
+  top: spacing(large);
+  right: spacing(large);
+  border-bottom: 5px solid var(--primary);
+  border-radius: var(--border-radius);
+  box-shadow: 0 0 4rem 0 var(--modal-window-box-shadow);
+  padding: unit(2);
+
+  .button {
+    display: block;
+  }
+
+  &__enable {
+    background: none;
+    padding: 0;
+    margin: 0;
+    min-height: 3rem;
+  }
+
+  &__control {
+    display: flex;
+    align-items: center;
+    min-height: 3rem;
+
+    &--disabled {
+      opacity: .5;
     }
   }
 }

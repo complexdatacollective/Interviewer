@@ -6,6 +6,7 @@ import LayoutContext from '../../contexts/LayoutContext';
 import { entityPrimaryKeyProperty, entityAttributesProperty } from '../../ducks/modules/network';
 import ScreenManager from './ScreenManager';
 import LayoutNode from './LayoutNode';
+import SimulationControls from './SimulationControls';
 
 class NodeLayout extends React.Component {
   constructor(props) {
@@ -162,21 +163,12 @@ class NodeLayout extends React.Component {
     return (
       <>
         <div className="node-layout" ref={this.initializeLayout} />
-
-        <div style={{ position: 'absolute', top: 0, left: 0 }}>
-          { !simulationEnabled && (
-            <button type="button" onClick={() => toggleSimulation()}>enable simulation</button>
-          )}
-          { simulationEnabled && (
-            <>
-              <button type="button" onClick={() => toggleSimulation()}>disable simulation</button>
-              <button type="button" onClick={() => reheat()}>reheat</button>
-              <button type="button" onClick={() => stop()}>stop</button>
-              <button type="button" onClick={() => viewport.zoomViewport(1.5)}>in</button>
-              <button type="button" onClick={() => viewport.zoomViewport(0.67)}>out</button>
-            </>
-          )}
-        </div>
+        <SimulationControls
+          isSimulationEnabled={simulationEnabled}
+          onReheat={reheat}
+          onToggleSimulation={toggleSimulation}
+          onZoomViewport={viewport.zoomViewport}
+        />
 
         {nodes.map((node, index) => {
           const el = this.layoutEls[index];
