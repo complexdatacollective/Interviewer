@@ -120,11 +120,11 @@ export const LayoutProvider = ({
   const previousIsRunning = useRef(false);
 
   useEffect(() => {
-    if (!isRunning && previousIsRunning.current) {
+    if (!isRunning && simulationEnabled && previousIsRunning.current) {
       updateNetworkInStore();
     }
     previousIsRunning.current = isRunning;
-  }, [isRunning, updateNetworkInStore]);
+  }, [isRunning, simulationEnabled, updateNetworkInStore]);
 
   const toggleSimulation = useCallback(() => {
     if (!simulationEnabled) {
