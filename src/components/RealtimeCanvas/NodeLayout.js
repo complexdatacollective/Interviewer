@@ -6,7 +6,7 @@ import LayoutContext from '../../contexts/LayoutContext';
 import { entityPrimaryKeyProperty, entityAttributesProperty } from '../../ducks/modules/network';
 import ScreenManager from './ScreenManager';
 import LayoutNode from './LayoutNode';
-import SimulationControls from './SimulationControls';
+import SimulationPanel from './SimulationPanel';
 
 class NodeLayout extends React.Component {
   constructor(props) {
@@ -148,7 +148,7 @@ class NodeLayout extends React.Component {
       viewport,
       simulation: {
         reheat,
-        stop,
+        isRunning,
         simulationEnabled,
         toggleSimulation,
       },
@@ -163,11 +163,13 @@ class NodeLayout extends React.Component {
     return (
       <>
         <div className="node-layout" ref={this.initializeLayout} />
-        <SimulationControls
+        <SimulationPanel
           isSimulationEnabled={simulationEnabled}
           onReheat={reheat}
           onToggleSimulation={toggleSimulation}
           onZoomViewport={viewport.zoomViewport}
+          isRunning={isRunning}
+          dragConstraints={this.ref}
         />
 
         {nodes.map((node, index) => {
