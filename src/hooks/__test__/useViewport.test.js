@@ -33,10 +33,10 @@ const TestConsumer = () => {
 };
 
 const viewportShape = {
-  zoom: expect.any(Number),
+  zoom: { get: expect.any(Function), set: expect.any(Function) },
   center: {
-    x: expect.any(Number),
-    y: expect.any(Number),
+    x: { get: expect.any(Function), set: expect.any(Function) },
+    y: { get: expect.any(Function), set: expect.any(Function) },
   },
 };
 
@@ -70,7 +70,7 @@ describe('useViewport', () => {
       calculateRelativeCoords,
     } = subject.find('div').prop('useViewport');
 
-    expect(viewport()).toEqual(viewportShape);
+    expect(viewport).toEqual(viewportShape);
     expect(moveViewport).toBeInstanceOf(Function);
     expect(zoomViewport).toBeInstanceOf(Function);
     expect(calculateLayoutCoords).toBeInstanceOf(Function);
@@ -95,13 +95,9 @@ describe('useViewport', () => {
       moveViewport(0.1, 0.1);
       zoomViewport(2);
 
-      expect(viewport()).toEqual({
-        zoom: 2,
-        center: {
-          x: 100,
-          y: 100,
-        },
-      });
+      expect(viewport.zoom.get()).toEqual(2);
+      expect(viewport.center.x.get()).toEqual(100);
+      expect(viewport.center.y.get()).toEqual(100);
     });
   });
 
@@ -148,7 +144,6 @@ describe('useViewport', () => {
         .toMatchCoords({ x: 100, y: 100 });
       expect(calculateLayoutCoords({ x: 1, y: 1 }))
         .toMatchCoords({ x: 600, y: 600 });
-
 
       zoomViewport(2, true); // zoom = 2
       moveViewport(0, 0, true); // center = 0, 0

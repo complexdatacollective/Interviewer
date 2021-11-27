@@ -23,10 +23,10 @@ class NodeLayout extends React.Component {
     this.updateRAF = requestAnimationFrame(() => this.update());
   }
 
-  componentDidUpdate(prevProps) {
-    const { nodes } = this.props;
+  componentDidUpdate() {
+    const { network: { nodes } } = this.context;
 
-    if (prevProps.nodes.length !== nodes.length) {
+    if (this.layoutEls.length !== nodes.length) {
       this.createLayoutEls();
     }
   }
@@ -36,7 +36,7 @@ class NodeLayout extends React.Component {
   }
 
   createLayoutEls = () => {
-    const { nodes } = this.props;
+    const { network: { nodes } } = this.context;
 
     this.layoutEls = nodes.map((_, index) => {
       if (this.layoutEls[index]) { return this.layoutEls[index]; }

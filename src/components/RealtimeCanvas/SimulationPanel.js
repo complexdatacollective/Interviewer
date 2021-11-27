@@ -1,7 +1,6 @@
 /* eslint-disable no-param-reassign */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { isEmpty, get } from 'lodash';
 import cx from 'classnames';
 import { motion } from 'framer-motion';
 import { Toggle } from '@codaco/ui/lib/components/Fields';
@@ -43,6 +42,18 @@ const SimulationControl = ({
     {children}
   </div>
 );
+
+SimulationControl.propTypes = {
+  icon: PropTypes.any.isRequired,
+  onClick: PropTypes.isRequired,
+  children: PropTypes.any,
+  disabled: PropTypes.bool,
+};
+
+SimulationControl.defaultProps = {
+  children: null,
+  disabled: false,
+};
 
 const SimulationPanel = ({
   isSimulationEnabled,
@@ -99,5 +110,20 @@ const SimulationPanel = ({
     </motion.div>
   </motion.div>
 );
+
+SimulationPanel.propTypes = {
+  isSimulationEnabled: PropTypes.bool,
+  onReheat: PropTypes.func.isRequired,
+  onToggleSimulation: PropTypes.func.isRequired,
+  onZoomViewport: PropTypes.func.isRequired,
+  isRunning: PropTypes.bool,
+  dragConstraints: PropTypes.object,
+};
+
+SimulationPanel.defaultProps = {
+  isSimulationEnabled: false,
+  isRunning: false,
+  dragConstraints: undefined,
+};
 
 export default SimulationPanel;
