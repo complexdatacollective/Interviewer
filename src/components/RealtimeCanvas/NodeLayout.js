@@ -32,6 +32,7 @@ class NodeLayout extends React.Component {
   }
 
   componentWillUnmount() {
+    this.screen.destroy();
     cancelAnimationFrame(this.updateRAF);
   }
 

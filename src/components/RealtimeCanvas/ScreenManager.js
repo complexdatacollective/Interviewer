@@ -1,8 +1,11 @@
+import { throttle, clamp } from 'lodash';
 import getAbsoluteBoundingRect from '../../utils/getAbsoluteBoundingRect';
 
-// TODO: watch resize
-
 const screen = () => {
+  const el = {
+    current: null,
+  };
+
   const state = {
     width: 0,
     height: 0,
@@ -10,17 +13,32 @@ const screen = () => {
     top: 0,
   };
 
-  const initialize = (el) => {
+  const measureScreen = () => {
     const {
       width,
       height,
       left,
       top,
-    } = getAbsoluteBoundingRect(el);
+    } = getAbsoluteBoundingRect(el.current);
+
     state.width = width;
     state.height = height;
     state.left = left;
     state.top = top;
+  };
+
+  const watchScreen = throttle(() => {
+    measureScreen();
+  }, 1000 / 60);
+
+  const initialize = (_el) => {
+    el.current = _el;
+    measureScreen();
+    window.addEventListener('resize', watchScreen);
+  };
+
+  const destroy = () => {
+    window.removeEventListener('resize', watchScreen);
   };
 
   // Convert a relative coordinate into position on the screen accounting for viewport
@@ -43,13 +61,14 @@ const screen = () => {
     } = state;
 
     return {
-      x: (x - viewportX) / width,
-      y: (y - viewportY) / height,
+      x: clamp((x - viewportX) / width, 0, 1),
+      y: clamp((y - viewportY) / height, 0, 1),
     };
   };
 
   return {
     initialize,
+    destroy,
     calculateScreenCoords,
     calculateRelativeCoords,
   };

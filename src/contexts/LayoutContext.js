@@ -5,7 +5,7 @@ import React, {
   useState,
 } from 'react';
 import { useDispatch } from 'react-redux';
-import { get, noop } from 'lodash';
+import { get, noop, clamp } from 'lodash';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { entityPrimaryKeyProperty } from '../ducks/modules/network';
 import useForceSimulation from '../hooks/useForceSimulation';
@@ -111,7 +111,7 @@ export const LayoutProvider = ({
         sessionsActions.updateNode(
           node[entityPrimaryKeyProperty],
           undefined,
-          { [layout]: { x, y } },
+          { [layout]: { x: clamp(x, 0, 1), y: clamp(y, 0, 1) } },
         ),
       );
     });

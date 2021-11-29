@@ -1,5 +1,5 @@
 import { bindActionCreators } from 'redux';
-import { isNil } from 'lodash';
+import { isNil, clamp } from 'lodash';
 import { connect } from 'react-redux';
 import { compose, withHandlers, withState } from 'recompose';
 import { withBounds } from '../../behaviours';
@@ -9,8 +9,8 @@ import { DropTarget } from '../../behaviours/DragAndDrop';
 import NodeLayout from '../../components/Canvas/NodeLayout';
 
 const relativeCoords = (container, node) => ({
-  x: (node.x - container.x) / container.width,
-  y: (node.y - container.y) / container.height,
+  x: clamp((node.x - container.x) / container.width, 0, 1),
+  y: clamp((node.y - container.y) / container.height, 0, 1),
 });
 
 const withConnectFrom = withState('connectFrom', 'setConnectFrom', null);
@@ -32,7 +32,10 @@ const withDropHandlers = withHandlers({
       {},
       {
         [layoutVariable]: relativeCoords({
-          width, height, x, y,
+          width,
+          height,
+          x,
+          y,
         }, item),
       },
     );
@@ -49,7 +52,10 @@ const withDropHandlers = withHandlers({
       {},
       {
         [layoutVariable]: relativeCoords({
-          width, height, x, y,
+          width,
+          height,
+          x,
+          y,
         }, item),
       },
     );
