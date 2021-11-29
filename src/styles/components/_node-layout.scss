@@ -29,18 +29,45 @@
   border-radius: var(--border-radius);
   box-shadow: 0 0 4rem 0 var(--modal-window-box-shadow);
   overflow: hidden;
-  cursor: move;
 
   .button {
     display: block;
   }
 
-  &__heading {
+  &__header {
+    display: flex;
+    justify-content: flex-end;
+    text-align: center;
+    padding: 0 unit(2);
+    flex: 0 0 unit(4);
+    cursor: move;
+
+    &-open-prompt {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      padding: unit(1) 0;
+    }
+
+    &-minimize {
+      cursor: pointer;
+    }
+  }
+
+  &__enable {
     border-bottom-width: 0.1rem;
     border-bottom-style: solid;
     border-bottom-color: transparent;
     padding: unit(2);
     transition: border-bottom-color var(--animation-duration-standard) var(--animation-easing);
+
+    &-toggle {
+      background: none;
+      padding: 0;
+      margin: 0;
+      min-height: 0;
+    }
 
     .form-field-container {
       margin: 0;
@@ -51,11 +78,8 @@
     }
   }
 
-  &__enable {
-    background: none;
-    padding: 0;
-    margin: 0;
-    min-height: 0;
+  &__controls {
+    overflow: hidden;
   }
 
   &__control {
@@ -74,6 +98,7 @@
 
     &--disabled {
       opacity: .5;
+      cursor: not-allowed;
     }
 
     &:first-child {
