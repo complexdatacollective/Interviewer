@@ -16,6 +16,7 @@ class NodeLayout extends React.Component {
     this.updateRAF = undefined;
     this.layoutEls = [];
     this.screen = ScreenManager();
+    this.isDragging = false;
   }
 
   componentDidMount() {
@@ -91,8 +92,34 @@ class NodeLayout extends React.Component {
     this.screen.initialize(el);
   };
 
-  // (uuid, index, { dy, dx, x, y })
-  handleDragStart = () => {};
+  handleDragStart = (uuid, index, delta) => {
+    this.isDragging = true;
+
+    const {
+      network: { layout },
+      simulation: { simulationEnabled, moveNode },
+    } = this.context;
+
+    const { updateNode } = this.props;
+
+    const {
+      dy,
+      dx,
+      x,
+      y,
+    } = delta;
+
+    if (simulationEnabled) {
+      moveNode({ dy, dx }, index);
+      return;
+    }
+
+    updateNode(
+      uuid,
+      undefined,
+      { [layout]: this.screen.calculateRelativeCoords({ x, y }) },
+    );
+  };
 
   handleDragMove = (uuid, index, delta) => {
     const {
@@ -143,6 +170,17 @@ class NodeLayout extends React.Component {
     );
   };
 
+  // When node is dragged this is called last,
+  // we can use that to reset isDragging state
+  handleSelected = (...args) => {
+    const { onSelected } = this.props;
+    if (this.isDragging) {
+      this.isDragging = false;
+      return;
+    }
+    onSelected(...args);
+  };
+
   render() {
     const {
       network: { nodes },
@@ -187,7 +225,7 @@ class NodeLayout extends React.Component {
               onDragEnd={this.handleDragEnd}
               allowPositioning={allowPositioning}
               allowSelect={allowSelect}
-              onSelected={onSelected}
+              onSelected={this.handleSelected}
               selected={this.isHighlighted(node)}
               linking={this.isLinking(node)}
             />
