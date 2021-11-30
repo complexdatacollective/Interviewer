@@ -10,6 +10,7 @@ import Canvas from '../../components/RealtimeCanvas/Canvas';
 import NodeBucket from '../Canvas/NodeBucket';
 import NodeLayout from '../RealtimeCanvas/NodeLayout';
 import EdgeLayout from '../../components/RealtimeCanvas/EdgeLayout';
+import SimulationPanel from '../../components/RealtimeCanvas/SimulationPanel';
 import Background from '../Canvas/Background';
 import { actionCreators as resetActions } from '../../ducks/modules/reset';
 import { getEdges, makeGetNextUnplacedNode, makeGetPlacedNodes } from '../../selectors/canvas';
@@ -98,6 +99,9 @@ const Sociogram = (props) => {
               id="NODE_BUCKET"
               node={nextUnplacedNode}
               allowPositioning={allowPositioning}
+            />
+            <SimulationPanel
+              dragConstraints={interfaceRef}
             />
           </Canvas>
         </LayoutProvider>

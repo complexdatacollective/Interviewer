@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { motion, useDragControls } from 'framer-motion';
@@ -8,6 +8,7 @@ import AutorenewIcon from '@material-ui/icons/AutorenewRounded';
 import ZoomInIcon from '@material-ui/icons/ZoomInRounded';
 import ZoomOutIcon from '@material-ui/icons/ZoomOutRounded';
 import MinimizeIcon from '@material-ui/icons/MinimizeRounded';
+import LayoutContext from '../../contexts/LayoutContext';
 
 const panelVariants = {
   minimized: {
@@ -73,13 +74,21 @@ SimulationControl.defaultProps = {
 };
 
 const SimulationPanel = ({
-  isSimulationEnabled,
-  onReheat,
-  onToggleSimulation,
-  onZoomViewport,
-  isRunning,
   dragConstraints,
 }) => {
+  const {
+    viewport,
+    allowSimulation,
+    simulation,
+  } = useContext(LayoutContext);
+
+  const {
+    reheat,
+    isRunning,
+    simulationEnabled,
+    toggleSimulation,
+  } = simulation;
+
   const [isMinimized, setMinimized] = useState(false);
   const dragControls = useDragControls();
 
@@ -88,6 +97,8 @@ const SimulationPanel = ({
   const startDrag = (event) => {
     dragControls.start(event);
   };
+
+  if (!allowSimulation) { return null; }
 
   return (
     <motion.div
@@ -124,38 +135,38 @@ const SimulationPanel = ({
         <motion.div
           className={cx(
             'simulation-panel__enable',
-            { 'simulation-panel__enable--active': isSimulationEnabled },
+            { 'simulation-panel__enable--active': simulationEnabled },
           )}
         >
           <Toggle
             className="simulation-panel__enable-toggle"
             input={{
-              value: isSimulationEnabled,
-              onChange: onToggleSimulation,
+              value: simulationEnabled,
+              onChange: toggleSimulation,
             }}
             label="Simulation enabled"
           />
         </motion.div>
         <motion.div
           className="simulation-panel__controls"
-          animate={isSimulationEnabled ? 'enabled' : 'disabled'}
+          animate={simulationEnabled ? 'enabled' : 'disabled'}
           variants={controlVariants}
         >
           <SimulationControl
             icon={ZoomInIcon}
-            onClick={() => onZoomViewport(1.5)}
+            onClick={() => viewport.zoomViewport(1.5)}
           >
             Zoom In
           </SimulationControl>
           <SimulationControl
             icon={ZoomOutIcon}
-            onClick={() => onZoomViewport(0.67)}
+            onClick={() => viewport.zoomViewport(0.67)}
           >
             Zoom Out
           </SimulationControl>
           <SimulationControl
             icon={AutorenewIcon}
-            onClick={onReheat}
+            onClick={reheat}
             disabled={isRunning}
           >
             Reheat
@@ -167,17 +178,10 @@ const SimulationPanel = ({
 };
 
 SimulationPanel.propTypes = {
-  isSimulationEnabled: PropTypes.bool,
-  onReheat: PropTypes.func.isRequired,
-  onToggleSimulation: PropTypes.func.isRequired,
-  onZoomViewport: PropTypes.func.isRequired,
-  isRunning: PropTypes.bool,
   dragConstraints: PropTypes.object,
 };
 
 SimulationPanel.defaultProps = {
-  isSimulationEnabled: false,
-  isRunning: false,
   dragConstraints: undefined,
 };
 

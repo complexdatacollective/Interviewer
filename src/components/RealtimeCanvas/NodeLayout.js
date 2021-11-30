@@ -6,7 +6,6 @@ import LayoutContext from '../../contexts/LayoutContext';
 import { entityPrimaryKeyProperty, entityAttributesProperty } from '../../ducks/modules/network';
 import ScreenManager from './ScreenManager';
 import LayoutNode from './LayoutNode';
-import SimulationPanel from './SimulationPanel';
 
 class NodeLayout extends React.Component {
   constructor(props) {
@@ -192,34 +191,6 @@ class NodeLayout extends React.Component {
     onSelected(...args);
   };
 
-  renderSimulationPanel() {
-    const {
-      viewport,
-      allowSimulation,
-      simulation,
-    } = this.context;
-
-    if (!allowSimulation) { return null; }
-
-    const {
-      reheat,
-      isRunning,
-      simulationEnabled,
-      toggleSimulation,
-    } = simulation;
-
-    return (
-      <SimulationPanel
-        isSimulationEnabled={simulationEnabled}
-        onReheat={reheat}
-        onToggleSimulation={toggleSimulation}
-        onZoomViewport={viewport.zoomViewport}
-        isRunning={isRunning}
-        dragConstraints={this.ref}
-      />
-    );
-  }
-
   render() {
     const {
       network: { nodes },
@@ -233,7 +204,6 @@ class NodeLayout extends React.Component {
     return (
       <>
         <div className="node-layout" ref={this.initializeLayout} />
-        {this.renderSimulationPanel()}
 
         {nodes.map((node, index) => {
           const el = this.layoutEls[index];
