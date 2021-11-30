@@ -11,13 +11,12 @@ const EdgeLayout = () => {
   const svg = useRef();
   const {
     network: { edges, links },
-    simulation: { getPosition },
+    getPosition,
   } = useContext(LayoutContext);
   const timer = useRef();
   const edgeDefinitions = useSelector((state) => getProtocolCodebook(state).edge);
 
   const update = useRef(() => {
-    // debugger;
     lines.current.forEach(({ link, el }) => {
       if (!link) { return; }
 
@@ -36,8 +35,6 @@ const EdgeLayout = () => {
   useEffect(() => {
     if (!svg.current) { return () => cancelAnimationFrame(timer.current); }
 
-    // debugger;
-
     lines.current = edges.map((edge, index) => {
       const svgNS = svg.current.namespaceURI;
       const el = document.createElementNS(svgNS, 'line');
@@ -51,7 +48,6 @@ const EdgeLayout = () => {
     timer.current = requestAnimationFrame(() => update.current());
 
     return () => {
-      // debugger;
       lines.current.forEach(({ el }) => svg.current.removeChild(el));
       cancelAnimationFrame(timer.current);
     };

@@ -51,6 +51,8 @@ const Sociogram = (props) => {
   const allowHighlighting = get(prompt, 'highlight.allowHighlighting', false);
   const createEdge = get(prompt, 'edges.create');
   const allowPositioning = get(prompt, 'prompt.layout.allowPositioning', true);
+  // const allowSimulation = get(stage, 'simulation.enabled', false);
+  const allowSimulation = get(stage, 'simulation.enabled', true);
 
   // Display Properties
   const layoutVariable = get(prompt, 'layout.layoutVariable');
@@ -74,6 +76,7 @@ const Sociogram = (props) => {
           layout={layoutVariable}
           nodes={nodes}
           edges={edges}
+          allowSimulation={allowSimulation}
         >
           <Canvas className="concentric-circles" id="concentric-circles">
             <Background
@@ -81,11 +84,8 @@ const Sociogram = (props) => {
               skewedTowardCenter={skewedTowardCenter}
               image={backgroundImage}
             />
-            <EdgeLayout
-              edges={edges}
-            />
+            <EdgeLayout />
             <NodeLayout
-              nodes={nodes}
               id="NODE_LAYOUT"
               highlightAttribute={highlightAttribute}
               layoutVariable={layoutVariable}

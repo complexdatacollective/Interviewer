@@ -21,29 +21,22 @@ const LayoutContext = React.createContext({
     moveViewport: noop,
     zoomViewport: noop,
   },
-  simulation: {
-    simulation: {},
-    isRunning: false,
-    initialize: noop,
-    start: noop,
-    reheat: noop,
-    stop: noop,
-    moveNode: noop,
-    releaseNode: noop,
-    getPosition: noop,
-    simulationEnabled: false,
-    toggleSimulation: noop,
-  },
+  getPosition: noop,
+  allowSimulation: false,
+  simulation: undefined,
 });
 
-const getLinks = ({ nodes, edges }) => {
+export const getLinks = ({ nodes, edges }) => {
   if (nodes.length === 0 || edges.length === 0) { return []; }
 
   const nodeIdMap = nodes.reduce(
-    (memo, { _uid }, index) => ({
-      ...memo,
-      [_uid]: index,
-    }),
+    (memo, node, index) => {
+      const uid = node[entityPrimaryKeyProperty];
+      return {
+        ...memo,
+        [uid]: index,
+      };
+    },
     {},
   );
 
@@ -51,7 +44,7 @@ const getLinks = ({ nodes, edges }) => {
     (acc, { from, to }) => {
       const source = nodeIdMap[from];
       const target = nodeIdMap[to];
-      if (!source || !target) { return acc; }
+      if (source === undefined || target === undefined) { return acc; }
       return [...acc, { source, target }];
     },
     [],
@@ -65,6 +58,7 @@ export const LayoutProvider = ({
   nodes,
   edges,
   layout,
+  allowSimulation,
 }) => {
   const {
     state: forceSimulation,
@@ -91,18 +85,21 @@ export const LayoutProvider = ({
   // and "constant" values. Any other ideas?
   useEffect(() => {
     getPosition.current = (index) => {
-      if (!simulationEnabled) {
-        return get(nodes, [index, 'attributes', layout]);
+      if (allowSimulation && simulationEnabled) {
+        return get(forceSimulation.current.nodes, [index]);
       }
 
-      return get(forceSimulation.current.nodes, [index]);
+      return get(nodes, [index, 'attributes', layout]);
     };
-  }, [nodes, simulationEnabled]);
+  }, [nodes, simulationEnabled, allowSimulation]);
 
   const dispatch = useDispatch();
 
   const updateNetworkInStore = useCallback(() => {
+    if (!simulationEnabled) { return; }
+
     if (!forceSimulation.current) { return; }
+
     nodes.forEach((node, index) => {
       const position = get(forceSimulation.current.nodes, [index]);
       if (!position) { return; }
@@ -115,7 +112,7 @@ export const LayoutProvider = ({
         ),
       );
     });
-  }, [dispatch, nodes, layout]);
+  }, [dispatch, nodes, layout, simulationEnabled]);
 
   const previousIsRunning = useRef(false);
 
@@ -139,40 +136,52 @@ export const LayoutProvider = ({
   }, [simulationEnabled, setSimulationEnabled, updateNetworkInStore]);
 
   useEffect(() => {
-    const simulationNodes = nodes.map(
-      ({ attributes }) => attributes[layout],
-    );
-
-    const simulationLinks = getLinks({ nodes, edges });
-
-    initialize({ nodes: simulationNodes, links: simulationLinks });
-  }, []);
-
-  useEffect(() => {
-    if (!simulationEnabled) { return; }
-
-    const simulationNodes = nodes.map(
-      ({ attributes }) => attributes[layout],
-    );
-
-    // console.debug('update sim nodes');
-
-    updateNetwork({ nodes: simulationNodes });
-  }, [simulationEnabled, nodes, layout]);
-
-  useEffect(() => {
     const nextLinks = getLinks({ nodes, edges });
 
     setLinks(nextLinks);
   }, [edges, nodes]);
 
   useEffect(() => {
-    if (!simulationEnabled) { return; }
+    if (!allowSimulation) { return; }
 
-    // console.debug('update sim links');
+    // const simulationNodes = nodes.map(
+    //   ({ attributes }) => attributes[layout],
+    // );
+
+    // const simulationLinks = getLinks({ nodes, edges });
+
+    // initialize({ nodes: simulationNodes, links: simulationLinks });
+    initialize({ nodes: [], links: [] });
+  }, [allowSimulation]);
+
+  useEffect(() => {
+    if (!allowSimulation || !simulationEnabled) { return; }
+
+    const simulationNodes = nodes.map(
+      ({ attributes }) => attributes[layout],
+    );
+
+    updateNetwork({ nodes: simulationNodes });
+  }, [allowSimulation, simulationEnabled, nodes, layout]);
+
+  useEffect(() => {
+    if (!allowSimulation || !simulationEnabled) { return; }
 
     updateNetwork({ links });
-  }, [simulationEnabled, links]);
+  }, [allowSimulation, simulationEnabled, links]);
+
+  const simulation = allowSimulation ? {
+    simulation: forceSimulation,
+    isRunning,
+    initialize,
+    start,
+    reheat,
+    stop,
+    moveNode,
+    releaseNode,
+    simulationEnabled,
+    toggleSimulation,
+  } : undefined;
 
   const value = {
     network: {
@@ -185,19 +194,9 @@ export const LayoutProvider = ({
       moveViewport,
       zoomViewport,
     },
-    simulation: {
-      simulation: forceSimulation,
-      isRunning,
-      initialize,
-      start,
-      reheat,
-      stop,
-      moveNode,
-      releaseNode,
-      getPosition,
-      simulationEnabled,
-      toggleSimulation,
-    },
+    allowSimulation,
+    getPosition,
+    simulation,
   };
 
   return (

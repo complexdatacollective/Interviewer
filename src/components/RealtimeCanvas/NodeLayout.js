@@ -55,9 +55,7 @@ class NodeLayout extends React.Component {
 
   update = () => {
     const {
-      simulation: {
-        getPosition,
-      },
+      getPosition,
     } = this.context;
 
     this.layoutEls.forEach((el, index) => {
@@ -97,7 +95,8 @@ class NodeLayout extends React.Component {
 
     const {
       network: { layout },
-      simulation: { simulationEnabled, moveNode },
+      allowSimulation,
+      simulation,
     } = this.context;
 
     const { updateNode } = this.props;
@@ -109,9 +108,12 @@ class NodeLayout extends React.Component {
       y,
     } = delta;
 
-    if (simulationEnabled) {
-      moveNode({ dy, dx }, index);
-      return;
+    if (allowSimulation) {
+      const { simulationEnabled, moveNode } = simulation;
+      if (simulationEnabled) {
+        moveNode({ dy, dx }, index);
+        return;
+      }
     }
 
     updateNode(
@@ -124,7 +126,8 @@ class NodeLayout extends React.Component {
   handleDragMove = (uuid, index, delta) => {
     const {
       network: { layout },
-      simulation: { simulationEnabled, moveNode },
+      allowSimulation,
+      simulation,
     } = this.context;
 
     const { updateNode } = this.props;
@@ -136,9 +139,12 @@ class NodeLayout extends React.Component {
       y,
     } = delta;
 
-    if (simulationEnabled) {
-      moveNode({ dy, dx }, index);
-      return;
+    if (allowSimulation) {
+      const { simulationEnabled, moveNode } = simulation;
+      if (simulationEnabled) {
+        moveNode({ dy, dx }, index);
+        return;
+      }
     }
 
     updateNode(
@@ -151,16 +157,21 @@ class NodeLayout extends React.Component {
   handleDragEnd = (uuid, index, { x, y }) => {
     const {
       network: { layout },
-      simulation: { simulationEnabled, releaseNode },
+      allowSimulation,
+      simulation,
     } = this.context;
 
     const {
       updateNode,
     } = this.props;
 
-    if (simulationEnabled) {
-      releaseNode(index);
-      return;
+    if (allowSimulation) {
+      const { simulationEnabled, releaseNode } = simulation;
+
+      if (simulationEnabled) {
+        releaseNode(index);
+        return;
+      }
     }
 
     updateNode(
@@ -181,35 +192,48 @@ class NodeLayout extends React.Component {
     onSelected(...args);
   };
 
+  renderSimulationPanel() {
+    const {
+      viewport,
+      allowSimulation,
+      simulation,
+    } = this.context;
+
+    if (!allowSimulation) { return null; }
+
+    const {
+      reheat,
+      isRunning,
+      simulationEnabled,
+      toggleSimulation,
+    } = simulation;
+
+    return (
+      <SimulationPanel
+        isSimulationEnabled={simulationEnabled}
+        onReheat={reheat}
+        onToggleSimulation={toggleSimulation}
+        onZoomViewport={viewport.zoomViewport}
+        isRunning={isRunning}
+        dragConstraints={this.ref}
+      />
+    );
+  }
+
   render() {
     const {
       network: { nodes },
-      viewport,
-      simulation: {
-        reheat,
-        isRunning,
-        simulationEnabled,
-        toggleSimulation,
-      },
     } = this.context;
 
     const {
       allowPositioning,
       allowSelect,
-      onSelected,
     } = this.props;
 
     return (
       <>
         <div className="node-layout" ref={this.initializeLayout} />
-        <SimulationPanel
-          isSimulationEnabled={simulationEnabled}
-          onReheat={reheat}
-          onToggleSimulation={toggleSimulation}
-          onZoomViewport={viewport.zoomViewport}
-          isRunning={isRunning}
-          dragConstraints={this.ref}
-        />
+        {this.renderSimulationPanel()}
 
         {nodes.map((node, index) => {
           const el = this.layoutEls[index];
