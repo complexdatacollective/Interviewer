@@ -11,6 +11,27 @@ let simulation;
 
 console.log('new force simulation worker!');
 
+const updateOptions = function (options) {
+  Object.keys(options).forEach((option) => {
+    const value = options[option];
+    switch (option) {
+      case 'decay':
+        simulation.velocityDecay(value);
+        break;
+      case 'center':
+        simulation.force('x').strength(value);
+        simulation.force('y').strength(value);
+        break;
+      default:
+        simulation.force(option).strength(value);
+    }
+  });
+
+  simulation
+    .alpha(0.3)
+    .restart();
+};
+
 onmessage = function ({ data }) {
   switch (data.type) {
     case 'initialize': {
@@ -19,6 +40,7 @@ onmessage = function ({ data }) {
           nodes,
           links,
         },
+        options,
       } = data;
 
       console.debug('worker:initialize');
@@ -51,6 +73,14 @@ onmessage = function ({ data }) {
           nodes: simulation.nodes(),
         });
       });
+      break;
+    }
+    case 'update_options': {
+      const {
+        options,
+      } = data;
+
+      updateOptions(options);
       break;
     }
     case 'stop': {

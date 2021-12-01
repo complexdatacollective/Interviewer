@@ -20,6 +20,7 @@
 }
 
 .simulation-panel {
+  --active-color: yellow;
   position: absolute;
   z-index: var(--z-panel);
   background: var(--light-background);

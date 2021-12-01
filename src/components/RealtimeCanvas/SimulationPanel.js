@@ -1,9 +1,17 @@
 /* eslint-disable no-param-reassign */
-import React, { useState, useContext } from 'react';
+import React, {
+  useRef,
+  useState,
+  useContext,
+  useCallback,
+  useReducer,
+  useEffect,
+} from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { motion, useDragControls } from 'framer-motion';
-import { Toggle } from '@codaco/ui/lib/components/Fields';
+import { debounce } from 'lodash';
+import Toggle from '@codaco/ui/lib/components/Fields/Toggle';
 import AutorenewIcon from '@material-ui/icons/AutorenewRounded';
 import ZoomInIcon from '@material-ui/icons/ZoomInRounded';
 import ZoomOutIcon from '@material-ui/icons/ZoomOutRounded';
@@ -38,10 +46,10 @@ const controlVariants = {
   },
 };
 
-const SimulationControl = ({
+const ButtonControl = ({
   icon: Icon,
   onClick,
-  children,
+  label,
   disabled,
 }) => (
   <div
@@ -57,20 +65,103 @@ const SimulationControl = ({
     <div className="simulation-panel__control-icon">
       <Icon />
     </div>
-    {children}
+    {label}
   </div>
 );
 
-SimulationControl.propTypes = {
+ButtonControl.propTypes = {
   icon: PropTypes.any.isRequired,
   onClick: PropTypes.isRequired,
-  children: PropTypes.any,
+  label: PropTypes.string.isRequired,
+  disabled: PropTypes.bool,
+};
+ButtonControl.defaultProps = {
+  disabled: false,
+};
+
+const SliderControl = ({
+  value,
+  label,
+  min,
+  max,
+  name,
+  disabled,
+  onChange,
+}) => {
+  const unit = (max - min) / 1000;
+  const displayValue = Math.round((value - min) / unit);
+
+  const handleChange = useCallback((e) => {
+    const { target } = e;
+    const newValue = min + (parseFloat(target.value) * unit);
+    onChange(newValue, name, e);
+  }, [unit, name, min]);
+
+  return (
+    <div
+      className={cx(
+        'simulation-panel__control',
+        { 'simulation-panel__control--disabled': disabled },
+      )}
+    >
+      {label}
+      <br />
+      <input
+        type="range"
+        name={name}
+        min={0}
+        max={1000}
+        value={displayValue}
+        onChange={handleChange}
+      />
+    </div>
+  );
+};
+
+SliderControl.propTypes = {
+  min: PropTypes.number,
+  max: PropTypes.number,
+  value: PropTypes.number.isRequired,
+  label: PropTypes.string.isRequired,
   disabled: PropTypes.bool,
 };
 
-SimulationControl.defaultProps = {
-  children: null,
+SliderControl.defaultProps = {
+  min: 0,
+  max: 100,
   disabled: false,
+};
+
+const optionsReducer = (state, { type, payload }) => {
+  switch (type) {
+    case 'UPDATE':
+      return {
+        ...state,
+        [payload.option]: payload.value,
+      };
+    default:
+      return state;
+  }
+};
+
+const useDebouncedEffect = (func, wait, deps) => {
+  const currentFunc = useRef(null);
+  const debouncedFunc = useRef(debounce(() => { currentFunc.current(); }, wait));
+  useEffect(() => {
+    if (!currentFunc.current) { // skip first run
+      currentFunc.current = func;
+      return;
+    }
+    currentFunc.current = func;
+    debouncedFunc.current();
+  }, deps);
+};
+
+const initialOptions = {
+  decay: 0.1,
+  charge: -30,
+  links: 30,
+  center: 30,
 };
 
 const SimulationPanel = ({
@@ -83,6 +174,7 @@ const SimulationPanel = ({
   } = useContext(LayoutContext);
 
   const {
+    updateOptions,
     reheat,
     isRunning,
     simulationEnabled,
@@ -92,11 +184,27 @@ const SimulationPanel = ({
   const [isMinimized, setMinimized] = useState(false);
   const dragControls = useDragControls();
 
+  const [options, optionsAction] = useReducer(optionsReducer, initialOptions);
+
   const toggleMinimize = () => setMinimized((minimized) => !minimized);
 
-  const startDrag = (event) => {
+  const handleStartDrag = useCallback((event) => {
     dragControls.start(event);
-  };
+  }, [dragControls]);
+
+  const handleChangeSlider = useCallback((value, option) => {
+    optionsAction({
+      type: 'UPDATE',
+      payload: {
+        option,
+        value,
+      },
+    });
+  }, [optionsAction]);
+
+  useDebouncedEffect(() => {
+    updateOptions(options);
+  }, 50, [options]);
 
   if (!allowSimulation) { return null; }
 
@@ -111,7 +219,7 @@ const SimulationPanel = ({
       <motion.div
         className="simulation-panel__header"
         onTap={toggleMinimize}
-        onPointerDown={startDrag}
+        onPointerDown={handleStartDrag}
       >
         { isMinimized ? (
           <motion.div
@@ -152,25 +260,55 @@ const SimulationPanel = ({
           animate={simulationEnabled ? 'enabled' : 'disabled'}
           variants={controlVariants}
         >
-          <SimulationControl
+          <ButtonControl
             icon={ZoomInIcon}
             onClick={() => viewport.zoomViewport(1.5)}
-          >
-            Zoom In
-          </SimulationControl>
-          <SimulationControl
+            label="Zoom In"
+          />
+          <ButtonControl
             icon={ZoomOutIcon}
             onClick={() => viewport.zoomViewport(0.67)}
-          >
-            Zoom Out
-          </SimulationControl>
-          <SimulationControl
+            label="Zoom Out"
+          />
+          <ButtonControl
             icon={AutorenewIcon}
             onClick={reheat}
             disabled={isRunning}
-          >
-            Reheat
-          </SimulationControl>
+            label="Reheat"
+          />
+          {/* Stay hot */}
+          <SliderControl
+            label="velocity decay"
+            name="decay"
+            value={options.decay}
+            onChange={handleChangeSlider}
+            min={-1}
+            max={0}
+          />
+          <SliderControl
+            label="Charge strength"
+            name="charge"
+            value={options.charge}
+            onChange={handleChangeSlider}
+            min={-50}
+            max={50}
+          />
+          <SliderControl
+            label="Link strength"
+            name="links"
+            value={options.link}
+            onChange={handleChangeSlider}
+            min={-50}
+            max={50}
+          />
+          <SliderControl
+            label="Center strength"
+            name="center"
+            value={options.center}
+            onChange={handleChangeSlider}
+            min={-50}
+            max={50}
+          />
         </motion.div>
       </motion.div>
     </motion.div>

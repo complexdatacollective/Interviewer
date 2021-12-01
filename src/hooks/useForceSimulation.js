@@ -29,7 +29,9 @@ const useForceSimulation = (listener = () => {}) => {
 
   useEffect(() => viewport.zoom.onChange(() => recalculate()), [recalculate]);
 
-  const initialize = useCallback(({ nodes = [], links = [] }) => {
+  const initialize = useCallback(({ nodes = [], links = [] }, options = {}) => {
+    if (worker.current) { worker.current.terminate(); }
+
     worker.current = new ForceSimulationWorker();
 
     state.current = {
@@ -70,10 +72,20 @@ const useForceSimulation = (listener = () => {}) => {
         nodes: simNetwork.current.nodes,
         links,
       },
+      options,
     });
 
     setIsRunning(false);
   }, [setIsRunning]);
+
+  const updateOptions = useCallback((options) => {
+    if (!worker.current) { return; }
+
+    worker.current.postMessage({
+      type: 'update_options',
+      options,
+    });
+  }, [initialize]);
 
   const start = useCallback(() => {
     if (!worker.current) { return; }
@@ -161,6 +173,7 @@ const useForceSimulation = (listener = () => {}) => {
     state,
     isRunning,
     initialize,
+    updateOptions,
     start,
     stop,
     reheat,

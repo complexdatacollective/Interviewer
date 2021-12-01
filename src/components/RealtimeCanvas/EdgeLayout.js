@@ -23,6 +23,8 @@ const EdgeLayout = () => {
       const from = getPosition.current(link.source);
       const to = getPosition.current(link.target);
 
+      if (!from || !to) { return; }
+
       el.setAttributeNS(null, 'x1', from.x * 100);
       el.setAttributeNS(null, 'y1', from.y * 100);
       el.setAttributeNS(null, 'x2', to.x * 100);
