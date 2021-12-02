@@ -22,8 +22,10 @@ const updateOptions = function (options) {
         simulation.force('x').strength(value);
         simulation.force('y').strength(value);
         break;
+      case 'linkDistance':
+        simulation.force('links').distance(value);
+        break;
       default:
-        simulation.force(option).strength(value);
     }
   });
 

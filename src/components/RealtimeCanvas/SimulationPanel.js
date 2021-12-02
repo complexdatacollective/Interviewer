@@ -160,8 +160,9 @@ const useDebouncedEffect = (func, wait, deps) => {
 const initialOptions = {
   decay: 0.1,
   charge: -30,
-  links: 30,
-  center: 30,
+  linkForce: 1,
+  linkDistance: 30,
+  center: 0.1,
 };
 
 const SimulationPanel = ({
@@ -282,8 +283,8 @@ const SimulationPanel = ({
             name="decay"
             value={options.decay}
             onChange={handleChangeSlider}
-            min={-1}
-            max={0}
+            min={0}
+            max={1}
           />
           <SliderControl
             label="Charge strength"
@@ -291,23 +292,23 @@ const SimulationPanel = ({
             value={options.charge}
             onChange={handleChangeSlider}
             min={-50}
-            max={50}
+            max={0}
           />
           <SliderControl
-            label="Link strength"
-            name="links"
-            value={options.link}
+            label="Link distance"
+            name="linkDistance"
+            value={options.linkDistance}
             onChange={handleChangeSlider}
-            min={-50}
-            max={50}
+            min={0}
+            max={30}
           />
           <SliderControl
             label="Center strength"
             name="center"
             value={options.center}
             onChange={handleChangeSlider}
-            min={-50}
-            max={50}
+            min={0}
+            max={1}
           />
         </motion.div>
       </motion.div>
