@@ -103,6 +103,7 @@ const SliderControl = ({
         'simulation-panel__control',
         { 'simulation-panel__control--disabled': disabled },
       )}
+      onPointerDown={(e) => { e.stopPropagation(); }}
     >
       {label}
       <br />

@@ -47,6 +47,7 @@ const Sociogram = (props) => {
   } = props;
 
   const interfaceRef = useRef(null);
+  const dragSafeRef = useRef(null);
 
   // Behaviour Configuration
   const allowHighlighting = get(prompt, 'highlight.allowHighlighting', false);
@@ -66,11 +67,12 @@ const Sociogram = (props) => {
 
   return (
     <div className="sociogram-interface" ref={interfaceRef}>
+      <div className="sociogram-interface__drag-safe" ref={dragSafeRef}/>
       <CollapsablePrompts
         prompts={stage.prompts}
         currentPromptIndex={prompt.id}
         handleResetInterface={handleResetInterface}
-        interfaceRef={interfaceRef}
+        interfaceRef={dragSafeRef}
       />
       <div className="sociogram-interface__concentric-circles">
         <LayoutProvider
@@ -101,7 +103,7 @@ const Sociogram = (props) => {
               allowPositioning={allowPositioning}
             />
             <SimulationPanel
-              dragConstraints={interfaceRef}
+              dragConstraints={dragSafeRef}
             />
           </Canvas>
         </LayoutProvider>
