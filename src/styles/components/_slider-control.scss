@@ -1,0 +1,35 @@
+.slider-control {
+  $touch-height: $global-input-element-size;
+  --active-color: var(--color-sea-green);
+  --slider-color: var(--color-platinum);
+  --disabled-color: var(--color-charcoal);
+  min-width: 100px;
+  width: 100%;
+
+  &__container {
+    width: 100%;
+    position: relative;
+
+    &::before {
+      display: block;
+      content: '';
+      position: absolute;
+      z-index: -1;
+      background-color: var(--slider-color);
+      border-radius: $touch-height * 0.5;
+      height: $touch-height * 0.5;
+      width: 100%;
+      top: 50%;
+      left: 0;
+      transform: translate(0, -50%);
+    }
+  }
+
+  &__handle {
+    width: $touch-height;
+    height: $touch-height;
+    background-color: var(--active-color);
+    border-radius: 100%;
+    cursor: pointer;
+  }
+}

@@ -10,6 +10,8 @@ import useViewport from './useViewport';
 
 const VIEWPORT_SPACE_PX = 500;
 
+const emptyNetwork = { nodes: [], links: [] };
+
 const useForceSimulation = (listener = () => {}) => {
   const {
     viewport,
@@ -29,10 +31,12 @@ const useForceSimulation = (listener = () => {}) => {
 
   useEffect(() => viewport.zoom.onChange(() => recalculate()), [recalculate]);
 
-  const initialize = useCallback(({ nodes = [], links = [] }, options = {}) => {
+  const initialize = useCallback((network, options = {}) => {
     if (worker.current) { worker.current.terminate(); }
 
     worker.current = new ForceSimulationWorker();
+
+    const { nodes, links } = { ...emptyNetwork, ...network };
 
     state.current = {
       links,

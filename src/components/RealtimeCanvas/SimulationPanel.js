@@ -17,7 +17,7 @@ import ZoomInIcon from '@material-ui/icons/ZoomInRounded';
 import ZoomOutIcon from '@material-ui/icons/ZoomOutRounded';
 import MinimizeIcon from '@material-ui/icons/MinimizeRounded';
 import LayoutContext from '../../contexts/LayoutContext';
-import Slider from './Slider';
+import Slider from '../SliderControl';
 
 const panelVariants = {
   minimized: {

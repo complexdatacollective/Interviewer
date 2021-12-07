@@ -67,7 +67,7 @@ const Sociogram = (props) => {
 
   return (
     <div className="sociogram-interface" ref={interfaceRef}>
-      <div className="sociogram-interface__drag-safe" ref={dragSafeRef}/>
+      <div className="sociogram-interface__drag-safe" ref={dragSafeRef} />
       <CollapsablePrompts
         prompts={stage.prompts}
         currentPromptIndex={prompt.id}

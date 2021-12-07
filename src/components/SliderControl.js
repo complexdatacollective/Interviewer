@@ -9,8 +9,10 @@ import {
   useTransform,
   useMotionValue,
 } from 'framer-motion';
+import PropTypes from 'prop-types';
+import { noop } from 'lodash';
 
-const Slider = ({
+const SliderControl = ({
   min,
   max,
   value,
@@ -45,10 +47,10 @@ const Slider = ({
   }, [nextValue, onChangeEnd]);
 
   return (
-    <div className="panel-slider">
+    <div className="slider-control">
       <motion.div
         ref={containerRef}
-        className="panel-slider__container"
+        className="slider-control__container"
       >
         <motion.div
           ref={handleRef}
@@ -58,7 +60,7 @@ const Slider = ({
           dragSnapToOrigin
           dragConstraints={containerRef}
           onDragEnd={handleDragEnd}
-          className="panel-slider__handle"
+          className="slider-control__handle"
           style={{ x: position }}
           whileDrag={{ scale: 1.2 }}
         />
@@ -67,11 +69,20 @@ const Slider = ({
   );
 };
 
-Slider.defaultProps = {
+SliderControl.defaultProps = {
   min: 0,
   max: 100,
-  onChange: () => {},
-  onChangeEnd: () => {},
+  value: 0,
+  onChange: noop,
+  onChangeEnd: noop,
 };
 
-export default Slider;
+SliderControl.propTypes = {
+  min: PropTypes.number,
+  max: PropTypes.number,
+  value: PropTypes.number,
+  onChange: PropTypes.func,
+  onChangeEnd: PropTypes.func,
+};
+
+export default SliderControl;

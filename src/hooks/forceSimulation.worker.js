@@ -55,6 +55,8 @@ onmessage = function ({ data }) {
         .force('x', forceX()) // 0 as center
         .force('y', forceY()); // 0 as center
 
+      updateOptions(options);
+
       // do not auto run
       simulation
         .alpha(0)

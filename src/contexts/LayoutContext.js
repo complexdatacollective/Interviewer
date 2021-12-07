@@ -145,14 +145,9 @@ export const LayoutProvider = ({
   useEffect(() => {
     if (!allowSimulation) { return; }
 
-    // const simulationNodes = nodes.map(
-    //   ({ attributes }) => attributes[layout],
-    // );
-
-    // const simulationLinks = getLinks({ nodes, edges });
-
-    // initialize({ nodes: simulationNodes, links: simulationLinks });
-    initialize({ nodes: [], links: [] });
+    // We can start with an empty network since the other effects
+    // will provide the nodes/links
+    initialize();
   }, [allowSimulation]);
 
   useEffect(() => {
