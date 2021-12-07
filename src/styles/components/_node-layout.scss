@@ -112,3 +112,22 @@
     }
   }
 }
+
+.panel-slider {
+  min-width: 100px;
+  width: 100%;
+
+  &__container {
+    width: 100%;
+    height: $global-input-element-size;
+    border-radius: $global-input-element-size;
+    background: silver;
+  }
+
+  &__handle {
+    background: green;
+    width: $global-input-element-size;
+    height: $global-input-element-size;
+    border-radius: $global-input-element-size;
+  }
+}

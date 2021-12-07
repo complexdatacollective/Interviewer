@@ -17,6 +17,7 @@ import ZoomInIcon from '@material-ui/icons/ZoomInRounded';
 import ZoomOutIcon from '@material-ui/icons/ZoomOutRounded';
 import MinimizeIcon from '@material-ui/icons/MinimizeRounded';
 import LayoutContext from '../../contexts/LayoutContext';
+import Slider from './Slider';
 
 const panelVariants = {
   minimized: {
@@ -88,14 +89,9 @@ const SliderControl = ({
   disabled,
   onChange,
 }) => {
-  const unit = (max - min) / 1000;
-  const displayValue = Math.round((value - min) / unit);
-
-  const handleChange = useCallback((e) => {
-    const { target } = e;
-    const newValue = min + (parseFloat(target.value) * unit);
-    onChange(newValue, name, e);
-  }, [unit, name, min]);
+  const handleChange = useCallback((nextValue) => {
+    onChange(nextValue, name);
+  }, [name]);
 
   return (
     <div
@@ -107,13 +103,11 @@ const SliderControl = ({
     >
       {label}
       <br />
-      <input
-        type="range"
-        name={name}
-        min={0}
-        max={1000}
-        value={displayValue}
-        onChange={handleChange}
+      <Slider
+        value={value}
+        min={min}
+        max={max}
+        onChangeEnd={handleChange}
       />
     </div>
   );
@@ -278,7 +272,6 @@ const SimulationPanel = ({
             disabled={isRunning}
             label="Reheat"
           />
-          {/* Stay hot */}
           <SliderControl
             label="velocity decay"
             name="decay"
