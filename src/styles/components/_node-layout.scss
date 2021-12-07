@@ -86,13 +86,13 @@
 
   &__control {
     display: flex;
-    align-items: center;
-    min-height: 3rem;
+    min-height: unit(3);
     padding: unit(1) unit(2);
     cursor: pointer;
+    align-items: center;
 
     &-icon {
-      margin: 0 .5rem 0 0;
+      margin: 0 unit(0.5) 0 0;
       .MuiSvgIcon-root {
         font-size: 2rem;
       }
@@ -110,24 +110,52 @@
     &:last-child {
       margin-bottom: unit(1);
     }
+
+    &--slider {
+      flex-direction: column;
+      cursor: default;
+      align-items: flex-start;
+      margin-top: unit(1);
+
+      .panel-slider{
+        margin-top: unit(1);
+      }
+    }
   }
 }
 
 .panel-slider {
+  $touch-height: $global-input-element-size;
+  --active-color: var(--color-sea-green);
+  --slider-color: var(--color-platinum);
+  --disabled-color: var(--color-charcoal);
   min-width: 100px;
   width: 100%;
 
   &__container {
     width: 100%;
-    height: $global-input-element-size;
-    border-radius: $global-input-element-size;
-    background: silver;
+    position: relative;
+
+    &::before {
+      display: block;
+      content: '';
+      position: absolute;
+      z-index: -1;
+      background-color: var(--slider-color);
+      border-radius: $touch-height * 0.5;
+      height: $touch-height * 0.5;
+      width: 100%;
+      top: 50%;
+      left: 0;
+      transform: translate(0, -50%);
+    }
   }
 
   &__handle {
-    background: green;
-    width: $global-input-element-size;
-    height: $global-input-element-size;
-    border-radius: $global-input-element-size;
+    width: $touch-height;
+    height: $touch-height;
+    background-color: var(--active-color);
+    border-radius: 100%;
+    cursor: pointer;
   }
 }

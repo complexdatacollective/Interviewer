@@ -60,6 +60,7 @@ const Slider = ({
           onDragEnd={handleDragEnd}
           className="panel-slider__handle"
           style={{ x: position }}
+          whileDrag={{ scale: 1.2 }}
         />
       </motion.div>
     </div>

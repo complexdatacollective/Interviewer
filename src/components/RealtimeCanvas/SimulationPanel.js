@@ -97,12 +97,12 @@ const SliderControl = ({
     <div
       className={cx(
         'simulation-panel__control',
+        'simulation-panel__control--slider',
         { 'simulation-panel__control--disabled': disabled },
       )}
       onPointerDown={(e) => { e.stopPropagation(); }}
     >
       {label}
-      <br />
       <Slider
         value={value}
         min={min}
@@ -273,7 +273,7 @@ const SimulationPanel = ({
             label="Reheat"
           />
           <SliderControl
-            label="velocity decay"
+            label="Velocity Decay"
             name="decay"
             value={options.decay}
             onChange={handleChangeSlider}
@@ -281,7 +281,7 @@ const SimulationPanel = ({
             max={1}
           />
           <SliderControl
-            label="Charge strength"
+            label="Charge Strength"
             name="charge"
             value={options.charge}
             onChange={handleChangeSlider}
@@ -289,7 +289,7 @@ const SimulationPanel = ({
             max={0}
           />
           <SliderControl
-            label="Link distance"
+            label="Link Distance"
             name="linkDistance"
             value={options.linkDistance}
             onChange={handleChangeSlider}
@@ -297,7 +297,7 @@ const SimulationPanel = ({
             max={30}
           />
           <SliderControl
-            label="Center strength"
+            label="Center Strength"
             name="center"
             value={options.center}
             onChange={handleChangeSlider}
