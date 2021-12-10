@@ -53,8 +53,8 @@ const Sociogram = (props) => {
   const allowHighlighting = get(prompt, 'highlight.allowHighlighting', false);
   const createEdge = get(prompt, 'edges.create');
   const allowPositioning = get(prompt, 'prompt.layout.allowPositioning', true);
-  // const allowSimulation = get(stage, 'simulation.enabled', false);
-  const allowSimulation = get(stage, 'simulation.enabled', true);
+  // eslint-disable-next-line @codaco/spellcheck/spell-checker
+  const allowAutomaticLayout = get(stage, 'behaviours.automaticLayout.enabled', false);
 
   // Display Properties
   const layoutVariable = get(prompt, 'layout.layoutVariable');
@@ -79,7 +79,7 @@ const Sociogram = (props) => {
           layout={layoutVariable}
           nodes={nodes}
           edges={edges}
-          allowSimulation={allowSimulation}
+          allowAutomaticLayout={allowAutomaticLayout}
         >
           <Canvas className="concentric-circles" id="concentric-circles">
             <Background

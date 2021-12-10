@@ -22,7 +22,7 @@ const LayoutContext = React.createContext({
     zoomViewport: noop,
   },
   getPosition: noop,
-  allowSimulation: false,
+  allowAutomaticLayout: false,
   simulation: undefined,
 });
 
@@ -58,7 +58,7 @@ export const LayoutProvider = ({
   nodes,
   edges,
   layout,
-  allowSimulation,
+  allowAutomaticLayout,
 }) => {
   const {
     state: forceSimulation,
@@ -86,13 +86,13 @@ export const LayoutProvider = ({
   // and "constant" values. Any other ideas?
   useEffect(() => {
     getPosition.current = (index) => {
-      if (allowSimulation && simulationEnabled) {
+      if (allowAutomaticLayout && simulationEnabled) {
         return get(forceSimulation.current.nodes, [index]);
       }
 
       return get(nodes, [index, 'attributes', layout]);
     };
-  }, [nodes, simulationEnabled, allowSimulation]);
+  }, [nodes, simulationEnabled, allowAutomaticLayout]);
 
   const dispatch = useDispatch();
 
@@ -143,30 +143,30 @@ export const LayoutProvider = ({
   }, [edges, nodes]);
 
   useEffect(() => {
-    if (!allowSimulation) { return; }
+    if (!allowAutomaticLayout) { return; }
 
     // We can start with an empty network since the other effects
     // will provide the nodes/links
     initialize();
-  }, [allowSimulation]);
+  }, [allowAutomaticLayout]);
 
   useEffect(() => {
-    if (!allowSimulation || !simulationEnabled) { return; }
+    if (!allowAutomaticLayout || !simulationEnabled) { return; }
 
     const simulationNodes = nodes.map(
       ({ attributes }) => attributes[layout],
     );
 
     updateNetwork({ nodes: simulationNodes });
-  }, [allowSimulation, simulationEnabled, nodes, layout]);
+  }, [allowAutomaticLayout, simulationEnabled, nodes, layout]);
 
   useEffect(() => {
-    if (!allowSimulation || !simulationEnabled) { return; }
+    if (!allowAutomaticLayout || !simulationEnabled) { return; }
 
     updateNetwork({ links });
-  }, [allowSimulation, simulationEnabled, links]);
+  }, [allowAutomaticLayout, simulationEnabled, links]);
 
-  const simulation = allowSimulation ? {
+  const simulation = allowAutomaticLayout ? {
     simulation: forceSimulation,
     isRunning,
     initialize,
@@ -191,7 +191,7 @@ export const LayoutProvider = ({
       moveViewport,
       zoomViewport,
     },
-    allowSimulation,
+    allowAutomaticLayout,
     getPosition,
     simulation,
   };
