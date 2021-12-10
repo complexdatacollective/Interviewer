@@ -165,17 +165,9 @@ const SimulationPanel = ({
 }) => {
   const {
     viewport,
-    allowSimulation,
+    allowAutomaticLayout,
     simulation,
   } = useContext(LayoutContext);
-
-  const {
-    updateOptions,
-    reheat,
-    isRunning,
-    simulationEnabled,
-    toggleSimulation,
-  } = simulation;
 
   const [isMinimized, setMinimized] = useState(false);
   const dragControls = useDragControls();
@@ -199,10 +191,18 @@ const SimulationPanel = ({
   }, [optionsAction]);
 
   useDebouncedEffect(() => {
-    updateOptions(options);
+    if (!simulation) { return; }
+    simulation.updateOptions(options);
   }, 50, [options]);
 
-  if (!allowSimulation) { return null; }
+  if (!allowAutomaticLayout) { return null; }
+
+  const {
+    reheat,
+    isRunning,
+    simulationEnabled,
+    toggleSimulation,
+  } = simulation;
 
   return (
     <motion.div

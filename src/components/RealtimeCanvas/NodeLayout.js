@@ -94,7 +94,7 @@ class NodeLayout extends React.Component {
 
     const {
       network: { layout },
-      allowSimulation,
+      allowAutomaticLayout,
       simulation,
     } = this.context;
 
@@ -107,7 +107,7 @@ class NodeLayout extends React.Component {
       y,
     } = delta;
 
-    if (allowSimulation) {
+    if (allowAutomaticLayout) {
       const { simulationEnabled, moveNode } = simulation;
       if (simulationEnabled) {
         moveNode({ dy, dx }, index);
@@ -125,7 +125,7 @@ class NodeLayout extends React.Component {
   handleDragMove = (uuid, index, delta) => {
     const {
       network: { layout },
-      allowSimulation,
+      allowAutomaticLayout,
       simulation,
     } = this.context;
 
@@ -138,7 +138,7 @@ class NodeLayout extends React.Component {
       y,
     } = delta;
 
-    if (allowSimulation) {
+    if (allowAutomaticLayout) {
       const { simulationEnabled, moveNode } = simulation;
       if (simulationEnabled) {
         moveNode({ dy, dx }, index);
@@ -156,7 +156,7 @@ class NodeLayout extends React.Component {
   handleDragEnd = (uuid, index, { x, y }) => {
     const {
       network: { layout },
-      allowSimulation,
+      allowAutomaticLayout,
       simulation,
     } = this.context;
 
@@ -164,7 +164,7 @@ class NodeLayout extends React.Component {
       updateNode,
     } = this.props;
 
-    if (allowSimulation) {
+    if (allowAutomaticLayout) {
       const { simulationEnabled, releaseNode } = simulation;
 
       if (simulationEnabled) {
