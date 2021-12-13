@@ -1,8 +1,29 @@
 import { useCallback } from 'react';
 import { useSpring, useMotionValue } from 'framer-motion';
-import { clamp } from 'lodash';
+import { clamp, max, min } from 'lodash';
 
 const LAYOUT_SPACE = 1000;
+
+const MIN_ZOOM = 0.5;
+const MAX_ZOOM = 20;
+
+const suggestZoom = (nodes, layoutSpace = LAYOUT_SPACE) => {
+  if (nodes.length <= 1) {
+    return 1;
+  }
+
+  const bound = nodes.reduce((acc, { x, y }, index) => {
+    if (index === 0) {
+      return max([Math.abs(x), Math.abs(y)]);
+    }
+
+    return max([Math.abs(x), Math.abs(y), acc]);
+  }, 0);
+
+  const suggestedZoom = (0.45 * layoutSpace) / bound;
+
+  return min([MAX_ZOOM, max([MIN_ZOOM, suggestedZoom])]);
+};
 
 const useViewport = (layoutSpace = LAYOUT_SPACE) => {
   const zoom = useSpring(3);
@@ -51,12 +72,20 @@ const useViewport = (layoutSpace = LAYOUT_SPACE) => {
     y: clamp((((y - centerY.get()) / layoutSpace) * zoom.get()) + 0.5, 0, 1),
   }), []);
 
+  // Calculate relative position accounting for viewport
+  const autoZoom = useCallback((nodes) => {
+    const suggestedZoom = suggestZoom(nodes, layoutSpace);
+
+    zoom.set(suggestedZoom);
+  }, []);
+
   return {
     viewport,
     moveViewport,
     zoomViewport,
     calculateLayoutCoords,
     calculateRelativeCoords,
+    autoZoom,
   };
 };
 

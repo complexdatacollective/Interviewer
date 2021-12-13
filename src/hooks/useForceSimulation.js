@@ -19,6 +19,7 @@ const useForceSimulation = (listener = () => {}) => {
     zoomViewport,
     calculateLayoutCoords,
     calculateRelativeCoords,
+    autoZoom,
   } = useViewport(VIEWPORT_SPACE_PX);
   const worker = useRef(null);
   const simNetwork = useRef(null);
@@ -47,15 +48,16 @@ const useForceSimulation = (listener = () => {}) => {
       switch (event.data.type) {
         case 'tick': {
           setIsRunning(true);
-          const protocolNodes = event.data.nodes.map(calculateRelativeCoords);
           simNetwork.current.nodes = event.data.nodes;
+          const protocolNodes = event.data.nodes.map(calculateRelativeCoords);
           state.current.nodes = protocolNodes;
           listener({ type: 'tick', data: protocolNodes });
           break;
         }
         case 'end': {
-          const protocolNodes = event.data.nodes.map(calculateRelativeCoords);
           simNetwork.current.nodes = event.data.nodes;
+          autoZoom(simNetwork.current.nodes);
+          const protocolNodes = event.data.nodes.map(calculateRelativeCoords);
           state.current.nodes = protocolNodes;
           listener({ type: 'end', data: protocolNodes });
           setIsRunning(false);
