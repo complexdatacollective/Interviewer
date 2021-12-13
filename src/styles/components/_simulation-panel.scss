@@ -90,16 +90,5 @@
     &:last-child {
       margin-bottom: unit(1);
     }
-
-    &--slider {
-      flex-direction: column;
-      cursor: default;
-      align-items: flex-start;
-      margin-top: unit(1);
-
-      .slider-control {
-        margin-top: unit(1);
-      }
-    }
   }
 }

@@ -10,6 +10,13 @@ import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { entityPrimaryKeyProperty } from '../ducks/modules/network';
 import useForceSimulation from '../hooks/useForceSimulation';
 
+const SIMULATION_OPTIONS = {
+  decay: 0.1,
+  charge: -30,
+  linkDistance: 30,
+  center: 0.1,
+};
+
 const LayoutContext = React.createContext({
   network: {
     nodes: [],
@@ -147,7 +154,8 @@ export const LayoutProvider = ({
 
     // We can start with an empty network since the other effects
     // will provide the nodes/links
-    initialize();
+    const network = {};
+    initialize(network, SIMULATION_OPTIONS);
   }, [allowAutomaticLayout]);
 
   useEffect(() => {
