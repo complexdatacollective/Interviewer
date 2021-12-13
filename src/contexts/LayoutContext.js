@@ -104,8 +104,6 @@ export const LayoutProvider = ({
   const dispatch = useDispatch();
 
   const updateNetworkInStore = useCallback(() => {
-    if (!simulationEnabled) { return; }
-
     if (!forceSimulation.current) { return; }
 
     nodes.forEach((node, index) => {
@@ -120,18 +118,18 @@ export const LayoutProvider = ({
         ),
       );
     });
-  }, [dispatch, nodes, layout, simulationEnabled]);
+  }, [dispatch, nodes, layout]);
 
   const previousIsRunning = useRef(false);
 
-  // TODO: is this still necessary?
   useEffect(() => {
     const didStopRunning = !isRunning && previousIsRunning.current;
     previousIsRunning.current = isRunning;
-    if (simulationEnabled && didStopRunning) {
+    // if (simulationEnabled && didStopRunning) {
+    if (didStopRunning) {
       updateNetworkInStore();
     }
-  }, [isRunning, simulationEnabled, updateNetworkInStore]);
+  }, [isRunning, updateNetworkInStore]);
 
   const toggleSimulation = useCallback(() => {
     if (!simulationEnabled) {
@@ -140,12 +138,11 @@ export const LayoutProvider = ({
       return;
     }
 
-    updateNetworkInStore();
     stop();
-     // Prevent old redraw?
-    setTimeout(() => {
-      setSimulationEnabled(false);
-    }, 0);
+    // Run setSimulationEnabled in next tick in order to
+    // allow updateNetworkInStore to run before getPosition
+    // changes to redux state.
+    setTimeout(() => { setSimulationEnabled(false); }, 0);
   }, [simulationEnabled, setSimulationEnabled, updateNetworkInStore]);
 
   useEffect(() => {
