@@ -84,7 +84,7 @@ export const LayoutProvider = ({
     },
   } = useForceSimulation();
 
-  const [simulationEnabled, setSimulationEnabled] = useState(false);
+  const [simulationEnabled, setSimulationEnabled] = useState(true);
   const [links, setLinks] = useState([]);
 
   const getPosition = useRef(() => undefined);
@@ -124,11 +124,13 @@ export const LayoutProvider = ({
 
   const previousIsRunning = useRef(false);
 
+  // TODO: is this still necessary?
   useEffect(() => {
-    if (!isRunning && simulationEnabled && previousIsRunning.current) {
+    const didStopRunning = !isRunning && previousIsRunning.current;
+    previousIsRunning.current = isRunning;
+    if (simulationEnabled && didStopRunning) {
       updateNetworkInStore();
     }
-    previousIsRunning.current = isRunning;
   }, [isRunning, simulationEnabled, updateNetworkInStore]);
 
   const toggleSimulation = useCallback(() => {
@@ -138,9 +140,12 @@ export const LayoutProvider = ({
       return;
     }
 
-    updateNetworkInStore(); // Prevent old redraw
-    setSimulationEnabled(false);
+    updateNetworkInStore();
     stop();
+     // Prevent old redraw?
+    setTimeout(() => {
+      setSimulationEnabled(false);
+    }, 0);
   }, [simulationEnabled, setSimulationEnabled, updateNetworkInStore]);
 
   useEffect(() => {
@@ -156,6 +161,7 @@ export const LayoutProvider = ({
     // will provide the nodes/links
     const network = {};
     initialize(network, SIMULATION_OPTIONS);
+    start();
   }, [allowAutomaticLayout]);
 
   useEffect(() => {

@@ -7,11 +7,9 @@ import React, {
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { motion, useDragControls } from 'framer-motion';
-import Toggle from '@codaco/ui/lib/components/Fields/Toggle';
-import AutorenewIcon from '@material-ui/icons/AutorenewRounded';
-import ZoomInIcon from '@material-ui/icons/ZoomInRounded';
-import ZoomOutIcon from '@material-ui/icons/ZoomOutRounded';
 import MinimizeIcon from '@material-ui/icons/MinimizeRounded';
+import PlayIcon from '@material-ui/icons/PlayArrowRounded';
+import PauseIcon from '@material-ui/icons/PauseRounded';
 import LayoutContext from '../../contexts/LayoutContext';
 
 const panelVariants = {
@@ -28,58 +26,33 @@ const panelVariants = {
   },
 };
 
-const controlVariants = {
-  disabled: {
-    height: 0,
-    transition: {
-    },
-  },
-  enabled: {
-    height: 'auto',
-    transition: {
-      when: 'afterChildren',
-    },
-  },
-};
-
-const ButtonControl = ({
-  icon: Icon,
+const PlayPauseButton = ({
   onClick,
-  label,
-  disabled,
+  isPlaying,
 }) => (
   <div
-    className={cx(
-      'simulation-panel__control',
-      { 'simulation-panel__control--disabled': disabled },
-    )}
-    onClick={() => {
-      if (disabled) { return; }
-      onClick();
-    }}
+    className="simulation-panel__control"
+    onClick={onClick}
   >
     <div className="simulation-panel__control-icon">
-      <Icon />
+      {isPlaying ? <PauseIcon /> : <PlayIcon />}
     </div>
-    {label}
+    {isPlaying ? 'Pause' : 'Play'}
   </div>
 );
 
-ButtonControl.propTypes = {
-  icon: PropTypes.any.isRequired,
+PlayPauseButton.propTypes = {
   onClick: PropTypes.isRequired,
-  label: PropTypes.string.isRequired,
-  disabled: PropTypes.bool,
+  isPlaying: PropTypes.bool,
 };
-ButtonControl.defaultProps = {
-  disabled: false,
+PlayPauseButton.defaultProps = {
+  isPlaying: false,
 };
 
 const SimulationPanel = ({
   dragConstraints,
 }) => {
   const {
-    viewport,
     allowAutomaticLayout,
     simulation,
   } = useContext(LayoutContext);
@@ -96,8 +69,6 @@ const SimulationPanel = ({
   if (!allowAutomaticLayout) { return null; }
 
   const {
-    reheat,
-    isRunning,
     simulationEnabled,
     toggleSimulation,
   } = simulation;
@@ -140,35 +111,9 @@ const SimulationPanel = ({
             { 'simulation-panel__enable--active': simulationEnabled },
           )}
         >
-          <Toggle
-            className="simulation-panel__enable-toggle"
-            input={{
-              value: simulationEnabled,
-              onChange: toggleSimulation,
-            }}
-            label="Simulation enabled"
-          />
-        </motion.div>
-        <motion.div
-          className="simulation-panel__controls"
-          animate={simulationEnabled ? 'enabled' : 'disabled'}
-          variants={controlVariants}
-        >
-          <ButtonControl
-            icon={ZoomInIcon}
-            onClick={() => viewport.zoomViewport(1.5)}
-            label="Zoom In"
-          />
-          <ButtonControl
-            icon={ZoomOutIcon}
-            onClick={() => viewport.zoomViewport(0.67)}
-            label="Zoom Out"
-          />
-          <ButtonControl
-            icon={AutorenewIcon}
-            onClick={reheat}
-            disabled={isRunning}
-            label="Reheat"
+          <PlayPauseButton
+            isPlaying={simulationEnabled}
+            onClick={toggleSimulation}
           />
         </motion.div>
       </motion.div>
