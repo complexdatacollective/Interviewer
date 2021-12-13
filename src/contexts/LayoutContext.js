@@ -67,6 +67,8 @@ export const LayoutProvider = ({
   layout,
   allowAutomaticLayout,
 }) => {
+  const dispatch = useDispatch();
+
   const {
     state: forceSimulation,
     isRunning,
@@ -100,8 +102,6 @@ export const LayoutProvider = ({
       return get(nodes, [index, 'attributes', layout]);
     };
   }, [nodes, simulationEnabled, allowAutomaticLayout]);
-
-  const dispatch = useDispatch();
 
   const updateNetworkInStore = useCallback(() => {
     if (!forceSimulation.current) { return; }

@@ -76,6 +76,10 @@ const useViewport = (layoutSpace = LAYOUT_SPACE) => {
   const autoZoom = useCallback((nodes) => {
     const suggestedZoom = suggestZoom(nodes, layoutSpace);
 
+    // Animating this value stops the network being updated when
+    // autozoom is run at end of animation, therefore disable
+    // animation behaviour until this is resolved.
+    zoom.current = zoom.prev = suggestedZoom; // eslint-disable-line no-multi-assign
     zoom.set(suggestedZoom);
   }, []);
 
