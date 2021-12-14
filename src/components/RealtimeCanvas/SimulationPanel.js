@@ -6,29 +6,6 @@ import PlayIcon from '@material-ui/icons/PlayArrowRounded';
 import PauseIcon from '@material-ui/icons/PauseRounded';
 import LayoutContext from '../../contexts/LayoutContext';
 
-const PlayPauseButton = ({
-  onClick,
-  isPlaying,
-}) => (
-  <div
-    className="simulation-panel__control"
-    onClick={onClick}
-  >
-    <div className="simulation-panel__control-icon">
-      {isPlaying ? <PauseIcon /> : <PlayIcon />}
-    </div>
-    {isPlaying ? 'Pause' : 'Play'}
-  </div>
-);
-
-PlayPauseButton.propTypes = {
-  onClick: PropTypes.isRequired,
-  isPlaying: PropTypes.bool,
-};
-PlayPauseButton.defaultProps = {
-  isPlaying: false,
-};
-
 const SimulationPanel = ({
   dragConstraints,
 }) => {
@@ -57,7 +34,7 @@ const SimulationPanel = ({
         <div className="simulation-panel__control-icon">
           {simulationEnabled ? <PauseIcon /> : <PlayIcon />}
         </div>
-        {simulationEnabled ? 'Pause' : 'Play'}
+        {simulationEnabled ? 'Pause Layout' : 'Resume Layout'}
       </motion.div>
     </motion.div>
   );
