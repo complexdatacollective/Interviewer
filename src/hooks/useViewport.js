@@ -5,7 +5,7 @@ import { clamp, max, min } from 'lodash';
 const LAYOUT_SPACE = 1000;
 
 const MIN_ZOOM = 0.5;
-const MAX_ZOOM = 20;
+const MAX_ZOOM = 3;
 
 const suggestZoom = (nodes, layoutSpace = LAYOUT_SPACE) => {
   if (nodes.length <= 1) {

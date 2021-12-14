@@ -2,13 +2,17 @@
   position: absolute;
   z-index: var(--z-panel);
   background: var(--light-background);
-  width: unit(15);
+  width: unit(23);
+  height: unit(10);
   top: spacing(large);
   right: spacing(large);
   border-bottom: 5px solid var(--primary);
   border-radius: var(--border-radius);
   box-shadow: 0 0 4rem 0 var(--modal-window-box-shadow);
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: move;
 
   .button {
@@ -21,8 +25,6 @@
 
   &__control {
     display: flex;
-    min-height: unit(3);
-    padding: unit(1) unit(2);
     cursor: pointer;
     align-items: center;
 
@@ -31,7 +33,7 @@
 
       // sass-lint:disable class-name-format
       .MuiSvgIcon-root {
-        font-size: 2rem;
+        font-size: unit(6);
       }
     }
 
