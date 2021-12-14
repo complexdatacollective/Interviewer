@@ -54,9 +54,9 @@ onmessage = function ({ data }) {
         .force('links', forceLink(links))
         .force('charge', forceManyBody())
         // .force('collide', forceCollide().radius(50).iterations(2))
+        // .force('center', forceCenter().strength(200));
         .force('x', forceX()) // 0 as center
         .force('y', forceY()); // 0 as center
-        // .force('center', forceCenter().strength(200));
 
       updateOptions(options);
 

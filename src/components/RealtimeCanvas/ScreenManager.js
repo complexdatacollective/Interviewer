@@ -52,7 +52,7 @@ const screen = () => {
   };
 
   // Given a position on the screen calculate the relative coordinate for the viewport
-  const calculateRelativeCoords = ({ x, y } = { x: 0, y: 0 }) => {
+  const calculateRelativeCoords = ({ x, y, ...rest } = { x: 0, y: 0 }) => {
     const {
       width,
       height,
@@ -60,9 +60,15 @@ const screen = () => {
       top: viewportY,
     } = state;
 
+    const hasDelta = rest.dy && rest.dx;
+    const delta = hasDelta
+      ? { dy: rest.dy / height, dx: rest.dx / width }
+      : {};
+
     return {
       x: clamp((x - viewportX) / width, 0, 1),
       y: clamp((y - viewportY) / height, 0, 1),
+      ...delta,
     };
   };
 

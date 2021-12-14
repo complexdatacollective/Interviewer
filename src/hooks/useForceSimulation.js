@@ -149,13 +149,12 @@ const useForceSimulation = (listener = () => {}) => {
     });
   }, []);
 
-  const moveNode = useCallback(({ dy, dx }, nodeIndex) => {
-    const position = simNetwork.current.nodes[nodeIndex];
+  const moveNode = useCallback(({ x, y }, nodeIndex) => {
+    const layoutCoords = calculateLayoutCoords({ x, y });
 
-    const zoom = viewport.zoom.get();
     const nodeAttributes = {
-      fx: position.x + ((dx * viewport.layoutSpace) / zoom),
-      fy: position.y + ((dy * viewport.layoutSpace) / zoom),
+      fx: layoutCoords.x,
+      fy: layoutCoords.y,
     };
 
     updateNode(nodeAttributes, nodeIndex);

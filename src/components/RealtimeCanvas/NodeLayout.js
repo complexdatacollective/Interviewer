@@ -101,18 +101,11 @@ class NodeLayout extends React.Component {
     const { updateNode } = this.props;
 
     const {
-      dy,
-      dx,
       x,
       y,
     } = delta;
 
-    const screen = this.screen.get();
-
-    const relativeDelta = {
-      dy: dy / screen.width,
-      dx: dx / screen.height,
-    };
+    const relativeDelta = this.screen.calculateRelativeCoords(delta);
 
     if (allowAutomaticLayout) {
       const { simulationEnabled, moveNode } = simulation;
@@ -139,18 +132,11 @@ class NodeLayout extends React.Component {
     const { updateNode } = this.props;
 
     const {
-      dy,
-      dx,
       x,
       y,
     } = delta;
 
-    const screen = this.screen.get();
-
-    const relativeDelta = {
-      dy: dy / screen.width,
-      dx: dx / screen.height,
-    };
+    const relativeDelta = this.screen.calculateRelativeCoords(delta);
 
     if (allowAutomaticLayout) {
       const { simulationEnabled, moveNode } = simulation;
