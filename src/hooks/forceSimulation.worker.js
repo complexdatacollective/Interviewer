@@ -1,6 +1,7 @@
 /* eslint-disable no-console, func-names */
 import {
   forceSimulation,
+  // forceCenter,
   forceX,
   forceY,
   forceManyBody,
@@ -21,6 +22,7 @@ const updateOptions = function (options) {
       case 'center':
         simulation.force('x').strength(value);
         simulation.force('y').strength(value);
+        // simulation.force('center').strength(value);
         break;
       case 'linkDistance':
         simulation.force('links').distance(value);
@@ -49,11 +51,12 @@ onmessage = function ({ data }) {
       simulation = forceSimulation(nodes)
         // .alphaTarget(0.3) // stay hot
         .velocityDecay(0.1) // low friction
+        .force('links', forceLink(links))
         .force('charge', forceManyBody())
         // .force('collide', forceCollide().radius(50).iterations(2))
-        .force('links', forceLink(links))
         .force('x', forceX()) // 0 as center
         .force('y', forceY()); // 0 as center
+        // .force('center', forceCenter().strength(200));
 
       updateOptions(options);
 

@@ -32,6 +32,7 @@ const useViewport = (layoutSpace = LAYOUT_SPACE) => {
   const centerY = useMotionValue(0);
 
   const viewport = {
+    layoutSpace,
     zoom,
     center: {
       x: centerX,

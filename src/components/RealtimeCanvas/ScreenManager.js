@@ -66,9 +66,12 @@ const screen = () => {
     };
   };
 
+  const get = () => state;
+
   return {
     initialize,
     destroy,
+    get,
     calculateScreenCoords,
     calculateRelativeCoords,
   };
