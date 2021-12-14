@@ -23,6 +23,12 @@ const useForceSimulation = (listener = () => {}) => {
   const state = useRef(null);
   const [isRunning, setIsRunning] = useState(false);
 
+  useEffect(() => () => {
+    if (!worker.current) { return; }
+    worker.current.terminate();
+    worker.current = null;
+  }, []);
+
   const initialize = useCallback((network = {}, options = {}) => {
     if (worker.current) { worker.current.terminate(); }
 
