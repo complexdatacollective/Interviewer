@@ -1,11 +1,12 @@
 import { useCallback } from 'react';
-import { useSpring, useMotionValue } from 'framer-motion';
+import { useMotionValue } from 'framer-motion';
 import { clamp, max, min } from 'lodash';
 
 const LAYOUT_SPACE = 1000;
 
 const MIN_ZOOM = 0.5;
 const MAX_ZOOM = 3;
+const ZOOM_AREA = 0.95; // Suggest space around edge of graph
 
 const suggestZoom = (nodes, layoutSpace = LAYOUT_SPACE) => {
   if (nodes.length <= 1) {
@@ -20,13 +21,13 @@ const suggestZoom = (nodes, layoutSpace = LAYOUT_SPACE) => {
     return max([Math.abs(x), Math.abs(y), acc]);
   }, 0);
 
-  const suggestedZoom = (0.45 * layoutSpace) / bound;
+  const suggestedZoom = (0.5 * ZOOM_AREA * layoutSpace) / bound;
 
   return min([MAX_ZOOM, max([MIN_ZOOM, suggestedZoom])]);
 };
 
 const useViewport = (layoutSpace = LAYOUT_SPACE) => {
-  const zoom = useSpring(3);
+  const zoom = useMotionValue(3);
   // Don't use spring for centering since this functionality isn't exposed in UI
   const centerX = useMotionValue(0);
   const centerY = useMotionValue(0);
@@ -76,11 +77,6 @@ const useViewport = (layoutSpace = LAYOUT_SPACE) => {
   // Calculate relative position accounting for viewport
   const autoZoom = useCallback((nodes) => {
     const suggestedZoom = suggestZoom(nodes, layoutSpace);
-
-    // Animating this value stops the network being updated when
-    // autozoom is run at end of animation, therefore disable
-    // animation behaviour until this is resolved.
-    zoom.current = zoom.prev = suggestedZoom; // eslint-disable-line no-multi-assign
     zoom.set(suggestedZoom);
   }, []);
 

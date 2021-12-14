@@ -14,9 +14,6 @@ const emptyNetwork = { nodes: [], links: [] };
 
 const useForceSimulation = (listener = () => {}) => {
   const {
-    viewport,
-    moveViewport,
-    zoomViewport,
     calculateLayoutCoords,
     calculateRelativeCoords,
     autoZoom,
@@ -25,12 +22,6 @@ const useForceSimulation = (listener = () => {}) => {
   const simNetwork = useRef(null);
   const state = useRef(null);
   const [isRunning, setIsRunning] = useState(false);
-
-  const recalculate = useCallback(() => {
-    state.current.nodes = simNetwork.current.nodes.map(calculateRelativeCoords);
-  }, []);
-
-  useEffect(() => viewport.zoom.onChange(() => recalculate()), [recalculate]);
 
   const initialize = useCallback((network = {}, options = {}) => {
     if (worker.current) { worker.current.terminate(); }
@@ -49,6 +40,7 @@ const useForceSimulation = (listener = () => {}) => {
         case 'tick': {
           setIsRunning(true);
           simNetwork.current.nodes = event.data.nodes;
+          autoZoom(simNetwork.current.nodes);
           const protocolNodes = event.data.nodes.map(calculateRelativeCoords);
           state.current.nodes = protocolNodes;
           listener({ type: 'tick', data: protocolNodes });
@@ -165,16 +157,6 @@ const useForceSimulation = (listener = () => {}) => {
   }, [updateNode]);
 
   return {
-    viewport: {
-      moveViewport: (...args) => {
-        moveViewport(...args);
-        recalculate();
-      },
-      zoomViewport: (...args) => {
-        zoomViewport(...args);
-        recalculate();
-      },
-    },
     state,
     isRunning,
     initialize,

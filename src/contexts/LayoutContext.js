@@ -24,10 +24,6 @@ const LayoutContext = React.createContext({
     layout: undefined,
     links: [],
   },
-  viewport: {
-    moveViewport: noop,
-    zoomViewport: noop,
-  },
   getPosition: noop,
   allowAutomaticLayout: false,
   simulation: undefined,
@@ -80,10 +76,6 @@ export const LayoutProvider = ({
     moveNode,
     releaseNode,
     updateNetwork,
-    viewport: {
-      moveViewport,
-      zoomViewport,
-    },
   } = useForceSimulation();
 
   const [simulationEnabled, setSimulationEnabled] = useState(true);
@@ -197,10 +189,6 @@ export const LayoutProvider = ({
       edges,
       layout,
       links,
-    },
-    viewport: {
-      moveViewport,
-      zoomViewport,
     },
     allowAutomaticLayout,
     getPosition,
