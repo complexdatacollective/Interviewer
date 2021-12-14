@@ -111,15 +111,22 @@ const useForceSimulation = (listener = () => {}) => {
   const updateNetwork = useCallback((network) => {
     if (!worker.current) { return; }
 
+    const nodes = network.nodes || state.current.nodes;
+    const simNodes = (network.nodes && network.nodes.map(calculateLayoutCoords))
+      || simNetwork.current.nodes;
+
+    const links = nodes.length > 0
+      ? (network.links || state.current.links)
+      : [];
+
     state.current = {
-      ...state.current,
-      ...network,
+      nodes,
+      links,
     };
 
     const newSimNetwork = {
-      ...simNetwork.current,
-      ...network,
-      ...(network.nodes && { nodes: network.nodes.map(calculateLayoutCoords) }),
+      nodes: simNodes,
+      links,
     };
 
     const shouldRestart = (
