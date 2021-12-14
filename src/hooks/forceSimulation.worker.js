@@ -1,7 +1,6 @@
 /* eslint-disable no-console, func-names */
 import {
   forceSimulation,
-  // forceCenter,
   forceX,
   forceY,
   forceManyBody,
@@ -9,8 +8,11 @@ import {
 } from 'd3-force';
 
 let simulation;
+let links;
 
 console.log('new force simulation worker!');
+
+const cloneLinks = (ls) => ls.map((link) => ({ ...link }));
 
 const updateOptions = function (options) {
   Object.keys(options).forEach((option) => {
@@ -25,7 +27,7 @@ const updateOptions = function (options) {
         // simulation.force('center').strength(value);
         break;
       case 'linkDistance':
-        simulation.force('links').distance(value);
+        simulation.force('links', forceLink(cloneLinks(links)).distance(value));
         break;
       default:
     }
@@ -40,21 +42,20 @@ onmessage = function ({ data }) {
   switch (data.type) {
     case 'initialize': {
       const {
-        network: {
-          nodes,
-          links,
-        },
+        network,
         options,
       } = data;
 
+      links = network.links;
+
       console.debug('worker:initialize');
-      simulation = forceSimulation(nodes)
+
+      simulation = forceSimulation(network.nodes)
         // .alphaTarget(0.3) // stay hot
         .velocityDecay(0.1) // low friction
-        .force('links', forceLink(links))
         .force('charge', forceManyBody())
+        .force('links', forceLink(cloneLinks(links)))
         // .force('collide', forceCollide().radius(50).iterations(2))
-        // .force('center', forceCenter().strength(200));
         .force('x', forceX()) // 0 as center
         .force('y', forceY()); // 0 as center
 
@@ -122,18 +123,16 @@ onmessage = function ({ data }) {
       console.log('update network', { data });
 
       const {
-        network: {
-          nodes,
-          links,
-        },
+        network,
       } = data;
 
-      simulation
-        .nodes(nodes);
+      links = network.links;
 
       simulation
-        .force('links')
-        .links(links);
+        .nodes(network.nodes);
+
+      simulation
+        .force('links', forceLink(cloneLinks(links)));
 
       if (data.restart) {
       // TODO: don't run this on "first run"?
@@ -159,6 +158,9 @@ onmessage = function ({ data }) {
 
       simulation
         .nodes(nodes);
+
+      simulation
+        .force('links', forceLink(cloneLinks(links)));
 
       simulation
         .alpha(0.3)
