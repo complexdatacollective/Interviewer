@@ -6,7 +6,7 @@ const LAYOUT_SPACE = 1000;
 
 const MIN_ZOOM = 0.5;
 const MAX_ZOOM = 3;
-const ZOOM_AREA = 0.95; // Suggest space around edge of graph
+const ZOOM_AREA = 0.9; // Suggest space around edge of graph
 
 const suggestZoom = (nodes, layoutSpace = LAYOUT_SPACE) => {
   if (nodes.length <= 1) {
