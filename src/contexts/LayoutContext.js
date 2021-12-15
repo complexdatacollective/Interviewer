@@ -67,6 +67,7 @@ export const LayoutProvider = ({
 
   const {
     state: forceSimulation,
+    screen,
     isRunning,
     start,
     reheat,
@@ -190,6 +191,7 @@ export const LayoutProvider = ({
       layout,
       links,
     },
+    screen,
     allowAutomaticLayout,
     getPosition,
     simulation,

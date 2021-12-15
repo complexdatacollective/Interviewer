@@ -6,12 +6,15 @@ const LAYOUT_SPACE = 1000;
 
 const MIN_ZOOM = 0.5;
 const MAX_ZOOM = 3;
-const ZOOM_AREA = 0.9; // Suggest space around edge of graph
 
-const suggestZoom = (nodes, layoutSpace = LAYOUT_SPACE) => {
+const suggestZoom = (nodes, layoutSpace = LAYOUT_SPACE, screen) => {
   if (nodes.length <= 1) {
     return 1;
   }
+
+  const nodeSize = 65; // pixels
+  const availableSpace = max([screen.width, screen.height]);
+  const zoomArea = 1 - (nodeSize / availableSpace);
 
   const bound = nodes.reduce((acc, { x, y }, index) => {
     if (index === 0) {
@@ -21,7 +24,7 @@ const suggestZoom = (nodes, layoutSpace = LAYOUT_SPACE) => {
     return max([Math.abs(x), Math.abs(y), acc]);
   }, 0);
 
-  const suggestedZoom = (0.5 * ZOOM_AREA * layoutSpace) / bound;
+  const suggestedZoom = (0.5 * zoomArea * layoutSpace) / bound;
 
   return min([MAX_ZOOM, max([MIN_ZOOM, suggestedZoom])]);
 };
@@ -75,8 +78,9 @@ const useViewport = (layoutSpace = LAYOUT_SPACE) => {
   }), []);
 
   // Calculate relative position accounting for viewport
-  const autoZoom = useCallback((nodes) => {
-    const suggestedZoom = suggestZoom(nodes, layoutSpace);
+  const autoZoom = useCallback((nodes, screen) => {
+    if (!screen) { return; }
+    const suggestedZoom = suggestZoom(nodes, layoutSpace, screen);
     zoom.set(suggestedZoom);
   }, []);
 

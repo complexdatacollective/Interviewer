@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { isEmpty, get } from 'lodash';
 import LayoutContext from '../../contexts/LayoutContext';
 import { entityPrimaryKeyProperty, entityAttributesProperty } from '../../ducks/modules/network';
-import ScreenManager from './ScreenManager';
 import LayoutNode from './LayoutNode';
 
 class NodeLayout extends React.Component {
@@ -14,7 +13,6 @@ class NodeLayout extends React.Component {
     this.ref = React.createRef();
     this.updateRAF = undefined;
     this.layoutEls = [];
-    this.screen = ScreenManager();
     this.isDragging = false;
   }
 
@@ -32,7 +30,8 @@ class NodeLayout extends React.Component {
   }
 
   componentWillUnmount() {
-    this.screen.destroy();
+    const { screen } = this.context;
+    screen.current.destroy();
     cancelAnimationFrame(this.updateRAF);
   }
 
@@ -55,13 +54,14 @@ class NodeLayout extends React.Component {
   update = () => {
     const {
       getPosition,
+      screen,
     } = this.context;
 
     this.layoutEls.forEach((el, index) => {
       const relativePosition = getPosition.current(index);
       if (!relativePosition || !el) { return; }
 
-      const screenPosition = this.screen.calculateScreenCoords(relativePosition);
+      const screenPosition = screen.current.calculateScreenCoords(relativePosition);
       el.style.left = `${screenPosition.x}px`;
       el.style.top = `${screenPosition.y}px`;
       el.style.display = 'block';
@@ -85,8 +85,9 @@ class NodeLayout extends React.Component {
 
   initializeLayout = (el) => {
     if (!el) { return; }
+    const { screen } = this.context;
     this.ref.current = el;
-    this.screen.initialize(el);
+    screen.current.initialize(el);
   };
 
   handleDragStart = (uuid, index, delta) => {
@@ -96,6 +97,7 @@ class NodeLayout extends React.Component {
       network: { layout },
       allowAutomaticLayout,
       simulation,
+      screen,
     } = this.context;
 
     const { updateNode } = this.props;
@@ -105,7 +107,7 @@ class NodeLayout extends React.Component {
       y,
     } = delta;
 
-    const relativeDelta = this.screen.calculateRelativeCoords(delta);
+    const relativeDelta = screen.current.calculateRelativeCoords(delta);
 
     if (allowAutomaticLayout) {
       const { simulationEnabled, moveNode } = simulation;
@@ -118,7 +120,7 @@ class NodeLayout extends React.Component {
     updateNode(
       uuid,
       undefined,
-      { [layout]: this.screen.calculateRelativeCoords({ x, y }) },
+      { [layout]: screen.current.calculateRelativeCoords({ x, y }) },
     );
   };
 
@@ -127,6 +129,7 @@ class NodeLayout extends React.Component {
       network: { layout },
       allowAutomaticLayout,
       simulation,
+      screen,
     } = this.context;
 
     const { updateNode } = this.props;
@@ -136,7 +139,7 @@ class NodeLayout extends React.Component {
       y,
     } = delta;
 
-    const relativeDelta = this.screen.calculateRelativeCoords(delta);
+    const relativeDelta = screen.current.calculateRelativeCoords(delta);
 
     if (allowAutomaticLayout) {
       const { simulationEnabled, moveNode } = simulation;
@@ -149,7 +152,7 @@ class NodeLayout extends React.Component {
     updateNode(
       uuid,
       undefined,
-      { [layout]: this.screen.calculateRelativeCoords({ x, y }) },
+      { [layout]: screen.current.calculateRelativeCoords({ x, y }) },
     );
   };
 
@@ -158,6 +161,7 @@ class NodeLayout extends React.Component {
       network: { layout },
       allowAutomaticLayout,
       simulation,
+      screen,
     } = this.context;
 
     const {
@@ -176,7 +180,7 @@ class NodeLayout extends React.Component {
     updateNode(
       uuid,
       undefined,
-      { [layout]: this.screen.calculateRelativeCoords({ x, y }) },
+      { [layout]: screen.current.calculateRelativeCoords({ x, y }) },
     );
   };
 
