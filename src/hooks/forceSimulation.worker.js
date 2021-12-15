@@ -43,7 +43,7 @@ const updateOptions = function (newOptions) {
     }
   });
 
-  options = { ...options, ...newOptions };
+  options = { ...options, ...newOptions }; // Update saved options
 
   simulation
     .alpha(0.3)

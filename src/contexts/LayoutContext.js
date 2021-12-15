@@ -13,7 +13,7 @@ import useForceSimulation from '../hooks/useForceSimulation';
 const SIMULATION_OPTIONS = {
   decay: 0.1,
   charge: -30,
-  linkDistance: 30,
+  linkDistance: 20,
   center: 0.1,
 };
 
