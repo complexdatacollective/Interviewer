@@ -1,8 +1,8 @@
 /* eslint-env jest */
 
 import {
-  makeGetNextUnplacedNode,
-  makeGetPlacedNodes,
+  getNextUnplacedNode,
+  getPlacedNodes,
   makeGetDisplayEdges,
 } from '../canvas';
 import { entityAttributesProperty } from '../../ducks/modules/network';
@@ -49,8 +49,6 @@ const mockState = {
 
 describe('canvas selectors', () => {
   describe('makeGetPlacedNodes()', () => {
-    const getPlacedNodes = makeGetPlacedNodes();
-
     it('selects all placed nodes', () => {
       const props = {
         prompt: {
@@ -71,8 +69,6 @@ describe('canvas selectors', () => {
   });
 
   describe('makeGetNextUnplacedNode()', () => {
-    const getNextUnplacedNode = makeGetNextUnplacedNode();
-
     it('selects the next unplaced node', () => {
       const props = {
         prompt: {
@@ -91,8 +87,6 @@ describe('canvas selectors', () => {
   });
 
   describe('makeGetNextUnplacedNode() uses sort', () => {
-    const getNextUnplacedNode = makeGetNextUnplacedNode();
-
     it('selects the next unplaced node', () => {
       const props = {
         prompt: {
@@ -117,8 +111,6 @@ describe('canvas selectors', () => {
   });
 
   describe('makeGetDisplayEdges', () => {
-    const getDisplayEdges = makeGetDisplayEdges();
-
     it('selects edges for placed nodes, with coordinates', () => {
       const props = {
         prompt: {
@@ -131,7 +123,7 @@ describe('canvas selectors', () => {
         },
       };
 
-      const subject = getDisplayEdges(mockState, props);
+      const subject = makeGetDisplayEdges(mockState, props);
 
       expect(subject).toEqual([
         {
