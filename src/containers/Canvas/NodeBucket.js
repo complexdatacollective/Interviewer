@@ -19,7 +19,7 @@ const NodeBucket = React.forwardRef((props, ref) => {
     allowAutomaticLayout,
   } = useContext(LayoutContext);
 
-  if (!allowPositioning || allowAutomaticLayout) { return null; }
+  if (!node || !allowPositioning || allowAutomaticLayout) { return null; }
 
   return (
     <div className="node-bucket" ref={ref}>
