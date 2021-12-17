@@ -9,7 +9,6 @@ import LayoutNode from './LayoutNode';
 class NodeLayout extends React.Component {
   constructor(props) {
     super(props);
-
     this.ref = React.createRef();
     this.updateRAF = undefined;
     this.layoutEls = [];

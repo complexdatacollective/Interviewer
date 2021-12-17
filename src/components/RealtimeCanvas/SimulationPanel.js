@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';

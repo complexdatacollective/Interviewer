@@ -6,33 +6,11 @@ import { entityPrimaryKeyProperty, entityAttributesProperty } from '../../ducks/
 import { DropTarget } from '../../behaviours/DragAndDrop';
 import NodeLayout from '../../components/RealtimeCanvas/NodeLayout';
 
-const relativeCoords = (container, node) => ({
-  x: (node.x - container.x) / container.width,
-  y: (node.y - container.y) / container.height,
-});
-
 const withConnectFrom = withState('connectFrom', 'setConnectFrom', null);
 
 const withConnectFromHandler = withHandlers({
   handleConnectFrom: ({ setConnectFrom }) => (id) => setConnectFrom(id),
   handleResetConnectFrom: ({ setConnectFrom }) => () => setConnectFrom(null),
-});
-
-const withDropHandlers = withHandlers({
-  accepts: () => ({ meta }) => meta.itemType === 'POSITIONED_NODE',
-  onDrop: ({
-    updateNode, layoutVariable, width, height, x, y,
-  }) => (item) => {
-    updateNode(
-      item.meta[entityPrimaryKeyProperty],
-      {},
-      {
-        [layoutVariable]: relativeCoords({
-          width, height, x, y,
-        }, item),
-      },
-    );
-  },
 });
 
 const withSelectHandlers = compose(
@@ -107,7 +85,6 @@ export default compose(
   withConnectFromHandler,
   connect(null, mapDispatchToProps),
   withBounds,
-  withDropHandlers,
   withSelectHandlers,
   DropTarget,
 )(NodeLayout);

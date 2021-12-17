@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { get } from 'lodash';
 import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { withHandlers, compose } from 'recompose';
 import PropTypes from 'prop-types';
 import withPrompt from '../../behaviours/withPrompt';
@@ -13,7 +13,9 @@ import EdgeLayout from '../../components/RealtimeCanvas/EdgeLayout';
 import SimulationPanel from '../../components/RealtimeCanvas/SimulationPanel';
 import Background from '../Canvas/Background';
 import { actionCreators as resetActions } from '../../ducks/modules/reset';
-import { getEdges, makeGetNextUnplacedNode, makeGetPlacedNodes } from '../../selectors/canvas';
+import {
+  getEdges, getNextUnplacedNode, getNodes, getPlacedNodes,
+} from '../../selectors/canvas';
 import CollapsablePrompts from '../../components/CollapsablePrompts';
 
 const withResetInterfaceHandler = withHandlers({
@@ -41,9 +43,6 @@ const Sociogram = (props) => {
     promptId,
     stage,
     handleResetInterface,
-    nodes,
-    nextUnplacedNode,
-    edges,
   } = props;
 
   const interfaceRef = useRef(null);
@@ -64,6 +63,13 @@ const Sociogram = (props) => {
   const backgroundImage = get(stage, 'background.image');
   const concentricCircles = get(stage, 'background.concentricCircles');
   const skewedTowardCenter = get(stage, 'background.skewedTowardCenter');
+
+  const allNodes = useSelector((state) => getNodes(state, props));
+  const placedNodes = useSelector((state) => getPlacedNodes(state, props));
+  const nextUnplacedNode = useSelector((state) => getNextUnplacedNode(state, props));
+
+  const nodes = allowAutomaticLayout ? allNodes : placedNodes;
+  const edges = useSelector((state) => getEdges(state, props));
 
   return (
     <div className="sociogram-interface" ref={interfaceRef}>
@@ -99,8 +105,8 @@ const Sociogram = (props) => {
             />
             <NodeBucket
               id="NODE_BUCKET"
-              node={nextUnplacedNode}
               allowPositioning={allowPositioning}
+              node={nextUnplacedNode}
             />
             <SimulationPanel
               dragConstraints={dragSafeRef}
@@ -117,8 +123,6 @@ Sociogram.propTypes = {
   prompt: PropTypes.object.isRequired,
   promptId: PropTypes.number.isRequired,
   handleResetInterface: PropTypes.func.isRequired,
-  nodes: PropTypes.array.isRequired,
-  edges: PropTypes.array.isRequired,
 };
 
 Sociogram.defaultProps = {
@@ -129,22 +133,8 @@ const mapDispatchToProps = (dispatch) => ({
   resetPropertyForAllNodes: bindActionCreators(resetActions.resetPropertyForAllNodes, dispatch),
 });
 
-const makeMapStateToProps = () => {
-  // const getDisplayEdges = makeGetDisplayEdges();
-  const getPlacedNodes = makeGetPlacedNodes();
-  const getNextUnplacedNode = makeGetNextUnplacedNode();
-
-  const mapStateToProps = (state, ownProps) => ({
-    edges: getEdges(state, ownProps),
-    nodes: getPlacedNodes(state, ownProps),
-    nextUnplacedNode: getNextUnplacedNode(state, ownProps),
-  });
-
-  return mapStateToProps;
-};
-
 export default compose(
   withPrompt,
-  connect(makeMapStateToProps, mapDispatchToProps),
+  connect(null, mapDispatchToProps),
   withResetInterfaceHandler,
 )(Sociogram);

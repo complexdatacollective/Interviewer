@@ -1,6 +1,8 @@
 import { useCallback } from 'react';
 import { useMotionValue } from 'framer-motion';
-import { clamp, max, min } from 'lodash';
+import {
+  clamp, get, max, min,
+} from 'lodash';
 
 const LAYOUT_SPACE = 1000;
 
@@ -66,10 +68,16 @@ const useViewport = (layoutSpace = LAYOUT_SPACE) => {
 
   // Convert relative coordinates (0-1) into pixel coordinates for d3-force accounting for viewport
   // -1000 - -1000 space, 0,0 center
-  const calculateLayoutCoords = useCallback(({ x, y }) => ({
-    x: (((x - 0.5) / zoom.get()) * layoutSpace) + centerX.get(),
-    y: (((y - 0.5) / zoom.get()) * layoutSpace) + centerY.get(),
-  }), []);
+  const calculateLayoutCoords = useCallback((coords) => {
+    // Nodes may have no layoutVariable value, so start with 0.5
+    const x = get(coords, 'x', 0.5);
+    const y = get(coords, 'y', 0.5);
+
+    return {
+      x: (((x - 0.5) / zoom.get()) * layoutSpace) + centerX.get(),
+      y: (((y - 0.5) / zoom.get()) * layoutSpace) + centerY.get(),
+    };
+  }, []);
 
   // Calculate relative position accounting for viewport
   const calculateRelativeCoords = useCallback(({ x, y }) => ({
