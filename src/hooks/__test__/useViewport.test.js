@@ -34,6 +34,7 @@ const TestConsumer = () => {
 
 const viewportShape = {
   zoom: { get: expect.any(Function), set: expect.any(Function) },
+  layoutSpace: 1000,
   center: {
     x: { get: expect.any(Function), set: expect.any(Function) },
     y: { get: expect.any(Function), set: expect.any(Function) },

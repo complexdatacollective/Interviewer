@@ -297,7 +297,7 @@
       "^(?!.*\\.(js|jsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
     },
     "transformIgnorePatterns": [
-      "/node_modules/(?!@codaco/ui).+\\.js$"
+      "/node_modules/(?!@codaco/ui|d3-force|d3-quadtree|d3-dispatch|d3-timer).+\\.js$"
     ],
     "moduleNameMapper": {
       "^react-native$": "react-native-web"
