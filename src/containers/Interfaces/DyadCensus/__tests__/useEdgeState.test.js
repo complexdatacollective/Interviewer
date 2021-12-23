@@ -1,6 +1,11 @@
 /* eslint-env jest */
 
-import { getEdgeInNetwork, matchEntry, stageStateReducer, getIsPreviouslyAnsweredNo } from '../useEdgeState';
+import {
+  getEdgeInNetwork,
+  matchEntry,
+  stageStateReducer,
+  getIsPreviouslyAnsweredNo,
+} from '../useEdgeState';
 
 describe('useEdgeState', () => {
   describe('getEdgeInNetwork(edges, pair, edgeType)', () => {
@@ -13,7 +18,7 @@ describe('useEdgeState', () => {
       const pair2 = [4, 1];
       const pair3 = [4, 5];
       const pair4 = [5, 4];
-      const edgeType = "friend";
+      const edgeType = 'friend';
 
       expect(getEdgeInNetwork(edges, pair1, edgeType)).toEqual(edges[0]);
       expect(getEdgeInNetwork(edges, pair2, edgeType)).toEqual(edges[0]);
@@ -27,7 +32,7 @@ describe('useEdgeState', () => {
         { type: 'friend', from: 4, to: 5 },
       ];
       const pair1 = [1, 5];
-      const edgeType = "friend";
+      const edgeType = 'friend';
 
       expect(getEdgeInNetwork(edges, pair1, edgeType)).toEqual(null);
     });
