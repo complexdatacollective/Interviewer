@@ -6,6 +6,15 @@
   flex-direction: column;
   height: 100%;
   justify-content: center;
+  position: relative;
+
+  &__drag-safe {
+    position: absolute;
+    top: 25px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
 
   &__concentric-circles {
     flex: 1 1 auto;
