@@ -19,6 +19,10 @@ const NodeBucket = React.forwardRef((props, ref) => {
     allowAutomaticLayout,
   } = useContext(LayoutContext);
 
+  // Don't render a node bucket if:
+  // - there are no more nodes to place
+  // - automatic layout is enabled
+  // - nodes are not allowed to be dragged
   if (!node || !allowPositioning || allowAutomaticLayout) { return null; }
 
   return (
