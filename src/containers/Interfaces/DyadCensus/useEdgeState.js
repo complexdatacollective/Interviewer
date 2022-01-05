@@ -2,13 +2,13 @@ import { useState, useEffect } from 'react';
 import { actionCreators as sessionsActions } from '../../../ducks/modules/sessions';
 import { entityPrimaryKeyProperty } from '../../../ducks/modules/network';
 
-const getEdgeInNetwork = (edges, pair, edgeType) => {
+export const getEdgeInNetwork = (edges, pair, edgeType) => {
   if (!pair) { return null; }
   const [a, b] = pair;
 
   const edge = edges.find(({ from, to, type }) => (
     type === edgeType
-    && ((from === a && to === b) || (to === b && from === a))
+    && ((from === a && to === b) || (to === a && from === b))
   ));
 
   if (!edge) { return null; }
