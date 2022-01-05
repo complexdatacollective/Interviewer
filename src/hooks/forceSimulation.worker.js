@@ -125,8 +125,6 @@ onmessage = function ({ data }) {
     case 'update_network': {
       if (!simulation) { return; }
 
-      console.log('update network', { data });
-
       const {
         network,
       } = data;

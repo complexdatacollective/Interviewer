@@ -3,7 +3,6 @@
 import {
   getNextUnplacedNode,
   getPlacedNodes,
-  makeGetDisplayEdges,
 } from '../canvas';
 import { entityAttributesProperty } from '../../ducks/modules/network';
 
@@ -107,32 +106,6 @@ describe('canvas selectors', () => {
       expect(subject).toMatchObject(
         { _uid: 3 },
       );
-    });
-  });
-
-  describe('makeGetDisplayEdges', () => {
-    it('selects edges for placed nodes, with coordinates', () => {
-      const props = {
-        prompt: {
-          layout: {
-            layoutVariable: 'closeness',
-          },
-          edges: {
-            display: ['friend'],
-          },
-        },
-      };
-
-      const subject = makeGetDisplayEdges(mockState, props);
-
-      expect(subject).toEqual([
-        {
-          from: [1, 1], key: '1_friend_4', to: [1, 1], type: 'friend',
-        },
-        {
-          from: [1, 1], key: '4_friend_5', to: [1, 1], type: 'friend',
-        },
-      ]);
     });
   });
 });

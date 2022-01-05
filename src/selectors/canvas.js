@@ -110,20 +110,3 @@ export const getNodes = createDeepEqualSelector(
     return nodes.filter((node) => node.type === subject.type);
   },
 );
-
-/**
- * Selector for edges.
- *
- * requires:
- * { subject, layout, displayEdges } props
- */
-// TODO: makeGetDisplayEdgeCoords
-export const makeGetDisplayEdges = createDeepEqualSelector(
-  getNodes,
-  getEdges,
-  getLayout,
-  (nodes, edges, layout) => edgesToCoords(
-    edges,
-    { nodes, layout },
-  ),
-);
