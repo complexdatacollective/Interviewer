@@ -109,7 +109,7 @@
     "history": "^4.7.2",
     "html-webpack-plugin": "^4.0.0-beta.4",
     "http-proxy-middleware": "0.17.3",
-    "i": "^0.3.6",
+    "i": "^0.3.7",
     "icon-gen": "^1.2.3",
     "imgbb-uploader": "^1.0.3",
     "jest": "^26.0.1",
