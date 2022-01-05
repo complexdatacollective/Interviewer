@@ -24,7 +24,7 @@ const getDisplayEdges = (_, props) => get(props, 'prompt.edges.display', []);
  * requires:
  * { layout, subject, sortOrder, stage } props
  */
-export const makeGetNextUnplacedNode = () => createDeepEqualSelector(
+export const getNextUnplacedNode = createDeepEqualSelector(
   getNetworkNodes,
   getStageSubject(),
   getLayout,
@@ -49,7 +49,7 @@ export const makeGetNextUnplacedNode = () => createDeepEqualSelector(
  * requires:
  * { layout, subject } props
  */
-export const makeGetPlacedNodes = () => createDeepEqualSelector(
+export const getPlacedNodes = createDeepEqualSelector(
   getNetworkNodes,
   getStageSubject(),
   getLayout,
@@ -93,21 +93,20 @@ export const edgesToCoords = (edges, { nodes, layout }) => edges.map(
  * requires:
  * { subject, layout, displayEdges } props
  */
-export const makeGetDisplayEdges = () => {
-  const getPlacedNodes = makeGetPlacedNodes();
+export const getEdges = createDeepEqualSelector(
+  getNetworkEdges,
+  getDisplayEdges,
+  (edges, displayEdges) => edges.filter(
+    (edge) => displayEdges.includes(edge.type),
+  ),
+);
 
-  return createDeepEqualSelector(
-    getPlacedNodes,
-    getNetworkEdges,
-    getDisplayEdges,
-    getLayout,
-    (nodes, edges, displayEdges, layout) => {
-      const selectedEdges = edges.filter((edge) => displayEdges.includes(edge.type));
-
-      return edgesToCoords(
-        selectedEdges,
-        { nodes, layout },
-      );
-    },
-  );
-};
+// Selector for stage nodes
+export const getNodes = createDeepEqualSelector(
+  getNetworkNodes,
+  getStageSubject(),
+  (nodes, subject) => {
+    if (!subject) { return nodes; }
+    return nodes.filter((node) => node.type === subject.type);
+  },
+);

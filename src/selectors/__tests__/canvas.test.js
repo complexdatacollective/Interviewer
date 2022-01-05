@@ -1,9 +1,8 @@
 /* eslint-env jest */
 
 import {
-  makeGetNextUnplacedNode,
-  makeGetPlacedNodes,
-  makeGetDisplayEdges,
+  getNextUnplacedNode,
+  getPlacedNodes,
 } from '../canvas';
 import { entityAttributesProperty } from '../../ducks/modules/network';
 
@@ -49,8 +48,6 @@ const mockState = {
 
 describe('canvas selectors', () => {
   describe('makeGetPlacedNodes()', () => {
-    const getPlacedNodes = makeGetPlacedNodes();
-
     it('selects all placed nodes', () => {
       const props = {
         prompt: {
@@ -71,8 +68,6 @@ describe('canvas selectors', () => {
   });
 
   describe('makeGetNextUnplacedNode()', () => {
-    const getNextUnplacedNode = makeGetNextUnplacedNode();
-
     it('selects the next unplaced node', () => {
       const props = {
         prompt: {
@@ -91,8 +86,6 @@ describe('canvas selectors', () => {
   });
 
   describe('makeGetNextUnplacedNode() uses sort', () => {
-    const getNextUnplacedNode = makeGetNextUnplacedNode();
-
     it('selects the next unplaced node', () => {
       const props = {
         prompt: {
@@ -113,34 +106,6 @@ describe('canvas selectors', () => {
       expect(subject).toMatchObject(
         { _uid: 3 },
       );
-    });
-  });
-
-  describe('makeGetDisplayEdges', () => {
-    const getDisplayEdges = makeGetDisplayEdges();
-
-    it('selects edges for placed nodes, with coordinates', () => {
-      const props = {
-        prompt: {
-          layout: {
-            layoutVariable: 'closeness',
-          },
-          edges: {
-            display: ['friend'],
-          },
-        },
-      };
-
-      const subject = getDisplayEdges(mockState, props);
-
-      expect(subject).toEqual([
-        {
-          from: [1, 1], key: '1_friend_4', to: [1, 1], type: 'friend',
-        },
-        {
-          from: [1, 1], key: '4_friend_5', to: [1, 1], type: 'friend',
-        },
-      ]);
     });
   });
 });
