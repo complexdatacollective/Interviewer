@@ -14,10 +14,29 @@ const mockReducer = () => ({
   installedProtocols: {
     mockProtocol: {
       codebook: {
-        node: {},
+        node: {
+          person: {
+            name: 'person',
+            variables: {
+              '789-123': {
+                name: 'silly',
+                type: 'string',
+              },
+              '1011-12': {
+                name: 'fun',
+                type: 'boolean',
+              },
+            },
+          },
+        },
         edge: {},
       },
       assetManifest: {
+        foo: {
+          name: 'bar',
+          source: 'file.csv',
+          type: 'network',
+        },
         bar: {
           name: 'bar',
           source: 'file.json',
@@ -34,21 +53,68 @@ const mockReducer = () => ({
   },
 });
 
-const mockResult = {
+const mockData1 = {
   nodes: [
     {
       type: 'person',
       [entityAttributesProperty]: {
         fun: true,
+        happy: 'true',
+        campy: '42',
+        silly: 42,
       },
     },
   ],
 };
 
-const mockSource = 'bar';
+const mockResult1 = {
+  nodes: [
+    {
+      type: 'person',
+      [entityAttributesProperty]: {
+        '1011-12': true,
+        happy: 'true',
+        campy: '42',
+        '789-123': 42,
+      },
+    },
+  ],
+};
+
+const mockData2 = {
+  nodes: [
+    {
+      type: 'person',
+      [entityAttributesProperty]: {
+        fun: 'true',
+        happy: 'true',
+        campy: '42',
+        silly: '42',
+      },
+    },
+  ],
+};
+
+const mockCsvResult2 = {
+  nodes: [
+    {
+      type: 'person',
+      [entityAttributesProperty]: {
+        '1011-12': true,
+        happy: true,
+        campy: 42,
+        '789-123': '42',
+      },
+    },
+  ],
+};
+
+const mockSource1 = 'bar';
+const mockSource2 = 'foo';
 
 loadExternalData
-  .mockImplementation(() => Promise.resolve(mockResult));
+  .mockImplementationOnce(() => Promise.resolve(mockData1))
+  .mockImplementationOnce(() => Promise.resolve(mockData2));
 
 describe('withExternalDataLoader', () => {
   let withExternalDataConfigured;
@@ -64,7 +130,7 @@ describe('withExternalDataLoader', () => {
     mount((
       <EnhancedComponent
         store={createStore(mockReducer)}
-        source={mockSource}
+        source={mockSource1}
         stage={{ subject: { entity: 'node', type: 'person' } }}
       />
     ));
@@ -72,8 +138,31 @@ describe('withExternalDataLoader', () => {
     setImmediate(() => {
       expect(last(MockComponent.mock.calls)[0])
         .toMatchObject({
-          externalData: mockResult,
-          source: mockSource,
+          externalData: mockResult1,
+          source: mockSource1,
+        });
+
+      done();
+    });
+  });
+
+  it('It converts external csv data based on the codebook', (done) => {
+    const MockComponent = jest.fn(() => '');
+    const EnhancedComponent = withExternalDataConfigured(MockComponent);
+
+    mount((
+      <EnhancedComponent
+        store={createStore(mockReducer)}
+        source={mockSource2}
+        stage={{ subject: { entity: 'node', type: 'person' } }}
+      />
+    ));
+
+    setImmediate(() => {
+      expect(last(MockComponent.mock.calls)[0])
+        .toMatchObject({
+          externalData: mockCsvResult2,
+          source: mockSource2,
         });
 
       done();
