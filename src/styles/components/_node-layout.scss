@@ -1,4 +1,5 @@
 .node-layout {
+  --border: calc(var(--base-node-size) * 0.275);
   @include gpu;
   position: absolute;
   width: 100%;
@@ -10,10 +11,10 @@
     @include gpu;
     position: absolute;
     transform: translate(-50%, -50%);
+  }
 
-    .node {
-      margin: 0;
-      font-size: calc(var(--base-node-size) * .55);
-    }
+  .node {
+    margin: 0;
+    font-size: calc(var(--base-node-size) * .55);
   }
 }
