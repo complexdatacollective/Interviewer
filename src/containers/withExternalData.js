@@ -231,6 +231,17 @@ const withTypeReplacement = (nodeList, protocolCodebook, stageSubject) => {
   return getNodeListUsingTypes(nodeList, protocolCodebook, stageSubject, codebookAttributeTypes);
 };
 
+export const getVariableTypeReplacements = (
+  sourceFile, uuidData, protocolCodebook, stageSubject,
+) => {
+  const fileExtension = (fileName) => fileName.split('.').pop();
+  const fileType = fileExtension(sourceFile) === 'csv' ? 'csv' : 'json';
+  if (fileType === 'csv') {
+    return withTypeReplacement(uuidData, protocolCodebook, stageSubject);
+  }
+  return uuidData;
+};
+
 /**
  * Creates a higher order component which can be used to load data from network assets in
  * the assetsManifest onto a component.
@@ -287,14 +298,9 @@ const withExternalData = (sourceProperty, dataProperty) => compose(
         .then((externalData) => (
           withVariableUUIDReplacement(externalData.nodes, protocolCodebook, stageSubject)
         ))
-        .then((uuidData) => {
-          const fileExtension = (fileName) => fileName.split('.').pop();
-          const fileType = fileExtension(sourceFile) === 'csv' ? 'csv' : 'json';
-          if (fileType === 'csv') {
-            return withTypeReplacement(uuidData, protocolCodebook, stageSubject);
-          }
-          return uuidData;
-        })
+        .then((uuidData) => getVariableTypeReplacements(
+          sourceFile, uuidData, protocolCodebook, stageSubject,
+        ))
         .then((nodes) => {
           setExternalDataIsLoading(false);
           setExternalData({ nodes });

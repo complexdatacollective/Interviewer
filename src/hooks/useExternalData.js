@@ -6,6 +6,7 @@ import objectHash from 'object-hash';
 import { mapValues, mapKeys } from 'lodash';
 import loadExternalData from '../utils/loadExternalData';
 import getParentKeyByNameValue from '../utils/getParentKeyByNameValue';
+import { getVariableTypeReplacements } from '../containers/withExternalData';
 import { entityAttributesProperty, entityPrimaryKeyProperty } from '../ducks/modules/network';
 
 const getSessionMeta = (state) => {
@@ -80,6 +81,9 @@ const useExternalData = (dataSource, subject) => {
 
     loadExternalData(protocolUID, sourceFile, type)
       .then(({ nodes }) => Promise.all(nodes.map(variableUUIDReplacer)))
+      .then((uuidData) => getVariableTypeReplacements(
+        sourceFile, uuidData, protocolCodebook, subject,
+      ))
       .then((formattedData) => setExternalData(formattedData))
       .then(() => updateStatus({ isLoading: false }))
       .catch((e) => updateStatus({ isLoading: false, error: e }));
