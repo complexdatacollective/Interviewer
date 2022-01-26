@@ -7,6 +7,7 @@ import NameGeneratorQuickAdd from './NameGeneratorQuickAdd';
 import NameGeneratorAutoComplete from './NameGeneratorAutoComplete';
 import OrdinalBin from './OrdinalBin';
 import NameGeneratorList from './NameGeneratorList';
+import NameGeneratorRoster from './NameGeneratorRoster';
 import Sociogram from './Sociogram';
 import Information from './Information';
 import CategoricalBin from './CategoricalBin';
@@ -23,6 +24,7 @@ const interfaces = {
   [StageType.NameGenerator]: NameGenerator,
   [StageType.NameGeneratorQuickAdd]: NameGeneratorQuickAdd,
   [StageType.NameGeneratorAutoComplete]: NameGeneratorAutoComplete,
+  [StageType.NameGeneratorRoster]: NameGeneratorRoster,
   [StageType.NameGeneratorList]: NameGeneratorList,
   [StageType.Sociogram]: Sociogram,
   [StageType.Information]: Information,
@@ -65,6 +67,7 @@ export {
   NameGeneratorQuickAdd,
   NameGeneratorAutoComplete,
   NameGeneratorList,
+  NameGeneratorRoster,
   Sociogram,
   Information,
   CategoricalBin,

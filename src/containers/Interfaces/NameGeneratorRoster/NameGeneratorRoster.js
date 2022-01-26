@@ -86,9 +86,9 @@ const ErrorMessage = ({ error }) => (
 );
 
 /**
-  * Name Generator List Interface
+  * Name Generator (unified) Roster Interface
   */
-const NameGeneratorList = (props) => {
+const NameGeneratorRoster = (props) => {
   const {
     prompt,
     stage,
@@ -265,15 +265,15 @@ const NameGeneratorList = (props) => {
   );
 };
 
-NameGeneratorList.propTypes = {
+NameGeneratorRoster.propTypes = {
   prompt: PropTypes.object.isRequired,
   stage: PropTypes.object.isRequired,
 };
 
-NameGeneratorList.defaultProps = {
+NameGeneratorRoster.defaultProps = {
 
 };
 
 export default compose(
   withPrompt,
-)(NameGeneratorList);
+)(NameGeneratorRoster);

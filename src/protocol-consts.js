@@ -89,6 +89,7 @@ export const SkipLogicOperator = Object.freeze({
 export const StageType = Object.freeze({
   NameGenerator: 'NameGenerator',
   NameGeneratorQuickAdd: 'NameGeneratorQuickAdd',
+  NameGeneratorRoster: 'NameGeneratorRoster',
   NameGeneratorList: 'NameGeneratorList',
   NameGeneratorAutoComplete: 'NameGeneratorAutoComplete',
   Sociogram: 'Sociogram',

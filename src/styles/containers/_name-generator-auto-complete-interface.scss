@@ -1,0 +1,50 @@
+$search-icon-offset-x: 0;
+$search-icon-offset-y: 1.8rem; // match stage menu button
+$search-z-index: var(--z-global-ui);
+
+.name-generator-auto-complete-interface {
+  @include interface-centering;
+
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 1rem 0;
+
+  &__prompt {
+    @include interface-prompt;
+  }
+
+  &__search {
+    .search {
+      --right-collapsed-js: 3rem; // align with 'core' of button
+      --right-offset: var(--session-panel-width); // margin equal to left menu width
+
+      // Position collapsed search element around the 'core' of the icon
+      bottom: $search-icon-offset-y;
+      right: var(--right-offset);
+      width: calc(100% - calc(var(--right-offset)*1.2) - var(--session-panel-width));
+      z-index: $search-z-index;
+    }
+  }
+
+  &__nodes {
+    height: calc(100% - var(--interface-prompt-flex-basis));
+    text-align: left;
+
+    .scrollable {
+      height: 100%;
+    }
+
+    .node__label {
+      line-height: 1; // tighter fit for longer text (e.g., venues)
+    }
+  }
+
+  &__node-bin {
+    position: absolute;
+    bottom: spacing(large);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+}

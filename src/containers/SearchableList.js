@@ -95,7 +95,7 @@ const SearchableList = ({
     sortByProperty,
     sortDirection,
     setSortByProperty,
-  ] = useSort(results, sortOptions.initialSortOrder);
+  ] = useSort(results, get(sortOptions, 'initialSortOrder', undefined));
 
   const filteredResults = useMemo(
     () => {
@@ -126,7 +126,8 @@ const SearchableList = ({
   );
 
   const showTooMany = mode === modes.LARGE && !hasQuery;
-  const canSort = sortOptions.sortableProperties.length > 0;
+  const sortOptionsProperties = get(sortOptions, 'sortableProperties', []);
+  const canSort = sortOptionsProperties.length > 0;
 
   const animationDuration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
 
@@ -177,7 +178,7 @@ const SearchableList = ({
         </div>
         { canSort && (
           <div className="searchable-list__sort">
-            {sortOptions.sortableProperties.map(({ variable, label }) => {
+            {sortOptionsProperties.map(({ variable, label }) => {
               const isActive = isEqual(variable, sortByProperty);
               const color = isActive ? 'primary' : 'platinum';
               return (
@@ -226,6 +227,7 @@ SearchableList.propTypes = {
   items: PropTypes.array,
   placeholder: PropTypes.node,
   searchOptions: PropTypes.object,
+  sortOptions: PropTypes.object,
   sortableProperties: PropTypes.array,
   dynamicProperties: PropTypes.object,
   excludeItems: PropTypes.array,
@@ -238,6 +240,7 @@ SearchableList.defaultProps = {
   items: [],
   placeholder: null,
   searchOptions: {},
+  sortOptions: {},
   sortableProperties: [],
   dynamicProperties: {},
   excludeItems: [],
