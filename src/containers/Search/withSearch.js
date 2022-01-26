@@ -6,7 +6,7 @@ import {
 import { connect } from 'react-redux';
 import { debounce } from 'lodash';
 import { entityPrimaryKeyProperty } from '../../ducks/modules/network';
-import { makeGetFuse } from '../../selectors/search';
+import { LEGACY_makeGetFuse as makeGetFuse } from '../../selectors/search';
 
 /**
  * Fuse.js: approximate string matching.

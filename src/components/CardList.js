@@ -102,7 +102,7 @@ class CardList extends Component {
         >
           {nodes.map((node, column) => {
             if (!node) { return <span className="card-list__content" key={`column-space-${column}`} />; }
-
+            console.log(node);
             return (
               <span
                 className="card-list__content"
