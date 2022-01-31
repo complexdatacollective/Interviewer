@@ -143,8 +143,6 @@ const SearchableList = (props) => {
     { 'searchable-list__list--too-many': showTooMany },
   );
 
-  console.log(props);
-
   return (
     <motion.div
       variants={variants}
