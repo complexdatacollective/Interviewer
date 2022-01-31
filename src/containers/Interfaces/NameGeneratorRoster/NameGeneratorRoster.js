@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { motion, AnimatePresence } from 'framer-motion';
-import { get } from 'lodash';
+import { get, isEmpty } from 'lodash';
 import { Node as UINode } from '@codaco/ui';
 import { DataCard } from '@codaco/ui/lib/components/Cards';
 import Prompts from '../../../components/Prompts';
@@ -113,7 +113,7 @@ const NameGeneratorRoster = (props) => {
   const sortOptions = useSortableProperties(nodeVariables, stage.sortOptions);
 
   const searchOptions = ((options) => {
-    if (!options) { return options; }
+    if (!options || isEmpty(options)) { return options; }
 
     return {
       ...options,
