@@ -8,12 +8,13 @@ import Fuse from 'fuse.js';
 import useDebounce from './useDebounce';
 
 const MIN_QUERY_LENGTH = 2;
-const SEARCH_DELAY = 1000;
-const DEBOUNCE_DELAY = 500;
+const SEARCH_DELAY = 0;
+const DEBOUNCE_DELAY = 0;
 
 const defaultFuseOptions = {
   minMatchCharLength: 2,
   shouldSort: false,
+  includeScore: true,
   ignoreLocation: true, // Search whole strings
 };
 

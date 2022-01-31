@@ -51,7 +51,7 @@ const DropOverlay = ({ isOver, nodeColor }) => {
 
   return (
     <motion.div
-      className="name-generator-list-interface__overlay"
+      className="name-generator-roster-interface__overlay"
       variants={variants}
       initial="hidden"
       animate="visible"
@@ -169,16 +169,16 @@ const NameGeneratorRoster = (props) => {
   };
 
   const nodeListClasses = cx(
-    'name-generator-list-interface__node-list',
-    { 'name-generator-list-interface__node-list--empty': nodesForPrompt.length === 0 },
+    'name-generator-roster-interface__node-list',
+    { 'name-generator-roster-interface__node-list--empty': nodesForPrompt.length === 0 },
   );
 
   return (
-    <div className="name-generator-list-interface">
+    <div className="name-generator-roster-interface">
       <AnimatePresence>
         {itemsStatus.isLoading && (
           <motion.div
-            className="name-generator-list-interface__loading"
+            className="name-generator-roster-interface__loading"
             initial="visible"
             animate="visible"
             exit="hidden"
@@ -190,7 +190,7 @@ const NameGeneratorRoster = (props) => {
         )}
         {!itemsStatus.isLoading && [
           <motion.div
-            className="name-generator-list-interface__prompt"
+            className="name-generator-roster-interface__prompt"
             initial="hidden"
             animate="visible"
             exit="hidden"
@@ -203,20 +203,20 @@ const NameGeneratorRoster = (props) => {
             />
           </motion.div>,
           <motion.div
-            className="name-generator-list-interface__panels"
+            className="name-generator-roster-interface__panels"
             key="panels"
             initial="hidden"
             animate="visible"
             exit="hidden"
             variants={variants}
           >
-            <div className="name-generator-list-interface__node-panel">
+            <div className="name-generator-roster-interface__node-panel">
               <Panel
                 title="Added to your interview"
                 noHighlight
                 noCollapse
               >
-                <div className="name-generator-list-interface__node-list">
+                <div className="name-generator-roster-interface__node-list">
                   <List
                     id="node-list"
                     className={nodeListClasses}
@@ -240,7 +240,7 @@ const NameGeneratorRoster = (props) => {
                 </div>
               </Panel>
             </div>
-            <div className="name-generator-list-interface__search-panel">
+            <div className="name-generator-roster-interface__search-panel">
               <SearchableList
                 id="searchable-list"
                 items={items}

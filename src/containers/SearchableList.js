@@ -71,22 +71,24 @@ const DropOverlay = ({ isOver, nodeColor }) => {
   * This adds UI around the HyperList component which enables
   * sorting and searching.
   */
-const SearchableList = ({
-  accepts,
-  columns,
-  title,
-  dynamicProperties,
-  excludeItems,
-  itemComponent,
-  dragComponent,
-  items,
-  placeholder,
-  itemType,
-  onDrop,
-  searchOptions,
-  sortOptions,
-  dropNodeColor,
-}) => {
+const SearchableList = (props) => {
+  const {
+    accepts,
+    columns,
+    title,
+    dynamicProperties,
+    excludeItems,
+    itemComponent,
+    dragComponent,
+    items,
+    placeholder,
+    itemType,
+    onDrop,
+    searchOptions,
+    sortOptions,
+    dropNodeColor,
+  } = props;
+
   const id = useRef(uuid());
   const [results, query, setQuery, isWaiting, hasQuery] = useSearch(items, searchOptions);
 
@@ -95,7 +97,7 @@ const SearchableList = ({
     sortByProperty,
     sortDirection,
     setSortByProperty,
-  ] = useSort(results, get(sortOptions, 'initialSortOrder', undefined));
+  ] = useSort(results, sortOptions.initialSortOrder);
 
   const filteredResults = useMemo(
     () => {
@@ -126,8 +128,7 @@ const SearchableList = ({
   );
 
   const showTooMany = mode === modes.LARGE && !hasQuery;
-  const sortOptionsProperties = get(sortOptions, 'sortableProperties', []);
-  const canSort = sortOptionsProperties.length > 0;
+  const canSort = sortOptions.sortableProperties.length > 0;
 
   const animationDuration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
 
@@ -141,6 +142,8 @@ const SearchableList = ({
     { 'searchable-list__list--can-sort': canSort },
     { 'searchable-list__list--too-many': showTooMany },
   );
+
+  console.log(props);
 
   return (
     <motion.div
@@ -172,13 +175,13 @@ const SearchableList = ({
             <div
               className={`searchable-list__too-many ${willAccept && 'searchable-list__too-many--no-text'}`}
             >
-              <h2>Too many to display. Filter the list below, to see results.</h2>
+              <h4>Type a search query below...</h4>
             </div>
           )}
         </div>
         { canSort && (
           <div className="searchable-list__sort">
-            {sortOptionsProperties.map(({ variable, label }) => {
+            {sortOptions.sortableProperties.map(({ variable, label }) => {
               const isActive = isEqual(variable, sortByProperty);
               const color = isActive ? 'primary' : 'platinum';
               return (
@@ -227,7 +230,6 @@ SearchableList.propTypes = {
   items: PropTypes.array,
   placeholder: PropTypes.node,
   searchOptions: PropTypes.object,
-  sortOptions: PropTypes.object,
   sortableProperties: PropTypes.array,
   dynamicProperties: PropTypes.object,
   excludeItems: PropTypes.array,
@@ -240,7 +242,6 @@ SearchableList.defaultProps = {
   items: [],
   placeholder: null,
   searchOptions: {},
-  sortOptions: {},
   sortableProperties: [],
   dynamicProperties: {},
   excludeItems: [],
