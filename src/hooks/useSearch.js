@@ -9,7 +9,7 @@ import useDebounce from './useDebounce';
 
 const MIN_QUERY_LENGTH = 2;
 const SEARCH_DELAY = 0;
-const DEBOUNCE_DELAY = 0;
+const DEBOUNCE_DELAY = 500;
 
 const defaultFuseOptions = {
   minMatchCharLength: 2,
@@ -59,7 +59,12 @@ const useSearch = (list, options, initialQuery = '') => {
     clearTimeout(delayRef.current);
     const startTime = new Date();
     const fuse = new Fuse(list, fuseOptions);
-    const r = fuse.search(_query).map(({ item }) => item);
+    const res = fuse.search(_query);
+
+    const r = res.map(({ item, score }) => ({
+      ...item,
+      relevance: score,
+    }));
 
     const endTime = new Date();
     const delay = SEARCH_DELAY - (endTime - startTime);

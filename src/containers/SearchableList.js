@@ -1,10 +1,10 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
 import uuid from 'uuid';
 import cx from 'classnames';
 import { motion, AnimatePresence } from 'framer-motion';
 import { isEqual, get } from 'lodash';
-import { Button, Node } from '@codaco/ui';
+import { Node } from '@codaco/ui';
 import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
 import Search from '@codaco/ui/lib/components/Fields/Search';
 import Loading from '../components/Loading';
@@ -14,6 +14,30 @@ import useSearch from '../hooks/useSearch';
 import HyperList from './HyperList';
 import useAnimationSettings from '../hooks/useAnimationSettings';
 import useDropMonitor from '../behaviours/DragAndDrop/useDropMonitor';
+
+const SortButton = ({
+  setSortByProperty,
+  variable,
+  color,
+  label,
+  isActive,
+  sortDirection,
+}) => (
+  <div
+    tabIndex={0}
+    role="button"
+    className={`filter-button ${isActive ? 'filter-button--active' : ''}`}
+    onClick={() => setSortByProperty(variable)}
+    key={variable}
+    color={color}
+  >
+    {label}
+
+    {isActive && (
+      sortDirection === 'asc' ? ' \u25B2' : ' \u25BC'
+    )}
+  </div>
+);
 
 const modes = {
   LARGE: 'LARGE',
@@ -99,6 +123,15 @@ const SearchableList = (props) => {
     setSortByProperty,
   ] = useSort(results, sortOptions.initialSortOrder);
 
+  useEffect(() => {
+    if (hasQuery) {
+      setSortByProperty(['relevance']);
+      return;
+    }
+
+    setSortByProperty([sortOptions.initialSortProperty]);
+  }, [hasQuery]);
+
   const filteredResults = useMemo(
     () => {
       if (!excludeItems || !sortedResults) { return sortedResults; }
@@ -179,22 +212,35 @@ const SearchableList = (props) => {
         </div>
         { canSort && (
           <div className="searchable-list__sort">
+            {
+              hasQuery && (
+                <div
+                  className={`filter-button ${isEqual(sortByProperty, ['relevance']) ? 'filter-button--active' : ''}`}
+                  onClick={() => {
+                    setSortByProperty(['relevance']);
+                  }}
+                  role="button"
+                  tabIndex={0}
+                >
+                  Relevance
+                  {isEqual(sortByProperty, ['relevance']) && (
+                    sortDirection === 'asc' ? ' \u25B2' : ' \u25BC'
+                  )}
+                </div>
+              )
+            }
             {sortOptions.sortableProperties.map(({ variable, label }) => {
               const isActive = isEqual(variable, sortByProperty);
               const color = isActive ? 'primary' : 'platinum';
               return (
-                <Button
-                  onClick={() => setSortByProperty(variable)}
-                  type="button"
-                  key={variable}
+                <SortButton
+                  variable={variable}
+                  setSortByProperty={setSortByProperty}
                   color={color}
-                >
-                  {label}
-
-                  {isActive && (
-                    sortDirection === 'asc' ? ' \u25B2' : ' \u25BC'
-                  )}
-                </Button>
+                  label={label}
+                  isActive={isActive}
+                  sortDirection={sortDirection}
+                />
               );
             })}
           </div>

@@ -6,7 +6,6 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import AutoSizer from 'react-virtualized-auto-sizer';
-import { motion, useReducedMotion } from 'framer-motion';
 import { VariableSizeGrid as Grid } from 'react-window';
 import { compose } from 'recompose';
 import uuid from 'uuid';
@@ -14,10 +13,10 @@ import cx from 'classnames';
 import { isNil } from 'lodash';
 import useGridSizer from './useGridSizer';
 import { DragSource, DropTarget, MonitorDropTarget } from '../../behaviours/DragAndDrop';
-import useAnimationSettings from '../../hooks/useAnimationSettings';
 import useDebounce from '../../hooks/useDebounce';
 
 const SCROLL_BORDER = 14; // ~1rem
+const GUTTER_SIZE = 14;
 
 const ListContext = React.createContext({ items: [], columns: 0 });
 
@@ -27,29 +26,11 @@ const getDataIndex = (columns, { rowIndex, columnIndex }) => (
   (rowIndex * columns) + columnIndex
 );
 
-const variants = {
-  visible: {
-    scale: 1,
-    opacity: 1,
-  },
-  hidden: {
-    scale: 0,
-    opacity: 0.5,
-  },
-};
-
-const reducedMotionVariants = {
-  visible: { opacity: 1 },
-  hidden: { opacity: 0 },
-};
-
 const getCellRenderer = (Component, DragComponent) => ({
   columnIndex,
   rowIndex,
   style,
 }) => {
-  const { duration, easing } = useAnimationSettings();
-
   const {
     items,
     columns,
@@ -60,7 +41,6 @@ const getCellRenderer = (Component, DragComponent) => ({
   const dataIndex = getDataIndex(columns, { rowIndex, columnIndex });
 
   const item = items[dataIndex];
-  const reducedMotion = useReducedMotion();
 
   if (!item) { return null; }
 
@@ -69,22 +49,20 @@ const getCellRenderer = (Component, DragComponent) => ({
 
   const isDisabled = disabled && disabled.includes(id);
 
-  const cellVariants = reducedMotion
-    ? reducedMotionVariants
-    : variants;
-
   const preview = DragComponent
     ? <DragComponent {...data} />
     : null;
 
   return (
-    <motion.div
+    <div
       className="hyper-list__item"
-      style={style}
-      initial="hidden"
-      animate="visible"
-      transition={{ duration: duration.standard, easing }}
-      variants={cellVariants}
+      style={{
+        ...style,
+        left: style.left + GUTTER_SIZE,
+        top: style.top + GUTTER_SIZE,
+        width: style.width - GUTTER_SIZE,
+        height: style.height - GUTTER_SIZE,
+      }}
       key={id}
     >
       <Component
@@ -94,7 +72,7 @@ const getCellRenderer = (Component, DragComponent) => ({
         allowDrag={!isDisabled}
         preview={preview}
       />
-    </motion.div>
+    </div>
   );
 };
 
@@ -148,7 +126,7 @@ const HyperList = ({
   const [gridProps, ready] = useGridSizer(SizeRenderer, items, columnCount, debouncedWidth);
 
   const handleResize = useCallback(
-    ({ width: newWidth }) => setWidth(newWidth - SCROLL_BORDER),
+    ({ width: newWidth }) => setWidth(newWidth - (SCROLL_BORDER * 2)),
     [setWidth],
   );
 

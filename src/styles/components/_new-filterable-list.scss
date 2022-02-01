@@ -42,29 +42,6 @@
         max-width: 30rem;
       }
 
-      .filter-button {
-        cursor: pointer;
-        display: inline-block;
-        font-weight: 700;
-        font-size: 0.8rem;
-        letter-spacing: 0.15em;
-        text-transform: uppercase;
-        color: var(--white);
-        opacity: 0.5;
-        margin: 0 unit(2);
-        padding: unit(2);
-        transition: color var(--animation-easing) var(--animation-duration-standard), opacity var(--animation-easing) var(--animation-duration-standard);
-
-        &:hover {
-          opacity: 1;
-          color: var(--primary);
-        }
-
-        &--active {
-          opacity: 1;
-        }
-      }
-
       h4 {
         display: inline;
         font-size: 0.8rem;
@@ -117,5 +94,28 @@
       justify-content: center;
       flex-direction: column;
     }
+  }
+}
+
+.filter-button {
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--white);
+  opacity: 0.5;
+  margin: 0 unit(2);
+  padding: unit(2);
+  transition: color var(--animation-easing) var(--animation-duration-standard), opacity var(--animation-easing) var(--animation-duration-standard);
+
+  &:hover {
+    opacity: 1;
+    color: var(--primary);
+  }
+
+  &--active {
+    opacity: 1;
   }
 }

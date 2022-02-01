@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { sortBy, get } from 'lodash/fp';
+import { isEqual } from 'lodash';
 
 const defaultSortOrder = {
   direction: 'asc',
@@ -40,7 +41,7 @@ const useSort = (list, initialSortOrder = defaultSortOrder) => {
   );
 
   const updateSortByProperty = (property) => {
-    if (property === sortByProperty) {
+    if (isEqual(property, sortByProperty)) {
       toggleSortDirection();
       return;
     }
