@@ -210,6 +210,24 @@ const NameGeneratorRoster = (props) => {
             exit="hidden"
             variants={variants}
           >
+            <div className="name-generator-roster-interface__search-panel">
+              <SearchableList
+                id="searchable-list"
+                items={items}
+                title="Available to add"
+                columns={countColumns}
+                placeholder={itemsStatus.error && <ErrorMessage error={itemsStatus.error} />}
+                itemType="SOURCE_NODES" // drop type
+                excludeItems={excludeItems}
+                itemComponent={DataCard}
+                dragComponent={Node}
+                sortOptions={sortOptions}
+                searchOptions={fuseOptions}
+                accepts={({ meta: { itemType } }) => itemType !== 'SOURCE_NODES'}
+                onDrop={handleRemoveNode}
+                dropNodeColor={dropNodeColor}
+              />
+            </div>
             <div className="name-generator-roster-interface__node-panel">
               <Panel
                 title="Added to your interview"
@@ -239,24 +257,6 @@ const NameGeneratorRoster = (props) => {
                   </AnimatePresence>
                 </div>
               </Panel>
-            </div>
-            <div className="name-generator-roster-interface__search-panel">
-              <SearchableList
-                id="searchable-list"
-                items={items}
-                title="Available to add"
-                columns={countColumns}
-                placeholder={itemsStatus.error && <ErrorMessage error={itemsStatus.error} />}
-                itemType="SOURCE_NODES" // drop type
-                excludeItems={excludeItems}
-                itemComponent={DataCard}
-                dragComponent={Node}
-                sortOptions={sortOptions}
-                searchOptions={fuseOptions}
-                accepts={({ meta: { itemType } }) => itemType !== 'SOURCE_NODES'}
-                onDrop={handleRemoveNode}
-                dropNodeColor={dropNodeColor}
-              />
             </div>
           </motion.div>,
         ]}

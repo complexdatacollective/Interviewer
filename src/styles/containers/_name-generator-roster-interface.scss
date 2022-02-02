@@ -19,7 +19,7 @@
   }
 
   &__node-panel {
-    flex-basis: 34%;
+    flex: 1 1 50%;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -54,10 +54,10 @@
   }
 
   &__search-panel {
-    flex-basis: 66%;
+    flex: 1 1 50%;
     height: 100%;
     display: flex;
-    padding-left: spacing(large);
+    padding-right: spacing(large);
 
     .card {
       cursor: grab;

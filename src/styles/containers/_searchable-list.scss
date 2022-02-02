@@ -1,5 +1,5 @@
 $search-height: 6rem;
-$sort-height: 3rem;
+$sort-height: 3.2rem;
 $overlay-color: rgb(54, 49, 95);
 
 .searchable-list {
@@ -70,6 +70,10 @@ $overlay-color: rgb(54, 49, 95);
     top: 0;
     left: 0;
     width: 100%;
+
+    .filter-button {
+      margin: 0;
+    }
   }
 
   &__placeholder {
@@ -106,5 +110,11 @@ $overlay-color: rgb(54, 49, 95);
     background: var(--overlay-background);
     justify-content: center;
     align-items: center;
+  }
+}
+
+.data-card {
+  &__data {
+    background-color: var(--color-slate-blue--dark);
   }
 }
