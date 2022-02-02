@@ -151,7 +151,7 @@ const EgoForm = ({
 
   return (
     <div className="ego-form alter-form">
-      <div className="ego-form__form-container" id="test">
+      <div className="ego-form__form-container">
         <Scroller className="ego-form__form-container-scroller" onScroll={handleScroll}>
           <div className="ego-form__introduction">
             <h1>{introductionPanel.title}</h1>
