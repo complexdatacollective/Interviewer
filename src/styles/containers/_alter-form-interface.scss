@@ -156,3 +156,27 @@
     }
   }
 }
+
+// TODO: move to its own component
+.scroll-nudge {
+  position: absolute;
+  bottom: unit(2);
+  background: var(--light-background);
+  color: var(--color-white);
+  padding: unit(1) unit(2);
+  border-radius: 10rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 unit(.5) unit(2) unit(1) var(--drop-shadow-color);
+
+  h5 {
+    margin: 0;
+  }
+
+  .icon {
+    margin-left: unit(1);
+    height: unit(2);
+    width: unit(2);
+  }
+}
