@@ -12,7 +12,7 @@ const requiredProps = {
     title: 'alpha',
     entity: 'ego',
   },
-  introductionPanel: { title: 'intro', text: 'content' },
+  introductionPanel: { title: 'intro', text: 'text' },
   ego: {},
   formEnabled: jest.fn(),
   submitForm: jest.fn(),
@@ -35,18 +35,5 @@ describe('EgoForm', () => {
       </Provider>
     ));
     expect(component.find('Connect(AutoInitialisedForm)')).toHaveLength(1);
-    expect(component.find('.progress-container')).toHaveLength(1);
-    expect(component.find('.progress-container--show')).toHaveLength(1);
-  });
-
-  it.only('hides scroll notice', () => {
-    const component = mount((
-      <Provider store={store}>
-        <EgoForm {...requiredProps} />
-      </Provider>
-    ));
-    component.find('.ego-form__form-container-scroller').first().simulate('scroll', { deltaY: 10 });
-    expect(component.find('.progress-container')).toHaveLength(1);
-    expect(component.find('.progress-container--show')).toHaveLength(0);
   });
 });

@@ -30,6 +30,10 @@ const useFlipflop = (restValue, delay, initialState) => {
         _setState(restValue);
       }, delay);
     }
+
+    return () => {
+      clearTimeout(timer.current);
+    };
   }, [delay, restValue, initialState]);
 
   return [state, setState];

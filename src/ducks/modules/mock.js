@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 
-import faker from 'faker';
+import faker from '@faker-js/faker';
 import uuid from 'uuid/v4';
 import { has, times, omit } from 'lodash';
 import { actionCreators as sessionsActions } from './sessions';
