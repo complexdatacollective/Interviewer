@@ -109,10 +109,15 @@ const App = ({
         win.setFullScreen(!!startFullScreen);
 
         win.on('enter-full-screen', () => {
+          if (startFullScreen) { return; }
           setStartFullScreen(true);
         });
 
+        // For some reason, this fires when the window loses focus (when
+        // switching workspaces) on linux.
         win.on('leave-full-screen', () => {
+          if (!startFullScreen) { return; }
+
           setStartFullScreen(false);
         });
       }
@@ -123,7 +128,7 @@ const App = ({
         win.removeAllListeners();
       }
     };
-  }, [win]);
+  }, [win, startFullScreen, setStartFullScreen]);
 
   setFontSize();
 

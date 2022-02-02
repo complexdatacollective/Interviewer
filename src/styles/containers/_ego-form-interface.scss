@@ -1,6 +1,6 @@
 .ego-form {
   @include interface-centering(false);
-  padding: unit(4) 0;
+  padding: 0;
   height: 100%;
   overflow: hidden;
   display: flex;
@@ -30,6 +30,7 @@
   }
 
   &__form-container-scroller {
+    padding: unit(4) 0;
     max-height: 100%;
     display: flex;
     flex-direction: column;
@@ -39,10 +40,5 @@
       align-self: center;
       width: 100%;
     }
-  }
-
-  .progress-bar__filler {
-    height: 100%;
-    transition: unset;
   }
 }
