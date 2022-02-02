@@ -11,7 +11,11 @@ import { importProtocolFromURI } from '../../../utils/protocol/importProtocol';
 import { actionCreators as dialogsActions } from '../../../ducks/modules/dialogs';
 import { actionCreators as mockActions } from '../../../ducks/modules/mock';
 import { getAdditionalAttributesForCurrentPrompt, getNodeEntryForCurrentPrompt } from '../../../selectors/session';
-import { DEVELOPMENT_PROTOCOL_URL } from '../../../config';
+import {
+  DEVELOPMENT_PROTOCOL_URL_V4,
+  DEVELOPMENT_PROTOCOL_URL_V5,
+  DEVELOPMENT_PROTOCOL_URL_V6,
+} from '../../../config';
 import { actionCreators as deviceSettingsActions } from '../../../ducks/modules/deviceSettings';
 import { isAndroid } from '../../../utils/Environment';
 
@@ -92,22 +96,35 @@ const DeveloperTools = (props) => {
         </motion.article>
         )
       }
-      <motion.article className="settings-element">
+      <motion.article className="settings-element--sub-item">
+        <div>
+          <h2>Import Development Protocols</h2>
+          <p>
+            These protocols are used by the development team for testing purposes.
+          </p>
+        </div>
         <div className="form-field-container">
           <div className="form-field">
             <Button
-              onClick={() => importProtocolFromURI(DEVELOPMENT_PROTOCOL_URL)}
+              onClick={() => importProtocolFromURI(DEVELOPMENT_PROTOCOL_URL_V4)}
             >
-              Import
+              Import v4 Protocol
             </Button>
           </div>
-        </div>
-        <div>
-          <h2>Import Development Protocol</h2>
-          <p>
-            Clicking this button will import the latest development protocol for this
-            version of Network Canvas Interviewer.
-          </p>
+          <div className="form-field">
+            <Button
+              onClick={() => importProtocolFromURI(DEVELOPMENT_PROTOCOL_URL_V5)}
+            >
+              Import v5 Protocol
+            </Button>
+          </div>
+          <div className="form-field">
+            <Button
+              onClick={() => importProtocolFromURI(DEVELOPMENT_PROTOCOL_URL_V6)}
+            >
+              Import v6 Protocol
+            </Button>
+          </div>
         </div>
       </motion.article>
       <motion.article className="settings-element--sub-item">
