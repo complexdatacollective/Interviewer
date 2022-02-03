@@ -22,7 +22,7 @@ const LargeRosterNotice = () => (
     animate={{ opacity: 1 }}
     exit={{ opacity: 0 }}
   >
-    <h2>Too many items.</h2>
+    <h2>Too many items to display.</h2>
     <p>Use the search feature to see results here.</p>
   </motion.div>
 );
@@ -133,16 +133,22 @@ const SearchableList = (props) => {
   const id = useRef(uuid());
   const [results, query, setQuery, isWaiting, hasQuery] = useSearch(items, searchOptions);
 
+  console.log('use search', searchOptions, results);
+
   const [
     sortedResults,
     sortByProperty,
     sortDirection,
     setSortByProperty,
+    setSortDirection,
   ] = useSort(results, sortOptions.initialSortOrder);
+
+  console.log('use sort', sortByProperty, sortDirection);
 
   useEffect(() => {
     if (hasQuery) {
       setSortByProperty(['relevance']);
+      setSortDirection('desc');
       return;
     }
 

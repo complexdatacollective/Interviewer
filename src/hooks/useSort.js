@@ -4,7 +4,7 @@ import { isEqual } from 'lodash';
 
 const defaultSortOrder = {
   direction: 'asc',
-  property: null,
+  property: ['data', 'attributes', 'name'],
 };
 
 const getProperty = (property) => get(property);
@@ -66,7 +66,7 @@ const useSort = (list, initialSortOrder = defaultSortOrder) => {
       : sortBy([getProperty(sortByProperty)])(list);
   }, [list, sortByProperty, sortDirection]);
 
-  return [sortedList, sortByProperty, sortDirection, updateSortByProperty, toggleSortDirection];
+  return [sortedList, sortByProperty, sortDirection, updateSortByProperty, setSortDirection];
 };
 
 export default useSort;

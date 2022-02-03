@@ -175,7 +175,7 @@ const NameGeneratorRoster = (props) => {
 
   return (
     <div className="name-generator-roster-interface">
-      <AnimatePresence>
+      <AnimatePresence exitBeforeEnter>
         {itemsStatus.isLoading && (
           <motion.div
             className="name-generator-roster-interface__loading"

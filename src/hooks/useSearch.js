@@ -7,7 +7,7 @@ import {
 import Fuse from 'fuse.js';
 import useDebounce from './useDebounce';
 
-const MIN_QUERY_LENGTH = 2;
+const MIN_QUERY_LENGTH = 1;
 const SEARCH_DELAY = 0;
 const DEBOUNCE_DELAY = 500;
 
