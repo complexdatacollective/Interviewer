@@ -1,6 +1,7 @@
 /* eslint-disable @codaco/spellcheck/spell-checker */
 import React, { useEffect, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'recompose';
 import uuid from 'uuid';
 import cx from 'classnames';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -13,9 +14,8 @@ import Panel from '../components/Panel';
 import useSort from '../hooks/useSort';
 import useSearch from '../hooks/useSearch';
 import HyperList from './HyperList';
-import useAnimationSettings from '../hooks/useAnimationSettings';
 import useDropMonitor from '../behaviours/DragAndDrop/useDropMonitor';
-import { compose } from 'recompose';
+
 import { DropTarget, MonitorDropTarget } from '../behaviours/DragAndDrop';
 
 const LargeRosterNotice = () => (
@@ -173,7 +173,7 @@ const SearchableList = (props) => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-          <Loading message="Searching..." />
+          <Loading message="Searching..." small />
         </motion.div>
       )
       : null

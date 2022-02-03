@@ -12,7 +12,6 @@ import { VariableSizeList as List } from 'react-window';
 import cx from 'classnames';
 import { DragSource } from '../../behaviours/DragAndDrop';
 
-const SCROLL_BORDER = 14; // ~1rem
 const GUTTER_SIZE = 14;
 
 const ListContext = React.createContext({ items: [] });
@@ -118,12 +117,12 @@ const HyperList = ({
     if (!width) { return 0; }
 
     const itemData = items[item];
-    const { id, data, props } = itemData;
+    const { props } = itemData;
     const newHiddenSizingEl = document.createElement('div');
 
     newHiddenSizingEl.style.position = 'absolute';
     newHiddenSizingEl.style.top = '0';
-    newHiddenSizingEl.style.width = `${width - GUTTER_SIZE}px`;
+    newHiddenSizingEl.style.width = width - (GUTTER_SIZE * 2);
     newHiddenSizingEl.style.pointerEvents = 'none';
 
     newHiddenSizingEl.style.visibility = 'hidden';
