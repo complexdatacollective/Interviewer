@@ -144,7 +144,7 @@ $overlay-color: rgb(54, 49, 95);
   background-size: 62%;
   padding-bottom: 16rem;
   position: relative;
-  top: -4rem;
+  top: -5rem;
   width: 100%;
   max-width: 28rem;
   margin: unit(2);
@@ -154,12 +154,12 @@ $overlay-color: rgb(54, 49, 95);
     content: '';
     background-image: url('../images/roster-list-character.svg');
     position: absolute;
-    bottom: -8rem;
+    bottom: -8.7rem;
     left: 0;
     background-repeat: no-repeat;
     height: 20rem;
     width: 100%;
     background-size: 65%;
-    background-position: 38% 200%;
+    background-position: 38% 100%;
   }
 }
