@@ -189,25 +189,26 @@ const SearchableList = (props) => {
         noCollapse
       >
         <div className={listClasses}>
-          <HyperList
-            id={`hyper-list-${id}`}
-            items={filteredResults}
-            dynamicProperties={dynamicProperties}
-            itemComponent={itemComponent}
-            dragComponent={dragComponent}
-            columns={columns}
-            emptyComponent={EmptyComponent}
-            placeholder={hyperListPlaceholder}
-            itemType={itemType} // drop type
-            accepts={accepts}
-            onDrop={onDrop}
-          />
-          { showTooMany && (
+          { showTooMany ? (
             <div
               className={`searchable-list__too-many ${willAccept && 'searchable-list__too-many--no-text'}`}
             >
-              <h4>Type a search query below...</h4>
+              <h4>Type a search query below to see results here</h4>
             </div>
+          ) : (
+            <HyperList
+              id={`hyper-list-${id}`}
+              items={filteredResults}
+              dynamicProperties={dynamicProperties}
+              itemComponent={itemComponent}
+              dragComponent={dragComponent}
+              columns={columns}
+              emptyComponent={EmptyComponent}
+              placeholder={hyperListPlaceholder}
+              itemType={itemType} // drop type
+              accepts={accepts}
+              onDrop={onDrop}
+            />
           )}
         </div>
         { canSort && (

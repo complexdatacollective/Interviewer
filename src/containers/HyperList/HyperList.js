@@ -2,45 +2,33 @@ import React, {
   useContext,
   useMemo,
   useCallback,
-  useState,
 } from 'react';
+import { renderToString } from 'react-dom/server';
 import PropTypes from 'prop-types';
 import AutoSizer from 'react-virtualized-auto-sizer';
-import { VariableSizeGrid as Grid } from 'react-window';
+import { VariableSizeList as List } from 'react-window';
 import { compose } from 'recompose';
-import uuid from 'uuid';
 import cx from 'classnames';
-import { isNil } from 'lodash';
-import useGridSizer from './useGridSizer';
 import { DragSource, DropTarget, MonitorDropTarget } from '../../behaviours/DragAndDrop';
-import useDebounce from '../../hooks/useDebounce';
 
 const SCROLL_BORDER = 14; // ~1rem
 const GUTTER_SIZE = 14;
 
-const ListContext = React.createContext({ items: [], columns: 0 });
+const ListContext = React.createContext({ items: []});
 
 const NoopComponent = () => null;
 
-const getDataIndex = (columns, { rowIndex, columnIndex }) => (
-  (rowIndex * columns) + columnIndex
-);
-
-const getCellRenderer = (Component, DragComponent) => ({
-  columnIndex,
-  rowIndex,
+const getRowRenderer = (Component, DragComponent) => ({
+  index,
   style,
 }) => {
   const {
     items,
-    columns,
     itemType,
     dynamicProperties,
   } = useContext(ListContext);
 
-  const dataIndex = getDataIndex(columns, { rowIndex, columnIndex });
-
-  const item = items[dataIndex];
+  const item = items[index];
 
   if (!item) { return null; }
 
@@ -56,13 +44,7 @@ const getCellRenderer = (Component, DragComponent) => ({
   return (
     <div
       className="hyper-list__item"
-      style={{
-        ...style,
-        left: style.left + GUTTER_SIZE,
-        top: style.top + GUTTER_SIZE,
-        width: style.width - GUTTER_SIZE,
-        height: style.height - GUTTER_SIZE,
-      }}
+      style={style}
       key={id}
     >
       <Component
@@ -103,61 +85,22 @@ const HyperList = ({
   dynamicProperties,
   itemComponent: ItemComponent,
   dragComponent: DragComponent,
-  columns,
   itemType,
   emptyComponent: EmptyComponent,
   placeholder,
   willAccept,
   isOver,
 }) => {
-  const [width, setWidth] = useState(0);
-  const debouncedWidth = useDebounce(width, 1000);
-  const columnCount = useMemo(() => {
-    if (!debouncedWidth) { return 1; }
-    return typeof columns === 'number'
-      ? columns
-      : columns(debouncedWidth);
-  }, [columns, debouncedWidth]);
-
-  const SizeRenderer = useCallback((props) => (
-    <div className="hyper-list__item"><ItemComponent {...props} /></div>
-  ), [ItemComponent]);
-
-  const [gridProps, ready] = useGridSizer(SizeRenderer, items, columnCount, debouncedWidth);
-
-  const handleResize = useCallback(
-    ({ width: newWidth }) => setWidth(newWidth - (SCROLL_BORDER * 2)),
-    [setWidth],
-  );
-
-  const itemKey = useCallback((index) => {
-    const dataIndex = getDataIndex(columnCount, index);
-
-    // If last row is shorter than number of columns
-    if (dataIndex >= items.length) { return null; }
-
-    const key = items[dataIndex] && items[dataIndex].id;
-
-    if (isNil(key)) {
-      // Something went wrong, this is a failsafe but will force a rerender every time
-      console.debug('`itemKey()` returned undefined in `<HyperList />`'); // eslint-disable-line no-console
-      return uuid();
-    }
-
-    return key;
-  }, [columnCount, items]);
-
-  const CellRenderer = useMemo(
-    () => getCellRenderer(DragSource(ItemComponent), DragComponent),
-    [ItemComponent, DragComponent, columnCount],
+  const RowRenderer = useMemo(
+    () => getRowRenderer(DragSource(ItemComponent), DragComponent),
+    [ItemComponent, DragComponent],
   );
 
   const context = useMemo(() => ({
     items,
-    columns: columnCount,
     dynamicProperties,
     itemType,
-  }), [items, columnCount, dynamicProperties, itemType]);
+  }), [items, dynamicProperties, itemType]);
 
   const classNames = cx(
     'hyper-list',
@@ -165,6 +108,35 @@ const HyperList = ({
     { 'hyper-list--drag': willAccept },
     { 'hyper-list--hover': willAccept && isOver },
   );
+
+  const SizeRenderer = useCallback((props) => (
+    <div className="hyper-list__item"><ItemComponent {...props} /></div>
+  ), [ItemComponent]);
+
+  const getItemSize = (item, width) => {
+    if (!width) { return 0; }
+
+    const itemData = items[item];
+    const { id, data, props } = itemData;
+    console.log(itemData, width);
+    const newHiddenSizingEl = document.createElement('div');
+
+    newHiddenSizingEl.style.position = 'absolute';
+    newHiddenSizingEl.style.top = '0';
+    newHiddenSizingEl.style.width = `${width - GUTTER_SIZE}px`;
+    newHiddenSizingEl.style.pointerEvents = 'none';
+
+    newHiddenSizingEl.style.visibility = 'hidden';
+
+    document.body.appendChild(newHiddenSizingEl);
+    newHiddenSizingEl.innerHTML = renderToString(<SizeRenderer {...props} />);
+    console.log(newHiddenSizingEl);
+    const height = newHiddenSizingEl.clientHeight;
+    console.log('item size:', height);
+    // document.body.removeChild(newHiddenSizingEl);
+
+    return height;
+  };
 
   // const showOverlay = !!OverlayComponent;
   // If placeholder is provider it supercedes everything
@@ -181,23 +153,21 @@ const HyperList = ({
           <div className="hyper-list__sizer">
             { showPlaceholder && placeholder }
             { showEmpty && <EmptyComponent />}
-            <AutoSizer onResize={handleResize}>
+            <AutoSizer>
               {(containerSize) => {
-                // If auto sizer is not ready, items would be sized incorrectly
-                if (!ready) { return null; }
-
                 if (!showResults) { return null; }
 
                 return (
-                  <Grid
+                  <List
                     className="hyper-list__grid"
                     height={containerSize.height}
                     width={containerSize.width}
-                    itemKey={itemKey}
-                    {...gridProps}
+                    itemSize={(item) => getItemSize(item, containerSize.width)}
+                    estimatedItemSize={getItemSize(0)}
+                    itemCount={items.length}
                   >
-                    {CellRenderer}
-                  </Grid>
+                    {RowRenderer}
+                  </List>
                 );
               }}
             </AutoSizer>
@@ -212,11 +182,6 @@ HyperList.propTypes = {
   itemComponent: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
   emptyComponent: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
   placeholder: PropTypes.node,
-  columns: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.func,
-  ]),
-  rowHeight: PropTypes.number,
   itemType: PropTypes.string,
 };
 
@@ -224,8 +189,6 @@ HyperList.defaultProps = {
   itemComponent: NoopComponent,
   emptyComponent: NoopComponent,
   placeholder: null,
-  columns: 2,
-  rowHeight: 300,
   itemType: 'HYPER_LIST',
 };
 
