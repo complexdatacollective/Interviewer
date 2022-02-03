@@ -3,6 +3,7 @@ import React, {
   useMemo,
   useCallback,
 } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { renderToString } from 'react-dom/server';
 import PropTypes from 'prop-types';
 import AutoSizer from 'react-virtualized-auto-sizer';
@@ -141,7 +142,7 @@ const HyperList = ({
     console.log(newHiddenSizingEl);
     const height = newHiddenSizingEl.clientHeight;
     console.log('item size:', height);
-    // document.body.removeChild(newHiddenSizingEl);
+    document.body.removeChild(newHiddenSizingEl);
 
     return height + GUTTER_SIZE;
   };
@@ -155,34 +156,41 @@ const HyperList = ({
   const showResults = !placeholder && items && items.length > 0;
 
   return (
-    <div className={classNames}>
+    <motion.div
+      className={classNames}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
       <ListContext.Provider value={context}>
         <div className="hyper-list__container">
           <div className="hyper-list__sizer">
-            { showPlaceholder && placeholder }
-            { showEmpty && <EmptyComponent />}
-            <AutoSizer>
-              {(containerSize) => {
-                if (!showResults) { return null; }
-
-                return (
-                  <List
-                    className="hyper-list__grid"
-                    height={containerSize.height}
-                    width={containerSize.width}
-                    itemSize={(item) => getItemSize(item, containerSize.width)}
-                    estimatedItemSize={getItemSize(0)}
-                    itemCount={items.length}
-                  >
-                    {RowRenderer}
-                  </List>
-                );
-              }}
-            </AutoSizer>
+            <AnimatePresence exitBeforeEnter>
+              { showPlaceholder && placeholder }
+              { showEmpty && <EmptyComponent />}
+              <AutoSizer>
+                {(containerSize) => {
+                  if (!showResults) { return null; }
+                  console.log('containersize', containerSize.width);
+                  return (
+                    <List
+                      className="hyper-list__grid"
+                      height={containerSize.height}
+                      width={containerSize.width}
+                      itemSize={(item) => getItemSize(item, containerSize.width)}
+                      estimatedItemSize={getItemSize(0)}
+                      itemCount={items.length}
+                    >
+                      {RowRenderer}
+                    </List>
+                  );
+                }}
+              </AutoSizer>
+            </AnimatePresence>
           </div>
         </div>
       </ListContext.Provider>
-    </div>
+    </motion.div>
   );
 };
 

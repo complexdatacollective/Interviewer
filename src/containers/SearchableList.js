@@ -16,10 +16,15 @@ import useAnimationSettings from '../hooks/useAnimationSettings';
 import useDropMonitor from '../behaviours/DragAndDrop/useDropMonitor';
 
 const LargeRosterNotice = () => (
-  <div className="large-roster-notice">
+  <motion.div
+    className="large-roster-notice"
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+  >
     <h2>Too many items.</h2>
     <p>Use the search feature to see results here.</p>
-  </div>
+  </motion.div>
 );
 
 const SortButton = ({
@@ -52,9 +57,14 @@ const modes = {
 };
 
 const EmptyComponent = () => (
-  <div className="searchable-list__placeholder">
-    No results.
-  </div>
+  <motion.div
+    className="searchable-list__placeholder"
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+  >
+    <h2>Nothing matched your search term.</h2>
+  </motion.div>
 );
 
 const DropOverlay = ({ isOver, nodeColor }) => {
@@ -160,9 +170,14 @@ const SearchableList = (props) => {
   const hyperListPlaceholder = placeholder || (
     isWaiting
       ? (
-        <div className="searchable-list__placeholder">
-          <Loading message="searching..." />
-        </div>
+        <motion.div
+          className="searchable-list__placeholder"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <Loading message="Searching..." />
+        </motion.div>
       )
       : null
   );
@@ -196,23 +211,25 @@ const SearchableList = (props) => {
         noCollapse
       >
         <div className={listClasses}>
-          { showTooMany && !willAccept ? (
-            <LargeRosterNotice />
-          ) : (
-            <HyperList
-              id={`hyper-list-${id}`}
-              items={filteredResults}
-              dynamicProperties={dynamicProperties}
-              itemComponent={itemComponent}
-              dragComponent={dragComponent}
-              columns={columns}
-              emptyComponent={EmptyComponent}
-              placeholder={hyperListPlaceholder}
-              itemType={itemType} // drop type
-              accepts={accepts}
-              onDrop={onDrop}
-            />
-          )}
+          <AnimatePresence exitBeforeEnter>
+            { showTooMany && !willAccept ? (
+              <LargeRosterNotice />
+            ) : (
+              <HyperList
+                id={`hyper-list-${id}`}
+                items={filteredResults}
+                dynamicProperties={dynamicProperties}
+                itemComponent={itemComponent}
+                dragComponent={dragComponent}
+                columns={columns}
+                emptyComponent={EmptyComponent}
+                placeholder={hyperListPlaceholder}
+                itemType={itemType} // drop type
+                accepts={accepts}
+                onDrop={onDrop}
+              />
+            )}
+          </AnimatePresence>
         </div>
         { canSort && (
           <div className="searchable-list__sort">

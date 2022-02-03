@@ -68,8 +68,12 @@ $overlay-color: rgb(54, 49, 95);
     top: 0;
     left: 0;
     width: 100%;
+    display: inline-flex;
+    overflow-x: auto;
 
     .filter-button {
+      display: flex;
+      flex: 0 0 auto;
       margin: 0;
     }
   }
@@ -130,8 +134,10 @@ $overlay-color: rgb(54, 49, 95);
   padding-bottom: 16rem;
   position: relative;
   top: -4rem;
-  width: 28rem;
-  box-shadow: inset 0 -1.2rem 3rem 0 var(--modal-window-box-shadow);
+  width: 100%;
+  max-width: 28rem;
+  margin: unit(2);
+  box-shadow: inset 0 -1.2rem 3rem 0 rgba(22, 21, 43, 0.28); //sass-lint:disable-line no-color-literals
 
   &::after {
     content: '';
