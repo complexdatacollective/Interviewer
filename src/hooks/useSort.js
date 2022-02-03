@@ -32,21 +32,30 @@ const getProperty = (property) => get(property);
  * ] = useSort(list, { property: 'name', direction: 'asc'});
  */
 const useSort = (list, initialSortOrder = defaultSortOrder) => {
-  const { property: initialSortBy, direction: initialDirection } = initialSortOrder;
-  const [sortByProperty, setSortByProperty] = useState(initialSortBy);
+  const { property: initialProperty, direction: initialDirection } = initialSortOrder;
+  const [sortByProperty, setSortByProperty] = useState(initialProperty);
   const [sortDirection, setSortDirection] = useState(initialDirection);
 
   const toggleSortDirection = () => setSortDirection(
     (d) => (d === 'desc' ? 'asc' : 'desc'),
   );
 
-  const updateSortByProperty = (property) => {
-    if (isEqual(property, sortByProperty)) {
+  const updateSortByProperty = (newProperty) => {
+    // If no property, reset to initial
+    if (!newProperty) {
+      setSortByProperty(initialProperty);
+      setSortDirection(initialDirection);
+      return;
+    }
+
+    // If property already selected, change direction only
+    if (isEqual(newProperty, sortByProperty)) {
       toggleSortDirection();
       return;
     }
 
-    setSortByProperty(property);
+    // Otherwise, set property and default direction
+    setSortByProperty(newProperty);
     setSortDirection(defaultSortOrder.direction);
   };
 
@@ -59,4 +68,5 @@ const useSort = (list, initialSortOrder = defaultSortOrder) => {
 
   return [sortedList, sortByProperty, sortDirection, updateSortByProperty, toggleSortDirection];
 };
+
 export default useSort;

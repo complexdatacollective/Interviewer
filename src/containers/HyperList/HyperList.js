@@ -15,7 +15,7 @@ import { DragSource, DropTarget, MonitorDropTarget } from '../../behaviours/Drag
 const SCROLL_BORDER = 14; // ~1rem
 const GUTTER_SIZE = 14;
 
-const ListContext = React.createContext({ items: []});
+const ListContext = React.createContext({ items: [] });
 
 const NoopComponent = () => null;
 
@@ -41,8 +41,6 @@ const getRowRenderer = (Component, DragComponent) => ({
   const preview = DragComponent
     ? <DragComponent {...data} />
     : null;
-
-  console.log(style, `calc(${style.width} - ${(GUTTER_SIZE * 2)}px)`);
 
   return (
     <div
@@ -127,7 +125,6 @@ const HyperList = ({
 
     const itemData = items[item];
     const { id, data, props } = itemData;
-    console.log(itemData, width);
     const newHiddenSizingEl = document.createElement('div');
 
     newHiddenSizingEl.style.position = 'absolute';
@@ -139,9 +136,7 @@ const HyperList = ({
 
     document.body.appendChild(newHiddenSizingEl);
     newHiddenSizingEl.innerHTML = renderToString(<SizeRenderer {...props} />);
-    console.log(newHiddenSizingEl);
     const height = newHiddenSizingEl.clientHeight;
-    console.log('item size:', height);
     document.body.removeChild(newHiddenSizingEl);
 
     return height + GUTTER_SIZE;
@@ -171,7 +166,6 @@ const HyperList = ({
               <AutoSizer>
                 {(containerSize) => {
                   if (!showResults) { return null; }
-                  console.log('containersize', containerSize.width);
                   return (
                     <List
                       className="hyper-list__grid"

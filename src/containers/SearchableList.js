@@ -101,7 +101,7 @@ const DropOverlay = ({ isOver, nodeColor }) => {
       >
         <Node label="" color={nodeColor} />
       </motion.div>
-      <p>Drop here to remove from network</p>
+      <h2>Drop here to remove</h2>
     </motion.div>
   );
 };
@@ -146,7 +146,7 @@ const SearchableList = (props) => {
       return;
     }
 
-    setSortByProperty([sortOptions.initialSortProperty]);
+    setSortByProperty();
   }, [hasQuery]);
 
   const filteredResults = useMemo(
