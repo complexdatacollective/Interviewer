@@ -92,7 +92,6 @@ const HyperList = ({
   dynamicProperties,
   itemComponent: ItemComponent,
   dragComponent: DragComponent,
-  itemType,
   emptyComponent: EmptyComponent,
   placeholder,
 }) => {
@@ -104,8 +103,7 @@ const HyperList = ({
   const context = useMemo(() => ({
     items,
     dynamicProperties,
-    itemType,
-  }), [items, dynamicProperties, itemType]);
+  }), [items, dynamicProperties]);
 
   const classNames = cx(
     'hyper-list',
@@ -190,14 +188,12 @@ HyperList.propTypes = {
   itemComponent: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
   emptyComponent: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
   placeholder: PropTypes.node,
-  itemType: PropTypes.string,
 };
 
 HyperList.defaultProps = {
   itemComponent: NoopComponent,
   emptyComponent: NoopComponent,
   placeholder: null,
-  itemType: 'HYPER_LIST',
 };
 
 export default HyperList;

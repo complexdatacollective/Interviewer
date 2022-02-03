@@ -53,6 +53,10 @@ $overlay-color: rgb(54, 49, 95);
     &--too-many {
       align-items: center;
       justify-content: center;
+
+      .hyper-list {
+        display: none;
+      }
     }
   }
 

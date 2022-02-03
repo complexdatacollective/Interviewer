@@ -195,6 +195,8 @@ const SearchableList = (props) => {
     { 'searchable-list__list--too-many': showTooMany },
   );
 
+  const { willAccept: hideDropOverlay } = useDropMonitor('node-list') || { willAccept: false };
+
   return (
     <motion.div
       variants={variants}
@@ -270,13 +272,15 @@ const SearchableList = (props) => {
             }}
           />
         </div>
-        <DropOverlay
-          id="drop-overlay"
-          nodeColor={dropNodeColor}
-          itemType={itemType} // drop type
-          accepts={accepts}
-          onDrop={onDrop}
-        />
+        { !hideDropOverlay && (
+          <DropOverlay
+            id="drop-overlay"
+            nodeColor={dropNodeColor}
+            itemType={itemType} // drop type
+            accepts={accepts}
+            onDrop={onDrop}
+          />
+        )}
       </Panel>
     </motion.div>
   );
