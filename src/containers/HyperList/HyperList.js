@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React, {
   useContext,
   useMemo,
@@ -8,9 +9,8 @@ import { renderToString } from 'react-dom/server';
 import PropTypes from 'prop-types';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { VariableSizeList as List } from 'react-window';
-import { compose } from 'recompose';
 import cx from 'classnames';
-import { DragSource, DropTarget, MonitorDropTarget } from '../../behaviours/DragAndDrop';
+import { DragSource } from '../../behaviours/DragAndDrop';
 
 const SCROLL_BORDER = 14; // ~1rem
 const GUTTER_SIZE = 14;
@@ -95,8 +95,6 @@ const HyperList = ({
   itemType,
   emptyComponent: EmptyComponent,
   placeholder,
-  willAccept,
-  isOver,
 }) => {
   const RowRenderer = useMemo(
     () => getRowRenderer(DragSource(ItemComponent), DragComponent),
@@ -112,8 +110,6 @@ const HyperList = ({
   const classNames = cx(
     'hyper-list',
     className,
-    { 'hyper-list--drag': willAccept },
-    { 'hyper-list--hover': willAccept && isOver },
   );
 
   const SizeRenderer = useCallback((props) => (
@@ -161,25 +157,27 @@ const HyperList = ({
         <div className="hyper-list__container">
           <div className="hyper-list__sizer">
             <AnimatePresence exitBeforeEnter>
-              { showPlaceholder && placeholder }
-              { showEmpty && <EmptyComponent />}
-              <AutoSizer>
-                {(containerSize) => {
-                  if (!showResults) { return null; }
-                  return (
-                    <List
-                      className="hyper-list__grid"
-                      height={containerSize.height}
-                      width={containerSize.width}
-                      itemSize={(item) => getItemSize(item, containerSize.width)}
-                      estimatedItemSize={getItemSize(0)}
-                      itemCount={items.length}
-                    >
-                      {RowRenderer}
-                    </List>
-                  );
-                }}
-              </AutoSizer>
+              { showPlaceholder ? placeholder : (
+                showEmpty ? <EmptyComponent /> : (
+                  <AutoSizer>
+                    {(containerSize) => {
+                      if (!showResults) { return null; }
+                      return (
+                        <List
+                          className="hyper-list__grid"
+                          height={containerSize.height}
+                          width={containerSize.width}
+                          itemSize={(item) => getItemSize(item, containerSize.width)}
+                          estimatedItemSize={getItemSize(0)}
+                          itemCount={items.length}
+                        >
+                          {RowRenderer}
+                        </List>
+                      );
+                    }}
+                  </AutoSizer>
+                )
+              )}
             </AnimatePresence>
           </div>
         </div>
@@ -202,7 +200,4 @@ HyperList.defaultProps = {
   itemType: 'HYPER_LIST',
 };
 
-export default compose(
-  DropTarget,
-  MonitorDropTarget(['isOver', 'willAccept']),
-)(HyperList);
+export default HyperList;

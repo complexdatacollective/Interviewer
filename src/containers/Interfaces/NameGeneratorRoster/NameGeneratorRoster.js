@@ -176,7 +176,7 @@ const NameGeneratorRoster = (props) => {
   return (
     <div className="name-generator-roster-interface">
       <AnimatePresence exitBeforeEnter>
-        {itemsStatus.isLoading && (
+        {itemsStatus.isLoading ? (
           <motion.div
             className="name-generator-roster-interface__loading"
             initial="visible"
@@ -187,79 +187,80 @@ const NameGeneratorRoster = (props) => {
           >
             <Loading message="Loading roster data..." />
           </motion.div>
-        )}
-        {!itemsStatus.isLoading && [
-          <motion.div
-            className="name-generator-roster-interface__prompt"
-            initial="hidden"
-            animate="visible"
-            exit="hidden"
-            variants={variants}
-            key="prompts"
-          >
-            <Prompts
-              prompts={prompts}
-              currentPrompt={prompt.id}
-            />
-          </motion.div>,
-          <motion.div
-            className="name-generator-roster-interface__panels"
-            key="panels"
-            initial="hidden"
-            animate="visible"
-            exit="hidden"
-            variants={variants}
-          >
-            <div className="name-generator-roster-interface__search-panel">
-              <SearchableList
-                id="searchable-list"
-                items={items}
-                title="Available to add"
-                columns={countColumns}
-                placeholder={itemsStatus.error && <ErrorMessage error={itemsStatus.error} />}
-                itemType="SOURCE_NODES" // drop type
-                excludeItems={excludeItems}
-                itemComponent={DataCard}
-                dragComponent={Node}
-                sortOptions={sortOptions}
-                searchOptions={fuseOptions}
-                accepts={({ meta: { itemType } }) => itemType !== 'SOURCE_NODES'}
-                onDrop={handleRemoveNode}
-                dropNodeColor={dropNodeColor}
+        ) : (
+          <>
+            <motion.div
+              className="name-generator-roster-interface__prompt"
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              variants={variants}
+              key="prompts"
+            >
+              <Prompts
+                prompts={prompts}
+                currentPrompt={prompt.id}
               />
-            </div>
-            <div className="name-generator-roster-interface__node-panel">
-              <Panel
-                title="Added"
-                noHighlight
-                noCollapse
-              >
-                <div className="name-generator-roster-interface__node-list">
-                  <List
-                    id="node-list"
-                    className={nodeListClasses}
-                    itemType="ADDED_NODES"
-                    accepts={({ meta: { itemType } }) => itemType !== 'ADDED_NODES'}
-                    onDrop={handleAddNode}
-                    items={nodesForPrompt.map(
-                      (item) => ({
-                        id: item._uid, // eslint-disable-line no-underscore-dangle
-                        data: item,
-                        props: item,
-                      }),
-                    )}
-                    itemComponent={Node}
-                  />
-                  <AnimatePresence>
-                    { willAccept && (
-                      <DropOverlay isOver={isOver} nodeColor={dropNodeColor} />
-                    )}
-                  </AnimatePresence>
-                </div>
-              </Panel>
-            </div>
-          </motion.div>,
-        ]}
+            </motion.div>
+            <motion.div
+              className="name-generator-roster-interface__panels"
+              key="panels"
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              variants={variants}
+            >
+              <div className="name-generator-roster-interface__search-panel">
+                <SearchableList
+                  id="searchable-list"
+                  items={items}
+                  title="Available to add"
+                  columns={countColumns}
+                  placeholder={itemsStatus.error && <ErrorMessage error={itemsStatus.error} />}
+                  itemType="SOURCE_NODES" // drop type
+                  excludeItems={excludeItems}
+                  itemComponent={DataCard}
+                  dragComponent={Node}
+                  sortOptions={sortOptions}
+                  searchOptions={fuseOptions}
+                  accepts={({ meta: { itemType } }) => itemType !== 'SOURCE_NODES'}
+                  onDrop={handleRemoveNode}
+                  dropNodeColor={dropNodeColor}
+                />
+              </div>
+              <div className="name-generator-roster-interface__node-panel">
+                <Panel
+                  title="Added"
+                  noHighlight
+                  noCollapse
+                >
+                  <div className="name-generator-roster-interface__node-list">
+                    <List
+                      id="node-list"
+                      className={nodeListClasses}
+                      itemType="ADDED_NODES"
+                      accepts={({ meta: { itemType } }) => itemType !== 'ADDED_NODES'}
+                      onDrop={handleAddNode}
+                      items={nodesForPrompt.map(
+                        (item) => ({
+                          id: item._uid, // eslint-disable-line no-underscore-dangle
+                          data: item,
+                          props: item,
+                        }),
+                      )}
+                      itemComponent={Node}
+                    />
+                    <AnimatePresence>
+                      { willAccept && (
+                        <DropOverlay isOver={isOver} nodeColor={dropNodeColor} />
+                      )}
+                    </AnimatePresence>
+                  </div>
+                </Panel>
+              </div>
+            </motion.div>
+          </>
+        )}
       </AnimatePresence>
     </div>
   );
