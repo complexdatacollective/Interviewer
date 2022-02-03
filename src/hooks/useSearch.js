@@ -16,6 +16,7 @@ const defaultFuseOptions = {
   shouldSort: false,
   includeScore: true,
   ignoreLocation: true, // Search whole strings
+  findAllMatches: true,
 };
 
 // Variation of useState which includes a debounced value
@@ -46,7 +47,6 @@ const useQuery = (initialQuery, delay = DEBOUNCE_DELAY) => {
  */
 const useSearch = (list, options, initialQuery = '') => {
   const delayRef = useRef();
-
   const [query, setQuery, displayQuery] = useQuery(initialQuery);
   const [results, setResults] = useState(list);
   const [isWaiting, setIsWaiting] = useState(false);
@@ -63,7 +63,7 @@ const useSearch = (list, options, initialQuery = '') => {
 
     const r = res.map(({ item, score }) => ({
       ...item,
-      relevance: score,
+      relevance: 1 - score, // fuseJS relevance is reverse nomalized (0 is perfect match)
     }));
 
     const endTime = new Date();

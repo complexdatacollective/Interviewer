@@ -133,8 +133,6 @@ const SearchableList = (props) => {
   const id = useRef(uuid());
   const [results, query, setQuery, isWaiting, hasQuery] = useSearch(items, searchOptions);
 
-  console.log('use search', searchOptions, results);
-
   const [
     sortedResults,
     sortByProperty,
@@ -142,8 +140,6 @@ const SearchableList = (props) => {
     setSortByProperty,
     setSortDirection,
   ] = useSort(results, sortOptions.initialSortOrder);
-
-  console.log('use sort', sortByProperty, sortDirection);
 
   useEffect(() => {
     if (hasQuery) {
