@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { motion, AnimatePresence } from 'framer-motion';
 import { get, isEmpty } from 'lodash';
-import { Node as UINode } from '@codaco/ui';
 import { DataCard } from '@codaco/ui/lib/components/Cards';
 import Prompts from '../../../components/Prompts';
 import withPrompt from '../../../behaviours/withPrompt';
@@ -26,48 +25,11 @@ import useFuseOptions from './useFuseOptions';
 import useSortableProperties from './useSortableProperties';
 import useItems from './useItems';
 import { convertNamesToUUIDs } from './helpers';
+import DropOverlay from './DropOverlay';
 
 const countColumns = (width) => (
   width < 140 ? 1 : Math.floor(width / 450)
 );
-const DropOverlay = ({ isOver, nodeColor }) => {
-  const { duration } = useAnimationSettings();
-
-  const variants = {
-    visible: { opacity: 1, transition: { duration: duration.standard } },
-    hidden: { opacity: 0, transition: { duration: duration.standard } },
-  };
-
-  const iconVariants = {
-    over: {
-      scale: [1, 1.2],
-      transition: { duration: duration.slow, repeat: Infinity, repeatType: 'reverse' },
-    },
-    initial: {
-      scale: 1,
-      transition: { duration: duration.fast },
-    },
-  };
-
-  return (
-    <motion.div
-      className="name-generator-roster-interface__overlay"
-      variants={variants}
-      initial="hidden"
-      animate="visible"
-      exit="hidden"
-    >
-      <motion.div
-        variants={iconVariants}
-        initial="initial"
-        animate={isOver ? 'over' : 'initial'}
-      >
-        <UINode label="" color={nodeColor} />
-      </motion.div>
-      <p>Drop here to add to network</p>
-    </motion.div>
-  );
-};
 
 const ErrorMessage = ({ error }) => (
   <div
@@ -134,11 +96,11 @@ const NameGeneratorRoster = (props) => {
     searchOptions,
     {
       keys: fallbackKeys,
-      threshold: 0,
+      threshold: 0.6,
     },
   );
 
-  const { isOver, willAccept } = useDropMonitor('node-drop-area')
+  const { isOver, willAccept } = useDropMonitor('node-list')
     || { isOver: false, willAccept: false };
 
   const handleAddNode = ({ meta }) => {
@@ -252,7 +214,11 @@ const NameGeneratorRoster = (props) => {
                     />
                     <AnimatePresence>
                       { willAccept && (
-                        <DropOverlay isOver={isOver} nodeColor={dropNodeColor} />
+                        <DropOverlay
+                          isOver={isOver}
+                          nodeColor={dropNodeColor}
+                          message="Drop here to add"
+                        />
                       )}
                     </AnimatePresence>
                   </div>

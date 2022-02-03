@@ -1,12 +1,10 @@
 /* eslint-disable @codaco/spellcheck/spell-checker */
 import React, { useEffect, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { compose } from 'recompose';
 import uuid from 'uuid';
 import cx from 'classnames';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { isEqual, get } from 'lodash';
-import { Node } from '@codaco/ui';
 import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
 import Search from '@codaco/ui/lib/components/Fields/Search';
 import Loading from '../components/Loading';
@@ -15,20 +13,7 @@ import useSort from '../hooks/useSort';
 import useSearch from '../hooks/useSearch';
 import HyperList from './HyperList';
 import useDropMonitor from '../behaviours/DragAndDrop/useDropMonitor';
-
-import { DropTarget, MonitorDropTarget } from '../behaviours/DragAndDrop';
-
-const LargeRosterNotice = () => (
-  <motion.div
-    className="large-roster-notice"
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    exit={{ opacity: 0 }}
-  >
-    <h2>Too many items to display.</h2>
-    <p>Use the search feature to see results here.</p>
-  </motion.div>
-);
+import DropOverlay from './Interfaces/NameGeneratorRoster/DropOverlay';
 
 const SortButton = ({
   setSortByProperty,
@@ -69,40 +54,6 @@ const EmptyComponent = () => (
     <h2>Nothing matched your search term.</h2>
   </motion.div>
 );
-
-const DropOverlay = compose(
-  DropTarget,
-  MonitorDropTarget(['isOver', 'willAccept']),
-)((props) => {
-  const {
-    willAccept, isOver, nodeColor,
-  } = props;
-
-  return (
-    <div
-      className="searchable-list__overlay"
-      style={{
-        height: willAccept ? '100%' : '0',
-        opacity: willAccept ? 1 : 0,
-        backgroundColor: isOver && 'rgba(0, 201, 162, 0.2)',
-      }}
-    >
-      <motion.div
-        animate={{
-          y: [0, 7, 0, 7, 0],
-        }}
-        transition={{
-          duration: 2,
-          loop: Infinity,
-          ease: 'easeInOut',
-        }}
-      >
-        <Node label="" color={nodeColor} />
-      </motion.div>
-      <h2>Drop here to remove</h2>
-    </div>
-  );
-});
 
 /**
   * SearchableList
@@ -195,7 +146,7 @@ const SearchableList = (props) => {
     { 'searchable-list__list--too-many': showTooMany },
   );
 
-  const { willAccept: hideDropOverlay } = useDropMonitor('node-list') || { willAccept: false };
+  const { willAccept, isOver } = useDropMonitor(`hyper-list-${id.current}`) || { willAccept: false, isOver: false };
 
   return (
     <motion.div
@@ -210,22 +161,20 @@ const SearchableList = (props) => {
         noCollapse
       >
         <div className={listClasses}>
-          <AnimatePresence exitBeforeEnter>
-            { showTooMany ? (
-              <LargeRosterNotice />
-            ) : (
-              <HyperList
-                id={`hyper-list-${id.current}`}
-                items={filteredResults}
-                dynamicProperties={dynamicProperties}
-                itemComponent={itemComponent}
-                dragComponent={dragComponent}
-                columns={columns}
-                emptyComponent={EmptyComponent}
-                placeholder={hyperListPlaceholder}
-              />
-            )}
-          </AnimatePresence>
+          <HyperList
+            id={`hyper-list-${id.current}`}
+            items={filteredResults}
+            dynamicProperties={dynamicProperties}
+            itemComponent={itemComponent}
+            dragComponent={dragComponent}
+            columns={columns}
+            emptyComponent={EmptyComponent}
+            placeholder={hyperListPlaceholder}
+            itemType={itemType} // drop type
+            accepts={accepts}
+            onDrop={onDrop}
+            showTooMany={showTooMany}
+          />
         </div>
         { canSort && (
           <div className="searchable-list__sort">
@@ -272,13 +221,11 @@ const SearchableList = (props) => {
             }}
           />
         </div>
-        { !hideDropOverlay && (
+        { willAccept && (
           <DropOverlay
-            id="drop-overlay"
+            isOver={isOver}
             nodeColor={dropNodeColor}
-            itemType={itemType} // drop type
-            accepts={accepts}
-            onDrop={onDrop}
+            message="Drop here to remove"
           />
         )}
       </Panel>

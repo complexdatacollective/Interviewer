@@ -1,6 +1,5 @@
 $search-height: 6rem;
 $sort-height: 3.2rem;
-$overlay-color: rgb(54, 49, 95);
 
 .searchable-list {
   flex: 1;
@@ -31,12 +30,7 @@ $overlay-color: rgb(54, 49, 95);
     .hyper-list {
       flex: 1;
       padding: 0 0 $search-height;
-
-      // Using custom overlays instead
-      &.hyper-list--drag,
-      &.hyper-list--hover {
-        background-color: transparent;
-      }
+      height: 100%;
     }
 
     &--can-sort {
@@ -55,7 +49,7 @@ $overlay-color: rgb(54, 49, 95);
       justify-content: center;
 
       .hyper-list {
-        display: none;
+        opacity: 0 !important;
       }
     }
   }

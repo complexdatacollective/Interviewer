@@ -4,13 +4,40 @@ import React, {
   useMemo,
   useCallback,
 } from 'react';
+import { compose } from 'recompose';
 import { AnimatePresence, motion } from 'framer-motion';
 import { renderToString } from 'react-dom/server';
 import PropTypes from 'prop-types';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { VariableSizeList as List } from 'react-window';
 import cx from 'classnames';
-import { DragSource } from '../../behaviours/DragAndDrop';
+import { DragSource, DropTarget, MonitorDropTarget } from '../../behaviours/DragAndDrop';
+
+const LargeRosterNotice = () => (
+  <div
+    className="large-roster-notice__wrapper"
+    style={{
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      height: '100%',
+      width: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    }}
+  >
+    <motion.div
+      className="large-roster-notice"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <h2>Too many items to display.</h2>
+      <p>Use the search feature to see results here.</p>
+    </motion.div>
+  </div>
+);
 
 const GUTTER_SIZE = 14;
 
@@ -93,6 +120,8 @@ const HyperList = ({
   dragComponent: DragComponent,
   emptyComponent: EmptyComponent,
   placeholder,
+  itemType,
+  showTooMany,
 }) => {
   const RowRenderer = useMemo(
     () => getRowRenderer(DragSource(ItemComponent), DragComponent),
@@ -102,7 +131,8 @@ const HyperList = ({
   const context = useMemo(() => ({
     items,
     dynamicProperties,
-  }), [items, dynamicProperties]);
+    itemType,
+  }), [items, dynamicProperties, itemType]);
 
   const classNames = cx(
     'hyper-list',
@@ -135,8 +165,7 @@ const HyperList = ({
     return height + GUTTER_SIZE;
   };
 
-  // const showOverlay = !!OverlayComponent;
-  // If placeholder is provider it supercedes everything
+  // If placeholder is provider it supersedes everything
   const showPlaceholder = !!placeholder;
   // If items is provided but is empty show the empty component
   const showEmpty = !placeholder && items && items.length === 0;
@@ -144,42 +173,49 @@ const HyperList = ({
   const showResults = !placeholder && items && items.length > 0;
 
   return (
-    <motion.div
-      className={classNames}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-    >
-      <ListContext.Provider value={context}>
-        <div className="hyper-list__container">
-          <div className="hyper-list__sizer">
-            <AnimatePresence exitBeforeEnter>
-              { showPlaceholder ? placeholder : (
-                showEmpty ? <EmptyComponent /> : (
-                  <AutoSizer>
-                    {(containerSize) => {
-                      if (!showResults) { return null; }
-                      return (
-                        <List
-                          className="hyper-list__grid"
-                          height={containerSize.height}
-                          width={containerSize.width}
-                          itemSize={(item) => getItemSize(item, containerSize.width)}
-                          estimatedItemSize={getItemSize(0)}
-                          itemCount={items.length}
-                        >
-                          {RowRenderer}
-                        </List>
-                      );
-                    }}
-                  </AutoSizer>
-                )
-              )}
-            </AnimatePresence>
+    <>
+      <motion.div
+        className={classNames}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      >
+        <ListContext.Provider value={context}>
+          <div className="hyper-list__container">
+            <div className="hyper-list__sizer">
+              <AnimatePresence exitBeforeEnter>
+                { showPlaceholder ? placeholder : (
+                  showEmpty ? <EmptyComponent /> : (
+                    <AutoSizer>
+                      {(containerSize) => {
+                        if (!showResults) { return null; }
+                        return (
+                          <List
+                            className="hyper-list__grid"
+                            height={containerSize.height}
+                            width={containerSize.width}
+                            itemSize={(item) => getItemSize(item, containerSize.width)}
+                            estimatedItemSize={getItemSize(0)}
+                            itemCount={items.length}
+                          >
+                            {RowRenderer}
+                          </List>
+                        );
+                      }}
+                    </AutoSizer>
+                  )
+                )}
+              </AnimatePresence>
+            </div>
           </div>
-        </div>
-      </ListContext.Provider>
-    </motion.div>
+        </ListContext.Provider>
+      </motion.div>
+      <AnimatePresence>
+        { showTooMany && (
+          <LargeRosterNotice />
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 
@@ -187,12 +223,17 @@ HyperList.propTypes = {
   itemComponent: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
   emptyComponent: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
   placeholder: PropTypes.node,
+  itemType: PropTypes.string,
 };
 
 HyperList.defaultProps = {
   itemComponent: NoopComponent,
   emptyComponent: NoopComponent,
   placeholder: null,
+  itemType: 'HYPER_LIST',
 };
 
-export default HyperList;
+export default compose(
+  DropTarget,
+  MonitorDropTarget(['isOver', 'willAccept']),
+)(HyperList);
