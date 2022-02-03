@@ -41,10 +41,18 @@ const getRowRenderer = (Component, DragComponent) => ({
     ? <DragComponent {...data} />
     : null;
 
+  console.log(style, `calc(${style.width} - ${(GUTTER_SIZE * 2)}px)`);
+
   return (
     <div
       className="hyper-list__item"
-      style={style}
+      style={{
+        ...style,
+        left: style.left + GUTTER_SIZE,
+        top: style.top + GUTTER_SIZE,
+        width: `calc(${style.width} - ${(GUTTER_SIZE * 2)}px)`,
+        height: style.height - GUTTER_SIZE,
+      }}
       key={id}
     >
       <Component
@@ -135,7 +143,7 @@ const HyperList = ({
     console.log('item size:', height);
     // document.body.removeChild(newHiddenSizingEl);
 
-    return height;
+    return height + GUTTER_SIZE;
   };
 
   // const showOverlay = !!OverlayComponent;

@@ -15,6 +15,13 @@ import HyperList from './HyperList';
 import useAnimationSettings from '../hooks/useAnimationSettings';
 import useDropMonitor from '../behaviours/DragAndDrop/useDropMonitor';
 
+const LargeRosterNotice = () => (
+  <div className="large-roster-notice">
+    <h2>Too many items.</h2>
+    <p>Use the search feature to see results here.</p>
+  </div>
+);
+
 const SortButton = ({
   setSortByProperty,
   variable,
@@ -189,12 +196,8 @@ const SearchableList = (props) => {
         noCollapse
       >
         <div className={listClasses}>
-          { showTooMany ? (
-            <div
-              className={`searchable-list__too-many ${willAccept && 'searchable-list__too-many--no-text'}`}
-            >
-              <h4>Type a search query below to see results here</h4>
-            </div>
+          { showTooMany && !willAccept ? (
+            <LargeRosterNotice />
           ) : (
             <HyperList
               id={`hyper-list-${id}`}

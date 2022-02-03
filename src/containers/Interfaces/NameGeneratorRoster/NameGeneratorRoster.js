@@ -230,7 +230,7 @@ const NameGeneratorRoster = (props) => {
             </div>
             <div className="name-generator-roster-interface__node-panel">
               <Panel
-                title="Added to your interview"
+                title="Added"
                 noHighlight
                 noCollapse
               >

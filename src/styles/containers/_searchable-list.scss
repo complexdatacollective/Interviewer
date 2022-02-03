@@ -52,9 +52,8 @@ $overlay-color: rgb(54, 49, 95);
     }
 
     &--too-many {
-      .hyper-list__grid {
-        overflow-y: hidden !important; // sass-lint:disable-line no-important
-      }
+      align-items: center;
+      justify-content: center;
     }
   }
 
@@ -115,5 +114,35 @@ $overlay-color: rgb(54, 49, 95);
 .data-card {
   &__data {
     background-color: var(--color-slate-blue--dark);
+  }
+}
+
+.large-roster-notice {
+  background: var(--background);
+  padding: unit(2);
+  color: var(--text);
+  border-radius: unit(3);
+  text-align: center;
+  background-image: url('../images/roster-list-bg-cards.svg');
+  background-repeat: no-repeat;
+  background-position: bottom;
+  background-size: 62%;
+  padding-bottom: 16rem;
+  position: relative;
+  top: -4rem;
+  width: 28rem;
+  box-shadow: inset 0 -1.2rem 3rem 0 var(--modal-window-box-shadow);
+
+  &::after {
+    content: '';
+    background-image: url('../images/roster-list-character.svg');
+    position: absolute;
+    bottom: -8rem;
+    left: 0;
+    background-repeat: no-repeat;
+    height: 20rem;
+    width: 100%;
+    background-size: 60%;
+    background-position: 36% 78%;
   }
 }
