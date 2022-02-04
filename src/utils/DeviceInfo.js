@@ -77,9 +77,13 @@ const deviceDescription = () => {
 // Disable dynamic scaling on android because vmin is resized by software keyboard
 const shouldUseDynamicScaling = () => !isCordova();
 
+// Set fullscreenforms to true for tablets
+const shouldUseFullScreenForm = () => isCordova();
+
 export default deviceDescription;
 
 export {
   deviceDescription,
   shouldUseDynamicScaling,
+  shouldUseFullScreenForm,
 };
