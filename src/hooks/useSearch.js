@@ -17,6 +17,7 @@ const defaultFuseOptions = {
   includeScore: true,
   ignoreLocation: true, // Search whole strings
   findAllMatches: true,
+  useExtendedSearch: true,
 };
 
 // Variation of useState which includes a debounced value
