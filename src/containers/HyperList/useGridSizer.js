@@ -76,7 +76,7 @@ const useGridSizer = (ItemComponent, items, columns, width, defaultHeight = 150)
     (rowIndex) => {
       if (!hiddenSizingEl) { return defaultHeight; }
 
-      hiddenSizingEl.style.width = `${columnWidth()}px`;
+      hiddenSizingEl.style.width = `${columnWidth()}px` - 14; // 14 is gutter
 
       const start = rowIndex * columns;
       const end = start + columns;
@@ -94,7 +94,7 @@ const useGridSizer = (ItemComponent, items, columns, width, defaultHeight = 150)
           0,
         );
 
-      return height > 0 ? height : defaultHeight;
+      return height > 0 ? height + 14 : defaultHeight;
     },
     [hiddenSizingEl, items, columnWidth()],
   );

@@ -24,6 +24,7 @@ class Card extends PureComponent {
           <h5 key={index} className={cx('card__attribute')}>
             {key}
             :
+            {' '}
             {detail[key]}
           </h5>
         );

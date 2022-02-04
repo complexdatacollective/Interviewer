@@ -1,6 +1,5 @@
 $search-height: 6rem;
-$sort-height: 5.5rem;
-$overlay-color: rgb(54, 49, 95);
+$sort-height: 3.2rem;
 
 .searchable-list {
   flex: 1;
@@ -12,13 +11,11 @@ $overlay-color: rgb(54, 49, 95);
     left: 0;
     width: 100%;
     height: calc(100% - #{$search-height} + 1rem);
-    background: linear-gradient(180deg, transparentize($overlay-color, 0.66) 0%, $overlay-color 100%);
-    backdrop-filter: blur(.5em);
+    background: var(--panel-bg-muted);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 2;
-    text-shadow: 1px 1px .5em var(--color-rich-black);
 
     &--no-text {
       display: none;
@@ -32,48 +29,32 @@ $overlay-color: rgb(54, 49, 95);
 
     .hyper-list {
       flex: 1;
-      padding: 1rem 1rem $search-height;
-
-      // Using custom overlays instead
-      &.hyper-list--drag,
-      &.hyper-list--hover {
-        background-color: transparent;
-      }
-    }
-
-    &--can-sort {
-      .hyper-list {
-        padding-top: $sort-height;
-      }
-
-      .searchable-list__too-many {
-        top: calc(#{$sort-height});
-        height: calc(100% - #{$sort-height} - #{$search-height} + 2rem);
-      }
+      height: 100%;
     }
 
     &--too-many {
-      .hyper-list__grid {
-        overflow-y: hidden !important; // sass-lint:disable-line no-important
-      }
-    }
-  }
+      align-items: center;
+      justify-content: center;
 
-  .panel {
-    &__content {
-      position: relative;
+      .hyper-list {
+        opacity: 0 !important; //sass-lint:disable-line no-important
+      }
     }
   }
 
   &__sort {
-    padding: 1rem;
-    position: absolute;
-    top: 0;
-    left: 0;
+    flex: 0 0 auto;
     width: 100%;
+    display: inline-flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    align-items: center;
+    border-bottom: 0.1em solid var(--background);
 
-    .button {
-      margin-right: 1rem;
+    .filter-button {
+      display: flex;
+      flex: 0 0 auto;
+      margin: 0;
     }
   }
 
@@ -85,11 +66,12 @@ $overlay-color: rgb(54, 49, 95);
   }
 
   &__search {
+    flex: 0 0 auto;
+    background: var(--panel-bg-muted);
+    border-top: 0.1rem solid var(--background);
     padding: 1rem;
-    position: absolute;
-    bottom: 0;
-    left: 0;
     width: 100%;
+    z-index: var(--z-panel);
 
     .form-field-container {
       margin: 0;
@@ -108,8 +90,49 @@ $overlay-color: rgb(54, 49, 95);
     width: 100%;
     height: 100%;
     display: flex;
+    flex-direction: column;
     background: var(--overlay-background);
+    backdrop-filter: blur(#{unit(2)});
     justify-content: center;
     align-items: center;
+    text-shadow: 1px 1px .5em var(--color-rich-black);
+  }
+}
+
+.data-card {
+  &__data {
+    background-color: var(--color-slate-blue--dark);
+  }
+}
+
+.large-roster-notice {
+  background: var(--background);
+  padding: unit(2);
+  color: var(--text);
+  border-radius: unit(3);
+  text-align: center;
+  background-image: url('../images/roster-list-bg-cards.svg');
+  background-repeat: no-repeat;
+  background-position: bottom;
+  background-size: 62%;
+  padding-bottom: 16rem;
+  position: relative;
+  top: -5rem;
+  width: 100%;
+  max-width: 28rem;
+  margin: unit(2);
+  box-shadow: inset 0 -1.2rem 3rem 0 rgba(22, 21, 43, 0.28); //sass-lint:disable-line no-color-literals
+
+  &::after {
+    content: '';
+    background-image: url('../images/roster-list-character.svg');
+    position: absolute;
+    bottom: -8.7rem;
+    left: 0;
+    background-repeat: no-repeat;
+    height: 20rem;
+    width: 100%;
+    background-size: 65%;
+    background-position: 38% 100%;
   }
 }

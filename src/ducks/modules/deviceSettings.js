@@ -1,4 +1,4 @@
-import { deviceDescription, shouldUseDynamicScaling } from '../../utils/DeviceInfo';
+import { deviceDescription, shouldUseDynamicScaling, shouldUseFullScreenForm } from '../../utils/DeviceInfo';
 
 const SET_DESCRIPTION = 'SETTINGS/SET_DESCRIPTION';
 const SET_INTERFACE_SCALE = 'SETTINGS/SET_INTERFACE_SCALE';
@@ -39,7 +39,7 @@ const initialState = {
 // Rehydration may occur before this, so only overwrite static default values.
 const getDeviceReadyState = (state) => {
   let { description } = state;
-  let { useDynamicScaling } = state;
+  let { useDynamicScaling, useFullScreenForms } = state;
   if (description === initialState.description) {
     description = deviceDescription();
   }
@@ -47,11 +47,15 @@ const getDeviceReadyState = (state) => {
     useDynamicScaling = shouldUseDynamicScaling();
   }
 
+  if (useFullScreenForms === initialState.useFullScreenForms) {
+    useFullScreenForms = shouldUseFullScreenForm();
+  }
+
   return {
     ...state,
     description,
     useDynamicScaling,
-
+    useFullScreenForms,
   };
 };
 

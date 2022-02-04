@@ -4,8 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { motion, AnimatePresence } from 'framer-motion';
-import { get } from 'lodash';
-import { Node as UINode } from '@codaco/ui';
+import { get, isEmpty } from 'lodash';
 import { DataCard } from '@codaco/ui/lib/components/Cards';
 import Prompts from '../../../components/Prompts';
 import withPrompt from '../../../behaviours/withPrompt';
@@ -26,48 +25,11 @@ import useFuseOptions from './useFuseOptions';
 import useSortableProperties from './useSortableProperties';
 import useItems from './useItems';
 import { convertNamesToUUIDs } from './helpers';
+import DropOverlay from './DropOverlay';
 
 const countColumns = (width) => (
   width < 140 ? 1 : Math.floor(width / 450)
 );
-const DropOverlay = ({ isOver, nodeColor }) => {
-  const { duration } = useAnimationSettings();
-
-  const variants = {
-    visible: { opacity: 1, transition: { duration: duration.standard } },
-    hidden: { opacity: 0, transition: { duration: duration.standard } },
-  };
-
-  const iconVariants = {
-    over: {
-      scale: [1, 1.2],
-      transition: { duration: duration.slow, repeat: Infinity, repeatType: 'reverse' },
-    },
-    initial: {
-      scale: 1,
-      transition: { duration: duration.fast },
-    },
-  };
-
-  return (
-    <motion.div
-      className="name-generator-list-interface__overlay"
-      variants={variants}
-      initial="hidden"
-      animate="visible"
-      exit="hidden"
-    >
-      <motion.div
-        variants={iconVariants}
-        initial="initial"
-        animate={isOver ? 'over' : 'initial'}
-      >
-        <UINode label="" color={nodeColor} />
-      </motion.div>
-      <p>Drop here to add to network</p>
-    </motion.div>
-  );
-};
 
 const ErrorMessage = ({ error }) => (
   <div
@@ -86,9 +48,9 @@ const ErrorMessage = ({ error }) => (
 );
 
 /**
-  * Name Generator List Interface
+  * Name Generator (unified) Roster Interface
   */
-const NameGeneratorList = (props) => {
+const NameGeneratorRoster = (props) => {
   const {
     prompt,
     stage,
@@ -113,7 +75,7 @@ const NameGeneratorList = (props) => {
   const sortOptions = useSortableProperties(nodeVariables, stage.sortOptions);
 
   const searchOptions = ((options) => {
-    if (!options) { return options; }
+    if (!options || isEmpty(options)) { return options; }
 
     return {
       ...options,
@@ -134,11 +96,11 @@ const NameGeneratorList = (props) => {
     searchOptions,
     {
       keys: fallbackKeys,
-      threshold: 0,
+      threshold: 0.6,
     },
   );
 
-  const { isOver, willAccept } = useDropMonitor('node-drop-area')
+  const { isOver, willAccept } = useDropMonitor('node-list')
     || { isOver: false, willAccept: false };
 
   const handleAddNode = ({ meta }) => {
@@ -169,16 +131,16 @@ const NameGeneratorList = (props) => {
   };
 
   const nodeListClasses = cx(
-    'name-generator-list-interface__node-list',
-    { 'name-generator-list-interface__node-list--empty': nodesForPrompt.length === 0 },
+    'name-generator-roster-interface__node-list',
+    { 'name-generator-roster-interface__node-list--empty': nodesForPrompt.length === 0 },
   );
 
   return (
-    <div className="name-generator-list-interface">
-      <AnimatePresence>
-        {itemsStatus.isLoading && (
+    <div className="name-generator-roster-interface">
+      <AnimatePresence exitBeforeEnter>
+        {itemsStatus.isLoading ? (
           <motion.div
-            className="name-generator-list-interface__loading"
+            className="name-generator-roster-interface__loading"
             initial="visible"
             animate="visible"
             exit="hidden"
@@ -187,93 +149,98 @@ const NameGeneratorList = (props) => {
           >
             <Loading message="Loading roster data..." />
           </motion.div>
-        )}
-        {!itemsStatus.isLoading && [
-          <motion.div
-            className="name-generator-list-interface__prompt"
-            initial="hidden"
-            animate="visible"
-            exit="hidden"
-            variants={variants}
-            key="prompts"
-          >
-            <Prompts
-              prompts={prompts}
-              currentPrompt={prompt.id}
-            />
-          </motion.div>,
-          <motion.div
-            className="name-generator-list-interface__panels"
-            key="panels"
-            initial="hidden"
-            animate="visible"
-            exit="hidden"
-            variants={variants}
-          >
-            <div className="name-generator-list-interface__node-panel">
-              <Panel
-                title="Added to your interview"
-                noHighlight
-                noCollapse
-              >
-                <div className="name-generator-list-interface__node-list">
-                  <List
-                    id="node-list"
-                    className={nodeListClasses}
-                    itemType="ADDED_NODES"
-                    accepts={({ meta: { itemType } }) => itemType !== 'ADDED_NODES'}
-                    onDrop={handleAddNode}
-                    items={nodesForPrompt.map(
-                      (item) => ({
-                        id: item._uid, // eslint-disable-line no-underscore-dangle
-                        data: item,
-                        props: item,
-                      }),
-                    )}
-                    itemComponent={Node}
-                  />
-                  <AnimatePresence>
-                    { willAccept && (
-                      <DropOverlay isOver={isOver} nodeColor={dropNodeColor} />
-                    )}
-                  </AnimatePresence>
-                </div>
-              </Panel>
-            </div>
-            <div className="name-generator-list-interface__search-panel">
-              <SearchableList
-                id="searchable-list"
-                items={items}
-                title="Available to add"
-                columns={countColumns}
-                placeholder={itemsStatus.error && <ErrorMessage error={itemsStatus.error} />}
-                itemType="SOURCE_NODES" // drop type
-                excludeItems={excludeItems}
-                itemComponent={DataCard}
-                dragComponent={Node}
-                sortOptions={sortOptions}
-                searchOptions={fuseOptions}
-                accepts={({ meta: { itemType } }) => itemType !== 'SOURCE_NODES'}
-                onDrop={handleRemoveNode}
-                dropNodeColor={dropNodeColor}
+        ) : (
+          <>
+            <motion.div
+              className="name-generator-roster-interface__prompt"
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              variants={variants}
+              key="prompts"
+            >
+              <Prompts
+                prompts={prompts}
+                currentPrompt={prompt.id}
               />
-            </div>
-          </motion.div>,
-        ]}
+            </motion.div>
+            <motion.div
+              className="name-generator-roster-interface__panels"
+              key="panels"
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              variants={variants}
+            >
+              <div className="name-generator-roster-interface__search-panel">
+                <SearchableList
+                  id="searchable-list"
+                  items={items}
+                  title="Available to add"
+                  columns={countColumns}
+                  placeholder={itemsStatus.error && <ErrorMessage error={itemsStatus.error} />}
+                  itemType="SOURCE_NODES" // drop type
+                  excludeItems={excludeItems}
+                  itemComponent={DataCard}
+                  dragComponent={Node}
+                  sortOptions={sortOptions}
+                  searchOptions={fuseOptions}
+                  accepts={({ meta: { itemType } }) => itemType !== 'SOURCE_NODES'}
+                  onDrop={handleRemoveNode}
+                  dropNodeColor={dropNodeColor}
+                />
+              </div>
+              <div className="name-generator-roster-interface__node-panel">
+                <Panel
+                  title="Added"
+                  noHighlight
+                  noCollapse
+                >
+                  <div className="name-generator-roster-interface__node-list">
+                    <List
+                      id="node-list"
+                      className={nodeListClasses}
+                      itemType="ADDED_NODES"
+                      accepts={({ meta: { itemType } }) => itemType !== 'ADDED_NODES'}
+                      onDrop={handleAddNode}
+                      items={nodesForPrompt.map(
+                        (item) => ({
+                          id: item._uid, // eslint-disable-line no-underscore-dangle
+                          data: item,
+                          props: item,
+                        }),
+                      )}
+                      itemComponent={Node}
+                    />
+                    <AnimatePresence>
+                      { willAccept && (
+                        <DropOverlay
+                          isOver={isOver}
+                          nodeColor={dropNodeColor}
+                          message="Drop here to add"
+                        />
+                      )}
+                    </AnimatePresence>
+                  </div>
+                </Panel>
+              </div>
+            </motion.div>
+          </>
+        )}
       </AnimatePresence>
     </div>
   );
 };
 
-NameGeneratorList.propTypes = {
+NameGeneratorRoster.propTypes = {
   prompt: PropTypes.object.isRequired,
   stage: PropTypes.object.isRequired,
 };
 
-NameGeneratorList.defaultProps = {
+NameGeneratorRoster.defaultProps = {
 
 };
 
 export default compose(
   withPrompt,
-)(NameGeneratorList);
+)(NameGeneratorRoster);

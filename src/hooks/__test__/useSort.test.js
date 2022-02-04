@@ -47,7 +47,7 @@ const TestConsumer = ({ list, initialSortOrder }) => {
     sortByProperty,
     sortDirection,
     updateSortByProperty,
-    toggleSortDirection,
+    setSortDirection,
   ] = useSort(
     list,
     initialSortOrder,
@@ -60,7 +60,7 @@ const TestConsumer = ({ list, initialSortOrder }) => {
         sortByProperty,
         sortDirection,
         updateSortByProperty,
-        toggleSortDirection,
+        setSortDirection,
       }}
     />
   );
@@ -80,14 +80,14 @@ describe('useSort', () => {
       sortByProperty,
       sortDirection,
       updateSortByProperty,
-      toggleSortDirection,
+      setSortDirection,
     } = subject.find('div').prop('useSort');
 
     expect(sortedList).toBeInstanceOf(Array);
     expect(sortByProperty).toEqual(sortOrder.property);
     expect(sortDirection).toEqual(sortOrder.direction);
     expect(updateSortByProperty).toBeInstanceOf(Function);
-    expect(toggleSortDirection).toBeInstanceOf(Function);
+    expect(setSortDirection).toBeInstanceOf(Function);
   });
 
   it('can toggle direction', () => {
@@ -100,13 +100,13 @@ describe('useSort', () => {
 
     const {
       sortedList,
-      toggleSortDirection,
+      setSortDirection,
       sortDirection: initialSortDirection,
     } = subject.find('div').prop('useSort');
 
     expect(initialSortDirection).toEqual('desc');
 
-    toggleSortDirection();
+    setSortDirection('asc');
 
     subject.update();
 

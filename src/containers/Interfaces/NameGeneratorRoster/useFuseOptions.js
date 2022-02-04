@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { get, compact } from 'lodash';
+import { get, compact, isEmpty } from 'lodash';
 
 const defaultFuseOptions = {
   keys: [['props', 'label']],
@@ -14,7 +14,7 @@ const useFuseOptions = (searchOptions, fallbackFuseOptions = defaultFuseOptions,
   const matchProperties = get(searchOptions, 'matchProperties');
   const fuzziness = get(searchOptions, 'fuzziness');
 
-  if (!searchOptions) {
+  if (!searchOptions || isEmpty(searchOptions)) {
     return fallbackFuseOptions;
   }
 

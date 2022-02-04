@@ -1,4 +1,5 @@
 export { default as Card } from './Card';
+export { default as CardList } from './CardList';
 export { default as FilterableListWrapper } from './FilterableListWrapper';
 export { default as NewFilterableListWrapper } from './NewFilterableListWrapper';
 export { default as Edge } from './Edge';

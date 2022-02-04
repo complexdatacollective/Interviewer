@@ -1,66 +1,61 @@
+/* eslint-disable no-nested-ternary */
 import React, {
   useContext,
   useMemo,
   useCallback,
-  useState,
 } from 'react';
+import { compose } from 'recompose';
+import { AnimatePresence, motion } from 'framer-motion';
+import { renderToString } from 'react-dom/server';
 import PropTypes from 'prop-types';
 import AutoSizer from 'react-virtualized-auto-sizer';
-import { motion, useReducedMotion } from 'framer-motion';
-import { VariableSizeGrid as Grid } from 'react-window';
-import { compose } from 'recompose';
-import uuid from 'uuid';
+import { VariableSizeList as List } from 'react-window';
 import cx from 'classnames';
-import { isNil } from 'lodash';
-import useGridSizer from './useGridSizer';
 import { DragSource, DropTarget, MonitorDropTarget } from '../../behaviours/DragAndDrop';
-import useAnimationSettings from '../../hooks/useAnimationSettings';
-import useDebounce from '../../hooks/useDebounce';
 
-const SCROLL_BORDER = 14; // ~1rem
+const LargeRosterNotice = () => (
+  <div
+    className="large-roster-notice__wrapper"
+    style={{
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      height: '100%',
+      width: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    }}
+  >
+    <motion.div
+      className="large-roster-notice"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <h2>Too many items to display.</h2>
+      <p>Use the search feature to see results here.</p>
+    </motion.div>
+  </div>
+);
 
-const ListContext = React.createContext({ items: [], columns: 0 });
+const GUTTER_SIZE = 14;
+
+const ListContext = React.createContext({ items: [] });
 
 const NoopComponent = () => null;
 
-const getDataIndex = (columns, { rowIndex, columnIndex }) => (
-  (rowIndex * columns) + columnIndex
-);
-
-const variants = {
-  visible: {
-    scale: 1,
-    opacity: 1,
-  },
-  hidden: {
-    scale: 0,
-    opacity: 0.5,
-  },
-};
-
-const reducedMotionVariants = {
-  visible: { opacity: 1 },
-  hidden: { opacity: 0 },
-};
-
-const getCellRenderer = (Component, DragComponent) => ({
-  columnIndex,
-  rowIndex,
+const getRowRenderer = (Component, DragComponent) => ({
+  index,
   style,
 }) => {
-  const { duration, easing } = useAnimationSettings();
-
   const {
     items,
-    columns,
     itemType,
     dynamicProperties,
   } = useContext(ListContext);
 
-  const dataIndex = getDataIndex(columns, { rowIndex, columnIndex });
-
-  const item = items[dataIndex];
-  const reducedMotion = useReducedMotion();
+  const item = items[index];
 
   if (!item) { return null; }
 
@@ -69,22 +64,20 @@ const getCellRenderer = (Component, DragComponent) => ({
 
   const isDisabled = disabled && disabled.includes(id);
 
-  const cellVariants = reducedMotion
-    ? reducedMotionVariants
-    : variants;
-
   const preview = DragComponent
     ? <DragComponent {...data} />
     : null;
 
   return (
-    <motion.div
+    <div
       className="hyper-list__item"
-      style={style}
-      initial="hidden"
-      animate="visible"
-      transition={{ duration: duration.standard, easing }}
-      variants={cellVariants}
+      style={{
+        ...style,
+        left: style.left + GUTTER_SIZE,
+        top: style.top + GUTTER_SIZE,
+        width: `calc(${style.width} - ${(GUTTER_SIZE * 2)}px)`,
+        height: style.height - GUTTER_SIZE,
+      }}
       key={id}
     >
       <Component
@@ -94,7 +87,7 @@ const getCellRenderer = (Component, DragComponent) => ({
         allowDrag={!isDisabled}
         preview={preview}
       />
-    </motion.div>
+    </div>
   );
 };
 
@@ -125,71 +118,54 @@ const HyperList = ({
   dynamicProperties,
   itemComponent: ItemComponent,
   dragComponent: DragComponent,
-  columns,
-  itemType,
   emptyComponent: EmptyComponent,
   placeholder,
-  willAccept,
-  isOver,
+  itemType,
+  showTooMany,
 }) => {
-  const [width, setWidth] = useState(0);
-  const debouncedWidth = useDebounce(width, 1000);
-  const columnCount = useMemo(() => {
-    if (!debouncedWidth) { return 1; }
-    return typeof columns === 'number'
-      ? columns
-      : columns(debouncedWidth);
-  }, [columns, debouncedWidth]);
+  const RowRenderer = useMemo(
+    () => getRowRenderer(DragSource(ItemComponent), DragComponent),
+    [ItemComponent, DragComponent],
+  );
+
+  const context = useMemo(() => ({
+    items,
+    dynamicProperties,
+    itemType,
+  }), [items, dynamicProperties, itemType]);
+
+  const classNames = cx(
+    'hyper-list',
+    className,
+  );
 
   const SizeRenderer = useCallback((props) => (
     <div className="hyper-list__item"><ItemComponent {...props} /></div>
   ), [ItemComponent]);
 
-  const [gridProps, ready] = useGridSizer(SizeRenderer, items, columnCount, debouncedWidth);
+  const getItemSize = (item, listWidth) => {
+    if (!listWidth) { return 0; }
 
-  const handleResize = useCallback(
-    ({ width: newWidth }) => setWidth(newWidth - SCROLL_BORDER),
-    [setWidth],
-  );
+    const itemData = items[item];
+    const { props } = itemData;
+    const newHiddenSizingEl = document.createElement('div');
 
-  const itemKey = useCallback((index) => {
-    const dataIndex = getDataIndex(columnCount, index);
+    newHiddenSizingEl.style.position = 'absolute';
+    newHiddenSizingEl.style.top = '0';
+    newHiddenSizingEl.style.width = `${listWidth - (GUTTER_SIZE * 2) - 14}px`; // Additional 14 for scrollbar
+    newHiddenSizingEl.style.pointerEvents = 'none';
 
-    // If last row is shorter than number of columns
-    if (dataIndex >= items.length) { return null; }
+    newHiddenSizingEl.style.visibility = 'hidden';
 
-    const key = items[dataIndex] && items[dataIndex].id;
+    document.body.appendChild(newHiddenSizingEl);
+    newHiddenSizingEl.innerHTML = renderToString(<SizeRenderer {...props} />);
+    const height = newHiddenSizingEl.clientHeight;
+    document.body.removeChild(newHiddenSizingEl);
 
-    if (isNil(key)) {
-      // Something went wrong, this is a failsafe but will force a rerender every time
-      console.debug('`itemKey()` returned undefined in `<HyperList />`'); // eslint-disable-line no-console
-      return uuid();
-    }
+    return height + GUTTER_SIZE;
+  };
 
-    return key;
-  }, [columnCount, items]);
-
-  const CellRenderer = useMemo(
-    () => getCellRenderer(DragSource(ItemComponent), DragComponent),
-    [ItemComponent, DragComponent, columnCount],
-  );
-
-  const context = useMemo(() => ({
-    items,
-    columns: columnCount,
-    dynamicProperties,
-    itemType,
-  }), [items, columnCount, dynamicProperties, itemType]);
-
-  const classNames = cx(
-    'hyper-list',
-    className,
-    { 'hyper-list--drag': willAccept },
-    { 'hyper-list--hover': willAccept && isOver },
-  );
-
-  // const showOverlay = !!OverlayComponent;
-  // If placeholder is provider it supercedes everything
+  // If placeholder is provider it supersedes everything
   const showPlaceholder = !!placeholder;
   // If items is provided but is empty show the empty component
   const showEmpty = !placeholder && items && items.length === 0;
@@ -197,36 +173,50 @@ const HyperList = ({
   const showResults = !placeholder && items && items.length > 0;
 
   return (
-    <div className={classNames}>
-      <ListContext.Provider value={context}>
-        <div className="hyper-list__container">
-          <div className="hyper-list__sizer">
-            { showPlaceholder && placeholder }
-            { showEmpty && <EmptyComponent />}
-            <AutoSizer onResize={handleResize}>
-              {(containerSize) => {
-                // If auto sizer is not ready, items would be sized incorrectly
-                if (!ready) { return null; }
-
-                if (!showResults) { return null; }
-
-                return (
-                  <Grid
-                    className="hyper-list__grid"
-                    height={containerSize.height}
-                    width={containerSize.width}
-                    itemKey={itemKey}
-                    {...gridProps}
-                  >
-                    {CellRenderer}
-                  </Grid>
-                );
-              }}
-            </AutoSizer>
+    <>
+      <motion.div
+        className={classNames}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      >
+        <ListContext.Provider value={context}>
+          <div className="hyper-list__container">
+            <div className="hyper-list__sizer">
+              <AnimatePresence exitBeforeEnter>
+                { showPlaceholder ? placeholder : (
+                  showEmpty ? <EmptyComponent /> : (
+                    <AutoSizer>
+                      {(containerSize) => {
+                        if (!showResults) { return null; }
+                        return (
+                          <List
+                            key={containerSize.width}
+                            className="hyper-list__grid"
+                            height={containerSize.height}
+                            width={containerSize.width}
+                            itemSize={(item) => getItemSize(item, containerSize.width)}
+                            estimatedItemSize={getItemSize(0)}
+                            itemCount={items.length}
+                          >
+                            {RowRenderer}
+                          </List>
+                        );
+                      }}
+                    </AutoSizer>
+                  )
+                )}
+              </AnimatePresence>
+            </div>
           </div>
-        </div>
-      </ListContext.Provider>
-    </div>
+        </ListContext.Provider>
+      </motion.div>
+      <AnimatePresence>
+        { showTooMany && (
+          <LargeRosterNotice />
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 
@@ -234,11 +224,6 @@ HyperList.propTypes = {
   itemComponent: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
   emptyComponent: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
   placeholder: PropTypes.node,
-  columns: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.func,
-  ]),
-  rowHeight: PropTypes.number,
   itemType: PropTypes.string,
 };
 
@@ -246,8 +231,6 @@ HyperList.defaultProps = {
   itemComponent: NoopComponent,
   emptyComponent: NoopComponent,
   placeholder: null,
-  columns: 2,
-  rowHeight: 300,
   itemType: 'HYPER_LIST',
 };
 

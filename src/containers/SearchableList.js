@@ -1,10 +1,10 @@
-import React, { useMemo, useRef } from 'react';
+/* eslint-disable @codaco/spellcheck/spell-checker */
+import React, { useEffect, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
 import uuid from 'uuid';
 import cx from 'classnames';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { isEqual, get } from 'lodash';
-import { Button, Node } from '@codaco/ui';
 import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
 import Search from '@codaco/ui/lib/components/Fields/Search';
 import Loading from '../components/Loading';
@@ -12,8 +12,32 @@ import Panel from '../components/Panel';
 import useSort from '../hooks/useSort';
 import useSearch from '../hooks/useSearch';
 import HyperList from './HyperList';
-import useAnimationSettings from '../hooks/useAnimationSettings';
 import useDropMonitor from '../behaviours/DragAndDrop/useDropMonitor';
+import DropOverlay from './Interfaces/NameGeneratorRoster/DropOverlay';
+
+const SortButton = ({
+  setSortByProperty,
+  variable,
+  color,
+  label,
+  isActive,
+  sortDirection,
+}) => (
+  <div
+    tabIndex={0}
+    role="button"
+    className={`filter-button ${isActive ? 'filter-button--active' : ''}`}
+    onClick={() => setSortByProperty(variable)}
+    key={variable}
+    color={color}
+  >
+    {label}
+
+    {isActive && (
+      sortDirection === 'asc' ? ' \u25B2' : ' \u25BC'
+    )}
+  </div>
+);
 
 const modes = {
   LARGE: 'LARGE',
@@ -21,49 +45,15 @@ const modes = {
 };
 
 const EmptyComponent = () => (
-  <div className="searchable-list__placeholder">
-    No results.
-  </div>
+  <motion.div
+    className="searchable-list__placeholder"
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+  >
+    <h2>Nothing matched your search term.</h2>
+  </motion.div>
 );
-
-const DropOverlay = ({ isOver, nodeColor }) => {
-  const { duration } = useAnimationSettings();
-
-  const variants = {
-    visible: { opacity: 1, transition: { duration: duration.standard } },
-    hidden: { opacity: 0, transition: { duration: duration.standard } },
-  };
-
-  const iconVariants = {
-    over: {
-      opacity: [1, 0.5],
-      transition: { duration: duration.slow, repeat: Infinity, repeatType: 'reverse' },
-    },
-    initial: {
-      scale: 1,
-      transition: { duration: duration.fast },
-    },
-  };
-
-  return (
-    <motion.div
-      className="searchable-list__overlay"
-      variants={variants}
-      initial="hidden"
-      animate="visible"
-      exit="hidden"
-    >
-      <motion.div
-        variants={iconVariants}
-        initial="initial"
-        animate={isOver ? 'over' : 'initial'}
-      >
-        <Node label="" color={nodeColor} />
-      </motion.div>
-      <p>Drop here to remove from network</p>
-    </motion.div>
-  );
-};
 
 /**
   * SearchableList
@@ -71,22 +61,24 @@ const DropOverlay = ({ isOver, nodeColor }) => {
   * This adds UI around the HyperList component which enables
   * sorting and searching.
   */
-const SearchableList = ({
-  accepts,
-  columns,
-  title,
-  dynamicProperties,
-  excludeItems,
-  itemComponent,
-  dragComponent,
-  items,
-  placeholder,
-  itemType,
-  onDrop,
-  searchOptions,
-  sortOptions,
-  dropNodeColor,
-}) => {
+const SearchableList = (props) => {
+  const {
+    accepts,
+    columns,
+    title,
+    dynamicProperties,
+    excludeItems,
+    itemComponent,
+    dragComponent,
+    items,
+    placeholder,
+    itemType,
+    onDrop,
+    searchOptions,
+    sortOptions,
+    dropNodeColor,
+  } = props;
+
   const id = useRef(uuid());
   const [results, query, setQuery, isWaiting, hasQuery] = useSearch(items, searchOptions);
 
@@ -95,7 +87,18 @@ const SearchableList = ({
     sortByProperty,
     sortDirection,
     setSortByProperty,
+    setSortDirection,
   ] = useSort(results, sortOptions.initialSortOrder);
+
+  useEffect(() => {
+    if (hasQuery) {
+      setSortByProperty(['relevance']);
+      setSortDirection('desc');
+      return;
+    }
+
+    setSortByProperty();
+  }, [hasQuery]);
 
   const filteredResults = useMemo(
     () => {
@@ -104,9 +107,6 @@ const SearchableList = ({
     },
     [sortedResults, excludeItems],
   );
-
-  const { isOver, willAccept } = useDropMonitor(`hyper-list-${id}`)
-    || { isOver: false, willAccept: false };
 
   const handleChangeSearch = (eventOrValue) => {
     const value = get(eventOrValue, ['target', 'value'], eventOrValue);
@@ -118,9 +118,14 @@ const SearchableList = ({
   const hyperListPlaceholder = placeholder || (
     isWaiting
       ? (
-        <div className="searchable-list__placeholder">
-          <Loading message="searching..." />
-        </div>
+        <motion.div
+          className="searchable-list__placeholder"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <Loading message="Searching..." small />
+        </motion.div>
       )
       : null
   );
@@ -141,6 +146,8 @@ const SearchableList = ({
     { 'searchable-list__list--too-many': showTooMany },
   );
 
+  const { willAccept, isOver } = useDropMonitor(`hyper-list-${id.current}`) || { willAccept: false, isOver: false };
+
   return (
     <motion.div
       variants={variants}
@@ -153,9 +160,45 @@ const SearchableList = ({
         noHighlight
         noCollapse
       >
+        { canSort && (
+          <div className="searchable-list__sort">
+            {
+              hasQuery && (
+                <div
+                  className={`filter-button ${isEqual(sortByProperty, ['relevance']) ? 'filter-button--active' : ''}`}
+                  onClick={() => {
+                    setSortByProperty(['relevance']);
+                  }}
+                  role="button"
+                  tabIndex={0}
+                >
+                  Relevance
+                  {isEqual(sortByProperty, ['relevance']) && (
+                    sortDirection === 'asc' ? ' \u25B2' : ' \u25BC'
+                  )}
+                </div>
+              )
+            }
+            {sortOptions.sortableProperties.map(({ variable, label }) => {
+              const isActive = isEqual(variable, sortByProperty);
+              const color = isActive ? 'primary' : 'platinum';
+              return (
+                <SortButton
+                  key={variable}
+                  variable={variable}
+                  setSortByProperty={setSortByProperty}
+                  color={color}
+                  label={label}
+                  isActive={isActive}
+                  sortDirection={sortDirection}
+                />
+              );
+            })}
+          </div>
+        )}
         <div className={listClasses}>
           <HyperList
-            id={`hyper-list-${id}`}
+            id={`hyper-list-${id.current}`}
             items={filteredResults}
             dynamicProperties={dynamicProperties}
             itemComponent={itemComponent}
@@ -166,37 +209,16 @@ const SearchableList = ({
             itemType={itemType} // drop type
             accepts={accepts}
             onDrop={onDrop}
+            showTooMany={showTooMany}
           />
-          { showTooMany && (
-            <div
-              className={`searchable-list__too-many ${willAccept && 'searchable-list__too-many--no-text'}`}
-            >
-              <h2>Too many to display. Filter the list below, to see results.</h2>
-            </div>
+          { willAccept && (
+          <DropOverlay
+            isOver={isOver}
+            nodeColor={dropNodeColor}
+            message="Drop here to remove"
+          />
           )}
         </div>
-        { canSort && (
-          <div className="searchable-list__sort">
-            {sortOptions.sortableProperties.map(({ variable, label }) => {
-              const isActive = isEqual(variable, sortByProperty);
-              const color = isActive ? 'primary' : 'platinum';
-              return (
-                <Button
-                  onClick={() => setSortByProperty(variable)}
-                  type="button"
-                  key={variable}
-                  color={color}
-                >
-                  {label}
-
-                  {isActive && (
-                    sortDirection === 'asc' ? ' \u25B2' : ' \u25BC'
-                  )}
-                </Button>
-              );
-            })}
-          </div>
-        )}
         <div className="searchable-list__search">
           <Search
             placeholder="Enter a search term..."
@@ -206,11 +228,6 @@ const SearchableList = ({
             }}
           />
         </div>
-        <AnimatePresence>
-          { willAccept && (
-            <DropOverlay isOver={isOver} nodeColor={dropNodeColor} />
-          )}
-        </AnimatePresence>
       </Panel>
     </motion.div>
   );

@@ -9,6 +9,7 @@ import { convertNamesToUUIDs } from './helpers';
 const useSortableProperties = (variableDefinitions, sortOptions, path = ['data', 'attributes']) => {
   const sortableProperties = get(sortOptions, 'sortableProperties');
   const initialSortOrder = get(sortOptions, ['sortOrder', 0]);
+  const initialSortProperty = get(initialSortOrder, 'property');
 
   if (!sortOptions) {
     return { sortableProperties: [], initialSortOrder: undefined };
@@ -16,7 +17,7 @@ const useSortableProperties = (variableDefinitions, sortOptions, path = ['data',
 
   const enhancedInitialSortOrder = useMemo(
     () => {
-      const property = convertNamesToUUIDs(variableDefinitions, initialSortOrder.property);
+      const property = convertNamesToUUIDs(variableDefinitions, initialSortProperty);
       return {
         ...initialSortOrder,
         property: compact([...path, property]),

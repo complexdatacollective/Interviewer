@@ -3,15 +3,15 @@ import React, {
   useState,
   useCallback,
   useRef,
+  useMemo,
 } from 'react';
 import PropTypes from 'prop-types';
-import cx from 'classnames';
+import { AnimatePresence, motion } from 'framer-motion';
 import { debounce } from 'lodash';
 import { connect } from 'react-redux';
-import { Scroller } from '@codaco/ui';
+import { Icon, Scroller } from '@codaco/ui';
 import { Markdown } from '@codaco/ui/lib/components/Fields';
 import { submit, isValid, isDirty } from 'redux-form';
-import { isIOS } from '../../utils/Environment';
 import Form from '../Form';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { getNetworkEgo } from '../../selectors/network';
@@ -20,6 +20,13 @@ import { entityAttributesProperty } from '../../ducks/modules/network';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import useReadyForNextStage from '../../hooks/useReadyForNextStage';
 import useFlipflop from '../../hooks/useFlipflop';
+
+export const elementHasOverflow = ({
+  clientWidth,
+  clientHeight,
+  scrollWidth,
+  scrollHeight,
+}) => scrollHeight > clientHeight || scrollWidth > clientWidth;
 
 const confirmDialog = {
   type: 'Confirm',
@@ -45,8 +52,11 @@ const EgoForm = ({
   updateEgo,
 }) => {
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [showScrollStatus, setShowScrollStatus] = useFlipflop(true, 7000, false);
+  const [isOverflowing, setIsOverflowing] = useState(false);
+
   const [, setIsReadyForNext] = useReadyForNextStage();
-  const [showScrollStatus, setShowScrollStatus] = useFlipflop(true, 7000);
+
   const formState = useRef({
     isFormDirty,
     isFormValid,
@@ -58,6 +68,14 @@ const EgoForm = ({
       isFormValid,
     };
   }, [isFormDirty, isFormValid]);
+
+  // Detect if the scrollable element has overflowing content
+  useEffect(() => {
+    const element = document.querySelector('.ego-form__form-container-scroller');
+    if (!element) { return; }
+
+    setIsOverflowing(elementHasOverflow(element));
+  }, []);
 
   const submitForm = () => {
     reduxFormSubmit(formName);
@@ -126,12 +144,9 @@ const EgoForm = ({
     if (!isFormValid) { setIsReadyForNext(false); }
   }, [isFormValid]);
 
-  const progressClasses = cx(
-    'progress-container',
-    'progress-container--status-only',
-    {
-      'progress-container--show': !isIOS() && scrollProgress !== 1 && showScrollStatus,
-    },
+  const showScrollNudge = useMemo(
+    () => scrollProgress !== 1 && showScrollStatus && isOverflowing,
+    [scrollProgress, showScrollStatus, isOverflowing],
   );
 
   return (
@@ -150,12 +165,39 @@ const EgoForm = ({
             form={formName}
             subject={{ entity: 'ego' }}
             onSubmit={handleSubmitForm}
+            onChange={() => {
+              // Reset the scroll nudge timeout each time a form field is changed
+              setShowScrollStatus(false);
+            }}
           />
         </Scroller>
       </div>
-      <div className={progressClasses}>
-        Scroll to see more questions...
-      </div>
+      <AnimatePresence>
+        { showScrollNudge && (
+          <motion.div
+            className="scroll-nudge"
+            initial={{ opacity: 0, y: '100%' }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: '100%' }}
+          >
+            <h5>
+              Scroll to see more questions
+            </h5>
+            <motion.div
+              animate={{
+                y: [0, 7, 0, 7, 0],
+              }}
+              transition={{
+                duration: 2,
+                loop: Infinity,
+                ease: 'easeInOut',
+              }}
+            >
+              <Icon name="chevron-down" />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
