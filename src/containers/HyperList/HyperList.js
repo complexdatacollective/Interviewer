@@ -143,8 +143,8 @@ const HyperList = ({
     <div className="hyper-list__item"><ItemComponent {...props} /></div>
   ), [ItemComponent]);
 
-  const getItemSize = (item, width) => {
-    if (!width) { return 0; }
+  const getItemSize = (item, listWidth) => {
+    if (!listWidth) { return 0; }
 
     const itemData = items[item];
     const { props } = itemData;
@@ -152,7 +152,7 @@ const HyperList = ({
 
     newHiddenSizingEl.style.position = 'absolute';
     newHiddenSizingEl.style.top = '0';
-    newHiddenSizingEl.style.width = width - (GUTTER_SIZE * 2);
+    newHiddenSizingEl.style.width = `${listWidth - (GUTTER_SIZE * 2) - 14}px`; // Additional 14 for scrollbar
     newHiddenSizingEl.style.pointerEvents = 'none';
 
     newHiddenSizingEl.style.visibility = 'hidden';
@@ -191,6 +191,7 @@ const HyperList = ({
                         if (!showResults) { return null; }
                         return (
                           <List
+                            key={containerSize.width}
                             className="hyper-list__grid"
                             height={containerSize.height}
                             width={containerSize.width}
