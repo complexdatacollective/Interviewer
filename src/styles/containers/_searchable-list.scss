@@ -29,19 +29,7 @@ $sort-height: 3.2rem;
 
     .hyper-list {
       flex: 1;
-      padding: 0 0 $search-height;
       height: 100%;
-    }
-
-    &--can-sort {
-      .hyper-list {
-        padding-top: $sort-height;
-      }
-
-      .searchable-list__too-many {
-        top: calc(#{$sort-height});
-        height: calc(100% - #{$sort-height} - #{$search-height} + 2rem);
-      }
     }
 
     &--too-many {
@@ -54,20 +42,11 @@ $sort-height: 3.2rem;
     }
   }
 
-  .panel {
-    &__content {
-      position: relative;
-    }
-  }
-
   &__sort {
-    position: absolute;
-    top: 0;
-    left: 0;
+    flex: 0 0 auto;
     width: 100%;
     display: inline-flex;
     overflow-x: auto;
-    height: 3rem;
     overflow-y: hidden;
     align-items: center;
     border-bottom: 0.1em solid var(--background);
@@ -87,12 +66,12 @@ $sort-height: 3.2rem;
   }
 
   &__search {
+    flex: 0 0 auto;
+    background: var(--panel-bg-muted);
     border-top: 0.1rem solid var(--background);
     padding: 1rem;
-    position: absolute;
-    bottom: 0;
-    left: 0;
     width: 100%;
+    z-index: var(--z-panel);
 
     .form-field-container {
       margin: 0;

@@ -160,22 +160,6 @@ const SearchableList = (props) => {
         noHighlight
         noCollapse
       >
-        <div className={listClasses}>
-          <HyperList
-            id={`hyper-list-${id.current}`}
-            items={filteredResults}
-            dynamicProperties={dynamicProperties}
-            itemComponent={itemComponent}
-            dragComponent={dragComponent}
-            columns={columns}
-            emptyComponent={EmptyComponent}
-            placeholder={hyperListPlaceholder}
-            itemType={itemType} // drop type
-            accepts={accepts}
-            onDrop={onDrop}
-            showTooMany={showTooMany}
-          />
-        </div>
         { canSort && (
           <div className="searchable-list__sort">
             {
@@ -212,6 +196,29 @@ const SearchableList = (props) => {
             })}
           </div>
         )}
+        <div className={listClasses}>
+          <HyperList
+            id={`hyper-list-${id.current}`}
+            items={filteredResults}
+            dynamicProperties={dynamicProperties}
+            itemComponent={itemComponent}
+            dragComponent={dragComponent}
+            columns={columns}
+            emptyComponent={EmptyComponent}
+            placeholder={hyperListPlaceholder}
+            itemType={itemType} // drop type
+            accepts={accepts}
+            onDrop={onDrop}
+            showTooMany={showTooMany}
+          />
+          { willAccept && (
+          <DropOverlay
+            isOver={isOver}
+            nodeColor={dropNodeColor}
+            message="Drop here to remove"
+          />
+          )}
+        </div>
         <div className="searchable-list__search">
           <Search
             placeholder="Enter a search term..."
@@ -221,13 +228,6 @@ const SearchableList = (props) => {
             }}
           />
         </div>
-        { willAccept && (
-          <DropOverlay
-            isOver={isOver}
-            nodeColor={dropNodeColor}
-            message="Drop here to remove"
-          />
-        )}
       </Panel>
     </motion.div>
   );
