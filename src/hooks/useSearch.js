@@ -6,13 +6,12 @@ import {
   useCallback,
 } from 'react';
 import Fuse from 'fuse.js';
-import { debounce } from 'lodash';
 
 const MIN_QUERY_LENGTH = 1;
 const DEBOUNCE_DELAY = 500;
 
 const defaultFuseOptions = {
-  minMatchCharLength: 2,
+  minMatchCharLength: 1,
   shouldSort: false,
   includeScore: true,
   ignoreLocation: true, // Search whole strings
@@ -20,8 +19,21 @@ const defaultFuseOptions = {
   useExtendedSearch: true,
 };
 
-// JRM: removed - see note in useSearch
 // Variation of useState which includes a debounced value
+/**
+ * TODO: This is not what was intended.
+ *
+ * The initial implementation debounced the query, but this just created
+ * an artificial delay to show a loading screen. What we wanted was to
+ * show a loading screen _if necessary_ while search results came back.
+ *
+ * The correct way to implement this is going to be to move fuse to a
+ * webworker, and develop a messaging system for data and results.
+ *
+ * This could be done as part of pre-processing assets at the start of
+ * the interview. A worker could be created for each network asset,
+ * which optionally exposes search and sort methods
+ */
 // const useQuery = (initialQuery, delay = DEBOUNCE_DELAY) => {
 //   const [query, setQuery] = useState(initialQuery);
 //   const debouncedQuery = useDebounce(query, delay);
@@ -49,31 +61,22 @@ const defaultFuseOptions = {
  */
 const useSearch = (list, options, initialQuery = '') => {
   const delayRef = useRef();
-  /**
-   * TODO: This is not what was intended.
-   *
-   * The initial implementation debounced the query, but this just created
-   * an artificial delay to show a loading screen. What we wanted was to
-   * show a loading screen _if necessary_ while search results came back.
-   *
-   * The correct way to implement this is going to be to move fuse to a
-   * webworker, and develop a messaging system for data and results.
-   *
-   * This could be done as part of pre-processing assets at the start of
-   * the interview. A worker could be created for each network asset,
-   * which optionally exposes search and sort methods
-   */
   const [query, setQuery] = useState(initialQuery);
   const [results, setResults] = useState(list);
   const [isWaiting, setIsWaiting] = useState(false);
 
-  const hasQuery = query.length >= MIN_QUERY_LENGTH;
+  const hasQuery = useMemo(() => query.length >= MIN_QUERY_LENGTH, [query]);
+  const isLargeList = useMemo(() => list.length > 100, [list]);
 
   const fuseOptions = { ...defaultFuseOptions, ...options };
+  const fuse = useMemo(() => new Fuse(list, fuseOptions), [list, fuseOptions]);
 
-  const search = (_query) => {
-    clearTimeout(delayRef.current);
-    const fuse = new Fuse(list, fuseOptions);
+  const search = useCallback((_query) => {
+    if (isLargeList) {
+      clearTimeout(delayRef.current);
+      setIsWaiting(true);
+    }
+
     const res = fuse.search(_query);
 
     const r = res.map(({ item, score }) => ({
@@ -81,33 +84,24 @@ const useSearch = (list, options, initialQuery = '') => {
       relevance: 1 - score, // fuseJS relevance is reverse nomalized (0 is perfect match)
     }));
 
-    if (list.length < 100) {
-      setResults(r);
-      setIsWaiting(false);
+    if (isLargeList) {
+      delayRef.current = setTimeout(() => {
+        setResults(r);
+        setIsWaiting(false);
+      }, DEBOUNCE_DELAY);
       return;
     }
 
     setResults(r);
     setIsWaiting(false);
-  };
-
-  useEffect(() => {
-    if (query.length < MIN_QUERY_LENGTH) { return; }
-    setIsWaiting(true);
-  }, [query]);
-
-  const debouncedSearch = useCallback(
-    debounce(search, DEBOUNCE_DELAY),
-    [],
-  );
+  }, [fuse, isLargeList]);
 
   useEffect(() => {
     if (!hasQuery) {
-      setIsWaiting(false);
       return;
     }
 
-    debouncedSearch(query);
+    search(query);
   }, [query]);
 
   const returnResults = useMemo(() => (

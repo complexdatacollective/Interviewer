@@ -75,8 +75,6 @@ const fileExtension = (fileName) => fileName.split('.').pop();
 const loadExternalData = (protocolUID, fileName, type) => new Promise((resolve, reject) => {
   const fileType = fileExtension(fileName) === 'csv' ? 'csv' : 'json';
 
-  // return reject(new Error('Nope'));
-
   switch (type) {
     case 'network':
       return getAssetUrl(protocolUID, fileName)
