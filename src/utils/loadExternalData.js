@@ -81,7 +81,8 @@ const loadExternalData = (protocolUID, fileName, type) => new Promise((resolve, 
     case 'network':
       return getAssetUrl(protocolUID, fileName)
         .then((url) => fetchNetwork(url, fileType))
-        .then(resolve);
+        .then(resolve)
+        .catch(reject(new Error('There was an error fetching this resource.')));
     default:
       return reject(new Error('You must specify an external data type.'));
   }
