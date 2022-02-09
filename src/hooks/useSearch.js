@@ -3,16 +3,15 @@ import {
   useState,
   useEffect,
   useRef,
+  useCallback,
 } from 'react';
 import Fuse from 'fuse.js';
-import useDebounce from './useDebounce';
 
 const MIN_QUERY_LENGTH = 1;
-const SEARCH_DELAY = 0;
-const DEBOUNCE_DELAY = 200;
+const DEBOUNCE_DELAY = 500;
 
 const defaultFuseOptions = {
-  minMatchCharLength: 2,
+  minMatchCharLength: 1,
   shouldSort: false,
   includeScore: true,
   ignoreLocation: true, // Search whole strings
@@ -35,12 +34,12 @@ const defaultFuseOptions = {
  * the interview. A worker could be created for each network asset,
  * which optionally exposes search and sort methods
  */
-const useQuery = (initialQuery, delay = DEBOUNCE_DELAY) => {
-  const [query, setQuery] = useState(initialQuery);
-  const debouncedQuery = useDebounce(query, delay);
+// const useQuery = (initialQuery, delay = DEBOUNCE_DELAY) => {
+//   const [query, setQuery] = useState(initialQuery);
+//   const debouncedQuery = useDebounce(query, delay);
 
-  return [debouncedQuery, setQuery, query];
-};
+//   return [debouncedQuery, setQuery, query];
+// };
 
 /**
  * useSearch
@@ -62,18 +61,22 @@ const useQuery = (initialQuery, delay = DEBOUNCE_DELAY) => {
  */
 const useSearch = (list, options, initialQuery = '') => {
   const delayRef = useRef();
-  const [query, setQuery, displayQuery] = useQuery(initialQuery);
+  const [query, setQuery] = useState(initialQuery);
   const [results, setResults] = useState(list);
   const [isWaiting, setIsWaiting] = useState(false);
 
-  const hasQuery = query.length >= MIN_QUERY_LENGTH;
+  const hasQuery = useMemo(() => query.length >= MIN_QUERY_LENGTH, [query]);
+  const isLargeList = useMemo(() => list.length > 100, [list]);
 
   const fuseOptions = { ...defaultFuseOptions, ...options };
+  const fuse = useMemo(() => new Fuse(list, fuseOptions), [list, fuseOptions]);
 
-  const search = (_query) => {
-    clearTimeout(delayRef.current);
-    const startTime = new Date();
-    const fuse = new Fuse(list, fuseOptions);
+  const search = useCallback((_query) => {
+    if (isLargeList) {
+      clearTimeout(delayRef.current);
+      setIsWaiting(true);
+    }
+
     const res = fuse.search(_query);
 
     const r = res.map(({ item, score }) => ({
@@ -81,34 +84,17 @@ const useSearch = (list, options, initialQuery = '') => {
       relevance: 1 - score, // fuseJS relevance is reverse nomalized (0 is perfect match)
     }));
 
-    const endTime = new Date();
-    const delay = SEARCH_DELAY - (endTime - startTime);
-
-    if (list.length < 100) {
-      setResults(r);
-      setIsWaiting(false);
-      return;
-    }
-
-    if (delay > 0) {
+    if (isLargeList) {
       delayRef.current = setTimeout(() => {
         setResults(r);
         setIsWaiting(false);
-      }, delay);
+      }, DEBOUNCE_DELAY);
       return;
     }
 
     setResults(r);
     setIsWaiting(false);
-  };
-
-  useEffect(() => {
-    if (displayQuery.length < MIN_QUERY_LENGTH) {
-      setIsWaiting(false);
-      return;
-    }
-    setIsWaiting(true);
-  }, [displayQuery]);
+  }, [fuse, isLargeList]);
 
   useEffect(() => {
     if (!hasQuery) {
@@ -122,7 +108,7 @@ const useSearch = (list, options, initialQuery = '') => {
     hasQuery ? results : list
   ), [hasQuery, list, results]);
 
-  return [returnResults, displayQuery, setQuery, isWaiting, hasQuery];
+  return [returnResults, query, setQuery, isWaiting, hasQuery];
 };
 
 export default useSearch;

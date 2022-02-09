@@ -75,14 +75,11 @@ const fileExtension = (fileName) => fileName.split('.').pop();
 const loadExternalData = (protocolUID, fileName, type) => new Promise((resolve, reject) => {
   const fileType = fileExtension(fileName) === 'csv' ? 'csv' : 'json';
 
-  // return reject(new Error('Nope'));
-
   switch (type) {
     case 'network':
       return getAssetUrl(protocolUID, fileName)
         .then((url) => fetchNetwork(url, fileType))
-        .then(resolve)
-        .catch(reject(new Error('There was an error fetching this resource.')));
+        .then(resolve);
     default:
       return reject(new Error('You must specify an external data type.'));
   }
