@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 import { Button, Node } from '@codaco/ui';
+import { MarkdownLabel } from '@codaco/ui/lib/components/Fields';
 import Field from '../Field';
 
 const stopClickPropagation = (e) => e.stopPropagation();
@@ -20,7 +21,9 @@ const OtherVariableForm = ({
           <Node label={label} color={color} />
         </div>
         <div className="other-variable-form__content-right">
-          <h4>{otherVariablePrompt}</h4>
+          <h4>
+            <MarkdownLabel inline label={otherVariablePrompt} />
+          </h4>
           <Field
             label=""
             placeholder="Enter your response here..."
