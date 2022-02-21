@@ -43,6 +43,16 @@ npx node-gyp rebuild --target=9.0.0 --arch=x64 --dist-url=https://atom.io/downlo
 
 `target` must match the electron version installed by npm
 
+#### Linux MDNS
+
+On Debian like systems, you may need to enable ipv6 dns resolution. Do this by ensuring:
+
+```
+hosts: files mdns4_minimal mdns6_minimal [NOTFOUND=return] dns
+```
+
+Is added to to `/etc/msswitch.conf`.
+
 ### Troubleshooting
 
 - Native dependencies won't compile
@@ -52,6 +62,8 @@ npx node-gyp rebuild --target=9.0.0 --arch=x64 --dist-url=https://atom.io/downlo
 - Runtime error related to DLL initialization
   + Make sure the "rebuild" step above works
   + [More Info](https://github.com/electron/electron/blob/master/docs/tutorial/using-native-node-modules.md#using-native-node-modules)
+- MDNS doesn't work on linux (getaddr
+  + Try adding `hosts: files mdns4_minimal mdns6_minimal [NOTFOUND=return] dns` to `/etc/msswitch.conf` 
 
 ## Installation
 
