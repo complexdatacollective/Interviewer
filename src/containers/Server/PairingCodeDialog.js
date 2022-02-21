@@ -117,7 +117,7 @@ const PairingCodeDialog = (props) => {
   }, [server]);
 
   return (
-    <motion.div>
+    <motion.div className="pairing-content">
       {
         loading
           ? (
