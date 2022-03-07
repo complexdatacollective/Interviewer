@@ -222,6 +222,10 @@ function makeMapStateToProps() {
   return function mapStateToProps(state, props) {
     return {
       activePromptAttributes: get(props, ['prompt', 'additionalAttributes'], {}),
+      // eslint-disable-next-line @codaco/spellcheck/spell-checker
+      minNodes: get(props, ['behaviours', 'minNodes'], 0),
+      // eslint-disable-next-line @codaco/spellcheck/spell-checker
+      maxNodes: get(props, ['behaviours', 'maxNodes'], null),
       newNodeAttributes: getPromptNodeAttributes(state, props),
       newNodeModelData: getPromptNodeModelData(state, props),
       nodesForPrompt: networkNodesForPrompt(state, props),

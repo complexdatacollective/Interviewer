@@ -5,6 +5,11 @@
   display: flex;
   align-items: center;
 
+  &--disabled {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
   .quick-add-form {
     @include transition-properties((opacity transform), var(--animation-easing), var(--animation-duration-fast));
     width: 25rem;

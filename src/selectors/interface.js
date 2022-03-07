@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 
 import { createSelector } from 'reselect';
-import { filter, includes } from 'lodash';
+import { filter, includes, intersection } from 'lodash';
 import { assert, createDeepEqualSelector } from './utils';
 import { getProtocolCodebook } from './protocol';
 import { getNetwork, getNetworkEdges, getNetworkNodes } from './network';
@@ -138,6 +138,23 @@ export const makeNetworkNodesForType = () => createSelector(
   makeGetSubject(),
   (nodes, subject) => filter(nodes, ['type', subject.type]),
 );
+
+const stagePromptIds = (state, props) => {
+  const { prompts } = propStage(state, props);
+  return prompts.map((prompt) => prompt.id);
+};
+
+// makeNetworkNodesForStage()
+export const makeGetStageNodeCount = () => {
+  const getNetworkNodesForSubject = makeNetworkNodesForType();
+
+  return createSelector(
+    getNetworkNodesForSubject, stagePromptIds,
+    (nodes, promptIds) => filter(
+      nodes, (node) => intersection(node.promptIDs, promptIds).length > 0,
+    ).length,
+  );
+};
 
 /**
  * makeNetworkNodesForPrompt

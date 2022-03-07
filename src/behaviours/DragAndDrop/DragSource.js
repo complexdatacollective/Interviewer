@@ -110,7 +110,7 @@ const dragSource = (WrappedComponent) => ({
   const styles = () => (isDragging ? { visibility: 'hidden' } : {});
 
   return (
-    <div style={styles()} className="draggable" ref={node}>
+    <div style={styles()} className={`draggable ${!allowDrag ? 'draggable--disabled' : ''}`} ref={node}>
       <WrappedComponent
         {...rest}
         allowDrag={allowDrag}

@@ -123,6 +123,7 @@ class NodePanels extends PureComponent {
     const {
       stage,
       prompt,
+      disableAddNew,
     } = this.props;
 
     const {
@@ -138,6 +139,7 @@ class NodePanels extends PureComponent {
         key={index}
         prompt={prompt}
         stage={stage}
+        disableDragging={dataSource !== 'existing' && disableAddNew}
         dataSource={dataSource}
         filter={filter}
         accepts={() => this.isPanelCompatible(index)}

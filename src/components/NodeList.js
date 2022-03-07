@@ -94,6 +94,7 @@ class NodeList extends Component {
       meta,
       hoverColor,
       className,
+      disableDragging,
     } = this.props;
 
     const {
@@ -135,6 +136,7 @@ class NodeList extends Component {
             >
               <div onClick={() => onItemClick(node)}>
                 <EnhancedNode
+                  allowDrag={!disableDragging}
                   label={`${label(node)}`}
                   meta={() => ({ ...node, itemType })}
                   itemType={itemType}
@@ -150,6 +152,7 @@ class NodeList extends Component {
 }
 
 NodeList.propTypes = {
+  disableDragging: PropTypes.bool,
   className: PropTypes.string,
   hoverColor: PropTypes.string,
   id: PropTypes.string.isRequired,
@@ -167,6 +170,7 @@ NodeList.propTypes = {
 };
 
 NodeList.defaultProps = {
+  disableDragging: false,
   className: null,
   hoverColor: null,
   isDragging: false,
