@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+title: 'Network Canvas: Interviewer'
+message: Please cite this software using these metadata.
+type: software
+authors:
+  - given-names: Complex Data Collective
+    orcid: 'https://orcid.org/0000-0003-4329-8540'
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.6026548
+repository-code: >-
+  https://github.com/complexdatacollective/Interviewer
+url: 'https://networkcanvas.com'
