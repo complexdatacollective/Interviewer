@@ -263,7 +263,7 @@ function makeMapStateToProps() {
     return {
       activePromptAttributes: get(props, ['prompt', 'additionalAttributes'], {}),
       minNodes: get(props, ['stage', 'behaviours', 'minNodes'], 0),
-      maxNodes: get(props, ['stage', 'behaviours', 'maxNodes'], 2),
+      maxNodes: get(props, ['stage', 'behaviours', 'maxNodes'], undefined),
       stageNodeCount: getStageNodeCount(state, props),
       newNodeAttributes: getPromptNodeAttributes(state, props),
       newNodeModelData: getPromptNodeModelData(state, props),
