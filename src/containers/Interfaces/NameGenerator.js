@@ -7,12 +7,13 @@ import { Icon } from '@codaco/ui';
 import Prompts from '../../components/Prompts';
 import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
-import { makeNetworkNodesForPrompt, makeGetAdditionalAttributes } from '../../selectors/interface';
+import { makeNetworkNodesForPrompt, makeGetAdditionalAttributes, makeGetStageNodeCount } from '../../selectors/interface';
 import { makeGetPromptNodeModelData, makeGetNodeIconName } from '../../selectors/name-generator';
 import NodePanels from '../NodePanels';
 import NodeForm from '../NodeForm';
 import { NodeList, NodeBin } from '../../components';
 import { entityAttributesProperty, entityPrimaryKeyProperty } from '../../ducks/modules/network';
+import { MaxNodesReached, MinNodesNotMet } from './NameGeneratorQuickAdd';
 
 /**
   * Name Generator Interface
@@ -22,10 +23,40 @@ class NameGenerator extends Component {
   constructor(props) {
     super(props);
 
+    const {
+      registerBeforeNext,
+    } = this.props;
+
+    registerBeforeNext(this.handleBeforeLeaving);
+
     this.state = {
       selectedNode: null,
       showNodeForm: false,
+      showMinWarning: false,
     };
+  }
+
+  // eslint-disable-next-line camelcase
+  UNSAFE_componentWillReceiveProps() {
+    this.setState({ showMinWarning: false });
+  }
+
+  handleBeforeLeaving = (direction) => {
+    const {
+      isFirstPrompt,
+      isLastPrompt,
+      minNodes,
+      stageNodeCount,
+      onComplete,
+    } = this.props;
+
+    const leaving = (isFirstPrompt() && direction === -1) || (isLastPrompt() && direction === 1);
+    if (leaving && stageNodeCount < minNodes) {
+      this.setState({ showMinWarning: true });
+      return;
+    }
+
+    onComplete();
   }
 
   /**
@@ -127,6 +158,9 @@ class NameGenerator extends Component {
       prompt,
       stage,
       removeNode,
+      stageNodeCount,
+      maxNodes,
+      minNodes,
     } = this.props;
 
     const {
@@ -137,6 +171,7 @@ class NameGenerator extends Component {
     const {
       selectedNode,
       showNodeForm,
+      showMinWarning,
     } = this.state;
 
     return (
@@ -149,7 +184,7 @@ class NameGenerator extends Component {
         </div>
         <div className="name-generator-interface__main">
           <div className="name-generator-interface__panels">
-            <NodePanels stage={stage} prompt={prompt} />
+            <NodePanels stage={stage} prompt={prompt} disableAddNew={stageNodeCount === maxNodes} />
           </div>
           <div className="name-generator-interface__nodes">
             <NodeList
@@ -163,12 +198,13 @@ class NameGenerator extends Component {
             />
           </div>
         </div>
-
+        <MaxNodesReached show={stageNodeCount === maxNodes} />
+        <MinNodesNotMet show={showMinWarning} minNodes={minNodes} />
         { form
           && (
           <div
             onClick={this.handleClickAddNode}
-            className="name-generator-interface__add-node"
+            className={`name-generator-interface__add-node ${stageNodeCount === maxNodes ? 'name-generator-interface__add-node--disabled' : ''}`}
             data-clickable="open-add-node"
           >
             <Icon name={nodeIconName} />
@@ -218,14 +254,14 @@ function makeMapStateToProps() {
   const getPromptNodeAttributes = makeGetAdditionalAttributes();
   const getPromptNodeModelData = makeGetPromptNodeModelData();
   const getNodeIconName = makeGetNodeIconName();
+  const getStageNodeCount = makeGetStageNodeCount();
 
   return function mapStateToProps(state, props) {
     return {
       activePromptAttributes: get(props, ['prompt', 'additionalAttributes'], {}),
-      // eslint-disable-next-line @codaco/spellcheck/spell-checker
-      minNodes: get(props, ['behaviours', 'minNodes'], 0),
-      // eslint-disable-next-line @codaco/spellcheck/spell-checker
-      maxNodes: get(props, ['behaviours', 'maxNodes'], null),
+      minNodes: get(props, ['stage', 'behaviours', 'minNodes'], 1),
+      maxNodes: get(props, ['stage', 'behaviours', 'maxNodes'], 4),
+      stageNodeCount: getStageNodeCount(state, props),
       newNodeAttributes: getPromptNodeAttributes(state, props),
       newNodeModelData: getPromptNodeModelData(state, props),
       nodesForPrompt: networkNodesForPrompt(state, props),

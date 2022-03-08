@@ -13,6 +13,7 @@
   left: 50%;
   overflow: hidden;
   z-index: var(--z-fx);
+  filter: drop-shadow(0 2.4rem 2.4rem var(--drop-shadow-color));
 
   &--active {
     transform: translateY(0);

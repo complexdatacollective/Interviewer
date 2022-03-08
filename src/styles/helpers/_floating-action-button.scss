@@ -3,7 +3,7 @@
 @mixin floating-action-button {
   position: absolute;
   bottom: unit(2);
-  right: unit(4);
+  right: 0;
   width: unit(13);
   height: unit(13);
   z-index: var(--z-global-ui);

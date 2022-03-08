@@ -105,7 +105,7 @@ const dragSource = (WrappedComponent) => ({
       cleanupPreview();
       cleanupDragManager();
     };
-  }, [node]);
+  }, [node, allowDrag]);
 
   const styles = () => (isDragging ? { visibility: 'hidden' } : {});
 

@@ -319,9 +319,9 @@ function makeMapStateToProps() {
       activePromptAttributes: props.prompt.additionalAttributes,
       minNodes: get(props, ['stage', 'behaviours', 'minNodes'], 0),
       maxNodes: get(props, ['stage', 'behaviours', 'maxNodes'], null),
+      stageNodeCount: getStageNodeCount(state, props),
       newNodeAttributes: getPromptNodeAttributes(state, props),
       newNodeModelData: getPromptNodeModelData(state, props),
-      stageNodeCount: getStageNodeCount(state, props),
       nodesForPrompt: networkNodesForPrompt(state, props),
       nodeIconName: getNodeIconName(state, props),
     };
