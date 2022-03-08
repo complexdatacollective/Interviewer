@@ -82,6 +82,7 @@ class OrdinalBins extends PureComponent {
         </div>
         <div className="ordinal-bin--content" style={{ borderBottomColor: accentColor, background: panelColor }}>
           <NodeList
+            stage={stage}
             listId={`ORDBIN_NODE_LIST_${stage.id}_${prompt.id}_${index}`}
             id={`ORDBIN_NODE_LIST_${index}`}
             items={bin.nodes}

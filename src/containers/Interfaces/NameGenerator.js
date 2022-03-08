@@ -174,6 +174,8 @@ class NameGenerator extends Component {
       showMinWarning,
     } = this.state;
 
+    console.log('stage', stageNodeCount, stageNodeCount >= maxNodes);
+
     return (
       <div className="name-generator-interface">
         <div className="name-generator-interface__prompt">
@@ -184,11 +186,12 @@ class NameGenerator extends Component {
         </div>
         <div className="name-generator-interface__main">
           <div className="name-generator-interface__panels">
-            <NodePanels stage={stage} prompt={prompt} disableAddNew={stageNodeCount === maxNodes} />
+            <NodePanels stage={stage} prompt={prompt} disableAddNew={stageNodeCount >= maxNodes} />
           </div>
           <div className="name-generator-interface__nodes">
             <NodeList
               items={nodesForPrompt}
+              stage={stage}
               listId={`${stage.id}_${prompt.id}_MAIN_NODE_LIST`}
               id="MAIN_NODE_LIST"
               accepts={({ meta }) => get(meta, 'itemType', null) === 'NEW_NODE'}
@@ -198,13 +201,13 @@ class NameGenerator extends Component {
             />
           </div>
         </div>
-        <MaxNodesReached show={stageNodeCount === maxNodes} />
+        <MaxNodesReached show={stageNodeCount >= maxNodes} />
         <MinNodesNotMet show={showMinWarning} minNodes={minNodes} />
         { form
           && (
           <div
             onClick={this.handleClickAddNode}
-            className={`name-generator-interface__add-node ${stageNodeCount === maxNodes ? 'name-generator-interface__add-node--disabled' : ''}`}
+            className={`name-generator-interface__add-node ${stageNodeCount >= maxNodes ? 'name-generator-interface__add-node--disabled' : ''}`}
             data-clickable="open-add-node"
           >
             <Icon name={nodeIconName} />
@@ -259,8 +262,8 @@ function makeMapStateToProps() {
   return function mapStateToProps(state, props) {
     return {
       activePromptAttributes: get(props, ['prompt', 'additionalAttributes'], {}),
-      minNodes: get(props, ['stage', 'behaviours', 'minNodes'], 1),
-      maxNodes: get(props, ['stage', 'behaviours', 'maxNodes'], 4),
+      minNodes: get(props, ['stage', 'behaviours', 'minNodes'], 0),
+      maxNodes: get(props, ['stage', 'behaviours', 'maxNodes'], 2),
       stageNodeCount: getStageNodeCount(state, props),
       newNodeAttributes: getPromptNodeAttributes(state, props),
       newNodeModelData: getPromptNodeModelData(state, props),

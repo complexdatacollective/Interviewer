@@ -23,6 +23,7 @@ const CategoricalItem = ({
   onClickItem,
   sortOrder,
   willAccept,
+  stage,
 }) => {
   const classNames = cx(
     'categorical-item',
@@ -56,6 +57,7 @@ const CategoricalItem = ({
             && (
             <div className="categorical-item__content">
               <NodeList
+                stage={stage}
                 listId={`CATBIN_NODE_LIST_${label}`}
                 id={`CATBIN_NODE_LIST_${label}`}
                 onItemClick={onClickItem}

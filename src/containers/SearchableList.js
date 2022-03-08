@@ -77,6 +77,7 @@ const SearchableList = (props) => {
     searchOptions,
     sortOptions,
     dropNodeColor,
+    disabled,
   } = props;
 
   const id = useRef(uuid());
@@ -148,6 +149,8 @@ const SearchableList = (props) => {
 
   const { willAccept, isOver } = useDropMonitor(`hyper-list-${id.current}`) || { willAccept: false, isOver: false };
 
+  console.log('searchable', willAccept, isOver);
+
   return (
     <motion.div
       variants={variants}
@@ -210,6 +213,7 @@ const SearchableList = (props) => {
             accepts={accepts}
             onDrop={onDrop}
             showTooMany={showTooMany}
+            allowDragging={!disabled}
           />
           { willAccept && (
           <DropOverlay
@@ -247,9 +251,11 @@ SearchableList.propTypes = {
   dynamicProperties: PropTypes.object,
   excludeItems: PropTypes.array,
   dropNodeColor: PropTypes.string,
+  disabled: PropTypes.bool,
 };
 
 SearchableList.defaultProps = {
+  disabled: false,
   columns: undefined,
   itemComponent: null,
   items: [],

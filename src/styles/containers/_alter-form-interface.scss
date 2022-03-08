@@ -169,6 +169,7 @@
   align-items: center;
   justify-content: center;
   box-shadow: 0 unit(.5) unit(2) unit(1) rgba(0, 0, 0, 0.25); //sass-lint:disable-line no-color-literals
+  z-index: var(--z-dialog);
 
   h5 {
     margin: 0;

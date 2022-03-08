@@ -36,6 +36,7 @@ const getItemRenderer = (ItemComponent, DragComponent) => {
     data,
     props,
     itemType,
+    allowDragging
   }) => {
     const { duration, easing } = useAnimationSettings();
     const reducedMotion = useReducedMotion();
@@ -57,6 +58,7 @@ const getItemRenderer = (ItemComponent, DragComponent) => {
       >
         <Component
           {...props}
+          allowDrag={allowDragging}
           meta={() => ({ data, id, itemType })}
           preview={preview}
         />
@@ -89,6 +91,7 @@ const List = ({
   willAccept,
   isOver,
   itemType,
+  allowDragging,
 }) => {
   const { duration } = useAnimationSettings();
 
@@ -135,7 +138,14 @@ const List = ({
         { showEmpty && <EmptyComponent />}
 
         { showResults && (
-          items.map((item) => (<ItemRenderer key={item.id} itemType={itemType} {...item} />))
+          items.map((item) => (
+            <ItemRenderer
+              key={item.id}
+              itemType={itemType}
+              allowDragging={allowDragging}
+              {...item}
+            />
+          ))
         )}
       </motion.div>
     </ListContext.Provider>
@@ -147,6 +157,7 @@ List.propTypes = {
   emptyComponent: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
   placeholder: PropTypes.node,
   itemType: PropTypes.string,
+  allowDragging: PropTypes.bool,
 };
 
 List.defaultProps = {
@@ -154,6 +165,7 @@ List.defaultProps = {
   emptyComponent: NoopComponent,
   placeholder: null,
   itemType: 'LIST',
+  allowDragging: true,
 };
 
 export default compose(

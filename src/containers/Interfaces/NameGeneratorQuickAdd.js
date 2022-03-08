@@ -1,5 +1,5 @@
 /* eslint-disable @codaco/spellcheck/spell-checker */
-import React, { Component } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -18,91 +18,126 @@ import QuickNodeForm from '../QuickNodeForm';
 import { NodeList, NodeBin } from '../../components';
 import { entityAttributesProperty, entityPrimaryKeyProperty } from '../../ducks/modules/network';
 
-export const MaxNodesReached = ({ show }) => (
-  <AnimatePresence>
-    { show && (
-      <motion.div
-        className="scroll-nudge"
-        style={{
-          bottom: '2.4rem',
-          width: '40rem',
-          alignItems: 'center',
-          left: 'calc(50% - 20rem)',
-          animation: 'shake 1.32s cubic-bezier(.36, .07, .19, .97) both',
-          animationDelay: '1s',
-        }}
-        initial={{ opacity: 0, y: '100%' }}
-        animate={{ opacity: 1, y: 0, transition: { delay: 1, type: 'spring' } }}
-        exit={{ opacity: 0, y: '100%' }}
-      >
-        <div
-          style={{
-            flex: '0 0 1rem',
-          }}
-        >
-          <Icon name="info" style={{ height: '3rem', width: '3rem' }} />
-        </div>
-        <div
-          style={{
-            flex: '1 1 auto',
-            marginLeft: '1.2rem',
-          }}
-        >
-          <p>
-            You have added the maximum number of nodes for this stage. Click
-            the down arrow to continue.
-          </p>
-        </div>
-      </motion.div>
-    )}
-  </AnimatePresence>
-);
+export const SelfDismissingNote = (Wrapped) => (
+  {
+    show,
+    dontHide = false,
+    onHideCallback = () => {},
+    ...rest
+  },
+) => {
+  const [visible, setVisible] = useState(show);
+  useEffect(() => {
+    let timeout;
+    if (show) {
+      setVisible(true);
 
-export const MinNodesNotMet = ({ show, minNodes }) => (
-  <AnimatePresence>
-    { show && (
-      <motion.div
-        className="scroll-nudge"
-        style={{
-          bottom: '2.4rem',
-          width: '30rem',
-          alignItems: 'center',
-          left: 'calc(50% - 15rem)',
-          animation: 'shake 1.32s cubic-bezier(.36, .07, .19, .97) both',
-        }}
-        initial={{ opacity: 0, y: '100%' }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: '100%' }}
-      >
-        <div
-          style={{
-            flex: '0 0 1rem',
-          }}
-        >
-          <Icon name="error" style={{ height: '3rem', width: '3rem' }} />
-        </div>
-        <div
-          style={{
-            flex: '1 1 auto',
-            marginLeft: '1.2rem',
-          }}
-        >
-          <p>
-            You must create at least
-            {' '}
-            <strong>
-              {minNodes}
-            </strong>
-            {' '}
-            {minNodes > 1 ? 'items' : 'item'}
-            {' '}
-            before you can continue.
-          </p>
-        </div>
-      </motion.div>
-    )}
-  </AnimatePresence>
-);
+      if (!dontHide) {
+        timeout = setTimeout(() => {
+          onHideCallback();
+          setVisible(false);
+        }, 4000);
+      }
+    }
+
+    if (!show) {
+      setVisible(false);
+      clearTimeout(timeout);
+    }
+
+    return () => {
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+    };
+  }, [show, dontHide, onHideCallback]);
+
+  return (
+    <AnimatePresence>
+      { visible && (
+        <Wrapped {...rest} />
+      )}
+    </AnimatePresence>
+  );
+};
+
+export const MaxNodesReached = SelfDismissingNote(() => (
+  <motion.div
+    className="scroll-nudge"
+    style={{
+      bottom: '2.4rem',
+      width: '40rem',
+      alignItems: 'center',
+      left: 'calc(50% - 20rem)',
+      animation: 'shake 1.32s cubic-bezier(.36, .07, .19, .97) both',
+      animationDelay: '1s',
+    }}
+    initial={{ opacity: 0, y: '100%' }}
+    animate={{ opacity: 1, y: 0, transition: { delay: 1, type: 'spring' } }}
+    exit={{ opacity: 0, y: '100%' }}
+  >
+    <div
+      style={{
+        flex: '0 0 1rem',
+      }}
+    >
+      <Icon name="info" style={{ height: '3rem', width: '3rem' }} />
+    </div>
+    <div
+      style={{
+        flex: '1 1 auto',
+        marginLeft: '1.2rem',
+      }}
+    >
+      <p>
+        You have added the maximum number of nodes for this stage. Click
+        the down arrow to continue.
+      </p>
+    </div>
+  </motion.div>
+));
+
+export const MinNodesNotMet = SelfDismissingNote(({ minNodes }) => (
+  <motion.div
+    className="scroll-nudge"
+    style={{
+      bottom: '2.4rem',
+      width: '30rem',
+      alignItems: 'center',
+      left: 'calc(50% - 15rem)',
+      animation: 'shake 1.32s cubic-bezier(.36, .07, .19, .97) both',
+    }}
+    initial={{ opacity: 0, y: '100%' }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: '100%' }}
+  >
+    <div
+      style={{
+        flex: '0 0 1rem',
+      }}
+    >
+      <Icon name="error" style={{ height: '3rem', width: '3rem' }} />
+    </div>
+    <div
+      style={{
+        flex: '1 1 auto',
+        marginLeft: '1.2rem',
+      }}
+    >
+      <p>
+        You must create at least
+        {' '}
+        <strong>
+          {minNodes}
+        </strong>
+        {' '}
+        {minNodes > 1 ? 'items' : 'item'}
+        {' '}
+        before you can continue.
+      </p>
+    </div>
+  </motion.div>
+));
 
 /**
   * Name Generator Interface
@@ -253,12 +288,13 @@ class NameGenerator extends Component {
             <NodePanels
               stage={stage}
               prompt={prompt}
-              disableAddNew={stageNodeCount === maxNodes}
+              disableAddNew={stageNodeCount >= maxNodes}
             />
           </div>
           <div className="name-generator-interface__nodes">
             <NodeList
               items={nodesForPrompt}
+              stage={stage}
               listId={`${stage.id}_${prompt.id}_MAIN_NODE_LIST`}
               id="MAIN_NODE_LIST"
               accepts={({ meta }) => get(meta, 'itemType', null) === 'NEW_NODE'}
@@ -268,11 +304,11 @@ class NameGenerator extends Component {
             />
           </div>
         </div>
-        <MaxNodesReached show={stageNodeCount === maxNodes} />
+        <MaxNodesReached show={stageNodeCount >= maxNodes} dontHide />
         <MinNodesNotMet show={showMinWarning} minNodes={minNodes} />
         <QuickNodeForm
           onClick={() => this.setState({ showMinWarning: false })}
-          disabled={stageNodeCount === maxNodes}
+          disabled={stageNodeCount >= maxNodes}
           stage={stage}
           targetVariable={quickAdd}
           addNode={addNode}
@@ -318,7 +354,7 @@ function makeMapStateToProps() {
     return {
       activePromptAttributes: props.prompt.additionalAttributes,
       minNodes: get(props, ['stage', 'behaviours', 'minNodes'], 0),
-      maxNodes: get(props, ['stage', 'behaviours', 'maxNodes'], null),
+      maxNodes: get(props, ['stage', 'behaviours', 'maxNodes'], undefined),
       stageNodeCount: getStageNodeCount(state, props),
       newNodeAttributes: getPromptNodeAttributes(state, props),
       newNodeModelData: getPromptNodeModelData(state, props),

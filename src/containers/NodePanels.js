@@ -139,7 +139,7 @@ class NodePanels extends PureComponent {
         key={index}
         prompt={prompt}
         stage={stage}
-        disableDragging={dataSource !== 'existing' && disableAddNew}
+        disableDragNew={disableAddNew}
         dataSource={dataSource}
         filter={filter}
         accepts={() => this.isPanelCompatible(index)}
