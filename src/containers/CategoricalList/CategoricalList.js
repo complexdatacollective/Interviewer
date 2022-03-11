@@ -148,7 +148,11 @@ class CategoricalList extends Component {
   };
 
   render() {
-    const { bins, expandedBinIndex, onExpandBin, stage } = this.props;
+    const {
+      bins,
+      expandedBinIndex,
+      onExpandBin,
+    } = this.props;
 
     const listClasses = cx(
       'categorical-list',

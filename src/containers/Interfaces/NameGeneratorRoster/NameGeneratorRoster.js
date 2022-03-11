@@ -1,4 +1,6 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
 import { compose } from 'redux';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -8,7 +10,12 @@ import { get, isEmpty } from 'lodash';
 import { DataCard } from '@codaco/ui/lib/components/Cards';
 import Prompts from '../../../components/Prompts';
 import withPrompt from '../../../behaviours/withPrompt';
-import { makeNetworkNodesForPrompt, makeGetAdditionalAttributes, makeGetNodeVariables, makeGetStageNodeCount } from '../../../selectors/interface';
+import {
+  makeNetworkNodesForPrompt,
+  makeGetAdditionalAttributes,
+  makeGetNodeVariables,
+  makeGetStageNodeCount,
+} from '../../../selectors/interface';
 import { makeGetPromptNodeModelData } from '../../../selectors/name-generator';
 import { entityPrimaryKeyProperty, entityAttributesProperty } from '../../../ducks/modules/network';
 import { actionCreators as sessionsActions } from '../../../ducks/modules/sessions';
@@ -78,7 +85,9 @@ const NameGeneratorRoster = (props) => {
   const sortOptions = useSortableProperties(nodeVariables, stage.sortOptions);
 
   const stageNodeCount = usePropSelector(makeGetStageNodeCount, props, true);
+  // eslint-disable-next-line @codaco/spellcheck/spell-checker
   const minNodes = get(props, ['stage', 'behaviours', 'minNodes'], 0);
+  // eslint-disable-next-line @codaco/spellcheck/spell-checker
   const maxNodes = get(props, ['stage', 'behaviours', 'maxNodes'], undefined);
 
   const [showMinWarning, setShowMinWarning] = useState(false);

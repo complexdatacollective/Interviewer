@@ -36,7 +36,7 @@ const getItemRenderer = (ItemComponent, DragComponent) => {
     data,
     props,
     itemType,
-    allowDragging
+    allowDragging,
   }) => {
     const { duration, easing } = useAnimationSettings();
     const reducedMotion = useReducedMotion();

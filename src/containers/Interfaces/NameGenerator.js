@@ -174,8 +174,6 @@ class NameGenerator extends Component {
       showMinWarning,
     } = this.state;
 
-    console.log('stage', stageNodeCount, stageNodeCount >= maxNodes);
-
     return (
       <div className="name-generator-interface">
         <div className="name-generator-interface__prompt">
@@ -262,7 +260,9 @@ function makeMapStateToProps() {
   return function mapStateToProps(state, props) {
     return {
       activePromptAttributes: get(props, ['prompt', 'additionalAttributes'], {}),
+      // eslint-disable-next-line @codaco/spellcheck/spell-checker
       minNodes: get(props, ['stage', 'behaviours', 'minNodes'], 0),
+      // eslint-disable-next-line @codaco/spellcheck/spell-checker
       maxNodes: get(props, ['stage', 'behaviours', 'maxNodes'], undefined),
       stageNodeCount: getStageNodeCount(state, props),
       newNodeAttributes: getPromptNodeAttributes(state, props),

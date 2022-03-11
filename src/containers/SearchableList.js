@@ -149,8 +149,6 @@ const SearchableList = (props) => {
 
   const { willAccept, isOver } = useDropMonitor(`hyper-list-${id.current}`) || { willAccept: false, isOver: false };
 
-  console.log('searchable', willAccept, isOver);
-
   return (
     <motion.div
       variants={variants}

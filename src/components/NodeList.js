@@ -97,7 +97,6 @@ class NodeList extends Component {
       stage: {
         id: stageId,
       },
-      listId,
       disableDragNew,
       externalData,
     } = this.props;
@@ -107,10 +106,6 @@ class NodeList extends Component {
       items,
       exit,
     } = this.state;
-
-    console.log('NodeList', {
-      id: listId, disableDragNew, stageId, externalData, items
-    });
 
     const isSource = !!find(
       items,
@@ -138,8 +133,8 @@ class NodeList extends Component {
       >
         {
           items.map((node, index) => {
-            const isDraggable = !(externalData && disableDragNew) && !(disableDragNew && node.stageId !== stageId);
-            console.log('Node', node.attributes[0], !disableDragNew, { node: node.stageId, stageId, isDraggable });
+            const isDraggable = !(externalData && disableDragNew)
+              && !(disableDragNew && node.stageId !== stageId);
 
             return (
               <NodeTransition
