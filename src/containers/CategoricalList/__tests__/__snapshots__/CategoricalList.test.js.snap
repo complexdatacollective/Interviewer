@@ -31,6 +31,11 @@ exports[`CategoricalList component renders categorical list 1`] = `
       key="0"
       nodeColor=""
       promptOtherVariable={null}
+      stage={
+        Object {
+          "id": 1,
+        }
+      }
     />
     <Connect(CategoricalListItem)
       accentColor={null}
@@ -51,6 +56,11 @@ exports[`CategoricalList component renders categorical list 1`] = `
       key="1"
       nodeColor=""
       promptOtherVariable={null}
+      stage={
+        Object {
+          "id": 1,
+        }
+      }
     />
   </Flipper>
 </div>

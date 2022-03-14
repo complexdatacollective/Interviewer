@@ -15,6 +15,7 @@ const requiredProps = {
   promptBackward: jest.fn(),
   promptForward: jest.fn(),
   updateNode: jest.fn(),
+  registerBeforeNext: jest.fn(),
 };
 
 describe('NameGenerator', () => {
