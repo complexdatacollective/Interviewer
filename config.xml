@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget android-versionCode="6125" id="org.codaco.NetworkCanvasInterviewer6" ios-CFBundleIdentifier="org.codaco.networkCanvasInterviewerBusiness" ios-CFBundleVersion="6125" version="6.2.1" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="6131" id="org.codaco.NetworkCanvasInterviewer6" ios-CFBundleIdentifier="org.codaco.networkCanvasInterviewerBusiness" ios-CFBundleVersion="6131" version="6.2.1" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>Network Canvas Interviewer</name>
   <description>
         A tool for conducting Network Canvas Interviews.
-    </description>
+  </description>
   <author email="developers@coda.co" href="http://coda.co">
         Complex Data Collective
-    </author>
+  </author>
   <content src="index.html"/>
   <access origin="*"/>
   <access origin="cdvfile://*"/>
@@ -86,7 +86,6 @@
   <plugin name="cordova-plugin-chooser" spec="~1.3.1"/>
   <plugin name="cordova-plugin-wkwebview-engine" spec="~1.2.1"/>
   <plugin name="cordova-plugin-network-canvas-client" spec="https://github.com/complexdatacollective/cordova-plugin-network-canvas-client.git"/>
-  <plugin name="cordova-sqlite-storage" spec="^5.1.0"/>
+  <plugin name="cordova-sqlite-storage" spec="6.0.0"/>
   <engine name="ios"/>
-  <engine name="android"/>
 </widget>
