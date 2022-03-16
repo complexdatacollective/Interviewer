@@ -74,6 +74,7 @@ const createDatabase = () => new Promise((resolve) => {
       db = window.sqlitePlugin.openDatabase({
         name: DATABASE_NAME,
         location: 'default',
+        androidDatabaseProvider: 'system',
       }, () => {
         resolve();
       }, () => {
@@ -123,6 +124,7 @@ export const deleteDB = (dbName = DATABASE_NAME) => new Promise((resolve, reject
   window.sqlitePlugin.deleteDatabase({
     name: dbName,
     location: 'default',
+    androidDatabaseProvider: 'system',
   }, () => {
     // eslint-disable-next-line no-console
     console.log('Database deleted');
