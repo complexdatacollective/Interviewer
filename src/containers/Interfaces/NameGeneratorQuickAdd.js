@@ -90,8 +90,8 @@ export const MaxNodesReached = SelfDismissingNote(() => (
       }}
     >
       <p>
-        You have added the maximum number of nodes for this stage. Click
-        the down arrow to continue.
+        You have added the maximum number of items for this screen. Please
+        click the down arrow to continue.
       </p>
     </div>
   </motion.div>
