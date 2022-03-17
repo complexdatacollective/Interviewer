@@ -33,7 +33,7 @@ const SimulationPanel = ({
         <div className="simulation-panel__control-icon">
           {simulationEnabled ? <PauseIcon /> : <PlayIcon />}
         </div>
-        {simulationEnabled ? 'Pause Layout' : 'Resume Layout'}
+        {simulationEnabled ? 'Pause Auto Layout' : 'Resume Auto Layout'}
       </motion.div>
     </motion.div>
   );
