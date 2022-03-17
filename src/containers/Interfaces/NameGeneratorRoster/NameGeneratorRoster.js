@@ -33,7 +33,9 @@ import useSortableProperties from './useSortableProperties';
 import useItems from './useItems';
 import { convertNamesToUUIDs } from './helpers';
 import DropOverlay from './DropOverlay';
-import { MaxNodesReached, MinNodesNotMet } from '../NameGeneratorQuickAdd';
+import {
+  MaxNodesReached, maxNodesWithDefault, MinNodesNotMet, minNodesWithDefault,
+} from '../NameGeneratorQuickAdd';
 
 const countColumns = (width) => (
   width < 140 ? 1 : Math.floor(width / 450)
@@ -86,9 +88,9 @@ const NameGeneratorRoster = (props) => {
 
   const stageNodeCount = usePropSelector(makeGetStageNodeCount, props, true);
   // eslint-disable-next-line @codaco/spellcheck/spell-checker
-  const minNodes = get(props, ['stage', 'behaviours', 'minNodes'], 0);
+  const minNodes = minNodesWithDefault(get(props, ['stage', 'behaviours', 'minNodes']));
   // eslint-disable-next-line @codaco/spellcheck/spell-checker
-  const maxNodes = get(props, ['stage', 'behaviours', 'maxNodes'], undefined);
+  const maxNodes = maxNodesWithDefault(get(props, ['stage', 'behaviours', 'maxNodes']));
 
   const [showMinWarning, setShowMinWarning] = useState(false);
 

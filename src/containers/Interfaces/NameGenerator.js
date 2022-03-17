@@ -13,7 +13,9 @@ import NodePanels from '../NodePanels';
 import NodeForm from '../NodeForm';
 import { NodeList, NodeBin } from '../../components';
 import { entityAttributesProperty, entityPrimaryKeyProperty } from '../../ducks/modules/network';
-import { MaxNodesReached, MinNodesNotMet } from './NameGeneratorQuickAdd';
+import {
+  MaxNodesReached, maxNodesWithDefault, MinNodesNotMet, minNodesWithDefault,
+} from './NameGeneratorQuickAdd';
 
 /**
   * Name Generator Interface
@@ -261,9 +263,9 @@ function makeMapStateToProps() {
     return {
       activePromptAttributes: get(props, ['prompt', 'additionalAttributes'], {}),
       // eslint-disable-next-line @codaco/spellcheck/spell-checker
-      minNodes: get(props, ['stage', 'behaviours', 'minNodes'], 0),
+      minNodes: minNodesWithDefault(get(props, ['stage', 'behaviours', 'minNodes'])),
       // eslint-disable-next-line @codaco/spellcheck/spell-checker
-      maxNodes: get(props, ['stage', 'behaviours', 'maxNodes'], undefined),
+      maxNodes: maxNodesWithDefault(get(props, ['stage', 'behaviours', 'maxNodes'])),
       stageNodeCount: getStageNodeCount(state, props),
       newNodeAttributes: getPromptNodeAttributes(state, props),
       newNodeModelData: getPromptNodeModelData(state, props),

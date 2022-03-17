@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Icon } from '@codaco/ui';
 import {
-  get, has, omit, debounce,
+  get, has, omit, debounce, defaultTo,
 } from 'lodash';
 import Prompts from '../../components/Prompts';
 import withPrompt from '../../behaviours/withPrompt';
@@ -138,6 +138,9 @@ export const MinNodesNotMet = SelfDismissingNote(({ minNodes }) => (
     </div>
   </motion.div>
 ));
+
+export const minNodesWithDefault = (stageValue) => defaultTo(stageValue, 0);
+export const maxNodesWithDefault = (stageValue) => defaultTo(stageValue, Infinity);
 
 /**
   * Name Generator Interface
@@ -353,8 +356,8 @@ function makeMapStateToProps() {
   return function mapStateToProps(state, props) {
     return {
       activePromptAttributes: props.prompt.additionalAttributes,
-      minNodes: get(props, ['stage', 'behaviours', 'minNodes'], 0),
-      maxNodes: get(props, ['stage', 'behaviours', 'maxNodes'], undefined),
+      minNodes: minNodesWithDefault(get(props, ['stage', 'behaviours', 'minNodes'])),
+      maxNodes: minNodesWithDefault(get(props, ['stage', 'behaviours', 'maxNodes'])),
       stageNodeCount: getStageNodeCount(state, props),
       newNodeAttributes: getPromptNodeAttributes(state, props),
       newNodeModelData: getPromptNodeModelData(state, props),
