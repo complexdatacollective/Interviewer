@@ -13,8 +13,9 @@
   }
 
   display: flex;
-  align-items: stretch;
+  align-items: center;
   padding: 0 unit(4);
+  height: 8rem;
   transition: background var(--animation-easing) var(--animation-duration-fast);
 
   &--current {
@@ -23,7 +24,7 @@
 
   &__image {
     flex: 0 0 8rem;
-    margin: 1rem 2rem 1rem 0;
+    margin-right: unit(2);
 
     img {
       max-width: 100%;
@@ -65,9 +66,10 @@
   display: flex;
 
   .stage-preview__notch {
+    height: 100%;
     flex: 0 0 1.5rem;
     position: relative;
-    margin-right: 1rem;
+    margin-right: unit(2);
     overflow: hidden;
 
 

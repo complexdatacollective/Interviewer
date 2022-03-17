@@ -94,7 +94,8 @@ const NameGeneratorRoster = (props) => {
 
   const [showMinWarning, setShowMinWarning] = useState(false);
 
-  const handleBeforeLeaving = useCallback(() => {
+  const handleBeforeLeaving = useCallback((direction, destination) => {
+    console.log('first', direction, destination);
     if (stageNodeCount < minNodes) {
       setShowMinWarning(true);
       return;
