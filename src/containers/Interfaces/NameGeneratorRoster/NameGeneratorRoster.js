@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { motion, AnimatePresence } from 'framer-motion';
-import { get, isEmpty } from 'lodash';
+import { get, isEmpty, isUndefined } from 'lodash';
 import { DataCard } from '@codaco/ui/lib/components/Cards';
 import Prompts from '../../../components/Prompts';
 import withPrompt from '../../../behaviours/withPrompt';
@@ -66,6 +66,8 @@ const NameGeneratorRoster = (props) => {
     stage,
     registerBeforeNext,
     onComplete,
+    isFirstPrompt,
+    isLastPrompt,
   } = props;
 
   const {
@@ -95,8 +97,13 @@ const NameGeneratorRoster = (props) => {
   const [showMinWarning, setShowMinWarning] = useState(false);
 
   const handleBeforeLeaving = useCallback((direction, destination) => {
-    console.log('first', direction, destination);
-    if (stageNodeCount < minNodes) {
+    const isLeavingStage = (isFirstPrompt() && direction === -1)
+      || (isLastPrompt() && direction === 1);
+
+    // Implementation quirk that destination is only provided when navigation
+    // is triggered by Stages Menu. Use this to skip message if user has
+    // navigated directly using stages menu.
+    if (isUndefined(destination) && isLeavingStage && stageNodeCount < minNodes) {
       setShowMinWarning(true);
       return;
     }
@@ -191,10 +198,10 @@ const NameGeneratorRoster = (props) => {
           <>
             <motion.div
               className="name-generator-roster-interface__prompt"
-              initial="hidden"
-              animate="visible"
-              exit="hidden"
-              variants={variants}
+              // initial="hidden"
+              // animate="visible"
+              // exit="hidden"
+              // variants={variants}
               key="prompts"
             >
               <Prompts

@@ -112,11 +112,13 @@ class Protocol extends Component {
 
     const beforeNext = get(this.beforeNext, stage.id);
 
+    // If no beforeNext is registered, go directly to the stage
     if (!beforeNext) {
       this.goToStage(index);
       return;
     }
 
+    // Otherwise construct a pending state, and call beforeNext
     const direction = (stageIndex > index) ? -1 : 1;
     this.setState(
       { pendingStage: index, pendingDirection: direction },

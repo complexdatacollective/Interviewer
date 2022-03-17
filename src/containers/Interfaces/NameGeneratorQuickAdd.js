@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Icon } from '@codaco/ui';
 import {
-  get, has, omit, debounce, defaultTo,
+  get, has, omit, debounce, defaultTo, isUndefined,
 } from 'lodash';
 import Prompts from '../../components/Prompts';
 import withPrompt from '../../behaviours/withPrompt';
@@ -236,7 +236,7 @@ class NameGenerator extends Component {
     }
   }
 
-  handleBeforeLeaving = (direction) => {
+  handleBeforeLeaving = (direction, destination) => {
     const {
       isFirstPrompt,
       isLastPrompt,
@@ -245,8 +245,12 @@ class NameGenerator extends Component {
       onComplete,
     } = this.props;
 
-    const leaving = (isFirstPrompt() && direction === -1) || (isLastPrompt() && direction === 1);
-    if (leaving && stageNodeCount < minNodes) {
+    const isLeavingStage = (isFirstPrompt() && direction === -1)
+    || (isLastPrompt() && direction === 1);
+    // Implementation quirk that destination is only provided when navigation
+    // is triggered by Stages Menu. Use this to skip message if user has
+    // navigated directly using stages menu.
+    if (isUndefined(destination) && isLeavingStage && stageNodeCount < minNodes) {
       this.setState({ showMinWarning: true });
       return;
     }

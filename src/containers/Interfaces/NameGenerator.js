@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { get, has, omit } from 'lodash';
+import {
+  get, has, isUndefined, omit,
+} from 'lodash';
 import { Icon } from '@codaco/ui';
 import Prompts from '../../components/Prompts';
 import withPrompt from '../../behaviours/withPrompt';
@@ -43,7 +45,7 @@ class NameGenerator extends Component {
     this.setState({ showMinWarning: false });
   }
 
-  handleBeforeLeaving = (direction) => {
+  handleBeforeLeaving = (direction, destination) => {
     const {
       isFirstPrompt,
       isLastPrompt,
@@ -52,8 +54,13 @@ class NameGenerator extends Component {
       onComplete,
     } = this.props;
 
-    const leaving = (isFirstPrompt() && direction === -1) || (isLastPrompt() && direction === 1);
-    if (leaving && stageNodeCount < minNodes) {
+    const isLeavingStage = (isFirstPrompt() && direction === -1)
+    || (isLastPrompt() && direction === 1);
+
+    // Implementation quirk that destination is only provided when navigation
+    // is triggered by Stages Menu. Use this to skip message if user has
+    // navigated directly using stages menu.
+    if (isUndefined(destination) && isLeavingStage && stageNodeCount < minNodes) {
       this.setState({ showMinWarning: true });
       return;
     }
