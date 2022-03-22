@@ -76,7 +76,6 @@ onmessage = function ({ data }) {
         .stop();
 
       simulation.on('tick', () => {
-        console.debug('worker:tick');
         postMessage({
           type: 'tick',
           nodes: simulation.nodes(),

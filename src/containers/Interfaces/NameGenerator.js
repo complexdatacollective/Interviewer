@@ -2,17 +2,22 @@ import React, { Component } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { get, has, omit } from 'lodash';
+import {
+  get, has, isUndefined, omit,
+} from 'lodash';
 import { Icon } from '@codaco/ui';
 import Prompts from '../../components/Prompts';
 import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
-import { makeNetworkNodesForPrompt, makeGetAdditionalAttributes } from '../../selectors/interface';
+import { makeNetworkNodesForPrompt, makeGetAdditionalAttributes, makeGetStageNodeCount } from '../../selectors/interface';
 import { makeGetPromptNodeModelData, makeGetNodeIconName } from '../../selectors/name-generator';
 import NodePanels from '../NodePanels';
 import NodeForm from '../NodeForm';
 import { NodeList, NodeBin } from '../../components';
 import { entityAttributesProperty, entityPrimaryKeyProperty } from '../../ducks/modules/network';
+import {
+  MaxNodesReached, maxNodesWithDefault, MinNodesNotMet, minNodesWithDefault,
+} from './NameGeneratorQuickAdd';
 
 /**
   * Name Generator Interface
@@ -22,10 +27,45 @@ class NameGenerator extends Component {
   constructor(props) {
     super(props);
 
+    const {
+      registerBeforeNext,
+    } = this.props;
+
+    registerBeforeNext(this.handleBeforeLeaving);
+
     this.state = {
       selectedNode: null,
       showNodeForm: false,
+      showMinWarning: false,
     };
+  }
+
+  // eslint-disable-next-line camelcase
+  UNSAFE_componentWillReceiveProps() {
+    this.setState({ showMinWarning: false });
+  }
+
+  handleBeforeLeaving = (direction, destination) => {
+    const {
+      isFirstPrompt,
+      isLastPrompt,
+      minNodes,
+      stageNodeCount,
+      onComplete,
+    } = this.props;
+
+    const isLeavingStage = (isFirstPrompt() && direction === -1)
+    || (isLastPrompt() && direction === 1);
+
+    // Implementation quirk that destination is only provided when navigation
+    // is triggered by Stages Menu. Use this to skip message if user has
+    // navigated directly using stages menu.
+    if (isUndefined(destination) && isLeavingStage && stageNodeCount < minNodes) {
+      this.setState({ showMinWarning: true });
+      return;
+    }
+
+    onComplete();
   }
 
   /**
@@ -127,6 +167,9 @@ class NameGenerator extends Component {
       prompt,
       stage,
       removeNode,
+      stageNodeCount,
+      maxNodes,
+      minNodes,
     } = this.props;
 
     const {
@@ -137,6 +180,7 @@ class NameGenerator extends Component {
     const {
       selectedNode,
       showNodeForm,
+      showMinWarning,
     } = this.state;
 
     return (
@@ -149,11 +193,12 @@ class NameGenerator extends Component {
         </div>
         <div className="name-generator-interface__main">
           <div className="name-generator-interface__panels">
-            <NodePanels stage={stage} prompt={prompt} />
+            <NodePanels stage={stage} prompt={prompt} disableAddNew={stageNodeCount >= maxNodes} />
           </div>
           <div className="name-generator-interface__nodes">
             <NodeList
               items={nodesForPrompt}
+              stage={stage}
               listId={`${stage.id}_${prompt.id}_MAIN_NODE_LIST`}
               id="MAIN_NODE_LIST"
               accepts={({ meta }) => get(meta, 'itemType', null) === 'NEW_NODE'}
@@ -163,12 +208,13 @@ class NameGenerator extends Component {
             />
           </div>
         </div>
-
+        <MaxNodesReached show={stageNodeCount >= maxNodes} />
+        <MinNodesNotMet show={showMinWarning} minNodes={minNodes} />
         { form
           && (
           <div
             onClick={this.handleClickAddNode}
-            className="name-generator-interface__add-node"
+            className={`name-generator-interface__add-node ${stageNodeCount >= maxNodes ? 'name-generator-interface__add-node--disabled' : ''}`}
             data-clickable="open-add-node"
           >
             <Icon name={nodeIconName} />
@@ -218,10 +264,16 @@ function makeMapStateToProps() {
   const getPromptNodeAttributes = makeGetAdditionalAttributes();
   const getPromptNodeModelData = makeGetPromptNodeModelData();
   const getNodeIconName = makeGetNodeIconName();
+  const getStageNodeCount = makeGetStageNodeCount();
 
   return function mapStateToProps(state, props) {
     return {
       activePromptAttributes: get(props, ['prompt', 'additionalAttributes'], {}),
+      // eslint-disable-next-line @codaco/spellcheck/spell-checker
+      minNodes: minNodesWithDefault(get(props, ['stage', 'behaviours', 'minNodes'])),
+      // eslint-disable-next-line @codaco/spellcheck/spell-checker
+      maxNodes: maxNodesWithDefault(get(props, ['stage', 'behaviours', 'maxNodes'])),
+      stageNodeCount: getStageNodeCount(state, props),
       newNodeAttributes: getPromptNodeAttributes(state, props),
       newNodeModelData: getPromptNodeModelData(state, props),
       nodesForPrompt: networkNodesForPrompt(state, props),

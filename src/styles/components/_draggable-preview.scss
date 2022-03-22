@@ -10,4 +10,8 @@
 
 .draggable {
   cursor: grab;
+
+  &--disabled {
+    cursor: not-allowed;
+  }
 }

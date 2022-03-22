@@ -1,19 +1,146 @@
-import React, { Component } from 'react';
+/* eslint-disable @codaco/spellcheck/spell-checker */
+import React, { Component, useEffect, useState } from 'react';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Icon } from '@codaco/ui';
 import {
-  get, has, omit, debounce,
+  get, has, omit, debounce, defaultTo, isUndefined,
 } from 'lodash';
 import Prompts from '../../components/Prompts';
 import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
-import { makeNetworkNodesForPrompt, makeGetAdditionalAttributes } from '../../selectors/interface';
+import { makeNetworkNodesForPrompt, makeGetAdditionalAttributes, makeGetStageNodeCount } from '../../selectors/interface';
 import { makeGetPromptNodeModelData, makeGetNodeIconName } from '../../selectors/name-generator';
 import NodePanels from '../NodePanels';
 import QuickNodeForm from '../QuickNodeForm';
 import { NodeList, NodeBin } from '../../components';
 import { entityAttributesProperty, entityPrimaryKeyProperty } from '../../ducks/modules/network';
+
+export const SelfDismissingNote = (Wrapped) => (
+  {
+    show,
+    dontHide = false,
+    onHideCallback = () => {},
+    ...rest
+  },
+) => {
+  const [visible, setVisible] = useState(show);
+  useEffect(() => {
+    let timeout;
+    if (show) {
+      setVisible(true);
+
+      if (!dontHide) {
+        timeout = setTimeout(() => {
+          onHideCallback();
+          setVisible(false);
+        }, 4000);
+      }
+    }
+
+    if (!show) {
+      setVisible(false);
+      clearTimeout(timeout);
+    }
+
+    return () => {
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+    };
+  }, [show, dontHide, onHideCallback]);
+
+  return (
+    <AnimatePresence>
+      { visible && (
+        <Wrapped {...rest} />
+      )}
+    </AnimatePresence>
+  );
+};
+
+export const MaxNodesReached = SelfDismissingNote(() => (
+  <motion.div
+    className="alter-limit-nudge"
+    style={{
+      bottom: '2.4rem',
+      width: '40rem',
+      alignItems: 'center',
+      left: 'calc(50% - 20rem)',
+      animation: 'shake 1.32s cubic-bezier(.36, .07, .19, .97) both',
+      animationDelay: '1s',
+    }}
+    initial={{ opacity: 0, y: '100%' }}
+    animate={{ opacity: 1, y: 0, transition: { delay: 1, type: 'spring' } }}
+    exit={{ opacity: 0, y: '100%' }}
+  >
+    <div
+      style={{
+        flex: '0 0 1.8rem',
+      }}
+    >
+      <Icon name="info" style={{ height: '3rem', width: '3rem' }} />
+    </div>
+    <div
+      style={{
+        flex: '1 1 auto',
+        margin: '0 1.8rem',
+      }}
+    >
+      <p>
+        You have added the maximum number of items. Click
+        the down arrow to continue.
+      </p>
+    </div>
+  </motion.div>
+));
+
+export const MinNodesNotMet = SelfDismissingNote(({ minNodes }) => (
+  <motion.div
+    className="alter-limit-nudge"
+    style={{
+      bottom: '2.4rem',
+      width: '30rem',
+      alignItems: 'center',
+      left: 'calc(50% - 15rem)',
+      animation: 'shake 1.32s cubic-bezier(.36, .07, .19, .97) both',
+    }}
+    initial={{ opacity: 0, y: '100%' }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: '100%' }}
+  >
+    <div
+      style={{
+        flex: '0 0 1.8rem',
+      }}
+    >
+      <Icon name="error" style={{ height: '3rem', width: '3rem' }} />
+    </div>
+    <div
+      style={{
+        flex: '1 1 auto',
+        margin: '0 1.8rem',
+      }}
+    >
+      <p>
+        You must create at least
+        {' '}
+        <strong>
+          {minNodes}
+        </strong>
+        {' '}
+        {minNodes > 1 ? 'items' : 'item'}
+        {' '}
+        before you can continue.
+      </p>
+    </div>
+  </motion.div>
+));
+
+export const minNodesWithDefault = (stageValue) => defaultTo(stageValue, 0);
+export const maxNodesWithDefault = (stageValue) => defaultTo(stageValue, Infinity);
 
 /**
   * Name Generator Interface
@@ -23,9 +150,21 @@ class NameGenerator extends Component {
   constructor(props) {
     super(props);
 
+    const {
+      registerBeforeNext,
+    } = this.props;
+
+    registerBeforeNext(this.handleBeforeLeaving);
+
     this.state = {
       selectedNode: null,
+      showMinWarning: false,
     };
+  }
+
+  // eslint-disable-next-line camelcase
+  UNSAFE_componentWillReceiveProps() {
+    this.setState({ showMinWarning: false });
   }
 
   /**
@@ -97,6 +236,28 @@ class NameGenerator extends Component {
     }
   }
 
+  handleBeforeLeaving = (direction, destination) => {
+    const {
+      isFirstPrompt,
+      isLastPrompt,
+      minNodes,
+      stageNodeCount,
+      onComplete,
+    } = this.props;
+
+    const isLeavingStage = (isFirstPrompt() && direction === -1)
+    || (isLastPrompt() && direction === 1);
+    // Implementation quirk that destination is only provided when navigation
+    // is triggered by Stages Menu. Use this to skip message if user has
+    // navigated directly using stages menu.
+    if (isUndefined(destination) && isLeavingStage && stageNodeCount < minNodes) {
+      this.setState({ showMinWarning: true });
+      return;
+    }
+
+    onComplete();
+  }
+
   render() {
     const {
       nodesForPrompt,
@@ -107,12 +268,19 @@ class NameGenerator extends Component {
       stage,
       addNode,
       removeNode,
+      maxNodes,
+      minNodes,
+      stageNodeCount,
     } = this.props;
 
     const {
       prompts,
       quickAdd,
     } = stage;
+
+    const {
+      showMinWarning,
+    } = this.state;
 
     return (
       <div className="name-generator-interface">
@@ -124,11 +292,16 @@ class NameGenerator extends Component {
         </div>
         <div className="name-generator-interface__main">
           <div className="name-generator-interface__panels">
-            <NodePanels stage={stage} prompt={prompt} />
+            <NodePanels
+              stage={stage}
+              prompt={prompt}
+              disableAddNew={stageNodeCount >= maxNodes}
+            />
           </div>
           <div className="name-generator-interface__nodes">
             <NodeList
               items={nodesForPrompt}
+              stage={stage}
               listId={`${stage.id}_${prompt.id}_MAIN_NODE_LIST`}
               id="MAIN_NODE_LIST"
               accepts={({ meta }) => get(meta, 'itemType', null) === 'NEW_NODE'}
@@ -138,8 +311,11 @@ class NameGenerator extends Component {
             />
           </div>
         </div>
-
+        <MaxNodesReached show={stageNodeCount >= maxNodes} dontHide />
+        <MinNodesNotMet show={showMinWarning} minNodes={minNodes} />
         <QuickNodeForm
+          onClick={() => this.setState({ showMinWarning: false })}
+          disabled={stageNodeCount >= maxNodes}
           stage={stage}
           targetVariable={quickAdd}
           addNode={addNode}
@@ -147,7 +323,6 @@ class NameGenerator extends Component {
           newNodeAttributes={newNodeAttributes}
           newNodeModelData={newNodeModelData}
         />
-
         <NodeBin
           accepts={(meta) => meta.itemType === 'EXISTING_NODE'}
           dropHandler={(meta) => removeNode(meta[entityPrimaryKeyProperty])}
@@ -180,10 +355,14 @@ function makeMapStateToProps() {
   const getPromptNodeAttributes = makeGetAdditionalAttributes();
   const getPromptNodeModelData = makeGetPromptNodeModelData();
   const getNodeIconName = makeGetNodeIconName();
+  const getStageNodeCount = makeGetStageNodeCount();
 
   return function mapStateToProps(state, props) {
     return {
       activePromptAttributes: props.prompt.additionalAttributes,
+      minNodes: minNodesWithDefault(get(props, ['stage', 'behaviours', 'minNodes'])),
+      maxNodes: maxNodesWithDefault(get(props, ['stage', 'behaviours', 'maxNodes'])),
+      stageNodeCount: getStageNodeCount(state, props),
       newNodeAttributes: getPromptNodeAttributes(state, props),
       newNodeModelData: getPromptNodeModelData(state, props),
       nodesForPrompt: networkNodesForPrompt(state, props),

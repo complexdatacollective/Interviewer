@@ -15,6 +15,7 @@ import {
   DEVELOPMENT_PROTOCOL_URL_V4,
   DEVELOPMENT_PROTOCOL_URL_V5,
   DEVELOPMENT_PROTOCOL_URL_V6,
+  DEVELOPMENT_PROTOCOL_URL_V7,
 } from '../../../config';
 import { actionCreators as deviceSettingsActions } from '../../../ducks/modules/deviceSettings';
 import { isAndroid } from '../../../utils/Environment';
@@ -123,6 +124,13 @@ const DeveloperTools = (props) => {
               onClick={() => importProtocolFromURI(DEVELOPMENT_PROTOCOL_URL_V6)}
             >
               Import v6 Protocol
+            </Button>
+          </div>
+          <div className="form-field">
+            <Button
+              onClick={() => importProtocolFromURI(DEVELOPMENT_PROTOCOL_URL_V7)}
+            >
+              Import v7 Protocol
             </Button>
           </div>
         </div>

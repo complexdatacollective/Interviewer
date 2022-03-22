@@ -33,6 +33,15 @@
   }
 
   &__add-node {
+    &--disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+
+      .icon {
+        pointer-events: none;
+      }
+    }
+
     .icon {
       @include floating-action-button;
     }

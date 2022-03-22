@@ -43,18 +43,18 @@ class NodeList extends Component {
     const {
       items,
       listId,
+      disableDragNew,
     } = this.props;
 
     if (this.refreshTimer) { clearTimeout(this.refreshTimer); }
 
     // Don't update if items are the same
-    if (isEqual(newProps.items, items)) {
+    if (isEqual(newProps.items, items) && isEqual(newProps.disableDragNew, disableDragNew)) {
       return;
     }
 
     const sorter = sortOrder(newProps.sortOrder);
     const sortedNodes = sorter(newProps.items);
-
     // if we provided the same id, then just update normally
     if (newProps.listId === listId) {
       this.setState({ exit: false }, () => {
@@ -94,6 +94,11 @@ class NodeList extends Component {
       meta,
       hoverColor,
       className,
+      stage: {
+        id: stageId,
+      },
+      disableDragNew,
+      externalData,
     } = this.props;
 
     const {
@@ -127,22 +132,28 @@ class NodeList extends Component {
         exit={exit}
       >
         {
-          items.map((node, index) => (
-            <NodeTransition
-              key={`${node[entityPrimaryKeyProperty]}`}
-              index={index}
-              stagger={stagger}
-            >
-              <div onClick={() => onItemClick(node)}>
-                <EnhancedNode
-                  label={`${label(node)}`}
-                  meta={() => ({ ...node, itemType })}
-                  itemType={itemType}
-                  {...node}
-                />
-              </div>
-            </NodeTransition>
-          ))
+          items.map((node, index) => {
+            const isDraggable = !(externalData && disableDragNew)
+              && !(disableDragNew && node.stageId !== stageId);
+
+            return (
+              <NodeTransition
+                key={`${node[entityPrimaryKeyProperty]}`}
+                index={index}
+                stagger={stagger}
+              >
+                <div onClick={() => onItemClick(node)}>
+                  <EnhancedNode
+                    allowDrag={isDraggable}
+                    label={`${label(node)}`}
+                    meta={() => ({ ...node, itemType })}
+                    itemType={itemType}
+                    {...node}
+                  />
+                </div>
+              </NodeTransition>
+            );
+          })
         }
       </TransitionGroup>
     );
@@ -150,6 +161,8 @@ class NodeList extends Component {
 }
 
 NodeList.propTypes = {
+  disableDragNew: PropTypes.bool,
+  stage: PropTypes.object.isRequired,
   className: PropTypes.string,
   hoverColor: PropTypes.string,
   id: PropTypes.string.isRequired,
@@ -167,6 +180,7 @@ NodeList.propTypes = {
 };
 
 NodeList.defaultProps = {
+  disableDragNew: false,
   className: null,
   hoverColor: null,
   isDragging: false,

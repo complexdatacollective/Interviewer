@@ -19,7 +19,7 @@ const StagesMenu = (props) => {
   } = props;
 
   const [filter, setFilter] = useState('');
-  const [imageLoaded, updateImageLoaded] = useState(false);
+
   const scrollerRef = useRef(null);
 
   const baseAnimationDuration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
@@ -142,7 +142,6 @@ const StagesMenu = (props) => {
           index={index}
           active={isActive}
           setExpanded={setExpanded}
-          onImageLoaded={() => updateImageLoaded(true)}
         />
       </motion.div>
     );
@@ -169,7 +168,7 @@ const StagesMenu = (props) => {
       const itemHeight = document.getElementsByClassName('stages-menu__preview-wrapper')[0].clientHeight;
       scrollToLocation(currentStageIndex * itemHeight, 0.2);
     }
-  }, [imageLoaded]);
+  }, []);
 
   return (
     <motion.div

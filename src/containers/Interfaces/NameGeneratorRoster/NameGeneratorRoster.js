@@ -1,14 +1,21 @@
-import React, { useMemo } from 'react';
+import React, {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
 import { compose } from 'redux';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { motion, AnimatePresence } from 'framer-motion';
-import { get, isEmpty } from 'lodash';
+import { get, isEmpty, isUndefined } from 'lodash';
 import { DataCard } from '@codaco/ui/lib/components/Cards';
 import Prompts from '../../../components/Prompts';
 import withPrompt from '../../../behaviours/withPrompt';
-import { makeNetworkNodesForPrompt, makeGetAdditionalAttributes, makeGetNodeVariables } from '../../../selectors/interface';
+import {
+  makeNetworkNodesForPrompt,
+  makeGetAdditionalAttributes,
+  makeGetNodeVariables,
+  makeGetStageNodeCount,
+} from '../../../selectors/interface';
 import { makeGetPromptNodeModelData } from '../../../selectors/name-generator';
 import { entityPrimaryKeyProperty, entityAttributesProperty } from '../../../ducks/modules/network';
 import { actionCreators as sessionsActions } from '../../../ducks/modules/sessions';
@@ -26,6 +33,9 @@ import useSortableProperties from './useSortableProperties';
 import useItems from './useItems';
 import { convertNamesToUUIDs } from './helpers';
 import DropOverlay from './DropOverlay';
+import {
+  MaxNodesReached, maxNodesWithDefault, MinNodesNotMet, minNodesWithDefault,
+} from '../NameGeneratorQuickAdd';
 
 const countColumns = (width) => (
   width < 140 ? 1 : Math.floor(width / 450)
@@ -54,6 +64,10 @@ const NameGeneratorRoster = (props) => {
   const {
     prompt,
     stage,
+    registerBeforeNext,
+    onComplete,
+    isFirstPrompt,
+    isLastPrompt,
   } = props;
 
   const {
@@ -73,6 +87,35 @@ const NameGeneratorRoster = (props) => {
   const [itemsStatus, items, excludeItems] = useItems(props);
 
   const sortOptions = useSortableProperties(nodeVariables, stage.sortOptions);
+
+  const stageNodeCount = usePropSelector(makeGetStageNodeCount, props, true);
+  // eslint-disable-next-line @codaco/spellcheck/spell-checker
+  const minNodes = minNodesWithDefault(get(props, ['stage', 'behaviours', 'minNodes']));
+  // eslint-disable-next-line @codaco/spellcheck/spell-checker
+  const maxNodes = maxNodesWithDefault(get(props, ['stage', 'behaviours', 'maxNodes']));
+
+  const [showMinWarning, setShowMinWarning] = useState(false);
+
+  const handleBeforeLeaving = useCallback((direction, destination) => {
+    const isLeavingStage = (isFirstPrompt() && direction === -1)
+      || (isLastPrompt() && direction === 1);
+
+    // Implementation quirk that destination is only provided when navigation
+    // is triggered by Stages Menu. Use this to skip message if user has
+    // navigated directly using stages menu.
+    if (isUndefined(destination) && isLeavingStage && stageNodeCount < minNodes) {
+      setShowMinWarning(true);
+      return;
+    }
+
+    onComplete();
+  }, [stageNodeCount, minNodes, onComplete]);
+
+  registerBeforeNext(handleBeforeLeaving);
+
+  useEffect(() => {
+    setShowMinWarning(false);
+  }, [stageNodeCount, prompt]);
 
   const searchOptions = ((options) => {
     if (!options || isEmpty(options)) { return options; }
@@ -135,6 +178,8 @@ const NameGeneratorRoster = (props) => {
     { 'name-generator-roster-interface__node-list--empty': nodesForPrompt.length === 0 },
   );
 
+  const disabled = useMemo(() => stageNodeCount >= maxNodes, [stageNodeCount, maxNodes]);
+
   return (
     <div className="name-generator-roster-interface">
       <AnimatePresence exitBeforeEnter>
@@ -153,10 +198,10 @@ const NameGeneratorRoster = (props) => {
           <>
             <motion.div
               className="name-generator-roster-interface__prompt"
-              initial="hidden"
-              animate="visible"
-              exit="hidden"
-              variants={variants}
+              // initial="hidden"
+              // animate="visible"
+              // exit="hidden"
+              // variants={variants}
               key="prompts"
             >
               <Prompts
@@ -174,6 +219,7 @@ const NameGeneratorRoster = (props) => {
             >
               <div className="name-generator-roster-interface__search-panel">
                 <SearchableList
+                  key={disabled}
                   id="searchable-list"
                   items={items}
                   title="Available to add"
@@ -188,8 +234,10 @@ const NameGeneratorRoster = (props) => {
                   accepts={({ meta: { itemType } }) => itemType !== 'SOURCE_NODES'}
                   onDrop={handleRemoveNode}
                   dropNodeColor={dropNodeColor}
+                  disabled={disabled}
                 />
               </div>
+              <MaxNodesReached show={stageNodeCount >= maxNodes} dontHide />
               <div className="name-generator-roster-interface__node-panel">
                 <Panel
                   title="Added"
@@ -228,6 +276,11 @@ const NameGeneratorRoster = (props) => {
           </>
         )}
       </AnimatePresence>
+      <MinNodesNotMet
+        show={showMinWarning}
+        minNodes={minNodes}
+        onHideCallback={() => setShowMinWarning(false)}
+      />
     </div>
   );
 };

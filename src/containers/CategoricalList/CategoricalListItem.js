@@ -40,6 +40,7 @@ const CategoricalListItem = (props) => {
     nodeColor,
     onExpandBin,
     updateNode,
+    stage,
   } = props;
 
   const isOtherVariable = !!bin.otherVariable;
@@ -133,6 +134,7 @@ const CategoricalListItem = (props) => {
         isExpanded={isExpanded}
         nodes={bin.nodes}
         sortOrder={sortOrder}
+        stage={stage}
       />
       { isOtherVariable
         && (

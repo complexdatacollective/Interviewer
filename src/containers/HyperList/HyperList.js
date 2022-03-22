@@ -45,7 +45,7 @@ const ListContext = React.createContext({ items: [] });
 
 const NoopComponent = () => null;
 
-const getRowRenderer = (Component, DragComponent) => ({
+const getRowRenderer = (Component, DragComponent, allowDragging) => ({
   index,
   style,
 }) => {
@@ -84,7 +84,7 @@ const getRowRenderer = (Component, DragComponent) => ({
         {...props}
         meta={() => ({ data, id, itemType })}
         disabled={isDisabled}
-        allowDrag={!isDisabled}
+        allowDrag={allowDragging && !isDisabled}
         preview={preview}
       />
     </div>
@@ -122,9 +122,10 @@ const HyperList = ({
   placeholder,
   itemType,
   showTooMany,
+  allowDragging,
 }) => {
   const RowRenderer = useMemo(
-    () => getRowRenderer(DragSource(ItemComponent), DragComponent),
+    () => getRowRenderer(DragSource(ItemComponent), DragComponent, allowDragging),
     [ItemComponent, DragComponent],
   );
 

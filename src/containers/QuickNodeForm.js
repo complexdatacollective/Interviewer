@@ -19,7 +19,20 @@ class QuickNodeForm extends PureComponent {
     };
   }
 
+  // eslint-disable-next-line camelcase
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    const {
+      disabled,
+    } = nextProps;
+
+    if (disabled) {
+      this.setState({ show: false });
+    }
+  }
+
   handleOpenForm = () => {
+    const { onClick } = this.props;
+    onClick();
     this.setState(({ show }) => ({ show: !show }));
   }
 
@@ -79,6 +92,7 @@ class QuickNodeForm extends PureComponent {
       nodeIconName,
       targetVariable,
       stage,
+      disabled,
     } = this.props;
 
     const {
@@ -94,7 +108,7 @@ class QuickNodeForm extends PureComponent {
     };
 
     return (
-      <div className="quick-add">
+      <div className={`quick-add ${disabled ? 'quick-add--disabled' : ''}`}>
         <div className={cx('quick-add-form', { 'quick-add-form--show': show })}>
           <form autoComplete="off" onSubmit={this.handleSubmitForm}>
             {show

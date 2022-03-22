@@ -142,12 +142,17 @@ class CategoricalList extends Component {
           onExpandBin={onExpandBin}
           isExpanded={expandedBinIndex === index}
           sortOrder={prompt.binSortOrder}
+          stage={stage}
         />
       ));
   };
 
   render() {
-    const { bins, expandedBinIndex, onExpandBin } = this.props;
+    const {
+      bins,
+      expandedBinIndex,
+      onExpandBin,
+    } = this.props;
 
     const listClasses = cx(
       'categorical-list',

@@ -16,7 +16,6 @@ const StagePreview = ({
     type, label, index, id,
   },
   handleOpenStage,
-  onImageLoaded,
   active,
 }) => {
   const classes = cx('stage-preview', {
@@ -29,7 +28,7 @@ const StagePreview = ({
     expanded: {
       y: 0,
       opacity: 1,
-      height: 'auto',
+      height: '100%',
       transition: {
         duration: baseAnimationDuration / 3,
       },
@@ -61,7 +60,6 @@ const StagePreview = ({
           src={getTimelineImage(type)}
           alt="NameGenerator Interface"
           title="NameGenerator Interface"
-          onLoad={onImageLoaded}
         />
       </div>
       <div className="stage-preview__label">
@@ -95,7 +93,6 @@ StagePreview.propTypes = {
   item: PropTypes.object.isRequired,
   active: PropTypes.bool.isRequired,
   handleOpenStage: PropTypes.func.isRequired,
-  onImageLoaded: PropTypes.func.isRequired,
 };
 
 export default compose(
