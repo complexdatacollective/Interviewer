@@ -78,7 +78,7 @@ export const MaxNodesReached = SelfDismissingNote(() => (
   >
     <div
       style={{
-        flex: '0 0 1.2rem',
+        flex: '0 0 1.8rem',
       }}
     >
       <Icon name="info" style={{ height: '3rem', width: '3rem' }} />
@@ -86,7 +86,7 @@ export const MaxNodesReached = SelfDismissingNote(() => (
     <div
       style={{
         flex: '1 1 auto',
-        marginLeft: '1.2rem',
+        margin: '0 1.8rem',
       }}
     >
       <p>
@@ -113,7 +113,7 @@ export const MinNodesNotMet = SelfDismissingNote(({ minNodes }) => (
   >
     <div
       style={{
-        flex: '0 0 1rem',
+        flex: '0 0 1.8rem',
       }}
     >
       <Icon name="error" style={{ height: '3rem', width: '3rem' }} />
@@ -121,7 +121,7 @@ export const MinNodesNotMet = SelfDismissingNote(({ minNodes }) => (
     <div
       style={{
         flex: '1 1 auto',
-        marginLeft: '1.2rem',
+        margin: '0 1.8rem',
       }}
     >
       <p>
