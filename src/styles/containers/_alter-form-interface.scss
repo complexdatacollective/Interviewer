@@ -181,3 +181,24 @@
     width: unit(2);
   }
 }
+
+.alter-limit-nudge {
+  position: absolute;
+  bottom: unit(2);
+  background: var(--color-slate-blue--dark);
+  color: var(--color-white);
+  padding: unit(1) unit(2);
+  border-radius: 10rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 unit(.5) unit(2) unit(1) rgba(0, 0, 0, 0.25); //sass-lint:disable-line no-color-literals
+  z-index: var(--z-dialog);
+  font-size: 1.25rem;
+
+  .icon {
+    margin-left: unit(1);
+    height: unit(2);
+    width: unit(2);
+  }
+}

@@ -63,7 +63,7 @@ export const SelfDismissingNote = (Wrapped) => (
 
 export const MaxNodesReached = SelfDismissingNote(() => (
   <motion.div
-    className="scroll-nudge"
+    className="alter-limit-nudge"
     style={{
       bottom: '2.4rem',
       width: '40rem',
@@ -78,7 +78,7 @@ export const MaxNodesReached = SelfDismissingNote(() => (
   >
     <div
       style={{
-        flex: '0 0 1rem',
+        flex: '0 0 1.2rem',
       }}
     >
       <Icon name="info" style={{ height: '3rem', width: '3rem' }} />
@@ -90,8 +90,8 @@ export const MaxNodesReached = SelfDismissingNote(() => (
       }}
     >
       <p>
-        You have added the maximum number of items for this screen. Please
-        click the down arrow to continue.
+        You have added the maximum number of items. Click
+        the down arrow to continue.
       </p>
     </div>
   </motion.div>
@@ -99,7 +99,7 @@ export const MaxNodesReached = SelfDismissingNote(() => (
 
 export const MinNodesNotMet = SelfDismissingNote(({ minNodes }) => (
   <motion.div
-    className="scroll-nudge"
+    className="alter-limit-nudge"
     style={{
       bottom: '2.4rem',
       width: '30rem',
@@ -361,7 +361,7 @@ function makeMapStateToProps() {
     return {
       activePromptAttributes: props.prompt.additionalAttributes,
       minNodes: minNodesWithDefault(get(props, ['stage', 'behaviours', 'minNodes'])),
-      maxNodes: minNodesWithDefault(get(props, ['stage', 'behaviours', 'maxNodes'])),
+      maxNodes: maxNodesWithDefault(get(props, ['stage', 'behaviours', 'maxNodes'])),
       stageNodeCount: getStageNodeCount(state, props),
       newNodeAttributes: getPromptNodeAttributes(state, props),
       newNodeModelData: getPromptNodeModelData(state, props),
