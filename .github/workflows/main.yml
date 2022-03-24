@@ -1,7 +1,7 @@
 name: CI
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
 
   # Allows you to run this workflow manually from the Actions tab
@@ -18,7 +18,7 @@ jobs:
       # Set node version
       - uses: actions/setup-node@v2
         with:
-          node-version: '12.14.1'
+          node-version: "14.19.1"
       - name: Set NPM 7
         run: npm install -g npm@7.6.3
       # Cache node_modules
@@ -26,7 +26,7 @@ jobs:
         env:
           cache-name: cache-node-modules
         with:
-          path: '**/node_modules'
+          path: "**/node_modules"
           key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
 
       - name: Install MDNS build dependencies
@@ -52,7 +52,7 @@ jobs:
       # Set node version
       - uses: actions/setup-node@v2
         with:
-          node-version: '12.14.1'
+          node-version: "12.14.1"
       - name: Set NPM 7
         run: npm install -g npm@7.6.3
       # Cache node_modules
@@ -60,7 +60,7 @@ jobs:
         env:
           cache-name: cache-node-modules
         with:
-          path: '**/node_modules'
+          path: "**/node_modules"
           key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
 
       - name: Install MDNS build dependencies
@@ -71,5 +71,3 @@ jobs:
 
       - name: Build
         run: npm run build:electron
-
-
