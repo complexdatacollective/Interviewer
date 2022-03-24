@@ -80,7 +80,7 @@
     "detect-port": "1.1.0",
     "dotenv": "4.0.0",
     "electron": "9.4.4",
-    "electron-builder": "~22.7.0",
+    "electron-builder": "~23.0.2",
     "electron-log": "^4.2.2",
     "electron-notarize": "^1.0.0",
     "electron-winstaller": "^4.0.0",
@@ -167,6 +167,7 @@
     "whatwg-fetch": "2.0.3",
     "worker-loader": "^2.0.0",
     "xml2js": "~0.4.23",
+    "xmldom": "~0.1.27",
     "xss": "^0.3.4"
   },
   "optionalDependencies": {
