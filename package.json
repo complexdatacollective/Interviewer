@@ -11,6 +11,7 @@
   },
   "scripts": {
     "pack": "electron-builder --dir",
+    "start:web": "cross-env NC_TARGET_PLATFORM=web node scripts/start.js",
     "start:android": "cross-env NC_TARGET_PLATFORM=android node scripts/start.js",
     "start:electron": "cross-env NC_TARGET_PLATFORM=electron node scripts/start.js",
     "start:ios": "cross-env NC_TARGET_PLATFORM=ios node scripts/start.js",

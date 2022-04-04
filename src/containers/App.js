@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
 import cx from 'classnames';
 import 'swiper/css/swiper.css';
 import { actionCreators as deviceSettingsActions } from '../ducks/modules/deviceSettings';
@@ -194,6 +193,5 @@ function mapStateToProps(state) {
 }
 
 export default compose(
-  withRouter,
   connect(mapStateToProps, mapDispatchToProps),
 )(App);

@@ -70,17 +70,21 @@ if (isElectron()) {
 secureCommsReady.then(() => {
   if (isCordova()) {
     document.addEventListener('deviceready', startApp, false);
-  } else if (document.readyState === 'complete') {
-    startApp();
-    // Listen for file open events.
-    initFileOpener();
-  } else {
-    document.onreadystatechange = () => {
-      if (document.readyState === 'complete') {
-        startApp();
-        // Listen for file open events.
-        initFileOpener();
-      }
+  } else if (isElectron()) {
+    const start = () => {
+      startApp();
+      initFileOpener();
     };
+
+    // If document is already ready, start the app.
+    if (document.readyState === 'complete') { start(); }
+
+    // Else bind an event listener
+    document.onreadystatechange = () => {
+      if (document.readyState === 'complete') { start(); }
+    };
+  } else {
+    // Browser
+    startApp();
   }
 });
