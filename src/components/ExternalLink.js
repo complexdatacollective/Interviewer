@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { isElectron } from '../utils/Environment';
+import { isCordova, isElectron } from '../utils/Environment';
 
 export const openExternalLink = (href) => {
   if (isElectron()) {
@@ -10,7 +10,12 @@ export const openExternalLink = (href) => {
     return false;
   }
 
-  window.cordova.InAppBrowser.open(href, '_system', 'location=yes');
+  if (isCordova()) {
+    window.cordova.InAppBrowser.open(href, '_system', 'location=yes');
+  }
+
+  window.open(href, '_blank');
+
   return false;
 };
 

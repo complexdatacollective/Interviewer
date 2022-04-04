@@ -10,7 +10,7 @@ import { actionCreators as dialogActions } from '../ducks/modules/dialogs';
 import getVersion from '../utils/getVersion';
 import ExternalLink, { openExternalLink } from '../components/ExternalLink';
 import {
-  isAndroid, isIOS, isLinux, isMacOS, isPreview, isWindows,
+  isAndroid, isIOS, isLinux, isMacOS, isPreview, isWeb, isWindows,
 } from '../utils/Environment';
 import useDismissedUpdatesState from './useDismissedUpdatesState';
 
@@ -97,12 +97,6 @@ const useUpdater = (updateEndpoint, timeout = 0) => {
   const dispatch = useDispatch();
   const [dismissedUpdates, dismissUpdate] = useDismissedUpdatesState();
 
-  if (isPreview()) {
-    // eslint-disable-next-line no-console
-    console.info('Checking for updates disabled because we are in preview mode!');
-    return;
-  }
-
   const handleDismiss = (version) => {
     dismissUpdate(version);
     dispatch(toastActions.removeToast('update-toast'));
@@ -176,8 +170,13 @@ const useUpdater = (updateEndpoint, timeout = 0) => {
   };
 
   useEffect(() => {
-    const delay = setTimeout(checkForUpdate, timeout);
+    if (isPreview() || isWeb()) {
+      // eslint-disable-next-line no-console
+      console.info('Checking for updates disabled.');
+      return () => {};
+    }
 
+    const delay = setTimeout(checkForUpdate, timeout);
     return () => clearTimeout(delay);
   }, [updateEndpoint, dismissedUpdates]);
 };
