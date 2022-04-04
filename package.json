@@ -29,7 +29,7 @@
     "test:integration:update-snapshots": "docker-compose run update_snapshots",
     "test:update-snapshots": "node scripts/test.js --env=jsdom --updateSnapshot",
     "electron": "electron ./www",
-    "dev:electron": "cross-env NODE_ENV=development NC_DEVSERVER_FILE=\".devserver\" electron public/",
+    "dev:electron": "cross-env NODE_ENV=development NC_DEVSERVER_FILE=\".devserver\" electron electron/main",
     "dev:ios": "node scripts/check-dev-server.js && cross-env LIVE_RELOAD=1 cordova run ios --developmentTeam=85EZ69PQHJ",
     "dev:android": "node scripts/check-dev-server.js && cross-env LIVE_RELOAD=1 cordova run android",
     "generate-icons": "node scripts/generate-app-icons.js",
@@ -53,7 +53,6 @@
     "@babel/plugin-syntax-import-meta": "7.7.4",
     "@babel/preset-env": "7.10.4",
     "@babel/preset-react": "7.10.1",
-    "@codaco/eslint-plugin-spellcheck": "0.0.14",
     "@codaco/ui": "~5.7.7",
     "@faker-js/faker": "~6.0.0-alpha.5",
     "@zippytech/sorty": "^2.0.0",
@@ -80,7 +79,7 @@
     "csvtojson": "^2.0.8",
     "detect-port": "1.1.0",
     "dotenv": "4.0.0",
-    "electron": "9.4.4",
+    "electron": "~18.0.1",
     "electron-builder": "~22.7.0",
     "electron-log": "^4.2.2",
     "electron-notarize": "^1.0.0",
@@ -199,7 +198,7 @@
     "zeroconf": "^0.1.4"
   },
   "homepage": ".",
-  "main": "www/electron-starter.js",
+  "main": "electron/main",
   "build": {
     "extends": null,
     "extraResources": [
@@ -266,9 +265,9 @@
   },
   "browserslist": [
     "defaults",
-    "Electron 9.2.0",
-    "ChromeAndroid >= 84",
-    "iOS >= 13.6"
+    "Electron 18.0.1",
+    "ChromeAndroid >= 91",
+    "iOS >= 15.0"
   ],
   "jest": {
     "collectCoverageFrom": [

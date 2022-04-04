@@ -4,7 +4,7 @@ In the event that we uncover a security issue in the software, we will make ever
 
 ## Supported Versions
 
-Security updates will only be issued for the most recent version(s) of the software. These are the only versions of the apps that you should consider to be supported. We will review and accepts backports of security fixes for older versions of the software should you wish to create them.
+Security updates will only be issued for the most recent version(s) of the software. These are the only versions of the apps that you should consider to be supported. We will review and accept backports of security fixes for older versions of the software should you wish to create them.
 
 ## Reporting a Vulnerability
 

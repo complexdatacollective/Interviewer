@@ -92,6 +92,31 @@ const downloadProtocol = inEnvironment((environment) => {
     };
   }
 
+  if (environment === environments.WEB) {
+    const request = require('request-promise-native');
+    const path = require('path');
+    const electron = require('electron');
+    const tempPath = (electron.app || electron.remote.app).getPath('temp');
+    const destination = path.join(tempPath, getProtocolName());
+
+    return (uri, pairedServer = false) => {
+      let promisedResponse;
+      if (pairedServer) {
+        promisedResponse = new ApiClient(pairedServer).downloadProtocol(uri);
+      } else {
+        promisedResponse = getURL(uri)
+          .catch(urlError)
+          .then(url => request({ method: 'GET', encoding: null, uri: url.href }));
+      }
+
+      return promisedResponse
+        .catch(networkError)
+        .then(data => writeFile(destination, data))
+        .catch(fileError)
+        .then(() => destination);
+    };
+  }
+
   return () => Promise.reject(new Error('downloadProtocol() not available on platform'));
 });
 
