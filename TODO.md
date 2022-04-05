@@ -1,6 +1,8 @@
 Core dependencies to update:
 
 - Webpack (Can we use new CRA?) -> webpack 5
+- Remove enzyme and replace with @testing-library/react
+- replace mdns with something that works with context isolation
 - replace bespoke dialogs and toasts with something from an existing UI lib
 - React
 - React Router
@@ -13,6 +15,9 @@ Design changes
 - Frontend will then hydrate store/session by requesting protocol data from the backend
 - Protocol assets will be requested from the backend at runtime.
 - Could this also apply to roster data so that it can be pre-processed?
+- replace use of react-flip-toolkit on categorical bin
+- replace use of react-id-swiper on alter form interfaces
+- replace use of react-transition group with framer-motion
 
 - App bundle size
 - Font sizing
