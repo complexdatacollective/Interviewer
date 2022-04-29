@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { get } from 'lodash';
 import Button from '@codaco/ui/lib/components/Button';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { actionCreators as installedProtocolActions } from '../../ducks/modules/installedProtocols';
@@ -82,7 +83,7 @@ const ManageProtocolsOverlay = ({
   const SelectableProtocolCard = (props) => (
     <ProtocolCard
       {...props}
-      onClickHandler={() => handleProtocolCardClick(props.uid)}
+      onClickHandler={() => handleProtocolCardClick(get(props, 'uid'))}
     />
   );
 
