@@ -58,7 +58,7 @@
     "@zippytech/sorty": "^2.0.0",
     "ajv": "^6.5.4",
     "animejs": "^2.2.0",
-    "async": "^3.2.0",
+    "async": "^3.2.2",
     "autoprefixer": "^9.8.5",
     "axios": "^0.21.2",
     "babel-jest": "25.1.0",
