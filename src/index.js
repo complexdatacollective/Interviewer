@@ -1,4 +1,5 @@
 import React from 'react';
+import { webFrame, ipcRenderer } from 'electron';
 import ReactDOM from 'react-dom';
 import { PersistGate } from 'redux-persist/integration/react';
 import { ready as secureCommsReady } from 'secure-comms-api/cipher';
@@ -55,7 +56,6 @@ const startApp = () => {
 };
 
 if (isElectron()) {
-  const { webFrame, ipcRenderer } = window.require('electron'); // eslint-disable-line global-require
   webFrame.setVisualZoomLevelLimits(1, 1); // Prevents pinch-to-zoom
   remote.init();
 

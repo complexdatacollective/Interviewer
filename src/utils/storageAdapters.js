@@ -1,4 +1,3 @@
-/* eslint-disable @codaco/spellcheck/spell-checker */
 import storage from 'redux-persist/lib/storage';
 import { isElectron, isWeb } from './Environment';
 

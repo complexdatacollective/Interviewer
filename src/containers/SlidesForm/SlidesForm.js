@@ -6,7 +6,7 @@ import React, {
   useCallback,
 } from 'react';
 import cx from 'classnames';
-import uuid from 'uuid';
+import { v4 as uuid } from 'uuid';;
 import PropTypes from 'prop-types';
 import { debounce } from 'lodash';
 import { connect } from 'react-redux';

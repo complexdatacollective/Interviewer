@@ -2,13 +2,6 @@ import { omit } from 'lodash';
 import crypto from 'crypto';
 import objectHash from 'object-hash';
 import {
-  getEntityAttributes,
-  entityAttributesProperty,
-  entityPrimaryKeyProperty,
-  nodeTypePropertyForWorker,
-  primaryKeyPropertyForWorker,
-} from '../ducks/modules/network';
-import {
   sessionProperty,
   caseProperty,
   codebookHashProperty,
@@ -17,7 +10,14 @@ import {
   sessionStartTimeProperty,
   sessionFinishTimeProperty,
   sessionExportTimeProperty,
-} from './network-exporters/src/utils/reservedAttributes';
+} from '@codaco/network-exporters';
+import {
+  getEntityAttributes,
+  entityAttributesProperty,
+  entityPrimaryKeyProperty,
+  nodeTypePropertyForWorker,
+  primaryKeyPropertyForWorker,
+} from '../ducks/modules/network';
 
 /**
  * Internally, 'attributes' are stored with UUID keys, which are meaningless to the end user.
@@ -29,8 +29,11 @@ import {
  *
  * @private
  */
-export const getEntityAttributesWithNamesResolved = (entity, entityVariables,
-  ignoreExternalProps = false) => {
+export const getEntityAttributesWithNamesResolved = (
+  entity,
+  entityVariables,
+  ignoreExternalProps = false,
+) => {
   if (!entityVariables) {
     return {};
   }

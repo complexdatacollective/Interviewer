@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
+import { entityAttributesProperty } from '@codaco/network-exporters';
 import { get } from 'lodash';
 import { actionCreators as sessionsActions } from '../../../ducks/modules/sessions';
 import { entityPrimaryKeyProperty } from '../../../ducks/modules/network';
-import { entityAttributesProperty } from '../../../utils/network-exporters/src/utils/reservedAttributes';
 
 export const getEdgeInNetwork = (edges, pair, edgeType) => {
   if (!pair) { return null; }

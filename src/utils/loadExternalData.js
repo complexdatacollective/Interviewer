@@ -1,10 +1,8 @@
-/* eslint-disable quotes, quote-props, comma-dangle */
 import { get } from 'lodash';
 import environments from './environments';
 import inEnvironment from './Environment';
 import { readFile } from './filesystem';
 import getAssetUrl from './protocol/getAssetUrl';
-import CSVWorker from './csvDecoder.worker';
 
 /**
  * Converting data from CSV to our network JSON format is expensive, and so happens
@@ -15,7 +13,7 @@ import CSVWorker from './csvDecoder.worker';
  * to decode.
  */
 const convertCSVToJsonWithWorker = (data) => new Promise((resolve, reject) => {
-  const worker = new CSVWorker();
+  const worker = new Worker(new URL('./csvDecoder.worker', import.meta.url));
   worker.postMessage(data);
   worker.onerror = (event) => {
     reject(event);

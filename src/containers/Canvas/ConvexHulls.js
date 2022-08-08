@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
+import { entityAttributesProperty } from '@codaco/network-exporters';
 import { withBounds } from '../../behaviours';
 import ConvexHulls from '../../components/Canvas/ConvexHulls';
 import { makeGetCategoricalOptions } from '../../selectors/network';
-import { entityAttributesProperty } from '../../utils/network-exporters/src/utils/reservedAttributes';
 
 function makeMapStateToProps() {
   const getCategoricalOptions = makeGetCategoricalOptions();

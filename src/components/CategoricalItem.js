@@ -3,10 +3,12 @@ import React from 'react';
 import { compose, withProps, withState } from 'recompose';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { Flipped } from 'react-flip-toolkit';
+// import { Flipped } from 'react-flip-toolkit';
 import { MarkdownLabel } from '@codaco/ui/lib/components/Fields';
 import { DropTarget, MonitorDropTarget } from '../behaviours/DragAndDrop';
 import NodeList from './NodeList';
+
+const Flipped = ({children}) => (<div>{children}</div>);
 
 /**
   * Renders a droppable CategoricalBin item

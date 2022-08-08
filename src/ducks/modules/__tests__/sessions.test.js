@@ -1,9 +1,9 @@
 /* eslint-env jest */
-/* eslint-disable @codaco/spellcheck/spell-checker */
+
 
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import uuid from 'uuid/v4';
+import { v4 as uuid } from 'uuid';
 import reducer, { getReducer, actionCreators, actionTypes } from '../sessions';
 import { actionTypes as networkActionTypes, actionCreators as networkActions } from '../network';
 import { actionTypes as installedProtocolsActionTypes } from '../installedProtocols';

@@ -1,7 +1,7 @@
 /* eslint-disable global-require */
 
 import Zip from 'jszip';
-import uuid from 'uuid/v4';
+import { v4 as uuid } from 'uuid';
 import environments from '../environments';
 import inEnvironment from '../Environment';
 import friendlyErrorMessage from '../friendlyErrorMessage';

@@ -1,4 +1,4 @@
-import uuid from 'uuid';
+import { v4 as uuid } from 'uuid';;
 import React from 'react';
 
 const ADD_TOAST = 'TOASTS/ADD_TOAST';

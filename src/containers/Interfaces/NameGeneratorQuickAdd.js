@@ -1,4 +1,4 @@
-/* eslint-disable @codaco/spellcheck/spell-checker */
+
 import React, { Component, useEffect, useState } from 'react';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';

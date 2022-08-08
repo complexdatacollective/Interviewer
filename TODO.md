@@ -11,6 +11,8 @@ Core dependencies to update:
 - Cordova -> capacitor?
 
 Design changes
+- move filesystem to backend, and all filesystem related calls into API bridge
+- Use something like automerge to manage local state to global merge? <https://github.com/automerge/automerge>
 - Protocol actions must be moved to a backend, which will store protocol data
 - Frontend will then hydrate store/session by requesting protocol data from the backend
 - Protocol assets will be requested from the backend at runtime.

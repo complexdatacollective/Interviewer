@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { get } from 'lodash';
 import PropTypes from 'prop-types';
+import { entityAttributesProperty } from '@codaco/network-exporters';
 import ConvexHulls from '../Canvas/ConvexHulls';
 import NodeLayout from '../Canvas/NodeLayout';
 import Background from '../Canvas/Background';
@@ -12,7 +13,6 @@ import EdgeLayout from '../../components/Canvas/EdgeLayout';
 import Canvas from '../../components/Canvas/Canvas';
 import { getNetworkEdges, getNetworkNodes } from '../../selectors/network';
 import { edgesToCoords } from '../../selectors/canvas';
-import { entityAttributesProperty } from '../../utils/network-exporters/src/utils/reservedAttributes';
 
 /**
   * Narrative Interface

@@ -1,4 +1,4 @@
-import { VariableType } from './utils/network-exporters/src/utils/protocol-consts';
+import { VariableType } from '@codaco/network-exporters';
 
 // String consts used by protocol files
 // Note: these values are no longer used to produce JSON schemas; the schemas must

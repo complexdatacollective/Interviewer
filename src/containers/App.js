@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
+import electron from 'electron';
 import { motion } from 'framer-motion';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import cx from 'classnames';
-import 'swiper/css/swiper.css';
 import { actionCreators as deviceSettingsActions } from '../ducks/modules/deviceSettings';
 import '../styles/main.scss';
 import {
@@ -18,7 +18,6 @@ import { actionCreators as dialogActions } from '../ducks/modules/dialogs';
 
 const getElectronWindow = () => {
   if (isElectron()) {
-    const electron = window.require('electron'); // eslint-disable-line global-require
     return electron.remote.getCurrentWindow();
   }
   return false;
@@ -45,8 +44,6 @@ const App = ({
   setStartFullScreen,
   interfaceScale,
   useDynamicScaling,
-  crappleWarningHeeded,
-  setCrappleWarningHeeded,
   children,
   openDialog,
 }) => {
@@ -70,36 +67,6 @@ const App = ({
       window.Keyboard.shrinkView(true);
     }
   }, []);
-
-  useEffect(() => {
-    // Ugh.
-    if ((isIOS()) && !crappleWarningHeeded) {
-      openDialog({
-        type: 'Confirm',
-        title: 'Important requirements specific to iPad users',
-        message: (
-          <>
-            <p>
-              By using this app you confirm that you have submitted documents
-              to us that demonstrate compliance with all App Store policies regarding
-              human subjects research (including proof of full IRB or ethics board approval), and
-              have been formally approved by us (CODACO) to use this software for your specific
-              research,
-              {' '}
-              <strong>
-                and your specific research only
-              </strong>
-              . You also confirm that you will inform us immediately of
-              any changes to your IRB status that might impact our approval.
-            </p>
-          </>
-        ),
-        confirmLabel: 'I confirm the above',
-        canCancel: false,
-        onConfirm: setCrappleWarningHeeded,
-      });
-    }
-  }, [crappleWarningHeeded]);
 
   useEffect(() => {
     if (!env.REACT_APP_NO_FULLSCREEN) {
@@ -157,7 +124,7 @@ const App = ({
         })}
       >
         <SettingsMenu />
-        { children }
+        {/* { children } */}
       </div>
       <DialogManager />
       <ToastManager />
@@ -178,8 +145,6 @@ App.defaultProps = {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  setStartFullScreen: (value) => dispatch(deviceSettingsActions.setSetting('startFullScreen', value)),
-  setCrappleWarningHeeded: () => dispatch(deviceSettingsActions.setSetting('crappleWarningHeeded', true)),
   openDialog: (dialog) => dispatch(dialogActions.openDialog(dialog)),
 });
 
@@ -188,7 +153,6 @@ function mapStateToProps(state) {
     interfaceScale: state.deviceSettings.interfaceScale,
     useDynamicScaling: state.deviceSettings.useDynamicScaling,
     startFullScreen: state.deviceSettings.startFullScreen,
-    crappleWarningHeeded: state.deviceSettings.crappleWarningHeeded,
   };
 }
 

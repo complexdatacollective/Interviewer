@@ -1,6 +1,6 @@
 /* eslint-env jest */
-/* eslint-disable @codaco/spellcheck/spell-checker */
-import uuid from 'uuid/v4';
+
+import { v4 as uuid } from 'uuid';
 import reducer,
 {
   actionTypes,

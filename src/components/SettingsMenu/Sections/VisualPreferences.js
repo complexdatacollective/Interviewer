@@ -1,4 +1,5 @@
 import React from 'react';
+import electron from 'electron';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { motion } from 'framer-motion';
@@ -19,7 +20,6 @@ const VisualPreferences = (props) => {
 
   const getElectronWindow = () => {
     if (isElectron()) {
-      const electron = window.require('electron');
       return electron.remote.getCurrentWindow();
     }
     return false;

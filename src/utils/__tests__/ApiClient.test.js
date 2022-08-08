@@ -1,5 +1,5 @@
 /* eslint-env jest */
-/* eslint-disable @codaco/spellcheck/spell-checker */
+
 
 import axios from 'axios';
 import { decrypt } from 'secure-comms-api/cipher';

@@ -1,5 +1,5 @@
 /* eslint-env jest */
-/* eslint-disable @codaco/spellcheck/spell-checker */
+
 import React from 'react';
 import { createStore } from 'redux';
 import { mount } from 'enzyme';

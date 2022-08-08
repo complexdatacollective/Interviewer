@@ -3,7 +3,7 @@ import { compose } from 'redux';
 import { throttle } from 'lodash';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Flipper } from 'react-flip-toolkit';
+// import { Flipper } from 'react-flip-toolkit';
 import cx from 'classnames';
 import color from 'color';
 import { getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
@@ -16,6 +16,8 @@ import { entityAttributesProperty } from '../../ducks/modules/network';
 import getAbsoluteBoundingRect from '../../utils/getAbsoluteBoundingRect';
 import CategoricalListItem from './CategoricalListItem';
 import { getItemSize, getExpandedSize } from './helpers';
+
+const Flipper = ({ children }) => (<div>{children}</div>);
 
 const isSpecialValue = (value) => {
   if (value === null) {

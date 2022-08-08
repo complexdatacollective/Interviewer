@@ -1,5 +1,5 @@
 /* eslint-env jest */
-/* eslint-disable @codaco/spellcheck/spell-checker */
+
 
 import { createStore, applyMiddleware } from 'redux';
 import thunks from 'redux-thunk';

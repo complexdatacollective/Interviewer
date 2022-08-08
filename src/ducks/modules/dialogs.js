@@ -1,4 +1,4 @@
-import uuid from 'uuid';
+import { v4 as uuid } from 'uuid';;
 
 const OPEN_DIALOG = Symbol('PROTOCOL/OPEN_DIALOG');
 const CLOSE_DIALOG = Symbol('PROTOCOL/CLOSE_DIALOG');

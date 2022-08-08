@@ -1,5 +1,5 @@
 import React from 'react';
-import uuid from 'uuid';
+import { v4 as uuid } from 'uuid';;
 import { CancellationError } from 'builder-util-runtime';
 import { ProgressBar, Spinner } from '@codaco/ui';
 import { store } from '../../ducks/store';

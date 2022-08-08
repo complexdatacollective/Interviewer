@@ -2,12 +2,12 @@
 import axios from 'axios';
 import EventEmitter from 'eventemitter3';
 import { isString } from 'lodash';
+import { ipcRenderer } from 'electron'; // eslint-disable-line global-require
 import {
   decrypt, deriveSecretKeyBytes, encrypt, fromHex, toHex,
 } from 'secure-comms-api/cipher';
 import { DEVICE_API_VERSION } from '../config';
 import { isCordova, isElectron } from './Environment';
-import UserCancelledExport from './network-exporters/src/errors/UserCancelledExport';
 
 const ProgressMessages = {
   BeginExport: {
@@ -197,7 +197,6 @@ class ApiClient {
           reject(new Error('No trusted Server certificate available'));
           return;
         }
-        const { ipcRenderer } = require('electron'); // eslint-disable-line global-require
         ipcRenderer.once('add-cert-complete', resolve);
         ipcRenderer.send('add-cert', this.pairedServer.sslCertificate);
       });
