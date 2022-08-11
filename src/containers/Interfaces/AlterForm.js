@@ -7,7 +7,6 @@ import SlidesForm from '../SlidesForm/SlidesForm';
 
 const AlterForm = (props) => (
   <SlidesForm
-    itemName="alter"
     slideForm={SlideFormNode}
     {...props}
   />
