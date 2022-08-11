@@ -185,10 +185,8 @@ const SlidesForm = (props) => {
   }, 200), [setIsReadyForNext, setScrollProgress]);
 
   useEffect(() => {
-    console.log("active Index", activeIndex);
     setIsReadyForNext(false);
   }, [activeIndex]);
-
 
   const handleUpdate = (...update) => {
     updateItem(...update);
@@ -248,30 +246,26 @@ const SlidesForm = (props) => {
     );
   }, [activeIndex, items, getFormName, form, stage.subject, pendingDirection]);
 
-  const renderIntroSlide = useCallback(() => {
-    console.log('render intro slide', pendingDirection);
-
-    return (
-      <motion.div
-        key="introduction-wrapper"
-        className="introduction-wrapper"
-        variants={slideVariants}
-        animate="show"
-        initial={pendingDirection === 1 ? 'hideBottom' : 'hideTop'}
-        exit={pendingDirection === 1 ? 'hideTop' : 'hideBottom'}
-        transition={{ easing: 'easeInOutQuad', duration: 0.5 }}
+  const renderIntroSlide = useCallback(() => (
+    <motion.div
+      key="introduction-wrapper"
+      className="introduction-wrapper"
+      variants={slideVariants}
+      animate="show"
+      initial={pendingDirection === 1 ? 'hideBottom' : 'hideTop'}
+      exit="hideTop"
+      transition={{ easing: 'easeInOutQuad', duration: 0.5 }}
+    >
+      <div
+        className="alter-form__introduction"
       >
-        <div
-          className="alter-form__introduction"
-        >
-          <h1>{stage.introductionPanel.title}</h1>
-          <Markdown
-            label={stage.introductionPanel.text}
-          />
-        </div>
-      </motion.div>
-    );
-  }, [activeIndex, items, getFormName, form, stage.subject, pendingDirection]);
+        <h1>{stage.introductionPanel.title}</h1>
+        <Markdown
+          label={stage.introductionPanel.text}
+        />
+      </div>
+    </motion.div>
+  ), [activeIndex, items, getFormName, form, stage.subject, pendingDirection]);
 
   return (
     <div className={parentClasses}>
