@@ -106,7 +106,7 @@ module.exports = {
   bail: true,
   // We generate sourcemaps in production. This is slow but gives good results.
   // You can exclude the *.map files from the build during deployment.
-  devtool: false,
+  devtool: 'source-map',
   externals: {
     archiver: "require('archiver')",
   },
