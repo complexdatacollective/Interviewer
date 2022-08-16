@@ -86,7 +86,7 @@ const PairingCodeDialog = (props) => {
       .then((pairingInfo) => {
         const { device } = pairingInfo;
         const pairedServer = addSecureApiUrlToServer({
-          ...props.server,
+          ...server,
           securePort: pairingInfo.securePort,
           sslCertificate: pairingInfo.sslCertificate,
         });
