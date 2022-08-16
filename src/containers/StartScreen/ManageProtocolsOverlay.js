@@ -79,7 +79,7 @@ const ManageProtocolsOverlay = ({
     ]);
   };
 
-  const SelectableProtocolCard = (props) => (
+  const SelectableProtocolCard = ({ uid, ...props }) => (
     <ProtocolCard
       {...props}
       onClickHandler={() => handleProtocolCardClick(props.uid)}
