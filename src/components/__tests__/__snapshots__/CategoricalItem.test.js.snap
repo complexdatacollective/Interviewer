@@ -24,8 +24,7 @@ exports[`CategoricalItem component renders unexpanded categorical item 1`] = `
           className="categorical-item__title"
         >
           <h3>
-            <MarkdownLabel
-              className="form-field-label"
+            <Memo(MarkdownLabel)
               inline={true}
               label="undefined"
             />
