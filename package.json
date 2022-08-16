@@ -214,7 +214,7 @@
     },
     "win": {
       "target": "nsis",
-      "certificateSha1": "512E5573B1961B0ADCAFB21288935F8A3E6E656F"
+      "certificateSha1": "8F1243989C0B23B29B50E872282AAB00A4302CCD"
     },
     "mac": {
       "category": "public.app-category.education",
