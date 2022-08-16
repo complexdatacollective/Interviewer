@@ -93,11 +93,6 @@ const getVariableName = (variableId, store) => {
   return get(codebookVariablesForType, [variableId, 'name']);
 };
 
-const getVariableType = (variableId, store) => {
-  const codebookVariablesForType = getCodebookVariablesForType()(store.getState());
-  return get(codebookVariablesForType, [variableId, 'type']);
-};
-
 export const differentFrom = (variableId, store) => {
   const variableName = getVariableName(variableId, store);
   return (value, allValues) => (isMatchingValue(value, allValues[variableId]) ? `Your answer must be different from ${variableName}` : undefined);
@@ -106,39 +101,6 @@ export const differentFrom = (variableId, store) => {
 export const sameAs = (variableId, store) => {
   const variableName = getVariableName(variableId, store);
   return (value, allValues) => (!isMatchingValue(value, allValues[variableId]) ? `Your answer must be the same as ${variableName}` : undefined);
-};
-
-const compareVariables = (value1, value2, type) => {
-  // check for dates
-  if (type === 'datetime') {
-    const date1 = new Date(value1);
-    const date2 = new Date(value2);
-    return date1.valueOf() - date2.valueOf();
-  }
-
-  // check for numbers (could be number, ordinal, scalar, etc)
-  if (isNumber(value1) && isNumber(value2)) {
-    return value1 - value2;
-  }
-
-  // string compare
-  if (isString(value1) && isString(value2)) {
-    return value1.localeCompare(value2);
-  }
-
-  return value1 < value2 ? -1 : 1;
-};
-
-export const greaterThanVariable = (variableId, store) => {
-  const variableName = getVariableName(variableId, store);
-  const variableType = getVariableType(variableId, store);
-  return (value, allValues) => (isNil(value) || (compareVariables(value, allValues[variableId], variableType) <= 0) ? `Your answer must be greater than ${variableName}` : undefined);
-};
-
-export const lessThanVariable = (variableId, store) => {
-  const variableName = getVariableName(variableId, store);
-  const variableType = getVariableType(variableId, store);
-  return (value, allValues) => (isNil(value) || (compareVariables(value, allValues[variableId], variableType) >= 0) ? `Your answer must be less than ${variableName}` : undefined);
 };
 
 export default {
@@ -152,6 +114,4 @@ export default {
   unique,
   differentFrom,
   sameAs,
-  greaterThanVariable,
-  lessThanVariable,
 };

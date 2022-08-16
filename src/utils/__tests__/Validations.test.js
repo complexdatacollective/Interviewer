@@ -11,8 +11,6 @@ import {
   unique,
   differentFrom,
   sameAs,
-  greaterThanVariable,
-  lessThanVariable,
 } from '../Validations';
 import {
   entityAttributesProperty,
@@ -410,104 +408,6 @@ describe('Validations', () => {
 
     it('fails for a different object', () => {
       expect(subject5({ x: 2.1, y: 3.2 }, allValues)).toBe(`${errorMessage} [object Object]`);
-    });
-  });
-
-  describe('greaterThanVariable()', () => {
-    const errorMessage = 'Your answer must be greater than';
-
-    const allValues = {
-      uid1: 1, uid2: '2012-10-07', uid3: 'word',
-    };
-
-    getCodebookVariablesForType.mockReturnValue(
-      () => ({
-        uid1: { name: 1 },
-        uid2: { name: '2012-10-07', type: 'datetime' },
-        uid3: { name: 'word' },
-      }),
-    );
-
-    const subject1 = greaterThanVariable('uid1', mockStore);
-    const subject2 = greaterThanVariable('uid2', mockStore);
-    const subject3 = greaterThanVariable('uid3', mockStore);
-
-    it('fails for null or undefined', () => {
-      expect(subject1(null, allValues)).toBe(`${errorMessage} 1`);
-      expect(subject1(undefined, allValues)).toBe(`${errorMessage} 1`);
-    });
-
-    it('passes if number is greater than', () => {
-      expect(subject1(3, allValues)).toBe(undefined);
-    });
-
-    it('fails if number is less than', () => {
-      expect(subject1(0, allValues)).toBe(`${errorMessage} 1`);
-    });
-
-    it('passes if date is greater than', () => {
-      expect(subject2('2012-11-07', allValues)).toBe(undefined);
-    });
-
-    it('fails if date is less than', () => {
-      expect(subject2('2012-09-07', allValues)).toBe(`${errorMessage} 2012-10-07`);
-    });
-
-    it('passes if string is greater than', () => {
-      expect(subject3('zebra', allValues)).toBe(undefined);
-    });
-
-    it('fails if string is less than', () => {
-      expect(subject3('diff', allValues)).toBe(`${errorMessage} word`);
-    });
-  });
-
-  describe('lessThanVariable()', () => {
-    const errorMessage = 'Your answer must be less than';
-
-    const allValues = {
-      uid1: 1, uid2: '2012-10-07', uid3: 'word',
-    };
-
-    getCodebookVariablesForType.mockReturnValue(
-      () => ({
-        uid1: { name: 1 },
-        uid2: { name: '2012-10-07' },
-        uid3: { name: 'word' },
-      }),
-    );
-
-    const subject1 = lessThanVariable('uid1', mockStore);
-    const subject2 = lessThanVariable('uid2', mockStore);
-    const subject3 = lessThanVariable('uid3', mockStore);
-
-    it('fails for null or undefined', () => {
-      expect(subject1(null, allValues)).toBe(`${errorMessage} 1`);
-      expect(subject1(undefined, allValues)).toBe(`${errorMessage} 1`);
-    });
-
-    it('passes if number is less than', () => {
-      expect(subject1(0, allValues)).toBe(undefined);
-    });
-
-    it('fails if number is greater than', () => {
-      expect(subject1(2, allValues)).toBe(`${errorMessage} 1`);
-    });
-
-    it('passes if date is less than', () => {
-      expect(subject2('2012-09-07', allValues)).toBe(undefined);
-    });
-
-    it('fails if date is greater than', () => {
-      expect(subject2('2012-11-07', allValues)).toBe(`${errorMessage} 2012-10-07`);
-    });
-
-    it('passes if string is less than', () => {
-      expect(subject3('less', allValues)).toBe(undefined);
-    });
-
-    it('fails if string is greater than', () => {
-      expect(subject3('zebra', allValues)).toBe(`${errorMessage} word`);
     });
   });
 });
