@@ -113,7 +113,7 @@
     "jest-image-snapshot": "^4.0.2",
     "json-loader": "0.5.4",
     "jssha": "^3.1.0",
-    "jszip": "^3.5.0",
+    "jszip": "^3.7.0",
     "lodash": "^4.17.11",
     "mdns": "~2.7.2",
     "mini-css-extract-plugin": "^0.8.0",
