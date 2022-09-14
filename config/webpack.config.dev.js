@@ -28,6 +28,7 @@ const resolveAlias = {
   // TODO: Track this issue
   // https://github.com/mapbox/concaveman/issues/18
   tinyqueue: '../tinyqueue/tinyqueue.js',
+  '@codaco/shared-consts': require.resolve('@codaco/shared-consts/dist/index.js'),
 };
 if (!isTargetingElectron) {
   resolveAlias.electron = `${paths.appSrc}/utils/electron-shim`;
