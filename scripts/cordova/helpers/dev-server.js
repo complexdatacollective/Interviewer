@@ -1,3 +1,5 @@
+const fs = require('fs');
+const path = require('path');
 // This file contains the LAN URL for the dev server while running
 const DevServerFilename = '.devserver';
 const ConfigFilename = 'config.xml';
@@ -11,9 +13,6 @@ const cordovaContentNode = entry => `<content src="${entry}" />`;
  * - on iOS, allow navigation to wildcard
  */
 function useDevConfig(ctx) {
-  const fs = ctx.requireCordovaModule('fs');
-  const path = ctx.requireCordovaModule('path');
-
   const projRoot = ctx.opts.projectRoot;
   const configXml = path.join(projRoot, ConfigFilename);
   const backupXml = path.join(projRoot, BackupConfigFilename);
@@ -60,9 +59,6 @@ function useDevConfig(ctx) {
 }
 
 function revertDevConfig(ctx) {
-  const fs = ctx.requireCordovaModule('fs');
-  const path = ctx.requireCordovaModule('path');
-
   const projRoot = ctx.opts.projectRoot;
   const configXml = path.join(projRoot, ConfigFilename);
   const backupXml = path.join(projRoot, BackupConfigFilename);

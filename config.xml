@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget android-versionCode="6161" id="org.codaco.NetworkCanvasInterviewer6" ios-CFBundleIdentifier="org.codaco.networkCanvasInterviewerBusiness" ios-CFBundleVersion="6160" version="6.3.2" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="6180" id="org.codaco.NetworkCanvasInterviewer6" ios-CFBundleIdentifier="org.codaco.networkCanvasInterviewerBusiness" ios-CFBundleVersion="6179" version="6.3.2" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>Network Canvas Interviewer</name>
   <description>
         A tool for conducting Network Canvas Interviews.
@@ -34,6 +34,7 @@
     </edit-config>
   </platform>
   <platform name="ios">
+    <allow-navigation href="*"/>
     <allow-navigation href="*"/>
     <allow-navigation href="*"/>
     <preference name="WKWebViewOnly" value="true"/>
