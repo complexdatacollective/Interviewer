@@ -104,7 +104,7 @@ const HeaderSection = () => {
               <Button
                 color="mustard"
                 disabled={!onlineStatus}
-                onClick={() => importProtocolFromURI('https://documentation.networkcanvas.com/protocols/Sample%20Protocol%20v4.netcanvas')}
+                onClick={() => importProtocolFromURI('https://documentation.networkcanvas.com/protocols/Sample%20Protocol%20v3.netcanvas')}
               >
                 Install sample protocol
               </Button>
