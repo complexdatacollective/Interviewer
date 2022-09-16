@@ -1,7 +1,8 @@
+const q = require('q');
 const revertDevConfig = require('./helpers/dev-server').revertDevConfig;
 
 module.exports = (ctx) => {
-  const deferral = ctx.requireCordovaModule('q').defer();
+  const deferral = q.defer();
 
   if (process.env.LIVE_RELOAD) {
     revertDevConfig(ctx);

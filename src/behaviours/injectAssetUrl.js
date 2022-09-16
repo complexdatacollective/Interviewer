@@ -4,8 +4,8 @@ import {
 } from 'recompose';
 import PropTypes from 'prop-types';
 import { get } from 'lodash';
-import getMediaAssetUrl from '../utils/protocol/getMediaAssetUrl';
 import { getAssetManifest } from '../selectors/protocol';
+import getMediaAssetUrl from '../utils/protocol/getMediaAssetUrl';
 
 // curry asset fetcher with protocol path from state
 const mapStateToProps = (state) => ({

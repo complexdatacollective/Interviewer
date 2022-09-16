@@ -23,7 +23,6 @@ const assetUrl = (environment) => {
       assetPath = isRequired('assetPath'),
     ) => {
       const sourceFilename = protocolPath(protocolUID, `assets/${assetPath}`);
-
       return Promise.resolve(sourceFilename);
     };
   }

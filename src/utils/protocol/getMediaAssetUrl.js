@@ -1,40 +1,30 @@
 /* global device */
 
-import environments from '../environments';
-import inEnvironment from '../Environment';
+import inEnvironment, { isIOS } from '../Environment';
 import { makeTmpDirCopy, resolveFileSystemUrl } from '../filesystem';
 import getAssetUrl from './getAssetUrl';
 
 /**
- * An enchanced version of assetUrl, which returns urls suitable for streaming
+ * An enhanced version of assetUrl, which returns urls suitable for streaming
  * video/audio on cordova.
  */
-const mediaAssetUrl = (environment) => {
-  if (environment === environments.CORDOVA) {
-    return (
-      protocolName,
-      assetPath,
-    ) => {
-      // Android supports native URLs to the permanent filesystem
-      if ((/Android/i).test(device.platform)) {
-        return getAssetUrl(protocolName, assetPath)
-          .then(resolveFileSystemUrl)
-          .then(url => url.nativeURL);
-      }
+const getMediaAssetUrl = (protocolName, assetPath) => {
+  if (isIOS()) {
+    // iOS doesn't support cdvfile:// urls (limitation of wkwebview), so we need to copy
+    // the file to a temporary directory and return a file:// url.
 
-      // iOS will happily serve video assets from the tmp directory
-      // files stored in a flat hierarchy under tmp/; prepend protocolName to ensure uniqueness
-      const tmpFilename = `${protocolName}-${assetPath}`;
-      return getAssetUrl(protocolName, assetPath)
-        .then(sourceFilename => makeTmpDirCopy(sourceFilename, tmpFilename))
-        .then(fileEntry => fileEntry.nativeURL)
-        .catch((err) => {
-          console.error(err); // eslint-disable-line no-console
-          return '';
-        });
-    };
+    // files stored in a flat hierarchy under tmp/; prepend protocolName to ensure uniqueness
+    const tmpFilename = `${protocolName}-${assetPath}`;
+    return getAssetUrl(protocolName, assetPath)
+      .then(sourceFilename => makeTmpDirCopy(sourceFilename, tmpFilename))
+      .then(fileEntry => fileEntry.nativeURL)
+      .catch((err) => {
+        console.error(err); // eslint-disable-line no-console
+        return '';
+      });
   }
-  return getAssetUrl;
+
+  return getAssetUrl(protocolName, assetPath);
 };
 
-export default inEnvironment(mediaAssetUrl);
+export default getMediaAssetUrl;
