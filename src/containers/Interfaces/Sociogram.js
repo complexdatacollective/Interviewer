@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import { get } from 'lodash';
+import React, { useMemo, useRef } from 'react';
+import { get, isArray } from 'lodash';
 import { bindActionCreators } from 'redux';
 import { connect, useSelector } from 'react-redux';
 import { withHandlers, compose } from 'recompose';
@@ -47,6 +47,7 @@ const Sociogram = (props) => {
 
   const interfaceRef = useRef(null);
   const dragSafeRef = useRef(null);
+  const twoMode = useMemo(() => isArray(stage.subject), [stage.subject]);
 
   // Behaviour Configuration
   const allowHighlighting = get(prompt, 'highlight.allowHighlighting', false);
@@ -83,6 +84,7 @@ const Sociogram = (props) => {
       <div className="sociogram-interface__concentric-circles">
         <LayoutProvider
           layout={layoutVariable}
+          twoMode={twoMode}
           nodes={nodes}
           edges={edges}
           allowAutomaticLayout={allowAutomaticLayout}

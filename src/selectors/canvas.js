@@ -2,6 +2,7 @@ import {
   first,
   get,
   has,
+  isArray,
   isNil,
 } from 'lodash';
 import { getNetworkNodes, getNetworkEdges } from './network';
@@ -104,9 +105,15 @@ export const getEdges = createDeepEqualSelector(
 // Selector for stage nodes
 export const getNodes = createDeepEqualSelector(
   getNetworkNodes,
-  getStageSubject(),
+  getStageSubject(), // This is either a subject object or a collection of subject objects
   (nodes, subject) => {
     if (!subject) { return nodes; }
+
+    if (isArray(subject)) {
+      const subjects = subject.map((s) => s.type);
+      return nodes.filter((node) => subjects.includes(node.type));
+    }
+
     return nodes.filter((node) => node.type === subject.type);
   },
 );

@@ -3,9 +3,12 @@ import React, {
   useCallback,
   useRef,
   useState,
+  useMemo,
 } from 'react';
 import { useDispatch } from 'react-redux';
-import { get, noop, clamp } from 'lodash';
+import {
+  get, noop, clamp, isArray,
+} from 'lodash';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { entityPrimaryKeyProperty } from '../ducks/modules/network';
 import useForceSimulation from '../hooks/useForceSimulation';
@@ -61,6 +64,7 @@ export const LayoutProvider = ({
   nodes,
   edges,
   layout,
+  twoMode,
   allowAutomaticLayout,
 }) => {
   const dispatch = useDispatch();
@@ -82,6 +86,8 @@ export const LayoutProvider = ({
   const [simulationEnabled, setSimulationEnabled] = useState(true);
   const [links, setLinks] = useState([]);
 
+  console.log('layoutProvider', layout, twoMode);
+
   const getPosition = useRef(() => undefined);
 
   // TODO: this seems like a misguided approach, mixing "reactive"
@@ -92,9 +98,10 @@ export const LayoutProvider = ({
         return get(forceSimulation.current.nodes, [index]);
       }
 
-      return get(nodes, [index, 'attributes', layout]);
+      const layoutVariable = twoMode ? layout[nodes[index].type] : layout;
+      return get(nodes, [index, 'attributes', layoutVariable]);
     };
-  }, [nodes, simulationEnabled, allowAutomaticLayout]);
+  }, [nodes, simulationEnabled, allowAutomaticLayout, layout, twoMode]);
 
   const updateNetworkInStore = useCallback(() => {
     if (!forceSimulation.current) { return; }
@@ -103,11 +110,14 @@ export const LayoutProvider = ({
       const position = get(forceSimulation.current.nodes, [index]);
       if (!position) { return; }
       const { x, y } = position;
+
+      const layoutVariable = twoMode ? layout[node.type] : layout;
+
       dispatch(
         sessionsActions.updateNode(
           node[entityPrimaryKeyProperty],
           undefined,
-          { [layout]: { x: clamp(x, 0, 1), y: clamp(y, 0, 1) } },
+          { [layoutVariable]: { x: clamp(x, 0, 1), y: clamp(y, 0, 1) } },
         ),
       );
     });
@@ -158,11 +168,14 @@ export const LayoutProvider = ({
     if (!allowAutomaticLayout || !simulationEnabled) { return; }
 
     const simulationNodes = nodes.map(
-      ({ attributes }) => attributes[layout],
+      ({ attributes, type }) => {
+        const layoutVariable = twoMode ? layout[type] : layout;
+        return get(attributes, layoutVariable);
+      },
     );
 
     updateNetwork({ nodes: simulationNodes });
-  }, [allowAutomaticLayout, simulationEnabled, nodes, layout]);
+  }, [allowAutomaticLayout, simulationEnabled, nodes, layout, twoMode]);
 
   useEffect(() => {
     if (!allowAutomaticLayout || !simulationEnabled) { return; }
