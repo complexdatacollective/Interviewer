@@ -1,7 +1,7 @@
 import { throttle, clamp } from 'lodash';
 import getAbsoluteBoundingRect from '../../utils/getAbsoluteBoundingRect';
 
-const screen = () => {
+const screenManager = () => {
   const el = {
     current: null,
   };
@@ -83,4 +83,4 @@ const screen = () => {
   };
 };
 
-export default screen;
+export default screenManager;

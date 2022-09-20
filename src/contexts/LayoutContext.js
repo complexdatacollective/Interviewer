@@ -85,6 +85,7 @@ export const LayoutProvider = ({
   const [simulationEnabled, setSimulationEnabled] = useState(true);
   const [links, setLinks] = useState([]);
 
+  const previousIsRunning = useRef(false);
   const getPosition = useRef(() => undefined);
 
   // TODO: this seems like a misguided approach, mixing "reactive"
@@ -120,8 +121,6 @@ export const LayoutProvider = ({
     });
   }, [dispatch, nodes, layout]);
 
-  const previousIsRunning = useRef(false);
-
   useEffect(() => {
     const didStopRunning = !isRunning && previousIsRunning.current;
     previousIsRunning.current = isRunning;
@@ -147,7 +146,6 @@ export const LayoutProvider = ({
 
   useEffect(() => {
     const nextLinks = getLinks({ nodes, edges });
-
     setLinks(nextLinks);
   }, [edges, nodes]);
 
@@ -203,6 +201,7 @@ export const LayoutProvider = ({
     },
     screen,
     allowAutomaticLayout,
+    twoMode,
     getPosition,
     simulation,
   };

@@ -25,6 +25,7 @@ const withDropHandlers = withHandlers({
     updateNode, layout, twoMode, width, height, x, y,
   }) => (item) => {
     const layoutVariable = twoMode ? layout[item.type] : layout;
+    console.log('layoutVariable', layoutVariable);
     updateNode(
       item.meta[entityPrimaryKeyProperty],
       {},
@@ -47,7 +48,6 @@ const withSelectHandlers = compose(
       toggleEdge,
       originRestriction,
     }) => (nodeId) => {
-      console.log('selectHandlers', createEdge, connectFrom, nodeId);
       // If edge creation is disabled, return
       if (!createEdge) { return; }
 

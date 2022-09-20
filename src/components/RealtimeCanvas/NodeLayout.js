@@ -5,6 +5,7 @@ import React, {
   useEffect,
   useRef,
   useState,
+  forwardRef,
 } from 'react';
 import { entityAttributesProperty, entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import PropTypes from 'prop-types';
@@ -17,7 +18,7 @@ import {
 import LayoutContext from '../../contexts/LayoutContext';
 import LayoutNode from './LayoutNode';
 
-const NodeLayout = React.forwardRef((props) => {
+const NodeLayout = forwardRef((props) => {
   const {
     layout,
     connectFrom,
@@ -135,7 +136,7 @@ const NodeLayout = React.forwardRef((props) => {
     screen.current.initialize(el);
   };
 
-  const handleDragStart = (uuid, index, delta) => {
+  const handleDragStart = useCallback((uuid, index, delta) => {
     setIsDragging(true);
 
     const {
@@ -153,16 +154,17 @@ const NodeLayout = React.forwardRef((props) => {
       }
     }
 
-    const layoutVariable = twoMode ? layout[get(nodes, [uuid, 'type'])] : layout;
+    const nodeType = find(nodes, [entityPrimaryKeyProperty, uuid]).type;
+    const layoutVariable = twoMode ? layout[nodeType] : layout;
 
     updateNode(
       uuid,
       undefined,
       { [layoutVariable]: screen.current.calculateRelativeCoords({ x, y }) },
     );
-  };
+  }, [allowAutomaticLayout, layout, nodes, simulation, twoMode, updateNode]);
 
-  const handleDragMove = (uuid, index, delta) => {
+  const handleDragMove = useCallback((uuid, index, delta) => {
     const {
       x,
       y,
@@ -178,16 +180,16 @@ const NodeLayout = React.forwardRef((props) => {
       }
     }
 
-    const layoutVariable = twoMode ? layout[get(nodes, [uuid, 'type'])] : layout;
-
+    const nodeType = find(nodes, [entityPrimaryKeyProperty, uuid]).type;
+    const layoutVariable = twoMode ? layout[nodeType] : layout;
     updateNode(
       uuid,
       undefined,
       { [layoutVariable]: screen.current.calculateRelativeCoords({ x, y }) },
     );
-  };
+  }, [allowAutomaticLayout, layout, nodes, screen, simulation, twoMode, updateNode]);
 
-  const handleDragEnd = (uuid, index, { x, y }) => {
+  const handleDragEnd = useCallback((uuid, index, { x, y }) => {
     if (allowAutomaticLayout) {
       const { simulationEnabled, releaseNode } = simulation;
 
@@ -204,7 +206,7 @@ const NodeLayout = React.forwardRef((props) => {
       undefined,
       { [layoutVariable]: screen.current.calculateRelativeCoords({ x, y }) },
     );
-  };
+  }, [allowAutomaticLayout, layout, nodes, screen, simulation, twoMode, updateNode]);
 
   // When node is dragged this is called last,
   // we can use that to reset isDragging state
@@ -218,8 +220,7 @@ const NodeLayout = React.forwardRef((props) => {
   };
 
   return (
-    <>
-      <div className="node-layout" ref={initializeLayout} />
+    <div className="node-layout" ref={initializeLayout}>
       {nodes.map((node, index) => {
         const el = layoutEls[index];
         if (!el) { return null; }
@@ -244,7 +245,7 @@ const NodeLayout = React.forwardRef((props) => {
           />
         );
       })}
-    </>
+    </div>
   );
 });
 

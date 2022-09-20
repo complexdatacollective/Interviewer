@@ -1,4 +1,3 @@
-/*eslint-disable*/
 /**
 https://gist.github.com/rgrove/5463265
 
@@ -17,44 +16,42 @@ canvas, regardless of scrolling.
 @method getAbsoluteBoundingRect
 @param {HTMLElement} el HTML element.
 @return {Object} Absolute bounding rect for _el_.
-**/
+* */
 
 export default function getAbsoluteBoundingRect(el) {
-    if (!el) {
-      return 0;
+  if (!el) {
+    return 0;
+  }
+
+  let offsetX = (window.pageXOffset !== undefined)
+    ? window.pageXOffset
+    : (document.documentElement || document.body.parentNode || document.body).scrollLeft;
+
+  let offsetY = (window.pageYOffset !== undefined)
+    ? window.pageYOffset
+    : (document.documentElement || document.body.parentNode || document.body).scrollTop;
+
+  const rect = el.getBoundingClientRect();
+
+  if (el !== document.body) {
+    let parent = el.parentNode;
+
+    // The element's rect will be affected by the scroll positions of
+    // *all* of its scrollable parents, not just the window, so we have
+    // to walk up the tree and collect every scroll offset. Good times.
+    while (parent && parent !== document.body) {
+      offsetX += parent.scrollLeft;
+      offsetY += parent.scrollTop;
+      parent = parent.parentNode;
     }
+  }
 
-    var doc  = document,
-        win  = window,
-        body = doc.body,
-
-        // pageXOffset and pageYOffset work everywhere except IE <9.
-        offsetX = win.pageXOffset !== undefined ? win.pageXOffset :
-            (doc.documentElement || body.parentNode || body).scrollLeft,
-        offsetY = win.pageYOffset !== undefined ? win.pageYOffset :
-            (doc.documentElement || body.parentNode || body).scrollTop,
-
-        rect = el.getBoundingClientRect();
-
-    if (el !== body) {
-        var parent = el.parentNode;
-
-        // The element's rect will be affected by the scroll positions of
-        // *all* of its scrollable parents, not just the window, so we have
-        // to walk up the tree and collect every scroll offset. Good times.
-        while (parent && parent !== body) {
-            offsetX += parent.scrollLeft;
-            offsetY += parent.scrollTop;
-            parent   = parent.parentNode;
-        }
-    }
-
-    return {
-        bottom: rect.bottom + offsetY,
-        height: rect.height,
-        left  : rect.left + offsetX,
-        right : rect.right + offsetX,
-        top   : rect.top + offsetY,
-        width : rect.width
-    };
+  return {
+    bottom: rect.bottom + offsetY,
+    height: rect.height,
+    left: rect.left + offsetX,
+    right: rect.right + offsetX,
+    top: rect.top + offsetY,
+    width: rect.width,
+  };
 }
