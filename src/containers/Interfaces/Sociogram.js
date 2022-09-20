@@ -55,6 +55,8 @@ const Sociogram = (props) => {
   const allowPositioning = get(prompt, 'prompt.layout.allowPositioning', true);
   // eslint-disable-next-line @codaco/spellcheck/spell-checker
   const allowAutomaticLayout = get(stage, 'behaviours.automaticLayout.enabled', false);
+  const destinationRestriction = get(prompt, 'edges.restrict.destination', null);
+  const originRestriction = get(prompt, 'edges.restrict.origin', null);
 
   // Display Properties
   const layoutVariable = get(prompt, 'layout.layoutVariable');
@@ -99,7 +101,10 @@ const Sociogram = (props) => {
             <NodeLayout
               id="NODE_LAYOUT"
               highlightAttribute={highlightAttribute}
-              layoutVariable={layoutVariable}
+              layout={layoutVariable}
+              twoMode={twoMode}
+              destinationRestriction={destinationRestriction}
+              originRestriction={originRestriction}
               allowHighlighting={allowHighlighting && !createEdge}
               allowPositioning={allowPositioning}
               createEdge={createEdge}

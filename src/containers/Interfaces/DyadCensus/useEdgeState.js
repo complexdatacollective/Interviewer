@@ -1,6 +1,6 @@
+import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import { useState, useEffect } from 'react';
 import { actionCreators as sessionsActions } from '../../../ducks/modules/sessions';
-import { entityPrimaryKeyProperty } from '../../../ducks/modules/network';
 
 export const getEdgeInNetwork = (edges, pair, edgeType) => {
   if (!pair) { return null; }
@@ -18,7 +18,7 @@ export const getEdgeInNetwork = (edges, pair, edgeType) => {
 
 export const matchEntry = (prompt, pair) => ([p, a, b]) => (
   (p === prompt && a === pair[0] && b === pair[1])
-    || (p === prompt && b === pair[0] && a === pair[1])
+  || (p === prompt && b === pair[0] && a === pair[1])
 );
 
 export const getIsPreviouslyAnsweredNo = (state, prompt, pair) => {

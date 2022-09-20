@@ -1,10 +1,9 @@
 /* eslint-env jest */
-
+import { entityAttributesProperty } from '@codaco/shared-consts';
 import {
   getNextUnplacedNode,
   getPlacedNodes,
 } from '../canvas';
-import { entityAttributesProperty } from '../../ducks/modules/network';
 
 const node1 = { _uid: 1, type: 'person', [entityAttributesProperty]: { role: ['a'], name: 'alpha', closeness: [1, 1] } };
 const node2 = { _uid: 2, type: 'person', [entityAttributesProperty]: { role: ['a'], name: 'foxtrot', closeness: null } };

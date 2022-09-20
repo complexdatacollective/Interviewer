@@ -3,8 +3,9 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { get } from 'lodash';
+import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
-import { getEntityAttributes, entityPrimaryKeyProperty } from '../../ducks/modules/network';
+import { getEntityAttributes } from '../../ducks/modules/network';
 import { CategoricalItem } from '../../components';
 import Overlay from '../Overlay';
 import OtherVariableForm from './OtherVariableForm';
@@ -136,25 +137,25 @@ const CategoricalListItem = (props) => {
         sortOrder={sortOrder}
         stage={stage}
       />
-      { isOtherVariable
+      {isOtherVariable
         && (
-        <Overlay
-          show={otherVariableWindow.show}
-          onClose={closeOtherVariableWindow}
-          onBlur={closeOtherVariableWindow}
-        >
-          { otherVariableWindow.show
-            && (
-            <OtherVariableForm
-              label={otherVariableWindow.label}
-              color={otherVariableWindow.color}
-              otherVariablePrompt={bin.otherVariablePrompt}
-              onSubmit={handleSubmitOtherVariableForm}
-              onCancel={closeOtherVariableWindow}
-              initialValues={otherVariableWindow.initialValues}
-            />
-            )}
-        </Overlay>
+          <Overlay
+            show={otherVariableWindow.show}
+            onClose={closeOtherVariableWindow}
+            onBlur={closeOtherVariableWindow}
+          >
+            {otherVariableWindow.show
+              && (
+                <OtherVariableForm
+                  label={otherVariableWindow.label}
+                  color={otherVariableWindow.color}
+                  otherVariablePrompt={bin.otherVariablePrompt}
+                  onSubmit={handleSubmitOtherVariableForm}
+                  onCancel={closeOtherVariableWindow}
+                  initialValues={otherVariableWindow.initialValues}
+                />
+              )}
+          </Overlay>
         )}
     </div>
   );

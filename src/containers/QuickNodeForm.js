@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { compose } from 'redux';
 import { Icon } from '@codaco/ui';
+import { entityAttributesProperty } from '@codaco/shared-consts';
 import withPrompt from '../behaviours/withPrompt';
-import { entityAttributesProperty } from '../ducks/modules/network';
 import Node from './Node';
 
 class QuickNodeForm extends PureComponent {
@@ -112,18 +112,18 @@ class QuickNodeForm extends PureComponent {
         <div className={cx('quick-add-form', { 'quick-add-form--show': show })}>
           <form autoComplete="off" onSubmit={this.handleSubmitForm}>
             {show
-            && (
-            <input
-              className="quick-add-form__label-input"
-              key="label"
-              autoFocus // eslint-disable-line
-              onChange={this.handleChange}
-              onBlur={this.handleBlur}
-              placeholder="Type a name and press enter..."
-              value={nodeLabel}
-              type="text"
-            />
-            )}
+              && (
+                <input
+                  className="quick-add-form__label-input"
+                  key="label"
+                  autoFocus // eslint-disable-line
+                  onChange={this.handleChange}
+                  onBlur={this.handleBlur}
+                  placeholder="Type a name and press enter..."
+                  value={nodeLabel}
+                  type="text"
+                />
+              )}
           </form>
         </div>
         <div className={cx('flip-button', { 'flip-button--flip': nodeLabel.length > 0 })}>

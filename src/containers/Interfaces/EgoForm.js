@@ -12,11 +12,11 @@ import { connect } from 'react-redux';
 import { Icon, Scroller } from '@codaco/ui';
 import { Markdown } from '@codaco/ui/lib/components/Fields';
 import { submit, isValid, isDirty } from 'redux-form';
+import { entityAttributesProperty } from '@codaco/shared-consts';
 import Form from '../Form';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { getNetworkEgo } from '../../selectors/network';
 import { getSessionProgress } from '../../selectors/session';
-import { entityAttributesProperty } from '../../ducks/modules/network';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import useReadyForNextStage from '../../hooks/useReadyForNextStage';
 import useFlipflop from '../../hooks/useFlipflop';
@@ -173,7 +173,7 @@ const EgoForm = ({
         </Scroller>
       </div>
       <AnimatePresence>
-        { showScrollNudge && (
+        {showScrollNudge && (
           <motion.div
             className="scroll-nudge"
             initial={{ opacity: 0, y: '100%' }}

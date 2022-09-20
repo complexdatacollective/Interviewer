@@ -1,8 +1,9 @@
 import { connect } from 'react-redux';
 import { compose, withHandlers, withState } from 'recompose';
+import { get } from 'lodash';
+import { entityAttributesProperty, entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import { withBounds } from '../../behaviours';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
-import { entityPrimaryKeyProperty, entityAttributesProperty } from '../../ducks/modules/network';
 import { DropTarget } from '../../behaviours/DragAndDrop';
 import NodeLayout from '../../components/RealtimeCanvas/NodeLayout';
 
@@ -21,8 +22,9 @@ const withConnectFromHandler = withHandlers({
 const withDropHandlers = withHandlers({
   accepts: () => ({ meta }) => meta.itemType === 'POSITIONED_NODE',
   onDrop: ({
-    updateNode, layoutVariable, width, height, x, y,
+    updateNode, layout, twoMode, width, height, x, y,
   }) => (item) => {
+    const layoutVariable = twoMode ? layout[item.type] : layout;
     updateNode(
       item.meta[entityPrimaryKeyProperty],
       {},
@@ -38,11 +40,14 @@ const withDropHandlers = withHandlers({
 const withSelectHandlers = compose(
   withHandlers({
     connectNode: ({
+      nodes,
       createEdge,
       connectFrom,
       handleConnectFrom,
       toggleEdge,
+      originRestriction,
     }) => (nodeId) => {
+      console.log('selectHandlers', createEdge, connectFrom, nodeId);
       // If edge creation is disabled, return
       if (!createEdge) { return; }
 
@@ -52,8 +57,14 @@ const withSelectHandlers = compose(
         return;
       }
 
-      // If there isn't a target node yet, set the selected node into the linking state
+      // If there isn't a target node yet, and the type isn't restricted,
+      // set the selected node into the linking state
       if (!connectFrom) {
+        const nodeType = get(nodes, [nodeId, 'type']);
+
+        // If the node type is restricted, return
+        if (originRestriction && nodeType === originRestriction) { return; }
+
         handleConnectFrom(nodeId);
         return;
       }

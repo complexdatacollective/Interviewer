@@ -5,14 +5,11 @@ import {
   isArray,
   isNil,
 } from 'lodash';
+import { entityAttributesProperty, entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import { getNetworkNodes, getNetworkEdges } from './network';
 import { createDeepEqualSelector } from './utils';
 import sortOrder from '../utils/sortOrder';
-import {
-  getEntityAttributes,
-  entityPrimaryKeyProperty,
-  entityAttributesProperty,
-} from '../ducks/modules/network';
+import { getEntityAttributes } from '../ducks/modules/network';
 import { getStageSubject } from './session';
 
 const getLayout = (_, props) => get(props, 'prompt.layout.layoutVariable');

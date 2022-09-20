@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Icon } from '@codaco/ui';
+import { entityAttributesProperty, entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import {
   get, has, omit, debounce, defaultTo, isUndefined,
 } from 'lodash';
@@ -16,13 +17,12 @@ import { makeGetPromptNodeModelData, makeGetNodeIconName } from '../../selectors
 import NodePanels from '../NodePanels';
 import QuickNodeForm from '../QuickNodeForm';
 import { NodeList, NodeBin } from '../../components';
-import { entityAttributesProperty, entityPrimaryKeyProperty } from '../../ducks/modules/network';
 
 export const SelfDismissingNote = (Wrapped) => (
   {
     show,
     dontHide = false,
-    onHideCallback = () => {},
+    onHideCallback = () => { },
     ...rest
   },
 ) => {
@@ -54,7 +54,7 @@ export const SelfDismissingNote = (Wrapped) => (
 
   return (
     <AnimatePresence>
-      { visible && (
+      {visible && (
         <Wrapped {...rest} />
       )}
     </AnimatePresence>
@@ -246,7 +246,7 @@ class NameGenerator extends Component {
     } = this.props;
 
     const isLeavingStage = (isFirstPrompt() && direction === -1)
-    || (isLastPrompt() && direction === 1);
+      || (isLastPrompt() && direction === 1);
     // Implementation quirk that destination is only provided when navigation
     // is triggered by Stages Menu. Use this to skip message if user has
     // navigated directly using stages menu.

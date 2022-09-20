@@ -4,10 +4,10 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import objectHash from 'object-hash';
 import { mapValues, mapKeys } from 'lodash';
+import { entityAttributesProperty, entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import loadExternalData from '../utils/loadExternalData';
 import getParentKeyByNameValue from '../utils/getParentKeyByNameValue';
 import { getVariableTypeReplacements } from '../containers/withExternalData';
-import { entityAttributesProperty, entityPrimaryKeyProperty } from '../ducks/modules/network';
 
 const getSessionMeta = (state) => {
   const session = state.sessions[state.activeSessionId];

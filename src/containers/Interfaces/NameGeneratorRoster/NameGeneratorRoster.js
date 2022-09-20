@@ -8,6 +8,7 @@ import cx from 'classnames';
 import { motion, AnimatePresence } from 'framer-motion';
 import { get, isEmpty, isUndefined } from 'lodash';
 import { DataCard } from '@codaco/ui/lib/components/Cards';
+import { entityAttributesProperty, entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import Prompts from '../../../components/Prompts';
 import withPrompt from '../../../behaviours/withPrompt';
 import {
@@ -17,7 +18,6 @@ import {
   makeGetStageNodeCount,
 } from '../../../selectors/interface';
 import { makeGetPromptNodeModelData } from '../../../selectors/name-generator';
-import { entityPrimaryKeyProperty, entityAttributesProperty } from '../../../ducks/modules/network';
 import { actionCreators as sessionsActions } from '../../../ducks/modules/sessions';
 import { getNodeColor } from '../../../selectors/network';
 import List from '../../../components/List';
@@ -261,7 +261,7 @@ const NameGeneratorRoster = (props) => {
                       itemComponent={Node}
                     />
                     <AnimatePresence>
-                      { willAccept && (
+                      {willAccept && (
                         <DropOverlay
                           isOver={isOver}
                           nodeColor={dropNodeColor}

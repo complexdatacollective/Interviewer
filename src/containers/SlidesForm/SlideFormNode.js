@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { withProps } from 'recompose';
 import { Scroller } from '@codaco/ui';
-import { entityAttributesProperty, entityPrimaryKeyProperty } from '../../ducks/modules/network';
+import { entityAttributesProperty, entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import Node from '../Node';
 import Form from '../Form';
 
@@ -61,8 +61,8 @@ SlideFormNode.propTypes = {
 
 SlideFormNode.defaultProps = {
   form: {},
-  onUpdate: () => {},
-  onScroll: () => {},
+  onUpdate: () => { },
+  onScroll: () => { },
   submitButton: <button type="submit" key="submit" aria-label="Submit" hidden />,
 };
 

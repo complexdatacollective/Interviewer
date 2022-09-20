@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { get } from 'lodash';
+import { entityAttributesProperty, entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import { actionCreators as sessionsActions } from '../../../ducks/modules/sessions';
-import { entityPrimaryKeyProperty } from '../../../ducks/modules/network';
-import { entityAttributesProperty } from '../../../utils/network-exporters/src/utils/reservedAttributes';
 
 export const getEdgeInNetwork = (edges, pair, edgeType) => {
   if (!pair) { return null; }
@@ -22,7 +21,7 @@ const edgeExistsInNetwork = (edges, pair, edgeType) => !!getEdgeInNetwork(edges,
 
 export const matchEntry = (prompt, pair) => ([p, a, b]) => (
   (p === prompt && a === pair[0] && b === pair[1])
-    || (p === prompt && b === pair[0] && a === pair[1])
+  || (p === prompt && b === pair[0] && a === pair[1])
 );
 
 export const getIsPreviouslyAnsweredNo = (state, prompt, pair) => {

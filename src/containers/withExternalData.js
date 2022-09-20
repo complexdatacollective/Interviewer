@@ -17,10 +17,10 @@ import {
   toNumber,
   reduce,
 } from 'lodash';
+import { entityAttributesProperty, entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import loadExternalData from '../utils/loadExternalData';
 import getParentKeyByNameValue from '../utils/getParentKeyByNameValue';
 import ProtocolConsts from '../protocol-consts';
-import { entityAttributesProperty, entityPrimaryKeyProperty } from '../ducks/modules/network';
 
 const mapStateToProps = (state) => {
   const session = state.sessions[state.activeSessionId];

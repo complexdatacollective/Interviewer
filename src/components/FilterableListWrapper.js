@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from '@codaco/ui';
 import { Text } from '@codaco/ui/lib/components/Fields';
-import { entityAttributesProperty } from '../ducks/modules/network';
+import { entityAttributesProperty } from '@codaco/shared-consts';
 import sortOrder from '../utils/sortOrder';
 
 class FilterableListWrapper extends Component {
@@ -115,23 +115,23 @@ class FilterableListWrapper extends Component {
       <div className="list-select">
         <div className="list-select__sort">
           <div>
-            { (sortFields && sortFields.length > 0)
+            {(sortFields && sortFields.length > 0)
               && (
-              <>
-                <h4>Sort: </h4>
-                {sortFields.map((sortField) => (
-                  <Button
-                    color={activeSortOrder.property === sortField.variable ? 'primary' : 'white'}
-                    key={sortField.variable}
-                    onClick={() => this.setSortBy(sortField.variable)}
-                  >
-                    {
-                      (sortField.label || sortField.variable)
+                <>
+                  <h4>Sort: </h4>
+                  {sortFields.map((sortField) => (
+                    <Button
+                      color={activeSortOrder.property === sortField.variable ? 'primary' : 'white'}
+                      key={sortField.variable}
+                      onClick={() => this.setSortBy(sortField.variable)}
+                    >
+                      {
+                        (sortField.label || sortField.variable)
                         + this.getDirection(sortField.variable)
-                    }
-                  </Button>
-                ))}
-              </>
+                      }
+                    </Button>
+                  ))}
+                </>
               )}
           </div>
           <div>

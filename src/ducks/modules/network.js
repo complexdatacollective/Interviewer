@@ -1,3 +1,4 @@
+import { entityAttributesProperty, entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import {
   reject, find, isMatch, omit, keys, get,
 } from 'lodash';
@@ -6,12 +7,6 @@ import uuid from 'uuid/v4';
 /*
  * For actionCreators see `src/ducks/modules/sessions`
  */
-
-// Property name for the primary key for nodes or edged
-export const entityPrimaryKeyProperty = '_uid';
-
-// Property name for node or edge model properties
-export const entityAttributesProperty = 'attributes';
 
 // Property names passed to user worker scripts
 export const primaryKeyPropertyForWorker = 'networkCanvasId';

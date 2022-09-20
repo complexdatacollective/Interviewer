@@ -1,5 +1,5 @@
 import { orderBy } from 'lodash';
-import { entityAttributesProperty } from '../ducks/modules/network';
+import { entityAttributesProperty } from '@codaco/shared-consts';
 
 /* Maps a `createdIndex` index value to all items in an array */
 const withCreatedIndex = (items) => items.map((item, createdIndex) => ({ ...item, createdIndex }));

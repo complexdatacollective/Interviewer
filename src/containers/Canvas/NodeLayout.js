@@ -1,10 +1,10 @@
 import { bindActionCreators } from 'redux';
-import { isNil, clamp } from 'lodash';
+import { isNil, clamp, get } from 'lodash';
 import { connect } from 'react-redux';
 import { compose, withHandlers, withState } from 'recompose';
+import { entityAttributesProperty, entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import { withBounds } from '../../behaviours';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
-import { entityPrimaryKeyProperty, entityAttributesProperty } from '../../ducks/modules/network';
 import { DropTarget } from '../../behaviours/DragAndDrop';
 import NodeLayout from '../../components/Canvas/NodeLayout';
 
@@ -25,8 +25,10 @@ const withRerenderCount = withState('rerenderCount', 'setRerenderCount', 0);
 const withDropHandlers = withHandlers({
   accepts: () => ({ meta }) => meta.itemType === 'POSITIONED_NODE',
   onDrop: ({
-    updateNode, layoutVariable, setRerenderCount, rerenderCount, width, height, x, y,
+    updateNode, layout, twoMode, setRerenderCount, rerenderCount, width, height, x, y,
   }) => (item) => {
+    const layoutVariable = twoMode ? layout[item.type] : layout;
+
     updateNode(
       item.meta[entityPrimaryKeyProperty],
       {},
@@ -44,8 +46,10 @@ const withDropHandlers = withHandlers({
     setRerenderCount(rerenderCount + 1);
   },
   onDrag: ({
-    layoutVariable, updateNode, width, height, x, y,
+    layout, twoMode, updateNode, width, height, x, y,
   }) => (item) => {
+    const layoutVariable = twoMode ? layout[item.type] : layout;
+
     if (isNil(item.meta[entityAttributesProperty][layoutVariable])) { return; }
     updateNode(
       item.meta[entityPrimaryKeyProperty],
@@ -69,10 +73,12 @@ const withDropHandlers = withHandlers({
 const withSelectHandlers = compose(
   withHandlers({
     connectNode: ({
+      nodes,
       createEdge,
       connectFrom,
       handleConnectFrom,
       toggleEdge,
+      originRestriction,
     }) => (nodeId) => {
       // If edge creation is disabled, return
       if (!createEdge) { return; }
@@ -83,8 +89,11 @@ const withSelectHandlers = compose(
         return;
       }
 
-      // If there isn't a target node yet, set the selected node into the linking state
+      // If there isn't a target node yet, and the type isn't restricted,
+      // set the selected node into the linking state
       if (!connectFrom) {
+        const nodeType = get(nodes, [nodeId, 'type']);
+        if (originRestriction && nodeType !== originRestriction) { return; }
         handleConnectFrom(nodeId);
         return;
       }

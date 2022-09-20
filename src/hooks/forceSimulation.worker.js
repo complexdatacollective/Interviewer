@@ -18,8 +18,6 @@ let simulation;
 let links;
 let options = { ...DEFAULT_OPTIONS };
 
-console.log('new force simulation worker!');
-
 const cloneLinks = (ls) => ls.map((link) => ({ ...link }));
 
 const updateOptions = function (newOptions) {
@@ -59,7 +57,7 @@ onmessage = function ({ data }) {
 
       links = network.links;
 
-      console.debug('worker:initialize');
+      console.debug('worker:initialize', network.nodes);
 
       const initialOptions = {
         ...DEFAULT_OPTIONS,
@@ -137,7 +135,7 @@ onmessage = function ({ data }) {
         .force('links', forceLink(cloneLinks(links)).distance(options.linkDistance));
 
       if (data.restart) {
-      // TODO: don't run this on "first run"?
+        // TODO: don't run this on "first run"?
         simulation
           .alpha(0.3)
           .restart();

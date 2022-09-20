@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { entityPrimaryKeyProperty, entityAttributesProperty } from '@codaco/shared-consts';
 import { differenceBy, omit, get } from 'lodash';
 import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
-import { entityPrimaryKeyProperty, getEntityAttributes, entityAttributesProperty } from '../../ducks/modules/network';
+import { getEntityAttributes } from '../../ducks/modules/network';
 import { makeNetworkNodesForOtherPrompts, makeGetAdditionalAttributes } from '../../selectors/interface';
 import { getNetworkNodes, makeGetNodeTypeDefinition, makeGetNodeLabel } from '../../selectors/network';
 import {

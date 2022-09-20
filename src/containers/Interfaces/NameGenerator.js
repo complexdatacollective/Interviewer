@@ -6,6 +6,7 @@ import {
   get, has, isUndefined, omit,
 } from 'lodash';
 import { Icon } from '@codaco/ui';
+import { entityAttributesProperty, entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import Prompts from '../../components/Prompts';
 import withPrompt from '../../behaviours/withPrompt';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
@@ -14,7 +15,7 @@ import { makeGetPromptNodeModelData, makeGetNodeIconName } from '../../selectors
 import NodePanels from '../NodePanels';
 import NodeForm from '../NodeForm';
 import { NodeList, NodeBin } from '../../components';
-import { entityAttributesProperty, entityPrimaryKeyProperty } from '../../ducks/modules/network';
+
 import {
   MaxNodesReached, maxNodesWithDefault, MinNodesNotMet, minNodesWithDefault,
 } from './NameGeneratorQuickAdd';
@@ -55,7 +56,7 @@ class NameGenerator extends Component {
     } = this.props;
 
     const isLeavingStage = (isFirstPrompt() && direction === -1)
-    || (isLastPrompt() && direction === 1);
+      || (isLastPrompt() && direction === 1);
 
     // Implementation quirk that destination is only provided when navigation
     // is triggered by Stages Menu. Use this to skip message if user has
@@ -210,27 +211,27 @@ class NameGenerator extends Component {
         </div>
         <MaxNodesReached show={stageNodeCount >= maxNodes} />
         <MinNodesNotMet show={showMinWarning} minNodes={minNodes} />
-        { form
+        {form
           && (
-          <div
-            onClick={this.handleClickAddNode}
-            className={`name-generator-interface__add-node ${stageNodeCount >= maxNodes ? 'name-generator-interface__add-node--disabled' : ''}`}
-            data-clickable="open-add-node"
-          >
-            <Icon name={nodeIconName} />
-          </div>
+            <div
+              onClick={this.handleClickAddNode}
+              className={`name-generator-interface__add-node ${stageNodeCount >= maxNodes ? 'name-generator-interface__add-node--disabled' : ''}`}
+              data-clickable="open-add-node"
+            >
+              <Icon name={nodeIconName} />
+            </div>
           )}
 
-        { form
+        {form
           && (
-          <NodeForm
-            key={selectedNode}
-            node={selectedNode}
-            stage={stage}
-            onSubmit={this.handleSubmitForm}
-            onClose={this.handleCloseForm}
-            show={showNodeForm}
-          />
+            <NodeForm
+              key={selectedNode}
+              node={selectedNode}
+              stage={stage}
+              onSubmit={this.handleSubmitForm}
+              onClose={this.handleCloseForm}
+              show={showNodeForm}
+            />
           )}
         <NodeBin
           accepts={(meta) => meta.itemType === 'EXISTING_NODE'}

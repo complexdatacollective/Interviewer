@@ -1,12 +1,14 @@
 /* eslint-env jest */
 /* eslint-disable @codaco/spellcheck/spell-checker */
 import uuid from 'uuid/v4';
+import {
+  entityPrimaryKeyProperty as PK,
+  entityAttributesProperty,
+} from '@codaco/shared-consts';
 import reducer,
 {
   actionTypes,
   actionCreators,
-  entityPrimaryKeyProperty as PK,
-  entityAttributesProperty,
 } from '../network';
 
 jest.mock('uuid');

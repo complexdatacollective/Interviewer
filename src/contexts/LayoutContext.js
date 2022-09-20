@@ -3,14 +3,13 @@ import React, {
   useCallback,
   useRef,
   useState,
-  useMemo,
 } from 'react';
 import { useDispatch } from 'react-redux';
 import {
-  get, noop, clamp, isArray,
+  get, noop, clamp,
 } from 'lodash';
+import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
-import { entityPrimaryKeyProperty } from '../ducks/modules/network';
 import useForceSimulation from '../hooks/useForceSimulation';
 
 const SIMULATION_OPTIONS = {
@@ -85,8 +84,6 @@ export const LayoutProvider = ({
 
   const [simulationEnabled, setSimulationEnabled] = useState(true);
   const [links, setLinks] = useState([]);
-
-  console.log('layoutProvider', layout, twoMode);
 
   const getPosition = useRef(() => undefined);
 

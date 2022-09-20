@@ -5,6 +5,7 @@ import { find, get, isEqual } from 'lodash';
 import cx from 'classnames';
 import { TransitionGroup } from 'react-transition-group';
 import { getCSSVariableAsString, getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
+import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import Node from '../containers/Node';
 import { Node as NodeTransition } from './Transition';
 import { scrollable } from '../behaviours';
@@ -15,7 +16,6 @@ import {
   MonitorDragSource,
 } from '../behaviours/DragAndDrop';
 import sortOrder from '../utils/sortOrder';
-import { entityPrimaryKeyProperty } from '../ducks/modules/network';
 
 const EnhancedNode = DragSource(Node);
 
@@ -189,8 +189,8 @@ NodeList.defaultProps = {
   itemType: 'NODE',
   label: () => (''),
   meta: {},
-  onDrop: () => {},
-  onItemClick: () => {},
+  onDrop: () => { },
+  onItemClick: () => { },
   sortOrder: [],
   willAccept: false,
 };

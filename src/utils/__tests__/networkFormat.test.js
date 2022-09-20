@@ -1,16 +1,14 @@
 /* eslint-env jest */
 /* eslint-disable @codaco/spellcheck/spell-checker */
-
+import {
+  entityPrimaryKeyProperty,
+  nodeTypePropertyForWorker,
+} from '@codaco/shared-consts';
+import { primaryKeyPropertyForWorker } from '../../ducks/modules/network';
 import {
   asWorkerAgentEntity,
   asWorkerAgentEdge,
 } from '../networkFormat';
-
-import {
-  entityPrimaryKeyProperty,
-  nodeTypePropertyForWorker,
-  primaryKeyPropertyForWorker,
-} from '../../ducks/modules/network';
 
 describe('asWorkerAgentEntity', () => {
   const nodeInNetwork = {

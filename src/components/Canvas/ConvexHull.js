@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { map, isEqual } from 'lodash';
 import ConcaveMan from 'concaveman';
-import { entityAttributesProperty } from '../../ducks/modules/network';
+import { entityAttributesProperty } from '@codaco/shared-consts';
 
 export class ConvexHull extends Component {
   shouldComponentUpdate(nextProps) {

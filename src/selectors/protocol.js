@@ -6,7 +6,7 @@ import {
   omit,
 } from 'lodash';
 import { createSelector } from 'reselect';
-import { entityAttributesProperty } from '../ducks/modules/network';
+import { entityAttributesProperty } from '@codaco/shared-consts';
 
 const DefaultFinishStage = {
   // `id` is used as component key; must be unique from user input

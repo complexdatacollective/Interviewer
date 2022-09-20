@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
+import { entityAttributesProperty } from '@codaco/shared-consts';
 import { SlideFormNode as SlideForm } from '../SlideFormNode';
-import { entityAttributesProperty } from '../../../ducks/modules/network';
 
 const mockProps = {
   form: {

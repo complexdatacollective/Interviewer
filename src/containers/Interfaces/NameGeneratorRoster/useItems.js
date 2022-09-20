@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
+import { entityPrimaryKeyProperty, getEntityAttributes } from '@codaco/shared-consts';
 import {
   makeGetNodeTypeDefinition,
   getNetworkNodes,
   makeGetNodeLabel,
 } from '../../../selectors/network';
 import { getCardAdditionalProperties } from '../../../selectors/name-generator';
-import { entityPrimaryKeyProperty, getEntityAttributes } from '../../../ducks/modules/network';
 import getParentKeyByNameValue from '../../../utils/getParentKeyByNameValue';
 import usePropSelector from './usePropSelector';
 import useExternalData from '../../../hooks/useExternalData';

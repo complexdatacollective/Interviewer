@@ -4,9 +4,9 @@ import React, { useEffect } from 'react';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import { mount } from 'enzyme';
+import { entityAttributesProperty } from '@codaco/shared-consts';
 import useExternalData from '../useExternalData';
 import loadExternalData from '../../utils/loadExternalData';
-import { entityAttributesProperty } from '../../ducks/modules/network';
 
 jest.mock('../../utils/loadExternalData');
 
