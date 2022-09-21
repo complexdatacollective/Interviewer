@@ -2,9 +2,8 @@
 /* eslint-disable @codaco/spellcheck/spell-checker */
 import {
   entityPrimaryKeyProperty,
-  nodeTypePropertyForWorker,
 } from '@codaco/shared-consts';
-import { primaryKeyPropertyForWorker } from '../../ducks/modules/network';
+import { primaryKeyPropertyForWorker, nodeTypePropertyForWorker } from '../../ducks/modules/network';
 import {
   asWorkerAgentEntity,
   asWorkerAgentEdge,

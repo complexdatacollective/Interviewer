@@ -71,7 +71,7 @@ class LoadParamsRoute extends Component {
     return (
       <RenderComponent
         {...rest}
-        stageIndex={rest.computedMatch.params.stageIndex || 0}
+        stageIndex={parseInt(rest.computedMatch.params.stageIndex, 10) || 0}
         stageBackward={!!backParam}
       />
     );

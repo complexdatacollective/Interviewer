@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { get, isArray } from 'lodash';
 import { bindActionCreators } from 'redux';
 import { connect, useSelector } from 'react-redux';
@@ -37,7 +37,7 @@ const withResetInterfaceHandler = withHandlers({
   * Sociogram Interface
   * @extends Component
   */
-const Sociogram = (props) => {
+const Sociogram = React.memo((props) => {
   const {
     prompt,
     promptId,
@@ -74,11 +74,6 @@ const Sociogram = (props) => {
   const nodes = allowAutomaticLayout ? allNodes : placedNodes;
   const edges = useSelector((state) => getEdges(state, props));
 
-  useEffect(() => {
-    // Reset connectFrom when promptID changes to reset linking state
-    console.log('promptID changed: ', promptId);
-  }, [promptId]);
-
   return (
     <div className="sociogram-interface" ref={interfaceRef}>
       <div className="sociogram-interface__drag-safe" ref={dragSafeRef} />
@@ -113,6 +108,7 @@ const Sociogram = (props) => {
               allowHighlighting={allowHighlighting && !createEdge}
               allowPositioning={allowPositioning}
               createEdge={createEdge}
+              key={promptId}
             />
             <NodeBucket
               id="NODE_BUCKET"
@@ -127,7 +123,7 @@ const Sociogram = (props) => {
       </div>
     </div>
   );
-};
+});
 
 Sociogram.propTypes = {
   stage: PropTypes.object.isRequired,

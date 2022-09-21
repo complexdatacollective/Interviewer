@@ -124,7 +124,7 @@ export const LayoutProvider = ({
   useEffect(() => {
     const didStopRunning = !isRunning && previousIsRunning.current;
     previousIsRunning.current = isRunning;
-    // if (simulationEnabled && didStopRunning) {
+
     if (didStopRunning) {
       updateNetworkInStore();
     }

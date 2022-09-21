@@ -4,8 +4,6 @@ import objectHash from 'object-hash';
 import {
   entityAttributesProperty,
   entityPrimaryKeyProperty,
-  nodeTypePropertyForWorker,
-  primaryKeyPropertyForWorker,
   sessionProperty,
   caseProperty,
   codebookHashProperty,
@@ -17,6 +15,8 @@ import {
 } from '@codaco/shared-consts';
 import {
   getEntityAttributes,
+  nodeTypePropertyForWorker,
+  primaryKeyPropertyForWorker,
 } from '../ducks/modules/network';
 
 /**
