@@ -5,7 +5,6 @@ import {
   isArray,
   isNil,
 } from 'lodash';
-import { entityAttributesProperty, entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import { getNetworkNodes, getNetworkEdges } from './network';
 import { createDeepEqualSelector } from './utils';
 import sortOrder from '../utils/sortOrder';
@@ -15,6 +14,7 @@ import { getStageSubject } from './session';
 const getLayout = (_, props) => get(props, 'prompt.layout.layoutVariable');
 const getSortOptions = (_, props) => get(props, 'prompt.sortOrder');
 const getDisplayEdges = (_, props) => get(props, 'prompt.edges.display', []);
+const getPresetDisplayEdges = (preset) => get(preset, 'edges.display', []);
 
 /**
  * Selector for next unplaced node.
@@ -64,27 +64,6 @@ export const getPlacedNodes = createDeepEqualSelector(
   },
 );
 
-const edgeCoords = (edge, { nodes, layout }) => {
-  const from = nodes.find((n) => n[entityPrimaryKeyProperty] === edge.from);
-  const to = nodes.find((n) => n[entityPrimaryKeyProperty] === edge.to);
-
-  if (!from || !to) { return { from: null, to: null }; }
-
-  return {
-    key: `${edge.from}_${edge.type}_${edge.to}`,
-    type: edge.type,
-    from: from[entityAttributesProperty][layout],
-    to: to[entityAttributesProperty][layout],
-  };
-};
-
-export const edgesToCoords = (edges, { nodes, layout }) => edges.map(
-  (edge) => edgeCoords(
-    edge,
-    { nodes, layout },
-  ),
-);
-
 /**
  * Selector for edges.
  *
@@ -94,6 +73,15 @@ export const edgesToCoords = (edges, { nodes, layout }) => edges.map(
 export const getEdges = createDeepEqualSelector(
   getNetworkEdges,
   getDisplayEdges,
+  (edges, displayEdges) => edges.filter(
+    (edge) => displayEdges.includes(edge.type),
+  ),
+);
+
+// As above, but for narrative interface which uses preset rather than prompts
+export const getPresetEdges = (preset) => createDeepEqualSelector(
+  getNetworkEdges,
+  () => getPresetDisplayEdges(preset),
   (edges, displayEdges) => edges.filter(
     (edge) => displayEdges.includes(edge.type),
   ),

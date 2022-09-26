@@ -9,11 +9,12 @@ const SimulationPanel = ({
   dragConstraints,
 }) => {
   const {
-    allowAutomaticLayout,
+    enableAutomaticLayout,
     simulation,
   } = useContext(LayoutContext);
 
-  if (!allowAutomaticLayout) { return null; }
+  // Don't render if automatic layout is not allowed
+  if (!enableAutomaticLayout) { return null; }
 
   const {
     simulationEnabled,

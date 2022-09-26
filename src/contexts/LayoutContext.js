@@ -27,7 +27,7 @@ const LayoutContext = React.createContext({
     links: [],
   },
   getPosition: noop,
-  allowAutomaticLayout: false,
+  enableAutomaticLayout: false,
   simulation: undefined,
 });
 
@@ -62,64 +62,58 @@ export const LayoutProvider = ({
   children,
   nodes,
   edges,
-  layout,
-  twoMode,
-  allowAutomaticLayout,
+  twoMode, // Does this stage have multiple node types
+  enableAutomaticLayout, // Should the layout be updated automatically
+  allowPositioning, // Should the user be able to position nodes
+  allowSelect, // Is node highlighting enabled
+  dontUpdateLayout = false, // Should layout changes be stored back on the node
+  layoutAttributes, // Where layout should be stored
 }) => {
   const dispatch = useDispatch();
 
   const {
     state: forceSimulation,
+    isRunning, // If the simulation is currently iterating. NOT the same as being enabled.
     screen,
-    isRunning,
-    start,
-    reheat,
-    stop,
-    initialize,
-    updateOptions,
-    moveNode,
-    releaseNode,
-    updateNetwork,
-  } = useForceSimulation();
+    start, // Start the simulation
+    reheat, // Reset the simulation
+    stop, // Stop the simulation
+    freezeNodes,
+    unfreezeNodes,
+    initialize, // Initialize the simulation
+    updateOptions, // Update the simulation options
+    moveNode, // Move a node to a position
+    updateNode, // Update node directly
+    updateNetwork, // Update the network
+  } = useForceSimulation({});
 
-  const [simulationEnabled, setSimulationEnabled] = useState(true);
+  const [simulationEnabled, setSimulationEnabled] = useState(enableAutomaticLayout);
   const [links, setLinks] = useState([]);
 
   const previousIsRunning = useRef(false);
-  const getPosition = useRef(() => undefined);
-
-  // TODO: this seems like a misguided approach, mixing "reactive"
-  // and "constant" values. Any other ideas?
-  useEffect(() => {
-    getPosition.current = (index) => {
-      if (allowAutomaticLayout && simulationEnabled) {
-        return get(forceSimulation.current.nodes, [index]);
-      }
-
-      const layoutVariable = twoMode ? layout[nodes[index].type] : layout;
-      return get(nodes, [index, 'attributes', layoutVariable]);
-    };
-  }, [nodes, simulationEnabled, allowAutomaticLayout, layout, twoMode]);
+  const getPosition = useCallback((index) => get(forceSimulation.current.nodes, [index]),
+    [forceSimulation]);
 
   const updateNetworkInStore = useCallback(() => {
     if (!forceSimulation.current) { return; }
+    if (dontUpdateLayout) { return; }
 
     nodes.forEach((node, index) => {
       const position = get(forceSimulation.current.nodes, [index]);
       if (!position) { return; }
       const { x, y } = position;
 
-      const layoutVariable = twoMode ? layout[node.type] : layout;
+      const nodeLayoutAttribute = twoMode ? layoutAttributes[node.type] : layoutAttributes;
 
       dispatch(
         sessionsActions.updateNode(
           node[entityPrimaryKeyProperty],
           undefined,
-          { [layoutVariable]: { x: clamp(x, 0, 1), y: clamp(y, 0, 1) } },
+          { [nodeLayoutAttribute]: { x: clamp(x, 0, 1), y: clamp(y, 0, 1) } },
         ),
       );
     });
-  }, [dispatch, nodes, layout]);
+  }, [nodes, layoutAttributes]);
 
   useEffect(() => {
     const didStopRunning = !isRunning && previousIsRunning.current;
@@ -133,11 +127,11 @@ export const LayoutProvider = ({
   const toggleSimulation = useCallback(() => {
     if (!simulationEnabled) {
       setSimulationEnabled(true);
-      reheat();
+      unfreezeNodes();
       return;
     }
 
-    stop();
+    freezeNodes();
     // Run setSimulationEnabled in next tick in order to
     // allow updateNetworkInStore to run before getPosition
     // changes to redux state.
@@ -150,35 +144,34 @@ export const LayoutProvider = ({
   }, [edges, nodes]);
 
   useEffect(() => {
-    if (!allowAutomaticLayout) { return; }
-
     // We can start with an empty network since the other effects
     // will provide the nodes/links
     const network = {};
     initialize(network, SIMULATION_OPTIONS);
-    start();
-  }, [allowAutomaticLayout]);
+
+    if (enableAutomaticLayout) {
+      start();
+    } else {
+      freezeNodes();
+    }
+  }, []);
 
   useEffect(() => {
-    if (!allowAutomaticLayout || !simulationEnabled) { return; }
-
     const simulationNodes = nodes.map(
       ({ attributes, type }) => {
-        const layoutVariable = twoMode ? layout[type] : layout;
-        return get(attributes, layoutVariable);
+        const layoutAttribute = twoMode ? layoutAttributes[type] : layoutAttributes;
+        return get(attributes, layoutAttribute);
       },
     );
 
     updateNetwork({ nodes: simulationNodes });
-  }, [allowAutomaticLayout, simulationEnabled, nodes, layout, twoMode]);
+  }, [simulationEnabled, nodes, layoutAttributes, twoMode]);
 
   useEffect(() => {
-    if (!allowAutomaticLayout || !simulationEnabled) { return; }
-
     updateNetwork({ links });
-  }, [allowAutomaticLayout, simulationEnabled, links]);
+  }, [simulationEnabled, links]);
 
-  const simulation = allowAutomaticLayout ? {
+  const simulation = {
     simulation: forceSimulation,
     isRunning,
     initialize,
@@ -187,23 +180,24 @@ export const LayoutProvider = ({
     reheat,
     stop,
     moveNode,
-    releaseNode,
+    updateNode,
     simulationEnabled,
     toggleSimulation,
-  } : undefined;
+  };
 
   const value = {
     network: {
       nodes,
       edges,
-      layout,
       links,
     },
-    screen,
-    allowAutomaticLayout,
+    enableAutomaticLayout,
+    allowPositioning,
+    allowSelect,
     twoMode,
     getPosition,
     simulation,
+    screen,
   };
 
   return (

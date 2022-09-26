@@ -6,20 +6,21 @@ import {
 } from 'react';
 import get from 'lodash/get';
 import ForceSimulationWorker from './forceSimulation.worker';
-import screenManager from '../components/RealtimeCanvas/ScreenManager';
 import useViewport from './useViewport';
+import screenManager from '../components/RealtimeCanvas/ScreenManager';
 
 const VIEWPORT_SPACE_PX = 500;
 
 const emptyNetwork = { nodes: [], links: [] };
 
-const useForceSimulation = (listener = () => { }) => {
+const useForceSimulation = ({ listener = () => { } }) => {
   const screen = useRef(screenManager());
   const {
     calculateLayoutCoords,
     calculateRelativeCoords,
     autoZoom,
   } = useViewport(VIEWPORT_SPACE_PX);
+
   const worker = useRef(null);
   const simNetwork = useRef(null);
   const state = useRef(null);
@@ -109,6 +110,16 @@ const useForceSimulation = (listener = () => { }) => {
     // worker.current = null;
   }, []);
 
+  const freezeNodes = useCallback(() => {
+    if (!worker.current) { return; }
+    worker.current.postMessage({ type: 'freezeNodes' });
+  }, []);
+
+  const unfreezeNodes = useCallback(() => {
+    if (!worker.current) { return; }
+    worker.current.postMessage({ type: 'unfreezeNodes' });
+  }, []);
+
   // TODO: separate update nodes and update links?
   const updateNetwork = useCallback((network) => {
     if (!worker.current) { return; }
@@ -142,7 +153,8 @@ const useForceSimulation = (listener = () => { }) => {
     worker.current.postMessage({
       type: 'update_network',
       network: newSimNetwork,
-      restart: shouldRestart,
+      // restart: shouldRestart,
+      restart: true,
     });
   }, []);
 
@@ -167,10 +179,6 @@ const useForceSimulation = (listener = () => { }) => {
     updateNode(nodeAttributes, nodeIndex);
   }, [updateNode]);
 
-  const releaseNode = useCallback((nodeIndex) => {
-    updateNode({ fx: null, fy: null }, nodeIndex);
-  }, [updateNode]);
-
   return {
     state,
     screen,
@@ -179,10 +187,12 @@ const useForceSimulation = (listener = () => { }) => {
     updateOptions,
     start,
     stop,
+    freezeNodes,
+    unfreezeNodes,
     reheat,
     moveNode,
-    releaseNode,
     updateNetwork,
+    updateNode,
   };
 };
 

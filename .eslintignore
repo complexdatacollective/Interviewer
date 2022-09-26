@@ -1,4 +1,5 @@
 public/protocols/**/*Worker.js
+plugins
 src/utils/networkQuery
 src/utils/network-exporters
 src/utils/protocol

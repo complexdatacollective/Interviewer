@@ -87,7 +87,10 @@ const useViewport = (layoutSpace = LAYOUT_SPACE) => {
 
   // Calculate relative position accounting for viewport
   const autoZoom = useCallback((nodes, screen) => {
-    if (!screen) { return; }
+    if (!screen || !(screen.width && screen.height)) {
+      throw new Error('Screen dimensions are required to auto-zoom');
+    }
+
     const suggestedZoom = suggestZoom(nodes, layoutSpace, screen);
     zoom.set(suggestedZoom);
   }, []);

@@ -17,8 +17,61 @@ const DEFAULT_OPTIONS = {
 let simulation;
 let links;
 let options = { ...DEFAULT_OPTIONS };
+let frozen = false;
 
 const cloneLinks = (ls) => ls.map((link) => ({ ...link }));
+
+const start = (alphaValue = 0.3) => {
+  if (!simulation) { return; }
+  console.debug('worker:start');
+  simulation
+    .alpha(alphaValue)
+    .restart();
+};
+
+const stop = () => {
+  if (!simulation) { return; }
+  console.debug('worker:stop');
+  simulation.stop();
+  postMessage({
+    type: 'end',
+    nodes: simulation.nodes(),
+  });
+};
+
+const freeze = () => {
+  const nodes = simulation.nodes().map((node) => ({
+    ...node,
+    fx: node.x,
+    fy: node.y,
+  }));
+
+  simulation
+    .nodes(nodes);
+
+  simulation
+    .force('links', forceLink(cloneLinks(links)).distance(options.linkDistance));
+
+  start();
+  frozen = true;
+};
+
+const unfreeze = () => {
+  const nodes = simulation.nodes().map((node) => ({
+    ...node,
+    fx: null,
+    fy: null,
+  }));
+
+  simulation
+    .nodes(nodes);
+
+  simulation
+    .force('links', forceLink(cloneLinks(links)).distance(options.linkDistance));
+
+  start();
+  frozen = false;
+};
 
 const updateOptions = function (newOptions) {
   Object.keys(newOptions).forEach((option) => {
@@ -43,9 +96,7 @@ const updateOptions = function (newOptions) {
 
   options = { ...options, ...newOptions }; // Update saved options
 
-  simulation
-    .alpha(0.3)
-    .restart();
+  start(0.3);
 };
 
 onmessage = function ({ data }) {
@@ -82,10 +133,7 @@ onmessage = function ({ data }) {
 
       simulation.on('end', () => {
         console.debug('worker:end');
-        postMessage({
-          type: 'end',
-          nodes: simulation.nodes(),
-        });
+        stop();
       });
       break;
     }
@@ -96,30 +144,33 @@ onmessage = function ({ data }) {
     case 'stop': {
       if (!simulation) { return; }
       console.debug('worker:stop');
-      simulation.stop();
-      postMessage({
-        type: 'end',
-        nodes: simulation.nodes(),
-      });
+      stop();
       break;
     }
     case 'start': {
       if (!simulation) { return; }
       console.debug('worker:start');
-      simulation
-        .alpha(1)
-        .restart();
+      start();
       break;
     }
     case 'reheat': {
       if (!simulation) { return; }
-      console.debug('worker:start');
-      simulation
-        .alpha(0.3)
-        .restart();
+      console.debug('worker:reheat');
+      start(1);
+      break;
+    }
+    case 'freezeNodes': {
+      console.debug('worker:freezeNodes');
+      freeze();
+      break;
+    }
+    case 'unfreezeNodes': {
+      console.debug('worker:unfreezeNodes');
+      unfreeze();
       break;
     }
     case 'update_network': {
+      console.debug('worker:update_network');
       if (!simulation) { return; }
 
       const {
@@ -136,17 +187,23 @@ onmessage = function ({ data }) {
 
       if (data.restart) {
         // TODO: don't run this on "first run"?
-        simulation
-          .alpha(0.3)
-          .restart();
+        start();
       }
+
+      if (frozen) {
+        freeze();
+      }
+
       break;
     }
     case 'update_node': {
+      console.debug('worker:update_node', data.node);
       if (!simulation) { return; }
 
       const nodes = simulation.nodes().map((node, index) => {
-        if (index !== data.index) { return node; }
+        if (index !== data.index) {
+          return node;
+        }
 
         const newNode = {
           ...node,
@@ -162,9 +219,11 @@ onmessage = function ({ data }) {
       simulation
         .force('links', forceLink(cloneLinks(links)).distance(options.linkDistance));
 
-      simulation
-        .alpha(0.3)
-        .restart();
+      start();
+
+      if (frozen) {
+        freeze();
+      }
       break;
     }
     default:

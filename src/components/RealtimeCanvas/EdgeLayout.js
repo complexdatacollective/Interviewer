@@ -20,8 +20,8 @@ const EdgeLayout = () => {
     lines.current.forEach(({ link, el }) => {
       if (!link) { return; }
 
-      const from = getPosition.current(link.source);
-      const to = getPosition.current(link.target);
+      const from = getPosition(link.source);
+      const to = getPosition(link.target);
 
       if (!from || !to) { return; }
 
@@ -66,7 +66,5 @@ const EdgeLayout = () => {
     </div>
   );
 };
-
-export { EdgeLayout };
 
 export default EdgeLayout;

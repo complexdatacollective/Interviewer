@@ -7,7 +7,6 @@ import { entityAttributesProperty } from '@codaco/shared-consts';
 import { currentStageIndex } from '../utils/matchSessionPath';
 import { getAdditionalAttributes, getSubject } from '../utils/protocol/accessors';
 import { createDeepEqualSelector } from './utils';
-import { initialState } from '../ducks/modules/session';
 import { getProtocolCodebook, getProtocolStages, getCurrentSessionProtocol } from './protocol';
 
 const currentPathname = (router) => router && router.location && router.location.pathname;
@@ -106,11 +105,7 @@ export const getSessionProgress = (state) => {
   };
 };
 
-export const anySessionIsActive = (state) => (
-  state.activeSessionId && state.activeSessionId !== initialState
-);
-
-export const getStageForCurrentSession = createSelector(
+const getStageForCurrentSession = createSelector(
   (state, props) => getProtocolStages(state, props),
   stageIndexForCurrentSession,
   (stages, stageIndex) => stages[stageIndex],

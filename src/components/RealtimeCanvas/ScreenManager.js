@@ -29,7 +29,7 @@ const screenManager = () => {
 
   const watchScreen = throttle(() => {
     measureScreen();
-  }, 1000 / 60);
+  }, 1000, { leading: true });
 
   const initialize = (_el) => {
     el.current = _el;

@@ -1,155 +1,120 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
-import { get } from 'lodash';
+import React, { useMemo, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { get, noop } from 'lodash';
 import PropTypes from 'prop-types';
-import ConvexHulls from '../Canvas/ConvexHulls';
-import NodeLayout from '../Canvas/NodeLayout';
-import Background from '../Canvas/Background';
-import PresetSwitcher from '../Canvas/PresetSwitcher';
-import Annotations from '../Canvas/Annotations';
-import EdgeLayout from '../../components/Canvas/EdgeLayout';
-import Canvas from '../../components/Canvas/Canvas';
-import { getNetworkEdges, getNetworkNodes } from '../../selectors/network';
-import { edgesToCoords } from '../../selectors/canvas';
-import { entityAttributesProperty } from '../../utils/network-exporters/src/utils/reservedAttributes';
+import Background from '../../components/RealtimeCanvas/Background';
+import PresetSwitcher from '../../components/RealtimeCanvas/PresetSwitcher';
+import Annotations from '../../components/RealtimeCanvas/Annotations';
+import Canvas from '../../components/RealtimeCanvas/Canvas';
+import ConvexHulls from '../../components/RealtimeCanvas/ConvexHulls';
+import NodeLayout from '../../components/RealtimeCanvas/NodeLayout';
+import EdgeLayout from '../../components/RealtimeCanvas/EdgeLayout';
+import { LayoutProvider } from '../../contexts/LayoutContext';
+import { getNodes, getPresetEdges } from '../../selectors/canvas';
+import SimulationPanel from '../../components/RealtimeCanvas/SimulationPanel';
 
 /**
   * Narrative Interface
   * @extends Component
   */
-class Narrative extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      presetIndex: 0,
-      showConvexHulls: true,
-      showEdges: true,
-      showHighlightedNodes: true,
-      highlightIndex: 0,
-      activeAnnotations: false,
-      activeFocusNodes: false,
-      isFrozen: false,
-    };
+const Narrative = (props) => {
+  const {
+    stage,
+  } = props;
 
-    this.annotationLayer = React.createRef();
-  }
+  const {
+    presets,
+    background: {
+      image: backgroundImage,
+      concentricCircles,
+      skewedTowardCenter,
+    },
+  } = stage;
 
-  handleChangeActiveAnnotations = (status) => {
-    this.setState({
-      activeAnnotations: status,
-    });
-  }
+  const [presetIndex, setPresetIndex] = useState(0);
+  const [highlightIndex, setHighlightIndex] = useState(0);
+  const [showConvexHulls, setShowConvexHulls] = useState(true);
+  const [showEdges, setShowEdges] = useState(true);
+  const [showHighlightedNodes, setShowHighlightedNodes] = useState(true);
+  const [activeAnnotations, setActiveAnnotations] = useState(false);
+  const [activeFocusNodes, setActiveFocusNodes] = useState(false);
 
-  handleToggleHulls = () => {
-    this.setState((oldState) => ({
-      showConvexHulls: !oldState.showConvexHulls,
-    }));
-  }
+  const [isFrozen, setIsFrozen] = useState(false);
+  const [useAutomaticLayout, setUseAutomaticLayout] = useState(true);
 
-  handleToggleEdges = () => {
-    this.setState((oldState) => ({
-      showEdges: !oldState.showEdges,
-    }));
-  }
+  const annotationLayer = useRef(null);
+  const dragSafeRef = useRef(null);
 
-  handleToggleHighlighting = () => {
-    this.setState((oldState) => ({
-      showHighlightedNodes: !oldState.showHighlightedNodes,
-    }));
-  }
+  const currentPreset = useMemo(() => presets[presetIndex], [presetIndex, presets]);
 
-  handleChangeHighlightIndex = (index) => {
-    this.setState({
-      highlightIndex: index,
-    });
-  }
+  const nodes = useSelector(getNodes);
+  const edges = useSelector((state) => getPresetEdges(currentPreset)(state));
 
-  handleToggleFreeze = () => {
-    this.setState((oldState) => ({
-      isFrozen: !oldState.isFrozen,
-    }));
-  }
+  const handleChangeActiveAnnotations = (status) => setActiveAnnotations(status);
+  const handleToggleHulls = () => setShowConvexHulls(!showConvexHulls);
+  const handleToggleEdges = () => setShowEdges(!showEdges);
+  const handleToggleHighlighting = () => setShowHighlightedNodes(!showHighlightedNodes);
+  const handleChangeHighlightIndex = (index) => setHighlightIndex(index);
+  const handleToggleFreeze = () => setIsFrozen(!isFrozen);
 
-  handleResetInteractions = () => {
-    this.annotationLayer.current.reset();
-  }
-
-  handleChangePreset = (index) => {
-    const { presetIndex } = this.state;
-
-    if (index !== presetIndex) {
-      this.setState({
-        showConvexHulls: true,
-        showEdges: true,
-        showHighlightedNodes: true,
-        highlightIndex: 0,
-        presetIndex: index,
-        activeAnnotations: false,
-        activeFocusNodes: false,
-      });
+  const handleResetInteractions = () => {
+    if (annotationLayer.current) {
+      annotationLayer.current.reset();
     }
-  }
+  };
 
-  render() {
-    const {
-      stage,
-      nodes,
-      edges,
-    } = this.props;
+  const handleChangePreset = (index) => {
+    if (index !== presetIndex) {
+      setPresetIndex(index);
+      setShowConvexHulls(true);
+      setShowEdges(true);
+      setShowHighlightedNodes(true);
+      setHighlightIndex(0);
+      setActiveAnnotations([]);
+      setActiveFocusNodes([]);
+    }
+  };
 
-    const {
-      presetIndex,
-      activeAnnotations,
-      activeFocusNodes,
-      showEdges,
-      showConvexHulls,
-      isFrozen,
-      showHighlightedNodes,
-      highlightIndex,
-    } = this.state;
+  // Behaviour Configuration
+  // eslint-disable-next-line @codaco/spellcheck/spell-checker
+  const allowRepositioning = get(stage, 'behaviours.allowRepositioning', false);
+  // eslint-disable-next-line @codaco/spellcheck/spell-checker
+  const freeDraw = get(stage, 'behaviours.freeDraw', false);
 
-    const {
-      presets,
-    } = stage;
+  const shouldShowResetButton = useMemo(() => !!(activeAnnotations || activeFocusNodes),
+    [activeAnnotations, activeFocusNodes]);
 
-    const currentPreset = presets[presetIndex];
+  // Display Properties
+  const layoutVariable = useMemo(() => get(currentPreset, 'layoutVariable'), [currentPreset]);
 
-    // Behaviour Configuration
-    // eslint-disable-next-line @codaco/spellcheck/spell-checker
-    const allowRepositioning = get(stage, 'behaviours.allowRepositioning', false);
-    // eslint-disable-next-line @codaco/spellcheck/spell-checker
-    const freeDraw = get(stage, 'behaviours.freeDraw', false);
-    const shouldShowResetButton = activeAnnotations || activeFocusNodes;
-
-    // Display Properties
-    const layoutVariable = get(currentPreset, 'layoutVariable');
-    const displayEdges = showEdges ? get(currentPreset, 'edges.display', []) : [];
-    const highlight = get(currentPreset, 'highlight', []);
-    const convexHullVariable = showConvexHulls ? get(currentPreset, 'groupVariable', '') : '';
-
-    // Background Configuration
-    const backgroundImage = get(stage, 'background.image');
-    const concentricCircles = get(stage, 'background.concentricCircles');
-    const skewedTowardCenter = get(stage, 'background.skewedTowardCenter');
-
-    // Wrangled entities
-
-    // NodeLayout and ConvexHulls should only be passed nodes that have
-    // the layoutVariable set
-    const nodesWithLayout = nodes.filter((node) => node[entityAttributesProperty][layoutVariable]);
+  const displayEdges = useMemo(() => {
+    if (!showEdges) { return []; }
+    const presetDisplayEdges = get(currentPreset, 'edges.display', []);
 
     // EdgeLayout should only be passed edges that are included in the presets
     // edges.display list
-    const filteredEdges = edges.filter((edge) => displayEdges.includes(edge.type));
-    const edgesWithCoords = edgesToCoords(
-      filteredEdges,
-      { nodes: nodesWithLayout, layout: layoutVariable },
-    );
+    return edges.filter((edge) => presetDisplayEdges.includes(edge.type));
+  }, [currentPreset, showEdges, edges]);
 
-    return (
-      <div className="narrative-interface">
-        <div className="narrative-interface__canvas" id="narrative-interface__canvas">
+  const highlight = useMemo(() => get(currentPreset, 'highlight', []), [currentPreset]);
+
+  const convexHullVariable = useMemo(() => {
+    if (!showConvexHulls) { return null; }
+    return get(currentPreset, 'groupVariable', null);
+  }, [currentPreset, showConvexHulls]);
+
+  console.log('convexHullVariable', convexHullVariable, currentPreset, showConvexHulls);
+
+  return (
+    <div className="narrative-interface" ref={dragSafeRef}>
+      <div className="narrative-interface__canvas" id="narrative-interface__canvas">
+        <LayoutProvider
+          layout={layoutVariable}
+          nodes={nodes}
+          edges={displayEdges}
+          allowAutomaticLayout={useAutomaticLayout}
+          dontUpdateLayout
+        >
           <Canvas
             className="narrative-concentric-circles"
             id="concentric-circles"
@@ -161,68 +126,56 @@ class Narrative extends Component {
               image={backgroundImage}
             />
             <ConvexHulls
-              nodes={nodesWithLayout}
+              nodes={nodes}
               groupVariable={convexHullVariable}
               layoutVariable={layoutVariable}
             />
-            <EdgeLayout
-              edges={edgesWithCoords}
-            />
+            <EdgeLayout />
             {
               freeDraw && (
                 <Annotations
-                  ref={this.annotationLayer}
+                  ref={annotationLayer}
                   isFrozen={isFrozen}
-                  onChangeActiveAnnotations={this.handleChangeActiveAnnotations}
+                  // onChangeActiveAnnotations={this.handleChangeActiveAnnotations}
+                  onChangeActiveAnnotations={noop}
                 />
               )
             }
             <NodeLayout
-              nodes={nodesWithLayout}
               id="NODE_LAYOUT"
               highlightAttribute={
                 (showHighlightedNodes ? highlight[highlightIndex] : null)
-}
-              layoutVariable={layoutVariable}
+              }
+              layout={layoutVariable}
               allowPositioning={allowRepositioning}
+              key={presetIndex}
             />
+            <SimulationPanel dragConstraints={dragSafeRef} />
           </Canvas>
-          <PresetSwitcher
-            id="drop-obstacle"
-            presets={presets}
-            activePreset={presetIndex}
-            highlightIndex={highlightIndex}
-            isFrozen={isFrozen}
-            shouldShowResetButton={shouldShowResetButton}
-            shouldShowFreezeButton={freeDraw}
-            onResetInteractions={this.handleResetInteractions}
-            onChangePreset={this.handleChangePreset}
-            onToggleFreeze={this.handleToggleFreeze}
-            onToggleHulls={this.handleToggleHulls}
-            onToggleEdges={this.handleToggleEdges}
-            onChangeHighlightIndex={this.handleChangeHighlightIndex}
-            onToggleHighlighting={this.handleToggleHighlighting}
-          />
-        </div>
+        </LayoutProvider>
+        <PresetSwitcher
+          id="drop-obstacle"
+          presets={presets}
+          activePreset={presetIndex}
+          highlightIndex={highlightIndex}
+          isFrozen={isFrozen}
+          shouldShowResetButton={shouldShowResetButton}
+          shouldShowFreezeButton={freeDraw}
+          onResetInteractions={handleResetInteractions}
+          onChangePreset={handleChangePreset}
+          onToggleFreeze={handleToggleFreeze}
+          onToggleHulls={handleToggleHulls}
+          onToggleEdges={handleToggleEdges}
+          onChangeHighlightIndex={handleChangeHighlightIndex}
+          onToggleHighlighting={handleToggleHighlighting}
+        />
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 Narrative.propTypes = {
   stage: PropTypes.object.isRequired,
 };
 
-function mapStateToProps(state) {
-  return {
-    nodes: getNetworkNodes(state),
-    edges: getNetworkEdges(state),
-  };
-}
-
-const mapDispatchToProps = () => ({
-});
-
-export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
-)(Narrative);
+export default Narrative;

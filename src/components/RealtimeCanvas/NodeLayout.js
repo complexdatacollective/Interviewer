@@ -1,63 +1,73 @@
 /* eslint-disable no-param-reassign */
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, {
+  useCallback, useContext, useEffect, useRef, useState,
+} from 'react';
+import { useDispatch } from 'react-redux';
 import { entityPrimaryKeyProperty, entityAttributesProperty } from '@codaco/shared-consts';
 import { isEmpty, get, find } from 'lodash';
+import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import LayoutContext from '../../contexts/LayoutContext';
 import LayoutNode from './LayoutNode';
 
-class NodeLayout extends React.Component {
-  constructor(props) {
-    super(props);
-    this.ref = React.createRef();
-    this.updateRAF = undefined;
-    this.layoutEls = [];
-    this.isDragging = false;
-  }
+const NodeLayout = (props) => {
+  const {
+    highlightAttribute,
+    destinationRestriction,
+    originRestriction,
+    createEdge,
+  } = props;
 
-  componentDidMount() {
-    this.createLayoutEls();
-    this.updateRAF = requestAnimationFrame(() => this.update());
-  }
+  const {
+    network: {
+      nodes,
+    },
+    allowPositioning,
+    allowSelect,
+    simulation,
+    getPosition,
+    screen,
+  } = useContext(LayoutContext);
 
-  componentDidUpdate() {
-    const { network: { nodes } } = this.context;
+  const dispatch = useDispatch();
+  const toggleEdge = useCallback(
+    (modelData, attributeData) => dispatch(sessionsActions.toggleEdge(modelData, attributeData)),
+    [createEdge, dispatch],
+  );
 
-    if (this.layoutEls.length !== nodes.length) {
-      this.createLayoutEls();
-    }
-  }
+  const toggleHighlight = useCallback(
+    (nodeUID, attributeData) => dispatch(
+      sessionsActions.toggleNodeAttributes(
+        nodeUID,
+        attributeData,
+      ),
+    ), [dispatch, highlightAttribute],
+  );
 
-  componentWillUnmount() {
-    const { screen } = this.context;
-    screen.current.destroy();
-    cancelAnimationFrame(this.updateRAF);
-  }
+  const ref = useRef(null);
+  const updateRAF = useRef(null);
+  const [layoutEls, setLayoutEls] = useState([]);
+  const [isDragging, setIsDragging] = useState(false);
+  const [connectFrom, setConnectFrom] = useState(null);
 
-  createLayoutEls = () => {
-    const { network: { nodes } } = this.context;
-
-    this.layoutEls = nodes.map((_, index) => {
-      if (this.layoutEls[index]) { return this.layoutEls[index]; }
+  const createLayoutEls = useCallback(() => {
+    const newEls = nodes.map((_, index) => {
+      if (layoutEls[index]) { return layoutEls[index]; }
 
       const nodeEl = document.createElement('div');
       nodeEl.style.position = 'absolute';
       nodeEl.style.transform = 'translate(-50%, -50%)';
       nodeEl.style.display = 'none';
-      this.ref.current.append(nodeEl);
+      ref.current.append(nodeEl);
 
       return nodeEl;
     });
-  }
 
-  update = () => {
-    const {
-      getPosition,
-      screen,
-    } = this.context;
+    setLayoutEls(newEls);
+  }, [nodes, ref]);
 
-    this.layoutEls.forEach((el, index) => {
-      const relativePosition = getPosition.current(index);
+  const update = useCallback(() => {
+    layoutEls.forEach((el, index) => {
+      const relativePosition = getPosition(index);
       if (!relativePosition || !el) { return; }
 
       const screenPosition = screen.current.calculateScreenCoords(relativePosition);
@@ -66,31 +76,26 @@ class NodeLayout extends React.Component {
       el.style.display = 'block';
     });
 
-    this.updateRAF = requestAnimationFrame(() => this.update());
-  }
+    updateRAF.current = requestAnimationFrame(() => update());
+  }, [layoutEls, screen, getPosition]);
 
-  isLinking = (node) => {
-    const { connectFrom } = this.props;
-    return get(node, entityPrimaryKeyProperty) === connectFrom;
-  };
+  useEffect(() => {
+    if (layoutEls.length !== nodes.length) {
+      createLayoutEls();
+    }
+  }, [nodes, layoutEls, createLayoutEls]);
 
-  isHighlighted = (node) => {
-    const { highlightAttribute } = this.props;
-    return (
-      !isEmpty(highlightAttribute)
-      && get(node, [entityAttributesProperty, highlightAttribute]) === true
-    );
-  };
+  const isLinking = useCallback(
+    (node) => get(node, entityPrimaryKeyProperty) === connectFrom,
+    [connectFrom],
+  );
 
-  isDisabled = (node) => {
-    const {
-      connectFrom,
-      originRestriction,
-      destinationRestriction,
-    } = this.props;
+  const isHighlighted = useCallback((node) => (
+    !isEmpty(highlightAttribute)
+    && get(node, [entityAttributesProperty, highlightAttribute]) === true
+  ), [highlightAttribute]);
 
-    const { network: { nodes } } = this.context;
-
+  const isDisabled = useCallback((node) => {
     // Node is disabled if type is same as originRestriction, unless there is a connectFrom
     // If there is a connectFrom, we need to check other things.
     if (!connectFrom && originRestriction && node.type === originRestriction) { return true; }
@@ -110,174 +115,136 @@ class NodeLayout extends React.Component {
     }
 
     return false;
-  };
+  }, [connectFrom, originRestriction, destinationRestriction]);
 
-  initializeLayout = (el) => {
-    if (!el) { return; }
-    const { screen } = this.context;
-    this.ref.current = el;
-    screen.current.initialize(el);
-  };
+  useEffect(() => {
+    updateRAF.current = requestAnimationFrame(() => update());
 
-  handleDragStart = (uuid, index, delta) => {
-    this.isDragging = true;
+    return () => {
+      screen.current.destroy();
+      cancelAnimationFrame(updateRAF.current);
+    };
+  }, [update]);
 
-    const {
-      network: { layout },
-      allowAutomaticLayout,
-      simulation,
-      screen,
-    } = this.context;
+  const connectNode = useCallback((nodeId) => {
+    // If edge creation is disabled, return
+    if (!createEdge) { return; }
 
-    const { updateNode } = this.props;
+    // If the target and source node are the same, deselect
+    if (connectFrom === nodeId) {
+      setConnectFrom(null);
+      return;
+    }
 
-    const {
-      x,
-      y,
-    } = delta;
+    // If there isn't a target node yet, and the type isn't restricted,
+    // set the selected node into the linking state
+    if (!connectFrom) {
+      const { type: nodeType } = find(nodes, [entityPrimaryKeyProperty, nodeId]);
+      // If the node type is restricted, return
+      if (originRestriction && nodeType === originRestriction) { return; }
 
+      setConnectFrom(nodeId);
+      return;
+    }
+
+    // Either add or remove an edge
+    if (connectFrom !== nodeId) {
+      toggleEdge({
+        from: connectFrom,
+        to: nodeId,
+        type: createEdge,
+      });
+    }
+
+    // Reset the node linking state
+    setConnectFrom(null);
+  }, [connectFrom, originRestriction, createEdge, nodes]);
+
+  const handleDrag = useCallback((uuid, index, delta) => {
+    setIsDragging(true);
     const relativeDelta = screen.current.calculateRelativeCoords(delta);
 
-    if (allowAutomaticLayout) {
-      const { simulationEnabled, moveNode } = simulation;
-      if (simulationEnabled) {
-        moveNode(relativeDelta, index);
-        return;
-      }
-    }
+    const { moveNode } = simulation;
+    moveNode(relativeDelta, index);
+  }, [screen, simulation.moveNode]);
 
-    updateNode(
-      uuid,
-      undefined,
-      { [layout]: screen.current.calculateRelativeCoords({ x, y }) },
+  const handleDragEnd = useCallback((uuid, index) => {
+    const { simulationEnabled, updateNode } = simulation;
+    if (!simulationEnabled) { return; }
+
+    // Setting fx/fy to null will allow the node to be moved by the simulation
+    updateNode({ fx: null, fy: null }, index);
+  }, [simulation.simulationEnabled, simulation.updateNode]);
+
+  const toggleHighlightAttribute = useCallback((node) => {
+    if (!allowSelect) { return; }
+    const newVal = !node[entityAttributesProperty][highlightAttribute];
+    toggleHighlight(
+      node[entityPrimaryKeyProperty],
+      { [highlightAttribute]: newVal },
     );
-  };
+  }, [allowSelect, highlightAttribute]);
 
-  handleDragMove = (uuid, index, delta) => {
-    const {
-      network: { layout },
-      allowAutomaticLayout,
-      simulation,
-      screen,
-    } = this.context;
-
-    const { updateNode } = this.props;
-
-    const {
-      x,
-      y,
-    } = delta;
-
-    const relativeDelta = screen.current.calculateRelativeCoords(delta);
-
-    if (allowAutomaticLayout) {
-      const { simulationEnabled, moveNode } = simulation;
-      if (simulationEnabled) {
-        moveNode(relativeDelta, index);
-        return;
-      }
+  const onSelected = useCallback((node) => {
+    if (!allowSelect) {
+      connectNode(node[entityPrimaryKeyProperty]);
+    } else {
+      toggleHighlightAttribute(node);
     }
-
-    updateNode(
-      uuid,
-      undefined,
-      { [layout]: screen.current.calculateRelativeCoords({ x, y }) },
-    );
-  };
-
-  handleDragEnd = (uuid, index, { x, y }) => {
-    const {
-      network: { layout },
-      allowAutomaticLayout,
-      simulation,
-      screen,
-    } = this.context;
-
-    const {
-      updateNode,
-    } = this.props;
-
-    if (allowAutomaticLayout) {
-      const { simulationEnabled, releaseNode } = simulation;
-
-      if (simulationEnabled) {
-        releaseNode(index);
-        return;
-      }
-    }
-
-    updateNode(
-      uuid,
-      undefined,
-      { [layout]: screen.current.calculateRelativeCoords({ x, y }) },
-    );
-  };
+  }, [allowSelect, connectNode, toggleHighlightAttribute]);
 
   // When node is dragged this is called last,
   // we can use that to reset isDragging state
-  handleSelected = (...args) => {
-    if (this.isDisabled(...args)) { return; }
-    const { onSelected } = this.props;
+  const handleSelected = useCallback((...args) => {
+    if (isDisabled(...args)) { return; }
 
-    if (this.isDragging) {
-      this.isDragging = false;
+    if (isDragging) {
+      setIsDragging(false);
       return;
     }
     onSelected(...args);
+  }, [isDragging, isDisabled, onSelected]);
+
+  const initializeLayout = (el) => {
+    if (!el || ref.current) { return; }
+    ref.current = el;
+    screen.current.initialize(el);
   };
 
-  render() {
-    const {
-      network: { nodes },
-    } = this.context;
-
-    const {
-      allowPositioning,
-      allowSelect,
-    } = this.props;
-
-    return (
-      <>
-        <div className="node-layout" ref={this.initializeLayout} />
-        {nodes.map((node, index) => {
-          const el = this.layoutEls[index];
-          if (!el) { return null; }
-          return (
-            <LayoutNode
-              node={node}
-              portal={el}
-              index={index}
-              key={`${node[entityPrimaryKeyProperty]}_${index}`}
-              onDragStart={this.handleDragStart}
-              onDragMove={this.handleDragMove}
-              onDragEnd={this.handleDragEnd}
-              allowPositioning={allowPositioning}
-              allowSelect={allowSelect}
-              onSelected={this.handleSelected}
-              selected={this.isHighlighted(node)}
-              linking={this.isLinking(node)}
-              inactive={this.isDisabled(node)}
-            />
-          );
-        })}
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <div className="node-layout" ref={initializeLayout} />
+      {nodes.map((node, index) => {
+        const el = layoutEls[index];
+        if (!el) { return null; }
+        return (
+          <LayoutNode
+            node={node}
+            portal={el}
+            index={index}
+            key={`${node[entityPrimaryKeyProperty]}_${index}`}
+            onDragStart={handleDrag}
+            onDragMove={handleDrag}
+            onDragEnd={handleDragEnd}
+            allowPositioning={allowPositioning}
+            allowSelect={allowSelect}
+            onSelected={handleSelected}
+            selected={isHighlighted(node)}
+            linking={isLinking(node)}
+            inactive={isDisabled(node)}
+          />
+        );
+      })}
+    </>
+  );
+};
 
 NodeLayout.propTypes = {
-  onSelected: PropTypes.func.isRequired,
-  allowPositioning: PropTypes.bool,
-  allowSelect: PropTypes.bool,
 };
 
 NodeLayout.defaultProps = {
   allowPositioning: true,
   allowSelect: true,
 };
-
-NodeLayout.contextType = LayoutContext;
-
-export { NodeLayout };
 
 export default NodeLayout;
