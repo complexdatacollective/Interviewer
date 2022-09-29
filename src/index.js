@@ -9,7 +9,12 @@ import initMenuActions from './utils/initMenuActions';
 import { history, store, persistor as storePersistor } from './ducks/store';
 import { actionCreators as deviceActions } from './ducks/modules/deviceSettings';
 import App from './containers/App';
-import { isCordova, isElectron, getEnv } from './utils/Environment';
+import {
+  isCordova,
+  isElectron,
+  getEnv,
+  isAndroid,
+} from './utils/Environment';
 import AppRouter from './routes';
 import remote from './utils/remote';
 
@@ -39,6 +44,29 @@ const Persist = ({ persistor, children }) => {
 
 const startApp = () => {
   store.dispatch(deviceActions.deviceReady());
+
+  // Enable fullscreen mode on Android using cordova-plugin-fullscreen
+  if (isAndroid()) {
+    window.AndroidFullScreen.isImmersiveModeSupported(() => {
+      window.AndroidFullScreen.immersiveMode(() => {
+        // eslint-disable-next-line no-console
+        console.info('Set app into immersive mode.');
+
+        window.addEventListener('keyboardDidHide', () => {
+          // Describe your logic which will be run each time keyboard is closed.
+          // eslint-disable-next-line no-console
+          console.log('keyboard hidden');
+          window.AndroidFullScreen.immersiveMode();
+        });
+      }, () => {
+        // eslint-disable-next-line no-console
+        console.warn('Failed to set app into immersive mode!');
+      });
+    }, () => {
+      // eslint-disable-next-line no-console
+      console.warn('Wanted to set immersive mode, but not supported!');
+    });
+  }
 
   ReactDOM.render(
     <Provider store={store}>

@@ -78,6 +78,7 @@
     "cordova-ios": "~5.1.1",
     "cordova-plugin-app-version": "~0.1.14",
     "cordova-plugin-file": "~5.0.0",
+    "cordova-plugin-ionic-keyboard": "2.2.0",
     "cordova-plugin-network-canvas-client": "github:complexdatacollective/cordova-plugin-network-canvas-client",
     "cross-env": "^5.2.0",
     "css-loader": "^3.4.2",
@@ -300,7 +301,9 @@
       "cordova-plugin-file-transfer": {},
       "cordova-plugin-whitelist": {},
       "cordova-plugin-device": {},
-      "cordova-plugin-keyboard": {},
+      "cordova-plugin-app-version": {},
+      "cordova-plugin-ionic-keyboard": {},
+      "cordova-plugin-fullscreen": {},
       "cordova-plugin-zeroconf": {},
       "cordova-plugin-x-socialsharing": {
         "ANDROID_SUPPORT_V4_VERSION": "24.1.1+",
@@ -313,8 +316,7 @@
       "cordova-plugin-wkwebview-engine": {},
       "cordova-plugin-network-canvas-client": {},
       "cordova-sqlite-storage": {},
-      "cordova-plugin-file": {},
-      "cordova-plugin-app-version": {}
+      "cordova-plugin-file": {}
     }
   }
 }
