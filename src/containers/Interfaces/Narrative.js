@@ -113,7 +113,7 @@ const Narrative = (props) => {
           nodes={nodes}
           edges={displayEdges}
           allowAutomaticLayout={useAutomaticLayout}
-          dontUpdateLayout
+          dontStoreLayout
         >
           <Canvas
             className="narrative-concentric-circles"
