@@ -51,12 +51,6 @@
         "allowSamePrecedence": true
       }
     ],
-    "import/no-unused-modules": [
-      1,
-      {
-        "unusedExports": true
-      }
-    ],
     "@codaco/spellcheck/spell-checker": [
       1,
       {

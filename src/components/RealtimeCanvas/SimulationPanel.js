@@ -5,12 +5,11 @@ import PlayIcon from '@material-ui/icons/PlayArrowRounded';
 import PauseIcon from '@material-ui/icons/PauseRounded';
 import LayoutContext from '../../contexts/LayoutContext';
 
-const SimulationPanel = ({
-  dragConstraints,
-}) => {
+const SimulationPanel = () => {
   const {
     enableAutomaticLayout,
     simulation,
+    dragConstraints, // doesn't exist - need to implement maybe using screen?
   } = useContext(LayoutContext);
 
   // Don't render if automatic layout is not allowed

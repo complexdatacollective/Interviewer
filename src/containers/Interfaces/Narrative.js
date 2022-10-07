@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import Background from '../../components/RealtimeCanvas/Background';
 import PresetSwitcher from '../../components/RealtimeCanvas/PresetSwitcher';
 import Annotations from '../../components/RealtimeCanvas/Annotations';
-import Canvas from '../../components/RealtimeCanvas/Canvas';
 import ConvexHulls from '../../components/RealtimeCanvas/ConvexHulls';
 import NodeLayout from '../../components/RealtimeCanvas/NodeLayout';
 import EdgeLayout from '../../components/RealtimeCanvas/EdgeLayout';
@@ -115,43 +114,37 @@ const Narrative = (props) => {
           allowAutomaticLayout={useAutomaticLayout}
           dontStoreLayout
         >
-          <Canvas
-            className="narrative-concentric-circles"
-            id="concentric-circles"
-            key={`circles-${currentPreset.id}`}
-          >
-            <Background
-              concentricCircles={concentricCircles}
-              skewedTowardCenter={skewedTowardCenter}
-              image={backgroundImage}
-            />
-            <ConvexHulls
-              nodes={nodes}
-              groupVariable={convexHullVariable}
-              layoutVariable={layoutVariable}
-            />
-            <EdgeLayout />
-            {
-              freeDraw && (
-                <Annotations
-                  ref={annotationLayer}
-                  isFrozen={isFrozen}
-                  // onChangeActiveAnnotations={this.handleChangeActiveAnnotations}
-                  onChangeActiveAnnotations={noop}
-                />
-              )
+          <Background
+            concentricCircles={concentricCircles}
+            skewedTowardCenter={skewedTowardCenter}
+            image={backgroundImage}
+          />
+          <ConvexHulls
+            nodes={nodes}
+            groupVariable={convexHullVariable}
+            layoutVariable={layoutVariable}
+          />
+          <EdgeLayout />
+          {
+            freeDraw && (
+              <Annotations
+                ref={annotationLayer}
+                isFrozen={isFrozen}
+                // onChangeActiveAnnotations={this.handleChangeActiveAnnotations}
+                onChangeActiveAnnotations={noop}
+              />
+            )
+          }
+          <NodeLayout
+            id="NODE_LAYOUT"
+            highlightAttribute={
+              (showHighlightedNodes ? highlight[highlightIndex] : null)
             }
-            <NodeLayout
-              id="NODE_LAYOUT"
-              highlightAttribute={
-                (showHighlightedNodes ? highlight[highlightIndex] : null)
-              }
-              layout={layoutVariable}
-              allowPositioning={allowRepositioning}
-              key={presetIndex}
-            />
-            <SimulationPanel dragConstraints={dragSafeRef} />
-          </Canvas>
+            layout={layoutVariable}
+            allowPositioning={allowRepositioning}
+            key={presetIndex}
+          />
+          <SimulationPanel dragConstraints={dragSafeRef} />
         </LayoutProvider>
         <PresetSwitcher
           id="drop-obstacle"

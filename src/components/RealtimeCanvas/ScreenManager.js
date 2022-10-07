@@ -41,45 +41,43 @@ const screenManager = () => {
     window.removeEventListener('resize', watchScreen);
   };
 
-  // Convert a relative coordinate into position on the screen accounting for viewport
-  const calculateScreenCoords = ({ x, y } = { x: 0.5, y: 0.5 }) => {
-    const { width, height } = state;
-
-    return {
-      x: (((x - 0.5) * width) + (0.5 * width)),
-      y: (((y - 0.5) * height) + (0.5 * height)),
-    };
-  };
-
-  // Given a position on the screen calculate the relative coordinate for the viewport
-  const calculateRelativeCoords = ({ x, y, ...rest } = { x: 0, y: 0 }) => {
-    const {
-      width,
-      height,
-      left: viewportX,
-      top: viewportY,
-    } = state;
-
-    const hasDelta = rest.dy && rest.dx;
-    const delta = hasDelta
-      ? { dy: rest.dy / height, dx: rest.dx / width }
-      : {};
-
-    return {
-      x: clamp((x - viewportX) / width, 0, 1),
-      y: clamp((y - viewportY) / height, 0, 1),
-      ...delta,
-    };
-  };
-
   const get = () => state;
 
   return {
     initialize,
     destroy,
     get,
-    calculateScreenCoords,
-    calculateRelativeCoords,
+  };
+};
+
+// Convert a relative coordinate into position on the screen accounting for viewport
+export const calculateScreenCoords = ({ x, y } = { x: 0.5, y: 0.5 }, screen) => {
+  const { width, height } = screen;
+
+  return {
+    x: (((x - 0.5) * width) + (0.5 * width)),
+    y: (((y - 0.5) * height) + (0.5 * height)),
+  };
+};
+
+// Given a position on the screen calculate the relative coordinate for the viewport
+export const calculateRelativeCoords = ({ x, y, ...rest } = { x: 0, y: 0 }, screen) => {
+  const {
+    width,
+    height,
+    left: viewportX,
+    top: viewportY,
+  } = screen;
+
+  const hasDelta = rest.dy && rest.dx;
+  const delta = hasDelta
+    ? { dy: rest.dy / height, dx: rest.dx / width }
+    : {};
+
+  return {
+    x: clamp((x - viewportX) / width, 0, 1),
+    y: clamp((y - viewportY) / height, 0, 1),
+    ...delta,
   };
 };
 

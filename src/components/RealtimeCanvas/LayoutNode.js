@@ -7,7 +7,7 @@ import DragManager from '../../behaviours/DragAndDrop/DragManager';
 const LayoutNode = ({
   node,
   portal,
-  onSelected,
+  onSelect,
   onDragStart,
   onDragMove,
   onDragEnd,
@@ -39,12 +39,12 @@ const LayoutNode = ({
   }, [portal, index, onDragStart, onDragMove, onDragEnd]);
 
   useEffect(() => {
-    const handleSelected = () => onSelected(node);
+    const handleSelected = () => onSelect(node);
 
     portal.addEventListener('click', handleSelected);
 
     return () => { portal.removeEventListener('click', handleSelected); };
-  }, [onSelected, node]);
+  }, [onSelect, node]);
 
   return ReactDOM.createPortal(
     <UINode

@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import React, {
-  useCallback, useContext, useEffect, useRef, useState,
+  useCallback, useContext, useEffect, useMemo, useRef, useState,
 } from 'react';
 import { useDispatch } from 'react-redux';
 import { entityPrimaryKeyProperty, entityAttributesProperty } from '@codaco/shared-consts';
@@ -8,9 +8,13 @@ import { isEmpty, get, find } from 'lodash';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import LayoutContext from '../../contexts/LayoutContext';
 import LayoutNode from './LayoutNode';
+import { calculateScreenCoords } from './ScreenManager';
 
 const NodeLayout = (props) => {
   const {
+    allowPositioning,
+    allowSelecting,
+    allowEdgeCreation,
     highlightAttribute,
     destinationRestriction,
     originRestriction,
@@ -18,72 +22,20 @@ const NodeLayout = (props) => {
   } = props;
 
   const {
-    network: {
-      nodes,
-    },
-    allowPositioning,
-    allowSelect,
-    simulation,
-    getPosition,
+    nodes,
+    handleDrag,
+    handleDragEnd,
+    getLayoutNodePosition,
     screen,
+    interfaceRef,
   } = useContext(LayoutContext);
 
+  const currentScreenDimensions = useMemo(screen.current.get, [screen.current]);
+
   const dispatch = useDispatch();
-  const toggleEdge = useCallback(
-    (modelData, attributeData) => dispatch(sessionsActions.toggleEdge(modelData, attributeData)),
-    [createEdge, dispatch],
-  );
-
-  const toggleHighlight = useCallback(
-    (nodeUID, attributeData) => dispatch(
-      sessionsActions.toggleNodeAttributes(
-        nodeUID,
-        attributeData,
-      ),
-    ), [dispatch, highlightAttribute],
-  );
-
-  const ref = useRef(null);
   const updateRAF = useRef(null);
-  const [layoutEls, setLayoutEls] = useState([]);
-  const [isDragging, setIsDragging] = useState(false);
+  const [layoutNodeElements, setLayoutNodeElements] = useState([]);
   const [connectFrom, setConnectFrom] = useState(null);
-
-  const createLayoutEls = useCallback(() => {
-    const newEls = nodes.map((_, index) => {
-      if (layoutEls[index]) { return layoutEls[index]; }
-
-      const nodeEl = document.createElement('div');
-      nodeEl.style.position = 'absolute';
-      nodeEl.style.transform = 'translate(-50%, -50%)';
-      nodeEl.style.display = 'none';
-      ref.current.append(nodeEl);
-
-      return nodeEl;
-    });
-
-    setLayoutEls(newEls);
-  }, [nodes, ref]);
-
-  const update = useCallback(() => {
-    layoutEls.forEach((el, index) => {
-      const relativePosition = getPosition(index);
-      if (!relativePosition || !el) { return; }
-
-      const screenPosition = screen.current.calculateScreenCoords(relativePosition);
-      el.style.left = `${screenPosition.x}px`;
-      el.style.top = `${screenPosition.y}px`;
-      el.style.display = 'block';
-    });
-
-    updateRAF.current = requestAnimationFrame(() => update());
-  }, [layoutEls, screen, getPosition]);
-
-  useEffect(() => {
-    if (layoutEls.length !== nodes.length) {
-      createLayoutEls();
-    }
-  }, [nodes, layoutEls, createLayoutEls]);
 
   const isLinking = useCallback(
     (node) => get(node, entityPrimaryKeyProperty) === connectFrom,
@@ -117,18 +69,73 @@ const NodeLayout = (props) => {
     return false;
   }, [connectFrom, originRestriction, destinationRestriction]);
 
+  /**
+   * Create DOM elements from each of the layout nodes, which we can manipulate
+   * outside of the React render cycle.
+   */
+  const createLayoutNodeElements = useCallback(() => {
+    const newEls = nodes.map((_, index) => {
+      // If a node already exists, use it
+      if (layoutNodeElements[index]) { return layoutNodeElements[index]; }
+
+      const nodeEl = document.createElement('div');
+      nodeEl.style.position = 'absolute';
+      nodeEl.style.transform = 'translate(-50%, -50%)';
+      nodeEl.style.display = 'none'; // Hide until we have a position
+      document.getElementsByClassName('sociogram-interface')[0].append(nodeEl);
+
+      return nodeEl;
+    });
+
+    setLayoutNodeElements(newEls);
+  }, [nodes, interfaceRef]);
+
+  /**
+   * Establish an update loop running on each animation frame that updates the
+   * layout node elements with the latest positions.
+   *
+   * Positions either come from the simulation, OR from existing node layout
+   * data (in the case of manual layout).
+   */
+  const update = useCallback(() => {
+    // Need to optimize this to only update the nodes that have changed
+    layoutNodeElements.forEach((el, index) => {
+      const relativePosition = getLayoutNodePosition(index);
+      if (!relativePosition || !el) { return; }
+
+      const screenPosition = calculateScreenCoords(relativePosition, currentScreenDimensions);
+      console.log('screenPosition', screenPosition);
+      el.style.left = `${screenPosition.x}px`;
+      el.style.top = `${screenPosition.y}px`;
+      el.style.display = 'block';
+    });
+    updateRAF.current = requestAnimationFrame(() => update());
+  }, [layoutNodeElements, currentScreenDimensions, getLayoutNodePosition]);
+
+  /**
+   * If the node or edge lists change, recreate the layout node elements.
+   */
+  useEffect(() => {
+    // TODO: Handle removal of nodes!
+    if (layoutNodeElements.length !== nodes.length) {
+      createLayoutNodeElements();
+    }
+  }, [nodes, layoutNodeElements, createLayoutNodeElements]);
+
+  /**
+   * Start the update loop on first render
+   */
   useEffect(() => {
     updateRAF.current = requestAnimationFrame(() => update());
 
     return () => {
-      screen.current.destroy();
       cancelAnimationFrame(updateRAF.current);
     };
   }, [update]);
 
-  const connectNode = useCallback((nodeId) => {
+  const handleEdgeCreation = useCallback((nodeId) => {
     // If edge creation is disabled, return
-    if (!createEdge) { return; }
+    if (!allowEdgeCreation || !createEdge) { return; }
 
     // If the target and source node are the same, deselect
     if (connectFrom === nodeId) {
@@ -149,73 +156,47 @@ const NodeLayout = (props) => {
 
     // Either add or remove an edge
     if (connectFrom !== nodeId) {
-      toggleEdge({
+      dispatch(sessionsActions.toggleEdge({
         from: connectFrom,
         to: nodeId,
         type: createEdge,
-      });
+      }));
     }
 
     // Reset the node linking state
     setConnectFrom(null);
   }, [connectFrom, originRestriction, createEdge, nodes]);
 
-  const handleDrag = useCallback((uuid, index, delta) => {
-    setIsDragging(true);
-    const relativeDelta = screen.current.calculateRelativeCoords(delta);
-
-    const { moveNode } = simulation;
-    moveNode(relativeDelta, index);
-  }, [screen, simulation.moveNode]);
-
-  const handleDragEnd = useCallback((uuid, index) => {
-    const { simulationEnabled, updateNode } = simulation;
-    if (!simulationEnabled) { return; }
-
-    // Setting fx/fy to null will allow the node to be moved by the simulation
-    updateNode({ fx: null, fy: null }, index);
-  }, [simulation.simulationEnabled, simulation.updateNode]);
-
   const toggleHighlightAttribute = useCallback((node) => {
-    if (!allowSelect) { return; }
+    if (!allowSelecting) { return; }
     const newVal = !node[entityAttributesProperty][highlightAttribute];
-    toggleHighlight(
-      node[entityPrimaryKeyProperty],
-      { [highlightAttribute]: newVal },
+
+    dispatch(
+      sessionsActions.toggleNodeAttributes(
+        node[entityPrimaryKeyProperty],
+        { [highlightAttribute]: newVal },
+      ),
     );
-  }, [allowSelect, highlightAttribute]);
+  }, [allowSelecting, highlightAttribute]);
 
   const onSelected = useCallback((node) => {
-    if (!allowSelect) {
-      connectNode(node[entityPrimaryKeyProperty]);
+    if (!allowSelecting) {
+      handleEdgeCreation(node[entityPrimaryKeyProperty]);
     } else {
       toggleHighlightAttribute(node);
     }
-  }, [allowSelect, connectNode, toggleHighlightAttribute]);
+  }, [allowSelecting, handleEdgeCreation, toggleHighlightAttribute]);
 
-  // When node is dragged this is called last,
-  // we can use that to reset isDragging state
   const handleSelected = useCallback((...args) => {
     if (isDisabled(...args)) { return; }
 
-    if (isDragging) {
-      setIsDragging(false);
-      return;
-    }
     onSelected(...args);
-  }, [isDragging, isDisabled, onSelected]);
-
-  const initializeLayout = (el) => {
-    if (!el || ref.current) { return; }
-    ref.current = el;
-    screen.current.initialize(el);
-  };
+  }, [isDisabled, onSelected]);
 
   return (
     <>
-      <div className="node-layout" ref={initializeLayout} />
       {nodes.map((node, index) => {
-        const el = layoutEls[index];
+        const el = layoutNodeElements[index];
         if (!el) { return null; }
         return (
           <LayoutNode
@@ -227,8 +208,8 @@ const NodeLayout = (props) => {
             onDragMove={handleDrag}
             onDragEnd={handleDragEnd}
             allowPositioning={allowPositioning}
-            allowSelect={allowSelect}
-            onSelected={handleSelected}
+            allowSelecting={allowSelecting}
+            onSelect={handleSelected}
             selected={isHighlighted(node)}
             linking={isLinking(node)}
             inactive={isDisabled(node)}
@@ -244,7 +225,7 @@ NodeLayout.propTypes = {
 
 NodeLayout.defaultProps = {
   allowPositioning: true,
-  allowSelect: true,
+  allowSelecting: true,
 };
 
 export default NodeLayout;

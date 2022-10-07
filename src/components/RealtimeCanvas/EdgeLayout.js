@@ -10,8 +10,8 @@ const EdgeLayout = () => {
   const lines = useRef();
   const svg = useRef();
   const {
-    network: { edges, links },
-    getPosition,
+    edges,
+    getLayoutNodePosition,
   } = useContext(LayoutContext);
   const timer = useRef();
   const edgeDefinitions = useSelector((state) => getProtocolCodebook(state).edge);
@@ -20,8 +20,8 @@ const EdgeLayout = () => {
     lines.current.forEach(({ link, el }) => {
       if (!link) { return; }
 
-      const from = getPosition(link.source);
-      const to = getPosition(link.target);
+      const from = getLayoutNodePosition(link.source);
+      const to = getLayoutNodePosition(link.target);
 
       if (!from || !to) { return; }
 
@@ -42,7 +42,7 @@ const EdgeLayout = () => {
       const el = document.createElementNS(svgNS, 'line');
       const color = get(edgeDefinitions, [edge.type, 'color'], 'edge-color-seq-1');
       el.setAttributeNS(null, 'stroke', `var(--${color})`);
-      return { edge, el, link: links[index] };
+      return { edge, el, link: edges[index] };
     });
 
     lines.current.forEach(({ el }) => svg.current.appendChild(el));
@@ -53,7 +53,7 @@ const EdgeLayout = () => {
       lines.current.forEach(({ el }) => svg.current.removeChild(el));
       cancelAnimationFrame(timer.current);
     };
-  }, [edges, links, edgeDefinitions]);
+  }, [edges, edgeDefinitions]);
 
   return (
     <div className="edge-layout">

@@ -2,36 +2,28 @@ import React, {
   useEffect,
   useCallback,
   useRef,
-  useState,
 } from 'react';
 import { useDispatch } from 'react-redux';
 import {
   get, noop, clamp,
 } from 'lodash';
-import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
+import { entityAttributesProperty, entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
-import useForceSimulation from '../hooks/useForceSimulation';
+import screenManager from '../components/RealtimeCanvas/ScreenManager';
+import useViewport from '../hooks/useViewport';
+import useForceDirectedWorker from '../hooks/useForceDirectedWorker';
 
-const SIMULATION_OPTIONS = {
-  decay: 0.1,
-  charge: -30,
-  linkDistance: 20,
-  center: 0.1,
-};
+const VIEWPORT_SPACE_PX = 500;
 
-const LayoutContext = React.createContext({
-  network: {
-    nodes: [],
-    edges: [],
-    layout: undefined,
-    links: [],
-  },
-  getPosition: noop,
-  enableAutomaticLayout: false,
-  simulation: undefined,
-});
-
-export const getLinks = ({ nodes, edges }) => {
+/**
+ * @typedef {Object} LayoutContextValue
+ * @property {Object} network
+ * @property {Object[]} network.nodes
+ * @property {Object[]} network.edges
+ *
+ * Format edges as links, compatible with d3-force
+ */
+export const formatEdgesAsLinks = ({ nodes, edges }) => {
   if (nodes.length === 0 || edges.length === 0) { return []; }
 
   const nodeIdMap = nodes.reduce(
@@ -58,48 +50,96 @@ export const getLinks = ({ nodes, edges }) => {
   return links;
 };
 
+const LayoutContext = React.createContext({
+  nodes: [],
+  edges: [],
+  getLayoutNodePosition: noop,
+  forceDirected: false,
+  simulation: undefined,
+  screen: undefined,
+});
+
 export const LayoutProvider = ({
   children,
   nodes,
   edges,
   twoMode, // Does this stage have multiple node types
-  enableAutomaticLayout, // Should the layout be updated automatically
-  allowPositioning, // Should the user be able to position nodes
-  allowSelect, // Is node highlighting enabled
-  dontUpdateLayout = false, // Should layout changes be stored back on the node
+  forceDirected, // Determine if we enable force directed mode
+  dontStoreLayout = false, // Should layout changes be stored back on the nodeX
   layoutAttributes, // Where layout should be stored
+  interfaceRef, // Ref to the interface element to generate screen sizing
 }) => {
   const dispatch = useDispatch();
+  const screen = useRef(screenManager());
+  const layoutNodes = useRef(null);
+  const layoutEdges = useRef(null);
+
+  const layoutAttributeForType = useCallback((type) => {
+    if (!layoutAttributes) { throw new Error('Layout attributes not defined'); }
+    if (twoMode) {
+      return layoutAttributes[type];
+    }
+
+    return layoutAttributes;
+  }, [layoutAttributes, twoMode]);
+
+  // Convert incoming nodes and edges to layout nodes and edges
+  useEffect(() => {
+    layoutNodes.current = nodes.map((node) => {
+      // Nodes that have not yet been placed will have a null value for the layout attribute
+      const nodeLayoutAttributeValue = get(
+        node,
+        [entityAttributesProperty, layoutAttributeForType(node.type)],
+        null,
+      );
+
+      // If the layout is null, flag the node as unpositioned and set a temporary position in the
+      // node bucket
+      if (nodeLayoutAttributeValue === null) {
+        console.warn('Node has no layout attribute', node);
+        return {
+          ...node,
+          unpositioned: true,
+          x: 0.5,
+          y: 0.5,
+        };
+      }
+
+      const { x, y } = nodeLayoutAttributeValue;
+      return {
+        [entityPrimaryKeyProperty]: node[entityPrimaryKeyProperty],
+        unpositioned: false,
+        x,
+        y,
+      };
+    });
+
+    layoutEdges.current = formatEdgesAsLinks({ nodes, edges });
+  }, [nodes, edges]);
 
   const {
-    state: forceSimulation,
-    isRunning, // If the simulation is currently iterating. NOT the same as being enabled.
-    screen,
-    start, // Start the simulation
-    reheat, // Reset the simulation
-    stop, // Stop the simulation
-    freezeNodes,
-    unfreezeNodes,
-    initialize, // Initialize the simulation
-    updateOptions, // Update the simulation options
-    moveNode, // Move a node to a position
-    updateNode, // Update node directly
-    updateNetwork, // Update the network
-  } = useForceSimulation({});
+    calculateLayoutCoords,
+    calculateRelativeCoords,
+    autoZoom,
+  } = useViewport(VIEWPORT_SPACE_PX);
 
-  const [simulationEnabled, setSimulationEnabled] = useState(enableAutomaticLayout);
-  const [links, setLinks] = useState([]);
+  const simulation = useForceDirectedWorker({
+    screen: screen.current.get(),
+    // onEnd: storeLayout,
+  });
 
-  const previousIsRunning = useRef(false);
-  const getPosition = useCallback((index) => get(forceSimulation.current.nodes, [index]),
-    [forceSimulation]);
+  const getLayoutNodePosition = useCallback((index) => get(layoutNodes.current, [index]),
+    [layoutNodes]);
 
-  const updateNetworkInStore = useCallback(() => {
-    if (!forceSimulation.current) { return; }
-    if (dontUpdateLayout) { return; }
+  /**
+   * Commit the current node positions to the node's layout variable
+   */
+  const storeLayout = useCallback(() => {
+    if (dontStoreLayout) { return; }
 
     nodes.forEach((node, index) => {
-      const position = get(forceSimulation.current.nodes, [index]);
+      const position = getLayoutNodePosition(index);
+
       if (!position) { return; }
       const { x, y } = position;
 
@@ -113,92 +153,64 @@ export const LayoutProvider = ({
         ),
       );
     });
-  }, [nodes, layoutAttributes]);
+  }, [nodes, layoutAttributes, twoMode, getLayoutNodePosition, dontStoreLayout]);
 
   useEffect(() => {
-    const didStopRunning = !isRunning && previousIsRunning.current;
-    previousIsRunning.current = isRunning;
-
-    if (didStopRunning) {
-      updateNetworkInStore();
+    if (forceDirected) {
+      const simulationNodes = nodes.map(
+        ({ attributes, type }) => {
+          const layoutAttribute = twoMode ? layoutAttributes[type] : layoutAttributes;
+          return get(attributes, layoutAttribute);
+        },
+      );
+      simulation.updateNetwork({ nodes: simulationNodes });
     }
-  }, [isRunning, updateNetworkInStore]);
+  }, [forceDirected, nodes, layoutAttributes, twoMode]);
 
-  const toggleSimulation = useCallback(() => {
-    if (!simulationEnabled) {
-      setSimulationEnabled(true);
-      unfreezeNodes();
+  useEffect(() => {
+    if (forceDirected) {
+      const edgesAsLinks = formatEdgesAsLinks({ nodes, edges });
+      simulation.updateNetwork({ links: edgesAsLinks });
+    }
+  }, [forceDirected, edges]);
+
+  const moveNode = useCallback((position, index) => {
+    if (forceDirected) {
+      // simulation.moveNode(position, index);
       return;
     }
 
-    freezeNodes();
-    // Run setSimulationEnabled in next tick in order to
-    // allow updateNetworkInStore to run before getPosition
-    // changes to redux state.
-    setTimeout(() => { setSimulationEnabled(false); }, 0);
-  }, [simulationEnabled, setSimulationEnabled, updateNetworkInStore]);
+    layoutNodes.current[index].x = position.x;
+    layoutNodes.current[index].y = position.y;
+  });
 
-  useEffect(() => {
-    const nextLinks = getLinks({ nodes, edges });
-    setLinks(nextLinks);
-  }, [edges, nodes]);
+  const handleDrag = useCallback((uuid, index, delta) => {
+    const relativeDelta = calculateRelativeCoords(delta, screen.current.get());
+    moveNode(relativeDelta, index);
+  }, [screen, moveNode]);
 
-  useEffect(() => {
-    // We can start with an empty network since the other effects
-    // will provide the nodes/links
-    const network = {};
-    initialize(network, SIMULATION_OPTIONS);
-
-    if (enableAutomaticLayout) {
-      start();
-    } else {
-      freezeNodes();
-    }
-  }, []);
-
-  useEffect(() => {
-    const simulationNodes = nodes.map(
-      ({ attributes, type }) => {
-        const layoutAttribute = twoMode ? layoutAttributes[type] : layoutAttributes;
-        return get(attributes, layoutAttribute);
-      },
-    );
-
-    updateNetwork({ nodes: simulationNodes });
-  }, [simulationEnabled, nodes, layoutAttributes, twoMode]);
-
-  useEffect(() => {
-    updateNetwork({ links });
-  }, [simulationEnabled, links]);
-
-  const simulation = {
-    simulation: forceSimulation,
-    isRunning,
-    initialize,
-    updateOptions,
-    start,
-    reheat,
-    stop,
-    moveNode,
-    updateNode,
-    simulationEnabled,
-    toggleSimulation,
-  };
+  const handleDragEnd = useCallback((uuid, index) => {
+    storeLayout();
+  }, [storeLayout]);
 
   const value = {
-    network: {
-      nodes,
-      edges,
-      links,
-    },
-    enableAutomaticLayout,
-    allowPositioning,
-    allowSelect,
-    twoMode,
-    getPosition,
-    simulation,
     screen,
+    twoMode,
+    nodes,
+    edges,
+    getLayoutNodePosition,
+    handleDrag,
+    handleDragEnd,
+    interfaceRef,
   };
+
+  // Manage screen
+  useEffect(() => {
+    screen.current.initialize(interfaceRef.current);
+    return () => {
+      screen.current.destroy();
+    };
+  }, [interfaceRef]);
 
   return (
     <LayoutContext.Provider value={value}>

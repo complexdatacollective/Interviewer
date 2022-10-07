@@ -1,11 +1,8 @@
 import React, { useCallback, useMemo, useRef } from 'react';
 import { get, isArray } from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
-import { compose } from 'recompose';
 import PropTypes from 'prop-types';
-import withPrompt from '../../behaviours/withPrompt';
 import { LayoutProvider } from '../../contexts/LayoutContext';
-import Canvas from '../../components/RealtimeCanvas/Canvas';
 import NodeLayout from '../../components/RealtimeCanvas/NodeLayout';
 import EdgeLayout from '../../components/RealtimeCanvas/EdgeLayout';
 import SimulationPanel from '../../components/RealtimeCanvas/SimulationPanel';
@@ -13,17 +10,16 @@ import Background from '../../components/RealtimeCanvas/Background';
 import { actionCreators as resetActions } from '../../ducks/modules/reset';
 import { getEdges, getNodes } from '../../selectors/canvas';
 import CollapsablePrompts from '../../components/CollapsablePrompts';
+import usePrompts from '../../hooks/usePrompts';
 
-/**
-  * Sociogram Interface
-  * @extends Component
-  */
 const Sociogram = React.memo((props) => {
   const {
-    prompt,
-    promptId,
     stage,
   } = props;
+
+  const {
+    prompt,
+  } = usePrompts({ stage });
 
   const dispatch = useDispatch();
 
@@ -42,7 +38,6 @@ const Sociogram = React.memo((props) => {
   }, [resetPropertyForAllNodes, resetEdgesOfType, stage]);
 
   const interfaceRef = useRef(null);
-  const dragSafeRef = useRef(null);
   const twoMode = useMemo(() => isArray(stage.subject), [stage.subject]);
 
   // Behaviour Configuration
@@ -67,58 +62,48 @@ const Sociogram = React.memo((props) => {
   const edges = useSelector((state) => getEdges(state, props));
 
   return (
-    <div className="sociogram-interface" ref={interfaceRef}>
-      <div className="sociogram-interface__drag-safe" ref={dragSafeRef} />
+    <div className="sociogram-interface">
+      <div className="sociogram-interface__drag-safe" ref={interfaceRef} />
       <CollapsablePrompts
         prompts={stage.prompts}
         currentPromptIndex={prompt.id}
         handleResetInterface={handleResetInterface}
-        interfaceRef={dragSafeRef}
+        interfaceRef={interfaceRef}
       />
-      <div className="sociogram-interface__concentric-circles">
-        <LayoutProvider
-          layoutAttributes={layoutVariable}
-          twoMode={twoMode}
-          nodes={nodes}
-          edges={edges}
-          enableAutomaticLayout={enableAutomaticLayout}
+      <LayoutProvider
+        nodes={nodes}
+        edges={edges}
+        twoMode={twoMode}
+        layoutAttributes={layoutVariable}
+        enableAutomaticLayout={enableAutomaticLayout}
+        interfaceRef={interfaceRef}
+      >
+        <Background
+          concentricCircles={concentricCircles}
+          skewedTowardCenter={skewedTowardCenter}
+          image={backgroundImage}
+        />
+        <EdgeLayout />
+        <NodeLayout
           allowPositioning={allowPositioning}
-          allowSelect={allowHighlighting && !createEdge}
-        >
-          <Canvas className="concentric-circles" id="concentric-circles">
-            <Background
-              concentricCircles={concentricCircles}
-              skewedTowardCenter={skewedTowardCenter}
-              image={backgroundImage}
-            />
-            <EdgeLayout />
-            <NodeLayout
-              id="NODE_LAYOUT"
-              highlightAttribute={highlightAttribute}
-              destinationRestriction={destinationRestriction}
-              originRestriction={originRestriction}
-              createEdge={createEdge}
-              key={promptId}
-            />
-            <SimulationPanel
-              dragConstraints={dragSafeRef}
-            />
-          </Canvas>
-        </LayoutProvider>
-      </div>
+          allowSelecting={allowHighlighting && !createEdge}
+          allowEdgeCreation={createEdge && !allowHighlighting}
+          highlightAttribute={highlightAttribute}
+          createEdge={createEdge}
+          destinationRestriction={destinationRestriction}
+          originRestriction={originRestriction}
+        />
+        <SimulationPanel />
+      </LayoutProvider>
     </div>
   );
 });
 
 Sociogram.propTypes = {
   stage: PropTypes.object.isRequired,
-  prompt: PropTypes.object.isRequired,
-  promptId: PropTypes.number.isRequired,
 };
 
 Sociogram.defaultProps = {
 };
 
-export default compose(
-  withPrompt,
-)(Sociogram);
+export default Sociogram;
