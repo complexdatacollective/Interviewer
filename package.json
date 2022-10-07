@@ -21,7 +21,7 @@
     "build:ios": "cross-env NC_TARGET_PLATFORM=ios node scripts/build.js && cordova prepare ios",
     "lint": "eslint src && eslint public",
     "sass-lint": "sass-lint -vc .sass-lint.yml",
-    "test": "node scripts/test.js --env=jsdom",
+    "test": "node scripts/test.js",
     "test:integration": "cross-env TEST_ENV=development jest --config=integration-tests/jest.config.js --runInBand",
     "test:integration:ci": "jest --config=integration-tests/jest.config.js --runInBand",
     "test:integration:docker": "docker-compose run integration_tests",
@@ -277,7 +277,7 @@
       "<rootDir>/integration-tests",
       "<rootDir>/platforms"
     ],
-    "testEnvironment": "node",
+    "testEnvironment": "jsdom",
     "testURL": "http://localhost",
     "transform": {
       "/node_modules/(?!codaco/ui).+\\.js$": "<rootDir>/node_modules/babel-jest",

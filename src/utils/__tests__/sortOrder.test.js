@@ -104,6 +104,27 @@ describe('sortOrder', () => {
     ]);
   });
 
+  it('handles missing attributes', () => {
+    const sorter = sortOrder([
+      {
+        property: 'name',
+        direction: 'desc',
+      },
+      {
+        property: 'missingAttribute',
+        direction: 'asc',
+      },
+    ]);
+
+    expect(sorter(mockItems)).toMatchObject([
+      { attributes: { name: 'eugine' } },
+      { attributes: { name: 'dave' } },
+      { attributes: { name: 'carolyn' } },
+      { attributes: { name: 'benjamin' } },
+      { attributes: { name: 'abigail' } },
+    ]);
+  });
+
   it('treats "*" property as fifo ordering', () => {
     const sorter = sortOrder([{
       property: '*',

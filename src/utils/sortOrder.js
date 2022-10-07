@@ -16,7 +16,7 @@ const fifo = ({ createdIndex }) => createdIndex;
  * @param {Array} sortConfig - list of rules to sort by, as an array of objects where each object
  * has two properties ("property", and "direction"), and direction can be either "asc" or "desc".
  * @param {Object} codebook - an object containing variables for the node type as specified
- * at: `codebook.node[nodeType]variables`
+ * at: `codebook.node[nodeType].variables`
  * TODO: Use variable registry to respect variable type?
  */
 const sortOrder = (sortConfig = [], codebook = {}, attributePath = entityAttributesProperty) => { // eslint-disable-line
