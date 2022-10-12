@@ -171,7 +171,7 @@
     "whatwg-fetch": "2.0.3",
     "worker-loader": "^2.0.0",
     "xml2js": "~0.4.23",
-    "xmldom": "~0.1.27",
+    "xmldom": "~0.6.0",
     "xss": "^0.3.4"
   },
   "optionalDependencies": {
