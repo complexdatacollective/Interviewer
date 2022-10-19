@@ -1,38 +1,52 @@
 /* eslint-env jest */
 /* eslint-disable @codaco/spellcheck/spell-checker */
+import { entityAttributesProperty } from '@codaco/shared-consts';
 import sortOrder from '../sortOrder';
 
 const mockItems = [
   {
-    attributes: {
+    type: 'human',
+    [entityAttributesProperty]: {
       name: 'abigail',
       age: 20,
       favouriteColor: 'red',
     },
   },
   {
-    attributes: {
+    type: 'human',
+    [entityAttributesProperty]: {
       name: 'benjamin',
       age: 50,
       favouriteColor: 'green',
     },
   },
   {
-    attributes: {
+    type: 'human',
+    [entityAttributesProperty]: {
       name: 'carolyn',
       age: 30,
       favouriteColor: 'blue',
     },
   },
   {
-    attributes: {
+    type: 'human',
+    [entityAttributesProperty]: {
       name: 'eugine',
       age: 20,
       favouriteColor: 'green',
     },
   },
   {
-    attributes: {
+    type: 'animal',
+    [entityAttributesProperty]: {
+      name: 'zebra',
+      age: 20,
+      favouriteColor: 'green',
+    },
+  },
+  {
+    type: 'human',
+    [entityAttributesProperty]: {
       name: 'dave',
       age: 20,
       favouriteColor: 'blue',
@@ -58,13 +72,10 @@ describe('sortOrder', () => {
         direction: 'asc',
       }]);
 
-      expect(sorter(mockItems)).toMatchObject([
-        { attributes: { name: 'abigail' } },
-        { attributes: { name: 'eugine' } },
-        { attributes: { name: 'dave' } },
-        { attributes: { name: 'carolyn' } },
-        { attributes: { name: 'benjamin' } },
-      ]);
+      const result = sorter(mockItems);
+      const resultNames = result.map((item) => item[entityAttributesProperty].name);
+
+      expect(resultNames).toEqual(['abigail', 'eugine', 'zebra', 'dave', 'carolyn', 'benjamin']);
     });
 
     it('orders descending with "desc"', () => {
@@ -73,13 +84,10 @@ describe('sortOrder', () => {
         direction: 'desc',
       }]);
 
-      expect(sorter(mockItems)).toMatchObject([
-        { attributes: { name: 'benjamin' } },
-        { attributes: { name: 'carolyn' } },
-        { attributes: { name: 'abigail' } },
-        { attributes: { name: 'eugine' } },
-        { attributes: { name: 'dave' } },
-      ]);
+      const result = sorter(mockItems);
+      const resultNames = result.map((item) => item[entityAttributesProperty].name);
+
+      expect(resultNames).toEqual(['benjamin', 'carolyn', 'abigail', 'eugine', 'zebra', 'dave']);
     });
   });
 
@@ -96,15 +104,15 @@ describe('sortOrder', () => {
     ]);
 
     expect(sorter(mockItems)).toMatchObject([
-      { attributes: { name: 'eugine' } },
-      { attributes: { name: 'dave' } },
-      { attributes: { name: 'abigail' } },
-      { attributes: { name: 'carolyn' } },
-      { attributes: { name: 'benjamin' } },
+      { [entityAttributesProperty]: { name: 'eugine' } },
+      { [entityAttributesProperty]: { name: 'dave' } },
+      { [entityAttributesProperty]: { name: 'abigail' } },
+      { [entityAttributesProperty]: { name: 'carolyn' } },
+      { [entityAttributesProperty]: { name: 'benjamin' } },
     ]);
   });
 
-  it('handles missing attributes', () => {
+  it('handles missing [entityAttributesProperty]', () => {
     const sorter = sortOrder([
       {
         property: 'name',
@@ -117,11 +125,11 @@ describe('sortOrder', () => {
     ]);
 
     expect(sorter(mockItems)).toMatchObject([
-      { attributes: { name: 'eugine' } },
-      { attributes: { name: 'dave' } },
-      { attributes: { name: 'carolyn' } },
-      { attributes: { name: 'benjamin' } },
-      { attributes: { name: 'abigail' } },
+      { [entityAttributesProperty]: { name: 'eugine' } },
+      { [entityAttributesProperty]: { name: 'dave' } },
+      { [entityAttributesProperty]: { name: 'carolyn' } },
+      { [entityAttributesProperty]: { name: 'benjamin' } },
+      { [entityAttributesProperty]: { name: 'abigail' } },
     ]);
   });
 
