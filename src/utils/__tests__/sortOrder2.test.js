@@ -1,8 +1,8 @@
 /* eslint-env jest */
 /* eslint-disable @codaco/spellcheck/spell-checker */
-import sortOrder2 from '../sortOrder2';
+import createSorter from '../sortOrder2';
 
-describe('sortOrder', () => {
+describe('createSorter', () => {
   it('it does not change order when rules are empty', () => {
     const mockItems = [
       {
@@ -19,7 +19,7 @@ describe('sortOrder', () => {
       },
     ];
 
-    const sorter = sortOrder2();
+    const sorter = createSorter();
     expect(sorter(mockItems)).toMatchObject(mockItems);
   });
 
@@ -30,7 +30,7 @@ describe('sortOrder', () => {
       },
     ];
 
-    const sorter = sortOrder2();
+    const sorter = createSorter();
     expect(sorter(mockItems)[0]).toEqual(mockItems[0]);
   });
 
@@ -48,7 +48,7 @@ describe('sortOrder', () => {
         },
       ];
 
-      const sorter = sortOrder2([{
+      const sorter = createSorter([{
         property: 'name',
         direction: 'asc',
       }]);
@@ -72,7 +72,7 @@ describe('sortOrder', () => {
         },
       ];
 
-      const sorter = sortOrder2([{
+      const sorter = createSorter([{
         property: 'name',
         direction: 'desc',
       }]);
@@ -111,7 +111,7 @@ describe('sortOrder', () => {
         },
       ];
 
-      const sorter = sortOrder2([
+      const sorter = createSorter([
         {
           property: 'age',
           direction: 'asc',
@@ -140,29 +140,35 @@ describe('sortOrder', () => {
         },
         {
           type: 'human',
+          // age: 10, - missing
+        },
+        {
+          type: 'human',
           age: 10,
         },
       ];
 
       let sorter;
 
-      sorter = sortOrder2([{
+      sorter = createSorter([{
         property: 'age',
+        type: 'number',
         direction: 'asc',
       }]);
       const result = sorter(mockItems);
       const resultAges = result.map((item) => item.age);
 
-      expect(resultAges).toEqual([10, 20, 30]);
+      expect(resultAges).toEqual([10, 20, 30, undefined]);
 
-      sorter = sortOrder2([{
+      sorter = createSorter([{
         property: 'age',
+        type: 'number',
         direction: 'desc',
       }]);
       const result2 = sorter(mockItems);
       const resultAges2 = result2.map((item) => item.age);
 
-      expect(resultAges2).toEqual([30, 20, 10]);
+      expect(resultAges2).toEqual([30, 20, 10, undefined]);
     });
 
     it('orders date values', () => {
@@ -181,7 +187,7 @@ describe('sortOrder', () => {
         },
       ];
 
-      const sorter = sortOrder2([{
+      const sorter = createSorter([{
         property: 'birthdate',
         direction: 'asc',
       }]);
@@ -210,8 +216,9 @@ describe('sortOrder', () => {
         },
       ];
 
-      const sorter = sortOrder2([{
+      const sorter = createSorter([{
         property: 'isAlive',
+        type: 'boolean',
         direction: 'asc',
       }]);
       const result = sorter(mockItems);
@@ -219,7 +226,7 @@ describe('sortOrder', () => {
 
       expect(resultNames).toEqual(['benjamin', 'abigail', 'carolyn']);
 
-      const sorter2 = sortOrder2([{
+      const sorter2 = createSorter([{
         property: 'isAlive',
         direction: 'desc',
       }]);
@@ -243,7 +250,7 @@ describe('sortOrder', () => {
         },
       ];
 
-      const sorter = sortOrder2([
+      const sorter = createSorter([
         {
           property: 'name',
           direction: 'desc',
@@ -277,7 +284,7 @@ describe('sortOrder', () => {
         },
       ];
 
-      sorter = sortOrder2([
+      sorter = createSorter([
         {
           property: 'name',
           direction: 'asc',
@@ -287,7 +294,7 @@ describe('sortOrder', () => {
       const resultNamesAsc = sorter(mockItems).map((item) => item.name);
       expect(resultNamesAsc).toEqual(['abigail', 'benjamin', undefined]);
 
-      sorter = sortOrder2([
+      sorter = createSorter([
         {
           property: 'name',
           direction: 'desc',
@@ -322,7 +329,7 @@ describe('sortOrder', () => {
         },
       ];
 
-      sorter = sortOrder2([
+      sorter = createSorter([
         {
           property: 'name',
           direction: 'asc',
@@ -332,7 +339,7 @@ describe('sortOrder', () => {
       const resultIDsAsc = sorter(mockItems).map((item) => item.id);
       expect(resultIDsAsc).toEqual([1, 2, 3, 4, 5]);
 
-      sorter = sortOrder2([
+      sorter = createSorter([
         {
           property: 'name',
           direction: 'desc',
@@ -374,7 +381,7 @@ describe('sortOrder', () => {
         },
       ];
 
-      const sorter = sortOrder2([
+      const sorter = createSorter([
         {
           property: ['address', 'country'],
           direction: 'asc',
@@ -411,7 +418,7 @@ describe('sortOrder', () => {
         },
       ];
 
-      const sorter = sortOrder2([{
+      const sorter = createSorter([{
         property: ['name', 'first'],
         direction: 'asc',
       }]);
@@ -419,7 +426,7 @@ describe('sortOrder', () => {
       const result = sorter(mockItems);
       const resultNames = result.map((item) => item.name.first);
 
-      const sorter2 = sortOrder2([{
+      const sorter2 = createSorter([{
         property: ['name', 'first'],
         direction: 'desc',
       }]);
@@ -447,14 +454,14 @@ describe('sortOrder', () => {
         },
       ];
 
-      sorter = sortOrder2([{
+      sorter = createSorter([{
         property: '*',
         direction: 'asc',
       }]);
 
       const resultPositionsAsc = sorter(mockItems).map((item) => item.position);
 
-      sorter = sortOrder2([{
+      sorter = createSorter([{
         property: '*',
         direction: 'desc',
       }]);
@@ -485,9 +492,10 @@ describe('sortOrder', () => {
         },
       ];
 
-      const sorter = sortOrder2([
+      const sorter = createSorter([
         {
           property: 'name',
+          type: 'string',
           direction: 'asc',
         },
       ]);
@@ -499,7 +507,7 @@ describe('sortOrder', () => {
     });
 
     describe('Node Type rules', () => {
-      it('handles _nodeType sort rules', () => {
+      it('handles node type sort rules', () => {
         const mockItems = [
           {
             type: 'human',
@@ -515,8 +523,9 @@ describe('sortOrder', () => {
           },
         ];
 
-        const sorter = sortOrder2([{
-          property: '_nodeType',
+        const sorter = createSorter([{
+          property: 'type',
+          type: 'hierarchy',
           hierarchy: ['human', 'animal'],
         }]);
 
@@ -548,8 +557,9 @@ describe('sortOrder', () => {
           },
         ];
 
-        const sorter = sortOrder2([{
-          property: '_nodeType',
+        const sorter = createSorter([{
+          property: 'type',
+          type: 'hierarchy',
           hierarchy: ['human', 'animal'],
         }]);
         const result = sorter(mockItems).map((item) => item.name);
@@ -580,8 +590,9 @@ describe('sortOrder', () => {
           },
         ];
 
-        const sorter = sortOrder2([{
-          property: '_nodeType',
+        const sorter = createSorter([{
+          property: 'type',
+          type: 'hierarchy',
         }]);
         const result = sorter(mockItems).map((item) => item.name);
         expect(result).toEqual(['zebra', 'abigail', 'benjamin', 'cow', 'eucalyptus']);
@@ -611,13 +622,15 @@ describe('sortOrder', () => {
           },
         ];
 
-        const sorter = sortOrder2([
+        const sorter = createSorter([
           {
-            property: '_nodeType',
+            property: 'type',
+            type: 'hierarchy',
             hierarchy: ['human', 'animal', 'plant'],
           },
           {
             property: 'name',
+            type: 'string',
             direction: 'asc',
           },
         ]);
