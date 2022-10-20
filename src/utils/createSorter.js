@@ -6,6 +6,15 @@ import { get } from './lodash-replacements';
  *
  */
 
+/**
+ * Creating a collator that is reused by string comparison is significantly faster
+ * than using `localeCompare` directly.
+ *
+ * See: https://stackoverflow.com/a/52369951/1497330
+ *      https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Collator/Collator
+ */
+const collator = new Intl.Collator();
+
 /* Maps a `_createdIndex` index value to all items in an array */
 const withCreatedIndex = (items) => items.map(
   (item, _createdIndex) => ({ ...item, _createdIndex }),
@@ -48,36 +57,26 @@ const chain = (...fns) => (a, b) => fns.reduce((diff, fn) => diff || fn(a, b), 0
 /**
   * Generates a sort function for strings that handles null/undefined values by
   * placing them at the end of the list.
+  *
+  * Also places non-strings at the end of the sorting order.
  */
 const stringFunction = ({ property, direction }) => (a, b) => {
   const firstValue = get(a, property, null);
   const secondValue = get(b, property, null);
 
-  if (firstValue === null) {
+  if (firstValue === null || typeof firstValue !== 'string') {
     return 1;
   }
 
-  if (secondValue === null) {
+  if (secondValue === null || typeof secondValue !== 'string') {
     return -1;
   }
 
   if (direction === 'asc') {
-    return -(firstValue < secondValue) || +(firstValue > secondValue);
+    return collator.compare(firstValue, secondValue);
   }
 
-  return -(firstValue > secondValue) || +(firstValue < secondValue);
-};
-
-/**
- * Sort function for numbers that handles null/undefined values by placing them
- * at the end of the list.
- */
-const numberFunction = ({ property, direction }) => {
-  if (direction === 'asc') {
-    return asc((item) => get(item, property, Infinity));
-  }
-
-  return desc((item) => get(item, property, -Infinity));
+  return collator.compare(secondValue, firstValue);
 };
 
 /**
@@ -122,6 +121,28 @@ const hierarchyFunction = ({ property, direction, hierarchy = [] }) => (a, b) =>
   return 0;
 };
 
+const dateFunction = ({ property, direction }) => (a, b) => {
+  const firstValueString = get(a, property, null);
+  const secondValueString = get(b, property, null);
+
+  const firstValueDate = Date.parse(firstValueString);
+  const secondValueDate = Date.parse(secondValueString);
+
+  if (Number.isNaN(firstValueDate)) {
+    return 1;
+  }
+
+  if (Number.isNaN(secondValueDate)) {
+    return -1;
+  }
+
+  if (direction === 'asc') {
+    return -(firstValueDate < secondValueDate) || +(firstValueDate > secondValueDate);
+  }
+
+  return -(firstValueDate > secondValueDate) || +(firstValueDate < secondValueDate);
+};
+
 /**
  * Transforms sort rules into sort functions compatible with Array.sort.
  *
@@ -134,7 +155,7 @@ const getSortFunction = (rule) => {
   const {
     property,
     direction = 'asc',
-    type = 'string', // number, boolean, string, date, hierarchy
+    type, // REQUIRED! number, boolean, string, date, hierarchy
   } = rule;
 
   // LIFO/FIFO rule sorted by _createdIndex
@@ -142,21 +163,17 @@ const getSortFunction = (rule) => {
     return direction === 'asc' ? asc((item) => get(item, '_createdIndex')) : desc((item) => get(item, '_createdIndex'));
   }
 
-  if (type === 'string' || type === 'boolean') { return stringFunction(rule); }
+  if (type === 'string') { return stringFunction(rule); }
 
-  if (type === 'number') { return numberFunction(rule); }
+  if (type === 'boolean') { return direction === 'asc' ? asc((item) => get(item, property, false)) : desc((item) => get(item, property, true)); }
 
-  if (type === 'date') {
-    if (direction === 'asc') {
-      return asc((item) => get(item, property, new Date(-8640000000000000)));
-    }
+  if (type === 'number') { return direction === 'asc' ? asc((item) => get(item, property, Infinity)) : desc((item) => get(item, property, -Infinity)); }
 
-    return desc((item) => get(item, property, new Date(8640000000000000)));
-  }
+  if (type === 'date') { return dateFunction(rule); }
 
   if (type === 'hierarchy') { return hierarchyFunction(rule); }
 
-  throw new Error(`Unknown sort type: ${type}`);
+  throw new Error(`Unknown sort type: ${type}. Supported types are: number, boolean, string, date, hierarchy.`);
 };
 
 const createSorter = (sortRules = []) => {
