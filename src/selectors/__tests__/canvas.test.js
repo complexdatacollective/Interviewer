@@ -67,7 +67,7 @@ describe('canvas selectors', () => {
   });
 
   describe('makeGetNextUnplacedNode()', () => {
-    it('selects the next unplaced node', () => {
+    it.only('selects the next unplaced node', () => {
       const props = {
         prompt: {
           layout: {

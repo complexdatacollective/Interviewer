@@ -173,7 +173,9 @@ const getSortFunction = (rule) => {
 
   if (type === 'hierarchy') { return hierarchyFunction(rule); }
 
-  throw new Error(`Unknown sort type: ${type}. Supported types are: number, boolean, string, date, hierarchy.`);
+  // eslint-disable-next-line no-console
+  // console.warn('WARNING: Sort rule missing required property \'type\'. Sorting as a string, which may cause incorrect results. Supported types are: number, boolean, string, date, hierarchy.');
+  return direction === 'asc' ? asc((item) => get(item, property, null)) : desc((item) => get(item, property, null));
 };
 
 const createSorter = (sortRules = []) => {
