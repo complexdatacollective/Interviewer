@@ -1,8 +1,9 @@
 import { useCallback } from 'react';
 import { useMotionValue } from 'framer-motion';
 import {
-  clamp, get, max, min,
+  clamp, max, min,
 } from 'lodash';
+import { get } from '../utils/lodash-replacements';
 
 const LAYOUT_SPACE = 1000;
 

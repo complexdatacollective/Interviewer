@@ -7,7 +7,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Icon } from '@codaco/ui';
 import { entityAttributesProperty, entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import {
-  get, has, omit, debounce, defaultTo, isUndefined,
+  has, omit, debounce, defaultTo, isUndefined,
 } from 'lodash';
 import Prompts from '../../components/Prompts';
 import withPrompt from '../../behaviours/withPrompt';
@@ -17,6 +17,7 @@ import { makeGetPromptNodeModelData, makeGetNodeIconName } from '../../selectors
 import NodePanels from '../NodePanels';
 import QuickNodeForm from '../QuickNodeForm';
 import { NodeList, NodeBin } from '../../components';
+import { get } from '../../utils/lodash-replacements';
 
 export const SelfDismissingNote = (Wrapped) => (
   {

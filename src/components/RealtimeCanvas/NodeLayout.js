@@ -2,9 +2,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { entityPrimaryKeyProperty, entityAttributesProperty } from '@codaco/shared-consts';
-import { isEmpty, get, find } from 'lodash';
+import { isEmpty, find } from 'lodash';
 import LayoutContext from '../../contexts/LayoutContext';
 import LayoutNode from './LayoutNode';
+import { get } from '../../utils/lodash-replacements';
 
 class NodeLayout extends React.Component {
   constructor(props) {

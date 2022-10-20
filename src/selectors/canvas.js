@@ -1,6 +1,5 @@
 import {
   first,
-  get,
   has,
   isArray,
   isNil,
@@ -11,6 +10,7 @@ import { createDeepEqualSelector } from './utils';
 import createSorter from '../utils/createSorter';
 import { getEntityAttributes } from '../ducks/modules/network';
 import { getStageSubject } from './session';
+import { get } from '../utils/lodash-replacements';
 
 const getLayout = (_, props) => get(props, 'prompt.layout.layoutVariable');
 const getSortOptions = (_, props) => get(props, 'prompt.sortOrder');

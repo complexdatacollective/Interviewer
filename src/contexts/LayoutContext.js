@@ -6,11 +6,12 @@ import React, {
 } from 'react';
 import { useDispatch } from 'react-redux';
 import {
-  get, noop, clamp,
+  noop, clamp,
 } from 'lodash';
 import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import useForceSimulation from '../hooks/useForceSimulation';
+import { get } from '../utils/lodash-replacements';
 
 const SIMULATION_OPTIONS = {
   decay: 0.1,

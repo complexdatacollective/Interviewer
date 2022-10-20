@@ -2,10 +2,11 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useStore } from 'react-redux';
 import { Field as ReduxFormField } from 'redux-form';
-import { map, get, toPairs } from 'lodash';
+import { map, toPairs } from 'lodash';
 import * as Fields from '@codaco/ui/lib/components/Fields';
 import validations from '../utils/Validations';
 import { FormComponent } from '../protocol-consts';
+import { get } from '../utils/lodash-replacements';
 
 const ComponentTypeNotFound = (componentType) => () => (
   <div>

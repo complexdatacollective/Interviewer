@@ -1,5 +1,5 @@
 import React, { useMemo, useRef } from 'react';
-import { get, isArray } from 'lodash';
+import { isArray } from 'lodash';
 import { bindActionCreators } from 'redux';
 import { connect, useSelector } from 'react-redux';
 import { withHandlers, compose } from 'recompose';
@@ -17,6 +17,7 @@ import {
   getEdges, getNextUnplacedNode, getNodes, getPlacedNodes,
 } from '../../selectors/canvas';
 import CollapsablePrompts from '../../components/CollapsablePrompts';
+import { get } from '../../utils/lodash-replacements';
 
 const withResetInterfaceHandler = withHandlers({
   handleResetInterface: ({
@@ -73,6 +74,8 @@ const Sociogram = React.memo((props) => {
 
   const nodes = allowAutomaticLayout ? allNodes : placedNodes;
   const edges = useSelector((state) => getEdges(state, props));
+
+  console.log(allNodes, placedNodes, nextUnplacedNode);
 
   return (
     <div className="sociogram-interface" ref={interfaceRef}>

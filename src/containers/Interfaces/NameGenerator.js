@@ -3,7 +3,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
-  get, has, isUndefined, omit,
+  has, isUndefined, omit,
 } from 'lodash';
 import { Icon } from '@codaco/ui';
 import { entityAttributesProperty, entityPrimaryKeyProperty } from '@codaco/shared-consts';
@@ -15,10 +15,10 @@ import { makeGetPromptNodeModelData, makeGetNodeIconName } from '../../selectors
 import NodePanels from '../NodePanels';
 import NodeForm from '../NodeForm';
 import { NodeList, NodeBin } from '../../components';
-
 import {
   MaxNodesReached, maxNodesWithDefault, MinNodesNotMet, minNodesWithDefault,
 } from './NameGeneratorQuickAdd';
+import { get } from '../../utils/lodash-replacements';
 
 /**
   * Name Generator Interface

@@ -2,7 +2,45 @@
 
 exports[`<Field /> should render 1`] = `
 <Field
-  component={[Function]}
+  component={
+    Object {
+      "Boolean": [Function],
+      "Checkbox": Object {
+        "$$typeof": Symbol(react.memo),
+        "compare": [Function],
+        "type": [Function],
+      },
+      "CheckboxGroup": [Function],
+      "DatePicker": [Function],
+      "LikertScale": [Function],
+      "Markdown": Object {
+        "$$typeof": Symbol(react.memo),
+        "compare": null,
+        "type": [Function],
+      },
+      "MarkdownLabel": Object {
+        "$$typeof": Symbol(react.memo),
+        "compare": null,
+        "type": [Function],
+      },
+      "Number": [Function],
+      "Radio": [Function],
+      "RadioGroup": [Function],
+      "RelativeDatePicker": [Function],
+      "RichText": [Function],
+      "Search": [Function],
+      "Text": Object {
+        "$$typeof": Symbol(react.memo),
+        "compare": null,
+        "type": [Function],
+      },
+      "TextArea": [Function],
+      "Toggle": [Function],
+      "ToggleButton": [Function],
+      "ToggleButtonGroup": [Function],
+      "VisualAnalogScale": [Function],
+    }
+  }
   label="Name"
   name="name"
   validate={Array []}

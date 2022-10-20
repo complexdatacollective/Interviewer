@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
-import { find, get, isEqual } from 'lodash';
+import { find, isEqual } from 'lodash';
 import cx from 'classnames';
 import { TransitionGroup } from 'react-transition-group';
 import { getCSSVariableAsString, getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
@@ -16,6 +16,7 @@ import {
   MonitorDragSource,
 } from '../behaviours/DragAndDrop';
 import createSorter from '../utils/createSorter';
+import { get } from '../utils/lodash-replacements';
 
 const EnhancedNode = DragSource(Node);
 

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { get, difference } from 'lodash';
+import { difference } from 'lodash';
 import { useSelector } from 'react-redux';
 import { SessionCard } from '@codaco/ui/lib/components/Cards';
 import { Switch } from '../../components';
 import NewFilterableListWrapper, { getFilteredList } from '../../components/NewFilterableListWrapper';
 import formatDatestamp from '../../utils/formatDatestamp';
+import { get } from '../../utils/lodash-replacements';
 
 const oneBasedIndex = (i) => parseInt(i || 0, 10) + 1;
 
@@ -181,12 +182,12 @@ const SessionSelect = ({
               onChange={toggleSelectAll}
             />
           </div>
-          { selectedSessions.length > 0 && (
+          {selectedSessions.length > 0 && (
             <strong>
-              { selectedSessions.length}
+              {selectedSessions.length}
               {' '}
               selected session
-              { selectedSessions.length > 1 ? ('s') : null }
+              {selectedSessions.length > 1 ? ('s') : null}
               .
             </strong>
           )}
