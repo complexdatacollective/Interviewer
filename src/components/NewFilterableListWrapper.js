@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { get } from 'lodash';
 import objectHash from 'object-hash';
 import { motion, AnimatePresence } from 'framer-motion';
 import PropTypes from 'prop-types';
@@ -7,6 +6,7 @@ import { Spinner } from '@codaco/ui';
 import { Search } from '@codaco/ui/lib/components/Fields';
 import { entityAttributesProperty } from '@codaco/shared-consts';
 import createSorter from '../utils/createSorter';
+import { get } from '../utils/lodash-replacements';
 
 export const getFilteredList = (items, filterTerm, propertyPath) => {
   if (!filterTerm) { return items; }

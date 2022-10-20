@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import { get } from 'lodash';
 import PropTypes from 'prop-types';
 import ConvexHulls from '../Canvas/ConvexHulls';
 import NodeLayout from '../Canvas/NodeLayout';
@@ -13,6 +12,7 @@ import Canvas from '../../components/Canvas/Canvas';
 import { getNetworkEdges, getNetworkNodes } from '../../selectors/network';
 import { edgesToCoords } from '../../selectors/canvas';
 import { entityAttributesProperty } from '../../utils/network-exporters/src/utils/reservedAttributes';
+import { get } from '../../utils/lodash-replacements';
 
 /**
   * Narrative Interface
@@ -182,7 +182,7 @@ class Narrative extends Component {
               id="NODE_LAYOUT"
               highlightAttribute={
                 (showHighlightedNodes ? highlight[highlightIndex] : null)
-}
+              }
               layoutVariable={layoutVariable}
               allowPositioning={allowRepositioning}
             />

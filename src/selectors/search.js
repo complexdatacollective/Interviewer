@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import FuseLegacy from 'fuse.js-legacy';
-import { get } from 'lodash';
 import { createSelector } from 'reselect';
+import { get } from '../utils/lodash-replacements';
 
 const getSearchOpts = (_, props) => props.options;
 const getSearchData = (_, props) => get(props.externalData, 'nodes', []);

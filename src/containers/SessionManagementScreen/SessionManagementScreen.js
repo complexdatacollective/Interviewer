@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import sanitizeFilename from 'sanitize-filename';
-import { get } from 'lodash';
 import Button from '@codaco/ui/lib/components/Button';
 import { Modal } from '@codaco/ui/lib/components/Modal';
 import ExportSprite from '@codaco/ui/lib/components/Sprites/ExportSprite';
@@ -17,6 +16,7 @@ import { asNetworkWithSessionVariables } from '../../utils/networkFormat';
 import SessionSelect from './SessionSelect';
 import ExportOptions from '../../components/SettingsMenu/Sections/ExportOptions';
 import { isCordova } from '../../utils/Environment';
+import { get } from '../../utils/lodash-replacements';
 
 const fatalExportErrorAction = withErrorDialog((error) => ({
   type: 'SESSION_EXPORT_FATAL_ERROR',
@@ -171,7 +171,7 @@ const DataExportScreen = ({ show, onClose }) => {
         >
           <Button color="neon-coral" onClick={handleDeleteSessions} disabled={selectedSessions.length === 0} icon="menu-purge-data">Delete Selected</Button>
           <div className="export-buttons">
-            { pairedServerConnection === 'ok' && (<Button onClick={() => exportSessions(true)} color="mustard" disabled={pairedServerConnection !== 'ok' || selectedSessions.length === 0}>Export Selected To Server</Button>)}
+            {pairedServerConnection === 'ok' && (<Button onClick={() => exportSessions(true)} color="mustard" disabled={pairedServerConnection !== 'ok' || selectedSessions.length === 0}>Export Selected To Server</Button>)}
             <Button color="platinum" onClick={forward} disabled={selectedSessions.length === 0}>Export Selected To File</Button>
           </div>
         </div>
@@ -217,13 +217,13 @@ const DataExportScreen = ({ show, onClose }) => {
         footer={renderFooter()}
         className="export-settings-wizard"
       >
-        { step === 1 && (
+        {step === 1 && (
           <SessionSelect // SessionPicker
             selectedSessions={selectedSessions}
             setSelectedSessions={setSelectedSessions}
           />
         )}
-        { step === 2 && (
+        {step === 2 && (
           <Scroller>
             <div style={{
               maxWidth: '65rem',
@@ -231,7 +231,7 @@ const DataExportScreen = ({ show, onClose }) => {
               margin: '0 auto',
             }}
             >
-              { isCordova() && (
+              {isCordova() && (
                 <>
                   <h2>Filename for export:</h2>
                   <p>

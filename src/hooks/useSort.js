@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react';
 import { isEqual } from 'lodash';
 import createSorter from '../utils/createSorter';
-import { get } from '../utils/lodash-replacements';
 
 const defaultSortOrder = {
   direction: 'asc',

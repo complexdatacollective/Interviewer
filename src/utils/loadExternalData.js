@@ -1,10 +1,10 @@
 /* eslint-disable quotes, quote-props, comma-dangle */
-import { get } from 'lodash';
 import environments from './environments';
 import inEnvironment from './Environment';
 import { readFile } from './filesystem';
 import getAssetUrl from './protocol/getAssetUrl';
 import CSVWorker from './csvDecoder.worker';
+import { get } from './lodash-replacements';
 
 /**
  * Converting data from CSV to our network JSON format is expensive, and so happens

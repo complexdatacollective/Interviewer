@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { TransitionGroup } from 'react-transition-group';
-import { get } from 'lodash';
 import { Fade } from '@codaco/ui/lib/components/Transitions';
 import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
 import { Timeline } from '../components';
@@ -13,6 +12,7 @@ import { isStageSkipped } from '../selectors/skip-logic';
 import { getProtocolStages } from '../selectors/protocol';
 import { actionCreators as navigateActions } from '../ducks/modules/navigate';
 import { actionCreators as dialogActions } from '../ducks/modules/dialogs';
+import { get } from '../utils/lodash-replacements';
 
 const initialState = {
   pendingDirection: 1,

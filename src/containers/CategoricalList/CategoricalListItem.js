@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { get } from 'lodash';
 import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { getEntityAttributes } from '../../ducks/modules/network';
 import { CategoricalItem } from '../../components';
 import Overlay from '../Overlay';
 import OtherVariableForm from './OtherVariableForm';
+import { get } from '../../utils/lodash-replacements';
 
 const formatBinDetails = (nodes, getNodeLabel) => {
   if (nodes.length === 0) {
