@@ -8,7 +8,7 @@ import {
 import { entityAttributesProperty, entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import { getNetworkNodes, getNetworkEdges } from './network';
 import { createDeepEqualSelector } from './utils';
-import sortOrder from '../utils/sortOrder';
+import createSorter from '../utils/createSorter';
 import { getEntityAttributes } from '../ducks/modules/network';
 import { getStageSubject } from './session';
 
@@ -36,7 +36,7 @@ export const getNextUnplacedNode = createDeepEqualSelector(
         && (has(attributes, layoutVariable) && isNil(attributes[layoutVariable]))
       );
     });
-    const sorter = sortOrder(sortOptions);
+    const sorter = createSorter(sortOptions);
     return first(sorter(unplacedNodes));
   },
 );

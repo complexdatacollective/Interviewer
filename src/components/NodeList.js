@@ -15,7 +15,7 @@ import {
   MonitorDropTarget,
   MonitorDragSource,
 } from '../behaviours/DragAndDrop';
-import sortOrder from '../utils/sortOrder';
+import createSorter from '../utils/createSorter';
 
 const EnhancedNode = DragSource(Node);
 
@@ -26,7 +26,7 @@ class NodeList extends Component {
   constructor(props) {
     super(props);
 
-    const sorter = sortOrder(props.sortOrder);
+    const sorter = createSorter(props.sortOrder);
     const sortedNodes = sorter(props.items);
 
     this.state = {
@@ -53,7 +53,7 @@ class NodeList extends Component {
       return;
     }
 
-    const sorter = sortOrder(newProps.sortOrder);
+    const sorter = createSorter(newProps.sortOrder);
     const sortedNodes = sorter(newProps.items);
     // if we provided the same id, then just update normally
     if (newProps.listId === listId) {

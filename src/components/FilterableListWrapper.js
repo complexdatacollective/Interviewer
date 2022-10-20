@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button } from '@codaco/ui';
 import { Text } from '@codaco/ui/lib/components/Fields';
 import { entityAttributesProperty } from '@codaco/shared-consts';
-import sortOrder from '../utils/sortOrder';
+import createSorter from '../utils/createSorter';
 
 class FilterableListWrapper extends Component {
   constructor(props) {
@@ -108,7 +108,7 @@ class FilterableListWrapper extends Component {
       filterValue,
     } = this.state;
 
-    const sorter = sortOrder([activeSortOrder]);
+    const sorter = createSorter([activeSortOrder]);
     const sortedNodes = this.getFilteredList(sorter(items));
 
     return (

@@ -1,5 +1,4 @@
-import { get } from 'lodash';
-import { createDeepEqualSelector } from '../../selectors/utils';
+import { get } from "../lodash-replacements";
 
 export const getSubject = (stage, prompt) => {
   return stage.subject || prompt.subject;

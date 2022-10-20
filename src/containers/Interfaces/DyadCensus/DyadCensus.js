@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import PropTypes from 'prop-types';
-import { get } from 'lodash';
 import cx from 'classnames';
 import BooleanOption from '@codaco/ui/lib/components/Boolean/BooleanOption';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -19,6 +18,7 @@ import useSteps from './useSteps';
 import useNetworkEdgeState from './useEdgeState';
 import useAutoAdvance from './useAutoAdvance';
 import Pair from './Pair';
+import { get } from '../../../utils/lodash-replacements';
 
 const fadeVariants = {
   show: { opacity: 1, transition: { duration: 0.5 } },
@@ -163,108 +163,108 @@ const DyadCensus = ({
         initial={false}
         exitBeforeEnter
       >
-        { isIntroduction
-        && (
-        <motion.div
-          className="dyad-census__introduction"
-          variants={introVariants}
-          initial="hide"
-          exit="hide"
-          animate="show"
-          key="intro"
-        >
-          <h1>{stage.introductionPanel.title}</h1>
-          <Markdown
-            label={stage.introductionPanel.text}
-          />
-        </motion.div>
-        )}
-        { !isIntroduction
+        {isIntroduction
           && (
-          <motion.div
-            key="content"
-            variants={fadeVariants}
-            initial="hide"
-            exit="hide"
-            animate="show"
-            className="dyad-census__wrapper"
-          >
-            <div className="dyad-census__prompt">
-              <Prompts
-                currentPrompt={stage.prompts[promptIndex].id}
-                prompts={stage.prompts}
+            <motion.div
+              className="dyad-census__introduction"
+              variants={introVariants}
+              initial="hide"
+              exit="hide"
+              animate="show"
+              key="intro"
+            >
+              <h1>{stage.introductionPanel.title}</h1>
+              <Markdown
+                label={stage.introductionPanel.text}
               />
-            </div>
-            <AnimatePresence exitBeforeEnter>
-              <motion.div
-                className="dyad-census__main"
-                key={promptIndex}
-                variants={fadeVariants}
-                initial="hide"
-                exit="hide"
-                animate="show"
-              >
-                <div className="dyad-census__layout">
-                  <div className="dyad-census__pairs">
-                    <AnimatePresence
-                      custom={[isForwards]}
-                      initial={false}
+            </motion.div>
+          )}
+        {!isIntroduction
+          && (
+            <motion.div
+              key="content"
+              variants={fadeVariants}
+              initial="hide"
+              exit="hide"
+              animate="show"
+              className="dyad-census__wrapper"
+            >
+              <div className="dyad-census__prompt">
+                <Prompts
+                  currentPrompt={stage.prompts[promptIndex].id}
+                  prompts={stage.prompts}
+                />
+              </div>
+              <AnimatePresence exitBeforeEnter>
+                <motion.div
+                  className="dyad-census__main"
+                  key={promptIndex}
+                  variants={fadeVariants}
+                  initial="hide"
+                  exit="hide"
+                  animate="show"
+                >
+                  <div className="dyad-census__layout">
+                    <div className="dyad-census__pairs">
+                      <AnimatePresence
+                        custom={[isForwards]}
+                        initial={false}
+                      >
+                        <Pair
+                          key={`${promptIndex}_${stepsState.step}`}
+                          edgeColor={edgeColor}
+                          hasEdge={hasEdge}
+                          animateForwards={isForwards}
+                          fromNode={fromNode}
+                          toNode={toNode}
+                        />
+                      </AnimatePresence>
+                    </div>
+                    <motion.div
+                      className={choiceClasses}
+                      variants={choiceVariants}
+                      layout
+                      initial="hide"
+                      animate="show"
                     >
-                      <Pair
-                        key={`${promptIndex}_${stepsState.step}`}
-                        edgeColor={edgeColor}
-                        hasEdge={hasEdge}
-                        animateForwards={isForwards}
-                        fromNode={fromNode}
-                        toNode={toNode}
-                      />
-                    </AnimatePresence>
-                  </div>
-                  <motion.div
-                    className={choiceClasses}
-                    variants={choiceVariants}
-                    layout
-                    initial="hide"
-                    animate="show"
-                  >
-                    <div className="dyad-census__options">
-                      <AnimatePresence exitBeforeEnter>
-                        <motion.div
-                          key={stepsState.step}
-                          className="dyad-census__options-step"
-                          variants={optionsVariants}
-                          initial="hide"
-                          animate="show"
-                          exit="hide"
-                        >
-                          <div className="form-field-container form-field-boolean">
-                            <div className="form-field-boolean__control">
-                              <div>
-                                <div className="boolean__options">
-                                  <BooleanOption
-                                    selected={!!hasEdge && hasEdge !== null}
-                                    onClick={handleChange(true)}
-                                    label={() => <h1>Yes</h1>}
-                                  />
-                                  <BooleanOption
-                                    classes="boolean-option--no"
-                                    onClick={handleChange(false)}
-                                    selected={!hasEdge && hasEdge !== null}
-                                    label={() => <h1>No</h1>}
-                                    negative
-                                  />
+                      <div className="dyad-census__options">
+                        <AnimatePresence exitBeforeEnter>
+                          <motion.div
+                            key={stepsState.step}
+                            className="dyad-census__options-step"
+                            variants={optionsVariants}
+                            initial="hide"
+                            animate="show"
+                            exit="hide"
+                          >
+                            <div className="form-field-container form-field-boolean">
+                              <div className="form-field-boolean__control">
+                                <div>
+                                  <div className="boolean__options">
+                                    <BooleanOption
+                                      selected={!!hasEdge && hasEdge !== null}
+                                      onClick={handleChange(true)}
+                                      label={() => <h1>Yes</h1>}
+                                    />
+                                    <BooleanOption
+                                      classes="boolean-option--no"
+                                      onClick={handleChange(false)}
+                                      selected={!hasEdge && hasEdge !== null}
+                                      label={() => <h1>No</h1>}
+                                      negative
+                                    />
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        </motion.div>
-                      </AnimatePresence>
-                    </div>
-                  </motion.div>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </motion.div>
+                          </motion.div>
+                        </AnimatePresence>
+                      </div>
+                    </motion.div>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </motion.div>
           )}
       </AnimatePresence>
     </div>

@@ -1,8 +1,8 @@
 import React, { useRef, useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { get } from 'lodash';
 import LayoutContext from '../../contexts/LayoutContext';
 import { getProtocolCodebook } from '../../selectors/protocol';
+import { get } from '../../utils/lodash-replacements';
 
 const viewBoxScale = 100;
 

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { get } from 'lodash';
 import objectHash from 'object-hash';
 import { motion, AnimatePresence } from 'framer-motion';
 import PropTypes from 'prop-types';
 import { Spinner } from '@codaco/ui';
 import { Search } from '@codaco/ui/lib/components/Fields';
 import { entityAttributesProperty } from '@codaco/shared-consts';
-import sortOrder from '../utils/sortOrder';
+import createSorter from '../utils/createSorter';
+import { get } from '../utils/lodash-replacements';
 
 export const getFilteredList = (items, filterTerm, propertyPath) => {
   if (!filterTerm) { return items; }
@@ -92,7 +92,7 @@ const NewFilterableListWrapper = (props) => {
 
   const filteredItems = onFilterChange ? items : getFilteredList(items, filterTerm, propertyPath);
 
-  const sortedItems = sortOrder([{
+  const sortedItems = createSorter([{
     property: sortProperty,
     direction: sortAscending ? 'asc' : 'desc',
   }], {}, propertyPath)(filteredItems);

@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 import { withHandlers, compose } from 'recompose';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { get } from 'lodash';
 import { motion } from 'framer-motion';
 import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
 import timelineImages from '../../images/timeline';
 import { currentStageIndex } from '../../utils/matchSessionPath';
+import { get } from '../../utils/lodash-replacements';
 
 const getTimelineImage = (type) => get(timelineImages, type, timelineImages.Default);
 

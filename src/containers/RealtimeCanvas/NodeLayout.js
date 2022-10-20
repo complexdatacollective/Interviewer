@@ -1,11 +1,11 @@
 import { connect } from 'react-redux';
 import { compose, withHandlers, withState } from 'recompose';
-import { get } from 'lodash';
 import { entityAttributesProperty, entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import { withBounds } from '../../behaviours';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { DropTarget } from '../../behaviours/DragAndDrop';
 import NodeLayout from '../../components/RealtimeCanvas/NodeLayout';
+import { get } from '../../utils/lodash-replacements';
 
 const relativeCoords = (container, node) => ({
   x: (node.x - container.x) / container.width,

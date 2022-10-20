@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import { get } from 'lodash';
 import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import {
   makeNetworkNodesForPrompt as makeGetNodesForPrompt,
@@ -11,6 +10,7 @@ import { getNetworkEdges, getNetworkEgo } from '../selectors/network';
 import { Panel, NodeList } from '../components';
 import withExternalData from './withExternalData';
 import customFilter from '../utils/networkQuery/filter';
+import { get } from '../utils/lodash-replacements';
 
 class NodePanel extends PureComponent {
   componentDidMount() {
