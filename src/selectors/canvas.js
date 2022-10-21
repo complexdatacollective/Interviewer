@@ -14,7 +14,7 @@ import { get } from '../utils/lodash-replacements';
 import { getAllVariableUUIDsByEntity } from './protocol';
 
 const getLayout = (_, props) => get(props, 'prompt.layout.layoutVariable');
-const getSortOptions = (_, props) => get(props, 'prompt.sortOrder');
+const getSortOptions = (_, props) => get(props, 'prompt.sortOrder', null);
 const getDisplayEdges = (_, props) => get(props, 'prompt.edges.display', []);
 
 /**
@@ -30,10 +30,13 @@ export const getNextUnplacedNode = createDeepEqualSelector(
   getSortOptions,
   getAllVariableUUIDsByEntity,
   (nodes, subject, layoutVariable, sortOptions, codebookVariables) => {
-    // Stage subject is either a single object or a collecton of objects
+    if (nodes && nodes.length === 0) { return undefined; }
+
+    // Stage subject is either a single object or a collection of objects
     const types = isArray(subject) ? subject.map((s) => s.type) : [subject.type];
 
-    // Layout variable is either a string or an object keyed by node type
+    // Layout variable is either a string (single stage subject) or an object
+    // keyed by node type (two-mode stage subject)
     const layoutVariableForType = (type) => {
       if (typeof layoutVariable === 'string') { return layoutVariable; }
       return layoutVariable[type];
@@ -48,10 +51,11 @@ export const getNextUnplacedNode = createDeepEqualSelector(
       );
     });
 
+    if (unplacedNodes.length === 0) { return undefined; }
+    if (!sortOptions) { return first(unplacedNodes); }
+
     // Protocol sort rules must be processed to be used by createSorter
     const processedSortRules = sortOptions.map(processProtocolSortRule(codebookVariables));
-
-    console.log('processedSortRules', processedSortRules, codebookVariables);
     const sorter = createSorter(processedSortRules);
     return first(sorter(unplacedNodes));
   },
@@ -68,6 +72,8 @@ export const getPlacedNodes = createDeepEqualSelector(
   getStageSubject(),
   getLayout,
   (nodes, subject, layoutVariable) => {
+    if (nodes && nodes.length === 0) { return undefined; }
+
     // Stage subject is either a single object or a collecton of objects
     const types = isArray(subject) ? subject.map((s) => s.type) : [subject.type];
 

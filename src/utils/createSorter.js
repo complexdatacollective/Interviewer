@@ -78,41 +78,38 @@ const stringFunction = ({ property, direction }) => (a, b) => {
  * Creates a sort function that sorts items according to the index of their
  * property value in a hierarchy array.
  */
-const hierarchyFunction = ({ property, direction, hierarchy = [] }) => (a, b) => {
+const hierarchyFunction = ({ property, direction = 'desc', hierarchy = [] }) => (a, b) => {
   const firstValue = get(a, property);
   const secondValue = get(b, property);
-
-  if (hierarchy.indexOf(firstValue) === -1) {
-    return 1;
-  }
-
-  if (hierarchy.indexOf(secondValue) === -1) {
-    return -1;
-  }
 
   const firstIndex = hierarchy.indexOf(firstValue);
   const secondIndex = hierarchy.indexOf(secondValue);
 
-  if (direction === 'asc') {
-    if (firstIndex < secondIndex) {
-      return 1;
-    }
+  // If the value is not in the hierarchy, it is sorted to the end of the list
+  if (firstIndex === -1) {
+    return 1;
+  }
+  if (secondIndex === -1) {
+    return -1;
+  }
 
+  if (direction === 'asc') {
     if (firstIndex > secondIndex) {
       return -1;
     }
 
-    return 0;
-  }
+    if (firstIndex < secondIndex) {
+      return 1;
+    }
+  } else {
+    if (firstIndex < secondIndex) {
+      return -1;
+    }
 
-  if (firstIndex > secondIndex) {
-    return 1;
+    if (firstIndex > secondIndex) {
+      return 1;
+    }
   }
-
-  if (firstIndex < secondIndex) {
-    return -1;
-  }
-
   return 0;
 };
 
@@ -169,7 +166,7 @@ const getSortFunction = (rule) => {
   if (type === 'hierarchy') { return hierarchyFunction(rule); }
 
   // eslint-disable-next-line no-console
-  console.warn('WARNING: Sort rule missing required property \'type\'. Sorting as a string, which may cause incorrect results. Supported types are: number, boolean, string, date, hierarchy.');
+  console.warn('🤔 Sort rule missing required property \'type\', or type was not recognized. Sorting as a string, which may cause incorrect results. Supported types are: number, boolean, string, date, hierarchy.');
   return direction === 'asc' ? asc((item) => get(item, property, null)) : desc((item) => get(item, property, null));
 };
 

@@ -34,6 +34,289 @@ it('it does not add any properties to items', () => {
   expect(sorter(mockItems)[0]).toEqual(mockItems[0]);
 });
 
+describe('Types', () => {
+  it('orders numerical values numerically', () => {
+    const mockItems = [
+      {
+        age: 20,
+      },
+      {
+        age: 30,
+      },
+      {
+        // age: 10, - missing
+      },
+      {
+        age: 10,
+      },
+    ];
+
+    let sorter;
+
+    sorter = createSorter([{
+      property: 'age',
+      type: 'number',
+      direction: 'asc',
+    }]);
+    const result = sorter(mockItems);
+    const resultAges = result.map((item) => item.age);
+
+    expect(resultAges).toEqual([10, 20, 30, undefined]);
+
+    sorter = createSorter([{
+      property: 'age',
+      type: 'number',
+      direction: 'desc',
+    }]);
+    const result2 = sorter(mockItems);
+    const resultAges2 = result2.map((item) => item.age);
+
+    expect(resultAges2).toEqual([30, 20, 10, undefined]);
+  });
+
+  it('orders date values', () => {
+    const mockItems = [
+      {
+        type: 'human',
+        birthdate: '1990-01-01',
+      },
+      {
+        type: 'human',
+        birthdate: '1980-01-01',
+      },
+      {
+        type: 'human',
+        birthdate: '1970-01-01',
+      },
+    ];
+
+    let sorter;
+
+    sorter = createSorter([{
+      property: 'birthdate',
+      type: 'date',
+      direction: 'asc',
+    }]);
+    const result = sorter(mockItems);
+    const resultBirthdates = result.map((item) => item.birthdate);
+
+    expect(resultBirthdates).toEqual(['1970-01-01', '1980-01-01', '1990-01-01']);
+
+    sorter = createSorter([{
+      property: 'birthdate',
+      type: 'date',
+      direction: 'desc',
+    }]);
+
+    const result2 = sorter(mockItems);
+    const result2Birthdates = result2.map((item) => item.birthdate);
+    expect(result2Birthdates).toEqual(['1990-01-01', '1980-01-01', '1970-01-01']);
+  });
+
+  it('orders boolean values', () => {
+    const mockItems = [
+      {
+        type: 'human',
+        isAlive: true,
+        name: 'abigail',
+      },
+      {
+        type: 'human',
+        isAlive: false,
+        name: 'benjamin',
+      },
+      {
+        type: 'human',
+        isAlive: true,
+        name: 'carolyn',
+      },
+    ];
+
+    const sorter = createSorter([{
+      property: 'isAlive',
+      type: 'boolean',
+      direction: 'asc',
+    }]);
+    const result = sorter(mockItems);
+    const resultNames = result.map((item) => item.name);
+
+    expect(resultNames).toEqual(['benjamin', 'abigail', 'carolyn']);
+
+    const sorter2 = createSorter([{
+      property: 'isAlive',
+      type: 'boolean',
+      direction: 'desc',
+    }]);
+    const result2 = sorter2(mockItems);
+    const resultNames2 = result2.map((item) => item.name);
+
+    expect(resultNames2).toEqual(['abigail', 'carolyn', 'benjamin']);
+  });
+
+  describe('Hierarchy rules', () => {
+    it('sorts numerical hierarchy', () => {
+      const mockItems = [
+        {
+          ordinal: 1,
+          name: 'abigail',
+        },
+        {
+          ordinal: 2,
+          name: 'benjamin',
+        },
+        {
+          ordinal: 3,
+          name: 'carolyn',
+        },
+        {
+          ordinal: 4,
+          name: 'daniel',
+        },
+        {
+          ordinal: -1,
+          name: 'eugine',
+        },
+      ];
+
+      const sorter = createSorter([{
+        property: 'ordinal',
+        type: 'hierarchy',
+        hierarchy: [4, 3, 2, 1, -1],
+      }]);
+
+      const result = sorter(mockItems).map((item) => item.name);
+      expect(result).toEqual(['daniel', 'carolyn', 'benjamin', 'abigail', 'eugine']);
+    });
+
+    it('multiple hierarchies', () => {
+      const mockItems = [
+        {
+          type: 'human',
+          name: 'abigail',
+          ordinal: 1,
+        },
+        {
+          type: 'animal',
+          name: 'aardvark',
+        },
+        {
+          type: 'human',
+          name: 'benjamin',
+          ordinal: 2,
+        },
+        {
+          type: 'animal',
+          name: 'cow',
+        },
+        {
+          type: 'plant',
+          name: 'eucalyptus',
+        },
+        {
+          type: 'animal',
+          name: 'zebra',
+        },
+      ];
+
+      const sorter = createSorter([
+        {
+          property: 'type',
+          type: 'hierarchy',
+          hierarchy: ['human', 'animal'],
+        },
+        {
+          property: 'ordinal',
+          type: 'hierarchy',
+          hierarchy: [2, 1],
+        },
+        {
+          property: 'name',
+          type: 'string',
+          direction: 'asc',
+        },
+      ]);
+
+      const result = sorter(mockItems).map((item) => item.name);
+
+      expect(result).toEqual(['benjamin', 'abigail', 'aardvark', 'cow', 'zebra', 'eucalyptus']);
+    });
+
+    it('handles missing hierarchy', () => {
+      const mockItems = [
+        {
+          type: 'animal',
+          name: 'zebra',
+        },
+        {
+          type: 'human',
+          name: 'abigail',
+        },
+        {
+          type: 'human',
+          name: 'benjamin',
+        },
+        {
+          type: 'animal',
+          name: 'cow',
+        },
+        {
+          type: 'plant',
+          name: 'eucalyptus',
+        },
+      ];
+
+      const sorter = createSorter([{
+        property: 'type',
+        type: 'hierarchy',
+      }]);
+      const result = sorter(mockItems).map((item) => item.name);
+      expect(result).toEqual(['zebra', 'abigail', 'benjamin', 'cow', 'eucalyptus']);
+    });
+
+    it('sorts hierarchies ascending or descending', () => {
+      const mockItems = [
+        {
+          type: 'animal',
+          name: 'zebra',
+        },
+        {
+          type: 'human',
+          name: 'abigail',
+        },
+        {
+          type: 'human',
+          name: 'benjamin',
+        },
+        {
+          type: 'animal',
+          name: 'cow',
+        },
+        {
+          type: 'plant',
+          name: 'eucalyptus',
+        },
+      ];
+
+      const sorter = createSorter([{
+        property: 'type',
+        type: 'hierarchy',
+        hierarchy: ['human', 'animal'],
+      }]);
+      const result = sorter(mockItems).map((item) => item.name);
+      expect(result).toEqual(['abigail', 'benjamin', 'zebra', 'cow', 'eucalyptus']);
+
+      const sorter2 = createSorter([{
+        property: 'type',
+        type: 'hierarchy',
+        direction: 'asc',
+        hierarchy: ['human', 'animal'],
+      }]);
+      const result2 = sorter2(mockItems).map((item) => item.name);
+      expect(result2).toEqual(['zebra', 'cow', 'abigail', 'benjamin', 'eucalyptus']);
+    });
+  });
+});
+
 describe('Order direction', () => {
   it('orders ascending with "asc"', () => {
     const mockItems = [
@@ -130,124 +413,6 @@ describe('Order direction', () => {
     const resultNames = result.map((item) => item.name);
 
     expect(resultNames).toEqual(['timmy', 'eugine', 'richard', 'carolyn', 'benjamin', 'abigail']);
-  });
-
-  it('orders numerical values numerically', () => {
-    const mockItems = [
-      {
-        age: 20,
-      },
-      {
-        age: 30,
-      },
-      {
-        // age: 10, - missing
-      },
-      {
-        age: 10,
-      },
-    ];
-
-    let sorter;
-
-    sorter = createSorter([{
-      property: 'age',
-      type: 'number',
-      direction: 'asc',
-    }]);
-    // const result = sorter(mockItems);
-    // const resultAges = result.map((item) => item.age);
-
-    // expect(resultAges).toEqual([10, 20, 30, undefined]);
-
-    sorter = createSorter([{
-      property: 'age',
-      type: 'number',
-      direction: 'desc',
-    }]);
-    const result2 = sorter(mockItems);
-    const resultAges2 = result2.map((item) => item.age);
-
-    expect(resultAges2).toEqual([30, 20, 10, undefined]);
-  });
-
-  it('orders date values', () => {
-    const mockItems = [
-      {
-        type: 'human',
-        birthdate: '1990-01-01',
-      },
-      {
-        type: 'human',
-        birthdate: '1980-01-01',
-      },
-      {
-        type: 'human',
-        birthdate: '1970-01-01',
-      },
-    ];
-
-    let sorter;
-
-    sorter = createSorter([{
-      property: 'birthdate',
-      type: 'date',
-      direction: 'asc',
-    }]);
-    const result = sorter(mockItems);
-    const resultBirthdates = result.map((item) => item.birthdate);
-
-    expect(resultBirthdates).toEqual(['1970-01-01', '1980-01-01', '1990-01-01']);
-
-    sorter = createSorter([{
-      property: 'birthdate',
-      type: 'date',
-      direction: 'desc',
-    }]);
-
-    const result2 = sorter(mockItems);
-    const result2Birthdates = result2.map((item) => item.birthdate);
-    expect(result2Birthdates).toEqual(['1990-01-01', '1980-01-01', '1970-01-01']);
-  });
-
-  it('orders boolean values', () => {
-    const mockItems = [
-      {
-        type: 'human',
-        isAlive: true,
-        name: 'abigail',
-      },
-      {
-        type: 'human',
-        isAlive: false,
-        name: 'benjamin',
-      },
-      {
-        type: 'human',
-        isAlive: true,
-        name: 'carolyn',
-      },
-    ];
-
-    const sorter = createSorter([{
-      property: 'isAlive',
-      type: 'boolean',
-      direction: 'asc',
-    }]);
-    const result = sorter(mockItems);
-    const resultNames = result.map((item) => item.name);
-
-    expect(resultNames).toEqual(['benjamin', 'abigail', 'carolyn']);
-
-    const sorter2 = createSorter([{
-      property: 'isAlive',
-      type: 'boolean',
-      direction: 'desc',
-    }]);
-    const result2 = sorter2(mockItems);
-    const resultNames2 = result2.map((item) => item.name);
-
-    expect(resultNames2).toEqual(['abigail', 'carolyn', 'benjamin']);
   });
 });
 
@@ -463,6 +628,125 @@ describe('Attribute path', () => {
 });
 
 describe('Special cases', () => {
+  it('handles strings with extended latin characters', () => {
+    const mockItems = [
+      { name: 'a' },
+      { name: 'A' },
+      { name: 'ä' },
+      { name: 'á' },
+      { name: 'â' },
+    ];
+    const sorter = createSorter([{
+      property: 'name',
+      direction: 'asc',
+      type: 'string',
+    }]);
+
+    const sorted = sorter(mockItems).map((item) => item.name);
+
+    expect(sorted).toEqual(['a', 'A', 'á', 'â', 'ä']);
+  });
+
+  describe('Node type rules', () => {
+    it('combines node type rules with other rules', () => {
+      const mockItems = [
+        {
+          type: 'plant',
+          name: 'eucalyptus',
+        },
+        {
+          type: 'human',
+          name: 'abigail',
+        },
+        {
+          type: 'animal',
+          name: 'cow',
+        },
+        {
+          type: 'human',
+          name: 'benjamin',
+        },
+        {
+          type: 'animal',
+          name: 'zebra',
+        },
+      ];
+
+      const sorter = createSorter([
+        {
+          property: 'type',
+          type: 'hierarchy',
+          hierarchy: ['human', 'animal', 'plant'],
+        },
+        {
+          property: 'name',
+          type: 'string',
+          direction: 'asc',
+        },
+      ]);
+      const result = sorter(mockItems).map((item) => item.name);
+      expect(result).toEqual(['abigail', 'benjamin', 'cow', 'zebra', 'eucalyptus']);
+    });
+    it('handles node type sort rules', () => {
+      const mockItems = [
+        {
+          type: 'human',
+          name: 'abigail',
+        },
+        {
+          type: 'animal',
+          name: 'cow',
+        },
+        {
+          type: 'human',
+          name: 'benjamin',
+        },
+      ];
+
+      const sorter = createSorter([{
+        property: 'type',
+        type: 'hierarchy',
+        hierarchy: ['human', 'animal'],
+      }]);
+
+      const result = sorter(mockItems).map((item) => item.name);
+      expect(result).toEqual(['abigail', 'benjamin', 'cow']);
+    });
+
+    it('puts missing node types at the end of the list', () => {
+      const mockItems = [
+        {
+          type: 'human',
+          name: 'abigail',
+        },
+        {
+          type: 'animal',
+          name: 'cow',
+        },
+        {
+          type: 'plant',
+          name: 'eugine',
+        },
+        {
+          type: 'human',
+          name: 'benjamin',
+        },
+        {
+          type: 'animal',
+          name: 'zebra',
+        },
+      ];
+
+      const sorter = createSorter([{
+        property: 'type',
+        type: 'hierarchy',
+        hierarchy: ['human', 'animal'],
+      }]);
+      const result = sorter(mockItems).map((item) => item.name);
+      expect(result).toEqual(['abigail', 'benjamin', 'cow', 'zebra', 'eugine']);
+    });
+  });
+
   it('treats "*" property as fifo/lifo ordering', () => {
     let sorter;
     const mockItems = [
@@ -527,246 +811,6 @@ describe('Special cases', () => {
     const resultNames = result.map((item) => item.name);
 
     expect(resultNames).toEqual(['abigail', 'benjamin', 1, 2]);
-  });
-
-  describe('Node Type rules', () => {
-    it('handles node type sort rules', () => {
-      const mockItems = [
-        {
-          type: 'human',
-          name: 'abigail',
-        },
-        {
-          type: 'animal',
-          name: 'cow',
-        },
-        {
-          type: 'human',
-          name: 'benjamin',
-        },
-      ];
-
-      const sorter = createSorter([{
-        property: 'type',
-        type: 'hierarchy',
-        hierarchy: ['human', 'animal'],
-      }]);
-
-      const result = sorter(mockItems).map((item) => item.name);
-      expect(result).toEqual(['abigail', 'benjamin', 'cow']);
-    });
-
-    it('puts missing node types at the end of the list', () => {
-      const mockItems = [
-        {
-          type: 'human',
-          name: 'abigail',
-        },
-        {
-          type: 'animal',
-          name: 'cow',
-        },
-        {
-          type: 'plant',
-          name: 'eugine',
-        },
-        {
-          type: 'human',
-          name: 'benjamin',
-        },
-        {
-          type: 'animal',
-          name: 'zebra',
-        },
-      ];
-
-      const sorter = createSorter([{
-        property: 'type',
-        type: 'hierarchy',
-        hierarchy: ['human', 'animal'],
-      }]);
-      const result = sorter(mockItems).map((item) => item.name);
-      expect(result).toEqual(['abigail', 'benjamin', 'cow', 'zebra', 'eugine']);
-    });
-
-    it('sorts numerical hierarchy', () => {
-      const mockItems = [
-        {
-          ordinal: 1,
-          name: 'abigail',
-        },
-        {
-          ordinal: 2,
-          name: 'benjamin',
-        },
-        {
-          ordinal: 3,
-          name: 'carolyn',
-        },
-        {
-          ordinal: 4,
-          name: 'daniel',
-        },
-        {
-          ordinal: -1,
-          name: 'eugine',
-        },
-      ];
-
-      const sorter = createSorter([{
-        property: 'ordinal',
-        type: 'hierarchy',
-        direction: 'desc',
-        hierarchy: [4, 3, 2, 1, -1],
-      }]);
-
-      const result = sorter(mockItems).map((item) => item.name);
-      expect(result).toEqual(['daniel', 'carolyn', 'benjamin', 'abigail', 'eugine']);
-    });
-
-    it('multiple hierarchy', () => {
-      const mockItems = [
-        {
-          type: 'human',
-          name: 'abigail',
-          ordinal: 1,
-        },
-        {
-          type: 'animal',
-          name: 'aardvark',
-        },
-        {
-          type: 'human',
-          name: 'benjamin',
-          ordinal: 2,
-        },
-        {
-          type: 'animal',
-          name: 'cow',
-        },
-        {
-          type: 'plant',
-          name: 'eucalyptus',
-        },
-        {
-          type: 'animal',
-          name: 'zebra',
-        },
-      ];
-
-      const sorter = createSorter([
-        {
-          property: 'type',
-          type: 'hierarchy',
-          hierarchy: ['human', 'animal'],
-        },
-        {
-          property: 'ordinal',
-          type: 'hierarchy',
-          hierarchy: [2, 1],
-        },
-        {
-          property: 'name',
-          type: 'string',
-          direction: 'asc',
-        },
-      ]);
-
-      const result = sorter(mockItems).map((item) => item.name);
-
-      expect(result).toEqual(['benjamin', 'abigail', 'aardvark', 'cow', 'zebra', 'eucalyptus']);
-    });
-
-    it('handles missing hierarchy', () => {
-      const mockItems = [
-        {
-          type: 'animal',
-          name: 'zebra',
-        },
-        {
-          type: 'human',
-          name: 'abigail',
-        },
-        {
-          type: 'human',
-          name: 'benjamin',
-        },
-        {
-          type: 'animal',
-          name: 'cow',
-        },
-        {
-          type: 'plant',
-          name: 'eucalyptus',
-        },
-      ];
-
-      const sorter = createSorter([{
-        property: 'type',
-        type: 'hierarchy',
-      }]);
-      const result = sorter(mockItems).map((item) => item.name);
-      expect(result).toEqual(['zebra', 'abigail', 'benjamin', 'cow', 'eucalyptus']);
-    });
-
-    it('combines node type rules with other rules', () => {
-      const mockItems = [
-        {
-          type: 'plant',
-          name: 'eucalyptus',
-        },
-        {
-          type: 'human',
-          name: 'abigail',
-        },
-        {
-          type: 'animal',
-          name: 'cow',
-        },
-        {
-          type: 'human',
-          name: 'benjamin',
-        },
-        {
-          type: 'animal',
-          name: 'zebra',
-        },
-      ];
-
-      const sorter = createSorter([
-        {
-          property: 'type',
-          type: 'hierarchy',
-          hierarchy: ['human', 'animal', 'plant'],
-        },
-        {
-          property: 'name',
-          type: 'string',
-          direction: 'asc',
-        },
-      ]);
-      const result = sorter(mockItems).map((item) => item.name);
-      expect(result).toEqual(['abigail', 'benjamin', 'cow', 'zebra', 'eucalyptus']);
-    });
-
-    it('handles strings with extended latin characters', () => {
-      const mockItems = [
-        { name: 'a' },
-        { name: 'A' },
-        { name: 'ä' },
-        { name: 'á' },
-        { name: 'â' },
-      ];
-      const sorter = createSorter([{
-        property: 'name',
-        direction: 'asc',
-        type: 'string',
-      }]);
-
-      const sorted = sorter(mockItems).map((item) => item.name);
-
-      expect(sorted).toEqual(['a', 'A', 'á', 'â', 'ä']);
-    });
   });
 });
 
