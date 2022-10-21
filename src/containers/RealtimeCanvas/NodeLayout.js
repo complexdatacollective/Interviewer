@@ -24,7 +24,7 @@ const withDropHandlers = withHandlers({
   onDrop: ({
     updateNode, layout, twoMode, width, height, x, y,
   }) => (item) => {
-    const layoutVariable = twoMode ? layout[item.type] : layout;
+    const layoutVariable = twoMode ? layout[item.meta.type] : layout;
     updateNode(
       item.meta[entityPrimaryKeyProperty],
       {},

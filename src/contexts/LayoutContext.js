@@ -12,6 +12,7 @@ import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import useForceSimulation from '../hooks/useForceSimulation';
 import { get } from '../utils/lodash-replacements';
+import { getTwoModeLayoutVariable } from '../components/RealtimeCanvas/utils';
 
 const SIMULATION_OPTIONS = {
   decay: 0.1,
@@ -97,7 +98,8 @@ export const LayoutProvider = ({
         return get(forceSimulation.current.nodes, [index]);
       }
 
-      const layoutVariable = twoMode ? layout[nodes[index].type] : layout;
+      const nodeType = get(nodes, [index, 'type']);
+      const layoutVariable = getTwoModeLayoutVariable(twoMode, nodeType, layout);
       return get(nodes, [index, 'attributes', layoutVariable]);
     };
   }, [nodes, simulationEnabled, allowAutomaticLayout, layout, twoMode]);

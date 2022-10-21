@@ -26,9 +26,19 @@ const withResetInterfaceHandler = withHandlers({
     stage,
   }) => () => {
     stage.prompts.forEach((prompt) => {
-      resetPropertyForAllNodes(prompt.layout.layoutVariable);
       if (prompt.edges) {
         resetEdgesOfType(prompt.edges.creates);
+      }
+
+      const layoutVariable = get(prompt, 'layout.layoutVariable', null);
+      if (!layoutVariable) { return; }
+
+      if (typeof layoutVariable === 'string') {
+        resetPropertyForAllNodes(layoutVariable);
+      } else {
+        Object.keys(layoutVariable).forEach((type) => {
+          resetPropertyForAllNodes(layoutVariable[type]);
+        });
       }
     });
   },

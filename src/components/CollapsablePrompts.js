@@ -1,13 +1,16 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import MinimizeIcon from '@material-ui/icons/Minimize';
+import { Button } from '@codaco/ui';
 import Prompts from './Prompts';
+import { isDevMode } from '../utils/Environment';
 
 const CollapsablePrompts = React.memo((props) => {
   const {
     prompts,
     currentPromptIndex,
     interfaceRef,
+    handleResetInterface,
   } = props;
   const ref = useRef(null);
   const [minimized, setMinimized] = useState(false);
@@ -76,6 +79,15 @@ const CollapsablePrompts = React.memo((props) => {
           )}
         </AnimatePresence>
       </motion.div>
+      {isDevMode() && (
+        <div
+          style={{
+            display: 'flex', justifyContent: 'center', padding: '1.2rem',
+          }}
+        >
+          <Button size="small" onClick={handleResetInterface}>Dev: Reset Interface</Button>
+        </div>
+      )}
     </motion.div>
   );
 });

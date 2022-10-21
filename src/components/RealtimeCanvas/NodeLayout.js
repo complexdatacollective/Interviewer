@@ -6,6 +6,7 @@ import { isEmpty, find } from 'lodash';
 import LayoutContext from '../../contexts/LayoutContext';
 import LayoutNode from './LayoutNode';
 import { get } from '../../utils/lodash-replacements';
+import { getTwoModeLayoutVariable } from './utils';
 
 class NodeLayout extends React.Component {
   constructor(props) {
@@ -124,7 +125,8 @@ class NodeLayout extends React.Component {
     this.isDragging = true;
 
     const {
-      network: { layout },
+      network: { layout, nodes },
+      twoMode,
       allowAutomaticLayout,
       simulation,
       screen,
@@ -147,16 +149,20 @@ class NodeLayout extends React.Component {
       }
     }
 
+    const nodeType = get(nodes, [index, 'type']);
+    const layoutVariable = getTwoModeLayoutVariable(twoMode, nodeType, layout);
+
     updateNode(
       uuid,
       undefined,
-      { [layout]: screen.current.calculateRelativeCoords({ x, y }) },
+      { [layoutVariable]: screen.current.calculateRelativeCoords({ x, y }) },
     );
   };
 
   handleDragMove = (uuid, index, delta) => {
     const {
-      network: { layout },
+      network: { layout, nodes },
+      twoMode,
       allowAutomaticLayout,
       simulation,
       screen,
@@ -179,16 +185,20 @@ class NodeLayout extends React.Component {
       }
     }
 
+    const nodeType = get(nodes, [index, 'type']);
+    const layoutVariable = getTwoModeLayoutVariable(twoMode, nodeType, layout);
+
     updateNode(
       uuid,
       undefined,
-      { [layout]: screen.current.calculateRelativeCoords({ x, y }) },
+      { [layoutVariable]: screen.current.calculateRelativeCoords({ x, y }) },
     );
   };
 
   handleDragEnd = (uuid, index, { x, y }) => {
     const {
-      network: { layout },
+      network: { layout, nodes },
+      twoMode,
       allowAutomaticLayout,
       simulation,
       screen,
@@ -207,10 +217,13 @@ class NodeLayout extends React.Component {
       }
     }
 
+    const nodeType = get(nodes, [index, 'type']);
+    const layoutVariable = getTwoModeLayoutVariable(twoMode, nodeType, layout);
+
     updateNode(
       uuid,
       undefined,
-      { [layout]: screen.current.calculateRelativeCoords({ x, y }) },
+      { [layoutVariable]: screen.current.calculateRelativeCoords({ x, y }) },
     );
   };
 
