@@ -1,10 +1,5 @@
+import { entityAttributesProperty } from '@codaco/shared-consts';
 import { get } from './lodash-replacements';
-
-/**
- * Below is *heavily* inspired by this SO answer:
- * https://stackoverflow.com/questions/6913512/how-to-sort-an-array-of-objects-by-multiple-fields/72649463#72649463
- *
- */
 
 /**
  * Creating a collator that is reused by string comparison is significantly faster
@@ -178,11 +173,106 @@ const getSortFunction = (rule) => {
   return direction === 'asc' ? asc((item) => get(item, property, null)) : desc((item) => get(item, property, null));
 };
 
+/**
+ * Creates a sort function that sorts a collection of items according to a set
+ * of sort rules.
+ *
+ * Below is *heavily* inspired by this SO answer:
+ * https://stackoverflow.com/questions/6913512/how-to-sort-an-array-of-objects-by-multiple-fields/72649463#72649463
+ *
+ */
 const createSorter = (sortRules = []) => {
   const sortFunctions = sortRules.map(getSortFunction);
   return (items) => withoutCreatedIndex(withCreatedIndex(items).sort(chain(
     ...sortFunctions,
   )));
+};
+
+/**
+ * Utility helper to map NC variable types to the types supported by the
+ * createSorter function.
+ *
+ * Sort rules can only be of type:
+ * - string
+ * - boolean
+ * - hierarchy
+ * - number
+ * - date
+ *
+ * Network Canvas Variables can be of type:
+ * - "boolean",
+ * - "text",
+ * - "number",
+ * - "datetime",
+ * - "ordinal",
+ * - "scalar",
+ * - "categorical",
+ * - "layout",
+ * - "location"
+ */
+const mapNCType = (type) => {
+  switch (type) {
+    case 'text':
+    case 'categorical':
+    case 'layout':
+      return 'string';
+    case 'number':
+    case 'boolean':
+    case '*':
+      return type;
+    case 'datetime':
+      return 'date';
+    case 'ordinal':
+      return 'hierarchy';
+    case 'scalar':
+      return 'number';
+    default:
+      return 'string';
+  }
+};
+
+// Conditionally add the entity attributes property to the path
+// Path is assumed to be a single variable UUID.
+const propertyWithAttributePath = (rule) => {
+  // 'type' rules are a special case - they exist in the protocol, but do not
+  // refer to an entity attribute (they refer to a model property)
+  if (rule.property === 'type') {
+    return rule.property;
+  }
+
+  return [entityAttributesProperty, rule.property];
+};
+
+/**
+ * Function that provides a compatibility layer between the old and new sort
+ * systems.
+ *
+ * The old system provided a configurable "attribute path" that defaulted to
+ * `entityAttributesProperty`. The new system requires the path to be specified
+ * in full. This function appends the entity attributes property to the path.
+ *
+ * The old system also did not account for variable type in sort behaviour.
+ * The new system uses a 'type' property to do this. This function maps the
+ * variable type to the new type by looking up the variable definition in the
+ * codebook.
+ */
+export const processProtocolSortRule = (codebookVariables) => (sortRule) => {
+  const variableDefinition = get(codebookVariables, sortRule.property, null);
+
+  // Don't modify the rule there is no variable definition
+  if (variableDefinition === null) {
+    return sortRule;
+  }
+
+  const { type } = variableDefinition;
+
+  return {
+    ...sortRule,
+    property: propertyWithAttributePath(sortRule),
+    type: mapNCType(type),
+    // Generate a hierarchy if the variable is ordinal based on the ordinal options
+    ...type === 'ordinal' && { hierarchy: variableDefinition.options.map((option) => option.value) },
+  };
 };
 
 export default createSorter;

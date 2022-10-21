@@ -7,10 +7,11 @@ import {
 import { entityAttributesProperty, entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import { getNetworkNodes, getNetworkEdges } from './network';
 import { createDeepEqualSelector } from './utils';
-import createSorter from '../utils/createSorter';
+import createSorter, { processProtocolSortRule } from '../utils/createSorter';
 import { getEntityAttributes } from '../ducks/modules/network';
 import { getStageSubject } from './session';
 import { get } from '../utils/lodash-replacements';
+import { getAllVariableUUIDsByEntity } from './protocol';
 
 const getLayout = (_, props) => get(props, 'prompt.layout.layoutVariable');
 const getSortOptions = (_, props) => get(props, 'prompt.sortOrder');
@@ -27,16 +28,31 @@ export const getNextUnplacedNode = createDeepEqualSelector(
   getStageSubject(),
   getLayout,
   getSortOptions,
-  (nodes, subject, layoutVariable, sortOptions) => {
-    const type = subject && subject.type;
+  getAllVariableUUIDsByEntity,
+  (nodes, subject, layoutVariable, sortOptions, codebookVariables) => {
+    // Stage subject is either a single object or a collecton of objects
+    const types = isArray(subject) ? subject.map((s) => s.type) : [subject.type];
+
+    // Layout variable is either a string or an object keyed by node type
+    const layoutVariableForType = (type) => {
+      if (typeof layoutVariable === 'string') { return layoutVariable; }
+      return layoutVariable[type];
+    };
+
     const unplacedNodes = nodes.filter((node) => {
       const attributes = getEntityAttributes(node);
       return (
-        node.type === type
-        && (has(attributes, layoutVariable) && isNil(attributes[layoutVariable]))
+        types.includes(node.type)
+        && (has(attributes, layoutVariableForType(node.type)))
+        && isNil(attributes[layoutVariableForType(node.type)])
       );
     });
-    const sorter = createSorter(sortOptions);
+
+    // Protocol sort rules must be processed to be used by createSorter
+    const processedSortRules = sortOptions.map(processProtocolSortRule(codebookVariables));
+
+    console.log('processedSortRules', processedSortRules, codebookVariables);
+    const sorter = createSorter(processedSortRules);
     return first(sorter(unplacedNodes));
   },
 );
@@ -52,13 +68,21 @@ export const getPlacedNodes = createDeepEqualSelector(
   getStageSubject(),
   getLayout,
   (nodes, subject, layoutVariable) => {
-    const type = subject && subject.type;
+    // Stage subject is either a single object or a collecton of objects
+    const types = isArray(subject) ? subject.map((s) => s.type) : [subject.type];
+
+    // Layout variable is either a string or an object keyed by node type
+    const layoutVariableForType = (type) => {
+      if (typeof layoutVariable === 'string') { return layoutVariable; }
+      return layoutVariable[type];
+    };
 
     return nodes.filter((node) => {
       const attributes = getEntityAttributes(node);
       return (
-        node.type === type
-        && (has(attributes, layoutVariable) && !isNil(attributes[layoutVariable]))
+        types.includes(node.type)
+        && has(attributes, layoutVariableForType(node.type))
+        && !isNil(attributes[layoutVariableForType(node.type)])
       );
     });
   },
