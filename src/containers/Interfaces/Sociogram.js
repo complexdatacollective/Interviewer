@@ -75,8 +75,6 @@ const Sociogram = React.memo((props) => {
   const nodes = allowAutomaticLayout ? allNodes : placedNodes;
   const edges = useSelector((state) => getEdges(state, props));
 
-  console.log(allNodes, placedNodes, nextUnplacedNode);
-
   return (
     <div className="sociogram-interface" ref={interfaceRef}>
       <div className="sociogram-interface__drag-safe" ref={dragSafeRef} />

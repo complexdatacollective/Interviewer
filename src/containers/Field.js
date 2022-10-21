@@ -23,7 +23,6 @@ const ComponentTypeNotFound = (componentType) => () => (
   */
 export const getInputComponent = (componentType = 'Text') => {
   const def = get(FormComponent, componentType);
-
   return get(
     Fields,
     def,
