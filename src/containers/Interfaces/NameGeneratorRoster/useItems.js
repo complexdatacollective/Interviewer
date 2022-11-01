@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { entityPrimaryKeyProperty, getEntityAttributes } from '@codaco/shared-consts';
+import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import {
   makeGetNodeTypeDefinition,
   getNetworkNodes,
@@ -10,6 +10,7 @@ import { getCardAdditionalProperties } from '../../../selectors/name-generator';
 import getParentKeyByNameValue from '../../../utils/getParentKeyByNameValue';
 import usePropSelector from './usePropSelector';
 import useExternalData from '../../../hooks/useExternalData';
+import { getEntityAttributes } from '../../../ducks/modules/network';
 
 /**
  * Format details needed for list cards

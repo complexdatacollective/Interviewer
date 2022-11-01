@@ -625,6 +625,57 @@ describe('Attribute path', () => {
     expect(resultNames).toEqual(['abigail', 'benjamin', 'carolyn']);
     expect(resultNames2).toEqual(['carolyn', 'benjamin', 'abigail']);
   });
+
+  it('can sort very deeply nested attributes', () => {
+    const mockItems = [
+      {
+        type: 'human',
+        name: {
+          first: 'benjamin',
+          middle: {
+            initial: 'b',
+          },
+        },
+      },
+      {
+        type: 'human',
+        name: {
+          first: 'abigail',
+          middle: {
+            initial: 'a',
+          },
+        },
+      },
+      {
+        type: 'human',
+        name: {
+          first: 'carolyn',
+          middle: {
+            initial: 'c',
+          },
+        },
+      },
+    ];
+
+    const sorter = createSorter([{
+      property: ['name', 'middle', 'initial'],
+      direction: 'asc',
+    }]);
+
+    const result = sorter(mockItems);
+    const resultNames = result.map((item) => item.name.first);
+
+    const sorter2 = createSorter([{
+      property: ['name', 'middle', 'initial'],
+      direction: 'desc',
+    }]);
+
+    const result2 = sorter2(mockItems);
+    const resultNames2 = result2.map((item) => item.name.first);
+
+    expect(resultNames).toEqual(['abigail', 'benjamin', 'carolyn']);
+    expect(resultNames2).toEqual(['carolyn', 'benjamin', 'abigail']);
+  });
 });
 
 describe('Special cases', () => {
@@ -646,6 +697,9 @@ describe('Special cases', () => {
 
     expect(sorted).toEqual(['a', 'A', 'á', 'â', 'ä']);
   });
+
+  it.todo('Handles paths with array notation');
+  it.todo('Handles paths with array indexes');
 
   describe('Node type rules', () => {
     it('combines node type rules with other rules', () => {

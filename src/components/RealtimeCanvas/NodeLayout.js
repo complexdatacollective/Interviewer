@@ -80,7 +80,7 @@ class NodeLayout extends React.Component {
     const { highlightAttribute } = this.props;
     return (
       !isEmpty(highlightAttribute)
-      && get(node, [entityAttributesProperty, highlightAttribute]) === true
+      && get(node, [entityAttributesProperty, highlightAttribute], false) === true
     );
   };
 

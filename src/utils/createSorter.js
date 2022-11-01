@@ -167,7 +167,7 @@ const getSortFunction = (rule) => {
 
   // eslint-disable-next-line no-console
   console.warn('🤔 Sort rule missing required property \'type\', or type was not recognized. Sorting as a string, which may cause incorrect results. Supported types are: number, boolean, string, date, hierarchy.');
-  return direction === 'asc' ? asc((item) => get(item, property, null)) : desc((item) => get(item, property, null));
+  return stringFunction(rule);
 };
 
 /**
