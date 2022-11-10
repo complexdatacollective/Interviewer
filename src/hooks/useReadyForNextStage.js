@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { get } from 'lodash';
 import { actionCreators as uiActions } from '../ducks/modules/ui';
+import { get } from '../utils/lodash-replacements';
 
 const useReadyForNextStage = () => {
   const dispatch = useDispatch();

@@ -7,7 +7,7 @@ import {
   some,
   get,
 } from 'lodash';
-import { entityPrimaryKeyProperty } from '../ducks/modules/network';
+import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import { makeNetworkEntitiesForType } from '../selectors/interface';
 import { getCodebookVariablesForType } from '../selectors/session';
 

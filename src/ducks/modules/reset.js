@@ -1,5 +1,5 @@
+import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import { actionCreators as sessionsActions } from './sessions';
-import { entityPrimaryKeyProperty } from './network';
 import { actionCreators as deviceActions } from './deviceSettings';
 import resetProtocolFiles from '../../utils/protocol/resetProtocolFiles';
 

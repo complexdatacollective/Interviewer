@@ -1,14 +1,15 @@
 /* eslint-disable no-shadow */
 import { createSelector } from 'reselect';
 import {
-  get, clamp, orderBy, values, mapValues, omit,
+  clamp, orderBy, values, mapValues, omit,
 } from 'lodash';
+import { entityAttributesProperty } from '@codaco/shared-consts';
 import { currentStageIndex } from '../utils/matchSessionPath';
 import { getAdditionalAttributes, getSubject } from '../utils/protocol/accessors';
 import { createDeepEqualSelector } from './utils';
 import { initialState } from '../ducks/modules/session';
 import { getProtocolCodebook, getProtocolStages, getCurrentSessionProtocol } from './protocol';
-import { entityAttributesProperty } from '../ducks/modules/network';
+import { get } from '../utils/lodash-replacements';
 
 const currentPathname = (router) => router && router.location && router.location.pathname;
 const stageIndexForCurrentSession = (state) => currentStageIndex(currentPathname(state.router));

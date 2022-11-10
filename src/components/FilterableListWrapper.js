@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from '@codaco/ui';
 import { Text } from '@codaco/ui/lib/components/Fields';
-import { entityAttributesProperty } from '../ducks/modules/network';
-import sortOrder from '../utils/sortOrder';
+import { entityAttributesProperty } from '@codaco/shared-consts';
+import createSorter from '../utils/createSorter';
 
 class FilterableListWrapper extends Component {
   constructor(props) {
@@ -108,30 +108,30 @@ class FilterableListWrapper extends Component {
       filterValue,
     } = this.state;
 
-    const sorter = sortOrder([activeSortOrder]);
+    const sorter = createSorter([activeSortOrder]);
     const sortedNodes = this.getFilteredList(sorter(items));
 
     return (
       <div className="list-select">
         <div className="list-select__sort">
           <div>
-            { (sortFields && sortFields.length > 0)
+            {(sortFields && sortFields.length > 0)
               && (
-              <>
-                <h4>Sort: </h4>
-                {sortFields.map((sortField) => (
-                  <Button
-                    color={activeSortOrder.property === sortField.variable ? 'primary' : 'white'}
-                    key={sortField.variable}
-                    onClick={() => this.setSortBy(sortField.variable)}
-                  >
-                    {
-                      (sortField.label || sortField.variable)
+                <>
+                  <h4>Sort: </h4>
+                  {sortFields.map((sortField) => (
+                    <Button
+                      color={activeSortOrder.property === sortField.variable ? 'primary' : 'white'}
+                      key={sortField.variable}
+                      onClick={() => this.setSortBy(sortField.variable)}
+                    >
+                      {
+                        (sortField.label || sortField.variable)
                         + this.getDirection(sortField.variable)
-                    }
-                  </Button>
-                ))}
-              </>
+                      }
+                    </Button>
+                  ))}
+                </>
               )}
           </div>
           <div>

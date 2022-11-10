@@ -12,5 +12,6 @@ module.exports = {
       },
     ],
     '@babel/plugin-proposal-json-strings',
+    '@babel/plugin-proposal-nullish-coalescing-operator',
   ],
 };

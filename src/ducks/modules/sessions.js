@@ -1,8 +1,9 @@
 import { has, omit, reduce } from 'lodash';
 import uuid from 'uuid/v4';
+import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import { actionCreators as SessionWorkerActions } from './sessionWorkers';
 import { actionTypes as installedProtocolsActionTypes } from './installedProtocols';
-import networkReducer, { actionTypes as networkActionTypes, actionCreators as networkActions, entityPrimaryKeyProperty } from './network';
+import networkReducer, { actionTypes as networkActionTypes, actionCreators as networkActions } from './network';
 
 const ADD_SESSION = 'ADD_SESSION';
 const SET_SESSION_FINISHED = 'SET_SESSION_FINISHED';

@@ -1,5 +1,5 @@
 import { filter, differenceBy } from 'lodash';
-import { entityPrimaryKeyProperty } from '../ducks/modules/network';
+import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
 
 const nodeIncludesAttributes = (network, attributes) => {
   const nodes = filter(network.nodes, attributes);

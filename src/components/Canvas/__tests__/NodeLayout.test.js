@@ -3,11 +3,8 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
+import { entityAttributesProperty, entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import NodeLayout from '../NodeLayout';
-import {
-  entityPrimaryKeyProperty,
-  entityAttributesProperty,
-} from '../../../ducks/modules/network';
 
 const layout = 'foo';
 
@@ -22,9 +19,9 @@ const mockProps = {
       [entityAttributesProperty]: { isOn: false, [layout]: { x: 0, y: 0 } },
     },
   ],
-  updateNode: () => {},
-  toggleEdge: () => {},
-  toggleHighlight: () => {},
+  updateNode: () => { },
+  toggleEdge: () => { },
+  toggleHighlight: () => { },
   width: 123,
   height: 456,
   layoutVariable: layout,

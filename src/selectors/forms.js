@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { get } from 'lodash';
+import { get } from '../utils/lodash-replacements';
 import { getProtocolCodebook } from './protocol';
 
 // Prop selectors

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { get } from 'lodash';
 import objectHash from 'object-hash';
 import { motion, AnimatePresence } from 'framer-motion';
 import PropTypes from 'prop-types';
 import { Spinner } from '@codaco/ui';
 import { Search } from '@codaco/ui/lib/components/Fields';
-import { entityAttributesProperty } from '../ducks/modules/network';
-import sortOrder from '../utils/sortOrder';
+import { entityAttributesProperty } from '@codaco/shared-consts';
+import createSorter from '../utils/createSorter';
+import { get } from '../utils/lodash-replacements';
 
 export const getFilteredList = (items, filterTerm, propertyPath) => {
   if (!filterTerm) { return items; }
@@ -92,7 +92,7 @@ const NewFilterableListWrapper = (props) => {
 
   const filteredItems = onFilterChange ? items : getFilteredList(items, filterTerm, propertyPath);
 
-  const sortedItems = sortOrder([{
+  const sortedItems = createSorter([{
     property: sortProperty,
     direction: sortAscending ? 'asc' : 'desc',
   }], {}, propertyPath)(filteredItems);
@@ -101,26 +101,26 @@ const NewFilterableListWrapper = (props) => {
     <div className="new-filterable-list">
       <header className="new-filterable-list__header">
         <section className="new-filterable-list__header-section new-filterable-list__header-section--sort">
-          { (sortableProperties && sortableProperties.length > 0)
+          {(sortableProperties && sortableProperties.length > 0)
             && (
-            <div className="scroll-container">
-              {sortableProperties.map((sortField) => (
-                <div
-                  tabIndex="0"
-                  role="button"
-                  className={`filter-button ${sortProperty === sortField.variable ? 'filter-button--active' : ''}`}
-                  key={sortField.variable}
-                  onClick={() => handleSetSortProperty(sortField.variable)}
-                >
-                  {
-                    (sortField.label)
-                  }
-                  {
-                    sortProperty === sortField.variable && (sortAscending ? ' \u25B2' : ' \u25BC')
-                  }
-                </div>
-              ))}
-            </div>
+              <div className="scroll-container">
+                {sortableProperties.map((sortField) => (
+                  <div
+                    tabIndex="0"
+                    role="button"
+                    className={`filter-button ${sortProperty === sortField.variable ? 'filter-button--active' : ''}`}
+                    key={sortField.variable}
+                    onClick={() => handleSetSortProperty(sortField.variable)}
+                  >
+                    {
+                      (sortField.label)
+                    }
+                    {
+                      sortProperty === sortField.variable && (sortAscending ? ' \u25B2' : ' \u25BC')
+                    }
+                  </div>
+                ))}
+              </div>
             )}
         </section>
         <section className="new-filterable-list__header-section new-filterable-list__header-section--filter">

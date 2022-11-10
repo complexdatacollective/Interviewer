@@ -2,15 +2,15 @@ import React, { PureComponent } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { get } from 'lodash';
+import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import { getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
 import { makeGetAdditionalAttributes } from '../selectors/interface';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
-import { entityPrimaryKeyProperty } from '../ducks/modules/network';
 import { Panels } from '../components';
 import { makeGetPanelConfiguration } from '../selectors/name-generator';
 import NodePanel from './NodePanel';
 import { MonitorDragSource } from '../behaviours/DragAndDrop';
+import { get } from '../utils/lodash-replacements';
 
 /**
   * Configures and renders `NodePanels` according to the protocol config

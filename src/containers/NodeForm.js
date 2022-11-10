@@ -4,10 +4,10 @@ import { connect } from 'react-redux';
 import { submit } from 'redux-form';
 import { debounce } from 'lodash';
 import { Button, Scroller } from '@codaco/ui';
+import { entityPrimaryKeyProperty, entityAttributesProperty } from '@codaco/shared-consts';
 import Overlay from './Overlay';
 import Form from './Form';
 import FormWizard from './FormWizard';
-import { entityPrimaryKeyProperty, entityAttributesProperty } from '../ducks/modules/network';
 
 const reduxFormName = 'NODE_FORM';
 
@@ -65,7 +65,7 @@ class NodeForm extends Component {
         footer={!useFullScreenForms && (<Button key="submit" aria-label="Submit" type="submit" onClick={submitForm}>Finished</Button>)}
         allowMaximize={false}
       >
-        { useFullScreenForms
+        {useFullScreenForms
           ? (
             <FormWizard
               {...formProps}

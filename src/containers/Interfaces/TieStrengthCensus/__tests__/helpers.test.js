@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import { entityPrimaryKeyProperty } from '../../../../ducks/modules/network';
+import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import { getPairs } from '../helpers';
 
 describe('getPairs()', () => {

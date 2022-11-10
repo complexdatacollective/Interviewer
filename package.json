@@ -1,6 +1,6 @@
 {
   "name": "network-canvas-interviewer",
-  "version": "6.3.2",
+  "version": "6.4.0",
   "productName": "Network Canvas Interviewer",
   "description": "A tool for conducting Network Canvas Interviews.",
   "author": "Complex Data Collective",
@@ -21,7 +21,7 @@
     "build:ios": "cross-env NC_TARGET_PLATFORM=ios node scripts/build.js && cordova prepare ios",
     "lint": "eslint src && eslint public",
     "sass-lint": "sass-lint -vc .sass-lint.yml",
-    "test": "node scripts/test.js --env=jsdom",
+    "test": "node scripts/test.js",
     "test:integration": "cross-env TEST_ENV=development jest --config=integration-tests/jest.config.js --runInBand",
     "test:integration:ci": "jest --config=integration-tests/jest.config.js --runInBand",
     "test:integration:docker": "docker-compose run integration_tests",
@@ -48,6 +48,7 @@
     "@babel/eslint-parser": "~7.13.10",
     "@babel/plugin-proposal-class-properties": "7.7.4",
     "@babel/plugin-proposal-json-strings": "7.7.4",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "~7.18.6",
     "@babel/plugin-syntax-dynamic-import": "7.7.4",
     "@babel/plugin-syntax-import-meta": "7.7.4",
     "@babel/preset-env": "7.10.4",
@@ -277,7 +278,7 @@
       "<rootDir>/integration-tests",
       "<rootDir>/platforms"
     ],
-    "testEnvironment": "node",
+    "testEnvironment": "jsdom",
     "testURL": "http://localhost",
     "transform": {
       "/node_modules/(?!codaco/ui).+\\.js$": "<rootDir>/node_modules/babel-jest",

@@ -3,8 +3,8 @@
 import faker from '@faker-js/faker';
 import uuid from 'uuid/v4';
 import { has, times, omit } from 'lodash';
+import { entityPrimaryKeyProperty, entityAttributesProperty } from '@codaco/shared-consts';
 import { actionCreators as sessionsActions } from './sessions';
-import { entityPrimaryKeyProperty, entityAttributesProperty } from './network';
 
 const MOCK_GENERATE_NODES = 'MOCK/GENERATE_NODES';
 

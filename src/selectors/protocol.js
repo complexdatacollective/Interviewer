@@ -6,7 +6,8 @@ import {
   omit,
 } from 'lodash';
 import { createSelector } from 'reselect';
-import { entityAttributesProperty } from '../ducks/modules/network';
+import { entityAttributesProperty } from '@codaco/shared-consts';
+import { get } from '../utils/lodash-replacements';
 
 const DefaultFinishStage = {
   // `id` is used as component key; must be unique from user input
@@ -97,6 +98,50 @@ export const getAssetManifest = createSelector(
 export const getProtocolCodebook = createSelector(
   getCurrentSessionProtocol,
   (protocol) => protocol.codebook,
+);
+
+// Get all variables for all subjects in the codebook, adding the entity and type
+export const getAllVariableUUIDsByEntity = createSelector(
+  getProtocolCodebook,
+  ({ node: nodeTypes = {}, edge: edgeTypes = {}, ego = {} }) => {
+    const variables = {};
+
+    // Nodes
+    Object.keys(nodeTypes).forEach((nodeType) => {
+      const nodeVariables = get(nodeTypes, [nodeType, 'variables'], {});
+      Object.keys(nodeVariables).forEach((variable) => {
+        variables[variable] = {
+          entity: 'node',
+          entityType: nodeType,
+          ...nodeVariables[variable],
+        };
+      });
+    });
+
+    // Edges
+    Object.keys(edgeTypes).forEach((edgeType) => {
+      const edgeVariables = get(edgeTypes, [edgeType, 'variables'], {});
+      Object.keys(edgeVariables).forEach((variable) => {
+        variables[variable] = {
+          entity: 'edge',
+          entityType: edgeType,
+          ...edgeVariables[variable],
+        };
+      });
+    });
+
+    // Ego
+    const egoVariables = get(ego, 'variables', {});
+    Object.keys(egoVariables).forEach((variable) => {
+      variables[variable] = {
+        entity: 'ego',
+        entityType: null,
+        ...egoVariables[variable],
+      };
+    });
+
+    return variables; // Spread converts Set to Array
+  },
 );
 
 const withFinishStage = (stages = []) => {

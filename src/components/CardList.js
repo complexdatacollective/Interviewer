@@ -5,8 +5,8 @@ import { times } from 'lodash';
 import {
   List, AutoSizer, CellMeasurer, CellMeasurerCache,
 } from 'react-virtualized';
+import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import Card from './Card';
-import { entityPrimaryKeyProperty } from '../ducks/modules/network';
 
 const calculateRequiredColumns = (width, height) => {
   // Tuple in format of [ratio, noOfColumns]
@@ -176,7 +176,7 @@ CardList.defaultProps = {
   details: () => (''),
   label: () => (''),
   items: [],
-  onItemClick: () => {},
+  onItemClick: () => { },
   isItemSelected: () => false,
   getKey: (node) => node[entityPrimaryKeyProperty],
 };

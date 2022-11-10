@@ -7,12 +7,12 @@ import { Flipper } from 'react-flip-toolkit';
 import cx from 'classnames';
 import color from 'color';
 import { getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
+import { entityAttributesProperty } from '@codaco/shared-consts';
 import {
   makeNetworkNodesForType, makeGetVariableOptions, makeGetPromptVariable, getPromptOtherVariable,
 } from '../../selectors/interface';
 import { makeGetNodeLabel, makeGetNodeColor } from '../../selectors/network';
 import { MonitorDragSource } from '../../behaviours/DragAndDrop';
-import { entityAttributesProperty } from '../../ducks/modules/network';
 import getAbsoluteBoundingRect from '../../utils/getAbsoluteBoundingRect';
 import CategoricalListItem from './CategoricalListItem';
 import { getItemSize, getExpandedSize } from './helpers';

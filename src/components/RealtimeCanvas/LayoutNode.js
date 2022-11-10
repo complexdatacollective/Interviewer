@@ -1,8 +1,8 @@
 import React, { useRef, useEffect } from 'react';
 import ReactDOM from 'react-dom';
+import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import UINode from '../../containers/Node';
 import DragManager from '../../behaviours/DragAndDrop/DragManager';
-import { entityPrimaryKeyProperty } from '../../ducks/modules/network';
 
 const LayoutNode = ({
   node,
@@ -13,6 +13,7 @@ const LayoutNode = ({
   onDragEnd,
   allowPositioning,
   selected,
+  inactive,
   linking,
   index,
 }) => {
@@ -50,6 +51,7 @@ const LayoutNode = ({
       {...node}
       selected={selected}
       linking={linking}
+      inactive={inactive}
     />,
     portal,
   );

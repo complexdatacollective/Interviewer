@@ -4,17 +4,17 @@ import {
   useState,
   useEffect,
 } from 'react';
-import { get } from 'lodash';
+import get from 'lodash/get';
 import ForceSimulationWorker from './forceSimulation.worker';
-import ScreenManager from '../components/RealtimeCanvas/ScreenManager';
+import screenManager from '../components/RealtimeCanvas/ScreenManager';
 import useViewport from './useViewport';
 
 const VIEWPORT_SPACE_PX = 500;
 
 const emptyNetwork = { nodes: [], links: [] };
 
-const useForceSimulation = (listener = () => {}) => {
-  const screen = useRef(ScreenManager());
+const useForceSimulation = (listener = () => { }) => {
+  const screen = useRef(screenManager());
   const {
     calculateLayoutCoords,
     calculateRelativeCoords,

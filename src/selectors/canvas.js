@@ -1,21 +1,20 @@
 import {
   first,
-  get,
   has,
+  isArray,
   isNil,
 } from 'lodash';
+import { entityAttributesProperty, entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import { getNetworkNodes, getNetworkEdges } from './network';
 import { createDeepEqualSelector } from './utils';
-import sortOrder from '../utils/sortOrder';
-import {
-  getEntityAttributes,
-  entityPrimaryKeyProperty,
-  entityAttributesProperty,
-} from '../ducks/modules/network';
+import createSorter, { processProtocolSortRule } from '../utils/createSorter';
+import { getEntityAttributes } from '../ducks/modules/network';
 import { getStageSubject } from './session';
+import { get } from '../utils/lodash-replacements';
+import { getAllVariableUUIDsByEntity } from './protocol';
 
 const getLayout = (_, props) => get(props, 'prompt.layout.layoutVariable');
-const getSortOptions = (_, props) => get(props, 'prompt.sortOrder');
+const getSortOptions = (_, props) => get(props, 'prompt.sortOrder', null);
 const getDisplayEdges = (_, props) => get(props, 'prompt.edges.display', []);
 
 /**
@@ -29,16 +28,35 @@ export const getNextUnplacedNode = createDeepEqualSelector(
   getStageSubject(),
   getLayout,
   getSortOptions,
-  (nodes, subject, layoutVariable, sortOptions) => {
-    const type = subject && subject.type;
+  getAllVariableUUIDsByEntity,
+  (nodes, subject, layoutVariable, sortOptions, codebookVariables) => {
+    if (nodes && nodes.length === 0) { return undefined; }
+
+    // Stage subject is either a single object or a collection of objects
+    const types = isArray(subject) ? subject.map((s) => s.type) : [subject.type];
+
+    // Layout variable is either a string (single stage subject) or an object
+    // keyed by node type (two-mode stage subject)
+    const layoutVariableForType = (type) => {
+      if (typeof layoutVariable === 'string') { return layoutVariable; }
+      return layoutVariable[type];
+    };
+
     const unplacedNodes = nodes.filter((node) => {
       const attributes = getEntityAttributes(node);
       return (
-        node.type === type
-        && (has(attributes, layoutVariable) && isNil(attributes[layoutVariable]))
+        types.includes(node.type)
+        && (has(attributes, layoutVariableForType(node.type)))
+        && isNil(attributes[layoutVariableForType(node.type)])
       );
     });
-    const sorter = sortOrder(sortOptions);
+
+    if (unplacedNodes.length === 0) { return undefined; }
+    if (!sortOptions) { return first(unplacedNodes); }
+
+    // Protocol sort rules must be processed to be used by createSorter
+    const processedSortRules = sortOptions.map(processProtocolSortRule(codebookVariables));
+    const sorter = createSorter(processedSortRules);
     return first(sorter(unplacedNodes));
   },
 );
@@ -54,13 +72,23 @@ export const getPlacedNodes = createDeepEqualSelector(
   getStageSubject(),
   getLayout,
   (nodes, subject, layoutVariable) => {
-    const type = subject && subject.type;
+    if (nodes && nodes.length === 0) { return undefined; }
+
+    // Stage subject is either a single object or a collecton of objects
+    const types = isArray(subject) ? subject.map((s) => s.type) : [subject.type];
+
+    // Layout variable is either a string or an object keyed by node type
+    const layoutVariableForType = (type) => {
+      if (typeof layoutVariable === 'string') { return layoutVariable; }
+      return layoutVariable[type];
+    };
 
     return nodes.filter((node) => {
       const attributes = getEntityAttributes(node);
       return (
-        node.type === type
-        && (has(attributes, layoutVariable) && !isNil(attributes[layoutVariable]))
+        types.includes(node.type)
+        && has(attributes, layoutVariableForType(node.type))
+        && !isNil(attributes[layoutVariableForType(node.type)])
       );
     });
   },
@@ -104,9 +132,15 @@ export const getEdges = createDeepEqualSelector(
 // Selector for stage nodes
 export const getNodes = createDeepEqualSelector(
   getNetworkNodes,
-  getStageSubject(),
+  getStageSubject(), // This is either a subject object or a collection of subject objects
   (nodes, subject) => {
     if (!subject) { return nodes; }
+
+    if (isArray(subject)) {
+      const subjects = subject.map((s) => s.type);
+      return nodes.filter((node) => subjects.includes(node.type));
+    }
+
     return nodes.filter((node) => node.type === subject.type);
   },
 );

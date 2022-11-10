@@ -1,7 +1,7 @@
 import { throttle, clamp } from 'lodash';
 import getAbsoluteBoundingRect from '../../utils/getAbsoluteBoundingRect';
 
-const screen = () => {
+const screenManager = () => {
   const el = {
     current: null,
   };
@@ -29,7 +29,7 @@ const screen = () => {
 
   const watchScreen = throttle(() => {
     measureScreen();
-  }, 1000 / 60);
+  }, 1000, { leading: true });
 
   const initialize = (_el) => {
     el.current = _el;
@@ -83,4 +83,4 @@ const screen = () => {
   };
 };
 
-export default screen;
+export default screenManager;

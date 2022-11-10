@@ -52,8 +52,8 @@ export const makeGetNodeTypeDefinition = () => createDeepEqualSelector(
     || get(props, 'stage.subject.type') // Standard location
     || get(state, 'type'), // Unknown - perhaps worker?
   (codebook, nodeType) => {
-    const nodeInfo = codebook && codebook.node;
-    return nodeInfo && nodeInfo[nodeType];
+    const nodeDefinitions = codebook && codebook.node;
+    return nodeDefinitions && nodeDefinitions[nodeType];
   },
 );
 
@@ -109,16 +109,18 @@ export const makeGetNodeColor = () => createDeepEqualSelector(
   getProtocolCodebook,
   (_, props) => props.type,
   (codebook, nodeType) => {
-    const nodeInfo = codebook.node;
-    return (nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].color) || 'node-color-seq-1';
+    const nodeDefinitions = codebook.node;
+    const nodeColor = get(nodeDefinitions, [nodeType, 'color'], 'node-color-seq-1');
+    return nodeColor;
   },
 );
 
 // Pure state selector variant of makeGetNodeColor
 export const getNodeColor = (nodeType) => (state) => {
   const codebook = getProtocolCodebook(state);
-  const nodeInfo = codebook.node;
-  return (nodeInfo && nodeInfo[nodeType] && nodeInfo[nodeType].color) || 'node-color-seq-1';
+  const nodeDefinitions = codebook.node;
+  const nodeColor = get(nodeDefinitions, [nodeType, 'color'], 'node-color-seq-1');
+  return nodeColor;
 };
 
 export const makeGetEdgeLabel = () => createDeepEqualSelector(
@@ -126,7 +128,8 @@ export const makeGetEdgeLabel = () => createDeepEqualSelector(
   (_, props) => props.type,
   (codebook, edgeType) => {
     const edgeInfo = codebook.edge;
-    return (edgeInfo && edgeInfo[edgeType] && edgeInfo[edgeType].name) || '';
+    const edgeLabel = get(edgeInfo, [edgeType, 'name'], '');
+    return edgeLabel;
   },
 );
 
@@ -135,7 +138,8 @@ export const makeGetEdgeColor = () => createDeepEqualSelector(
   (_, props) => props.type,
   (codebook, edgeType) => {
     const edgeInfo = codebook.edge;
-    return (edgeInfo && edgeInfo[edgeType] && edgeInfo[edgeType].color) || 'edge-color-seq-1';
+    const edgeColor = get(edgeInfo, [edgeType, 'color'], 'edge-color-seq-1');
+    return edgeColor;
   },
 );
 
@@ -144,9 +148,10 @@ export const makeGetNodeAttributeLabel = () => createDeepEqualSelector(
   getStageSubjectType(),
   (_, props) => props.variableId,
   (codebook, subjectType, variableId) => {
-    const nodeInfo = codebook.node;
-    const variables = (nodeInfo && nodeInfo[subjectType] && nodeInfo[subjectType].variables) || {};
-    return (variables && variables[variableId] && variables[variableId].name) || variableId;
+    const nodeDefinitions = codebook.node;
+    const variables = get(nodeDefinitions, [subjectType, 'variables'], {});
+    const attributeLabel = get(variables, [variableId, 'name'], variableId);
+    return attributeLabel;
   },
 );
 
@@ -155,8 +160,9 @@ export const makeGetCategoricalOptions = () => createDeepEqualSelector(
   getStageSubjectType(),
   (_, props) => props.variableId,
   (codebook, subjectType, variableId) => {
-    const nodeInfo = codebook.node;
-    const variables = (nodeInfo && nodeInfo[subjectType] && nodeInfo[subjectType].variables) || {};
-    return (variables && variables[variableId] && variables[variableId].options) || [];
+    const nodeDefinitions = codebook.node;
+    const variables = get(nodeDefinitions, [subjectType, 'variables'], {});
+    const options = get(variables, [variableId, 'options'], []);
+    return options;
   },
 );

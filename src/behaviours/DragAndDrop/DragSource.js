@@ -116,7 +116,7 @@ const dragSource = (WrappedComponent) => ({
         allowDrag={allowDrag}
         scrollDirection={scrollDirection}
       />
-      { preview && (
+      {preview && (
         <div
           ref={previewRef}
           style={{

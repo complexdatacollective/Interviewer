@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { isEmpty, get } from 'lodash';
+import { entityAttributesProperty, entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import LayoutNode from '../../containers/Canvas/LayoutNode';
-import { entityPrimaryKeyProperty, entityAttributesProperty } from '../../ducks/modules/network';
 
 const NodeLayout = React.forwardRef(({
   nodes,
@@ -10,14 +10,27 @@ const NodeLayout = React.forwardRef(({
   highlightAttribute,
   connectFrom,
   allowSelect,
+  destinationRestriction,
   onSelected,
-  layoutVariable,
+  layout,
+  twoMode,
   width,
   height,
 }, ref) => {
+  const layoutVariable = useCallback(
+    (nodeType) => {
+      if (twoMode) {
+        return layout[nodeType];
+      }
+
+      return layout;
+    },
+    [layout, twoMode],
+  );
+
   const isHighlighted = useCallback(
     (node) => !isEmpty(highlightAttribute)
-        && get(node, [entityAttributesProperty, highlightAttribute]) === true,
+      && get(node, [entityAttributesProperty, highlightAttribute]) === true,
     [highlightAttribute],
   );
 
@@ -26,16 +39,36 @@ const NodeLayout = React.forwardRef(({
     [connectFrom],
   );
 
+  const isDisabled = useCallback(
+    (node) => {
+      const originType = get(nodes, [connectFrom, 'type']);
+      if (!originType) { return false; }
+      const thisType = get(node, 'type');
+
+      if (destinationRestriction === 'same') {
+        return thisType !== originType;
+      }
+
+      if (destinationRestriction === 'different') {
+        return thisType === originType;
+      }
+
+      return false;
+    },
+    [connectFrom, destinationRestriction, nodes],
+  );
+
   return (
     <div className="node-layout" ref={ref}>
-      { nodes.map((node) => (
+      {nodes.map((node) => (
         <LayoutNode
           key={node[entityPrimaryKeyProperty]}
           node={node}
-          layoutVariable={layoutVariable}
+          layoutVariable={layoutVariable(node.type)}
           onSelected={() => onSelected(node)}
           selected={isHighlighted(node)}
           linking={isLinking(node)}
+          disabled={isDisabled(node)}
           allowPositioning={allowPositioning}
           allowSelect={allowSelect}
           areaWidth={width}
@@ -53,7 +86,9 @@ NodeLayout.propTypes = {
   highlightAttribute: PropTypes.string,
   allowPositioning: PropTypes.bool.isRequired,
   allowSelect: PropTypes.bool,
-  layoutVariable: PropTypes.string.isRequired,
+  layout: PropTypes.string.isRequired,
+  twoMode: PropTypes.bool.isRequired,
+  destinationRestriction: PropTypes.string,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
 };
@@ -62,6 +97,7 @@ NodeLayout.defaultProps = {
   connectFrom: null,
   highlightAttribute: null,
   allowSelect: true,
+  destinationRestriction: null,
 };
 
 export { NodeLayout };

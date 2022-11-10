@@ -75,10 +75,12 @@ const SearchableList = (props) => {
     itemType,
     onDrop,
     searchOptions,
-    sortOptions,
+    sortOptions = {},
     dropNodeColor,
     disabled,
   } = props;
+
+  const { initialSortOrder = {} } = sortOptions;
 
   const id = useRef(uuid());
   const [results, query, setQuery, isWaiting, hasQuery] = useSearch(items, searchOptions);
@@ -89,7 +91,7 @@ const SearchableList = (props) => {
     sortDirection,
     setSortByProperty,
     setSortDirection,
-  ] = useSort(results, sortOptions.initialSortOrder);
+  ] = useSort(results, initialSortOrder);
 
   useEffect(() => {
     if (hasQuery) {
@@ -132,7 +134,8 @@ const SearchableList = (props) => {
   );
 
   const showTooMany = mode === modes.LARGE && !hasQuery;
-  const canSort = sortOptions.sortableProperties.length > 0;
+  const numberOfSortOptions = get(sortOptions, 'sortableProperties', []).length;
+  const canSort = numberOfSortOptions > 0;
 
   const animationDuration = getCSSVariableAsNumber('--animation-duration-standard-ms') / 1000;
 
@@ -161,7 +164,7 @@ const SearchableList = (props) => {
         noHighlight
         noCollapse
       >
-        { canSort && (
+        {canSort && (
           <div className="searchable-list__sort">
             {
               hasQuery && (
@@ -213,12 +216,12 @@ const SearchableList = (props) => {
             showTooMany={showTooMany}
             allowDragging={!disabled}
           />
-          { willAccept && (
-          <DropOverlay
-            isOver={isOver}
-            nodeColor={dropNodeColor}
-            message="Drop here to remove"
-          />
+          {willAccept && (
+            <DropOverlay
+              isOver={isOver}
+              nodeColor={dropNodeColor}
+              message="Drop here to remove"
+            />
           )}
         </div>
         <div className="searchable-list__search">
@@ -245,7 +248,6 @@ SearchableList.propTypes = {
   items: PropTypes.array,
   placeholder: PropTypes.node,
   searchOptions: PropTypes.object,
-  sortableProperties: PropTypes.array,
   dynamicProperties: PropTypes.object,
   excludeItems: PropTypes.array,
   dropNodeColor: PropTypes.string,
@@ -259,7 +261,6 @@ SearchableList.defaultProps = {
   items: [],
   placeholder: null,
   searchOptions: {},
-  sortableProperties: [],
   dynamicProperties: {},
   excludeItems: [],
   dragComponent: null,

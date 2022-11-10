@@ -2,6 +2,8 @@ import environments from './environments';
 
 export const isElectron = () => !!window.require;
 
+export const isDevMode = () => isElectron() && process.env.NODE_ENV === 'development';
+
 export const isPreview = () => isElectron() && window.require('electron').remote.getGlobal('NETWORK_CANVAS_PREVIEW');
 
 // Not supported on Cordova

@@ -1,10 +1,10 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { get } from 'lodash';
 import { SessionCard } from '@codaco/ui/lib/components/Cards';
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
 import formatDatestamp from '../../utils/formatDatestamp';
 import Picker from '../../components/Picker';
+import { get } from '../../utils/lodash-replacements';
 
 const oneBasedIndex = (i) => parseInt(i || 0, 10) + 1;
 

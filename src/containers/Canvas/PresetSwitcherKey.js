@@ -3,14 +3,14 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { get, isEmpty } from 'lodash';
+import { isEmpty } from 'lodash';
 import { Icon, window } from '@codaco/ui';
 import { Radio, MarkdownLabel } from '@codaco/ui/lib/components/Fields';
 import Accordion from './Accordion';
-
 import {
   makeGetEdgeColor, makeGetEdgeLabel, makeGetNodeAttributeLabel, makeGetCategoricalOptions,
 } from '../../selectors/network';
+import { get } from '../../utils/lodash-replacements';
 
 class PresetSwitcherKey extends Component {
   constructor() {
@@ -73,12 +73,12 @@ class PresetSwitcherKey extends Component {
     return (
       <div className={classNames} ref={this.panel}>
         <div className="preset-switcher-key__content">
-          { !isEmpty(highlightLabels) && (
+          {!isEmpty(highlightLabels) && (
             <Accordion label="Attributes" onAccordionToggle={toggleHighlighting}>
               {highlightLabels.map(this.renderHighlightLabel)}
             </Accordion>
           )}
-          { !isEmpty(edges) && (
+          {!isEmpty(edges) && (
             <Accordion label="Links" onAccordionToggle={toggleEdges}>
               {edges.map((edge, index) => (
                 <div className="accordion-item" key={index}>
@@ -91,7 +91,7 @@ class PresetSwitcherKey extends Component {
               ))}
             </Accordion>
           )}
-          { !isEmpty(convexOptions) && (
+          {!isEmpty(convexOptions) && (
             <Accordion label="Groups" onAccordionToggle={toggleHulls}>
               {convexOptions.map((option, index) => (
                 <div className="accordion-item" key={index}>

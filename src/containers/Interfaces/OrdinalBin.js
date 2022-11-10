@@ -3,12 +3,12 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { isNil } from 'lodash';
+import { entityAttributesProperty } from '@codaco/shared-consts';
 import Prompts from '../../components/Prompts';
 import withPrompt from '../../behaviours/withPrompt';
 import OrdinalBins from '../OrdinalBins';
 import { makeGetPromptVariable, makeNetworkNodesForType } from '../../selectors/interface';
 import { MultiNodeBucket } from '../../components';
-import { entityAttributesProperty } from '../../ducks/modules/network';
 
 /**
   * OrdinalBin Interface

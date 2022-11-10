@@ -1,10 +1,12 @@
 /* eslint-disable no-param-reassign */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { isEmpty, get } from 'lodash';
+import { entityPrimaryKeyProperty, entityAttributesProperty } from '@codaco/shared-consts';
+import { isEmpty, find } from 'lodash';
 import LayoutContext from '../../contexts/LayoutContext';
-import { entityPrimaryKeyProperty, entityAttributesProperty } from '../../ducks/modules/network';
 import LayoutNode from './LayoutNode';
+import { get } from '../../utils/lodash-replacements';
+import { getTwoModeLayoutVariable } from './utils';
 
 class NodeLayout extends React.Component {
   constructor(props) {
@@ -78,8 +80,38 @@ class NodeLayout extends React.Component {
     const { highlightAttribute } = this.props;
     return (
       !isEmpty(highlightAttribute)
-      && get(node, [entityAttributesProperty, highlightAttribute]) === true
+      && get(node, [entityAttributesProperty, highlightAttribute], false) === true
     );
+  };
+
+  isDisabled = (node) => {
+    const {
+      connectFrom,
+      originRestriction,
+      destinationRestriction,
+    } = this.props;
+
+    const { network: { nodes } } = this.context;
+
+    // Node is disabled if type is same as originRestriction, unless there is a connectFrom
+    // If there is a connectFrom, we need to check other things.
+    if (!connectFrom && originRestriction && node.type === originRestriction) { return true; }
+
+    // Not disabled if we aren't linking, or if the node is the origin
+    if (!connectFrom || connectFrom === node[entityPrimaryKeyProperty]) { return false; }
+
+    const originType = find(nodes, [entityPrimaryKeyProperty, connectFrom]).type;
+    const thisType = get(node, 'type');
+
+    if (destinationRestriction === 'same') {
+      return thisType !== originType;
+    }
+
+    if (destinationRestriction === 'different') {
+      return thisType === originType;
+    }
+
+    return false;
   };
 
   initializeLayout = (el) => {
@@ -93,7 +125,8 @@ class NodeLayout extends React.Component {
     this.isDragging = true;
 
     const {
-      network: { layout },
+      network: { layout, nodes },
+      twoMode,
       allowAutomaticLayout,
       simulation,
       screen,
@@ -116,16 +149,20 @@ class NodeLayout extends React.Component {
       }
     }
 
+    const nodeType = get(nodes, [index, 'type']);
+    const layoutVariable = getTwoModeLayoutVariable(twoMode, nodeType, layout);
+
     updateNode(
       uuid,
       undefined,
-      { [layout]: screen.current.calculateRelativeCoords({ x, y }) },
+      { [layoutVariable]: screen.current.calculateRelativeCoords({ x, y }) },
     );
   };
 
   handleDragMove = (uuid, index, delta) => {
     const {
-      network: { layout },
+      network: { layout, nodes },
+      twoMode,
       allowAutomaticLayout,
       simulation,
       screen,
@@ -148,16 +185,20 @@ class NodeLayout extends React.Component {
       }
     }
 
+    const nodeType = get(nodes, [index, 'type']);
+    const layoutVariable = getTwoModeLayoutVariable(twoMode, nodeType, layout);
+
     updateNode(
       uuid,
       undefined,
-      { [layout]: screen.current.calculateRelativeCoords({ x, y }) },
+      { [layoutVariable]: screen.current.calculateRelativeCoords({ x, y }) },
     );
   };
 
   handleDragEnd = (uuid, index, { x, y }) => {
     const {
-      network: { layout },
+      network: { layout, nodes },
+      twoMode,
       allowAutomaticLayout,
       simulation,
       screen,
@@ -176,17 +217,22 @@ class NodeLayout extends React.Component {
       }
     }
 
+    const nodeType = get(nodes, [index, 'type']);
+    const layoutVariable = getTwoModeLayoutVariable(twoMode, nodeType, layout);
+
     updateNode(
       uuid,
       undefined,
-      { [layout]: screen.current.calculateRelativeCoords({ x, y }) },
+      { [layoutVariable]: screen.current.calculateRelativeCoords({ x, y }) },
     );
   };
 
   // When node is dragged this is called last,
   // we can use that to reset isDragging state
   handleSelected = (...args) => {
+    if (this.isDisabled(...args)) { return; }
     const { onSelected } = this.props;
+
     if (this.isDragging) {
       this.isDragging = false;
       return;
@@ -207,7 +253,6 @@ class NodeLayout extends React.Component {
     return (
       <>
         <div className="node-layout" ref={this.initializeLayout} />
-
         {nodes.map((node, index) => {
           const el = this.layoutEls[index];
           if (!el) { return null; }
@@ -225,6 +270,7 @@ class NodeLayout extends React.Component {
               onSelected={this.handleSelected}
               selected={this.isHighlighted(node)}
               linking={this.isLinking(node)}
+              inactive={this.isDisabled(node)}
             />
           );
         })}

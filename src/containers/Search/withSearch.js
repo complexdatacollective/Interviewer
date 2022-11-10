@@ -5,7 +5,7 @@ import {
 } from 'recompose';
 import { connect } from 'react-redux';
 import { debounce } from 'lodash';
-import { entityPrimaryKeyProperty } from '../../ducks/modules/network';
+import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import { LEGACY_makeGetFuse as makeGetFuse } from '../../selectors/search';
 
 /**

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Button from '@codaco/ui/lib/components/Button';
+import { entityAttributesProperty } from '@codaco/shared-consts';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { actionCreators as installedProtocolActions } from '../../ducks/modules/installedProtocols';
 import { ProtocolCard } from '../../components/Cards';
-import { entityAttributesProperty } from '../../ducks/modules/network';
 import Picker from '../../components/Picker';
 
 const ManageProtocolsOverlay = ({

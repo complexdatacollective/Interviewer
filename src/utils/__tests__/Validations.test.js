@@ -1,5 +1,7 @@
 /* eslint-env jest */
-
+import {
+  entityAttributesProperty,
+} from '@codaco/shared-consts';
 import {
   required,
   minLength,
@@ -14,9 +16,6 @@ import {
   greaterThanVariable,
   lessThanVariable,
 } from '../Validations';
-import {
-  entityAttributesProperty,
-} from '../../ducks/modules/network';
 import { getCodebookVariablesForType } from '../../selectors/session';
 import { makeNetworkEntitiesForType } from '../../selectors/interface';
 

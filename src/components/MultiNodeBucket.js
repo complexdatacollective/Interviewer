@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { isEqual } from 'lodash';
 import { TransitionGroup } from 'react-transition-group';
 import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
+import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import Node from '../containers/Node';
 import { Node as NodeTransition } from './Transition';
 import { NO_SCROLL } from '../behaviours/DragAndDrop/DragManager';
 import { DragSource } from '../behaviours/DragAndDrop';
-import sortOrder from '../utils/sortOrder';
-import { entityPrimaryKeyProperty } from '../ducks/modules/network';
+import createSorter from '../utils/createSorter';
 
 const EnhancedNode = DragSource(Node);
 
@@ -19,7 +19,7 @@ class MultiNodeBucket extends Component {
   constructor(props) {
     super(props);
 
-    const sorter = sortOrder(props.sortOrder);
+    const sorter = createSorter(props.sortOrder);
     const sortedNodes = sorter(props.nodes);
 
     this.state = {
@@ -42,7 +42,7 @@ class MultiNodeBucket extends Component {
       return;
     }
 
-    const sorter = sortOrder(newProps.sortOrder);
+    const sorter = createSorter(newProps.sortOrder);
     const sortedNodes = sorter(newProps.nodes);
 
     // if we provided the same id, then just update normally

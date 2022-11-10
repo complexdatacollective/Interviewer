@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
-import { get } from 'lodash';
 import { getAssetManifest } from '../selectors/protocol';
+import { get } from '../utils/lodash-replacements';
 
 const mapStateToProps = (state, { asset }) => {
   const assetManifest = getAssetManifest(state);

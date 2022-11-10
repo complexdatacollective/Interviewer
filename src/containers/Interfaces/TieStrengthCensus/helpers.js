@@ -1,6 +1,4 @@
-/* eslint-disable import/prefer-default-export */
-
-import { entityPrimaryKeyProperty } from '../../../ducks/modules/network';
+import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
 
 /**
  * Given a list of nodes calculate all unique possible pairs,

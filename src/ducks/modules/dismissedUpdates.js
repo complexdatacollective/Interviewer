@@ -1,4 +1,4 @@
-import { get } from 'lodash';
+import { get } from '../../utils/lodash-replacements';
 
 const DISMISS_UPDATE = 'DISMISSED_UPDATES/DISMISS_UPDATE';
 const RESET = 'DISMISSED_UPDATES/RESET';

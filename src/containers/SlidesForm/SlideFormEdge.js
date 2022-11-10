@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withProps, compose } from 'recompose';
 import { Scroller } from '@codaco/ui';
+import { entityAttributesProperty, entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import { makeGetEdgeColor, getNetworkNodes } from '../../selectors/network';
-import { entityAttributesProperty, entityPrimaryKeyProperty } from '../../ducks/modules/network';
 import Node from '../Node';
 import Form from '../Form';
 
@@ -66,7 +66,7 @@ SlideFormEdge.propTypes = {
 };
 
 SlideFormEdge.defaultProps = {
-  onScroll: () => {},
+  onScroll: () => { },
   submitButton: <button type="submit" key="submit" aria-label="Submit" hidden />,
 };
 

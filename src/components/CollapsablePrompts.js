@@ -1,13 +1,16 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import MinimizeIcon from '@material-ui/icons/Minimize';
+import { Button } from '@codaco/ui';
 import Prompts from './Prompts';
+import { isDevMode } from '../utils/Environment';
 
-const CollapsablePrompts = (props) => {
+const CollapsablePrompts = React.memo((props) => {
   const {
     prompts,
     currentPromptIndex,
     interfaceRef,
+    handleResetInterface,
   } = props;
   const ref = useRef(null);
   const [minimized, setMinimized] = useState(false);
@@ -29,10 +32,7 @@ const CollapsablePrompts = (props) => {
   // Reset the minimization when the prompt changes
   useEffect(() => {
     if (minimized) {
-      // There was an animation 'jank' without this additional
-      // timeout. I don't like it, but 'delay' in the variants
-      // didn't work :/
-      setTimeout(() => setMinimized(false), 250);
+      setMinimized(false);
     }
   }, [currentPromptIndex]);
 
@@ -47,7 +47,7 @@ const CollapsablePrompts = (props) => {
         className="sociogram-interface__prompts__header"
         onTap={() => setMinimized(!minimized)}
       >
-        { minimized ? (
+        {minimized ? (
           <motion.div
             role="button"
             aria-label="Tap to show the prompt"
@@ -68,7 +68,7 @@ const CollapsablePrompts = (props) => {
         variants={variants}
       >
         <AnimatePresence initial={false}>
-          { !minimized && (
+          {!minimized && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -79,8 +79,17 @@ const CollapsablePrompts = (props) => {
           )}
         </AnimatePresence>
       </motion.div>
+      {isDevMode() && (
+        <div
+          style={{
+            display: 'flex', justifyContent: 'center', padding: '1.2rem',
+          }}
+        >
+          <Button size="small" onClick={handleResetInterface}>Dev: Reset Interface</Button>
+        </div>
+      )}
     </motion.div>
   );
-};
+});
 
 export default CollapsablePrompts;

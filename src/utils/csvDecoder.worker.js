@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-globals */
-import { entityAttributesProperty } from '../ducks/modules/network';
+import { entityAttributesProperty } from '@codaco/shared-consts';
 /**
  * Converts a CSV file into a Network Canvas node list JSON
  *

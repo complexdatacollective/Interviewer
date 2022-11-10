@@ -1,7 +1,7 @@
 /* eslint-disable @codaco/spellcheck/spell-checker */
 /* eslint-env jest */
 
-import { entityPrimaryKeyProperty } from '../../ducks/modules/network';
+import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import { getLinks } from '../LayoutContext';
 
 jest.mock('../../hooks/forceSimulation.worker');

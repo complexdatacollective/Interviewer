@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import { get } from 'lodash';
+import React, { useMemo, useRef } from 'react';
+import { isArray } from 'lodash';
 import { bindActionCreators } from 'redux';
 import { connect, useSelector } from 'react-redux';
 import { withHandlers, compose } from 'recompose';
@@ -17,6 +17,7 @@ import {
   getEdges, getNextUnplacedNode, getNodes, getPlacedNodes,
 } from '../../selectors/canvas';
 import CollapsablePrompts from '../../components/CollapsablePrompts';
+import { get } from '../../utils/lodash-replacements';
 
 const withResetInterfaceHandler = withHandlers({
   handleResetInterface: ({
@@ -25,9 +26,19 @@ const withResetInterfaceHandler = withHandlers({
     stage,
   }) => () => {
     stage.prompts.forEach((prompt) => {
-      resetPropertyForAllNodes(prompt.layout.layoutVariable);
       if (prompt.edges) {
         resetEdgesOfType(prompt.edges.creates);
+      }
+
+      const layoutVariable = get(prompt, 'layout.layoutVariable', null);
+      if (!layoutVariable) { return; }
+
+      if (typeof layoutVariable === 'string') {
+        resetPropertyForAllNodes(layoutVariable);
+      } else {
+        Object.keys(layoutVariable).forEach((type) => {
+          resetPropertyForAllNodes(layoutVariable[type]);
+        });
       }
     });
   },
@@ -37,7 +48,7 @@ const withResetInterfaceHandler = withHandlers({
   * Sociogram Interface
   * @extends Component
   */
-const Sociogram = (props) => {
+const Sociogram = React.memo((props) => {
   const {
     prompt,
     promptId,
@@ -47,6 +58,7 @@ const Sociogram = (props) => {
 
   const interfaceRef = useRef(null);
   const dragSafeRef = useRef(null);
+  const twoMode = useMemo(() => isArray(stage.subject), [stage.subject]);
 
   // Behaviour Configuration
   const allowHighlighting = get(prompt, 'highlight.allowHighlighting', false);
@@ -54,6 +66,8 @@ const Sociogram = (props) => {
   const allowPositioning = get(prompt, 'prompt.layout.allowPositioning', true);
   // eslint-disable-next-line @codaco/spellcheck/spell-checker
   const allowAutomaticLayout = get(stage, 'behaviours.automaticLayout.enabled', false);
+  const destinationRestriction = get(prompt, 'edges.restrict.destination', null);
+  const originRestriction = get(prompt, 'edges.restrict.origin', null);
 
   // Display Properties
   const layoutVariable = get(prompt, 'layout.layoutVariable');
@@ -83,6 +97,7 @@ const Sociogram = (props) => {
       <div className="sociogram-interface__concentric-circles">
         <LayoutProvider
           layout={layoutVariable}
+          twoMode={twoMode}
           nodes={nodes}
           edges={edges}
           allowAutomaticLayout={allowAutomaticLayout}
@@ -97,11 +112,14 @@ const Sociogram = (props) => {
             <NodeLayout
               id="NODE_LAYOUT"
               highlightAttribute={highlightAttribute}
-              layoutVariable={layoutVariable}
+              layout={layoutVariable}
+              twoMode={twoMode}
+              destinationRestriction={destinationRestriction}
+              originRestriction={originRestriction}
               allowHighlighting={allowHighlighting && !createEdge}
               allowPositioning={allowPositioning}
               createEdge={createEdge}
-              key={promptId} // allows linking to reset without re-rendering the whole interface
+              key={promptId}
             />
             <NodeBucket
               id="NODE_BUCKET"
@@ -116,7 +134,7 @@ const Sociogram = (props) => {
       </div>
     </div>
   );
-};
+});
 
 Sociogram.propTypes = {
   stage: PropTypes.object.isRequired,

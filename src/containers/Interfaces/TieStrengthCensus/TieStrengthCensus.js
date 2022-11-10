@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import PropTypes from 'prop-types';
-import { get } from 'lodash';
 import cx from 'classnames';
 import BooleanOption from '@codaco/ui/lib/components/Boolean/BooleanOption';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -14,12 +13,12 @@ import { getNetworkEdges as getEdges } from '../../../selectors/network';
 import { getStageState } from '../../../selectors/session';
 import { getProtocolCodebook } from '../../../selectors/protocol';
 import { actionCreators as navigateActions } from '../../../ducks/modules/navigate';
-
 import { getPairs, getNodePair } from './helpers';
 import useSteps from './useSteps';
 import useNetworkEdgeState from './useEdgeState';
 import useAutoAdvance from './useAutoAdvance';
 import Pair from './Pair';
+import { get } from '../../../utils/lodash-replacements';
 
 const fadeVariants = {
   show: { opacity: 1, transition: { duration: 0.5 } },
@@ -180,117 +179,117 @@ const TieStrengthCensus = (props) => {
         initial={false}
         exitBeforeEnter
       >
-        { isIntroduction
-        && (
-        <motion.div
-          className="tie-strength-census__introduction"
-          variants={introVariants}
-          initial="hide"
-          exit="hide"
-          animate="show"
-          key="intro"
-        >
-          <h1>{stage.introductionPanel.title}</h1>
-          <Markdown
-            label={stage.introductionPanel.text}
-          />
-        </motion.div>
-        )}
-        { !isIntroduction
+        {isIntroduction
           && (
-          <motion.div
-            key="content"
-            variants={fadeVariants}
-            initial="hide"
-            exit="hide"
-            animate="show"
-            className="tie-strength-census__wrapper"
-          >
-            <div className="tie-strength-census__prompt">
-              <Prompts
-                currentPrompt={stage.prompts[promptIndex].id}
-                prompts={stage.prompts}
+            <motion.div
+              className="tie-strength-census__introduction"
+              variants={introVariants}
+              initial="hide"
+              exit="hide"
+              animate="show"
+              key="intro"
+            >
+              <h1>{stage.introductionPanel.title}</h1>
+              <Markdown
+                label={stage.introductionPanel.text}
               />
-            </div>
-            <AnimatePresence exitBeforeEnter>
-              <motion.div
-                className="tie-strength-census__main"
-                key={promptIndex}
-                variants={fadeVariants}
-                initial="hide"
-                exit="hide"
-                animate="show"
-              >
-                <div className="tie-strength-census__layout">
-                  <div className="tie-strength-census__pairs">
-                    <AnimatePresence
-                      custom={[isForwards]}
-                      initial={false}
+            </motion.div>
+          )}
+        {!isIntroduction
+          && (
+            <motion.div
+              key="content"
+              variants={fadeVariants}
+              initial="hide"
+              exit="hide"
+              animate="show"
+              className="tie-strength-census__wrapper"
+            >
+              <div className="tie-strength-census__prompt">
+                <Prompts
+                  currentPrompt={stage.prompts[promptIndex].id}
+                  prompts={stage.prompts}
+                />
+              </div>
+              <AnimatePresence exitBeforeEnter>
+                <motion.div
+                  className="tie-strength-census__main"
+                  key={promptIndex}
+                  variants={fadeVariants}
+                  initial="hide"
+                  exit="hide"
+                  animate="show"
+                >
+                  <div className="tie-strength-census__layout">
+                    <div className="tie-strength-census__pairs">
+                      <AnimatePresence
+                        custom={[isForwards]}
+                        initial={false}
+                      >
+                        <Pair
+                          key={`${promptIndex}_${stepsState.step}`}
+                          edgeColor={edgeColor}
+                          hasEdge={hasEdge}
+                          animateForwards={isForwards}
+                          fromNode={fromNode}
+                          toNode={toNode}
+                        />
+                      </AnimatePresence>
+                    </div>
+                    <motion.div
+                      className={choiceClasses}
+                      variants={choiceVariants}
+                      initial="hide"
+                      animate="show"
+                      style={{
+                        // Set the max width of the container based on the number of options
+                        // This prevents them getting too wide, but also ensures that they
+                        // expand to take up all available space.
+                        maxWidth: `${((edgeVariableOptions.length + 1) * 20) + 3.6}rem`,
+                      }}
                     >
-                      <Pair
-                        key={`${promptIndex}_${stepsState.step}`}
-                        edgeColor={edgeColor}
-                        hasEdge={hasEdge}
-                        animateForwards={isForwards}
-                        fromNode={fromNode}
-                        toNode={toNode}
-                      />
-                    </AnimatePresence>
-                  </div>
-                  <motion.div
-                    className={choiceClasses}
-                    variants={choiceVariants}
-                    initial="hide"
-                    animate="show"
-                    style={{
-                      // Set the max width of the container based on the number of options
-                      // This prevents them getting too wide, but also ensures that they
-                      // expand to take up all available space.
-                      maxWidth: `${((edgeVariableOptions.length + 1) * 20) + 3.6}rem`,
-                    }}
-                  >
-                    <div className="tie-strength-census__options">
-                      <AnimatePresence exitBeforeEnter>
-                        <motion.div
-                          key={stepsState.step}
-                          className="tie-strength-census__options-step"
-                          variants={optionsVariants}
-                          initial="hide"
-                          animate="show"
-                          exit="hide"
-                        >
-                          <div className="form-field-container form-field-boolean">
-                            <div className="form-field-boolean__control">
-                              <div>
-                                <div className="boolean__options">
-                                  { edgeVariableOptions.map((option) => (
+                      <div className="tie-strength-census__options">
+                        <AnimatePresence exitBeforeEnter>
+                          <motion.div
+                            key={stepsState.step}
+                            className="tie-strength-census__options-step"
+                            variants={optionsVariants}
+                            initial="hide"
+                            animate="show"
+                            exit="hide"
+                          >
+                            <div className="form-field-container form-field-boolean">
+                              <div className="form-field-boolean__control">
+                                <div>
+                                  <div className="boolean__options">
+                                    {edgeVariableOptions.map((option) => (
+                                      <BooleanOption
+                                        key={option.value}
+                                        selected={!!hasEdge && edgeVariableValue === option.value}
+                                        onClick={handleChange(option.value)}
+                                        label={option.label}
+                                      />
+                                    ))}
                                     <BooleanOption
-                                      key={option.value}
-                                      selected={!!hasEdge && edgeVariableValue === option.value}
-                                      onClick={handleChange(option.value)}
-                                      label={option.label}
+                                      classes="boolean-option--no"
+                                      // Has edge is null if not set and false if user rejected
+                                      selected={!hasEdge && hasEdge === false}
+                                      onClick={handleChange(false)}
+                                      label={negativeLabel}
+                                      negative
                                     />
-                                  ))}
-                                  <BooleanOption
-                                    classes="boolean-option--no"
-                                    // Has edge is null if not set and false if user rejected
-                                    selected={!hasEdge && hasEdge === false}
-                                    onClick={handleChange(false)}
-                                    label={negativeLabel}
-                                    negative
-                                  />
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        </motion.div>
-                      </AnimatePresence>
-                    </div>
-                  </motion.div>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </motion.div>
+                          </motion.div>
+                        </AnimatePresence>
+                      </div>
+                    </motion.div>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </motion.div>
           )}
       </AnimatePresence>
     </div>
