@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-import { get as lodashGet } from 'lodash';
+// import { get as lodashGet } from 'lodash';
 
 /**
  * Helper function for verifying that a replacement is functioning the same as the original
