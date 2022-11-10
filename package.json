@@ -132,7 +132,7 @@
     "promise": "7.1.1",
     "prop-types": "^15.6.2",
     "react": "^16.13.1",
-    "react-dev-utils": "^6.1.1",
+    "react-dev-utils": "^12.0.1",
     "react-dom": "^16.13.1",
     "react-flip-toolkit": "^5.0.5",
     "react-redux": "^7.2.1",
