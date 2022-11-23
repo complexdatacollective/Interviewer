@@ -77,11 +77,13 @@
     "connected-react-router": "^6.8.0",
     "cordova-android": "~8.1.0",
     "cordova-ios": "~5.1.1",
+    "cordova-plugin-androidx-adapter": "~1.1.3",
     "cordova-plugin-app-version": "~0.1.14",
     "cordova-plugin-file": "~5.0.0",
     "cordova-plugin-ionic-keyboard": "2.2.0",
     "cordova-plugin-keyboard": "~1.2.0",
     "cordova-plugin-network-canvas-client": "github:complexdatacollective/cordova-plugin-network-canvas-client",
+    "cordova-plugin-x-socialsharing-android12": "~6.0.5",
     "cross-env": "^5.2.0",
     "css-loader": "^3.4.2",
     "csvtojson": "^2.0.8",
@@ -96,7 +98,7 @@
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.6.0",
     "enzyme-to-json": "^3.4.3",
-    "es6-promise-plugin": "^4.2.2",
+    "es6-promise-plugin": "~4.2.2",
     "eslint": "^7.0.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-react-app": "^6.0.0",
@@ -307,11 +309,6 @@
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-fullscreen": {},
       "cordova-plugin-zeroconf": {},
-      "cordova-plugin-x-socialsharing": {
-        "ANDROID_SUPPORT_V4_VERSION": "24.1.1+",
-        "PHOTO_LIBRARY_ADD_USAGE_DESCRIPTION": "This app requires photo library access to function properly.",
-        "PHOTO_LIBRARY_USAGE_DESCRIPTION": "This app requires photo library access to function properly."
-      },
       "cordova-plugin-inappbrowser": {},
       "cordova-plugin-chooser": {},
       "cordova-plugin-network-information": {},
@@ -319,7 +316,12 @@
       "cordova-plugin-network-canvas-client": {},
       "cordova-sqlite-storage": {},
       "cordova-plugin-file": {},
-      "cordova-plugin-keyboard": {}
+      "cordova-plugin-keyboard": {},
+      "cordova-plugin-x-socialsharing-android12": {
+        "PHOTO_LIBRARY_ADD_USAGE_DESCRIPTION": "This app requires photo library access to function properly.",
+        "PHOTO_LIBRARY_USAGE_DESCRIPTION": "This app requires photo library access to function properly."
+      },
+      "cordova-plugin-androidx-adapter": {}
     }
   }
 }
