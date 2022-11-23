@@ -1,7 +1,7 @@
 const PROTOCOL_EXTENSION = '.netcanvas';
 
 // Target protocol schema version. Used to determine compatibility & migration
-const APP_SCHEMA_VERSION = 8;
+const APP_SCHEMA_VERSION = 7;
 
 const DEVICE_API_VERSION = '2'; // X-Device-API-Version
 

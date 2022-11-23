@@ -65,8 +65,11 @@
     background: var(--light-background);
     border-radius: var(--border-radius);
     padding: unit(2) unit(4);
-    min-width: 50vw;
-    text-align: center;
+    max-width: 55rem;
+
+    h1 {
+      text-align: center;
+    }
   }
 
   &__layout {

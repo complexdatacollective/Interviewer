@@ -13,6 +13,7 @@ import { getNetworkEdges, getNetworkNodes } from '../../selectors/network';
 import { edgesToCoords } from '../../selectors/canvas';
 import { entityAttributesProperty } from '../../utils/network-exporters/src/utils/reservedAttributes';
 import { get } from '../../utils/lodash-replacements';
+import { LayoutProvider } from '../../contexts/LayoutContext';
 
 /**
   * Narrative Interface
@@ -150,59 +151,65 @@ class Narrative extends Component {
     return (
       <div className="narrative-interface">
         <div className="narrative-interface__canvas" id="narrative-interface__canvas">
-          <Canvas
-            className="narrative-concentric-circles"
-            id="concentric-circles"
-            key={`circles-${currentPreset.id}`}
+          <LayoutProvider
+            layout={layoutVariable}
+            nodes={nodesWithLayout}
+            edges={edgesWithCoords}
           >
-            <Background
-              concentricCircles={concentricCircles}
-              skewedTowardCenter={skewedTowardCenter}
-              image={backgroundImage}
-            />
-            <ConvexHulls
-              nodes={nodesWithLayout}
-              groupVariable={convexHullVariable}
-              layoutVariable={layoutVariable}
-            />
-            <EdgeLayout
-              edges={edgesWithCoords}
-            />
-            {
-              freeDraw && (
-                <Annotations
-                  ref={this.annotationLayer}
-                  isFrozen={isFrozen}
-                  onChangeActiveAnnotations={this.handleChangeActiveAnnotations}
-                />
-              )
-            }
-            <NodeLayout
-              nodes={nodesWithLayout}
-              id="NODE_LAYOUT"
-              highlightAttribute={
-                (showHighlightedNodes ? highlight[highlightIndex] : null)
+            <Canvas
+              className="narrative-concentric-circles"
+              id="concentric-circles"
+              key={`circles-${currentPreset.id}`}
+            >
+              <Background
+                concentricCircles={concentricCircles}
+                skewedTowardCenter={skewedTowardCenter}
+                image={backgroundImage}
+              />
+              <ConvexHulls
+                nodes={nodesWithLayout}
+                groupVariable={convexHullVariable}
+                layoutVariable={layoutVariable}
+              />
+              <EdgeLayout
+                edges={edgesWithCoords}
+              />
+              {
+                freeDraw && (
+                  <Annotations
+                    ref={this.annotationLayer}
+                    isFrozen={isFrozen}
+                    onChangeActiveAnnotations={this.handleChangeActiveAnnotations}
+                  />
+                )
               }
-              layoutVariable={layoutVariable}
-              allowPositioning={allowRepositioning}
+              <NodeLayout
+                nodes={nodesWithLayout}
+                id="NODE_LAYOUT"
+                highlightAttribute={
+                  (showHighlightedNodes ? highlight[highlightIndex] : null)
+                }
+                layoutVariable={layoutVariable}
+                allowPositioning={allowRepositioning}
+              />
+            </Canvas>
+            <PresetSwitcher
+              id="drop-obstacle"
+              presets={presets}
+              activePreset={presetIndex}
+              highlightIndex={highlightIndex}
+              isFrozen={isFrozen}
+              shouldShowResetButton={shouldShowResetButton}
+              shouldShowFreezeButton={freeDraw}
+              onResetInteractions={this.handleResetInteractions}
+              onChangePreset={this.handleChangePreset}
+              onToggleFreeze={this.handleToggleFreeze}
+              onToggleHulls={this.handleToggleHulls}
+              onToggleEdges={this.handleToggleEdges}
+              onChangeHighlightIndex={this.handleChangeHighlightIndex}
+              onToggleHighlighting={this.handleToggleHighlighting}
             />
-          </Canvas>
-          <PresetSwitcher
-            id="drop-obstacle"
-            presets={presets}
-            activePreset={presetIndex}
-            highlightIndex={highlightIndex}
-            isFrozen={isFrozen}
-            shouldShowResetButton={shouldShowResetButton}
-            shouldShowFreezeButton={freeDraw}
-            onResetInteractions={this.handleResetInteractions}
-            onChangePreset={this.handleChangePreset}
-            onToggleFreeze={this.handleToggleFreeze}
-            onToggleHulls={this.handleToggleHulls}
-            onToggleEdges={this.handleToggleEdges}
-            onChangeHighlightIndex={this.handleChangeHighlightIndex}
-            onToggleHighlighting={this.handleToggleHighlighting}
-          />
+          </LayoutProvider>
         </div>
       </div>
     );

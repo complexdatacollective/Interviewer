@@ -72,13 +72,9 @@ const HeaderSection = () => {
             </header>
             <div className="welcome-description">
               <p>
-                If this is your first time using Network Canvas Interviewer, please consider taking
-                a moment to watch our overview video. It will introduce you to the key
-                concepts of the Network Canvas project.
-              </p>
-              <p>
                 For further detailed information, tutorials, videos, and information about
-                collaboration, please visit our documentation website.
+                collaboration, please visit our documentation website. For help and support,
+                visit our community website.
               </p>
               <p>
                 To get started right away, install one or more interview protocols
@@ -88,11 +84,11 @@ const HeaderSection = () => {
             </div>
             <div className="welcome-actions">
               <Button
-                color="primary"
-                onClick={() => openExternalLink('https://www.youtube.com/watch?v=XzfE6j-LnII')}
-                disabled={!onlineStatus}
+                className="button button--cerulean-blue button--with-new"
+                color="cerulean-blue"
+                onClick={() => openExternalLink('https://community.networkcanvas.com')}
               >
-                Watch overview video
+                Community Website
               </Button>
               <Button
                 color="sea-serpent"
@@ -104,7 +100,7 @@ const HeaderSection = () => {
               <Button
                 color="mustard"
                 disabled={!onlineStatus}
-                onClick={() => importProtocolFromURI('https://documentation.networkcanvas.com/protocols/Sample%20Protocol%20v3.netcanvas')}
+                onClick={() => importProtocolFromURI('https://documentation.networkcanvas.com/protocols/Sample%20Protocol%20v4.netcanvas')}
               >
                 Install sample protocol
               </Button>
