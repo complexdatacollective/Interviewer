@@ -26,12 +26,12 @@ const fadeVariants = {
 };
 
 const optionsVariants = {
-  show: { opacity: 1, transition: { delay: 0.35, duration: 0.25 } },
-  hide: { opacity: 0, transition: { delay: 0.35, duration: 0.25 } },
+  show: { opacity: 1, transition: { delay: 0.25, duration: 0.25 } },
+  hide: { opacity: 0, transition: { delay: 0.25, duration: 0.25 } },
 };
 
 const choiceVariants = {
-  show: { opacity: 1, translateY: '0%', transition: { delay: 0.25, type: 'spring' } },
+  show: { opacity: 1, translateY: '0%', transition: { delay: 0.15, type: 'spring' } },
   hide: { opacity: 0, translateY: '120%' },
 };
 
