@@ -2,6 +2,7 @@ import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import { actionCreators as sessionsActions } from './sessions';
 import { actionCreators as deviceActions } from './deviceSettings';
 import resetProtocolFiles from '../../utils/protocol/resetProtocolFiles';
+import { get } from '../../utils/lodash-replacements';
 
 const RESET_STATE = 'RESET_STATE';
 const RESET_EDGES_OF_TYPE = 'RESET/EDGES_OF_TYPE';
@@ -26,7 +27,8 @@ const resetPropertyForAllNodes = (property) => (dispatch, getState) => {
   } = getState();
 
   nodes.forEach((node) => {
-    const registryForType = nodeRegistry[node.type].variables;
+    // Node definition may not have any variables
+    const registryForType = get(nodeRegistry, [node.type, 'variables'], {});
 
     if (registryForType[property]) {
       const variableType = registryForType[property].type;

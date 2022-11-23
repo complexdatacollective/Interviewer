@@ -22,6 +22,8 @@ const getDisplayEdges = (_, props) => get(props, 'prompt.edges.display', []);
  *
  * requires:
  * { layout, subject, sortOrder, stage } props
+ *
+ * Must *ALWAYS* return a node, or null.
  */
 export const getNextUnplacedNode = createDeepEqualSelector(
   getNetworkNodes,
@@ -30,7 +32,8 @@ export const getNextUnplacedNode = createDeepEqualSelector(
   getSortOptions,
   getAllVariableUUIDsByEntity,
   (nodes, subject, layoutVariable, sortOptions, codebookVariables) => {
-    if (nodes && nodes.length === 0) { return undefined; }
+    if (nodes && nodes.length === 0) { return null; }
+    if (!subject) { return null; }
 
     // Stage subject is either a single object or a collection of objects
     const types = isArray(subject) ? subject.map((s) => s.type) : [subject.type];
@@ -66,13 +69,16 @@ export const getNextUnplacedNode = createDeepEqualSelector(
  *
  * requires:
  * { layout, subject } props
+ *
+ * Must *ALWAYS* return an array, even if empty.
  */
 export const getPlacedNodes = createDeepEqualSelector(
   getNetworkNodes,
   getStageSubject(),
   getLayout,
   (nodes, subject, layoutVariable) => {
-    if (nodes && nodes.length === 0) { return undefined; }
+    if (nodes && nodes.length === 0) { return []; }
+    if (!subject) { return []; }
 
     // Stage subject is either a single object or a collecton of objects
     const types = isArray(subject) ? subject.map((s) => s.type) : [subject.type];
