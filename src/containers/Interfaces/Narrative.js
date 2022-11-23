@@ -193,23 +193,23 @@ class Narrative extends Component {
                 allowPositioning={allowRepositioning}
               />
             </Canvas>
+            <PresetSwitcher
+              id="drop-obstacle"
+              presets={presets}
+              activePreset={presetIndex}
+              highlightIndex={highlightIndex}
+              isFrozen={isFrozen}
+              shouldShowResetButton={shouldShowResetButton}
+              shouldShowFreezeButton={freeDraw}
+              onResetInteractions={this.handleResetInteractions}
+              onChangePreset={this.handleChangePreset}
+              onToggleFreeze={this.handleToggleFreeze}
+              onToggleHulls={this.handleToggleHulls}
+              onToggleEdges={this.handleToggleEdges}
+              onChangeHighlightIndex={this.handleChangeHighlightIndex}
+              onToggleHighlighting={this.handleToggleHighlighting}
+            />
           </LayoutProvider>
-          <PresetSwitcher
-            id="drop-obstacle"
-            presets={presets}
-            activePreset={presetIndex}
-            highlightIndex={highlightIndex}
-            isFrozen={isFrozen}
-            shouldShowResetButton={shouldShowResetButton}
-            shouldShowFreezeButton={freeDraw}
-            onResetInteractions={this.handleResetInteractions}
-            onChangePreset={this.handleChangePreset}
-            onToggleFreeze={this.handleToggleFreeze}
-            onToggleHulls={this.handleToggleHulls}
-            onToggleEdges={this.handleToggleEdges}
-            onChangeHighlightIndex={this.handleChangeHighlightIndex}
-            onToggleHighlighting={this.handleToggleHighlighting}
-          />
         </div>
       </div>
     );

@@ -8,7 +8,7 @@ const animationTarget = -50;
 
 const pairTransition = {
   duration: 0.5,
-  delay: 0.35,
+  delay: 0.15,
   when: 'afterChildren',
 };
 
