@@ -17,7 +17,7 @@ jobs:
       # Set python version to 2.x due to node-gyp and sass
       - uses: actions/setup-python@v4
         with:
-          python-version: '2.18'
+          python-version: '2.7.18'
       # Set node version
       - uses: actions/setup-node@v2
         with:
@@ -54,7 +54,7 @@ jobs:
       # Set python version to 2.x due to node-gyp and sass
       - uses: actions/setup-python@v4
         with:
-          python-version: '2.18'
+          python-version: '2.7.18'
       # Set node version
       - uses: actions/setup-node@v2
         with:
