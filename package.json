@@ -80,6 +80,7 @@
     "cordova-plugin-app-version": "~0.1.14",
     "cordova-plugin-file": "~5.0.0",
     "cordova-plugin-ionic-keyboard": "2.2.0",
+    "cordova-plugin-keyboard": "~1.2.0",
     "cordova-plugin-network-canvas-client": "github:complexdatacollective/cordova-plugin-network-canvas-client",
     "cross-env": "^5.2.0",
     "css-loader": "^3.4.2",
@@ -317,7 +318,8 @@
       "cordova-plugin-wkwebview-engine": {},
       "cordova-plugin-network-canvas-client": {},
       "cordova-sqlite-storage": {},
-      "cordova-plugin-file": {}
+      "cordova-plugin-file": {},
+      "cordova-plugin-keyboard": {}
     }
   }
 }
