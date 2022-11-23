@@ -11,10 +11,13 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           submodules: recursive
-
+      # Set python version to 2.x due to node-gyp and sass
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '2.18'
       # Set node version
       - uses: actions/setup-node@v2
         with:
@@ -45,10 +48,13 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           submodules: recursive
-
+      # Set python version to 2.x due to node-gyp and sass
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '2.18'
       # Set node version
       - uses: actions/setup-node@v2
         with:
