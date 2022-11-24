@@ -34,6 +34,7 @@ const createDevServerConfig = require('../config/webpackDevServer.config');
 const {
   isTargetingCordova,
   isTargetingElectron,
+  isTargetingWeb,
   logPlatformInfo,
   cleanDevUrlFile,
   makeDevUrlFile,
@@ -96,8 +97,8 @@ choosePort(HOST, DEFAULT_PORT)
       }
     });
 
-    ['SIGINT', 'SIGTERM'].forEach(function(sig) {
-      process.on(sig, function() {
+    ['SIGINT', 'SIGTERM'].forEach(function (sig) {
+      process.on(sig, function () {
         devServer.close();
         cleanDevUrlFile();
         process.exit();

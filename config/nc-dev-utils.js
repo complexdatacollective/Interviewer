@@ -17,6 +17,7 @@ const devUrlFile = paths.dotdevserver;
 const isTargetingCordova = cordovaPlatformMatch.test(process.env.NC_TARGET_PLATFORM);
 
 const isTargetingElectron = process.env.NC_TARGET_PLATFORM === 'electron';
+const isTargetingWeb = process.env.NC_TARGET_PLATFORM === 'web';
 
 const logPlatformInfo = () => {
   if (isTargetingCordova) {
@@ -26,6 +27,8 @@ const logPlatformInfo = () => {
   } else if (isTargetingElectron) {
     console.log(chalk.green('Targeting Electron'));
     console.log(chalk.yellow('Content will only run in electron: `npm run dev:electron`'));
+  } else if (isTargetingWeb) {
+    console.log(chalk.green('Targeting Web'));
   } else {
     console.log(chalk.cyan('Live mobile dev also available: `npm run dev:[android|ios]`'));
   }
@@ -82,6 +85,7 @@ module.exports = {
   devServerContentBase,
   isTargetingCordova,
   isTargetingElectron,
+  isTargetingWeb,
   logPlatformInfo,
   makeDevUrlFile,
   reactBundleTarget,
