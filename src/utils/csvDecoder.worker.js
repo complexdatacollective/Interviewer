@@ -1,4 +1,4 @@
-/* eslint-disable no-restricted-globals */
+import csv from 'csv2json';
 import { entityAttributesProperty } from '@codaco/shared-consts';
 /**
  * Converts a CSV file into a Network Canvas node list JSON
@@ -9,8 +9,6 @@ import { entityAttributesProperty } from '@codaco/shared-consts';
  * to this function to increase performance particularly on cordova.
  *
  */
-
-const csv = require('../../node_modules/csvtojson/browser/browser.js');
 
 const CSVToJSONNetworkFormat = (data) => {
   const withTypeAndAttributes = (node) => ({
