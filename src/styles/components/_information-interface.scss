@@ -1,7 +1,7 @@
 $asset-size-large: 64vh;
 $asset-size-medium: 32vh;
-$asset-size-small: 16vh;
-$asset-size-default: 16vh;
+$asset-size-small: 17vh;
+$asset-size-default: 17vh;
 
 .information-interface {
   @include interface-centering;
@@ -12,8 +12,7 @@ $asset-size-default: 16vh;
   align-items: center;
 
   &__frame {
-    width: 80%;
-    max-width: 50rem;
+    max-width: 55rem;
   }
 
   &__title {
@@ -22,7 +21,7 @@ $asset-size-default: 16vh;
 
   &__items {
     margin-top: spacing('large');
-    max-height: calc($asset-size-large + #{spacing('medium') * 4});
+    max-height: calc(#{$asset-size-large} + #{spacing('medium') * 4});
     overflow: hidden;
   }
 
@@ -63,6 +62,7 @@ $asset-size-default: 16vh;
         overflow-y: auto;
         height: auto;
         max-height: $asset-size-small;
+        margin-top: 0; // Text paragraphs have their own margin
 
         &.information-interface__item--size-SMALL {
           max-height: $asset-size-small;

@@ -8,4 +8,4 @@ Security updates will only be issued for the most recent version(s) of the softw
 
 ## Reporting a Vulnerability
 
-To report a security issue to us, please contact info@networkcanvas.com. We will work with you to resolve the issue.
+To report a security issue to us, please help us to troubleshoot it by creating a topic on our [community page](https://community.networkcanvas.com). We will work with you to resolve the issue.

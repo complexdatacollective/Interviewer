@@ -16,8 +16,7 @@ $close-button-size: 1rem;
   margin: unit(4);
 
   &__title {
-    padding: 0 unit(4);
-    margin: unit(4);
+    padding: unit(4);
     flex: 0 0 auto;
     display: flex;
     align-items: center;
@@ -39,7 +38,6 @@ $close-button-size: 1rem;
     overflow-x: hidden;
     overflow-y: auto;
     padding: 0 unit(4);
-    margin-bottom: unit(4);
   }
 
   &__footer {
