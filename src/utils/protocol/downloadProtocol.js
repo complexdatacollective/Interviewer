@@ -33,7 +33,6 @@ const fileError = friendlyErrorMessage('The protocol could not be saved to your 
  */
 const downloadProtocol = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const request = require('request-promise-native');
     const path = require('path');
     const electron = require('electron');
     const tempPath = (electron.app || electron.remote.app).getPath('temp');
@@ -46,7 +45,7 @@ const downloadProtocol = inEnvironment((environment) => {
       } else {
         promisedResponse = getURL(uri)
           .catch(urlError)
-          .then(url => request({ method: 'GET', encoding: null, uri: url.href }));
+          .then(url => fetch({ method: 'GET', encoding: null, uri: url.href }));
       }
 
       return promisedResponse
