@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { motion, AnimatePresence } from 'framer-motion';
 import { isEmpty, isUndefined } from 'lodash';
-import { DataCard } from '@codaco/ui/lib/components/Cards';
+import { DataCard } from '@codaco/ui';
 import { entityAttributesProperty, entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import Prompts from '../../../components/Prompts';
 import withPrompt from '../../../behaviours/withPrompt';
@@ -90,9 +90,7 @@ const NameGeneratorRoster = (props) => {
   const sortOptions = useSortableProperties(nodeVariables, stage.sortOptions);
 
   const stageNodeCount = usePropSelector(makeGetStageNodeCount, props, true);
-  // eslint-disable-next-line @codaco/spellcheck/spell-checker
   const minNodes = minNodesWithDefault(get(props, ['stage', 'behaviours', 'minNodes']));
-  // eslint-disable-next-line @codaco/spellcheck/spell-checker
   const maxNodes = maxNodesWithDefault(get(props, ['stage', 'behaviours', 'maxNodes']));
 
   const [showMinWarning, setShowMinWarning] = useState(false);
@@ -110,7 +108,7 @@ const NameGeneratorRoster = (props) => {
     }
 
     onComplete();
-  }, [stageNodeCount, minNodes, onComplete]);
+  }, [stageNodeCount, minNodes, onComplete, isFirstPrompt, isLastPrompt]);
 
   registerBeforeNext(handleBeforeLeaving);
 
@@ -199,10 +197,6 @@ const NameGeneratorRoster = (props) => {
           <>
             <motion.div
               className="name-generator-roster-interface__prompt"
-              // initial="hidden"
-              // animate="visible"
-              // exit="hidden"
-              // variants={variants}
               key="prompts"
             >
               <Prompts

@@ -1,6 +1,4 @@
 /* eslint-env jest */
-/* eslint-disable @codaco/spellcheck/spell-checker, max-classes-per-file */
-
 import WorkerAgent, { urlForWorkerSource } from '../WorkerAgent';
 
 const mockUrl = 'blob:file://script.js';

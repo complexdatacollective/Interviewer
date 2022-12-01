@@ -1,12 +1,12 @@
 /* eslint-env jest */
-/* eslint-disable @codaco/spellcheck/spell-checker */
+
 
 import React from 'react';
 import { createStore } from 'redux';
 import { shallow } from 'enzyme';
 import NodeList from '../NodeList';
 
-jest.mock('@codaco/ui/lib/utils/CSSVariables');
+jest.mock('@codaco/ui';
 
 const mockStore = createStore(() => (
   { droppable: { activeZones: [] }, draggable: { draggingFromIds: {} } }

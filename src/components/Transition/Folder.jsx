@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Transition } from 'react-transition-group';
 import anime from 'animejs';
-import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
+import { getCSSVariableAsNumber } from '@codaco/ui';
 import getAbsoluteBoundingRect from '../../utils/getAbsoluteBoundingRect';
 
 const appear = () => ({

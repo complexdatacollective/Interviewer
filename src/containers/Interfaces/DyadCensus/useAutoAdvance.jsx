@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
+import { getCSSVariableAsNumber } from '@codaco/ui';
 
 /**
  * Automatically advance stage when an option is selected.
@@ -30,10 +30,10 @@ const useAutoAdvance = (_next, isTouched, isChanged) => {
     }
 
     return () => {
-      if (!timer.current) { return () => {}; }
+      if (!timer.current) { return () => { }; }
       return clearTimeout(timer.current);
     };
-  }, [isTouched]);
+  }, [isTouched, delay, isChanged]);
 };
 
 export default useAutoAdvance;

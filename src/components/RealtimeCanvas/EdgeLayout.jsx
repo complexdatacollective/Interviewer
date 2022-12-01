@@ -1,4 +1,4 @@
-import React, { useRef, useContext, useEffect } from 'react';
+import { useRef, useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import LayoutContext from '../../contexts/LayoutContext';
 import { getProtocolCodebook } from '../../selectors/protocol';
@@ -37,20 +37,23 @@ const EdgeLayout = () => {
   useEffect(() => {
     if (!svg.current) { return () => cancelAnimationFrame(timer.current); }
 
+    // eslint suggested this local copy of the ref.
+    const currentSvg = svg.current;
+
     lines.current = edges.map((edge, index) => {
-      const svgNS = svg.current.namespaceURI;
+      const svgNS = currentSvg.namespaceURI;
       const el = document.createElementNS(svgNS, 'line');
       const color = get(edgeDefinitions, [edge.type, 'color'], 'edge-color-seq-1');
       el.setAttributeNS(null, 'stroke', `var(--${color})`);
       return { edge, el, link: links[index] };
     });
 
-    lines.current.forEach(({ el }) => svg.current.appendChild(el));
+    lines.current.forEach(({ el }) => currentSvg.appendChild(el));
 
     timer.current = requestAnimationFrame(() => update.current());
 
     return () => {
-      lines.current.forEach(({ el }) => svg.current.removeChild(el));
+      lines.current.forEach(({ el }) => currentSvg.removeChild(el));
       cancelAnimationFrame(timer.current);
     };
   }, [edges, links, edgeDefinitions]);

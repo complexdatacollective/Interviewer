@@ -1,5 +1,5 @@
 /* eslint-env jest */
-/* eslint-disable @codaco/spellcheck/spell-checker */
+
 
 import React from 'react';
 import { shallow } from 'enzyme';
@@ -8,16 +8,16 @@ import { NodeForm } from '../NodeForm';
 const mockProps = {
   name: 'baz',
   title: 'The form title',
-  onSubmit: () => {},
+  onSubmit: () => { },
   fields: [
     {
       variable: 'foo',
       component: 'Text',
     },
   ],
-  closeModal: () => {},
-  openModal: () => {},
-  resetValues: () => {},
+  closeModal: () => { },
+  openModal: () => { },
+  resetValues: () => { },
   initialValues: {},
   show: true,
   stage: {

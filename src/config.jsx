@@ -16,7 +16,7 @@ const DEVELOPMENT_PROTOCOL_URL_V8 = 'https://github.com/complexdatacollective/de
 // Cannonical for this version
 const DEVELOPMENT_PROTOCOL_URL = DEVELOPMENT_PROTOCOL_URL_V8;
 
-module.exports = {
+export {
   PROTOCOL_EXTENSION,
   APP_SCHEMA_VERSION,
   APP_SUPPORTED_SCHEMA_VERSIONS,

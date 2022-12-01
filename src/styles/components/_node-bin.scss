@@ -1,7 +1,7 @@
 .node-bin {
   @include transition-properties((opacity transform), var(--animation-easing), var(--animation-duration-fast));
   background: transparent;
-  background-image: url('../images/node-bin.svg');
+  background-image: url('../../images/node-bin.svg');
   background-repeat: no-repeat;
   background-size: contain;
   width: 5rem;

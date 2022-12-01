@@ -1,5 +1,5 @@
 /* eslint-env jest */
-/* eslint-disable @codaco/spellcheck/spell-checker */
+
 import { entityAttributesProperty } from '@codaco/shared-consts';
 import createSorter, { processProtocolSortRule } from '../createSorter';
 

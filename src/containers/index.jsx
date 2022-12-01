@@ -1,7 +1,7 @@
 export { default as App } from './App';
 export { default as OrdinalBins } from './OrdinalBins';
 export { default as Stage } from './Stage';
-export { default as ProtocolScreen } from './ProtocolScreen';
+export { default as ProtocolScreen } from '../routes/Session';
 export { default as Form } from './Form';
 export { default as NodePanels } from './NodePanels';
 export { default as Field } from './Field';

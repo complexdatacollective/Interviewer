@@ -1,7 +1,5 @@
-import { CancellationError } from 'builder-util-runtime';
 import { findKey } from 'lodash';
 import { store } from '../../ducks/store';
-
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import {
   removeDirectory,
@@ -9,13 +7,20 @@ import {
 } from '../filesystem';
 import protocolPath from './protocolPath';
 
+export class CancellationError extends Error {
+  constructor(message) {
+    super(message); // (1)
+    this.name = "CancellationError"; // (2)
+  }
+}
+
 const renameProtocol = (previousUuid, currentUuid) => {
   // delete contents of previous uuid, and move current content directory to previous uuid location
   const previousDir = protocolPath(previousUuid);
   const currentDir = protocolPath(currentUuid);
 
   return removeDirectory(previousDir)
-  .then(() => rename(currentDir, previousDir));
+    .then(() => rename(currentDir, previousDir));
 }
 
 const checkExistingSession = (currentName) => {

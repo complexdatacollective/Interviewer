@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from '@codaco/ui';
-import { Text } from '@codaco/ui/lib/components/Fields';
+import { Text } from '@codaco/ui';
 import { entityAttributesProperty } from '@codaco/shared-consts';
 import createSorter from '../utils/createSorter';
 

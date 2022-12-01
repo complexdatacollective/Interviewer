@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import BooleanOption from '@codaco/ui/lib/components/Boolean/BooleanOption';
+import { BooleanOption } from '@codaco/ui';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Markdown } from '@codaco/ui/lib/components/Fields';
+import { Markdown } from '@codaco/ui';
 import Prompts from '../../../components/Prompts';
 import withPrompt from '../../../behaviours/withPrompt';
 import { makeNetworkNodesForType as makeGetNodes } from '../../../selectors/interface';
@@ -91,7 +91,7 @@ const TieStrengthCensus = (props) => {
     [stepsState.step],
   );
 
-  const next = () => {
+  const next = useCallback(() => {
     setForwards(true);
     setIsValid(true);
 
@@ -121,9 +121,9 @@ const TieStrengthCensus = (props) => {
     if (stepsState.isEnd) { return; }
 
     nextStep();
-  };
+  }, [stepsState, hasEdge, edgeVariableValue, isIntroduction, dispatch, nextStep]);
 
-  const back = () => {
+  const back = useCallback(() => {
     setForwards(false);
     setIsValid(true);
 
@@ -139,7 +139,7 @@ const TieStrengthCensus = (props) => {
     if (stepsState.isStart) { return; }
 
     previousStep();
-  };
+  }, [stepsState, isIntroduction, dispatch, previousStep]);
 
   const beforeNext = useCallback((direction, index = -1) => {
     if (index !== -1) {
@@ -153,11 +153,11 @@ const TieStrengthCensus = (props) => {
     }
 
     next();
-  }, [back, next]);
+  }, [back, next, onComplete]);
 
   useEffect(() => {
     registerBeforeNext(beforeNext);
-  }, [beforeNext]);
+  }, [registerBeforeNext, beforeNext]);
 
   useAutoAdvance(next, isTouched, isChanged);
 

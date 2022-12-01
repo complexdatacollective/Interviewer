@@ -10,7 +10,7 @@ const DEVICE_READY = 'DEVICE_READY';
 // Static defaults should be distinguishable from user choices (e.g., undefined instead of false).
 const initialState = {
   description: 'Unknown device',
-  useDynamicScaling: undefined,
+  useDynamicScaling: false,
   // useFullScreenForms defaults to false, leave using full screen forms up to user
   useFullScreenForms: false,
   interfaceScale: 100,
@@ -27,9 +27,6 @@ const initialState = {
   useScreenLayoutCoordinates: false,
   screenLayoutHeight: window.screen.height,
   screenLayoutWidth: window.screen.width,
-
-  // We are required to show a dialog on app launch for iOS users
-  crappleWarningHeeded: false,
 
   // Experimental TTS feature for reading prompts
   enableExperimentalTTS: false,

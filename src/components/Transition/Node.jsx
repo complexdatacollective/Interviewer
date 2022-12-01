@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Transition } from 'react-transition-group';
 import anime from 'animejs';
-import { getCSSVariableAsObject, getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
+import { getCSSVariableAsObject, getCSSVariableAsNumber } from '@codaco/ui';
 
 const Node = ({
   children, index, stagger, ...props
@@ -62,7 +62,7 @@ const Node = ({
       mountOnEnter={false}
       unmountOnExit
     >
-      { children }
+      {children}
     </Transition>
   );
 };

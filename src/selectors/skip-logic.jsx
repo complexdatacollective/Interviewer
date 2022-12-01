@@ -1,8 +1,11 @@
 import { createSelector } from 'reselect';
-import getQuery from '../utils/networkQuery/query';
 import { getProtocolStages } from './protocol';
 import { getNetwork } from './network';
 import { SkipLogicAction } from '../protocol-consts';
+
+const getQuery = () => {
+  console.warn('getQuery not implemented');
+}
 
 const rotateIndex = (max, nextIndex) => (nextIndex + max) % max;
 const maxLength = (state) => getProtocolStages(state).length;

@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import MinimizeIcon from '@material-ui/icons/Minimize';
 import { Button } from '@codaco/ui';
 import Prompts from './Prompts';
 import { isDevMode } from '../utils/Environment';
+
+const MinimizeIcon = () => { };
 
 const CollapsablePrompts = React.memo((props) => {
   const {
@@ -31,9 +32,7 @@ const CollapsablePrompts = React.memo((props) => {
 
   // Reset the minimization when the prompt changes
   useEffect(() => {
-    if (minimized) {
-      setMinimized(false);
-    }
+    setMinimized(false);
   }, [currentPromptIndex]);
 
   return (

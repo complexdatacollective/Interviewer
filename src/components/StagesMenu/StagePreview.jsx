@@ -4,7 +4,7 @@ import { withHandlers, compose } from 'recompose';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { motion } from 'framer-motion';
-import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
+import { getCSSVariableAsNumber } from '@codaco/ui';
 import timelineImages from '../../images/timeline';
 import { currentStageIndex } from '../../utils/matchSessionPath';
 import { get } from '../../utils/lodash-replacements';

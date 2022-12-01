@@ -1,6 +1,5 @@
 import React from 'react';
 import { v4 as uuid } from 'uuid';
-import { CancellationError } from 'builder-util-runtime';
 import { ProgressBar, Spinner } from '@codaco/ui';
 import { store } from '../../ducks/store';
 import { removeDirectory } from '../../utils/filesystem';
@@ -8,7 +7,7 @@ import { actionCreators as installedProtocolActions } from '../../ducks/modules/
 import downloadProtocol from '../../utils/protocol/downloadProtocol';
 import extractProtocol from '../../utils/protocol/extractProtocol';
 import parseProtocol from '../../utils/protocol/parseProtocol';
-import checkExistingProtocol, { moveToExistingProtocol } from '../../utils/protocol/checkExistingProtocol';
+import checkExistingProtocol, { CancellationError, moveToExistingProtocol } from '../../utils/protocol/checkExistingProtocol';
 import { actionCreators as toastActions } from '../../ducks/modules/toasts';
 import protocolPath from '../../utils/protocol/protocolPath';
 import { PROTOCOL_EXTENSION } from '../../config';

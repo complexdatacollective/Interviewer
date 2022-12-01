@@ -9,8 +9,11 @@ import {
 import { getNetworkEdges, getNetworkEgo } from '../selectors/network';
 import { Panel, NodeList } from '../components';
 import withExternalData from './withExternalData';
-import customFilter from '../utils/networkQuery/filter';
 import { get } from '../utils/lodash-replacements';
+
+const customFilter = () => {
+  console.warn('Custom filter not implemented');
+}
 
 class NodePanel extends PureComponent {
   componentDidMount() {

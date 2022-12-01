@@ -11,7 +11,7 @@ import EdgeLayout from '../../components/Canvas/EdgeLayout';
 import Canvas from '../../components/Canvas/Canvas';
 import { getNetworkEdges, getNetworkNodes } from '../../selectors/network';
 import { edgesToCoords } from '../../selectors/canvas';
-import { entityAttributesProperty } from '../../utils/network-exporters/src/utils/reservedAttributes';
+import { entityAttributesProperty } from '@codaco/shared-consts';
 import { get } from '../../utils/lodash-replacements';
 import { LayoutProvider } from '../../contexts/LayoutContext';
 
@@ -117,9 +117,7 @@ class Narrative extends Component {
     const currentPreset = presets[presetIndex];
 
     // Behaviour Configuration
-    // eslint-disable-next-line @codaco/spellcheck/spell-checker
     const allowRepositioning = get(stage, 'behaviours.allowRepositioning', false);
-    // eslint-disable-next-line @codaco/spellcheck/spell-checker
     const freeDraw = get(stage, 'behaviours.freeDraw', false);
     const shouldShowResetButton = activeAnnotations || activeFocusNodes;
 

@@ -1,5 +1,5 @@
 /* eslint-env jest */
-/* eslint-disable @codaco/spellcheck/spell-checker */
+
 import { v4 as uuid } from 'uuid';
 import {
   entityPrimaryKeyProperty as PK,

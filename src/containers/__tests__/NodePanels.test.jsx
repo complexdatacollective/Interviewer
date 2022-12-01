@@ -1,14 +1,14 @@
 /* eslint-env jest */
-/* eslint-disable @codaco/spellcheck/spell-checker */
+
 
 import React from 'react';
 import { shallow } from 'enzyme';
 import { NodePanels } from '../NodePanels';
 
-jest.mock('@codaco/ui/lib/utils/CSSVariables');
+jest.mock('@codaco/ui';
 
 const mockProps = {
-  removeNode: () => {},
+  removeNode: () => { },
   activePromptAttributes: {},
   newNodeAttributes: {},
   getLabel: () => 'some label',

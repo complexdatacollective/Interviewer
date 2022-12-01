@@ -1,8 +1,11 @@
-@import '@codaco/ui/lib/styles/all';
-@import 'helpers/all';
-@import 'components/all';
-@import 'containers/all';
-@import 'transitions';
+$font-path: "~@codaco/ui/src/assets/fonts";
+$image-path: "~@codaco/ui/";
+
+@import "@codaco/ui/src/styles/_all.scss";
+@import "helpers/all";
+@import "components/all";
+@import "containers/all";
+@import "transitions";
 
 // Remove touch and focus outlines
 * {
@@ -11,7 +14,7 @@
 
   &:focus {
     outline: none;
-   }
+  }
 }
 
 :root {
@@ -20,7 +23,7 @@
   --session-panel-width: 9rem; // Does *not* change actual timeline width (which is automatically calculated). Used for drop obstacle and stage margins
   --interface-prompt-flex-basis: 8rem;
   --base-font-size: 1.75vmin;
-  --border-radius: .75rem;
+  --border-radius: 0.75rem;
   --padding-unit: 1rem;
 
   --form-intro-panel-background: var(--color-cyber-grape);
@@ -30,14 +33,14 @@ html,
 body {
   cursor: default;
   overflow: hidden;
-  color: palette('text');
-  background: palette('background');
+  color: palette("text");
+  background: palette("background");
   width: 100%;
   height: 100vh;
 }
 
 a {
-  color: palette('link');
+  color: palette("link");
   text-decoration: none;
 }
 
@@ -72,4 +75,3 @@ a {
     border-radius: var(--border-radius);
   }
 }
-

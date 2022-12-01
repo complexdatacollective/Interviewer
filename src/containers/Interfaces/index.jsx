@@ -1,12 +1,9 @@
 /* eslint-disable import/prefer-default-export */
-import React from 'react';
 import { has } from 'lodash';
 import { Icon } from '@codaco/ui';
 import NameGenerator from './NameGenerator';
 import NameGeneratorQuickAdd from './NameGeneratorQuickAdd';
-import NameGeneratorAutoComplete from './NameGeneratorAutoComplete';
 import OrdinalBin from './OrdinalBin';
-import NameGeneratorList from './NameGeneratorList';
 import NameGeneratorRoster from './NameGeneratorRoster';
 import Sociogram from './Sociogram';
 import Information from './Information';
@@ -23,9 +20,7 @@ import { StageType } from '../../protocol-consts';
 const interfaces = {
   [StageType.NameGenerator]: NameGenerator,
   [StageType.NameGeneratorQuickAdd]: NameGeneratorQuickAdd,
-  [StageType.NameGeneratorAutoComplete]: NameGeneratorAutoComplete,
   [StageType.NameGeneratorRoster]: NameGeneratorRoster,
-  [StageType.NameGeneratorList]: NameGeneratorList,
   [StageType.Sociogram]: Sociogram,
   [StageType.Information]: Information,
   [StageType.OrdinalBin]: OrdinalBin,
@@ -65,8 +60,6 @@ const getInterface = (interfaceConfig) => {
 export {
   NameGenerator,
   NameGeneratorQuickAdd,
-  NameGeneratorAutoComplete,
-  NameGeneratorList,
   NameGeneratorRoster,
   Sociogram,
   Information,

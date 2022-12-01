@@ -119,7 +119,8 @@ const useEdgeState = (
     setEdgeState(getEdgeInNetwork(edges, pair, edgeType));
     setIsTouched(false);
     setIsChanged(false);
-  }, deps);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [...deps, edges, edgeType, pair, stageState]);
 
   return [getHasEdge(), setEdge, isTouched, isChanged];
 };

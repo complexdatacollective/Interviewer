@@ -1,8 +1,7 @@
-import React from 'react';
 import { compose, withProps } from 'recompose';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { window } from '@codaco/ui/lib/components/window';
+import { usePortal } from '@codaco/ui';
 import { DropTarget, MonitorDropTarget } from '../behaviours/DragAndDrop';
 
 /**
@@ -18,7 +17,13 @@ const NodeBin = ({
     { 'node-bin--hover': willAccept && isOver },
   );
 
-  return <div className={classNames} />;
+  const Portal = usePortal();
+
+  return (
+    <Portal>
+      <div className={classNames} />
+    </Portal>
+  );
 };
 
 NodeBin.propTypes = {
@@ -31,11 +36,11 @@ NodeBin.defaultProps = {
   willAccept: false,
 };
 
-export default window(compose(
+export default compose(
   withProps((props) => ({
     accepts: ({ meta }) => props.accepts(meta),
     onDrop: ({ meta }) => props.dropHandler(meta),
   })),
   DropTarget,
   MonitorDropTarget(['isOver', 'willAccept']),
-)(NodeBin));
+)(NodeBin);

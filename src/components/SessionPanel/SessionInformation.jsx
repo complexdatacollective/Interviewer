@@ -77,11 +77,11 @@ const SessionInformation = (props) => {
 
   const [interviewDuration, setInterviewDuration] = useState(sessionProgress.startedAt ? elapsedTime(sessionProgress.startedAt) : 'Unknown');
 
-  if (sessionProgress.startedAt) {
-    useInterval(() => {
+  useInterval(() => {
+    if (sessionProgress.startedAt) {
       setInterviewDuration(elapsedTime(sessionProgress.startedAt));
-    }, 1000);
-  }
+    }
+  }, 1000);
 
   const [showCaseIDRename, setShowCaseIDRename] = useState(false);
 

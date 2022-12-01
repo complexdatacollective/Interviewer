@@ -1,5 +1,4 @@
 import { omit } from 'lodash';
-import crypto from 'crypto';
 import objectHash from 'object-hash';
 import {
   entityAttributesProperty,
@@ -82,7 +81,11 @@ export const getNodeWithIdAttributes = (node, nodeVariables) => {
  * Get the remote protocol name for a protocol, which Server uses to uniquely identify it
  * @param {string} name the name of a protocol
  */
-export const getRemoteProtocolID = (name) => name && crypto.createHash('sha256').update(name).digest('hex');
+export const getRemoteProtocolID = (name) => {
+  console.warn('getRemoteProtocolID not implemented');
+  return name;
+  // return name && crypto.createHash('sha256').update(name).digest('hex')
+};
 
 /**
  * Creates an object containing all required session metadata for export

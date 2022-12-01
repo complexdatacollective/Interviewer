@@ -1,5 +1,5 @@
 /* eslint-env jest */
-/* eslint-disable @codaco/spellcheck/spell-checker */
+
 
 import React from 'react';
 import { createStore } from 'redux';
@@ -8,7 +8,7 @@ import { shallow, mount } from 'enzyme';
 import Form from '../Form';
 import Field from '../Field';
 
-jest.mock('@codaco/ui/lib/utils/CSSVariables');
+jest.mock('@codaco/ui';
 
 const mockStore = () => createStore(
   () => (
@@ -79,5 +79,5 @@ describe('<Form />', () => {
 
     expect(subject.find(Field).length).toBe(2);
   });
-  it('Calls autoPopulate on Field blur', () => {});
+  it('Calls autoPopulate on Field blur', () => { });
 });

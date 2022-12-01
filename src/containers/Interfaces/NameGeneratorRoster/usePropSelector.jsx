@@ -21,11 +21,11 @@ const usePropSelector = (selector, props, isFactory = false, equalityFn) => {
   const memoizedSelector = useMemo(() => {
     if (isFactory) { return selector(); }
     return selector;
-  }, []);
+  }, [isFactory, selector]);
 
   const selectorWithProps = useCallback(
     (state) => memoizedSelector(state, props),
-    [props],
+    [props, memoizedSelector],
   );
 
   const state = useSelector(selectorWithProps, equalityFn);

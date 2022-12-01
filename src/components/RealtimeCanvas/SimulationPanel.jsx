@@ -1,9 +1,10 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
-import PlayIcon from '@material-ui/icons/PlayArrowRounded';
-import PauseIcon from '@material-ui/icons/PauseRounded';
 import LayoutContext from '../../contexts/LayoutContext';
+
+const PauseIcon = () => { };
+const PlayIcon = () => { };
 
 const SimulationPanel = ({
   dragConstraints,

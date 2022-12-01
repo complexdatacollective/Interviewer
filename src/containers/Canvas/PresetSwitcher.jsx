@@ -1,9 +1,8 @@
-import React, { PureComponent } from 'react';
+import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'recompose';
 import cx from 'classnames';
-import { Icon } from '@codaco/ui';
-import HoverMarquee from '@codaco/ui/lib/components/HoverMarquee';
+import { Icon, HoverMarquee } from '@codaco/ui';
 import { DropObstacle } from '../../behaviours/DragAndDrop';
 import PresetSwitcherKey from './PresetSwitcherKey';
 

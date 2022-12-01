@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export, no-console */
-/* eslint-disable @codaco/spellcheck/spell-checker */
+
 /* eslint-env jest */
 
 const readFile = jest.fn(console.log);

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { isEqual } from 'lodash';
 import { TransitionGroup } from 'react-transition-group';
-import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
+import { getCSSVariableAsNumber } from '@codaco/ui';
 import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import Node from '../containers/Node';
 import { Node as NodeTransition } from './Transition';

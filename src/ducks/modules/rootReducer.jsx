@@ -1,7 +1,5 @@
 import { combineReducers } from 'redux';
-import { connectRouter } from 'connected-react-router';
 import { reducer as formReducer } from 'redux-form';
-
 import sessions from './sessions';
 import activeSessionId from './session';
 import activeSessionWorkers from './sessionWorkers';
@@ -16,8 +14,7 @@ import pairedServer from './pairedServer';
 import exportProgress from './exportProgress';
 import { actionTypes as resetActionTypes } from './reset';
 
-const appReducer = (history) => combineReducers({
-  router: connectRouter(history),
+const appReducer = combineReducers({
   form: formReducer,
   activeSessionId,
   activeSessionWorkers,
@@ -33,14 +30,14 @@ const appReducer = (history) => combineReducers({
   exportProgress,
 });
 
-const createRootReducer = (history) => (state, action) => {
+const rootReducer = (state, action) => {
   let currentState = state;
 
   if (action && action.type === resetActionTypes.RESET_STATE) {
     currentState = undefined;
   }
 
-  return appReducer(history)(currentState, action);
+  return appReducer(currentState, action);
 };
 
-export default createRootReducer;
+export default rootReducer;

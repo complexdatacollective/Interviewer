@@ -1,12 +1,11 @@
-/* eslint-disable @codaco/spellcheck/spell-checker */
-import React, { useEffect, useMemo, useRef } from 'react';
+
+import { useEffect, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { v4 as uuid } from 'uuid';
 import cx from 'classnames';
 import { motion } from 'framer-motion';
 import { isEqual, get } from 'lodash';
-import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
-import Search from '@codaco/ui/lib/components/Fields/Search';
+import { getCSSVariableAsNumber, Search } from '@codaco/ui';
 import Loading from '../components/Loading';
 import Panel from '../components/Panel';
 import useSort from '../hooks/useSort';
@@ -101,7 +100,7 @@ const SearchableList = (props) => {
     }
 
     setSortByProperty();
-  }, [hasQuery]);
+  }, [hasQuery, setSortByProperty, setSortDirection]);
 
   const filteredResults = useMemo(
     () => {

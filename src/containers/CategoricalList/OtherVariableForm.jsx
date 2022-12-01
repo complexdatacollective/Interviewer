@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 import { Button, Node } from '@codaco/ui';
-import { MarkdownLabel } from '@codaco/ui/lib/components/Fields';
+import { MarkdownLabel } from '@codaco/ui';
 import Field from '../Field';
 
 const stopClickPropagation = (e) => e.stopPropagation();

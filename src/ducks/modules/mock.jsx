@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 
-import faker from '@faker-js/faker';
+import { faker } from '@faker-js/faker';
 import { v4 as uuid } from 'uuid';
 import { has, times, omit } from 'lodash';
 import { entityPrimaryKeyProperty, entityAttributesProperty } from '@codaco/shared-consts';

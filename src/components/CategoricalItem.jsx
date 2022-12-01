@@ -4,7 +4,7 @@ import { compose, withProps, withState } from 'recompose';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { Flipped } from 'react-flip-toolkit';
-import { MarkdownLabel } from '@codaco/ui/lib/components/Fields';
+import { MarkdownLabel } from '@codaco/ui';
 import { DropTarget, MonitorDropTarget } from '../behaviours/DragAndDrop';
 import NodeList from './NodeList';
 
@@ -46,25 +46,25 @@ const CategoricalItem = ({
                 <MarkdownLabel inline label={label} />
               </h3>
               {(!isExpanded && details)
-              && (
-                <h5>
-                  <MarkdownLabel inline label={details} />
-                </h5>
-              )}
+                && (
+                  <h5>
+                    <MarkdownLabel inline label={details} />
+                  </h5>
+                )}
             </div>
           </Flipped>
           {isExpanded
             && (
-            <div className="categorical-item__content">
-              <NodeList
-                stage={stage}
-                listId={`CATBIN_NODE_LIST_${label}`}
-                id={`CATBIN_NODE_LIST_${label}`}
-                onItemClick={onClickItem}
-                items={nodes}
-                sortOrder={sortOrder}
-              />
-            </div>
+              <div className="categorical-item__content">
+                <NodeList
+                  stage={stage}
+                  listId={`CATBIN_NODE_LIST_${label}`}
+                  id={`CATBIN_NODE_LIST_${label}`}
+                  onItemClick={onClickItem}
+                  items={nodes}
+                  sortOrder={sortOrder}
+                />
+              </div>
             )}
         </div>
       </div>
@@ -93,8 +93,8 @@ CategoricalItem.defaultProps = {
   isOver: false,
   label: 'undefined',
   nodes: [],
-  onClick: () => {},
-  onClickItem: () => {},
+  onClick: () => { },
+  onClickItem: () => { },
   sortOrder: [],
   willAccept: false,
 };

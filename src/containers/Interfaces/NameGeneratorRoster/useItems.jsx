@@ -65,7 +65,7 @@ const useItems = (props) => {
           })(item),
         },
       }));
-  }, [externalData, getNodeLabel, nodeTypeDefinition, visibleSupplementaryFields]);
+  }, [externalData, getNodeLabel, nodeTypeDefinition, visibleSupplementaryFields, props]);
 
   return [status, items, excludeItems];
 };

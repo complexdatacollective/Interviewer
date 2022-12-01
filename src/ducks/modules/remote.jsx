@@ -1,6 +1,3 @@
-/* eslint-disable import/prefer-default-export */
-
-import { push } from 'connected-react-router';
 import { actionCreators as resetActions } from './reset';
 import { actionCreators as installedProtocolActions } from './installedProtocols';
 import { actionCreators as sessionActions } from './sessions';
@@ -33,7 +30,8 @@ const previewStage = (protocol = {}, stageIndex = 0) => (dispatch) => {
     .then((sessionId) => {
       // We have to update stage via path
       const path = `/session/${sessionId}/${stageIndex}`;
-      dispatch(push(path));
+      // dispatch(push(path));
+      console.warn('preViewStage wanted to use push from connectected-react-router but we removed it');
       return { protocol, stageIndex };
     });
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { SessionCard as UISessionCard } from '@codaco/ui/lib/components/Cards';
+import { SessionCard as UISessionCard } from '@codaco/ui';
 import { useSelector, useDispatch } from 'react-redux';
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
 import formatDatestamp from '../../utils/formatDatestamp';
@@ -13,10 +13,8 @@ const SessionCard = ({
   const sessions = useSelector((state) => state.sessions);
   const session = sessions[sessionUUID];
   const installedProtocols = useSelector((state) => state.installedProtocols);
-
-  if (!session) { return null; }
-
   const dispatch = useDispatch();
+  if (!session) { return null; }
   const setSession = (sessionUID) => dispatch(sessionActions.setSession(sessionUID));
 
   const {

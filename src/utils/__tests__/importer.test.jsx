@@ -1,5 +1,5 @@
 /* eslint-env jest */
-/* eslint-disable @codaco/spellcheck/spell-checker */
+
 
 import environments from '../environments';
 // eslint-disable-next-line import/named
@@ -14,7 +14,7 @@ describe('importer', () => {
       getEnvironment.mockReturnValue(environments.ELECTRON);
     });
 
-    it('copies the protocol files to the user data directory', () => {});
+    it('copies the protocol files to the user data directory', () => { });
   });
 
   describe('Cordova', () => {
@@ -22,6 +22,6 @@ describe('importer', () => {
       getEnvironment.mockReturnValue(environments.CORDOVA);
     });
 
-    it('copies the protocol files to the user data directory', () => {});
+    it('copies the protocol files to the user data directory', () => { });
   });
 });

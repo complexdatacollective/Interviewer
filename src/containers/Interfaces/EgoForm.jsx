@@ -1,4 +1,4 @@
-import React, {
+import {
   useEffect,
   useState,
   useCallback,
@@ -10,7 +10,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { debounce } from 'lodash';
 import { connect } from 'react-redux';
 import { Icon, Scroller } from '@codaco/ui';
-import { Markdown } from '@codaco/ui/lib/components/Fields';
+import { Markdown } from '@codaco/ui';
 import { submit, isValid, isDirty } from 'redux-form';
 import { entityAttributesProperty } from '@codaco/shared-consts';
 import Form from '../Form';
@@ -77,28 +77,28 @@ const EgoForm = ({
     setIsOverflowing(elementHasOverflow(element));
   }, []);
 
-  const submitForm = () => {
+  const submitForm = useCallback(() => {
     reduxFormSubmit(formName);
-  };
+  }, [reduxFormSubmit, formName]);
 
-  const checkShouldProceed = () => {
+  const checkShouldProceed = useCallback(() => {
     if (!formState.current.isFormDirty) { return Promise.resolve(true); }
     return openDialog(confirmDialog);
-  };
+  }, [openDialog]);
 
-  const onConfirmProceed = (confirm) => {
+  const onConfirmProceed = useCallback((confirm) => {
     if (confirm) {
       onComplete();
       return;
     }
 
     submitForm();
-  };
+  }, [onComplete, submitForm]);
 
-  const checkAndProceed = () => checkShouldProceed()
-    .then(onConfirmProceed);
+  const beforeNext = useCallback((direction, index = -1) => {
+    const checkAndProceed = () => checkShouldProceed()
+      .then(onConfirmProceed);
 
-  const beforeNext = (direction, index = -1) => {
     const isPendingStageChange = (index !== -1);
     const isBackwards = direction < 0;
 
@@ -117,32 +117,32 @@ const EgoForm = ({
     }
 
     submitForm();
-  };
+  }, [isFirstStage, submitForm, checkShouldProceed, onConfirmProceed]);
 
   useEffect(() => {
     registerBeforeNext(beforeNext);
-  }, []);
+  }, [beforeNext, registerBeforeNext]);
 
   const handleSubmitForm = (formData) => {
     updateEgo({}, formData);
     onComplete();
   };
 
-  const updateReadyStatus = useCallback(debounce((progress) => {
+  const updateReadyStatus = debounce((progress) => {
     const nextIsReady = isFormValid && progress === 1;
     setIsReadyForNext(nextIsReady);
-  }, 200), [isFormValid, setIsReadyForNext]);
+  }, 200);
 
   const handleScroll = useCallback((_, progress) => {
     setShowScrollStatus(false);
     setScrollProgress(progress);
 
     updateReadyStatus(progress);
-  }, [isFormValid, setShowScrollStatus, setScrollProgress, updateReadyStatus]);
+  }, [setShowScrollStatus, setScrollProgress, updateReadyStatus,]);
 
   useEffect(() => {
     if (!isFormValid) { setIsReadyForNext(false); }
-  }, [isFormValid]);
+  }, [isFormValid, setIsReadyForNext]);
 
   const showScrollNudge = useMemo(
     () => scrollProgress !== 1 && showScrollStatus && isOverflowing,

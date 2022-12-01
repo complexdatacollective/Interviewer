@@ -1,6 +1,3 @@
-/* eslint-disable import/prefer-default-export */
-
-import { push } from 'connected-react-router';
 import { isStageSkipped } from '../../selectors/skip-logic';
 import { getSessionPath, getSessionProgress } from '../../selectors/session';
 import { actionCreators as sessionsActions } from './sessions';
@@ -23,7 +20,9 @@ const goToStage = (index, direction) => (dispatch, getState) => {
   const back = direction === -1 ? '/?back' : '';
   const sessionPath = `${getSessionPath(state, index)}${back}`;
 
-  return dispatch(push(sessionPath));
+  console.log('goToStage is not implemented');
+  // return dispatch(push(sessionPath));
+  return;
 };
 
 /**
@@ -104,10 +103,10 @@ const goToNext = (direction = 1) => (dispatch, getState) => {
   const isLastScreenAndLastPrompt = isLastScreen && isLastPromptOrHasNone;
 
   if (
-  // first screen:
+    // first screen:
     (isBackwards(direction) && isFirstStage && isFirstPromptOrHasNone)
-      // when finish screen is absent we need to also check prompts:
-      || (isForwards(direction) && isLastScreenAndLastPrompt)
+    // when finish screen is absent we need to also check prompts:
+    || (isForwards(direction) && isLastScreenAndLastPrompt)
   ) {
     return null;
   }
@@ -119,7 +118,7 @@ const goToNext = (direction = 1) => (dispatch, getState) => {
   // At the end of the prompts it's time to go to the next stage
   if (
     (isBackwards(direction) && isFirstPrompt)
-      || (isForwards(direction) && isLastPrompt)
+    || (isForwards(direction) && isLastPrompt)
   ) {
     return dispatch(goToNextStage(direction));
   }

@@ -1,9 +1,8 @@
 /* eslint-env jest */
-/* eslint-disable @codaco/spellcheck/spell-checker */
+
 
 import React from 'react';
 import { createStore, applyMiddleware, compose } from 'redux';
-import { routerMiddleware } from 'connected-react-router';
 import { createHashHistory as createHistory } from 'history';
 import { Provider } from 'react-redux';
 import { mount } from 'enzyme';
@@ -11,7 +10,7 @@ import thunk from 'redux-thunk';
 import SettingsMenu from '../SettingsMenu';
 import createRootReducer from '../../../ducks/modules/rootReducer';
 
-jest.mock('@codaco/ui/lib/utils/CSSVariables');
+jest.mock('@codaco/ui';
 
 const actionLogger = (actions) => () => (next) => (action) => {
   actions.push(action);
@@ -80,7 +79,7 @@ const getMockStore = () => {
     createRootReducer(history),
     initialState,
     compose(
-      applyMiddleware(routerMiddleware(history), thunk, actionLogger(actions)),
+      applyMiddleware(thunk, actionLogger(actions)),
     ),
   );
   return { store, actions };

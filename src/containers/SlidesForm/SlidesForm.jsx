@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 import { debounce } from 'lodash';
 import { connect, useDispatch } from 'react-redux';
 import { ProgressBar } from '@codaco/ui';
-import { Markdown } from '@codaco/ui/lib/components/Fields';
+import { Markdown } from '@codaco/ui';
 import { submit, isValid, isDirty } from 'redux-form';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import useReadyForNextStage from '../../hooks/useReadyForNextStage';

@@ -1,4 +1,4 @@
-/* eslint-disable @codaco/spellcheck/spell-checker */
+
 /* eslint-env jest */
 import { checkEndpoint, getPlatformSpecificContent } from '../useUpdater';
 import * as Environment from '../../utils/Environment';

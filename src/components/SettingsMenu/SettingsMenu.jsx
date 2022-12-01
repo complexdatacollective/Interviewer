@@ -4,12 +4,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { Scroller } from '@codaco/ui';
-import { getCSSVariableAsNumber, getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
+import { getCSSVariableAsNumber, getCSSVariableAsString } from '@codaco/ui';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
 import { getActiveSession } from '../../selectors/session';
 import VisualPreferences from './Sections/VisualPreferences';
 import DeveloperTools from './Sections/DeveloperTools';
-import Pairing from './Sections/Pairing';
 import ExportOptions from './Sections/ExportOptions';
 import CloseButton from '../CloseButton';
 
@@ -25,7 +24,6 @@ const SettingsMenu = (props) => {
   const tabs = {
     'Visual Preferences': VisualPreferences,
     'Data Export Options': ExportOptions,
-    Pairing,
     'Developer Options': DeveloperTools,
   };
 
@@ -165,7 +163,7 @@ const SettingsMenu = (props) => {
 
   return (
     <AnimatePresence>
-      { settingsMenuOpen && (
+      {settingsMenuOpen && (
         <motion.div
           className="settings-menu"
           layout
@@ -185,7 +183,7 @@ const SettingsMenu = (props) => {
             >
               <h1>Settings</h1>
               <ul>
-                { renderNavigation }
+                {renderNavigation}
               </ul>
             </motion.nav>
             <motion.section layout variants={contentVariants}>
@@ -193,7 +191,7 @@ const SettingsMenu = (props) => {
               {/* The presence animation is temporarily disabled because it breaks
               the tests (possible bug) */}
               {/* <AnimatePresence exitBeforeEnter initial={false}> */}
-              { renderTabs }
+              {renderTabs}
               {/* </AnimatePresence> */}
             </motion.section>
           </motion.article>

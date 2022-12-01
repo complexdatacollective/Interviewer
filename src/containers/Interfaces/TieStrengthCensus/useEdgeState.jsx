@@ -164,7 +164,8 @@ const useEdgeState = (
     ), [entityAttributesProperty, edgeVariable], null));
     setIsTouched(false);
     setIsChanged(false);
-  }, deps);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [...deps, edgeType, edgeVariable, edges, pair]);
 
   return [getHasEdge(), getEdgeValue(), setEdge, isTouched, isChanged];
 };

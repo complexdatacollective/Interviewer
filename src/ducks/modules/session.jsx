@@ -1,4 +1,3 @@
-import { push } from 'connected-react-router';
 import { actionTypes as SessionsActionTypes, actionCreators as SessionsActions } from './sessions';
 import { actionCreators as SessionWorkerActions } from './sessionWorkers';
 import { actionTypes as installedProtocolsActionTypes } from './installedProtocols';
@@ -49,7 +48,8 @@ const endSession = (alsoDelete = false, markAsFinished = false) => (dispatch, ge
     type: END_SESSION,
   });
 
-  dispatch(push('/'));
+  console.warn('endSession wanted to use push from connectected-react-router but we removed it');
+  // dispatch(push('/'));
 
   dispatch(SessionWorkerActions.resetWorkerMapAction());
 

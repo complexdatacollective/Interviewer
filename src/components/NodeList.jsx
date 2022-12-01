@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { find, isEqual } from 'lodash';
 import cx from 'classnames';
 import { TransitionGroup } from 'react-transition-group';
-import { getCSSVariableAsString, getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
+import { getCSSVariableAsString, getCSSVariableAsNumber } from '@codaco/ui';
 import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import Node from '../containers/Node';
 import { Node as NodeTransition } from './Transition';

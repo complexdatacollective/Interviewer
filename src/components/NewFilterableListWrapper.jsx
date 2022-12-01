@@ -3,7 +3,7 @@ import objectHash from 'object-hash';
 import { motion, AnimatePresence } from 'framer-motion';
 import PropTypes from 'prop-types';
 import { Spinner } from '@codaco/ui';
-import { Search } from '@codaco/ui/lib/components/Fields';
+import { Search } from '@codaco/ui';
 import { entityAttributesProperty } from '@codaco/shared-consts';
 import createSorter from '../utils/createSorter';
 import { get } from '../utils/lodash-replacements';

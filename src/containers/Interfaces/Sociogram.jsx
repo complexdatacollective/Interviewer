@@ -64,7 +64,6 @@ const Sociogram = React.memo((props) => {
   const allowHighlighting = get(prompt, 'highlight.allowHighlighting', false);
   const createEdge = get(prompt, 'edges.create');
   const allowPositioning = get(prompt, 'prompt.layout.allowPositioning', true);
-  // eslint-disable-next-line @codaco/spellcheck/spell-checker
   const allowAutomaticLayout = get(stage, 'behaviours.automaticLayout.enabled', false);
   const destinationRestriction = get(prompt, 'edges.restrict.destination', null);
   const originRestriction = get(prompt, 'edges.restrict.origin', null);

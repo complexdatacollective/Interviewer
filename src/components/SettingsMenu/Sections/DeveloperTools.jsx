@@ -2,11 +2,8 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withHandlers, compose } from 'recompose';
-import { push } from 'connected-react-router';
 import { motion } from 'framer-motion';
-import { Button } from '@codaco/ui/lib/components';
-import { Number } from '@codaco/ui/lib/components/Fields';
-import Toggle from '@codaco/ui/lib/components/Fields/Toggle';
+import { Button, Number, Toggle } from '@codaco/ui';
 import { importProtocolFromURI } from '../../../utils/protocol/importProtocol';
 import { actionCreators as dialogsActions } from '../../../ducks/modules/dialogs';
 import { actionCreators as mockActions } from '../../../ducks/modules/mock';
@@ -76,25 +73,25 @@ const DeveloperTools = (props) => {
       {
         shouldShowMocksItem
         && (
-        <motion.article className="settings-element">
-          <div className="form-field-container">
-            <div className="form-field">
-              <Button
-                id="add-mock-nodes"
-                onClick={handleAddMockNodes}
-              >
-                Add nodes
-              </Button>
+          <motion.article className="settings-element">
+            <div className="form-field-container">
+              <div className="form-field">
+                <Button
+                  id="add-mock-nodes"
+                  onClick={handleAddMockNodes}
+                >
+                  Add nodes
+                </Button>
+              </div>
             </div>
-          </div>
-          <div>
-            <h2>Add Mock Nodes</h2>
-            <p>
-              During an active interview session, clicking this button will create
-              mock nodes for testing purposes.
-            </p>
-          </div>
-        </motion.article>
+            <div>
+              <h2>Add Mock Nodes</h2>
+              <p>
+                During an active interview session, clicking this button will create
+                mock nodes for testing purposes.
+              </p>
+            </div>
+          </motion.article>
         )
       }
       <motion.article className="settings-element--sub-item">
@@ -221,7 +218,7 @@ const mapDispatchToProps = (dispatch) => ({
   generateMockSessions: bindActionCreators(mockActions.generateMockSessions, dispatch),
   openDialog: bindActionCreators(dialogsActions.openDialog, dispatch),
   toggleSetting: (setting) => dispatch(deviceSettingsActions.toggleSetting(setting)),
-  resetState: () => dispatch(push('/reset')),
+  resetState: () => { console.warn('resetState is not implemented'); },
 });
 
 const mapStateToProps = (state) => ({

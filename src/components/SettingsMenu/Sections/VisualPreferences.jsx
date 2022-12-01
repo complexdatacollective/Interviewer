@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { motion } from 'framer-motion';
-import { Toggle } from '@codaco/ui/lib/components/Fields';
+import { Toggle } from '@codaco/ui';
 import { isElectron, isCordova } from '../../../utils/Environment';
 import { actionCreators as deviceSettingsActions } from '../../../ducks/modules/deviceSettings';
 
@@ -17,26 +17,27 @@ const VisualPreferences = (props) => {
     interfaceScale,
   } = props;
 
-  const getElectronWindow = () => {
-    if (isElectron()) {
-      const electron = window.require('electron');
-      return electron.remote.getCurrentWindow();
-    }
-    return false;
-  };
+  // const getElectronWindow = () => {
+  //   if (isElectron()) {
+  //     const electron = window.require('electron');
+  //     return electron.remote.getCurrentWindow();
+  //   }
+  //   return false;
+  // };
 
   const handleToggleUseFullScreenApp = () => {
-    const electronWindow = getElectronWindow();
+    console.warn('Not implemented');
+    // const electronWindow = getElectronWindow();
 
-    if (electronWindow) {
-      if (electronWindow.isFullScreen()) {
-        electronWindow.setFullScreen(false);
-      } else {
-        electronWindow.setFullScreen(true);
-      }
-    }
+    // if (electronWindow) {
+    //   if (electronWindow.isFullScreen()) {
+    //     electronWindow.setFullScreen(false);
+    //   } else {
+    //     electronWindow.setFullScreen(true);
+    //   }
+    // }
 
-    toggleSetting('startFullScreen');
+    // toggleSetting('startFullScreen');
   };
 
   return (
@@ -88,52 +89,52 @@ const VisualPreferences = (props) => {
         </div>
       </motion.article>
       {!isCordova() && (
-      <motion.article className="settings-element">
-        <Toggle
-          input={{
-            checked: true,
-            value: useDynamicScaling,
-            onChange: () => toggleSetting('useDynamicScaling'),
-          }}
-        />
-        <div>
-          <h2>Use dynamic scaling?</h2>
-          <p>
-            Dynamic scaling lets Interviewer resize the user interface proportionally to
-            the size of the window. Turning it off will use a fixed size.
-          </p>
-        </div>
-      </motion.article>
+        <motion.article className="settings-element">
+          <Toggle
+            input={{
+              checked: true,
+              value: useDynamicScaling,
+              onChange: () => toggleSetting('useDynamicScaling'),
+            }}
+          />
+          <div>
+            <h2>Use dynamic scaling?</h2>
+            <p>
+              Dynamic scaling lets Interviewer resize the user interface proportionally to
+              the size of the window. Turning it off will use a fixed size.
+            </p>
+          </div>
+        </motion.article>
       )}
       {isElectron() && (
-      <motion.article className="settings-element">
-        <Toggle
-          input={{
-            checked: !!startFullScreen,
-            value: startFullScreen,
-            onChange: handleToggleUseFullScreenApp,
-          }}
-        />
-        <div>
-          <h2>Run Fullscreen?</h2>
-          <p>
-            Interviewer is designed to run in full screen mode for an
-            immersive experience. You may disable or enable this mode here.
-          </p>
-          <p>
-            <em>
-              <strong>Windows users:</strong>
-              {' '}
-              when in full screen mode you
-              can access the native app menu by pressing the
-              {' '}
-              <code>alt</code>
-              {' '}
-              key.
-            </em>
-          </p>
-        </div>
-      </motion.article>
+        <motion.article className="settings-element">
+          <Toggle
+            input={{
+              checked: !!startFullScreen,
+              value: startFullScreen,
+              onChange: handleToggleUseFullScreenApp,
+            }}
+          />
+          <div>
+            <h2>Run Fullscreen?</h2>
+            <p>
+              Interviewer is designed to run in full screen mode for an
+              immersive experience. You may disable or enable this mode here.
+            </p>
+            <p>
+              <em>
+                <strong>Windows users:</strong>
+                {' '}
+                when in full screen mode you
+                can access the native app menu by pressing the
+                {' '}
+                <code>alt</code>
+                {' '}
+                key.
+              </em>
+            </p>
+          </div>
+        </motion.article>
       )}
       <motion.article className="settings-element">
         <Toggle

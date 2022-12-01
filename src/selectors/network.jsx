@@ -4,7 +4,10 @@ import { createDeepEqualSelector } from './utils';
 import { getProtocolCodebook } from './protocol';
 import { asWorkerAgentNetwork } from '../utils/networkFormat';
 import { getEntityAttributes } from '../ducks/modules/network';
-import customFilter from '../utils/networkQuery/filter';
+
+const customFilter = () => {
+  console.warn('Custom filter not implemented');
+}
 
 export const getNetwork = createDeepEqualSelector(
   (state, props) => getActiveSession(state, props),

@@ -3,7 +3,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
-import { getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
+import { getCSSVariableAsString } from '@codaco/ui';
 import { makeGetAdditionalAttributes } from '../selectors/interface';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { Panels } from '../components';

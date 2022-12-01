@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import { Fade } from '@codaco/ui/lib/components/Transitions';
+import { Fade } from '@codaco/ui';
 import DragManager, { NO_SCROLL } from '../../behaviours/DragAndDrop/DragManager';
 
 const AnnotationLines = ({

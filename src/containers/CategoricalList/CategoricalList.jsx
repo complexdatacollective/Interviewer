@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { Flipper } from 'react-flip-toolkit';
 import cx from 'classnames';
 import color from 'color';
-import { getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
+import { getCSSVariableAsString } from '@codaco/ui';
 import { entityAttributesProperty } from '@codaco/shared-consts';
 import {
   makeNetworkNodesForType, makeGetVariableOptions, makeGetPromptVariable, getPromptOtherVariable,

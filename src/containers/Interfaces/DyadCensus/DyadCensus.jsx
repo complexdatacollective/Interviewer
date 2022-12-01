@@ -1,11 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import BooleanOption from '@codaco/ui/lib/components/Boolean/BooleanOption';
+import { BooleanOption, Markdown } from '@codaco/ui';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Markdown } from '@codaco/ui/lib/components/Fields';
 import Prompts from '../../../components/Prompts';
 import withPrompt from '../../../behaviours/withPrompt';
 import { makeNetworkNodesForType as makeGetNodes } from '../../../selectors/interface';
@@ -77,7 +76,7 @@ const DyadCensus = ({
     [stepsState.step],
   );
 
-  const next = () => {
+  const next = useCallback(() => {
     setForwards(true);
     setIsValid(true);
 
@@ -105,9 +104,9 @@ const DyadCensus = ({
     if (stepsState.isEnd) { return; }
 
     nextStep();
-  };
+  }, [stepsState, hasEdge, isIntroduction, nextStep, dispatch]);
 
-  const back = () => {
+  const back = useCallback(() => {
     setForwards(false);
     setIsValid(true);
 
@@ -123,7 +122,7 @@ const DyadCensus = ({
     if (stepsState.isStart) { return; }
 
     previousStep();
-  };
+  }, [stepsState, isIntroduction, previousStep, dispatch]);
 
   const beforeNext = useCallback((direction, index = -1) => {
     if (index !== -1) {
@@ -137,11 +136,11 @@ const DyadCensus = ({
     }
 
     next();
-  }, [back, next]);
+  }, [back, next, onComplete]);
 
   useEffect(() => {
     registerBeforeNext(beforeNext);
-  }, [beforeNext]);
+  }, [beforeNext, registerBeforeNext]);
 
   useAutoAdvance(next, isTouched, isChanged);
 

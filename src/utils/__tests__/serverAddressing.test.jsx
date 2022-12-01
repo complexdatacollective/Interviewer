@@ -1,5 +1,5 @@
 /* eslint-env jest */
-/* eslint-disable @codaco/spellcheck/spell-checker */
+
 import * as util from '../serverAddressing';
 
 describe('the serverAddressing util', () => {

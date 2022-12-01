@@ -1,5 +1,5 @@
 /* eslint-env jest */
-/* eslint-disable @codaco/spellcheck/spell-checker */
+
 import {
   entityPrimaryKeyProperty,
 } from '@codaco/shared-consts';

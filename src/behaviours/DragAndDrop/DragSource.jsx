@@ -1,6 +1,4 @@
-/* eslint-disable react/no-find-dom-node, react/sort-comp, react/jsx-props-no-spreading */
-
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useCallback, useRef, useState } from 'react';
 import { throttle } from 'lodash';
 import DragPreview from './DragPreview';
 import DragManager, { VERTICAL_SCROLL } from './DragManager';
@@ -16,46 +14,46 @@ const dragSource = (WrappedComponent) => ({
 }) => {
   const node = useRef();
   const previewRef = useRef();
-  let dragManager = null;
-  let previewEl = null;
+  let dragManager = useRef();
+  let previewEl = useRef();
 
   const [isDragging, setIsDragging] = useState(false);
 
-  const cleanupDragManager = () => {
-    if (dragManager) {
-      dragManager.unmount();
-      dragManager = null;
+  const cleanupDragManager = useCallback(() => {
+    if (dragManager.current) {
+      dragManager.current.unmount();
+      dragManager.current = null;
     }
-  };
+  }, [dragManager]);
 
-  const cleanupPreview = () => {
-    if (previewEl) {
-      previewEl.cleanup();
-      previewEl = null;
+  const cleanupPreview = useCallback(() => {
+    if (previewEl.current) {
+      previewEl.current.cleanup();
+      previewEl.current = null;
     }
-  };
+  }, [previewEl]);
 
-  const createPreview = () => {
+  const createPreview = useCallback(() => {
     if (!preview) {
-      previewEl = new DragPreview(node.current);
+      previewEl.current = new DragPreview(node.current);
       return;
     }
 
-    previewEl = new DragPreview(previewRef.current);
-  };
+    previewEl.current = new DragPreview(previewRef.current);
+  }, [preview]);
 
-  const updatePreview = ({ x, y }) => {
+  const updatePreview = useCallback(({ x, y }) => {
     if (previewEl) {
-      previewEl.position({ x, y });
+      previewEl.current.position({ x, y });
     }
-  };
+  }, [previewEl]);
 
   const setValidMove = (valid) => {
     if (!previewEl) return;
-    previewEl.setValidMove(valid);
+    previewEl.current.setValidMove(valid);
   };
 
-  const onDragStart = (movement) => {
+  const onDragStart = useCallback((movement) => {
     createPreview();
 
     store.dispatch(
@@ -66,7 +64,7 @@ const dragSource = (WrappedComponent) => ({
     );
 
     setIsDragging(true);
-  };
+  }, [meta, createPreview]);
 
   const throttledDragAction = throttle(({ x, y, ...other }) => {
     store.dispatch(
@@ -76,23 +74,23 @@ const dragSource = (WrappedComponent) => ({
     );
   }, 60);
 
-  const onDragMove = ({ x, y, ...other }) => {
+  const onDragMove = useCallback(({ x, y, ...other }) => {
     updatePreview({ x, y });
     throttledDragAction({ x, y, ...other });
-  };
+  }, [updatePreview, throttledDragAction]);
 
-  const onDragEnd = (movement) => {
+  const onDragEnd = useCallback((movement) => {
     cleanupPreview();
     setIsDragging(false);
 
     store.dispatch(
       actions.dragEnd(movement),
     );
-  };
+  }, [cleanupPreview, setIsDragging]);
 
   useEffect(() => {
     if (node.current && allowDrag) {
-      dragManager = new DragManager({
+      dragManager.current = new DragManager({
         el: node.current,
         onDragStart,
         onDragMove,
@@ -105,7 +103,7 @@ const dragSource = (WrappedComponent) => ({
       cleanupPreview();
       cleanupDragManager();
     };
-  }, [node, allowDrag]);
+  }, [node, allowDrag, cleanupPreview, cleanupDragManager, onDragMove, onDragStart, onDragEnd, scrollDirection]);
 
   const styles = () => (isDragging ? { visibility: 'hidden' } : {});
 

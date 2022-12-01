@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import {
   find,
   get,
@@ -33,16 +33,16 @@ const useDropMonitor = (id, props = defaultProps) => {
     setState(newState);
   };
 
-  const updateMonitorProps = () => {
+  const updateMonitorProps = useCallback(() => {
     const status = getMonitorProps(store.getState(), id, props);
     updateState(status);
-  };
+  }, [id, props]);
 
   useEffect(() => {
     const unsubscribe = store.subscribe(updateMonitorProps);
 
     return unsubscribe;
-  }, []);
+  }, [updateMonitorProps]);
 
   return state;
 };

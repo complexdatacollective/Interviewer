@@ -3,7 +3,7 @@ import { compose } from 'recompose';
 import { withBounds } from '../../behaviours';
 import ConvexHulls from '../../components/Canvas/ConvexHulls';
 import { makeGetCategoricalOptions } from '../../selectors/network';
-import { entityAttributesProperty } from '../../utils/network-exporters/src/utils/reservedAttributes';
+import { entityAttributesProperty } from '@codaco/shared-consts';
 
 function makeMapStateToProps() {
   const getCategoricalOptions = makeGetCategoricalOptions();

@@ -1,5 +1,4 @@
-import React from 'react';
-import UIPrompts from '@codaco/ui/lib/components/Prompts/Prompts';
+import { Prompts as UIPrompts } from '@codaco/ui';
 import { useSelector } from 'react-redux';
 
 const Prompts = (props) => {

@@ -1,4 +1,4 @@
-/* eslint-disable @codaco/spellcheck/spell-checker */
+
 /* eslint-env jest */
 import { entityAttributesProperty } from '@codaco/shared-consts';
 import {

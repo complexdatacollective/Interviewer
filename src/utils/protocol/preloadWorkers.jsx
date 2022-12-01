@@ -3,8 +3,6 @@ import { isCordova } from '../Environment';
 import protocolPath from './protocolPath';
 import { urlForWorkerSource, supportedWorkers } from '../WorkerAgent';
 
-const path = require('path');
-
 /**
  * Builds source code for a Web Worker based on the protocol's
  * mapping function.
@@ -28,33 +26,32 @@ const compileWorker = (src, funcName) => {
   return `
     ${src}
     ;
-    onmessage = ((userFunc) => ${
-      ({ data }) => {
-        const messageId = data.messageId;
-        const onError = (scriptErr) => {
-          postMessage({
-            messageId,
-            error: {
-              name: scriptErr.name,
-              message: scriptErr.message,
-            },
-          });
-        };
+    onmessage = ((userFunc) => ${({ data }) => {
+      const messageId = data.messageId;
+      const onError = (scriptErr) => {
+        postMessage({
+          messageId,
+          error: {
+            name: scriptErr.name,
+            message: scriptErr.message,
+          },
+        });
+      };
 
-        let result;
-        try {
-          result = userFunc(data);
-        } catch (err) {
-          onError(err);
-        }
-        if (result instanceof Promise) {
-          result
-            .then(val => postMessage({ messageId, value: val }))
-            .catch(onError);
-        } else {
-          postMessage({ messageId, value: result });
-        }
+      let result;
+      try {
+        result = userFunc(data);
+      } catch (err) {
+        onError(err);
       }
+      if (result instanceof Promise) {
+        result
+          .then(val => postMessage({ messageId, value: val }))
+          .catch(onError);
+      } else {
+        postMessage({ messageId, value: result });
+      }
+    }
     })(${funcName});
     `;
   /* eslint-enable */
@@ -67,25 +64,27 @@ const compileWorker = (src, funcName) => {
  */
 const preloadWorkers = (protocolUID) => {
   return Promise.all(supportedWorkers.map((workerName) => {
-    let workerFile;
+    console.warn('preloadWorkers not implemented');
+    return Promise.resolve();
+    // let workerFile;
 
-    if (isCordova()) {
-      workerFile = `${protocolPath(protocolUID)}${workerName}.js`;
-    } else {
-      workerFile = path.join(protocolPath(protocolUID), `${workerName}.js`);
-    }
+    // if (isCordova()) {
+    //   workerFile = `${protocolPath(protocolUID)}${workerName}.js`;
+    // } else {
+    //   workerFile = path.join(protocolPath(protocolUID), `${workerName}.js`);
+    // }
 
-    const promise = readFile(workerFile);
+    // const promise = readFile(workerFile);
 
-    return promise
-      /**
-       * Load from blob so that script inherits CSP
-       */
-      .then(buf => new TextDecoder().decode(buf))
-      .then(str => compileWorker(str, workerName))
-      .then(source => new Blob([source], { type: 'text/plain' }))
-      .then(blob => urlForWorkerSource(blob))
-      .catch(() => null);
+    // return promise
+    //   /**
+    //    * Load from blob so that script inherits CSP
+    //    */
+    //   .then(buf => new TextDecoder().decode(buf))
+    //   .then(str => compileWorker(str, workerName))
+    //   .then(source => new Blob([source], { type: 'text/plain' }))
+    //   .then(blob => urlForWorkerSource(blob))
+    //   .catch(() => null);
   }));
 };
 

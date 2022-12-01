@@ -1,4 +1,4 @@
-import csv from 'csv2json';
+import csv from 'csvtojson';
 import { entityAttributesProperty } from '@codaco/shared-consts';
 /**
  * Converts a CSV file into a Network Canvas node list JSON
@@ -25,11 +25,13 @@ const CSVToJSONNetworkFormat = (data) => {
 };
 
 // Respond to message from parent thread
+// eslint-disable-next-line no-restricted-globals
 self.addEventListener(
   'message',
   (event) => {
     CSVToJSONNetworkFormat(event.data)
       .then((network) => {
+        // eslint-disable-next-line no-restricted-globals
         self.postMessage(network);
       });
   },

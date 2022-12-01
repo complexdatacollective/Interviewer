@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import UINode from '../../containers/Node';
@@ -36,7 +36,7 @@ const LayoutNode = ({
         dragManager.current.unmount();
       }
     };
-  }, [portal, index, onDragStart, onDragMove, onDragEnd]);
+  }, [portal, index, onDragStart, onDragMove, onDragEnd, allowPositioning, node]);
 
   useEffect(() => {
     const handleSelected = () => onSelected(node);
@@ -44,7 +44,7 @@ const LayoutNode = ({
     portal.addEventListener('click', handleSelected);
 
     return () => { portal.removeEventListener('click', handleSelected); };
-  }, [onSelected, node]);
+  }, [onSelected, node, portal]);
 
   return ReactDOM.createPortal(
     <UINode

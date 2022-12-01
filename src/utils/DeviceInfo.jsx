@@ -1,5 +1,5 @@
 /* globals device */
-import { isCordova, isElectron } from './Environment';
+import { isCordova, isElectron, isWeb } from './Environment';
 
 const versioned = (name) => `${name} - ${device.version || '?'}`;
 
@@ -74,8 +74,7 @@ const deviceDescription = () => {
   return 'Unknown device';
 };
 
-// Disable dynamic scaling on android because vmin is resized by software keyboard
-const shouldUseDynamicScaling = () => !isCordova();
+const shouldUseDynamicScaling = () => false;
 
 // Set fullscreenforms to true for tablets
 const shouldUseFullScreenForm = () => isCordova();

@@ -1,9 +1,9 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useStore } from 'react-redux';
 import { Field as ReduxFormField } from 'redux-form';
 import { map, toPairs } from 'lodash';
-import * as Fields from '@codaco/ui/lib/components/Fields';
+import * as Fields from '@codaco/ui';
 import validations from '../utils/Validations';
 import { FormComponent } from '../protocol-consts';
 import { get } from '../utils/lodash-replacements';
@@ -60,7 +60,7 @@ const Field = ({
   const component = useMemo(() => getInputComponent(rest.component), [rest.component]);
   const validate = useMemo(
     () => rest.validate || getValidation(validation, store),
-    [],
+    [rest.validate, store, validation],
   );
 
   return (

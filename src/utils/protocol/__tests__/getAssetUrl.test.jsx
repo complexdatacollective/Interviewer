@@ -3,7 +3,6 @@
 import environments from '../../environments';
 import { getEnvironment } from '../../Environment';
 import assetUrl from '../getAssetUrl';
-const path = require('path');
 
 jest.mock('../../filesystem');
 
@@ -17,25 +16,25 @@ describe('assetUrl', () => {
       await expect(assetUrl('foo.canvas', 'bar.mp3', 'factory')).resolves.toEqual('tmp/mock/user/path/protocols/foo.canvas/assets/bar.mp3');
     });
 
-    it('Generates a usable URL for a downloaded protocol', () => {}); // TBD how to handle [#681]
+    it('Generates a usable URL for a downloaded protocol', () => { }); // TBD how to handle [#681]
   });
 
-  describe('Electron', () => {
-    beforeAll(() => {
-      getEnvironment.mockReturnValue(environments.ELECTRON);
-    });
+  // describe('Electron', () => {
+  //   beforeAll(() => {
+  //     getEnvironment.mockReturnValue(environments.ELECTRON);
+  //   });
 
-    it('Generates an asset URL for the protocol', async () => {
-      const encodedPath = encodeURIComponent(path.join('foo.canvas', 'assets', 'bar.mp3'));
-      const expectedResult = `asset://${encodedPath}`;
-      await expect(assetUrl('foo.canvas', 'bar.mp3')).resolves.toEqual(expectedResult);
-    });
+  //   it('Generates an asset URL for the protocol', async () => {
+  //     const encodedPath = encodeURIComponent(path.join('foo.canvas', 'assets', 'bar.mp3'));
+  //     const expectedResult = `asset://${encodedPath}`;
+  //     await expect(assetUrl('foo.canvas', 'bar.mp3')).resolves.toEqual(expectedResult);
+  //   });
 
-    describe('with missing parameters', () => {
-      it('throws an error', () => {
-        expect(() => assetUrl('foo.canvas')).toThrow();
-        expect(() => assetUrl()).toThrow();
-      });
-    });
-  });
+  //   describe('with missing parameters', () => {
+  //     it('throws an error', () => {
+  //       expect(() => assetUrl('foo.canvas')).toThrow();
+  //       expect(() => assetUrl()).toThrow();
+  //     });
+  //   });
+  // });
 });

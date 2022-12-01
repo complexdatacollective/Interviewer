@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import {
   getCSSVariableAsNumber,
   getCSSVariableAsObject,
-} from '@codaco/ui/lib/utils/CSSVariables';
+} from '@codaco/ui';
 
 const useAnimationSettings = () => {
   const animation = useMemo(() => {

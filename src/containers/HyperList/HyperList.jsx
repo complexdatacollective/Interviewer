@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 import React, {
   useContext,
   useMemo,
@@ -126,7 +125,7 @@ const HyperList = ({
 }) => {
   const RowRenderer = useMemo(
     () => getRowRenderer(DragSource(ItemComponent), DragComponent, allowDragging),
-    [ItemComponent, DragComponent],
+    [ItemComponent, DragComponent, allowDragging],
   );
 
   const context = useMemo(() => ({
@@ -142,7 +141,7 @@ const HyperList = ({
 
   const SizeRenderer = useCallback((props) => (
     <div className="hyper-list__item"><ItemComponent {...props} /></div>
-  ), [ItemComponent]);
+  ), []);
 
   const getItemSize = (item, listWidth) => {
     if (!listWidth) { return 0; }
@@ -185,7 +184,7 @@ const HyperList = ({
           <div className="hyper-list__container">
             <div className="hyper-list__sizer">
               <AnimatePresence exitBeforeEnter>
-                { showPlaceholder ? placeholder : (
+                {showPlaceholder ? placeholder : (
                   showEmpty ? <EmptyComponent /> : (
                     <AutoSizer>
                       {(containerSize) => {
@@ -213,7 +212,7 @@ const HyperList = ({
         </ListContext.Provider>
       </motion.div>
       <AnimatePresence>
-        { showTooMany && (
+        {showTooMany && (
           <LargeRosterNotice />
         )}
       </AnimatePresence>

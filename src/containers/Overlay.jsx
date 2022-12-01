@@ -3,9 +3,10 @@ import cx from 'classnames';
 import { useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
 import PropTypes from 'prop-types';
-import ExpandLessIcon from '@material-ui/icons/ExpandLessRounded';
 import { Modal } from '@codaco/ui';
 import CloseButton from '../components/CloseButton';
+
+const ExpandLessIcon = () => { };
 
 /**
  * Renders a modal window.
@@ -33,7 +34,7 @@ const Overlay = (props) => {
   // UNLESS we have the forceDisableFullscreen prop
   const startFullscreen = useMemo(
     () => forceEnableFullscreen
-    || (!forceDisableFullscreen && (useFullScreenFormsPref || fullscreenProp)),
+      || (!forceDisableFullscreen && (useFullScreenFormsPref || fullscreenProp)),
     [
       forceEnableFullscreen,
       forceDisableFullscreen,
@@ -52,7 +53,7 @@ const Overlay = (props) => {
 
   const overlayClasses = cx(
     'overlay',
-    // eslint-disable-next-line @codaco/spellcheck/spell-checker
+
     { 'overlay--fullheight': fullheight },
     { 'overlay--fullscreen': fullscreen },
     className,
@@ -65,18 +66,18 @@ const Overlay = (props) => {
   return (
     <Modal show={show} onBlur={onBlur}>
       <article className={overlayClasses}>
-        { title && (
+        {title && (
           <header className="overlay__title">
-            { allowMaximize && (!forceDisableFullscreen && !forceEnableFullscreen) && (
-            <motion.div
-              style={{ cursor: 'pointer', display: 'flex' }}
-              onClick={handleFullScreenChange}
-              animate={!fullscreen ? { rotate: 0 } : { rotate: 180 }}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <ExpandLessIcon style={{ fontSize: '4rem' }} />
-            </motion.div>
+            {allowMaximize && (!forceDisableFullscreen && !forceEnableFullscreen) && (
+              <motion.div
+                style={{ cursor: 'pointer', display: 'flex' }}
+                onClick={handleFullScreenChange}
+                animate={!fullscreen ? { rotate: 0 } : { rotate: 180 }}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <ExpandLessIcon style={{ fontSize: '4rem' }} />
+              </motion.div>
             )}
             <h1>{title}</h1>
             <CloseButton className="overlay__close" onClick={onClose} />
@@ -85,7 +86,7 @@ const Overlay = (props) => {
         <main className="overlay__content">
           {children}
         </main>
-        { footer && (
+        {footer && (
           <footer className="overlay__footer">
             {footer}
           </footer>
@@ -110,8 +111,8 @@ Overlay.propTypes = {
 };
 
 Overlay.defaultProps = {
-  onBlur: () => {},
-  onClose: () => {},
+  onBlur: () => { },
+  onClose: () => { },
   title: null,
   className: '',
   show: false,

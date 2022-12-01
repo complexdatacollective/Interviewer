@@ -1,10 +1,10 @@
 /* eslint-disable no-nested-ternary */
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { Button } from '@codaco/ui';
 import { find } from 'lodash';
-import compareVersions from 'compare-versions';
-import { Markdown } from '@codaco/ui/lib/components/Fields';
+import { compare } from 'compare-versions';
+import { Markdown } from '@codaco/ui';
 import { actionCreators as toastActions } from '../ducks/modules/toasts';
 import { actionCreators as dialogActions } from '../ducks/modules/dialogs';
 import getVersion from '../utils/getVersion';
@@ -42,7 +42,6 @@ export const getPlatformSpecificContent = (assets) => {
   }
 
   if (isMacOS()) {
-    // eslint-disable-next-line @codaco/spellcheck/spell-checker
     const dmg = find(assets, (value) => value.name.split('.').pop() === 'dmg');
     return {
       buttonText: 'Download Installer',
@@ -51,7 +50,6 @@ export const getPlatformSpecificContent = (assets) => {
   }
 
   if (isWindows()) {
-    // eslint-disable-next-line @codaco/spellcheck/spell-checker
     const exe = find(assets, (value) => value.name.split('.').pop() === 'exe');
     return {
       buttonText: 'Download Installer',
@@ -75,40 +73,39 @@ export const getPlatformSpecificContent = (assets) => {
 export const checkEndpoint = (updateEndpoint, currentVersion) => fetch(updateEndpoint)
   .then((response) => response.json())
   .then(({ name, body, assets }) => {
-    if (compareVersions.compare(currentVersion, name, '<')) {
+    if (compare(currentVersion, name, '<')) {
       return {
-        newVersion: name,
-        releaseNotes: body,
-        releaseAssets: assets,
+        updateAvailable: true,
+        updateDetails: {
+          newVersion: name,
+          releaseNotes: body,
+          releaseAssets: assets,
+        },
       };
     }
     // eslint-disable-next-line no-console
     console.info(`No update available (current: ${currentVersion}, latest: ${name}).`);
-    return false;
+    return { updateAvailable: false };
   })
   .catch((error) => {
     // eslint-disable-next-line no-console
     console.warn('Error checking for updates:', error);
     // Don't reject, as we don't want to handle this error - just fail silently.
-    return Promise.resolve(false);
+    return Promise.resolve({ updateAvailable: false });
   });
+
+
 
 const useUpdater = (updateEndpoint, timeout = 0) => {
   const dispatch = useDispatch();
   const [dismissedUpdates, dismissUpdate] = useDismissedUpdatesState();
 
-  if (isPreview()) {
-    // eslint-disable-next-line no-console
-    console.info('Checking for updates disabled because we are in preview mode!');
-    return;
-  }
-
-  const handleDismiss = (version) => {
+  const handleDismiss = useCallback((version) => {
     dismissUpdate(version);
     dispatch(toastActions.removeToast('update-toast'));
-  };
+  }, [dismissUpdate, dispatch]);
 
-  const showReleaseNotes = (releaseNotes, releaseButtonContent) => {
+  const showReleaseNotes = useCallback((releaseNotes, releaseButtonContent) => {
     const { buttonText, buttonLink } = releaseButtonContent;
 
     dispatch(dialogActions.openDialog({
@@ -131,19 +128,18 @@ const useUpdater = (updateEndpoint, timeout = 0) => {
         </div>
       ),
     }));
-  };
+  }, [dispatch]);
 
-  const checkForUpdate = async () => {
-    const updateAvailable = await getVersion()
-      .then((version) => checkEndpoint(updateEndpoint, version));
-
+  const checkForUpdate = useCallback(async () => {
+    const currentVersion = await getVersion();
+    const { updateAvailable, updateDetails } = await checkEndpoint(updateEndpoint, currentVersion);
     if (!updateAvailable) { return; }
 
     const {
       newVersion,
       releaseNotes,
       releaseAssets,
-    } = updateAvailable;
+    } = updateDetails;
 
     const releaseButtonContent = getPlatformSpecificContent(releaseAssets);
 
@@ -173,13 +169,18 @@ const useUpdater = (updateEndpoint, timeout = 0) => {
         </>
       ),
     }));
-  };
+  }, [updateEndpoint, dismissedUpdates, dispatch, handleDismiss, showReleaseNotes]);
 
   useEffect(() => {
     const delay = setTimeout(checkForUpdate, timeout);
-
     return () => clearTimeout(delay);
-  }, [updateEndpoint, dismissedUpdates]);
+  }, [updateEndpoint, dismissedUpdates, checkForUpdate, timeout]);
+
+  if (isPreview()) {
+    // eslint-disable-next-line no-console
+    console.info('Checking for updates disabled because we are in preview mode!');
+    return;
+  }
 };
 
 export default useUpdater;

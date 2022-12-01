@@ -12,10 +12,6 @@ const useSortableProperties = (variableDefinitions, sortOptions, path = ['data',
   const initialSortOrder = get(sortOptions, ['sortOrder', 0]);
   const initialSortProperty = get(initialSortOrder, 'property');
 
-  if (!sortOptions) {
-    return { sortableProperties: [], initialSortOrder: undefined };
-  }
-
   const enhancedInitialSortOrder = useMemo(
     () => {
       const property = convertNamesToUUIDs(variableDefinitions, initialSortProperty);
@@ -24,7 +20,7 @@ const useSortableProperties = (variableDefinitions, sortOptions, path = ['data',
         property: compact([...path, property]),
       };
     },
-    [initialSortOrder],
+    [initialSortOrder, initialSortProperty, path, variableDefinitions],
   );
 
   const enhancedSortableProperties = useMemo(
@@ -39,8 +35,12 @@ const useSortableProperties = (variableDefinitions, sortOptions, path = ['data',
           };
         });
     },
-    [sortableProperties],
+    [sortableProperties, path, variableDefinitions],
   );
+
+  if (!sortOptions) {
+    return { sortableProperties: [], initialSortOrder: undefined };
+  }
 
   return {
     sortableProperties: enhancedSortableProperties,

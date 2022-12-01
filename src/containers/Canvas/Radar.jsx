@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { range, last, zipWith } from 'lodash';
 import color from 'color';
-import { getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
+import { getCSSVariableAsString } from '@codaco/ui';
 
 const equalByArea = (outerRadius, n) => {
   const rsq = outerRadius ** 2;

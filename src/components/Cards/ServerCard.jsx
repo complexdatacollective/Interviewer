@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ServerCard as UIServerCard } from '@codaco/ui/lib/components/Cards';
+import { ServerCard as UIServerCard } from '@codaco/ui';
 
 const ServerCard = (props) => {
   const {

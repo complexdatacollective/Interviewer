@@ -1,6 +1,5 @@
-import React from 'react';
 import { motion } from 'framer-motion';
-import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
+import { getCSSVariableAsNumber } from '@codaco/ui';
 
 const BackgroundDimmer = ({ clickHandler, children }) => {
   const slowDuration = getCSSVariableAsNumber('--animation-duration-slow-ms') / 1000;

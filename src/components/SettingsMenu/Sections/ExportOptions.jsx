@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { motion } from 'framer-motion';
 import { Button } from '@codaco/ui';
-import { Toggle, Number } from '@codaco/ui/lib/components/Fields';
+import { Toggle, Number } from '@codaco/ui';
 import { actionCreators as deviceSettingsActions } from '../../../ducks/modules/deviceSettings';
 
 const ExportOptions = (props) => {
@@ -123,7 +123,7 @@ const ExportOptions = (props) => {
             left). Enabling this option will store coordinates as screen space pixel values,
             with the same origin.
           </p>
-          { useScreenLayoutCoordinates && (
+          {useScreenLayoutCoordinates && (
             <motion.article className="settings-element--sub-item">
               <div>
                 <h3>Screen Size</h3>

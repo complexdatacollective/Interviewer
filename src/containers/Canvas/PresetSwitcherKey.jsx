@@ -4,8 +4,7 @@ import { compose } from 'recompose';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { isEmpty } from 'lodash';
-import { Icon, window } from '@codaco/ui';
-import { Radio, MarkdownLabel } from '@codaco/ui/lib/components/Fields';
+import { Icon, Radio, MarkdownLabel } from '@codaco/ui';
 import Accordion from './Accordion';
 import {
   makeGetEdgeColor, makeGetEdgeLabel, makeGetNodeAttributeLabel, makeGetCategoricalOptions,
@@ -159,6 +158,5 @@ export {
 };
 
 export default compose(
-  window,
   connect(makeMapStateToProps),
 )(PresetSwitcherKey);

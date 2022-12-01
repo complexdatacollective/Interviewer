@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { ProtocolCard as UIProtocolCard } from '@codaco/ui/lib/components/Cards';
+import { ProtocolCard as UIProtocolCard } from '@codaco/ui';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import formatDatestamp from '../../utils/formatDatestamp';
 import { APP_SUPPORTED_SCHEMA_VERSIONS, APP_SCHEMA_VERSION } from '../../config';

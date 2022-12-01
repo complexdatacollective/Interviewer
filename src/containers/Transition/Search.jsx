@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Transition } from 'react-transition-group';
 import anime from 'animejs';
-import { getCSSVariableAsObject, getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
+import { getCSSVariableAsObject, getCSSVariableAsNumber } from '@codaco/ui';
 
 const getCssProp = (computedStyle, name) => computedStyle.getPropertyValue(name).trim();
 
@@ -162,7 +162,7 @@ class Search extends Component {
       >
         <div>
           <div className="search__content" ref={(contentsContainer) => { this.contentsContainer = contentsContainer; }}>
-            { children }
+            {children}
           </div>
         </div>
       </Transition>

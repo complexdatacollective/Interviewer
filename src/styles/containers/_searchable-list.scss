@@ -111,7 +111,7 @@ $sort-height: 3.2rem;
   color: var(--text);
   border-radius: unit(3);
   text-align: center;
-  background-image: url('../images/roster-list-bg-cards.svg');
+  background-image: url('../../images/roster-list-bg-cards.svg');
   background-repeat: no-repeat;
   background-position: bottom;
   background-size: 62%;
@@ -125,7 +125,7 @@ $sort-height: 3.2rem;
 
   &::after {
     content: '';
-    background-image: url('../images/roster-list-character.svg');
+    background-image: url('../../images/roster-list-character.svg');
     position: absolute;
     bottom: -8.7rem;
     left: 0;

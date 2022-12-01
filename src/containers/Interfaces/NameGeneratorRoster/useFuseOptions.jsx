@@ -15,14 +15,14 @@ const useFuseOptions = (searchOptions, fallbackFuseOptions = defaultFuseOptions,
   const matchProperties = get(searchOptions, 'matchProperties');
   const fuzziness = get(searchOptions, 'fuzziness');
 
+  const keys = useMemo(
+    () => matchProperties.map((property) => compact([...path, property])),
+    [matchProperties, path],
+  );
+
   if (!searchOptions || isEmpty(searchOptions)) {
     return fallbackFuseOptions;
   }
-
-  const keys = useMemo(
-    () => matchProperties.map((property) => compact([...path, property])),
-    [matchProperties],
-  );
 
   const fuseOptions = {
     ...(typeof fuzziness === 'number' && {
