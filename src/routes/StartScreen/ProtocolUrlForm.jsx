@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { Button } from '@codaco/ui';
@@ -9,6 +8,23 @@ import Form from '../../containers/Form';
 import { required, validateUrl } from '../../utils/Validations';
 
 const FORM_NAME = 'import_protocol_url';
+
+const formConfig = {
+  formName: FORM_NAME,
+  fields: [
+    {
+      label: 'Protocol URL',
+      name: 'protocol_url',
+      component: 'Text',
+      placeholder: 'Enter a valid URL...',
+      validate: [required('Please enter a URL here.'), validateUrl()],
+    },
+  ],
+};
+
+const initialValues = {
+  protocol_url: 'https://',
+};
 
 const ProtocolUrlForm = ({
   show,
@@ -24,23 +40,6 @@ const ProtocolUrlForm = ({
         // Keep dialog open so user can retry after error.
       });
     }
-  };
-
-  const formConfig = {
-    formName: FORM_NAME,
-    fields: [
-      {
-        label: 'Protocol URL',
-        name: 'protocol_url',
-        component: 'Text',
-        placeholder: 'Enter a valid URL...',
-        validate: [required('Please enter a URL here.'), validateUrl()],
-      },
-    ],
-  };
-
-  const initialValues = {
-    protocol_url: 'https://',
   };
 
   return (

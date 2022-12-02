@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -50,7 +50,7 @@ const scrollToFirstError = (errors) => {
   // When used on alter form, multiple forms can be differentiated by the active slide
   // class. This needs priority, so look it up first.
   const el = document.querySelector(`.swiper-slide-active [name="${firstError}"]`)
-             || document.querySelector(`[name="${firstError}"]`);
+    || document.querySelector(`[name="${firstError}"]`);
 
   // If element is not found, prevent crash.
   if (!el) {
@@ -102,10 +102,9 @@ class Form extends Component {
       submitButton,
       children,
     } = this.props;
-
     return (
       <form className={className} onSubmit={handleSubmit} autoComplete="off">
-        { fields.map((field, index) => {
+        {fields.map((field, index) => {
           const isFirst = autoFocus && index === 0;
           return (
             <Field
@@ -116,7 +115,7 @@ class Form extends Component {
               tooltip={tooltip}
             />
           );
-        }) }
+        })}
         {submitButton}
         {children}
       </form>

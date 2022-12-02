@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useStore } from 'react-redux';
 import { Field as ReduxFormField } from 'redux-form';
 import { map, toPairs } from 'lodash';
-import * as Fields from '@codaco/ui';
+import { Fields } from '@codaco/ui';
 import validations from '../utils/Validations';
 import { FormComponent } from '../protocol-consts';
 import { get } from '../utils/lodash-replacements';

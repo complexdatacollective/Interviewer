@@ -1,17 +1,17 @@
-import React from 'react';
 import { motion } from 'framer-motion';
-import { connect } from 'react-redux';
 import { Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import HeaderSection from './HeaderSection';
 import InterviewSection from './InterviewSection';
 import ImportSection from './ImportSection';
 import WhatsNewSection from './WhatsNewSection';
 import SessionManagementSection from './SessionManagementSection';
 
-const StartScreen = ({
-  activeSessionId,
-  sessions,
-}) => {
+const StartScreen = () => {
+  const activeSessionId = useSelector((state) => state.activeSessionId);
+  const sessions = useSelector((state) => state.sessions);
+
+
   const variants = {
     show: {
       opacity: 1,
@@ -25,7 +25,7 @@ const StartScreen = ({
   if (activeSessionId) {
     const { stageIndex } = sessions[activeSessionId];
     const pathname = `/session/${activeSessionId}/${stageIndex}`;
-    return (<Navigate replace to={{ pathname: `${pathname}` }} />);
+    return (<Navigate replace to={pathname} />);
   }
 
   return (
@@ -47,21 +47,4 @@ const StartScreen = ({
   );
 };
 
-StartScreen.defaultProps = {
-};
-
-StartScreen.propTypes = {
-
-};
-
-const mapDispatchToProps = {
-
-};
-
-const mapStateToProps = (state) => ({
-  activeSessionId: state.activeSessionId,
-  sessions: state.sessions,
-
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(StartScreen);
+export default StartScreen;

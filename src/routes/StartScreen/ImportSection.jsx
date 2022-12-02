@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { GraphicButton, Button } from '@codaco/ui';
 import Section from './Section';
@@ -19,7 +19,7 @@ const ImportSection = () => {
   const dispatch = useDispatch();
   const toggleShowProtocolUrlForm = () => dispatch(uiActions.toggle('showProtocolUrlForm'));
 
-
+  console.log('import section rendering');
   return (
     <Section className="start-screen-section import-section">
       <main className="import-section__install-section">

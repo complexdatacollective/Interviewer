@@ -49,7 +49,7 @@ const Overlay = (props) => {
     if (fullscreen !== startFullscreen) {
       setFullscreen(startFullscreen);
     }
-  }, [startFullscreen]);
+  }, [startFullscreen, fullscreen]);
 
   const overlayClasses = cx(
     'overlay',
