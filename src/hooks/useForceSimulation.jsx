@@ -8,7 +8,7 @@ import get from 'lodash/get';
 import screenManager from '../components/RealtimeCanvas/ScreenManager';
 import useViewport from './useViewport';
 
-const ForceSimulationWorker = new Worker(new URL('./forceSimulation.worker.js', import.meta.url))
+const ForceSimulationWorker = new Worker(new URL('./forceSimulation.worker.js'))
 
 const VIEWPORT_SPACE_PX = 500;
 

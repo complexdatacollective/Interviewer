@@ -5,7 +5,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import Radar from '../Radar';
 
-jest.mock('@codaco/ui';
+jest.mock('@codaco/ui');
 
 const mockProps = {
   n: 5,

@@ -10,7 +10,7 @@ import thunk from 'redux-thunk';
 import SettingsMenu from '../SettingsMenu';
 import createRootReducer from '../../../ducks/modules/rootReducer';
 
-jest.mock('@codaco/ui';
+jest.mock('@codaco/ui');
 
 const actionLogger = (actions) => () => (next) => (action) => {
   actions.push(action);

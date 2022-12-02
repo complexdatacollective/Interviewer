@@ -6,7 +6,7 @@ import { shallow } from 'enzyme';
 import Search from '../Search';
 // import SearchResults
 
-jest.mock('@codaco/ui';
+jest.mock('@codaco/ui');
 
 const mockSearchResult = [{ attributes: { name: 'foo' } }];
 

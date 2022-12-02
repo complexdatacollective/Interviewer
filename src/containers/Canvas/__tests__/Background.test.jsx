@@ -5,7 +5,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { Background } from '../Background';
 
-jest.mock('@codaco/ui';
+jest.mock('@codaco/ui');
 
 const sociogramOptionsDefault = {
   layoutVariable: 'foo',
