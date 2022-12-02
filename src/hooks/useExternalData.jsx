@@ -87,7 +87,7 @@ const useExternalData = (dataSource, subject) => {
       .then((formattedData) => setExternalData(formattedData))
       .then(() => updateStatus({ isLoading: false }))
       .catch((e) => updateStatus({ isLoading: false, error: e }));
-  }, [dataSource]);
+  }, [dataSource, assetFiles, assetManifest, protocolCodebook, protocolUID, subject]);
 
   return [externalData, status];
 };

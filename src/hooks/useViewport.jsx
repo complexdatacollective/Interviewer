@@ -54,7 +54,7 @@ const useViewport = (layoutSpace = LAYOUT_SPACE) => {
     }
 
     zoom.set(zoom.get() * factor);
-  }, []);
+  }, [zoom]);
 
   const moveViewport = useCallback((x = 0, y = 0, absolute = false) => {
     if (absolute) {
@@ -65,7 +65,7 @@ const useViewport = (layoutSpace = LAYOUT_SPACE) => {
 
     centerX.set(centerX.get() + (x * layoutSpace / zoom.get()));
     centerY.set(centerY.get() + (y * layoutSpace / zoom.get()));
-  }, []);
+  }, [centerX, centerY, layoutSpace, zoom]);
 
   // Convert relative coordinates (0-1) into pixel coordinates for d3-force accounting for viewport
   // -1000 - -1000 space, 0,0 center
@@ -78,20 +78,20 @@ const useViewport = (layoutSpace = LAYOUT_SPACE) => {
       x: (((x - 0.5) / zoom.get()) * layoutSpace) + centerX.get(),
       y: (((y - 0.5) / zoom.get()) * layoutSpace) + centerY.get(),
     };
-  }, []);
+  }, [centerX, centerY, layoutSpace, zoom]);
 
   // Calculate relative position accounting for viewport
   const calculateRelativeCoords = useCallback(({ x, y }) => ({
     x: clamp((((x - centerX.get()) / layoutSpace) * zoom.get()) + 0.5, 0, 1),
     y: clamp((((y - centerY.get()) / layoutSpace) * zoom.get()) + 0.5, 0, 1),
-  }), []);
+  }), [centerX, centerY, layoutSpace, zoom]);
 
   // Calculate relative position accounting for viewport
   const autoZoom = useCallback((nodes, screen) => {
     if (!screen) { return; }
     const suggestedZoom = suggestZoom(nodes, layoutSpace, screen);
     zoom.set(suggestedZoom);
-  }, []);
+  }, [layoutSpace, zoom]);
 
   return {
     viewport,

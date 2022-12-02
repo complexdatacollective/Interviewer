@@ -141,6 +141,7 @@ export const lessThanVariable = (variableId, store) => {
   return (value, allValues) => (isNil(value) || (compareVariables(value, allValues[variableId], variableType) >= 0) ? `Your answer must be less than ${variableName}` : undefined);
 };
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default {
   required: () => required(),
   minLength,

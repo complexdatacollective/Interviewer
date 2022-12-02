@@ -15,6 +15,7 @@ import AlterEdgeForm from './stage--AlterEdgeForm.png';
 import EgoForm from './stage--EgoForm.png';
 import Default from './stage--Default.png';
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default {
   CategoricalBin,
   NameGenerator,

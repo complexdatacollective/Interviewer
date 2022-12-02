@@ -83,7 +83,7 @@ const useForceSimulation = (listener = () => { }) => {
     });
 
     setIsRunning(false);
-  }, [setIsRunning]);
+  }, [setIsRunning, listener, autoZoom, calculateLayoutCoords, calculateRelativeCoords]);
 
   const updateOptions = useCallback((options) => {
     if (!worker.current) { return; }
@@ -92,7 +92,7 @@ const useForceSimulation = (listener = () => { }) => {
       type: 'update_options',
       options,
     });
-  }, [initialize]);
+  }, [worker]);
 
   const start = useCallback(() => {
     if (!worker.current) { return; }
@@ -145,7 +145,7 @@ const useForceSimulation = (listener = () => { }) => {
       network: newSimNetwork,
       restart: shouldRestart,
     });
-  }, []);
+  }, [calculateLayoutCoords]);
 
   const updateNode = useCallback((node, index) => {
     if (!worker.current) { return; }
@@ -166,7 +166,7 @@ const useForceSimulation = (listener = () => { }) => {
     };
 
     updateNode(nodeAttributes, nodeIndex);
-  }, [updateNode]);
+  }, [updateNode, calculateLayoutCoords]);
 
   const releaseNode = useCallback((nodeIndex) => {
     updateNode({ fx: null, fy: null }, nodeIndex);

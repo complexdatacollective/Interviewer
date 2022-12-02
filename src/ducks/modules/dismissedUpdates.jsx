@@ -12,6 +12,7 @@ const dismissUpdate = (version) => ({
   },
 });
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default (state = initialState, { type, payload } = { type: null, payload: null }) => {
   switch (type) {
     case DISMISS_UPDATE:

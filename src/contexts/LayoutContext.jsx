@@ -102,7 +102,7 @@ export const LayoutProvider = ({
       const layoutVariable = getTwoModeLayoutVariable(twoMode, nodeType, layout);
       return get(nodes, [index, 'attributes', layoutVariable]);
     };
-  }, [nodes, simulationEnabled, allowAutomaticLayout, layout, twoMode]);
+  }, [nodes, simulationEnabled, allowAutomaticLayout, layout, twoMode, forceSimulation]);
 
   const updateNetworkInStore = useCallback(() => {
     if (!forceSimulation.current) { return; }
@@ -122,7 +122,7 @@ export const LayoutProvider = ({
         ),
       );
     });
-  }, [dispatch, nodes, layout]);
+  }, [dispatch, nodes, layout, forceSimulation, twoMode]);
 
   useEffect(() => {
     const didStopRunning = !isRunning && previousIsRunning.current;
@@ -145,7 +145,7 @@ export const LayoutProvider = ({
     // allow updateNetworkInStore to run before getPosition
     // changes to redux state.
     setTimeout(() => { setSimulationEnabled(false); }, 0);
-  }, [simulationEnabled, setSimulationEnabled, updateNetworkInStore]);
+  }, [simulationEnabled, setSimulationEnabled, reheat, stop]);
 
   useEffect(() => {
     const nextLinks = getLinks({ nodes, edges });
@@ -160,7 +160,7 @@ export const LayoutProvider = ({
     const network = {};
     initialize(network, SIMULATION_OPTIONS);
     start();
-  }, [allowAutomaticLayout]);
+  }, [allowAutomaticLayout, initialize, start]);
 
   useEffect(() => {
     if (!allowAutomaticLayout || !simulationEnabled) { return; }
@@ -173,13 +173,13 @@ export const LayoutProvider = ({
     );
 
     updateNetwork({ nodes: simulationNodes });
-  }, [allowAutomaticLayout, simulationEnabled, nodes, layout, twoMode]);
+  }, [allowAutomaticLayout, simulationEnabled, nodes, layout, twoMode, updateNetwork]);
 
   useEffect(() => {
     if (!allowAutomaticLayout || !simulationEnabled) { return; }
 
     updateNetwork({ links });
-  }, [allowAutomaticLayout, simulationEnabled, links]);
+  }, [allowAutomaticLayout, simulationEnabled, links, updateNetwork]);
 
   const simulation = allowAutomaticLayout ? {
     simulation: forceSimulation,

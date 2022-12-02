@@ -19,7 +19,6 @@ const ImportSection = () => {
   const dispatch = useDispatch();
   const toggleShowProtocolUrlForm = () => dispatch(uiActions.toggle('showProtocolUrlForm'));
 
-  console.log('import section rendering');
   return (
     <Section className="start-screen-section import-section">
       <main className="import-section__install-section">

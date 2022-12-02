@@ -68,7 +68,7 @@ const useSearch = (list, options, initialQuery = '') => {
   const hasQuery = useMemo(() => query.length >= MIN_QUERY_LENGTH, [query]);
   const isLargeList = useMemo(() => list.length > 100, [list]);
 
-  const fuseOptions = { ...defaultFuseOptions, ...options };
+  const fuseOptions = useMemo(() => ({ ...defaultFuseOptions, ...options }), [options]);
   const fuse = useMemo(() => new Fuse(list, fuseOptions), [list, fuseOptions]);
 
   const search = useCallback((_query) => {
@@ -102,7 +102,7 @@ const useSearch = (list, options, initialQuery = '') => {
     }
 
     search(query);
-  }, [query]);
+  }, [query, search, hasQuery]);
 
   const returnResults = useMemo(() => (
     hasQuery ? results : list

@@ -3,6 +3,7 @@ import React, {
   useEffect,
   useRef,
   useCallback,
+  useMemo,
 } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import cx from 'classnames';
@@ -51,8 +52,8 @@ const SlidesForm = (props) => {
   } = props;
 
   const dispatch = useDispatch();
-  const openDialog = (dialog) => dispatch(dialogActions.openDialog(dialog));
-  const submitFormRedux = (formName) => dispatch(submit(formName));
+  const openDialog = useCallback((dialog) => dispatch(dialogActions.openDialog(dialog)), [dispatch]);
+  const submitFormRedux = useCallback((formName) => dispatch(submit(formName)), [dispatch]);
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -61,16 +62,16 @@ const SlidesForm = (props) => {
   const [pendingDirection, setPendingDirection] = useState(null);
   const [pendingStage, setPendingStage] = useState(-1);
 
-  const getItemIndex = () => activeIndex - 1;
-  const isIntroScreen = () => activeIndex === 0;
-  const isLastItem = () => activeIndex >= items.length;
+  const itemIndex = useMemo(() => activeIndex - 1, [activeIndex]);
+  const isIntroScreen = useMemo(() => activeIndex === 0, [activeIndex]);
+  const isLastItem = useMemo(() => activeIndex >= items.length, [activeIndex, items.length]);
 
-  const previousItem = () => setActiveIndex(getItemIndex());
-  const nextItem = () => setActiveIndex(activeIndex + 1);
+  const previousItem = useCallback(() => setActiveIndex(itemIndex), [itemIndex]);
+  const nextItem = useCallback(() => setActiveIndex(activeIndex + 1), [activeIndex]);
 
   // Submit the form of whatever slide is currently active.
   // Get the form name based on the index of the slide.
-  const submitCurrentForm = () => submitFormRedux(getFormName(getItemIndex()));
+  const submitCurrentForm = useCallback(() => submitFormRedux(getFormName(itemIndex)), [itemIndex, getFormName, submitFormRedux]);
 
   // Ref to hold the current slide form state
   const formState = useRef({
@@ -79,8 +80,8 @@ const SlidesForm = (props) => {
   });
 
   // Helpers for accessing form state
-  const getIsFormValid = () => (formState.current.isFormValid[getItemIndex()]);
-  const getIsFormDirty = () => (formState.current.isFormDirty[getItemIndex()]);
+  const currentFormIsValid = useMemo(() => formState.current.isFormValid[itemIndex], [itemIndex, formState]);
+  const currentFormIsFormDirty = useMemo(() => formState.current.isFormDirty[itemIndex], [itemIndex, formState]);
 
   // Update the navigation button to glow when the current form is valid
   // And we are scrolled to the bottom.
@@ -90,15 +91,16 @@ const SlidesForm = (props) => {
       isFormDirty,
     };
 
-    const readyForNext = getIsFormValid() && scrollProgress === 1;
+    const readyForNext = currentFormIsValid && scrollProgress === 1;
     setIsReadyForNext(readyForNext);
-  }, [...isFormValid, ...isFormDirty, setIsReadyForNext, scrollProgress]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [...isFormValid, ...isFormDirty, setIsReadyForNext, scrollProgress, currentFormIsValid]);
 
   // Show a confirmation dialog if the form is dirty and invalid.
-  const confirmIfChanged = () => {
-    if (!getIsFormDirty()) { return Promise.resolve(true); }
+  const confirmIfChanged = useCallback(() => {
+    if (!currentFormIsFormDirty) { return Promise.resolve(true); }
     return openDialog(confirmDialog);
-  };
+  }, [currentFormIsFormDirty, openDialog]);
 
   /**
    * Called by ProtocolScreen before navigating away from this stage
@@ -107,14 +109,14 @@ const SlidesForm = (props) => {
    * navigation will be blocked until `onComplete()` is
    * called, which allows async events to happen such as form submission.
    */
-  const beforeNext = (direction, index = -1) => {
+  const beforeNext = useCallback((direction, index = -1) => {
     setPendingDirection(direction);
     const isPendingStageChange = (index !== -1);
 
     // If we are about to change stage...
     if (isPendingStageChange) {
       // ... if the form has been changed and is valid, submit  it
-      if (getIsFormValid() && getIsFormDirty()) {
+      if (currentFormIsValid && currentFormIsFormDirty) {
         setPendingStage(index);
         submitCurrentForm(); // submit and handleUpdate will complete
       } else {
@@ -135,19 +137,19 @@ const SlidesForm = (props) => {
 
     // Leave the stage if there are no items or if we are on the intro and
     // moving backwards
-    if (items.length === 0 || (isIntroScreen() && direction === -1)) {
+    if (items.length === 0 || (isIntroScreen && direction === -1)) {
       onComplete(direction);
       return;
     }
 
     // If we are on the intro and moving forwards, move to the next item
-    if (isIntroScreen() && direction === 1) {
+    if (isIntroScreen && direction === 1) {
       nextItem();
       return;
     }
 
     // If we are moving backward and the current form is not valid...
-    if (direction === -1 && !getIsFormValid()) {
+    if (direction === -1 && !currentFormIsValid) {
       confirmIfChanged()
         .then((confirmed) => {
           if (confirmed) {
@@ -163,32 +165,32 @@ const SlidesForm = (props) => {
 
     setPendingStage(index);
     submitCurrentForm();
-  };
+  }, [items, currentFormIsValid, currentFormIsFormDirty, confirmIfChanged, submitCurrentForm, onComplete, isIntroScreen, nextItem, previousItem]);
 
   const parentClasses = cx(
     'alter-form',
     parentClass,
   );
 
-  const isComplete = (direction, stageIndex) => {
-    if (isIntroScreen() && direction === -1) { return true; }
-    if (isLastItem() && direction === 1) { return true; }
+  const isComplete = useCallback((direction, stageIndex) => {
+    if (isIntroScreen && direction === -1) { return true; }
+    if (isLastItem && direction === 1) { return true; }
     if (stageIndex !== -1) { return true; }
     return false;
-  };
+  }, [isIntroScreen, isLastItem]);
 
-  const handleScroll = useCallback(debounce((_, progress) => {
+  const handleScroll = debounce((_, progress) => {
     setScrollProgress(progress);
-    const nextIsReady = getIsFormValid() && progress === 1;
+    const nextIsReady = currentFormIsValid && progress === 1;
 
     setIsReadyForNext(nextIsReady);
-  }, 200), [setIsReadyForNext, setScrollProgress]);
+  }, 200);
 
   useEffect(() => {
     setIsReadyForNext(false);
-  }, [activeIndex]);
+  }, [activeIndex, setIsReadyForNext]);
 
-  const handleUpdate = (...update) => {
+  const handleUpdate = useCallback((...update) => {
     updateItem(...update);
 
     if (isComplete(pendingDirection, pendingStage)) {
@@ -202,20 +204,19 @@ const SlidesForm = (props) => {
     }
 
     nextItem();
-  };
+  }, [updateItem, onComplete, pendingDirection, pendingStage, previousItem, nextItem, isComplete]);
 
   useEffect(() => {
     registerBeforeNext(beforeNext);
-  }, [beforeNext]);
+  }, [beforeNext, registerBeforeNext]);
 
   // enter key should always move forward, and needs to process using beforeNext
-  const handleEnterSubmit = (e) => {
+  const handleEnterSubmit = useCallback((e) => {
     beforeNext(1);
     e.preventDefault();
-  };
+  }, [beforeNext]);
 
   const renderActiveSlide = useCallback(() => {
-    const itemIndex = getItemIndex();
     const formName = getFormName(itemIndex);
 
     const slideForm = {
@@ -244,7 +245,7 @@ const SlidesForm = (props) => {
         />
       </motion.div>
     );
-  }, [activeIndex, items, getFormName, form, stage.subject, pendingDirection]);
+  }, [itemIndex, items, getFormName, form, stage.subject, pendingDirection, handleEnterSubmit, handleUpdate, handleScroll]);
 
   const renderIntroSlide = useCallback(() => (
     <motion.div
@@ -265,17 +266,17 @@ const SlidesForm = (props) => {
         />
       </div>
     </motion.div>
-  ), [activeIndex, items, getFormName, form, stage.subject, pendingDirection]);
+  ), [stage.introductionPanel.text, stage.introductionPanel.title, pendingDirection]);
 
   return (
     <div className={parentClasses}>
       <div className="slide-container">
         <AnimatePresence initial={false}>
-          {isIntroScreen() ? renderIntroSlide() : renderActiveSlide()}
+          {isIntroScreen ? renderIntroSlide() : renderActiveSlide()}
         </AnimatePresence>
       </div>
       <AnimatePresence>
-        {!isIntroScreen() && (
+        {!isIntroScreen && (
           <motion.div
             className="progress-container"
             key="progress-container"

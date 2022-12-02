@@ -73,7 +73,7 @@ const SessionSelect = ({
     const newFilteredSessions = getFilteredList(formattedSessions, filterTerm, null);
 
     setFilteredSessions(newFilteredSessions);
-  }, [filterTerm, selectedSessions]);
+  }, [filterTerm, selectedSessions, formattedSessions]);
 
   const isSelectAll = (
     selectedSessions.length > 0
