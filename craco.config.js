@@ -17,4 +17,16 @@ module.exports = {
       "@utils": path.resolve(__dirname, "src/utils"),
     },
   },
+  jest: {
+    configure: {
+      moduleNameMapper: {
+        // "This forces Jest/jest-environment-jsdom to use a Node+CommonJS version of uuid, not a Browser+ESM one",
+        // "See https://github.com/uuidjs/uuid/pull/616",
+        // "WARNING: if your dependency tree has multiple paths leading to uuid, this will force all of them to resolve to",
+        // "whichever one happens to be hoisted to your root node_modules folder. This makes it much more dangerous",
+        // "to consume future uuid upgrades. Consider using a custom resolver instead of moduleNameMapper.",
+        "^uuid$": "<rootDir>/node_modules/uuid/dist/index.js",
+      },
+    },
+  },
 };

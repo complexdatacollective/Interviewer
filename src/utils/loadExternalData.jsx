@@ -5,7 +5,7 @@ import { readFile } from './filesystem';
 import getAssetUrl from './protocol/getAssetUrl';
 import { get } from './lodash-replacements';
 
-const CSVWorker = new Worker(new URL('./csvDecoder.worker.js'))
+const CSVWorker = new Worker(new URL('./csvDecoder.worker.js', import.meta.url));
 
 /**
  * Converting data from CSV to our network JSON format is expensive, and so happens
