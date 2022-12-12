@@ -6,6 +6,7 @@ import InterviewSection from './InterviewSection';
 import ImportSection from './ImportSection';
 import WhatsNewSection from './WhatsNewSection';
 import SessionManagementSection from './SessionManagementSection';
+import TestSection from './TestSection';
 
 const StartScreen = () => {
   const activeSessionId = useSelector((state) => state.activeSessionId);
@@ -38,6 +39,7 @@ const StartScreen = () => {
         key="start-screen"
       >
         <HeaderSection />
+        <TestSection />
         <WhatsNewSection />
         <InterviewSection />
         <SessionManagementSection />

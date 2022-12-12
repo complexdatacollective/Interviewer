@@ -17,7 +17,7 @@ const initialState = {
   startFullScreen: false,
 
   // Start screen
-  showGettingStarted: true,
+  showGettingStarted: false,
   showWhatsNew: false, // Disabled for initial release
 
   // Export Options

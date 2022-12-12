@@ -57,6 +57,7 @@
   },
   "scripts": {
     "start": "craco start",
+    "electron": "electron ./backend/electron/main.js",
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
@@ -86,6 +87,7 @@
     ]
   },
   "devDependencies": {
+    "electron": "~22.0.0",
     "enzyme": "~3.11.0"
   }
 }
