@@ -12,12 +12,14 @@ const electronDescription = () => {
     Windows_NT: 'Windows',
   };
 
-  const os = window.require('os');
-  const osType = os.type();
-  const osName = osTypeMap[osType] || esc(osType) || '?';
-  // Strip '.local', etc. from hostname
-  const host = esc((os.hostname() || '').replace(/\.\w+$/, ''));
-  return `${host} (${osName})`;
+  console.warn('electronDescription() not implemented');
+  return;
+  // const os = window.require('os');
+  // const osType = os.type();
+  // const osName = osTypeMap[osType] || esc(osType) || '?';
+  // // Strip '.local', etc. from hostname
+  // const host = esc((os.hostname() || '').replace(/\.\w+$/, ''));
+  // return `${host} (${osName})`;
 };
 
 // As of now (both ee3cb6d and v2.0.2), the cordova-plugin-device docs are wrong; device.model

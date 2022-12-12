@@ -1,6 +1,6 @@
 import environments from './environments';
 
-export const isElectron = () => !!window.require;
+export const isElectron = () => navigator.userAgent.indexOf("Electron") !== -1;
 
 export const isDevMode = () => isElectron() && process.env.NODE_ENV === 'development';
 
@@ -12,11 +12,21 @@ export const isPreview = () => {
 // Not supported on Cordova
 export const getEnv = () => (isElectron() ? process.env : {});
 
-export const isMacOS = () => isElectron() && window.require('os').platform() === 'darwin';
+export const isMacOS = () => {
+  if (!isElectron()) { return false; }
+  return window.platform?.environment === "darwin" || false;
+}
 
-export const isWindows = () => isElectron() && window.require('os').platform() === 'win32';
+export const isWindows = () => {
+  if (!isElectron()) { return false; }
+  return window.platform?.environment === "win32" || false;
+}
 
-export const isLinux = () => isElectron() && window.require('os').platform() === 'linux';
+export const isLinux = () => {
+  if (!isElectron()) { return false; }
+  return window.platform?.environment === "linux" || false;
+}
+
 
 export const isCordova = () => !!window.cordova;
 

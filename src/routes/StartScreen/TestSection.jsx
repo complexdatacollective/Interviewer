@@ -2,59 +2,9 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Section from './Section';
 
-
-/**
- * ELECTRON API (for desktop app)
- * 
- * This will use electron's ipcRenderer to communicate with the main process.
- * 
- */
-const electronApi = () => {
-  console.info('using electronApi()');
-  const getAppVersion = async () => {
-    const response = await window.api.getAppVersion();
-    return response;
-  };
-
-  return {
-    getAppVersion,
-    getApiSource: window.api.getApiSource,
-  };
-};
-
-/**
- * WEB API (for browser based app)
- * 
- * This will eventually use react query (or similar) for caching and suspenseful data fetching.
- * 
- */
-const webApi = () => {
-  console.info('using webApi()');
-  const getAppVersion = async () => {
-    const response = await fetch('http://localhost:3000/api/version');
-    const json = await response.json();
-    return json;
-  };
-
-  const getApiSource = () => 'web';
-
-  return {
-    getAppVersion,
-    getApiSource,
-  };
-};
-
-/**
- * MOBILE API (for iOS/Android)
- * 
- * This will eventually use react query (or similar) for caching and suspenseful data fetching.
- * 
- */
-const mobileApi = () => {
-};
-
-
-
+const getApi = await import('../../api/getApi');
+const api = await getApi.default();
+const environmentApi = api.default;
 /**
  * API HOOK
  * 
@@ -66,14 +16,7 @@ const mobileApi = () => {
   */
 const useApi = () => {
   // Switch between web, electron, and mobile API based on environment
-  const getEnvironmentApi = () => {
-    if (window.api) return electronApi();
-
-    return webApi();
-  };
-
-  const environmentApi = getEnvironmentApi();
-
+  console.log('environmentApi', getApi, api, environmentApi);
 
   const getAppVersion = async () => {
     const appVersion = await environmentApi.getAppVersion();
