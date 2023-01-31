@@ -41,9 +41,9 @@ const StartScreen = () => {
         <HeaderSection />
         <TestSection />
         <WhatsNewSection />
-        <InterviewSection />
-        <SessionManagementSection />
-        <ImportSection />
+        {/* <InterviewSection /> */}
+        {/* <SessionManagementSection /> */}
+        {/* <ImportSection /> */}
       </motion.div>
     </div>
   );

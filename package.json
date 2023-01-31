@@ -5,6 +5,16 @@
   "description": "A tool for conducting Network Canvas Interviews.",
   "author": "Complex Data Collective",
   "private": true,
+  "scripts": {
+    "dev:web": "API_TYPE=web PORT=3000 craco start",
+    "build:web": "API_TYPE=web craco build",
+    "dev:electron": "API_TYPE=electron PORT=3001 BROWSER=none craco start",
+    "electron": "electron ./backend/electron/main.js",
+    "build:electron": "API_TYPE=electron craco build && electron-builder --dir",
+    "test": "craco test",
+    "eject": "react-scripts eject",
+    "lint": "eslint --ext js,ts,tsx src"
+  },
   "overrides": {
     "redux-form": {
       "react-redux": "^8.0.5"
@@ -17,6 +27,7 @@
     "@codaco/shared-consts": "^0.0.1-alpha.3",
     "@codaco/ui": "~6.0.0-alpha.10",
     "@faker-js/faker": "^7.6.0",
+    "@reduxjs/toolkit": "~1.9.2",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -55,14 +66,6 @@
     "uuid": "~9.0.0",
     "web-vitals": "^2.1.4"
   },
-  "scripts": {
-    "start": "craco start",
-    "electron": "electron ./backend/electron/main.js",
-    "build": "craco build",
-    "test": "craco test",
-    "eject": "react-scripts eject",
-    "lint": "eslint --ext js,ts,tsx src"
-  },
   "eslintConfig": {
     "root": true,
     "extends": [
@@ -87,6 +90,7 @@
     ]
   },
   "devDependencies": {
+    "cross-env": "~7.0.3",
     "electron": "~22.0.0",
     "enzyme": "~3.11.0"
   }

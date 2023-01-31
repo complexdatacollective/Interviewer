@@ -4,7 +4,7 @@ import sessions from './sessions';
 import activeSessionId from './session';
 import activeSessionWorkers from './sessionWorkers';
 import deviceSettings from './deviceSettings';
-import installedProtocols from './installedProtocols';
+import installedProtocols from '../../slices/protocols.slice';
 import dialogs from './dialogs';
 import toasts from './toasts';
 import search from './search';
