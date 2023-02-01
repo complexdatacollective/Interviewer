@@ -1,0 +1,97 @@
+{
+  "name": "network-canvas-interviewer",
+  "version": "7.0.0-alpha.1",
+  "productName": "Network Canvas Interviewer",
+  "description": "A tool for conducting Network Canvas Interviews.",
+  "author": "Complex Data Collective",
+  "private": true,
+  "scripts": {
+    "dev:web": "API_TYPE=web PORT=3000 craco start",
+    "build:web": "API_TYPE=web craco build",
+    "dev:electron": "API_TYPE=electron PORT=3001 BROWSER=none craco start",
+    "electron": "electron ./backend/electron/main.js",
+    "build:electron": "API_TYPE=electron craco build && electron-builder --dir",
+    "test": "craco test",
+    "eject": "react-scripts eject",
+    "lint": "eslint --ext js,ts,tsx src"
+  },
+  "overrides": {
+    "redux-form": {
+      "react-redux": "^8.0.5"
+    },
+    "react-compound-slider": {
+      "react": "^18.2.0"
+    }
+  },
+  "dependencies": {
+    "@codaco/shared-consts": "^0.0.1-alpha.3",
+    "@codaco/ui": "~6.0.0-alpha.10",
+    "@faker-js/faker": "^7.6.0",
+    "@reduxjs/toolkit": "~1.9.2",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^18.11.10",
+    "@types/react": "^18.0.25",
+    "@types/react-dom": "^18.0.9",
+    "axios": "^1.2.0",
+    "classnames": "^2.3.2",
+    "color": "^4.2.3",
+    "compare-versions": "^5.0.1",
+    "concaveman": "^1.2.1",
+    "craco": "^0.0.3",
+    "csvtojson": "^2.0.10",
+    "d3-force": "^3.0.0",
+    "framer-motion": "^7.6.15",
+    "fuse.js": "^6.6.2",
+    "fuse.js-legacy": "npm:fuse.js@~3.4.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-flip-toolkit": "^7.0.17",
+    "react-redux": "^8.0.5",
+    "react-router-dom": "^6.4.3",
+    "react-scripts": "5.0.1",
+    "react-virtualized-auto-sizer": "^1.0.7",
+    "react-window": "^1.8.8",
+    "recompose": "npm:react-recompose@~0.31.2",
+    "redux": "^4.2.0",
+    "redux-form": "^8.3.9",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.4.2",
+    "reselect": "^4.1.7",
+    "sanitize-filename": "^1.6.3",
+    "sass": "^1.56.1",
+    "typescript": "^4.9.3",
+    "uuid": "~9.0.0",
+    "web-vitals": "^2.1.4"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ],
+    "rules": {
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": "off"
+    }
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "cross-env": "~7.0.3",
+    "electron": "~22.0.0",
+    "enzyme": "~3.11.0"
+  }
+}

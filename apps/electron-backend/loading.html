@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Loading...</title>
+
+    <style type="text/css" media="all">
+      /* from: https://cssloaders.github.io/ */
+      .loading {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        position: relative;
+        animation: flash 0.5s ease-out infinite alternate;
+      }
+
+      @keyframes flash {
+        0% {
+          background-color: #FFF2;
+          box-shadow: 32px 0 #FFF2, -32px 0 #FFF;
+        }
+        50% {
+          background-color: #FFF;
+          box-shadow: 32px 0 #FFF2, -32px 0 #FFF2;
+        }
+        100% {
+          background-color: #FFF2;
+          box-shadow: 32px 0 #FFF, -32px 0 #FFF2;
+        }
+      }
+    </style>
+
+    <style type="text/css" media="all">
+      /**
+       * use the whole screen,
+       * center the "spinner",
+       * use create-react-app default color
+       */
+      body {
+        background-color: #282c34;
+        width: 100vw;
+        height: 100vh;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center
+      }
+    </style>
+
+  </head>
+  <body>
+    <div class="loading"></div>
+  </body>
+</html>
