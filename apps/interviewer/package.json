@@ -6,9 +6,10 @@
   "author": "Complex Data Collective",
   "private": true,
   "scripts": {
-    "start": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "start:web": "VITE_APP_PLATFORM=web vite --port 3000 --open",
+    "start:electron": "VITE_APP_PLATFORM=electron vite --port 4000",
+    "build:web": "VITE_APP_PLATFORM=web vite build",
+    "build:electron": "VITE_APP_PLATFORM=electron vite build"
   },
   "overrides": {
     "redux-form": {
