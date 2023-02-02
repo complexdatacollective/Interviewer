@@ -1,18 +1,3 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { TransitionGroup } from 'react-transition-group';
-import { Fade } from '@codaco/ui';
-import { getCSSVariableAsNumber } from '@codaco/ui';
-import { Timeline } from '../components';
-import { Stage as StageTransition } from '../components/Transition';
-import Stage from '../containers/Stage';
-import { getSessionProgress } from '../selectors/session';
-import { isStageSkipped } from '../selectors/skip-logic';
-import { getProtocolStages } from '../selectors/protocol';
-import { actionCreators as navigateActions } from '../ducks/modules/navigate';
-import { actionCreators as dialogActions } from '../ducks/modules/dialogs';
-import { get } from '../utils/lodash-replacements';
 import { Outlet, useParams } from 'react-router-dom';
 
 const Session = () => {

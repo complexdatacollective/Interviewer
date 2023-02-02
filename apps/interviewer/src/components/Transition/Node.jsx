@@ -1,7 +1,4 @@
-import React from 'react';
 import PropTypes from 'prop-types';
-import { Transition } from 'react-transition-group';
-import anime from 'animejs';
 import { getCSSVariableAsObject, getCSSVariableAsNumber } from '@codaco/ui';
 
 const Node = ({
@@ -30,40 +27,14 @@ const Node = ({
     duration: duration.exit,
   };
 
+  console.log('ReactTransitionGroup and anime removed. Node needs to be updated.')
+
   return (
-    <Transition
+    <div
       {...props}
-      timeout={duration}
-      onEnter={
-        (el) => {
-          // dirty performance hack
-          if (!stagger || index < animationThreshold) {
-            anime({
-              targets: el,
-              delay,
-              ...enterAnimation,
-            });
-          }
-        }
-      }
-      onExit={
-        (el) => {
-          // dirty performance hack
-          if (index < animationThreshold) {
-            anime({
-              targets: el,
-              ...exitAnimation,
-            });
-          } else {
-            el.setAttribute('style', 'display: none;');
-          }
-        }
-      }
-      mountOnEnter={false}
-      unmountOnExit
     >
       {children}
-    </Transition>
+    </div>
   );
 };
 

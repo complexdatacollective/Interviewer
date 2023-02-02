@@ -1,4 +1,4 @@
-import { createSelectorCreator, defaultMemoize } from '@reduxjs/toolkit';
+import { createSelectorCreator, defaultMemoize } from 'reselect';
 import { isEqual } from 'lodash';
 
 // create a "selector creator" that uses lodash.isEqual instead of ===

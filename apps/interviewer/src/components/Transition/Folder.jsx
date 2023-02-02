@@ -1,7 +1,4 @@
-import React from 'react';
 import PropTypes from 'prop-types';
-import { Transition } from 'react-transition-group';
-import anime from 'animejs';
 import { getCSSVariableAsNumber } from '@codaco/ui';
 import getAbsoluteBoundingRect from '../../utils/getAbsoluteBoundingRect';
 
@@ -27,41 +24,11 @@ const disappear = () => ({
 });
 
 const FolderTransition = ({ children, ...props }) => (
-  <Transition
-    mountOnEnter
-    unmountOnExit
-    timeout={getCSSVariableAsNumber('--animation-duration-slow-ms')}
-    onEntering={
-      (el) => {
-        const { height } = getAbsoluteBoundingRect(el);
-
-        anime({
-          targets: el,
-          elasticity: 0,
-          easing: 'easeInOutQuad',
-          maxHeight: {
-            value: [0, `${height}px`],
-            easing: 'easeInOutQuad',
-            duration: getCSSVariableAsNumber('--animation-duration-standard-ms'),
-          },
-          ...appear(),
-        });
-      }
-    }
-    onExiting={
-      (el) => {
-        anime({
-          targets: el,
-          elasticity: 0,
-          easing: 'easeInOutQuad',
-          ...disappear(),
-        });
-      }
-    }
+  <div
     {...props}
   >
     {children}
-  </Transition>
+  </div>
 );
 
 FolderTransition.propTypes = {

@@ -26,10 +26,9 @@ const TestSection = () => {
   }
 
   // Capture NODE_ENV
-  console.log(process.env.NODE_ENV);
-  const platform = process.env.REACT_APP_PLATFORM || 'web';
+  const platform = import.meta.env.VITE_APP_PLATFORM || 'web';
 
-  console.log('platform', platform, process.env);
+  console.log('platform', platform, import.meta.env);
 
   return (
     <Section className="start-screen-section">

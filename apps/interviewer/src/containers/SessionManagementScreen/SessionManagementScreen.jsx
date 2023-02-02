@@ -6,7 +6,7 @@ import { Overlay } from '../Overlay';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { withErrorDialog } from '../../ducks/modules/errors';
-import { exportToFile, exportToServer } from '../../utils/exportProcess';
+import { exportToFile } from '../../utils/exportProcess';
 import { asNetworkWithSessionVariables } from '../../utils/networkFormat';
 import SessionSelect from './SessionSelect';
 import ExportOptions from '../../components/SettingsMenu/Sections/ExportOptions';

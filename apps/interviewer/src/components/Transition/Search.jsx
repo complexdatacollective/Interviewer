@@ -1,7 +1,5 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Transition } from 'react-transition-group';
-import anime from 'animejs';
 import { getCSSVariableAsObject, getCSSVariableAsNumber } from '@codaco/ui';
 
 const getCssProp = (computedStyle, name) => computedStyle.getPropertyValue(name).trim();
@@ -83,22 +81,6 @@ class Search extends Component {
     };
 
     this.cancelRunningAnimation();
-    this.runningAnimation = anime.timeline(this.TimelineOpts)
-      .add({
-        targets: el,
-        ...wrapperAnimation,
-        duration: this.duration.wrapper.enter,
-        complete: () => {
-          const pxStyles = el.style;
-          pxStyles.maxHeight = '';
-          pxStyles.width = '';
-        },
-      })
-      .add({
-        targets: this.contentsContainer,
-        ...contentAnimation,
-        duration: this.duration.content.enter,
-      });
   }
 
   runExitTimeline(el) {
@@ -123,17 +105,6 @@ class Search extends Component {
     };
 
     this.cancelRunningAnimation();
-    this.runningAnimation = anime.timeline(this.TimelineOpts)
-      .add({
-        targets: this.contentsContainer,
-        ...inverseContentAnimation,
-        duration: this.duration.content.exit,
-      })
-      .add({
-        targets: el,
-        ...inverseWrapperAnimation,
-        duration: this.duration.wrapper.exit,
-      });
   }
 
   cancelRunningAnimation() {
@@ -149,23 +120,18 @@ class Search extends Component {
       ...props
     } = this.props;
 
+    console.warn('ReactTransitionGroup and anime removed. Search needs to be updated');
+
     return (
-      <Transition
+      <div
         {...props}
-        timeout={{
-          enter: this.duration.wrapper.enter + this.duration.content.enter,
-          exit: this.duration.wrapper.exit + this.duration.content.exit,
-        }}
-        onEnter={this.runEnterTimeline}
-        onExit={this.runExitTimeline}
-        unmountOnExit
       >
         <div>
           <div className="search__content" ref={(contentsContainer) => { this.contentsContainer = contentsContainer; }}>
             {children}
           </div>
         </div>
-      </Transition>
+      </div>
     );
   }
 }

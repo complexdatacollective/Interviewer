@@ -19,11 +19,11 @@ export const ipcBaseQuery = () => async (args: any) => {
 
 // Switch between different baseQuery implementations depending on environment 
 const getBaseQuery = () => {
-  if (process.env.REACT_APP_PLATFORM === 'electron') {
+  if (import.meta.env.VITE_APP_PLATFORM === 'electron') {
     return ipcBaseQuery();
   }
 
-  if (process.env.NODE_ENV === 'development') {
+  if (import.meta.env.DEV) {
     return fetchBaseQuery({ baseUrl: 'http://localhost:4001/api' });
   }
 

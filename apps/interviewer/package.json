@@ -6,13 +6,9 @@
   "author": "Complex Data Collective",
   "private": true,
   "scripts": {
-    "start": "NODE_ENV=development concurrently \"npm:start:web\" \"npm:start:electron\"",
-    "start:web": "PORT=4000 REACT_APP_PLATFORM=web craco start",
-    "start:electron": "PORT=3000 REACT_APP_PLATFORM=electron BROWSER=none craco start",
-    "build": "craco build",
-    "test": "craco test",
-    "eject": "react-scripts eject",
-    "lint": "eslint --ext js,ts,tsx src"
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "overrides": {
     "redux-form": {
@@ -48,6 +44,7 @@
     "d3-force": "^3.0.0",
     "framer-motion": "^9.0.0",
     "fuse.js": "^6.6.2",
+    "object-hash": "^3.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",
@@ -87,6 +84,8 @@
     ]
   },
   "devDependencies": {
-    "cross-env": "~7.0.3"
+    "@vitejs/plugin-react-swc": "^3.1.0",
+    "cross-env": "~7.0.3",
+    "vite": "^4.0.4"
   }
 }

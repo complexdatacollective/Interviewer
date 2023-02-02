@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { isEqual } from 'lodash';
-import { TransitionGroup } from 'react-transition-group';
 import { getCSSVariableAsNumber } from '@codaco/ui';
 import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import Node from '../containers/Node';
@@ -84,8 +83,10 @@ class MultiNodeBucket extends Component {
       exit,
     } = this.state;
 
+    console.warn('ReactTransitionGroup removed. MultiNodeBucket needs to be updated.');
+
     return (
-      <TransitionGroup
+      <div
         className="node-list"
         exit={exit}
       >
@@ -108,7 +109,7 @@ class MultiNodeBucket extends Component {
             </NodeTransition>
           ))
         }
-      </TransitionGroup>
+      </div>
     );
   }
 }

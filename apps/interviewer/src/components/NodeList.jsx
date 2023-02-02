@@ -3,7 +3,6 @@ import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { find, isEqual } from 'lodash';
 import cx from 'classnames';
-import { TransitionGroup } from 'react-transition-group';
 import { getCSSVariableAsString, getCSSVariableAsNumber } from '@codaco/ui';
 import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import Node from '../containers/Node';
@@ -126,8 +125,10 @@ class NodeList extends Component {
 
     const styles = isHovering ? { backgroundColor: hoverBackgroundColor } : {};
 
+    console.warn('ReactTransitionGroup was removed. NodeList needs updating!');
+
     return (
-      <TransitionGroup
+      <div
         className={classNames}
         style={styles}
         exit={exit}
@@ -156,7 +157,7 @@ class NodeList extends Component {
             );
           })
         }
-      </TransitionGroup>
+      </div>
     );
   }
 }

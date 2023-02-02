@@ -1,7 +1,4 @@
-import React from 'react';
 import PropTypes from 'prop-types';
-import { Transition } from 'react-transition-group';
-import anime from 'animejs';
 import { getCSSVariableAsObject, getCSSVariableAsNumber } from '@codaco/ui';
 
 const Stage = ({ children, stageBackward, ...props }) => {
@@ -31,31 +28,14 @@ const Stage = ({ children, stageBackward, ...props }) => {
     };
   };
 
+  console.warn('ReactTransitionGroup and anime removed. Stage needs to be updated.')
+
   return (
-    <Transition
+    <div
       {...props}
-      timeout={duration}
-      onEnter={
-        (el) => {
-          anime({
-            targets: el,
-            ...enterAnimation(stageBackward),
-          });
-        }
-      }
-      onExit={
-        (el) => {
-          anime({
-            targets: el,
-            ...exitAnimation(stageBackward),
-          });
-        }
-      }
-      appear
-      unmountOnExit
     >
       {children}
-    </Transition>
+    </div>
   );
 };
 
