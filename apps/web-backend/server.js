@@ -1,9 +1,11 @@
 import express from 'express';
+import cors from 'cors';
 import { BACKEND_PORT } from './config/constants.js';
 import { getSecureDbAdapter, initSecureDb } from './storage/secure.js';
 import { initInstanceDb } from './storage/instance.js';
 import apiRouter from './routes/api.js';
 import databaseRouter from './routes/database.js';
+import delayResponse from './middleware/delayResponse.js';
 
 // Initialize secureDB
 await initSecureDb();
@@ -26,7 +28,16 @@ if (process.env.NODE_ENV === 'development') {
 // Configure express
 const app = express();
 app.use(express.json()); // support json encoded bodies, needed por post x-www-form-urlencoded to work
+app.use(cors()); // Allow CORS
 app.use(express.urlencoded({ extended: true })); // support encoded bodies
+
+// Add an artificial delay in dev mode to simulate a slow connection
+if (process.env.NODE_ENV === 'development') {
+  console.log('applying delayResponse middleware');
+  app.use(delayResponse);
+}
+
+
 app.use('/', express.static('frontend')); // Interviewer frontend
 
 app.use(databaseRouter);

@@ -6,37 +6,36 @@ import { getSecureDb } from '../storage/secure.js';
 
 const apiRouter = Router();
 
-apiRouter.use('/api', checkDBReady); // All API routes require the database to be unlocked
-apiRouter.use('/api/secure', checkAdminAuth); // Admin routes require an admin JWT
+// Mock protocol data (for now)
+// TODO: create a function to generate mock protocols
+const protocols = [
+  {
+    id: '1',
+    name: 'Protocol 1',
+  },
+  {
+    id: '2',
+    name: 'Protocol 2',
+  },
+]
+
+// apiRouter.use('/api', checkDBReady); // All API routes require the database to be unlocked
+// apiRouter.use('/api/secure', checkAdminAuth); // Admin routes require an admin JWT
 
 // List all participants
-apiRouter.get('/api/participants', (req, res) => {
-  const secureDb = getSecureDb();
-  console.log(secureDb.data);
-  res.send(secureDb.data.participants);
+apiRouter.get('/api/protocols', (req, res) => {
+  res.send(protocols);
 });
 
 // Create a new participant using dynamic route
-apiRouter.post('/api/participants/:id', async (req, res) => {
-  const { id } = req.params;
-  const { name } = req.body;
+apiRouter.post('/api/protocols', async (req, res) => {
+  const { id, name } = req.body;
+  console.log(req.body);
+  protocols.push({ id, name });
 
-  if (!name) {
-    res.status(400).send({ error: 'Name is required' });
-    return;
-  }
 
-  const participant = {
-    id,
-    name,
-    sessions: [],
-  };
 
-  const secureDb = getSecureDb();
-
-  secureDb.data.participants.push(participant);
-  await secureDb.write();
-  res.send(participant);
+  res.send({ status: 'ok' });
 });
 
 export default apiRouter;

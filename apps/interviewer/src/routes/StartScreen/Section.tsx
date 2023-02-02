@@ -1,12 +1,15 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 
-const Section = (props) => {
-  const {
+type Props = {
+  children: React.ReactNode,
+  className?: string,
+}
+
+const Section: React.FC<Props> = ({
     children,
     className,
     ...rest
-  } = props;
+  }) => {
 
   const springy = {
     show: {
@@ -32,12 +35,6 @@ const Section = (props) => {
       {children}
     </motion.section>
   );
-};
-
-Section.propTypes = {
-};
-
-Section.defaultProps = {
 };
 
 export default Section;

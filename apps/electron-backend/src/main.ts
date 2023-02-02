@@ -5,22 +5,25 @@ import { waitForServerUp } from "wait-for-server-up";
 
 // TODO: maybe better "production detection"
 const isProduction = process.env.NODE_ENV !== "dev";
-const UI_PATH = path.join(__dirname, "../dist-ui/");
+const FRONTEND_PATH = path.join(__dirname, "../dist-interviewer/");
 const localServer = 'http://localhost:3000/';
 
 async function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    height: 600,
+    height: 800,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
+      nodeIntegration: false,
+      contextIsolation: true,
+      sandbox: true,
     },
-    width: 800,
+    width: 1024,
   });
 
   if (isProduction) {
     // load bundled React app
-    mainWindow.loadFile(path.join(UI_PATH, "index.html"));
+    mainWindow.loadFile(path.join(FRONTEND_PATH, "index.html"));
   } else {
     // show loading spinner while local server is ready
     mainWindow.loadFile(path.join(__dirname, "../loading.html"));

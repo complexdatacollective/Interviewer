@@ -1,19 +1,17 @@
 {
-  "name": "packager",
+  "name": "electron-packager",
   "version": "0.0.0",
   "main": "./dist/main.js",
   "scripts": {
-    "copy-electron": "rm -fr dist/ && cp -R ../desktop/dist/ dist",
-    "copy-ui": "rm -fr dist-ui/ && cp -R ../ui/build/ dist-ui",
-    "prepackage": "yarn run copy-electron && yarn run copy-ui",
+    "copy-electron": "rm -fr dist/ && cp -R ../electron-backend/dist/ dist",
+    "copy-interviewer": "rm -fr dist-interviewer/ && cp -R ../interviewer/build/ dist-interviewer",
+    "prepackage": "yarn run copy-electron && yarn run copy-interviewer",
     "package": "electron-builder --config ./electron-builder-config.yaml",
-
     "prepackage-dir": "yarn run prepackage",
     "package-dir": "electron-builder --config ./electron-builder-config.yaml --dir --config.asar=false",
-
-    "clean": "rm -fr dist dist-ui pkg"
+    "clean": "rm -fr dist dist-interviewer pkg"
   },
   "devDependencies": {
-    "electron-builder": "^23.0.3"
+    "electron-builder": "^23.6.0"
   }
 }

@@ -1,14 +1,14 @@
 directories:
   output: ./pkg/
-appId: com.ivanalejandro0.turbo-electron-react
+appId: org.codaco.networkCanvasInterviewer7
 extraMetadata:
-  name: turbo-electron-react
+  name: network-canvas-interviewer
 files:
   - filter:
       - ./dist/**/*
-      - ./dist-ui/**/*
+      - ./dist-interviewer/**/*
 mac:
-  category: your.app.category.type
+  category: public.app-category.education
   target:
     target: dmg
     arch:
@@ -16,4 +16,4 @@ mac:
       - arm64
 linux:
   target: appimage
-electronVersion: 19.0.3
+electronVersion: 22.1.0

@@ -4,7 +4,6 @@ import sessions from './sessions';
 import activeSessionId from './session';
 import activeSessionWorkers from './sessionWorkers';
 import deviceSettings from './deviceSettings';
-import installedProtocols from '../../slices/protocols.slice';
 import dialogs from './dialogs';
 import toasts from './toasts';
 import search from './search';
@@ -13,6 +12,7 @@ import dismissedUpdates from './dismissedUpdates';
 import pairedServer from './pairedServer';
 import exportProgress from './exportProgress';
 import { actionTypes as resetActionTypes } from './reset';
+import { apiSlice } from '../../slices/api.slice';
 
 const appReducer = combineReducers({
   form: formReducer,
@@ -20,7 +20,6 @@ const appReducer = combineReducers({
   activeSessionWorkers,
   sessions,
   deviceSettings,
-  installedProtocols,
   dialogs,
   toasts,
   search,
@@ -28,6 +27,7 @@ const appReducer = combineReducers({
   dismissedUpdates,
   pairedServer,
   exportProgress,
+  [apiSlice.reducerPath]: apiSlice.reducer,
 });
 
 const rootReducer = (state, action) => {

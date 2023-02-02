@@ -2,15 +2,14 @@
   "name": "network-canvas-interviewer",
   "version": "7.0.0-alpha.1",
   "productName": "Network Canvas Interviewer",
-  "description": "A tool for conducting Network Canvas Interviews.",
+  "description": "A tool for conducting Network Canvas interviews.",
   "author": "Complex Data Collective",
   "private": true,
   "scripts": {
-    "dev:web": "API_TYPE=web PORT=3000 craco start",
-    "build:web": "API_TYPE=web craco build",
-    "dev:electron": "API_TYPE=electron PORT=3001 BROWSER=none craco start",
-    "electron": "electron ./backend/electron/main.js",
-    "build:electron": "API_TYPE=electron craco build && electron-builder --dir",
+    "start": "NODE_ENV=development concurrently \"npm:start:web\" \"npm:start:electron\"",
+    "start:web": "PORT=4000 REACT_APP_PLATFORM=web craco start",
+    "start:electron": "PORT=3000 REACT_APP_PLATFORM=electron BROWSER=none craco start",
+    "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
     "lint": "eslint --ext js,ts,tsx src"
@@ -24,8 +23,12 @@
     }
   },
   "dependencies": {
-    "@codaco/shared-consts": "^0.0.1-alpha.3",
-    "@codaco/ui": "~6.0.0-alpha.10",
+    "@codaco/network-exporters": "*",
+    "@codaco/network-query": "*",
+    "@codaco/protocol-utils": "*",
+    "@codaco/protocol-validation": "*",
+    "@codaco/shared-consts": "*",
+    "@codaco/ui": "*",
     "@faker-js/faker": "^7.6.0",
     "@reduxjs/toolkit": "~1.9.2",
     "@testing-library/jest-dom": "^5.16.5",
@@ -35,11 +38,13 @@
     "@types/node": "^18.11.10",
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.9",
+    "@types/uuid": "^9.0.0",
     "axios": "^1.2.0",
     "classnames": "^2.3.2",
     "color": "^4.2.3",
     "compare-versions": "^5.0.1",
     "concaveman": "^1.2.1",
+    "concurrently": "^7.6.0",
     "craco": "^0.0.3",
     "csvtojson": "^2.0.10",
     "d3-force": "^3.0.0",
@@ -91,7 +96,6 @@
   },
   "devDependencies": {
     "cross-env": "~7.0.3",
-    "electron": "~22.0.0",
     "enzyme": "~3.11.0"
   }
 }
