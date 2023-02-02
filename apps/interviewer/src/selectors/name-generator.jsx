@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 
-import { createSelector } from 'reselect';
+import { createSelector } from '@reduxjs/toolkit';
 import { has } from 'lodash';
 import { makeGetSubject, makeGetIds, makeGetSubjectType } from './interface';
 import { getProtocolCodebook } from './protocol';

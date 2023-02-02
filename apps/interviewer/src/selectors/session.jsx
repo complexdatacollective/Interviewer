@@ -1,5 +1,5 @@
 /* eslint-disable no-shadow */
-import { createSelector } from 'reselect';
+import { createSelector } from '@reduxjs/toolkit';
 import {
   clamp, orderBy, values, mapValues, omit,
 } from 'lodash';

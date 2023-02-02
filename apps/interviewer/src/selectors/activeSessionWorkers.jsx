@@ -1,4 +1,4 @@
-import { createSelector } from 'reselect';
+import { createSelector } from '@reduxjs/toolkit';
 import { NodeLabelWorkerName } from '../utils/WorkerAgent';
 
 const getActiveSessionWorkers = (state) => state.activeSessionWorkers;

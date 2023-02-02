@@ -1,4 +1,4 @@
-import { createSelector } from 'reselect';
+import { createSelector } from '@reduxjs/toolkit';
 import { get } from '../utils/lodash-replacements';
 import { getProtocolCodebook } from './protocol';
 

@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
-import FuseLegacy from 'fuse.js-legacy';
-import { createSelector } from 'reselect';
+// import FuseLegacy from 'fuse.js-legacy';
+import { createSelector } from '@reduxjs/toolkit';
 import { get } from '../utils/lodash-replacements';
 
 const getSearchOpts = (_, props) => props.options;
@@ -21,10 +21,12 @@ export const LEGACY_makeGetFuse = (fuseOpts) => createSelector(
     if (typeof threshold !== 'number') {
       threshold = fuseOpts.threshold;
     }
-    return new FuseLegacy(searchData, {
-      ...fuseOpts,
-      keys: searchOpts.matchProperties,
-      threshold,
-    });
+
+    throw new Error('Replace fuse legacy in search.jsx!');
+    // return new FuseLegacy(searchData, {
+    //   ...fuseOpts,
+    //   keys: searchOpts.matchProperties,
+    //   threshold,
+    // });
   },
 );

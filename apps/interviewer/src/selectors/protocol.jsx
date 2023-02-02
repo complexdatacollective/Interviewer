@@ -5,7 +5,7 @@ import {
   mapValues,
   omit,
 } from 'lodash';
-import { createSelector } from 'reselect';
+import { createSelector } from '@reduxjs/toolkit';
 import { entityAttributesProperty } from '@codaco/shared-consts';
 import { get } from '../utils/lodash-replacements';
 

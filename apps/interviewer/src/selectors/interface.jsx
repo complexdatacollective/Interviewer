@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 
-import { createSelector } from 'reselect';
+import { createSelector } from '@reduxjs/toolkit';
 import { filter, includes, intersection } from 'lodash';
 import { assert, createDeepEqualSelector } from './utils';
 import { getProtocolCodebook } from './protocol';

@@ -3,7 +3,6 @@ import { compose } from 'redux';
 import { throttle } from 'lodash';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Flipper } from 'react-flip-toolkit';
 import cx from 'classnames';
 import color from 'color';
 import { getCSSVariableAsString } from '@codaco/ui';
@@ -26,6 +25,8 @@ const isSpecialValue = (value) => {
   }
   return false;
 };
+
+const Flipper = ({ children }) => (<div>{children}</div>);
 
 /**
   * CategoricalList: Renders a list of categorical bin items

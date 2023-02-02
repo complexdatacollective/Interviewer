@@ -1,4 +1,4 @@
-import { createSelector } from 'reselect';
+import { createSelector } from '@reduxjs/toolkit';
 import { getProtocolStages } from './protocol';
 import { getNetwork } from './network';
 import { SkipLogicAction } from '../protocol-consts';
