@@ -1,0 +1,92 @@
+.quick-add {
+  position: absolute;
+  bottom: unit(2);
+  right: unit(1.5);
+  display: flex;
+  align-items: center;
+
+  &--disabled {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  .quick-add-form {
+    @include transition-properties((opacity transform), var(--animation-easing), var(--animation-duration-fast));
+    width: 25rem;
+    opacity: 0;
+    transform-origin: center right;
+    transform: scaleX(0);
+    z-index: var(--z-global-ui);
+    margin-right: unit(1);
+
+    &--show {
+      opacity: 1;
+      transform: scaleX(1);
+    }
+
+    &__label-input {
+      width: 100%;
+      padding: unit(2) unit(4);
+      border-radius: 5rem;
+      border: 0;
+      background: var(--text);
+      color: var(--text-dark);
+      font-size: 1.2rem;
+      font-weight: bold;
+
+      &::placeholder {
+        font-style: italic;
+        font-weight: 100;
+      }
+    }
+  }
+
+  .flip-button {
+    width: unit(13); // Keep same as floating-action-buttin mixin
+    height: unit(13);
+    perspective: 1000px;
+    cursor: pointer;
+  }
+
+  /* This container is needed to position the front and back side */
+  .flip-button-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform var(--animation-duration-fast);
+    transform-style: preserve-3d;
+  }
+
+  .flip-button--flip {
+    .flip-button-inner {
+      transform: rotateY(180deg);
+    }
+  }
+
+  .flip-button-front,
+  .flip-button-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+
+    .node,
+    .icon {
+      font-size: 9rem;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .flip-button-front {
+    transform-origin: 1rem 0;
+    margin: 0 0 0 0.7rem;
+    padding-bottom: 0.3rem;
+  }
+
+  .flip-button-back {
+    transform: rotateY(180deg);
+  }
+
+}

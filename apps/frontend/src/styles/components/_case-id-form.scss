@@ -1,0 +1,26 @@
+.overlay {
+  &.case-id-form-overlay {
+    max-width: 65rem;
+  }
+}
+
+.case-id-form {
+  flex: 1;
+
+  .form-field-container {
+    background: var(--background);
+    padding: unit(4);
+    border-radius: var(--border-radius);
+    margin-bottom: unit(2);
+
+    .form-field-text__input {
+      margin-bottom: 0;
+    }
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+}

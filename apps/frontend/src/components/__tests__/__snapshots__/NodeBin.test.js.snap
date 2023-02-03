@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NodeBin component renders ok 1`] = `
+<Portal
+  containerInfo={<body />}
+>
+  <withProps(DropTarget)
+    store={
+      Object {
+        "@@observable": [Function],
+        "dispatch": [Function],
+        "getState": [Function],
+        "replaceReducer": [Function],
+        "subscribe": [Function],
+      }
+    }
+    windowRoot={null}
+  />
+</Portal>
+`;

@@ -1,0 +1,104 @@
+// This is needed because .session-panel can't have a width - it animates
+// its width automatically based on content. Without a width,
+// it cannot function as a drop obstacle, so we create this dummy
+// element.
+.session-panel-drop-obstacle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: var(--session-panel-width);
+}
+
+.session-panel {
+  --light-background: #4a4677; //sass-lint:disable-line no-color-literals
+  align-items: flex-end;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  flex: 1 0 auto;
+  height: 100%;
+  z-index: var(--z-global-ui);
+  background: var(--panel-bg-muted);
+}
+
+.session-info-panel {
+  --base-node-size: 5rem;
+  background: var(--color-platinum);
+  color: var(--color-navy-taupe);
+  position: absolute;
+  min-width: 30rem;
+  max-width: 30rem;
+  max-height: 40rem;
+  bottom: unit(4);
+  right: unit(4);
+  padding: unit(2) unit(4);
+  z-index: var(--z-global-ui);
+  border-radius: var(--border-radius);
+  display: flex;
+
+  .scrollable {
+    padding: unit(1) 0;
+  }
+
+  section {
+    padding: unit(2) 0;
+    border-bottom: 0.1rem solid var(--divider);
+
+    &:last-of-type {
+      border: 0;
+    }
+  }
+
+  .case-id {
+
+    svg {
+      height: 1.5rem;
+      width: 1.5rem;
+      margin-left: 1rem;
+      vertical-align: middle;
+    }
+  }
+
+  h4 {
+    font-weight: 400;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  h2 {
+    margin-bottom: 0;
+    margin-top: 0.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .session-duration {
+    margin: 0;
+    font-size: 3.5rem;
+  }
+
+  .entity-summary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 6rem;
+    text-align: center;
+    margin: unit(1) 0;
+
+    svg {
+      margin-bottom: unit(1);
+    }
+
+    h6 {
+      margin: 0;
+    }
+
+
+  }
+}

@@ -1,0 +1,134 @@
+@mixin clip {
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.categorical-item {
+  @include clip;
+  --categorical-item-color: var(--primary);
+  display: flex;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  cursor: pointer;
+
+  .categorical-item__disk {
+    @include clip;
+    @include transition-properties((background-color transform border-radius), var(--animation-easing), var(--animation-duration-standard));
+    transform-origin: center;
+    background-color: var(--background);
+    border: solid .3rem var(--categorical-item-color);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: scale(0.95);
+  }
+
+  .categorical-item__inner {
+    @include clip;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  @include platform-not-ios {
+    &:hover {
+      &:not(.categorical-item--hover) {
+        &:not(.categorical-item--expanded) {
+          .categorical-item__disk {
+            background-color: var(--categorical-item-color);
+          }
+        }
+      }
+    }
+  }
+
+  &--hover {
+    .categorical-item__disk {
+      transform: scale(1);
+      background-color: var(--categorical-item-color);
+    }
+  }
+
+  &__title {
+    @include clip;
+    align-items: center;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    padding: spacing(.5) spacing(1);
+    text-align: center;
+
+    h3,
+    h5 {
+      width: 100%;
+      margin: 0;
+    }
+
+    h5 {
+      margin-top: 0.5rem;
+      font-weight: 400;
+    }
+
+    h3 {
+      hyphens: auto;
+      -webkit-hyphens: auto; // sass-lint:disable-line no-vendor-prefixes
+    }
+  }
+
+  &--expanded {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: var(--z-global-ui);
+    border-radius: unset;
+
+    .categorical-item__inner {
+      padding: 5vh 5vh 7vh;
+      border-radius: unset;
+    }
+
+    .categorical-item__disk {
+      border: solid .3rem var(--categorical-item-color);
+      border-radius: var(--border-radius);
+    }
+
+    &.categorical-item--hover {
+      @include transition-properties((width height margin), var(--animation-easing), var(--animation-duration-standard));
+      margin: 0;
+    }
+
+    .categorical-item__title,
+    h3 {
+      overflow: initial;
+      width: 80%;
+      margin: 0 auto;
+    }
+
+    .categorical-item__content {
+      width: 100%;
+    }
+  }
+
+  &__content {
+    height: 100%;
+
+    .scrollable {
+      @include scrollable;
+      height: 100%;
+    }
+
+    .node {
+      font-size: calc(var(--base-node-size) * .66);
+    }
+  }
+}

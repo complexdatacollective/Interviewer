@@ -1,0 +1,23 @@
+$component-name: 'input';
+
+.#{$component-name} {
+  display: block;
+  margin: 1.5rem 0 0;
+
+  &__container {
+    margin-bottom: 3rem;
+  }
+}
+
+.context {
+  &__container {
+    display: inline-block;
+    margin-right: 1em;
+  }
+}
+
+.toggle {
+  &__slider {
+    margin-top: 1em;
+  }
+}

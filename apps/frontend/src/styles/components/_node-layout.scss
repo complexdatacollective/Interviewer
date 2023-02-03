@@ -1,0 +1,20 @@
+.node-layout {
+  --border: calc(var(--base-node-size) * 0.275);
+  @include gpu;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+
+  &__node {
+    @include gpu;
+    position: absolute;
+    transform: translate(-50%, -50%);
+  }
+
+  .node {
+    margin: 0;
+    font-size: calc(var(--base-node-size) * .55);
+  }
+}

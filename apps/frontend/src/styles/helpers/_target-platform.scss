@@ -1,0 +1,15 @@
+// These includes/mixins are only to be used when absolutely necessary!
+
+@mixin platform-only-ios {
+  @at-root .app--ios #{&} {
+    @content;
+  }
+}
+
+@mixin platform-not-ios {
+  @at-root .app--electron #{&}, .app-android #{&} {
+    @content;
+  }
+}
+
+

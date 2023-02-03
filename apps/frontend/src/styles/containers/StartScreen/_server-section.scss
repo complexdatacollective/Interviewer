@@ -1,0 +1,174 @@
+.server-section {
+  &__main {
+    background: linear-gradient(#404088, var(--color-cyber-grape)); //sass-lint:disable-line no-color-literals
+    padding: 0;
+
+    .content-area {
+      display: flex;
+      flex-direction: column;
+
+      &__buttons {
+        padding: unit(2) unit(6);
+        background: var(--color-mustard);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      &__discover {
+        padding: unit(4) unit(6);
+
+        > h4 {
+          margin-top: 0;
+          margin-bottom: 1.3rem;
+        }
+
+        .paired-server-wrapper {
+          margin-top: unit(2);
+          padding: unit(2) unit(4);
+          background: var(--color-slate-blue--dark);
+          color: var(--color-white);
+          border-radius: var(--border-radius);
+
+          .server-card {
+            margin: unit(2);
+          }
+        }
+
+        .discovered-server-list {
+          background: var(--color-slate-blue);
+          border-radius: var(--border-radius);
+          max-height: 30rem;
+          min-height: 25rem;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          overflow: hidden;
+          margin-top: unit(2);
+
+          &--offline,
+          &--error {
+            min-height: unset;
+          }
+
+          header {
+            width: 100%;
+            display: flex;
+            background: var(--color-slate-blue--dark);
+            color: var(--color-white);
+            align-items: center;
+            padding: unit(1) unit(4);
+
+            .spinner--small {
+              --circle-size: 0.5rem;
+              margin-right: unit(2);
+            }
+          }
+
+          .scrollable {
+            padding: unit(2);
+
+            > * {
+              width: 100%;
+              margin-bottom: unit(2);
+            }
+
+            &:empty {
+              display: flex;
+
+              &::after {
+                width: 100%;
+                height: 10rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                color: var(--color-white);
+                content: 'No Servers found.';
+              }
+            }
+          }
+
+          .server-list {
+            display: flex;
+
+            &--error,
+            &--offline {
+              padding: unit(2);
+
+              .error__icon {
+                flex: 0 0 10rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .server-status {
+    display: flex;
+
+    &__indicator {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 unit(2);
+
+      .indicator {
+        width: unit(2);
+        height: unit(2);
+        border-radius: 50%;
+        background: var(--error);
+      }
+    }
+
+    &--error {
+      .server-status__indicator {
+        .indicator {
+          background: var(--error);
+          @keyframes blinker {
+            50% {
+              opacity: 0;
+            }
+          }
+          animation: blinker 1s cubic-bezier(1, 0, 0, 1) infinite;
+        }
+      }
+    }
+
+    &--caution {
+      .server-status__indicator {
+        .indicator {
+          background: var(--warning);
+        }
+      }
+    }
+
+    &--ok {
+      .server-status__indicator {
+        .indicator {
+          background: var(--color-sea-green);
+          @keyframes pulse {
+            // sass-lint:disable-block no-color-literals
+            0% {
+              box-shadow: 0 0 0 0 rgba(var(--color-sea-green---rgb), 0.8);
+            }
+
+            70% {
+              box-shadow: 0 0 0 2rem rgba(var(--color-sea-green---rgb), 0);
+            }
+
+            100% {
+              box-shadow: 0 0 0 0 rgba(var(--color-sea-green---rgb), 0);
+            }
+          }
+
+          animation: pulse 2s infinite;
+        }
+      }
+    }
+  }
+}

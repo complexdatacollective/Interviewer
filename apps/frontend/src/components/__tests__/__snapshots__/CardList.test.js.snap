@@ -1,0 +1,58 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CardList component renders cards with list 1`] = `
+<ContextProvider
+  value={
+    Object {
+      "store": Object {
+        "@@observable": [Function],
+        "dispatch": [Function],
+        "getState": [Function],
+        "replaceReducer": [Function],
+        "subscribe": [Function],
+      },
+      "subscription": Object {
+        "addNestedSub": [Function],
+        "getListeners": [Function],
+        "handleChangeWrapper": [Function],
+        "isSubscribed": [Function],
+        "notifyNestedSubs": [Function],
+        "onStateChange": [Function],
+        "trySubscribe": [Function],
+        "tryUnsubscribe": [Function],
+      },
+    }
+  }
+>
+  <CardList
+    className=""
+    details={[Function]}
+    getKey={[Function]}
+    isItemSelected={[Function]}
+    items={Array []}
+    label={[Function]}
+    nodes={
+      Array [
+        Object {
+          "age": "22",
+          "name": "a name",
+          "uid": "a",
+        },
+        Object {
+          "age": "88",
+          "name": "b name",
+          "uid": "b",
+        },
+        Object {
+          "age": "33",
+          "name": "c name",
+          "uid": "c",
+        },
+      ]
+    }
+    onItemClick={[Function]}
+    onToggleCard={[Function]}
+    selected={[Function]}
+  />
+</ContextProvider>
+`;

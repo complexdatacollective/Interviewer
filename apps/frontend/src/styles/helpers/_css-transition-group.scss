@@ -1,0 +1,11 @@
+.css-transition-group {
+  &--fill {
+    display: flex;
+    flex: 1;
+
+    & > div {
+      display: flex;
+      flex: 1;
+    }
+  }
+}

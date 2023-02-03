@@ -1,16 +1,18 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "composite": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
     "noImplicitAny": true,
     "skipLibCheck": true,
     "sourceMap": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
     "outDir": "dist",
-    "baseUrl": ".",
-    "paths": {
-      "*": ["node_modules/*"]
-    }
   },
   "include": [
+    "vite.config.ts",
+    "package.json",
     "src/**/*"
   ]
 }

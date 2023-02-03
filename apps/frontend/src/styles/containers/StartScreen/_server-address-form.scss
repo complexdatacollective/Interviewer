@@ -1,0 +1,15 @@
+.server-address-form {
+  &__form {
+    padding: unit(4);
+    background: var(--background);
+    border-radius: var(--border-radius);
+    margin-bottom: unit(2);
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+  }
+}

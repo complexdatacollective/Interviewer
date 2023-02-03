@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Field /> should render 1`] = `
+<Field
+  component={[Function]}
+  label="Name"
+  name="name"
+  validate={Array []}
+/>
+`;

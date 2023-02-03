@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Radar /> renders ok 1`] = `
+<svg
+  className="canvas-radar"
+  viewBox="0 0 100 100"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <circle
+    className="canvas-radar__range"
+    cx="50"
+    cy="50"
+    fill="#000000"
+    key="0"
+    r={50}
+  />
+  <circle
+    className="canvas-radar__range"
+    cx="50"
+    cy="50"
+    fill="#000000"
+    key="1"
+    r={43.54101966249685}
+  />
+  <circle
+    className="canvas-radar__range"
+    cx="50"
+    cy="50"
+    fill="#000000"
+    key="2"
+    r={36.547375096555626}
+  />
+  <circle
+    className="canvas-radar__range"
+    cx="50"
+    cy="50"
+    fill="#000000"
+    key="3"
+    r={28.717082451262844}
+  />
+  <circle
+    className="canvas-radar__range"
+    cx="50"
+    cy="50"
+    fill="#000000"
+    key="4"
+    r={19.270509831248425}
+  />
+</svg>
+`;

@@ -1,0 +1,66 @@
+$add-count-button-height: 6rem;
+$add-count-button-width: 7rem;
+$add-count-button-inner-size: $add-count-button-width * .8; // width of the core circle (without badge)
+$module-name: add-count-button;
+
+// Provides alternate colors (e.g., to represent different node types)
+// 'flash' is the darkened 45° overlay
+@mixin add-count-colors($base-color, $flash-color) {
+  fill: color($base-color);
+
+  &-flash {
+    fill: color($flash-color);
+  }
+}
+
+
+.#{$module-name} {
+  background-color: transparent;
+  border: 0;
+  color: color('white');
+  cursor: pointer;
+  display: block;
+  font-size: 3rem;
+  font-weight: 500;
+  height: $add-count-button-height;
+  padding-bottom: 0;
+  padding-left: 0;
+  padding-right: $add-count-button-width - $add-count-button-inner-size;
+  text-align: center;
+  text-indent: 0; // override svg-button text hiding
+  width: $add-count-button-width;
+
+  &__count {
+    position: relative;
+  }
+
+  &__background {
+    height: 0;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+
+  &__base {
+    @include add-count-colors('neon-coral', 'neon-coral--dark');
+  }
+
+  // Allow button to take on any available named color
+  @each $color, $_ in $-color-map {
+    &--#{$color} {
+      .#{$module-name}__base {
+        @include add-count-colors($color, '#{$color}--dark');
+      }
+    }
+  }
+
+  &__badge {
+    fill: color('white');
+  }
+
+  &__plus {
+    fill: color('charcoal');
+  }
+
+}

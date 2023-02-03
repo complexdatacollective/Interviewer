@@ -1,0 +1,13 @@
+.narrative-interface {
+  @include interface-centering(false);
+  height: 100%;
+
+  &__canvas {
+    width: 100%;
+    height: 100%;
+
+    .canvas {
+      display: flex;
+    }
+  }
+}

@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SlideFormEdge /> should render 1`] = `
+<SlideFormEdge
+  edgeColor="blue"
+  edgeIndex={1}
+  form={
+    Object {
+      "entity": "edge",
+      "title": "alpha",
+      "type": "friend",
+    }
+  }
+  item={
+    Object {
+      "from": 1,
+      "to": 2,
+    }
+  }
+  nodes={
+    Object {
+      "1": Object {
+        "name": "One",
+      },
+      "2": Object {
+        "name": "Two",
+      },
+    }
+  }
+  onScroll={[Function]}
+  stageIndex={1}
+  submitButton={
+    <button
+      aria-label="Submit"
+      hidden={true}
+      type="submit"
+    />
+  }
+/>
+`;

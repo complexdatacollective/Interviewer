@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Panels component renders ok 1`] = `
+<div
+  className="panel"
+  style={
+    Object {
+      "borderColor": null,
+    }
+  }
+>
+  <div
+    className="panel__heading"
+    onClick={[Function]}
+  >
+    <h3
+      className="panel__heading-header"
+    />
+  </div>
+  <div
+    className="panel__content"
+  >
+    <span>
+      foo
+    </span>
+  </div>
+</div>
+`;

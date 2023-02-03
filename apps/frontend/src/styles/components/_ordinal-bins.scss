@@ -1,0 +1,58 @@
+.ordinal-bin {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex: 1;
+  min-width: 0;
+
+  .scrollable {
+    @include scrollable;
+
+  }
+
+  &--title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 4rem;
+    min-width: 0;
+    padding: 0 0.5rem;
+
+    h3 {
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+      flex: 1;
+      min-width: 0;
+    }
+
+  }
+
+  &--content {
+    display: flex;
+    flex: 1;
+    flex-grow: 5;
+    align-items: center;
+    justify-content: center;
+    height: calc(100% - 5rem);
+
+    .node-list {
+      &--hover,
+      &--drag {
+        background-color: inherit;
+      }
+    }
+
+    .scrollable {
+      height: 100%;
+    }
+
+    .node {
+      font-size: calc(var(--base-node-size) * .66);
+    }
+
+  }
+}

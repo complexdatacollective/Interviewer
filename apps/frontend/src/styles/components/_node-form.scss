@@ -1,0 +1,18 @@
+.overlay {
+
+  &:not(.overlay--fullscreen) {
+    &.node-form {
+      max-width: 65rem;
+
+      &.overlay--fullscreen {
+        max-height: 100%;
+      }
+
+      .overlay__content {
+        .scrollable {
+          padding: 0 unit(4);
+        }
+      }
+    }
+  }
+}

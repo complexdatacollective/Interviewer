@@ -1,0 +1,68 @@
+.panel {
+  --base-node-size: calc(var(--base-font-size) * 6.6);
+  @include transition-properties((opacity flex-basis flex-grow margin-bottom border-bottom-width), var(--animation-easing), var(--animation-duration-standard));
+  flex: 1 0 5rem;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--panel-bg-muted); // Replaced light background palette because it was too strong. This seems to be a one-off color, but migrate to UI if used elsewhere
+  border-color: palette('primary');
+  border-style: solid;
+  border-width: 0;
+  border-bottom-width: .5rem;
+  border-radius: var(--border-radius);
+  margin: 0 0 1rem;
+  overflow: hidden;
+  opacity: 1;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &__heading {
+    flex: 0 0 5rem;
+    padding: var(--padding-unit);
+    border-bottom: .1rem solid palette('background');
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+
+    &-header {
+      margin: 0;
+    }
+  }
+
+  &__content {
+    flex: 1 auto;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &--no-highlight {
+    border-bottom-width: 0;
+  }
+
+  &--minimize {
+    border-bottom-width: 0;
+    flex-basis: 0;
+    flex-grow: 0;
+    margin-bottom: 0;
+    opacity: 0;
+  }
+
+  &--collapsed {
+    &:not(.panel--minimize) {
+      flex-grow: 0;
+
+      .panel__content {
+        height: 0;
+      }
+    }
+  }
+
+  & .node-list--hover,
+  & .node-list--drag {
+    background-color: var(--panel-selected-node-bg-color);
+  }
+}

@@ -1,0 +1,12 @@
+.form {
+  &__button-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    .toggle__container {
+      margin: 0;
+    }
+  }
+}

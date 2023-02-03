@@ -16,11 +16,11 @@
       "dependsOn": []
     },
     "electron-packager#package": {
-      "dependsOn": ["interviewer#build", "electron#bundle"],
+      "dependsOn": ["frontend#build", "electron#bundle"],
       "cache": false
     },
     "electron-packager#package-dir": {
-      "dependsOn": ["interviewer#build", "electron#bundle"],
+      "dependsOn": ["frontend#build", "electron#bundle"],
       "cache": false
     },
     "clean": {

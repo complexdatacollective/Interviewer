@@ -3,13 +3,13 @@
   "version": "0.0.0",
   "main": "./dist/main.js",
   "scripts": {
-    "copy-electron": "rm -fr dist/ && cp -R ../electron-backend/dist/ dist",
-    "copy-interviewer": "rm -fr dist-interviewer/ && cp -R ../interviewer/build/ dist-interviewer",
-    "prepackage": "yarn run copy-electron && yarn run copy-interviewer",
+    "copy-backend": "rm -fr dist/ && cp -R ../electron-backend/dist-backend/ dist",
+    "copy-frontend": "rm -fr dist-frontend/ && cp -R ../frontend/build/ dist-frontend",
+    "prepackage": "yarn run copy-backend && yarn run copy-frontend",
     "package": "electron-builder --config ./electron-builder-config.yaml",
     "prepackage-dir": "yarn run prepackage",
     "package-dir": "electron-builder --config ./electron-builder-config.yaml --dir --config.asar=false",
-    "clean": "rm -fr dist dist-interviewer pkg"
+    "clean": "rm -fr dist dist-frontend pkg"
   },
   "devDependencies": {
     "electron-builder": "^23.6.0"

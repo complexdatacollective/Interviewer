@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CategoricalList component renders categorical list 1`] = `
+<div
+  className="categorical-list categorical-list--items--2"
+  onClick={[Function]}
+>
+  <Flipper
+    applyTransformOrigin={true}
+    className="categorical-list__items"
+    element="div"
+    flipKey={null}
+  >
+    <Connect(CategoricalListItem)
+      accentColor={null}
+      bin={
+        Object {
+          "label": "one",
+          "nodes": Array [
+            1,
+            2,
+            3,
+          ],
+          "value": 1,
+        }
+      }
+      getNodeLabel={[Function]}
+      id="CATBIN_ITEM_1_1_0"
+      index={0}
+      isExpanded={false}
+      key="0"
+      nodeColor=""
+      promptOtherVariable={null}
+      stage={
+        Object {
+          "id": 1,
+        }
+      }
+    />
+    <Connect(CategoricalListItem)
+      accentColor={null}
+      bin={
+        Object {
+          "label": "two",
+          "nodes": Array [
+            4,
+            5,
+          ],
+          "value": 2,
+        }
+      }
+      getNodeLabel={[Function]}
+      id="CATBIN_ITEM_1_1_1"
+      index={1}
+      isExpanded={false}
+      key="1"
+      nodeColor=""
+      promptOtherVariable={null}
+      stage={
+        Object {
+          "id": 1,
+        }
+      }
+    />
+  </Flipper>
+</div>
+`;

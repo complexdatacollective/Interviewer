@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SlideFormNode /> should render 1`] = `
+<SlideFormNode
+  form={
+    Object {
+      "entity": "node",
+      "title": "alpha",
+      "type": "person",
+    }
+  }
+  initialValues={
+    Object {
+      "foo": "bar",
+    }
+  }
+  item={
+    Object {
+      "attributes": Object {
+        "foo": "bar",
+      },
+    }
+  }
+  nodeIndex={1}
+  onScroll={[Function]}
+  onUpdate={[Function]}
+  stageIndex={1}
+  submitButton={
+    <button
+      aria-label="Submit"
+      hidden={true}
+      type="submit"
+    />
+  }
+/>
+`;

@@ -1,0 +1,31 @@
+.categorical-bin-interface {
+  @include interface-centering;
+  --categorical-bucket-basis: 8rem;
+  --categorical-padding-top: 1rem;
+  --categorical-padding-bottom: 2rem;
+
+  height: 100vh;
+  //sass-lint:disable shorthand-values
+  padding: var(--categorical-padding-top) 0 var(--categorical-padding-bottom);
+  display: flex;
+  flex-direction: column;
+
+  &__prompt {
+    @include interface-prompt;
+  }
+
+  &__bucket {
+    display: flex;
+    flex: 0 0 var(--categorical-bucket-basis);
+    justify-content: center;
+
+    .node {
+      font-size: calc(var(--base-node-size) * .66);
+    }
+
+    .node-list {
+      padding: 0;
+      width: auto;
+    }
+  }
+}

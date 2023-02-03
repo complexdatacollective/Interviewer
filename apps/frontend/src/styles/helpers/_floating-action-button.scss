@@ -1,0 +1,11 @@
+// Provides layout information for an interface's floating (bottom right) button,
+// which contains one of the "add-*" SVG icons from Network Canvas UI.
+@mixin floating-action-button {
+  position: absolute;
+  bottom: unit(2);
+  right: 0;
+  width: unit(13);
+  height: unit(13);
+  z-index: var(--z-global-ui);
+  cursor: pointer;
+}

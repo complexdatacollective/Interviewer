@@ -1,0 +1,49 @@
+.name-generator-interface {
+  @include interface-centering;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  &__prompt {
+    @include interface-prompt;
+  }
+
+  &__main {
+    flex: 1 auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100%;
+    position: relative;
+    min-height: 0;
+  }
+
+  &__nodes {
+    flex: 3 1 auto;
+    height: 100%;
+    display: flex;
+    padding-left: 1.5rem;
+  }
+
+  &__panels {
+    flex: 0 0 auto;
+    height: 100%;
+    display: flex;
+  }
+
+  &__add-node {
+    &--disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+
+      .icon {
+        pointer-events: none;
+      }
+    }
+
+    .icon {
+      @include floating-action-button;
+    }
+  }
+}

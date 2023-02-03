@@ -1,0 +1,40 @@
+.ordinal-bin-interface {
+  @include interface-centering;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  &__prompt {
+    @include interface-prompt;
+  }
+
+  &__bucket {
+    display: flex;
+    flex: 0 0 8rem;
+
+    .node {
+      font-size: calc(var(--base-node-size) * .66);
+    }
+
+    .node-list {
+      padding: 0;
+    }
+  }
+
+  &__bins {
+    display: flex;
+    align-items: flex-start;
+    height: 100%;
+    position: relative;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+  }
+
+  &__nodes {
+    flex: 3 1 auto;
+    height: 100%;
+    display: flex;
+    padding-left: spacing(large);
+  }
+}

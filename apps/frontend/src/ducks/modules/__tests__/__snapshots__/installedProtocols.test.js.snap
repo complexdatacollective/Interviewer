@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`protocols reducer deleteProtocolAction() Has existing sessions warns user about existing sessions 1`] = `
+Array [
+  Array [
+    Object {
+      "confirmLabel": "Delete protocol and sessions",
+      "message": <React.Fragment>
+        <p>
+          There are interview sessions on this device that use the protocol '
+          Mock Protocol
+          '.
+        </p>
+        <p>
+          <strong>
+            Deleting this protocol will also delete these sessions.
+          </strong>
+        </p>
+      </React.Fragment>,
+      "title": "Interviews using Mock Protocol",
+      "type": "Confirm",
+    },
+  ],
+]
+`;
+
+exports[`protocols reducer deleteProtocolAction() Has non-exported existing sessions warns user about existing sessions 1`] = `
+Array [
+  Array [
+    Object {
+      "confirmLabel": "Delete protocol and sessions",
+      "message": <React.Fragment>
+        <p>
+          There are interview sessions on this device using the protocol '
+          Mock Protocol
+          ' that have not yet been exported.
+        </p>
+        <p>
+          <strong>
+            Deleting this protocol will also delete these sessions.
+          </strong>
+        </p>
+      </React.Fragment>,
+      "title": "Interviews using 'Mock Protocol' have not been exported",
+      "type": "Warning",
+    },
+  ],
+]
+`;

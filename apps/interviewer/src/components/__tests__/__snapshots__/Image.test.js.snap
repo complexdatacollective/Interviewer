@@ -1,9 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`<Image /> renders ok 1`] = `
-<img
-  alt="baz"
-  miscellaneousAdditionalProperty="baz"
-  src="foo"
-/>
-`;

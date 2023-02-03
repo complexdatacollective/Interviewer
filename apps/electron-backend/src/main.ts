@@ -1,12 +1,11 @@
 import { app, BrowserWindow } from "electron";
 import * as path from "path";
-
-import { waitForServerUp } from "wait-for-server-up";
+import { waitForServerUp } from "./waitForServerUp";
 
 // TODO: maybe better "production detection"
-const isProduction = process.env.NODE_ENV !== "dev";
-const FRONTEND_PATH = path.join(__dirname, "../dist-interviewer/");
-const localServer = 'http://localhost:3000/';
+const isProduction = import.meta.env.PROD;
+const FRONTEND_PROD_PATH = path.join(__dirname, "../dist-frontend/");
+const FRONTEND_DEV_PATH = 'http://localhost:4000/';
 
 async function createWindow() {
   // Create the browser window.
@@ -23,13 +22,13 @@ async function createWindow() {
 
   if (isProduction) {
     // load bundled React app
-    mainWindow.loadFile(path.join(FRONTEND_PATH, "index.html"));
+    mainWindow.loadFile(path.join(FRONTEND_PROD_PATH, "index.html"));
   } else {
     // show loading spinner while local server is ready
     mainWindow.loadFile(path.join(__dirname, "../loading.html"));
-    await waitForServerUp(localServer)
+    await waitForServerUp(FRONTEND_DEV_PATH)
     // load locally served React app in dev mode
-    mainWindow.loadURL(localServer);
+    mainWindow.loadURL(FRONTEND_DEV_PATH);
 
     // Open the DevTools.
     mainWindow.webContents.openDevTools();

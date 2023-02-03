@@ -1,0 +1,17 @@
+.draggable-preview {
+  z-index: var(--z-fx-sub);
+
+  &--invalid {
+    .node {
+      opacity: 0.5;
+    }
+  }
+}
+
+.draggable {
+  cursor: grab;
+
+  &--disabled {
+    cursor: not-allowed;
+  }
+}

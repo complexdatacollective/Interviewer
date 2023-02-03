@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<LayoutNode /> renders ok 1`] = `
+<div
+  className="node-layout__node"
+  onClick={[Function]}
+  style={
+    Object {
+      "left": "77%",
+      "top": "20%",
+      "transform": "translate(-50%, -50%)",
+    }
+  }
+>
+  <Component
+    allowDrag={false}
+    allowSelect={false}
+    animate={false}
+    attributes={
+      Object {
+        "foo": Object {
+          "x": 0.77,
+          "y": 0.2,
+        },
+        "label": "some content",
+      }
+    }
+    linking={false}
+    meta={[Function]}
+    scrollDirection="NO_SCROLL"
+    selected={false}
+  />
+</div>
+`;

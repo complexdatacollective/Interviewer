@@ -1,0 +1,82 @@
+.accordion {
+  border-bottom: solid 0.1rem var(--narrative-border-bottom-color);
+
+  &__toggle {
+    align-items: center;
+    display: flex;
+    height: 4rem;
+    padding: 0 1rem;
+
+    &:not(.accordion__toggle--open) {
+      .accordion__icon--open {
+        display: none;
+      }
+    }
+
+    &:hover,
+    &--open {
+      opacity: 1;
+    }
+
+    h4 {
+      letter-spacing: .15rem;
+      text-transform: uppercase;
+      margin: 0;
+    }
+
+    & .accordion__icon {
+      width: 1rem;
+    }
+
+    &--open {
+      .accordion__icon--close {
+        display: none;
+      }
+    }
+  }
+
+  &__content {
+    padding: 1rem;
+  }
+}
+
+.accordion-item {
+  display: flex;
+  align-content: center;
+  align-items: center;
+
+  .icon {
+    margin: .5rem;
+  }
+
+  &__radio {
+    border: solid .1rem;
+    border-color: var(--input-border);
+    border-radius: 50%;
+    height: 2rem;
+    margin: .5rem;
+    width: 2rem;
+    transition: border-color var(--animation-easing) var(--animation-duration-standard);
+
+    &::before {
+      background-color: var(--input-accent);
+      border-radius: 50%;
+      content: '';
+      height: 1.3rem;
+      margin: .25rem;
+      opacity: 0;
+      position: absolute;
+      width: 1.3rem;
+      transition: opacity var(--animation-easing) var(--animation-duration-standard);
+    }
+
+    &--selected {
+      border-color: var(--input-accent);
+
+      &::before {
+        opacity: 1;
+        transition: opacity var(--animation-easing) var(--animation-duration-standard);
+      }
+    }
+  }
+}

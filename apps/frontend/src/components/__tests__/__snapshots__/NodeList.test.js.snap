@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NodeList component renders ok 1`] = `
+<Monitor
+  id="foo"
+  listId="foo_bar"
+  onDrag={[Function]}
+  onDragEnd={[Function]}
+  onDrop={[Function]}
+  store={
+    Object {
+      "@@observable": [Function],
+      "dispatch": [Function],
+      "getState": [Function],
+      "replaceReducer": [Function],
+      "subscribe": [Function],
+    }
+  }
+/>
+`;

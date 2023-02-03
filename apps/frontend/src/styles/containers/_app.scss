@@ -1,0 +1,53 @@
+#root { // sass-lint:disable-line no-ids
+  height: 100%;
+  width: 100%;
+}
+
+// NC specific override for stacking context
+.toast-container {
+  z-index: var(--z-fx);
+}
+
+// container for menus and content
+.app {
+  background: palette('primary');
+  height: 100%;
+  width: 100vw;
+
+  .electron-titlebar {
+    display: none;
+    visibility: hidden;
+  }
+
+  &--electron {
+    .electron-titlebar {
+      display: block;
+      visibility: visible;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 25px;
+      width: 100%;
+      -webkit-app-region: drag; // sass-lint:disable-line no-vendor-prefixes
+      z-index: var(--z-chrome);
+    }
+  }
+
+  // page wrap for content
+  &__content {
+    background: palette('background');
+    box-sizing: border-box;
+    height: 100%;
+    overflow: hidden;
+    width: 100vw;
+    position: relative; // do not remove this!
+  }
+
+  &--preview {
+    .session-navigation__button--menu {
+      pointer-events: none;
+      display: none;
+    }
+  }
+}

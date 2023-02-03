@@ -1,0 +1,138 @@
+$content-padding: 1rem 2rem;
+$module-name: search;
+$results-height: calc(100vh - 23rem);
+
+// Base input on global styling; override as needed below.
+@include text-input('#{$module-name}__input');
+
+.#{$module-name} {
+  --collapsed-square-size-js: 6.5rem;
+  --content-padding: 1rem;
+
+  background-color: color('cyber-grape');
+  border-radius: var(--border-radius);
+  max-height: 100%;
+  position: absolute;
+  transform-origin: right bottom;
+
+  &__loading {
+    position: absolute;
+    width: calc(100% - var(--session-panel-width)) !important; // sass-lint:disable-line no-important
+    bottom: 0;
+    left: var(--session-panel-width);
+    overflow: hidden;
+  }
+
+  &__search-button {
+    cursor: pointer;
+    transition: opacity var(--animation-duration-standard) var(--animation-easing);
+
+    &.icon {
+      position: absolute;
+      bottom: 1.8rem;
+      right: 1.8rem;
+      width: 7rem;
+      height: 7rem;
+    }
+
+    &--hidden {
+      opacity: 0;
+      z-index: -1;
+    }
+
+  }
+
+  &__header {
+    padding: 1rem 0;
+    margin: 0;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &--hidden {
+      height: 0;
+      margin: 0;
+      opacity: 0;
+      padding: 0;
+    }
+  }
+
+  &__close-button {
+    margin: 1rem;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1;
+
+    &[name='close'] { // specificity needed to override NC-UI
+      height: 1rem;
+      width: 1rem;
+    }
+  }
+
+  &__content {
+    height: 100%;
+    overflow: visible;
+    padding: $content-padding;
+    position: relative;
+  }
+
+  &__input {
+    background-color: color('white');
+    border-radius: spacing(small);
+    bottom: var(--content-padding);
+    color: palette('text-dark');
+    left: var(--content-padding);
+    padding: spacing(medium);
+    height: auto;
+    width: calc(100% - 2 * var(--content-padding));
+  }
+
+  &--collapsed {
+    transform: translateX(100%);
+  }
+
+  &__results {
+    display: block;
+    // A calculated height here attempts to use all available space without
+    // hiding the prompt question. min-height ensures results are readable,
+    // even if prompt is hidden at very short viewport heights.
+    height: $results-height;
+    margin: spacing(small) 0;
+    min-height: 8em;
+    overflow: hidden;
+    transition: height var(--animation-duration-fast) var(--animation-easing);
+
+    .card-list {
+      padding: 0;
+    }
+
+    .scrollable {
+      height: 100%;
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+    }
+
+    &--collapsed {
+      border: 0;
+      height: 0;
+      min-height: 0;
+    }
+  }
+
+  &__result {
+    &--selected {
+      background-color: color('white', .15);
+      border: 1px solid color('white');
+    }
+  }
+
+  .add-count-button {
+    filter: drop-shadow(0 3px 0 var(--drop-shadow-color));
+    position: absolute;
+    right: -4rem;
+    top: 30%;
+    z-index: 1;
+  }
+
+}

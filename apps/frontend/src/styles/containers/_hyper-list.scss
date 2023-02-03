@@ -1,0 +1,28 @@
+.hyper-list {
+  display: flex;
+
+  &__container,
+  &__sizer {
+    flex: 1;
+    display: flex;
+    position: relative;
+  }
+
+  &__grid {
+    @include scrollable;
+    overflow-x: hidden !important; // sass-lint:disable-line no-important
+  }
+
+  &__item {
+    .draggable {
+      height: 100%;
+      display: flex;
+    }
+  }
+
+  &--drag,
+  &--hover {
+    background-color: var(--node-list-action-bg);
+  }
+}
+

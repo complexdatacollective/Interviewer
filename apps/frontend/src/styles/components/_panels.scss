@@ -1,0 +1,18 @@
+.panels {
+  @include transition-properties((opacity width margin-right), var(--animation-easing), var(--animation-duration-standard));
+  display: flex;
+  flex-direction: column;
+  opacity: 1;
+  margin-right: 0;
+  width: 24rem;
+  max-width: 30vw; // To constrain large font sizes
+  transform: translateZ(0);
+  will-change: transform;
+
+  &--minimize {
+    display: block; // Override flex to fix Safari layout issue (#407)
+    margin-right: 0;
+    width: 0;
+    opacity: 0;
+  }
+}

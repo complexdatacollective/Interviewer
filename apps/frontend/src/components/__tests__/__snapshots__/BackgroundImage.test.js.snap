@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<BackgroundImage /> renders ok 1`] = `
+<div
+  miscellaneousAdditionalProperty="baz"
+  style={
+    Object {
+      "backgroundImage": "url(foo)",
+      "width": "100%",
+    }
+  }
+/>
+`;

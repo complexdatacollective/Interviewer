@@ -1,0 +1,77 @@
+$font-path: "~@codaco/ui/src/assets/fonts";
+$image-path: "~@codaco/ui/";
+
+@import "@codaco/ui/src/styles/_all.scss";
+@import "helpers/all";
+@import "components/all";
+@import "containers/all";
+@import "transitions";
+
+// Remove touch and focus outlines
+* {
+  outline-style: none;
+  -webkit-touch-callout: none; // sass-lint:disable-line no-vendor-prefixes
+
+  &:focus {
+    outline: none;
+  }
+}
+
+:root {
+  --body-font-family: #{$netcanvas-font-stack}; // override Network Canvas UI
+  --code-font: courier;
+  --session-panel-width: 9rem; // Does *not* change actual timeline width (which is automatically calculated). Used for drop obstacle and stage margins
+  --interface-prompt-flex-basis: 8rem;
+  --base-font-size: 1.75vmin;
+  --border-radius: 0.75rem;
+  --padding-unit: 1rem;
+
+  --form-intro-panel-background: var(--color-cyber-grape);
+}
+
+html,
+body {
+  cursor: default;
+  overflow: hidden;
+  color: palette("text");
+  background: palette("background");
+  width: 100%;
+  height: 100vh;
+}
+
+a {
+  color: palette("link");
+  text-decoration: none;
+}
+
+// Override UI toast style for now (make wider)
+.toast-container-list {
+  align-items: flex-end;
+}
+
+.toast {
+  .toast-button-group {
+    display: flex;
+    justify-content: flex-end;
+
+    button {
+      &:not(:last-child) {
+        margin-right: unit(1);
+      }
+    }
+  }
+}
+
+.update-available-toast {
+  width: 50rem;
+}
+
+.dialog-release-notes {
+  &__notes {
+    max-height: 50vh;
+    overflow-y: scroll;
+    background: var(--background);
+    padding: 0 1.2rem;
+    border-radius: var(--border-radius);
+  }
+}

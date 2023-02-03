@@ -1,0 +1,41 @@
+.import-section {
+  background: linear-gradient(#404088, var(--color-cyber-grape)); //sass-lint:disable-line no-color-literals
+
+  &__manage-protocols {
+    background: var(--color-slate-blue);
+    padding: unit(2) unit(6);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    h2 {
+      margin: 0;
+    }
+  }
+
+  &__install-section {
+    padding: unit(4) unit(6);
+
+    > .content-buttons {
+      display: flex;
+      justify-content: space-around;
+
+      .graphic-button {
+        max-width: 30rem;
+      }
+
+      > :only-child {
+        max-width: 30rem;
+        margin-left: -50% !important; //sass-lint:disable-line no-important
+      }
+
+      > :first-child {
+        margin-right: unit(2);
+      }
+
+      > :last-child {
+        margin-left: unit(2);
+      }
+    }
+  }
+}

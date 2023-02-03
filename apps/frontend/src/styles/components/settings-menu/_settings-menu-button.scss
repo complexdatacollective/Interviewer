@@ -1,0 +1,21 @@
+.settings-menu-button {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  .icon {
+    &[name='settings'] {
+      height: unit(4);
+      width: unit(4);
+    }
+  }
+
+  h4 {
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin: 0;
+    padding-left: unit(2);
+  }
+}

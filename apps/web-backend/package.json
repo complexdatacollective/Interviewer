@@ -1,5 +1,5 @@
 {
-  "name": "low-db-test",
+  "name": "fresco-backend",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -7,8 +7,8 @@
     "dev": "nodemon server.js --ignore 'data/*'"
   },
   "type": "module",
-  "author": "",
-  "license": "ISC",
+  "author": "Complex Data Collective",
+  "license": "GPL-3.0",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.18.2",

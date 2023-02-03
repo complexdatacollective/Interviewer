@@ -1,0 +1,53 @@
+.card {
+  align-items: center;
+  border: .2rem solid transparent;
+  border-radius: var(--border-radius);
+  background: var(--light-background);
+  transition: border-color var(--animation-duration-fast) var(--animation-easing);
+  cursor: pointer;
+  display: flex;
+  padding: 1.5rem;
+  height: 100%;
+
+  &__indicator {
+    box-sizing: content-box;
+    fill: transparent;
+    height: 2rem;
+    width: 2rem;
+    margin-right: .5rem;
+    // transition: fill var(--animation-duration-fast) var(--animation-easing);
+    transition-property: fill, opacity;
+    transition-duration: var(--animation-duration-fast);
+    transition-timing-function: var(--animation-easing);
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+
+    .tick {
+      fill: transparent;
+    }
+  }
+
+  &--selected {
+    border-color: palette('primary');
+
+    .card__indicator {
+      padding: 0;
+      animation: bounce var(--animation-duration-standard) var(--animation-easing);
+      fill: palette('primary');
+
+      .tick {
+        fill: palette('primary');
+      }
+    }
+  }
+
+  &--disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+
+  &__attribute {
+    font-weight: 300;
+  }
+}

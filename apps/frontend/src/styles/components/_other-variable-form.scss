@@ -1,0 +1,29 @@
+.other-variable-form {
+  height: auto;
+  padding: 2rem 0;
+  flex: 1 1;
+
+  &__content {
+    display: flex;
+    width: 100%;
+    align-items: flex-start;
+
+    &-left {
+      flex: 0 0 auto;
+    }
+
+    &-right {
+      flex: 1 1 auto;
+      margin-left: 2rem;
+      padding-top: 0.75rem;
+    }
+  }
+
+  &__footer {
+    text-align: right;
+
+    button {
+      margin-left: 1rem;
+    }
+  }
+}

@@ -1,0 +1,49 @@
+.list-select {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  @include breakpoint(full) {
+    margin: 0 100px;
+  }
+  max-height: inherit;
+  overflow: hidden;
+  position: relative;
+
+  .card-list {
+    padding-bottom: 0;
+    padding-top: 1rem;
+  }
+
+  &__sort {
+    display: flex;
+    align-items: center;
+    align-content: space-evenly;
+    justify-content: space-between;
+
+    button {
+      margin: 0 1rem;
+    }
+
+    h4 {
+      display: inline;
+    }
+  }
+
+  .form-field-container {
+    display: inline-block;
+    margin: 0 1rem;
+  }
+
+  &__filter {
+    width: 13rem;
+
+    input {
+      margin-bottom: 0;
+    }
+  }
+
+  &__submit {
+    align-self: flex-end;
+    margin: 10px;
+  }
+}

@@ -1,0 +1,44 @@
+.ego-form {
+  @include interface-centering(false);
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &__introduction {
+    width: 100%;
+    border-radius: var(--border-radius);
+    background: var(--form-intro-panel-background);
+    padding: unit(2) unit(4);
+    flex-direction: column;
+    margin-bottom: unit(4);
+    max-width: 55rem; // same as ego form max width
+
+    h1 {
+      text-align: center;
+    }
+  }
+
+  &__form-container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__form-container-scroller {
+    padding: unit(4) 0;
+    max-height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    & > * {
+      max-width: 55rem;
+      align-self: center;
+      width: 100%;
+    }
+  }
+}

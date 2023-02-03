@@ -1,0 +1,17 @@
+// Shared mixins for interfaces.
+
+@mixin interface-prompt {
+  // flex: 0 0 var(--interface-prompt-flex-basis);
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin interface-centering($margins: true) {
+  padding: unit(2) 0;
+  $margin: if($margins, unit(4), 0px); // sass-lint:disable-line zero-unit
+  margin-left: calc(#{$margin} + var(--session-panel-width));
+  margin-right: $margin;
+  position: relative; // so that absolutely positioned child elements are correctly centered
+}

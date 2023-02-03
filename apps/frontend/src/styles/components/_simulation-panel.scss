@@ -1,0 +1,53 @@
+.simulation-panel {
+  position: absolute;
+  z-index: var(--z-panel);
+  background: var(--light-background);
+  width: unit(26);
+  height: unit(10);
+  top: spacing(large);
+  right: spacing(large);
+  border-bottom: 5px solid var(--primary);
+  border-radius: var(--border-radius);
+  box-shadow: 0 0 4rem 0 var(--modal-window-box-shadow);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: move;
+
+  .button {
+    display: block;
+  }
+
+  &__controls {
+    overflow: hidden;
+  }
+
+  &__control {
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+
+    &-icon {
+      margin: 0 unit(0.5) 0 0;
+
+      // sass-lint:disable class-name-format
+      .MuiSvgIcon-root {
+        font-size: unit(6);
+      }
+    }
+
+    &--disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+
+    &:first-child {
+      margin-top: unit(1);
+    }
+
+    &:last-child {
+      margin-bottom: unit(1);
+    }
+  }
+}
