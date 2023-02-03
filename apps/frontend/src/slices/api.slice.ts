@@ -1,5 +1,5 @@
 // Import the RTK Query methods from the React-specific entry point
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { BaseQueryFn, createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 interface Protocol {
   id: string;
@@ -7,15 +7,12 @@ interface Protocol {
 }
 
 // baseQuery implementation using electron IPC?
-export const ipcBaseQuery = () => async (args: any) => {
-  const { url, method, body } = args;
-  const response = await window.api.protocols({
-    url,
-    method,
-    body,
-  });
+export const ipcBaseQuery = (): BaseQueryFn => async (args, api, extraOptions) => {
+  console.log(args, api, extraOptions);
+  const response = await window.api.query(args);
   return response;
 };
+
 
 // Switch between different baseQuery implementations depending on environment 
 const getBaseQuery = () => {
@@ -27,6 +24,7 @@ const getBaseQuery = () => {
     return fetchBaseQuery({ baseUrl: 'http://localhost:4001/api' });
   }
 
+  // What should this be in production?
   return fetchBaseQuery({ baseUrl: 'http://localhost:4001/api' });
 };
 
@@ -38,17 +36,18 @@ export const apiSlice = createApi({
   tagTypes: ['Protocols'],
   // The "endpoints" represent operations and requests for this server
   endpoints: builder => ({
-    // The `getPosts` endpoint is a "query" operation that returns data
     getProtocols: builder.query<Protocol[], void>({
-      // The URL for the request is '/api/posts'
-      query: () => '/protocols',
+      query: () => ({
+        url: '/protocols',
+        method: 'GET'
+      }),
       providesTags: ['Protocols']
     }),
     addProtocol: builder.mutation({
       query: initialProtocol => ({
         url: '/protocols',
         method: 'POST',
-        // Include the entire post object as the body of the request
+        // Include the entire protocol object as the body of the request
         body: initialProtocol
       }),
       invalidatesTags: ['Protocols']

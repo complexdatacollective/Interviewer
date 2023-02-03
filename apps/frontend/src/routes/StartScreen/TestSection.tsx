@@ -28,8 +28,6 @@ const TestSection = () => {
   // Capture NODE_ENV
   const platform = import.meta.env.VITE_APP_PLATFORM || 'web';
 
-  console.log('platform', platform, import.meta.env);
-
   return (
     <Section className="start-screen-section">
       <motion.section

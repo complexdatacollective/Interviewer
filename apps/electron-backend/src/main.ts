@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, ipcMain } from "electron";
 import * as path from "path";
 import { waitForServerUp } from "./waitForServerUp";
 
@@ -6,6 +6,18 @@ import { waitForServerUp } from "./waitForServerUp";
 const isProduction = import.meta.env.PROD;
 const FRONTEND_PROD_PATH = path.join(__dirname, "../dist-frontend/");
 const FRONTEND_DEV_PATH = 'http://localhost:4000/';
+
+// Mock protocol data to be replaced with data from DB
+const protocols = [
+  {
+    id: "1",
+    name: "Protocol 1",
+  },
+  {
+    id: "2",
+    name: "Protocol 2",
+  },
+];
 
 async function createWindow() {
   // Create the browser window.
@@ -47,7 +59,16 @@ app.on("ready", () => {
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
+
+  bindIPC();
 });
+
+const bindIPC = () => {
+  ipcMain.handle('query', (e, data) => {
+    console.log('query', data);
+    return { data: protocols };
+  })
+};
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
