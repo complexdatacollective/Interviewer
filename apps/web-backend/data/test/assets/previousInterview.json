@@ -1,0 +1,58 @@
+{
+  "nodes": [
+    {
+        "attributes": {
+            "6be95f85-c2d9-4daf-9de1-3939418af888": "Anita",
+            "last_name": "Li",
+            "nickname": "Annie",
+            "variableNotInRegistry": "tomato",
+            "age": 23
+        }
+    },
+    {
+        "attributes": {
+            "name": "Barry",
+            "last_name": "Smith",
+            "nickname": "Baz",
+            "variableNotInRegistry": "tomato",
+            "age": 23
+        }
+    },
+    {
+        "attributes": {
+            "6be95f85-c2d9-4daf-9de1-3939418af888": "Carlito",
+            "last_name": "González",
+            "nickname": "Carl",
+            "variableNotInRegistry": "tomato",
+            "age": 23
+        }
+    },
+    {
+        "attributes": {
+            "name": "Dee",
+            "last_name": "Zhang",
+            "nickname": "Dee",
+            "variableNotInRegistry": "tomato",
+            "age": 23
+        }
+    },
+    {
+        "attributes": {
+            "name": "Eugine",
+            "last_name": "Müller",
+            "nickname": "Eu",
+            "variableNotInRegistry": "tomato",
+            "age": 23
+        }
+    },
+    {
+        "attributes": {
+            "name": "Eustace",
+            "last_name": "Nguyễn",
+            "nickname": "Eu",
+            "variableNotInRegistry": "tomato",
+            "age": 24
+        }
+    }
+  ]
+}

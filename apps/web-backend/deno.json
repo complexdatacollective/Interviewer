@@ -1,0 +1,23 @@
+{
+  "$schema": "https://deno.land/x/deno/cli/schemas/config-file.v1.json",
+  "imports": {
+    "@codaco/shared-consts": "../../packages/shared-consts"
+  },
+  "scripts": {
+    "start": {
+      "cmd": "deno run --allow-net --allow-write --allow-read --allow-run=unzip server.ts",
+      "desc": "Start the Fresco API server. Default port is 3000."
+    }
+  },
+  "lint": {
+    "files": {
+      "include": ["src/"],
+      "exclude": ["src/testdata/"]
+    },
+    "rules": {
+      "tags": ["recommended"],
+      "include": ["ban-untagged-todo"],
+      "exclude": ["no-unused-vars"]
+    }
+  }
+}

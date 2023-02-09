@@ -1,0 +1,2029 @@
+{
+  "description": "The Network Canvas development protocol is designed for our team to test new features. It is not intended for general use.",
+  "lastModified": "2021-04-06T11:09:14.146Z",
+  "schemaVersion": 7,
+  "codebook": {
+    "node": {
+      "4aebf73e-95e3-4fd1-95e7-237dcc4a4466": {
+        "name": "person",
+        "color": "node-color-seq-1",
+        "iconVariant": "add-a-person",
+        "variables": {
+          "6be95f85-c2d9-4daf-9de1-3939418af888": {
+            "name": "name",
+            "component": "Text",
+            "type": "text",
+            "validation": {
+              "unique": true
+            }
+          },
+          "0ff25001-a2b8-46de-82a9-53143aa00d10": {
+            "name": "last_name",
+            "type": "text"
+          },
+          "c5fee926-855d-4419-b5bb-54e89010cea6": {
+            "name": "age",
+            "type": "number",
+            "component": "Number",
+            "validation": {
+              "maxValue": 99
+            }
+          },
+          "0e75ec18-2cb1-4606-9f18-034d28b07c19": {
+            "name": "nickname",
+            "component": "Text",
+            "type": "text",
+            "validation": {
+              "differentFrom": "6be95f85-c2d9-4daf-9de1-3939418af888"
+            }
+          },
+          "ae44b6ba-ad49-4ecf-bf38-b65decfce000": {
+            "name": "close_friend",
+            "component": "Toggle",
+            "type": "boolean"
+          },
+          "94e2dee9-1c25-4b64-b8bb-4946465c3c07": {
+            "name": "support_friend",
+            "type": "boolean"
+          },
+          "ec5b462e-a033-4cbc-8b73-82d90938ec82": {
+            "name": "advice_friend",
+            "type": "boolean"
+          },
+          "03b03617-46ae-41cb-9462-9acd8a17edd6": {
+            "name": "has_given_advice",
+            "type": "boolean"
+          },
+          "1096204b-48fe-444c-b642-4ab211f7f57c": {
+            "name": "contactFreq",
+            "type": "ordinal",
+            "options": [
+              {
+                "label": "Last 24 hours",
+                "value": 4
+              },
+              {
+                "label": "Last week",
+                "value": 3
+              },
+              {
+                "label": "Last six months",
+                "value": 2
+              },
+              {
+                "label": "Last two years",
+                "value": 1
+              },
+              {
+                "label": "_Over_ two years ago",
+                "value": -1
+              }
+            ]
+          },
+          "23c5a7b9-b553-4ff1-b515-6a81999773d2": {
+            "name": "discussFreq",
+            "type": "ordinal",
+            "component": "RadioGroup",
+            "validation": {
+              "required": true
+            },
+            "options": [
+              {
+                "label": "Three",
+                "value": 3
+              },
+              {
+                "label": "Two",
+                "value": 2
+              },
+              {
+                "label": "One",
+                "value": 1
+              },
+              {
+                "label": "Missing Value",
+                "value": -1
+              }
+            ]
+          },
+          "e343a91f-628d-4175-870c-957beffa0152": {
+            "name": "catvar2",
+            "type": "categorical",
+            "options": [
+              {
+                "label": "One",
+                "value": "one"
+              },
+              {
+                "label": "Two",
+                "value": "two"
+              }
+            ]
+          },
+          "e343a91f-628d-4175-870c-957beffa0153": {
+            "name": "catvar3",
+            "type": "categorical",
+            "options": [
+              {
+                "label": "One",
+                "value": "one"
+              },
+              {
+                "label": "Two",
+                "value": "two"
+              }
+            ]
+          },
+          "e343a91f-628d-4175-870c-957beffa0154": {
+            "name": "catvar4",
+            "type": "categorical",
+            "component": "ToggleButtonGroup",
+            "validation": {
+              "maxSelected": 2
+            },
+            "options": [
+              {
+                "label": "One",
+                "value": "one"
+              },
+              {
+                "label": "Two",
+                "value": "two"
+              },
+              {
+                "label": "***Three***",
+                "value": "three"
+              },
+              {
+                "label": "Four",
+                "value": "four"
+              }
+            ]
+          },
+          "e343a91f-628d-4175-870c-957beffa0151": {
+            "name": "contactType",
+            "type": "categorical",
+            "options": [
+              {
+                "label": "In person",
+                "value": "person"
+              },
+              {
+                "label": "Phone call",
+                "value": "call"
+              },
+              {
+                "label": "Text",
+                "value": "text"
+              },
+              {
+                "label": "Email",
+                "value": "email"
+              },
+              {
+                "label": "Social media",
+                "value": "media"
+              }
+            ]
+          },
+          "4ccba4e2-a246-46ee-a3ff-1c70fb4c449c": {
+            "name": "discussType",
+            "type": "categorical",
+            "component": "ToggleButtonGroup",
+            "validation": {
+              "required": true,
+              "minSelected": 1,
+              "maxSelected": 1
+            },
+            "options": [
+              {
+                "label": "Politics",
+                "value": "politics"
+              },
+              {
+                "label": "Weather",
+                "value": "weather"
+              },
+              {
+                "label": "Work",
+                "value": "work"
+              },
+              {
+                "label": "Current events",
+                "value": "current"
+              },
+              {
+                "label": "Entertainment",
+                "value": "entertainment"
+              },
+              {
+                "label": "School",
+                "value": "school"
+              },
+              {
+                "label": "Friends",
+                "value": "friends"
+              },
+              {
+                "label": "Money",
+                "value": "money"
+              }
+            ]
+          },
+          "d13ca72d-aefe-4f48-841d-09f020e0e988": {
+            "name": "closenessLayout",
+            "type": "layout"
+          },
+          "e13ca72d-aefe-4f48-841d-09f020e0e987": {
+            "name": "anotherLayout",
+            "type": "layout"
+          },
+          "d2d8091e-8170-42c1-9dc0-c0d54553b3e6": {
+            "name": "talk_friend",
+            "type": "boolean"
+          },
+          "04298634-eb5f-450a-84dd-95d2708e10c1": {
+            "name": "dataSource",
+            "type": "text"
+          },
+          "490db003-3289-4969-b426-919cefb4cdf0": {
+            "type": "ordinal",
+            "component": "LikertScale",
+            "options": [
+              {
+                "label": "Yes",
+                "value": "yes"
+              },
+              {
+                "value": "maybe",
+                "label": "Maybe"
+              },
+              {
+                "label": "No",
+                "value": "no"
+              }
+            ],
+            "name": "likertScaleTwo"
+          },
+          "9b56bc6d-6b20-4e38-9aab-4057e78e1130": {
+            "type": "datetime",
+            "component": "DatePicker",
+            "name": "compactdate"
+          },
+          "246c4d84-ebd7-41a6-8c1a-ef83938227ba": {
+            "type": "text",
+            "component": "TextArea",
+            "name": "bio"
+          },
+          "979c9ad7-74cb-402d-8574-3f0a91c9174d": {
+            "name": "other_variable",
+            "type": "text"
+          },
+          "e1dda563-f6f6-47b7-91cb-31b4c2fdb73a": {
+            "name": "homework_friend",
+            "type": "boolean"
+          }
+        }
+      },
+      "c93af3fe-9f84-4e85-acb5-5b15f30788c7": {
+        "name": "dummytype",
+        "color": "node-color-seq-6",
+        "variables": {
+          "2377af3f-3c79-41da-9b0b-6570fb519b93": {
+            "name": "label",
+            "component": "Text",
+            "type": "text"
+          },
+          "e3eb5f0b-84ad-43f0-8db5-9f83cd3a56de": {
+            "name": "numberVariable",
+            "component": "Number",
+            "type": "number"
+          },
+          "57fefac9-561f-454a-8f78-81bd9470efaa": {
+            "name": "booleanVariable",
+            "component": "Toggle",
+            "type": "boolean"
+          },
+          "683ad529-66c6-4c84-8e31-a31452dsf74k": {
+            "name": "booleanVariable3",
+            "type": "boolean",
+            "component": "Boolean",
+            "validation": {
+              "required": true
+            },
+            "options": [
+              {
+                "label": "Yes",
+                "value": true
+              },
+              {
+                "label": "No",
+                "value": false
+              }
+            ]
+          },
+          "d7b5f733-bec1-49be-8c33-f3c772ca0653": {
+            "name": "booleanVariable2",
+            "type": "boolean"
+          },
+          "3eaad411-0530-41ca-bb43-9fb6ea846d6e": {
+            "name": "checkboxVariable",
+            "type": "boolean"
+          },
+          "583ad529-66c6-4c84-8e31-a31452d6b5e9": {
+            "name": "ordinalVariable",
+            "type": "ordinal",
+            "component": "RadioGroup",
+            "validation": {
+              "required": true
+            },
+            "options": [
+              {
+                "label": "Value Four",
+                "value": 4
+              },
+              {
+                "label": "Value Three is quite long",
+                "value": 3
+              },
+              {
+                "label": "Value Two",
+                "value": 2
+              },
+              {
+                "label": "Value One is also long, with break",
+                "value": 1
+              },
+              {
+                "label": "Missing Value",
+                "value": -1
+              }
+            ]
+          },
+          "e3537457-41a2-4fbf-a1f8-9235b3c1edc6": {
+            "name": "categoricalVariable",
+            "type": "categorical",
+            "component": "CheckboxGroup",
+            "validation": {
+              "minSelected": 1
+            },
+            "options": [
+              {
+                "label": "Value A has additional text to go along with it",
+                "value": "Value_A"
+              },
+              {
+                "label": "Value B",
+                "value": "Value_B"
+              },
+              {
+                "label": "Value C is a label that has too much text - shorten it",
+                "value": "Value_C"
+              },
+              {
+                "label": "Value D",
+                "value": "Value_D"
+              },
+              {
+                "label": "Value E",
+                "value": "Value_E"
+              }
+            ]
+          },
+          "6c647977-f2d1-426f-b0c5-6d44c795c554": {
+            "name": "categoricalVariable2",
+            "type": "categorical",
+            "component": "ToggleButtonGroup",
+            "validation": {
+              "minSelected": 1,
+              "maxSelected": 4
+            },
+            "options": [
+              {
+                "label": "Friends",
+                "value": "Value_A"
+              },
+              {
+                "label": "Family",
+                "value": "Value_B"
+              },
+              {
+                "label": "Work",
+                "value": "Value_C"
+              },
+              {
+                "label": "Church",
+                "value": "Value_D"
+              },
+              {
+                "label": "Vikings",
+                "value": "Value_E"
+              },
+              {
+                "label": "German Course",
+                "value": "Value_F"
+              },
+              {
+                "label": "Gardening Club",
+                "value": "Value_G"
+              },
+              {
+                "label": "Neighbors",
+                "value": "Value_H"
+              },
+              {
+                "label": "Oxford Friends",
+                "value": "Value_I"
+              },
+              {
+                "label": "Band",
+                "value": "Value_J"
+              }
+            ]
+          },
+          "e4e0df51-4b53-4e16-9249-8587537370e9": {
+            "type": "ordinal",
+            "component": "LikertScale",
+            "options": [
+              {
+                "label": "Agree",
+                "value": "agree"
+              },
+              {
+                "label": "Somewhat Agree",
+                "value": "somewhat_agree"
+              },
+              {
+                "value": "neutral",
+                "label": "Neutral"
+              },
+              {
+                "label": "Somewhat disagree",
+                "value": "somewhat_disagree"
+              },
+              {
+                "label": "Disagree",
+                "value": "disagree"
+              }
+            ],
+            "validation": {
+              "required": true
+            },
+            "name": "likertScale"
+          },
+          "720224a3-e2d3-4729-968a-29d3f3e4fca6": {
+            "type": "scalar",
+            "component": "VisualAnalogScale",
+            "parameters": {
+              "minLabel": "Not very far",
+              "maxLabel": "Really quite far"
+            },
+            "validation": {
+              "required": true
+            },
+            "name": "visualAnalogScale"
+          }
+        }
+      },
+      "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73": {
+        "name": "venue",
+        "color": "node-color-seq-4",
+        "iconVariant": "add-a-place",
+        "variables": {
+          "66646d68-cd33-407b-a349-56707021df72": {
+            "name": "name",
+            "type": "text"
+          },
+          "7316d500-6c1e-4188-a531-b2ef587721e0": {
+            "name": "location",
+            "type": "location"
+          },
+          "a39a86ef-18c7-4545-8fbc-d0e5894565d0": {
+            "name": "visitfreq",
+            "type": "ordinal",
+            "options": [
+              {
+                "label": "Every day",
+                "value": 4
+              },
+              {
+                "label": "Every other day",
+                "value": 3
+              },
+              {
+                "label": "Every week",
+                "value": 2
+              },
+              {
+                "label": "Sometimes",
+                "value": 1
+              },
+              {
+                "label": "Never",
+                "value": -1
+              }
+            ]
+          },
+          "55f1fbbe-2fe5-42a7-88fb-9a8e5e659d2f": {
+            "name": "primary_venue",
+            "type": "boolean"
+          },
+          "8a35cd77-7bc4-4c7e-b98a-673b6a21321f": {
+            "name": "parentorg",
+            "type": "text"
+          },
+          "8ee3a187-d4be-458e-8abb-71efcc071949": {
+            "name": "subsidiary",
+            "type": "text"
+          },
+          "1e9ce62c-44c5-484d-9c26-0d20cc7d7238": {
+            "name": "Abbreviated_Name",
+            "type": "text"
+          },
+          "18fbc928-d027-42de-bc96-ff5c09bf4944": {
+            "name": "standardwordabbrev",
+            "type": "text"
+          },
+          "67132d2b-c371-4c57-a5eb-6520083f9d22": {
+            "name": "addr",
+            "type": "text"
+          },
+          "bdc60147-fe7a-4c3c-a164-e5b370f6a281": {
+            "name": "lat",
+            "type": "number"
+          },
+          "931a7b23-e433-4e7e-8e13-48b72e5f0549": {
+            "name": "long",
+            "type": "number"
+          },
+          "0a5f7952-a9a7-4e87-9353-2d17a59284ee": {
+            "name": "rawaddr",
+            "type": "text"
+          },
+          "0a5f7952-a9a7-4e87-9353-2d17a592ssss": {
+            "name": "Layout",
+            "type": "layout"
+          }
+        }
+      }
+    },
+    "ego": {
+      "variables": {
+        "3377af3f-3c79-41da-9b0b-6570fb519b93": {
+          "name": "name",
+          "type": "text",
+          "component": "Text",
+          "validation": {
+            "required": true
+          }
+        },
+        "f3eb5f0b-84ad-43f0-8db5-9f83cd3a56de": {
+          "name": "numberVariable",
+          "type": "number",
+          "component": "Number",
+          "validation": {
+            "minValue": 18
+          }
+        },
+        "67fefac9-561f-454a-8f78-81bd9470efaa": {
+          "name": "booleanVariable",
+          "component": "Toggle",
+          "type": "boolean"
+        },
+        "e7b5f733-bec1-49be-8c33-f3c772ca0653": {
+          "name": "booleanVariable2",
+          "type": "boolean"
+        },
+        "4eaad411-0530-41ca-bb43-9fb6ea846d6e": {
+          "name": "checkboxVariable",
+          "type": "boolean"
+        },
+        "683ad529-66c6-4c84-8e31-a31452d6b5e9": {
+          "name": "ordinalVariable",
+          "type": "ordinal",
+          "component": "RadioGroup",
+          "validation": {
+            "required": true
+          },
+          "options": [
+            {
+              "label": "Value Four",
+              "value": 4
+            },
+            {
+              "label": "Value Three is quite long",
+              "value": 3
+            },
+            {
+              "label": "Value Two",
+              "value": 2
+            },
+            {
+              "label": "Value One is also long, _with break_",
+              "value": 1
+            },
+            {
+              "label": "Missing Value",
+              "value": -1
+            }
+          ]
+        },
+        "f3537457-41a2-4fbf-a1f8-9235b3c1edc6": {
+          "name": "categoricalVariable",
+          "type": "categorical",
+          "component": "CheckboxGroup",
+          "validation": {
+            "minSelected": 1
+          },
+          "options": [
+            {
+              "label": "Value A **has additional** text to go along with it",
+              "value": "Value_A"
+            },
+            {
+              "label": "Value B",
+              "value": "Value_B"
+            },
+            {
+              "label": "Value C is a label that has too much text - **shorten it**",
+              "value": "Value_C"
+            },
+            {
+              "label": "Value D",
+              "value": "Value_D"
+            },
+            {
+              "label": "Value E",
+              "value": "Value_E"
+            }
+          ]
+        },
+        "7c647977-f2d1-426f-b0c5-6d44c795c554": {
+          "name": "categoricalVariable2",
+          "type": "categorical",
+          "component": "ToggleButtonGroup",
+          "validation": {
+            "minSelected": 1,
+            "maxSelected": 4
+          },
+          "options": [
+            {
+              "label": "Friends",
+              "value": "Value_A"
+            },
+            {
+              "label": "Family",
+              "value": "Value_B"
+            },
+            {
+              "label": "Work",
+              "value": "Value_C"
+            },
+            {
+              "label": "Church",
+              "value": "Value_D"
+            },
+            {
+              "label": "Vikings",
+              "value": "Value_E"
+            },
+            {
+              "label": "German Course",
+              "value": "Value_F"
+            },
+            {
+              "label": "_Gardening_ Club",
+              "value": "Value_G"
+            },
+            {
+              "label": "Neighbors",
+              "value": "Value_H"
+            },
+            {
+              "label": "Oxford Friends",
+              "value": "Value_I"
+            },
+            {
+              "label": "Band",
+              "value": "Value_J"
+            }
+          ]
+        },
+        "b4956387-cada-412f-9e97-fe352c3cc44e": {
+          "type": "text",
+          "component": "TextArea",
+          "name": "bio"
+        },
+        "300a798f-d11b-4195-91ee-3221bc586c0a": {
+          "type": "ordinal",
+          "component": "LikertScale",
+          "options": [
+            {
+              "label": "0",
+              "value": 0
+            },
+            {
+              "label": "Sometimes",
+              "value": "sometimes"
+            },
+            {
+              "label": "_Lots_",
+              "value": "lots"
+            }
+          ],
+          "name": "Choose_from_a_scale"
+        },
+        "03c54247-aa12-497a-b8f8-c4cb69048455": {
+          "type": "scalar",
+          "component": "VisualAnalogScale",
+          "parameters": {
+            "minLabel": "Here",
+            "maxLabel": "There"
+          },
+          "name": "vas_scale"
+        },
+        "23a10bcb-bd71-46a1-a36d-4ab80cb5a1d1": {
+          "type": "datetime",
+          "component": "DatePicker",
+          "parameters": {
+            "type": "full",
+            "min": "1908-04-02"
+          },
+          "validation": {
+            "required": true
+          },
+          "name": "dob"
+        },
+        "9c47f32e-b72f-4b1b-93a2-e29766dc3012": {
+          "type": "datetime",
+          "component": "RelativeDatePicker",
+          "parameters": {
+            "before": 60
+          },
+          "name": "favourite_day",
+          "validation": {
+            "differentFrom": "23a10bcb-bd71-46a1-a36d-4ab80cb5a1d1"
+          }
+        }
+      }
+    },
+    "edge": {
+      "77199445-9d50-4646-b0bc-6d6b0c0e06bd": {
+        "name": "friend",
+        "color": "edge-color-seq-1",
+        "variables": {
+          "e343a91f-628d-4175-870c-75429857399e": {
+            "name": "friendship-strength",
+            "type": "ordinal",
+            "options": [
+              {
+                "label": "Very close",
+                "value": 3
+              },
+              {
+                "label": "Sort of close",
+                "value": 2
+              },
+              {
+                "label": "Not very close",
+                "value": 1
+              }
+            ]
+          },
+          "e343a91f-628d-4175-870c-957beffa0002": {
+            "name": "catvar2",
+            "type": "categorical",
+            "component": "ToggleButtonGroup",
+            "options": [
+              {
+                "label": "One",
+                "value": "one"
+              },
+              {
+                "label": "Two",
+                "value": "two"
+              }
+            ]
+          },
+          "e343a91f-628d-4175-870c-957beffa0003": {
+            "name": "catvar3",
+            "type": "categorical",
+            "component": "ToggleButtonGroup",
+            "options": [
+              {
+                "label": "One",
+                "value": "one"
+              },
+              {
+                "label": "Two",
+                "value": "two"
+              },
+              {
+                "label": "Three",
+                "value": "three"
+              }
+            ],
+            "validation": {
+              "sameAs": "e343a91f-628d-4175-870c-957beffa0002"
+            }
+          },
+          "e343a91f-628d-4175-870c-957beffa0004": {
+            "name": "catvar4",
+            "type": "categorical",
+            "component": "ToggleButtonGroup",
+            "options": [
+              {
+                "label": "One",
+                "value": "one"
+              },
+              {
+                "label": "Two",
+                "value": "two"
+              },
+              {
+                "label": "Three",
+                "value": "three"
+              },
+              {
+                "label": "Four",
+                "value": "four"
+              }
+            ]
+          }
+        }
+      },
+      "867127d9-086b-403a-a3e7-2c7d32126546": {
+        "name": "professional",
+        "color": "edge-color-seq-2",
+        "variables": {
+          "f984jk23-628d-4175-870c-ejd8e7al8vc3": {
+            "name": "professional-strength",
+            "type": "ordinal",
+            "options": [
+              {
+                "label": "Constantly",
+                "value": 5
+              },
+              {
+                "label": "Very often",
+                "value": 4
+              },
+              {
+                "label": "Somewhat often",
+                "value": 3
+              },
+              {
+                "label": "Rarely",
+                "value": 2
+              },
+              {
+                "label": "Almost never",
+                "value": 1
+              }
+            ]
+          },
+          "d343a91f-628d-4175-870c-957beffa0002": {
+            "name": "catvar2",
+            "type": "categorical",
+            "component": "ToggleButtonGroup",
+            "options": [
+              {
+                "label": "One",
+                "value": "one"
+              },
+              {
+                "label": "Two",
+                "value": "two"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "assetManifest": {
+    "previousInterview-json": {
+      "source": "previousInterview.json",
+      "name": "previousInterview.json",
+      "type": "network"
+    },
+    "previousInterview-csv": {
+      "source": "previousInterview.csv",
+      "name": "previousInterview.csv",
+      "type": "network"
+    },
+    "HIVServices": {
+      "source": "HIVServices.json",
+      "name": "HIVServices.json",
+      "type": "network"
+    },
+    "HIVServices-csv": {
+      "source": "HIVServices.csv",
+      "name": "HIVServices.csv",
+      "type": "network"
+    },
+    "click_the_thing": {
+      "type": "audio",
+      "name": "click_the_thing.mp3",
+      "source": "click_the_thing.mp3"
+    },
+    "rubberduck": {
+      "type": "image",
+      "name": "rubberduck.jpg",
+      "source": "rubberduck.jpg"
+    },
+    "withSound": {
+      "type": "video",
+      "name": "withSound.mp4",
+      "source": "withSound.mp4",
+      "loop": true
+    },
+    "quadrant-1": {
+      "type": "image",
+      "name": "quadrant.svg",
+      "source": "quadrant.svg"
+    },
+    "quadrant-2": {
+      "type": "image",
+      "name": "quadrant.png",
+      "source": "quadrant.png"
+    }
+  },
+  "stages": [
+    {
+      "id": "ego-form-1",
+      "interviewScript": "This is a **markdown field** that contains notes for the interviewer that are printed with the codebook, and can be reviewed during the interview.\n\nFor now it will only support rich text, but not images or audio.",
+      "type": "EgoForm",
+      "label": "Ego Form",
+      "form": {
+        "title": "An example ego form",
+        "fields": [
+          {
+            "variable": "3377af3f-3c79-41da-9b0b-6570fb519b93",
+            "prompt": "What is your name?"
+          },
+          {
+            "variable": "b4956387-cada-412f-9e97-fe352c3cc44e",
+            "prompt": "Tell us about **yourself** maybe"
+          },
+          {
+            "variable": "f3eb5f0b-84ad-43f0-8db5-9f83cd3a56de",
+            "prompt": "What is your age?"
+          },
+          {
+            "variable": "683ad529-66c6-4c84-8e31-a31452d6b5e9",
+            "prompt": "How much do you like likert scales?"
+          },
+          {
+            "variable": "f3537457-41a2-4fbf-a1f8-9235b3c1edc6",
+            "prompt": "Which of these things do you like?"
+          },
+          {
+            "variable": "7c647977-f2d1-426f-b0c5-6d44c795c554",
+            "prompt": "Which of these other things do you like?"
+          },
+          {
+            "variable": "67fefac9-561f-454a-8f78-81bd9470efaa",
+            "prompt": "Is the switch below not turned on?"
+          },
+          {
+            "variable": "300a798f-d11b-4195-91ee-3221bc586c0a",
+            "prompt": "Do you like scales"
+          },
+          {
+            "variable": "03c54247-aa12-497a-b8f8-c4cb69048455",
+            "prompt": "Pick somewhere on the line"
+          },
+          {
+            "variable": "23a10bcb-bd71-46a1-a36d-4ab80cb5a1d1",
+            "prompt": "What is your date of birth?"
+          },
+          {
+            "variable": "9c47f32e-b72f-4b1b-93a2-e29766dc3012",
+            "prompt": "Pick your *favourite* day in the last 60 days"
+          }
+        ]
+      },
+      "introductionPanel": {
+        "title": "Introduction to the ego form",
+        "text": "There are multiple ways to describe **you**."
+      }
+    },
+    {
+      "id": "namegen1",
+      "interviewScript": "This is an example of interview script on a name generator.",
+      "type": "NameGenerator",
+      "label": "NG with external data",
+      "form": {
+        "title": "Add A Person",
+        "fields": [
+          {
+            "variable": "6be95f85-c2d9-4daf-9de1-3939418af888",
+            "prompt": "What is this person's name?"
+          },
+          {
+            "variable": "0e75ec18-2cb1-4606-9f18-034d28b07c19",
+            "prompt": "What is this person's *nickname*?"
+          },
+          {
+            "variable": "c5fee926-855d-4419-b5bb-54e89010cea6",
+            "prompt": "What is this person's age?"
+          },
+          {
+            "variable": "e343a91f-628d-4175-870c-957beffa0154",
+            "prompt": "Multiple categorical membership variable"
+          }
+        ]
+      },
+      "subject": {
+        "entity": "node",
+        "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
+      },
+      "panels": [
+        {
+          "id": "cab85e8a-0a9e-4d5f-9242-930b5d9ce3e4",
+          "title": "Already mentioned",
+          "dataSource": "existing"
+        },
+        {
+          "id": "another-unique-id",
+          "title": "External data not using UUIDs",
+          "dataSource": "previousInterview-json",
+          "filter": {
+            "join": "OR",
+            "rules": [
+              {
+                "type": "alter",
+                "id": "15218241538622",
+                "options": {
+                  "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466",
+                  "attribute": "6be95f85-c2d9-4daf-9de1-3939418af888",
+                  "operator": "EXACTLY",
+                  "value": "Dee"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "prompts": [
+        {
+          "id": "6cl",
+          "text": "Who would _you_ consider to be a **close friend**?",
+          "additionalAttributes": [
+            {
+              "variable": "ae44b6ba-ad49-4ecf-bf38-b65decfce000",
+              "value": true
+            },
+            {
+              "variable": "94e2dee9-1c25-4b64-b8bb-4946465c3c07",
+              "value": false
+            }
+          ]
+        },
+        {
+          "id": "6su",
+          "text": "This is a particularly long prompt, which will be discouraged in the Architect interface but might still be desired by a researcher. What does this look like rendered?",
+          "additionalAttributes": [
+            {
+              "variable": "94e2dee9-1c25-4b64-b8bb-4946465c3c07",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "2we",
+          "text": "Prompt with no additional attributes"
+        },
+        {
+          "id": "2wj",
+          "text": "Second prompt with no additional attributes"
+        }
+      ]
+    },
+    {
+      "id": "namegen1a",
+      "type": "NameGenerator",
+      "label": "NG CSV File",
+      "form": {
+        "title": "Add A Person",
+        "fields": [
+          {
+            "variable": "6be95f85-c2d9-4daf-9de1-3939418af888",
+            "prompt": "What is this person's name?"
+          },
+          {
+            "variable": "0e75ec18-2cb1-4606-9f18-034d28b07c19",
+            "prompt": "What is this person's nickname?"
+          },
+          {
+            "variable": "c5fee926-855d-4419-b5bb-54e89010cea6",
+            "prompt": "What is this person's age?"
+          }
+        ]
+      },
+      "subject": {
+        "entity": "node",
+        "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
+      },
+      "panels": [
+        {
+          "id": "another-unique-id-123",
+          "title": "External data from CSV",
+          "dataSource": "previousInterview-csv"
+        }
+      ],
+      "prompts": [
+        {
+          "id": "2wedwee",
+          "text": "NameGen with CSV external data"
+        }
+      ]
+    },
+    {
+      "id": "namegen2",
+      "type": "NameGeneratorQuickAdd",
+      "label": "NG Quick add",
+      "quickAdd": "66646d68-cd33-407b-a349-56707021df72",
+      "subject": {
+        "entity": "node",
+        "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73"
+      },
+      "panels": [
+        {
+          "id": "cab85e8a-0a9e-4d5f-9242-930b5d9ce3e4",
+          "title": "Other Venues",
+          "dataSource": "existing"
+        }
+      ],
+      "behaviours": {
+        "minNodes": 1,
+        "maxNodes": 8
+      },
+      "prompts": [
+        {
+          "id": "6cl",
+          "text": "This name generator creates venue nodes using the quick add form",
+          "additionalAttributes": [
+            {
+              "variable": "55f1fbbe-2fe5-42a7-88fb-9a8e5e659d2f",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "6su",
+          "text": "Another venue prompt"
+        }
+      ]
+    },
+    {
+      "id": "dyadcensus",
+      "type": "DyadCensus",
+      "label": "Dyad Census",
+      "subject": {
+        "entity": "node",
+        "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
+      },
+      "introductionPanel": {
+        "title": "Introduction to the Dyad Census",
+        "text": "This section will go through all possible node pairs and ask you how they are connected."
+      },
+      "prompts": [
+        {
+          "id": "friends",
+          "text": "Are these people friends?",
+          "createEdge": "77199445-9d50-4646-b0bc-6d6b0c0e06bd"
+        },
+        {
+          "id": "professional",
+          "text": "Do these people work together?",
+          "createEdge": "867127d9-086b-403a-a3e7-2c7d32126546"
+        }
+      ]
+    },
+    {
+      "id": "tie-strength-census",
+      "type": "TieStrengthCensus",
+      "label": "Tie-Strength Census",
+      "subject": {
+        "entity": "node",
+        "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
+      },
+      "introductionPanel": {
+        "title": "Introduction to the Tie-Strength Census",
+        "text": "This interface both creates an edge and assigns an ordinal value to it."
+      },
+      "prompts": [
+        {
+          "id": "friendship-strength",
+          "text": "Thinking about each pair of people, please choose the option that best describes **how close they are to one another**.",
+          "createEdge": "77199445-9d50-4646-b0bc-6d6b0c0e06bd",
+          "edgeVariable": "e343a91f-628d-4175-870c-75429857399e",
+          "negativeLabel": "Don't know each other"
+        },
+        {
+          "id": "professional-strength",
+          "text": "How often do these people work together on important projects?",
+          "createEdge": "867127d9-086b-403a-a3e7-2c7d32126546",
+          "edgeVariable": "f984jk23-628d-4175-870c-ejd8e7al8vc3",
+          "negativeLabel": "Do not work together"
+        }
+      ]
+    },
+    {
+      "id": "ordinalBin1",
+      "type": "OrdinalBin",
+      "label": "Contact Freq for close ties",
+      "subject": {
+        "entity": "node",
+        "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
+      },
+      "filter": {
+        "join": "AND",
+        "rules": [
+          {
+            "type": "alter",
+            "options": {
+              "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466",
+              "operator": "EXACTLY",
+              "attribute": "ae44b6ba-ad49-4ecf-bf38-b65decfce000",
+              "value": true
+            },
+            "id": "d1d2f846-35df-40c3-ba1c-f8e81aa2173b"
+          }
+        ]
+      },
+      "prompts": [
+        {
+          "id": "contactFreq",
+          "text": "Contact frequency ordinal variable for close ties only",
+          "variable": "1096204b-48fe-444c-b642-4ab211f7f57c",
+          "bucketSortOrder": [
+            {
+              "property": "0e75ec18-2cb1-4606-9f18-034d28b07c19",
+              "direction": "desc"
+            }
+          ],
+          "binSortOrder": [
+            {
+              "property": "0e75ec18-2cb1-4606-9f18-034d28b07c19",
+              "direction": "desc"
+            },
+            {
+              "property": "c5fee926-855d-4419-b5bb-54e89010cea6",
+              "direction": "desc"
+            }
+          ]
+        },
+        {
+          "id": "discussFreq",
+          "text": "Discussion Frequency variable, with a much longer prompt than the previous prompt. Please also note that this prompt uses the color override to style these bins differently than the main prompt.",
+          "variable": "23c5a7b9-b553-4ff1-b515-6a81999773d2",
+          "color": "ord-color-seq-2"
+        }
+      ]
+    },
+    {
+      "id": "ordinalBin2",
+      "type": "OrdinalBin",
+      "label": "Contact Freq.",
+      "subject": {
+        "entity": "node",
+        "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73"
+      },
+      "prompts": [
+        {
+          "id": "visitFreq",
+          "text": "Showing an ordinalbin interface with a node type other than person.",
+          "variable": "a39a86ef-18c7-4545-8fbc-d0e5894565d0",
+          "color": "ord-color-seq-7"
+        }
+      ]
+    },
+    {
+      "id": "namegenroster2a",
+      "type": "NameGeneratorRoster",
+      "label": "NG HIV Services",
+      "subject": {
+        "entity": "node",
+        "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73"
+      },
+      "behaviours": {
+        "minNodes": 1,
+        "maxNodes": 8
+      },
+      "dataSource": "HIVServices-csv",
+      "prompts": [
+        {
+          "id": "7tk",
+          "text": "HIV Venue CSV data, with no sort options or additional attributes."
+        }
+      ]
+    },
+    {
+      "id": "namegenroster2",
+      "type": "NameGeneratorRoster",
+      "label": "NG Classmates",
+      "subject": {
+        "entity": "node",
+        "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
+      },
+      "dataSource": "previousInterview-json",
+      "cardOptions": {
+        "additionalProperties": [
+          {
+            "label": "Name",
+            "variable": "last_name"
+          },
+          {
+            "label": "Age",
+            "variable": "age"
+          }
+        ]
+      },
+      "sortOptions": {
+        "sortOrder": [
+          {
+            "property": "age",
+            "direction": "desc"
+          }
+        ],
+        "sortableProperties": [
+          {
+            "label": "Nickname",
+            "variable": "nickname"
+          },
+          {
+            "label": "Age",
+            "variable": "age"
+          }
+        ]
+      },
+      "prompts": [
+        {
+          "id": "7cl",
+          "text": "previous interview JSON",
+          "additionalAttributes": [
+            {
+              "variable": "ae44b6ba-ad49-4ecf-bf38-b65decfce000",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "namegen4",
+      "type": "NameGenerator",
+      "label": "NG Inputs",
+      "form": {
+        "title": "Test for form input controls",
+        "fields": [
+          {
+            "variable": "2377af3f-3c79-41da-9b0b-6570fb519b93",
+            "prompt": "What is this person's _name_?"
+          },
+          {
+            "variable": "e3eb5f0b-84ad-43f0-8db5-9f83cd3a56de",
+            "prompt": "What is this person's _age_?"
+          },
+          {
+            "variable": "583ad529-66c6-4c84-8e31-a31452d6b5e9",
+            "prompt": "How much do you like **likert scales**?"
+          },
+          {
+            "variable": "e3537457-41a2-4fbf-a1f8-9235b3c1edc6",
+            "prompt": "Which of *these things* do you like?"
+          },
+          {
+            "variable": "6c647977-f2d1-426f-b0c5-6d44c795c554",
+            "prompt": "Which of these **other** things do you like?"
+          },
+          {
+            "variable": "57fefac9-561f-454a-8f78-81bd9470efaa",
+            "prompt": "Is the switch below not turned _on_?"
+          },
+          {
+            "variable": "683ad529-66c6-4c84-8e31-a31452dsf74k",
+            "prompt": "This is a variable whose **value** you must choose!"
+          },
+          {
+            "variable": "e4e0df51-4b53-4e16-9249-8587537370e9",
+            "prompt": "Do you like **likert scales**?"
+          },
+          {
+            "variable": "720224a3-e2d3-4729-968a-29d3f3e4fca6",
+            "prompt": "How _far away_ is the moon?"
+          }
+        ]
+      },
+      "subject": {
+        "entity": "node",
+        "type": "c93af3fe-9f84-4e85-acb5-5b15f30788c7"
+      },
+      "prompts": [
+        {
+          "id": "6cl",
+          "text": "This name generator is designed to test input types"
+        }
+      ]
+    },
+    {
+      "id": "sociogram",
+      "type": "Sociogram",
+      "label": "Sociogram",
+      "subject": {
+        "entity": "node",
+        "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
+      },
+      "background": {
+        "concentricCircles": 4,
+        "skewedTowardCenter": true
+      },
+      "behaviours": {
+        "automaticLayout": {
+          "enabled": true
+        }
+      },
+      "prompts": [
+        {
+          "id": "closeness1",
+          "text": "This interface uses the concentric circles background and excludes John and William",
+          "sortOrder": [
+            {
+              "property": "*",
+              "direction": "desc"
+            }
+          ],
+          "layout": {
+            "layoutVariable": "d13ca72d-aefe-4f48-841d-09f020e0e988"
+          },
+          "edges": {
+            "display": [
+              "867127d9-086b-403a-a3e7-2c7d32126546",
+              "77199445-9d50-4646-b0bc-6d6b0c0e06bd"
+            ],
+            "create": "77199445-9d50-4646-b0bc-6d6b0c0e06bd"
+          },
+          "highlight": {
+            "allowHighlighting": false
+          }
+        },
+        {
+          "id": "edgeType2",
+          "text": "Creates a second edge type",
+          "layout": {
+            "layoutVariable": "d13ca72d-aefe-4f48-841d-09f020e0e988"
+          },
+          "sortOrder": [
+            {
+              "property": "0e75ec18-2cb1-4606-9f18-034d28b07c19",
+              "direction": "desc"
+            }
+          ],
+          "edges": {
+            "display": [
+              "77199445-9d50-4646-b0bc-6d6b0c0e06bd",
+              "867127d9-086b-403a-a3e7-2c7d32126546"
+            ],
+            "create": "867127d9-086b-403a-a3e7-2c7d32126546"
+          },
+          "highlight": {
+            "allowHighlighting": false
+          }
+        },
+        {
+          "id": "closeness2",
+          "text": "Toggle variable",
+          "layout": {
+            "layoutVariable": "d13ca72d-aefe-4f48-841d-09f020e0e988"
+          },
+          "sortOrder": [
+            {
+              "property": "0e75ec18-2cb1-4606-9f18-034d28b07c19",
+              "direction": "desc"
+            }
+          ],
+          "edges": {
+            "display": [
+              "77199445-9d50-4646-b0bc-6d6b0c0e06bd",
+              "867127d9-086b-403a-a3e7-2c7d32126546"
+            ]
+          },
+          "highlight": {
+            "allowHighlighting": true,
+            "variable": "03b03617-46ae-41cb-9462-9acd8a17edd6"
+          }
+        },
+        {
+          "id": "closeness3",
+          "text": "This prompt shows 3 concentric circles and has create edge and allow highlight specified (against the rules!)",
+          "layout": {
+            "layoutVariable": "d13ca72d-aefe-4f48-841d-09f020e0e988"
+          },
+          "edges": {
+            "display": [
+              "77199445-9d50-4646-b0bc-6d6b0c0e06bd",
+              "867127d9-086b-403a-a3e7-2c7d32126546"
+            ],
+            "create": "77199445-9d50-4646-b0bc-6d6b0c0e06bd"
+          },
+          "highlight": {
+            "allowHighlighting": true,
+            "variable": "03b03617-46ae-41cb-9462-9acd8a17edd6"
+          }
+        }
+      ],
+      "filter": {
+        "join": "AND",
+        "rules": [
+          {
+            "type": "alter",
+            "options": {
+              "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466",
+              "operator": "NOT",
+              "attribute": "6be95f85-c2d9-4daf-9de1-3939418af888",
+              "value": "John"
+            },
+            "id": "6091efec-3ef1-4680-810f-d68f69441384"
+          },
+          {
+            "type": "alter",
+            "options": {
+              "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466",
+              "operator": "NOT",
+              "attribute": "6be95f85-c2d9-4daf-9de1-3939418af888",
+              "value": "William"
+            },
+            "id": "69593513-dbb9-48b8-a588-92d74d416bf7"
+          }
+        ]
+      }
+    },
+    {
+      "id": "sociogram2",
+      "type": "Sociogram",
+      "label": "Sociogram with background image",
+      "subject": {
+        "entity": "node",
+        "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73"
+      },
+      "background": {
+        "image": "quadrant-1",
+        "concentricCircles": 4,
+        "skewedTowardCenter": true
+      },
+      "prompts": [
+        {
+          "id": "23423",
+          "text": "This interface uses a background image",
+          "sortOrder": [
+            {
+              "property": "*",
+              "direction": "desc"
+            }
+          ],
+          "layout": {
+            "layoutVariable": "0a5f7952-a9a7-4e87-9353-2d17a592ssss"
+          }
+        }
+      ]
+    },
+    {
+      "id": "namegenroster1",
+      "type": "NameGeneratorRoster",
+      "label": "NG Classmates",
+      "subject": {
+        "entity": "node",
+        "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
+      },
+      "dataSource": "previousInterview-json",
+      "cardOptions": {
+        "additionalProperties": [
+          {
+            "label": "Name",
+            "variable": "last_name"
+          },
+          {
+            "label": "Age",
+            "variable": "age"
+          }
+        ]
+      },
+      "searchOptions": {
+        "fuzziness": 0.4,
+        "matchProperties": ["variableNotInRegistry", "nickname", "last_name"]
+      },
+      "prompts": [
+        {
+          "id": "7cl1",
+          "text": "Which classmates would you also think of as friends?",
+          "additionalAttributes": [
+            {
+              "variable": "ae44b6ba-ad49-4ecf-bf38-b65decfce000",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "31f7ee2e-6ff8-4881-9db4-ee1fc369dc5f",
+          "text": "Which of these classmates would help you with homework?\n",
+          "additionalAttributes": [
+            {
+              "variable": "e1dda563-f6f6-47b7-91cb-31b4c2fdb73a",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "namegenroster3",
+      "type": "NameGeneratorRoster",
+      "label": "Roster Autocomplete HIV",
+      "subject": {
+        "entity": "node",
+        "type": "eda5e3bb-8e1c-4216-9e06-adc0ff6b7f73"
+      },
+      "dataSource": "HIVServices",
+      "cardOptions": {
+        "additionalProperties": [
+          {
+            "label": "Address",
+            "variable": "67132d2b-c371-4c57-a5eb-6520083f9d22"
+          },
+          {
+            "label": "Subsidiary/Program/Project",
+            "variable": "8ee3a187-d4be-458e-8abb-71efcc071949"
+          }
+        ]
+      },
+      "searchOptions": {
+        "fuzziness": 0.5,
+        "matchProperties": [
+          "1e9ce62c-44c5-484d-9c26-0d20cc7d7238",
+          "8ee3a187-d4be-458e-8abb-71efcc071949",
+          "67132d2b-c371-4c57-a5eb-6520083f9d22"
+        ]
+      },
+      "prompts": [
+        {
+          "id": "7su",
+          "text": "Which of these venues have you visited in the previous 6 months?",
+          "additionalAttributes": [
+            {
+              "variable": "55f1fbbe-2fe5-42a7-88fb-9a8e5e659d2f",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "catBin1",
+      "type": "CategoricalBin",
+      "label": "Contact Types",
+      "subject": {
+        "entity": "node",
+        "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
+      },
+      "prompts": [
+        {
+          "variable": "e343a91f-628d-4175-870c-957beffa0152",
+          "id": "cat2",
+          "text": "Categorical bin excluding nodes called \"William\""
+        },
+        {
+          "variable": "e343a91f-628d-4175-870c-957beffa0153",
+          "id": "cat3",
+          "text": "Three with other",
+          "otherVariable": "979c9ad7-74cb-402d-8574-3f0a91c9174d",
+          "otherVariablePrompt": "What were you thinking of instead?",
+          "otherOptionLabel": "Not Listed"
+        },
+        {
+          "id": "cat4",
+          "text": "Four",
+          "variable": "e343a91f-628d-4175-870c-957beffa0154"
+        },
+        {
+          "id": "contactType",
+          "text": "What is the most frequent type of contact you have?",
+          "variable": "e343a91f-628d-4175-870c-957beffa0151",
+          "bucketSortOrder": [
+            {
+              "property": "0e75ec18-2cb1-4606-9f18-034d28b07c19",
+              "direction": "desc"
+            }
+          ],
+          "binSortOrder": [
+            {
+              "property": "0e75ec18-2cb1-4606-9f18-034d28b07c19",
+              "direction": "desc"
+            },
+            {
+              "property": "c5fee926-855d-4419-b5bb-54e89010cea6",
+              "direction": "desc"
+            },
+            {
+              "property": "0ff25001-a2b8-46de-82a9-53143aa00d10",
+              "direction": "desc"
+            }
+          ]
+        },
+        {
+          "id": "discussType",
+          "text": "Discussion type variable, with a much longer prompt than the previous prompt. Please also note that this prompt uses the max number of bins.",
+          "variable": "4ccba4e2-a246-46ee-a3ff-1c70fb4c449c"
+        }
+      ],
+      "filter": {
+        "join": "AND",
+        "rules": [
+          {
+            "type": "alter",
+            "options": {
+              "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466",
+              "operator": "NOT",
+              "attribute": "6be95f85-c2d9-4daf-9de1-3939418af888",
+              "value": "William"
+            },
+            "id": "e7cbcb30-5d01-4c23-ae76-4ac0d6e1c7f2"
+          }
+        ]
+      }
+    },
+    {
+      "id": "alter-form-1",
+      "type": "AlterForm",
+      "label": "Alter Form",
+      "subject": {
+        "entity": "node",
+        "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
+      },
+      "form": {
+        "title": "Modify a Person",
+        "fields": [
+          {
+            "variable": "246c4d84-ebd7-41a6-8c1a-ef83938227ba",
+            "prompt": "What is this person's life story?"
+          },
+          {
+            "variable": "9b56bc6d-6b20-4e38-9aab-4057e78e1130",
+            "prompt": "Choose a date"
+          },
+          {
+            "variable": "23c5a7b9-b553-4ff1-b515-6a81999773d2",
+            "prompt": "Required likert scale"
+          },
+          {
+            "variable": "ae44b6ba-ad49-4ecf-bf38-b65decfce000",
+            "prompt": "Does this person have this boolean attribute?"
+          },
+          {
+            "variable": "4ccba4e2-a246-46ee-a3ff-1c70fb4c449c",
+            "prompt": "Which of these does this person like?"
+          },
+          {
+            "variable": "490db003-3289-4969-b426-919cefb4cdf0",
+            "prompt": "Do you want to do another likert?"
+          }
+        ]
+      },
+      "introductionPanel": {
+        "title": "Introduction to the alter form",
+        "text": "This is some **markdown** that \n* explains this interface and \n* is *marked down*. \n\nBelow this might be as much additional text as the researcher desires. The container that this content is in should dynamically expand to accommodate that."
+      },
+      "skipLogic": {
+        "action": "SKIP",
+        "filter": {
+          "join": "AND",
+          "rules": [
+            {
+              "type": "alter",
+              "options": {
+                "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466",
+                "operator": "INCLUDES",
+                "attribute": "e343a91f-628d-4175-870c-957beffa0153",
+                "value": "two"
+              },
+              "id": "d9f1e1cb-59ee-4ed8-84d1-37a81518db04"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "alter-edge-form-1",
+      "type": "AlterEdgeForm",
+      "label": "Alter Edge Form (friends)",
+      "subject": {
+        "entity": "edge",
+        "type": "77199445-9d50-4646-b0bc-6d6b0c0e06bd"
+      },
+      "form": {
+        "title": "Modify an Edge",
+        "fields": [
+          {
+            "variable": "e343a91f-628d-4175-870c-957beffa0002",
+            "prompt": "Two item categorical variable"
+          },
+          {
+            "variable": "e343a91f-628d-4175-870c-957beffa0003",
+            "prompt": "_Three_ item categorical variable"
+          },
+          {
+            "variable": "e343a91f-628d-4175-870c-957beffa0004",
+            "prompt": "Four item categorical variable"
+          }
+        ]
+      },
+      "introductionPanel": {
+        "title": "Introduction to the alter edge form",
+        "text": "This per alter edge form shows friend edges, but filters any edges where either node also also has a professional edge."
+      },
+      "filter": {
+        "join": "AND",
+        "rules": [
+          {
+            "type": "edge",
+            "options": {
+              "operator": "NOT_EXISTS",
+              "type": "867127d9-086b-403a-a3e7-2c7d32126546"
+            },
+            "id": "3a6fad4a-f175-492f-87d7-0747a4e4ffca"
+          }
+        ]
+      }
+    },
+    {
+      "id": "alter-edge-form-2",
+      "type": "AlterEdgeForm",
+      "label": "Alter Edge Form (professional)",
+      "subject": {
+        "entity": "edge",
+        "type": "867127d9-086b-403a-a3e7-2c7d32126546"
+      },
+      "form": {
+        "title": "Modify a Professional Edge",
+        "fields": [
+          {
+            "variable": "d343a91f-628d-4175-870c-957beffa0002",
+            "prompt": "Two item categorical variable"
+          }
+        ]
+      },
+      "introductionPanel": {
+        "title": "An alternative alter edge interface",
+        "text": "This interface acts on professional edges."
+      }
+    },
+    {
+      "id": "narrative1",
+      "type": "Narrative",
+      "label": "Narrative",
+      "subject": {
+        "entity": "node",
+        "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466"
+      },
+      "presets": [
+        {
+          "id": "preset1",
+          "label": "My preset",
+          "layoutVariable": "d13ca72d-aefe-4f48-841d-09f020e0e988",
+          "groupVariable": "e343a91f-628d-4175-870c-957beffa0154",
+          "edges": {
+            "display": [
+              "77199445-9d50-4646-b0bc-6d6b0c0e06bd",
+              "867127d9-086b-403a-a3e7-2c7d32126546"
+            ]
+          },
+          "highlight": [
+            "03b03617-46ae-41cb-9462-9acd8a17edd6",
+            "ae44b6ba-ad49-4ecf-bf38-b65decfce000"
+          ]
+        },
+        {
+          "id": "preset2",
+          "label": "Another preset (with more text than will fit)",
+          "layoutVariable": "e13ca72d-aefe-4f48-841d-09f020e0e987",
+          "groupVariable": "e343a91f-628d-4175-870c-957beffa0154",
+          "edges": {
+            "display": ["867127d9-086b-403a-a3e7-2c7d32126546"]
+          },
+          "highlight": ["03b03617-46ae-41cb-9462-9acd8a17edd6"]
+        }
+      ],
+      "background": {
+        "concentricCircles": 4,
+        "skewedTowardCenter": true
+      },
+      "behaviours": {
+        "freeDraw": true,
+        "allowRepositioning": true
+      }
+    },
+    {
+      "id": "rubberduck",
+      "label": "Audio test",
+      "type": "Information",
+      "title": "Title for the screen",
+      "items": [
+        {
+          "id": "a",
+          "type": "asset",
+          "content": "click_the_thing",
+          "size": "SMALL"
+        },
+        {
+          "id": "b",
+          "type": "asset",
+          "content": "rubberduck",
+          "size": "SMALL"
+        },
+        {
+          "id": "c",
+          "type": "asset",
+          "content": "rubberduck",
+          "size": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "id": "info-sound",
+      "label": "InfoSound",
+      "type": "Information",
+      "title": "This interface has a video with sound.",
+      "items": [
+        {
+          "id": "65192318-0ef0-454d-91b7-bbaf51380069",
+          "type": "text",
+          "content": "The video below has sound and is set to loop. Some arbitrary text content that can _contain_ **formatting**.",
+          "size": "SMALL"
+        },
+        {
+          "id": "27eee84a-52c0-440d-951c-5ac35bc75168",
+          "type": "asset",
+          "content": "withSound",
+          "size": "MEDIUM"
+        }
+      ]
+    },
+    {
+      "id": "markdown",
+      "label": "Markdown",
+      "type": "Information",
+      "title": "Testing markdown",
+      "items": [
+        {
+          "id": "d3e52e4b-0d22-42e3-a82f-7a150daf7b6b",
+          "type": "text",
+          "size": "LARGE",
+          "content": "# h1 Heading 8-)\n## h2 Heading\n### h3 Heading\n#### h4 Heading\n##### h5 Heading\n###### h6 Heading\n\n## Emphasis\n\n**This is bold text**\n\n__This is bold text__\n\n*This is italic text* \n\n_This is italic text_ \n# Emoji \n:blush: :heartpulse: :wave:"
+        }
+      ]
+    },
+    {
+      "id": "skippable screen",
+      "label": "Skip or Show",
+      "type": "Information",
+      "title": "To skip or not to skip...",
+      "items": [
+        {
+          "id": "ffaf2249-00e7-4fdb-99fc-5757a24f5605",
+          "type": "text",
+          "content": "...that is the question.",
+          "size": "LARGE"
+        }
+      ],
+      "skipLogic": {
+        "action": "SHOW",
+        "filter": {
+          "join": "OR",
+          "rules": [
+            {
+              "type": "alter",
+              "id": "15218241538622",
+              "options": {
+                "type": "4aebf73e-95e3-4fd1-95e7-237dcc4a4466",
+                "attribute": "6be95f85-c2d9-4daf-9de1-3939418af888",
+                "operator": "EXACTLY",
+                "value": "Dee"
+              }
+            },
+            {
+              "type": "ego",
+              "id": "15218241553253",
+              "options": {
+                "attribute": "3377af3f-3c79-41da-9b0b-6570fb519b93",
+                "operator": "EXACTLY",
+                "value": "Bob"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

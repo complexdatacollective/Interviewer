@@ -1,0 +1,9 @@
+{
+  "$schema": "https://deno.land/x/denon@2.5.0/schema.json",
+  "scripts": {
+    "start": {
+      "cmd": "deno run --allow-net --allow-write --allow-read --allow-run=unzip server.ts",
+      "desc": "Start the Fresco API server. Default port is 3000."
+    }
+  }
+}
