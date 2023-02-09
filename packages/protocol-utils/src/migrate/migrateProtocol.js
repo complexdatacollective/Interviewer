@@ -1,5 +1,5 @@
-const getMigrationPath = require('./getMigrationPath');
-const MigrationStepError = require('./errors').MigrationStepError;
+import getMigrationPath from './getMigrationPath.js';
+import { MigrationStepError } from './errors.js';
 
 const migrateStep = (protocol, { version, migration }) => {
   try {
@@ -38,4 +38,4 @@ const migrateProtocol = (protocol, targetSchemaVersion) => {
   ];
 };
 
-module.exports = migrateProtocol;
+export default migrateProtocol;

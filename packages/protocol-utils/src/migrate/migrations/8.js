@@ -17,4 +17,4 @@ const v8 = {
   migration,
 };
 
-module.exports = v8;
+export default v8;

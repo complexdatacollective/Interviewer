@@ -1,4 +1,4 @@
-class MigrationNotPossibleError extends Error {
+export class MigrationNotPossibleError extends Error {
   constructor(from = undefined, to = undefined, ...params) {
     super(...params);
 
@@ -11,7 +11,7 @@ class MigrationNotPossibleError extends Error {
   }
 }
 
-class VersionMismatchError extends Error {
+export class VersionMismatchError extends Error {
   constructor(from = undefined, to = undefined, ...params) {
     super(...params);
 
@@ -24,7 +24,7 @@ class VersionMismatchError extends Error {
   }
 }
 
-class MigrationStepError extends Error {
+export class MigrationStepError extends Error {
   constructor(version = undefined, ...params) {
     super(...params);
 
@@ -37,7 +37,7 @@ class MigrationStepError extends Error {
   }
 }
 
-class StringVersionError extends Error {
+export class StringVersionError extends Error {
   constructor(version = undefined, type = undefined, ...params) {
     super(...params);
 
@@ -50,7 +50,7 @@ class StringVersionError extends Error {
   }
 }
 
-module.exports = {
+export default {
   VersionMismatchError,
   MigrationNotPossibleError,
   MigrationStepError,

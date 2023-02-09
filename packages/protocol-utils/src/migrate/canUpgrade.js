@@ -1,4 +1,4 @@
-const getMigrationPath = require('./getMigrationPath');
+import getMigrationPath from "./getMigrationPath.js";
 
 const canUpgrade = (sourceSchemaVersion, targetSchemaVersion) => {
   try {
@@ -10,4 +10,4 @@ const canUpgrade = (sourceSchemaVersion, targetSchemaVersion) => {
   return true;
 };
 
-module.exports = canUpgrade;
+export default canUpgrade;

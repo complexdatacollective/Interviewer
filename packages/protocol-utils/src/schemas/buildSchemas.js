@@ -1,6 +1,5 @@
 import { readdir, writeFile, readFile, access } from 'node:fs/promises';
-import { extname, join, dirname, basename } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { extname, join, basename } from 'node:path';
 import Ajv from "ajv";
 import standaloneCode from "ajv/dist/standalone/index.js";
 
@@ -68,11 +67,7 @@ export default versions;
 /**
  * Compile 
  */
-
-const defaultSourcePath = join(dirname(fileURLToPath(import.meta.url)), 'json');
-const defaultOutputPath = join(dirname(fileURLToPath(import.meta.url)), 'compiled');
-
-export const buildSchemas = async (sourcePath = defaultSourcePath, outputPath = defaultOutputPath) => {
+export const buildSchemas = async (sourcePath, outputPath) => {
   // Check if the source directory exists
   try {
     await access(sourcePath);
@@ -132,4 +127,4 @@ export const buildSchema = async (schema, sourceDirectory, outputDirectory) => {
   return modulePath;
 };
 
-buildSchemas();
+

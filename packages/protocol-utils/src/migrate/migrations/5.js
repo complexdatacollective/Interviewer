@@ -17,4 +17,4 @@ const v5 = {
   migration,
 };
 
-module.exports = v5;
+export default v5;

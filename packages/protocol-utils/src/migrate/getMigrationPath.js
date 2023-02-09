@@ -1,7 +1,5 @@
-const migrations = require('./migrations');
-const MigrationNotPossibleError = require('./errors').MigrationNotPossibleError;
-const VersionMismatchError = require('./errors').VersionMismatchError;
-const StringVersionError = require('./errors').StringVersionError;
+import migrations from './migrations.js';
+import { MigrationNotPossibleError, VersionMismatchError, StringVersionError } from './errors.js';
 
 const isMigrationPathValid = path =>
   !path.some(({ migration }) => !migration);
@@ -39,4 +37,4 @@ const getMigrationPath = (rawSourceSchemaVersion, targetSchemaVersion) => {
   return migrationPath;
 };
 
-module.exports = getMigrationPath;
+export default getMigrationPath;

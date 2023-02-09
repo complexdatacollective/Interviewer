@@ -16,4 +16,4 @@ const v7 = {
   migration,
 };
 
-module.exports = v7;
+export default v7;

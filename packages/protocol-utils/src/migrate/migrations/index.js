@@ -1,11 +1,11 @@
-const version4 = require('./4');
-const version5 = require('./5');
-const version6 = require('./6');
-const version7 = require('./7');
-const version8 = require('./8');
+import version4 from './4.js';
+import version5 from './5.js';
+import version6 from './6.js';
+import version7 from './7.js';
+import version8 from './8.js';
 
 /**
- * These should be in order
+ * These must be in order!
  */
 const migrations = [
   { version: '1.0.0', migration: protocol => protocol },
@@ -19,4 +19,4 @@ const migrations = [
   version8,
 ];
 
-module.exports = migrations;
+export default migrations;

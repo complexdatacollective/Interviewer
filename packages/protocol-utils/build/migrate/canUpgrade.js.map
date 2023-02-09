@@ -1,0 +1,1 @@
+{"version":3,"file":"canUpgrade.js","sourceRoot":"","sources":["../../src/migrate/canUpgrade.js"],"names":[],"mappings":"AAAA,OAAO,gBAAgB,MAAM,uBAAuB,CAAC;AAErD,MAAM,UAAU,GAAG,CAAC,mBAAmB,EAAE,mBAAmB,EAAE,EAAE;IAC9D,IAAI;QACF,gBAAgB,CAAC,mBAAmB,EAAE,mBAAmB,CAAC,CAAC;KAC5D;IAAC,OAAO,CAAC,EAAE;QACV,OAAO,KAAK,CAAC;KACd;IAED,OAAO,IAAI,CAAC;AACd,CAAC,CAAC;AAEF,eAAe,UAAU,CAAC"}

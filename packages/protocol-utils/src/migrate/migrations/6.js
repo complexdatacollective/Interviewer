@@ -33,4 +33,4 @@ const v6 = {
   migration,
 };
 
-module.exports = v6;
+export default v6;

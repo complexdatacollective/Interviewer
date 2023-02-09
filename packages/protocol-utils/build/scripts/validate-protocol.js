@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { basename } from 'node:path';
-import validateProtocol, { ValidationError } from '../src/validate/validateProtocol.js';
-import { errToString } from '../src/validate/helpers.js';
+import validateProtocol, { ValidationError } from '../validate/validateProtocol.js';
+import { errToString } from '../validate/helpers.js';
 import chalk from 'chalk';
 /**
  * Usage:
@@ -53,3 +53,4 @@ catch (err) {
     process.exit(1);
 }
 validateJson(protocolContents);
+//# sourceMappingURL=validate-protocol.js.map
