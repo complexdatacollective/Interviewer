@@ -1,0 +1,43 @@
+{
+  "name": "@codaco/protocol-utils",
+  "version": "0.0.1-alpha.1",
+  "description": "Utilities for working with Network Canvas protocols",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "test": "jest",
+    "build": "tsc",
+    "validate-protocol": "node src/scripts/validate-protocol.js",
+    "build-schemas": "node src/scripts/build-schemas.js",
+    "lint": "eslint src/**/*.ts",
+    "format": "eslint src/**/*.ts --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/complexdatacollective/protocol-utils.git"
+  },
+  "author": "jthrilly",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/complexdatacollective/protocol-utils/issues"
+  },
+  "homepage": "https://github.com/complexdatacollective/protocol-utils#readme",
+  "devDependencies": {
+    "@codaco/shared-consts": "*",
+    "@faker-js/faker": "^7.6.0",
+    "@types/jest": "^27.4.1",
+    "@types/lodash": "^4.14.191",
+    "@types/node": "^18.13.0",
+    "@types/uuid": "^9.0.0",
+    "ajv": "^8.12.0",
+    "chalk": "^5.2.0",
+    "jest": "^27.5.1",
+    "lodash": "^4.17.21",
+    "typescript": "^4.9.5",
+    "uuid": "^9.0.0"
+  }
+}

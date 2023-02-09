@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`validateLogic A well formed protocol will return an array of errors 1`] = `
+Array [
+  "protocol.codebook: Duplicate entity name \\"du\\"",
+  "protocol.stages[0].form.fields[0]: Form field variable not found in codebook.",
+  "protocol.stages[5].form.fields[0]: Form field variable not found in codebook.",
+]
+`;

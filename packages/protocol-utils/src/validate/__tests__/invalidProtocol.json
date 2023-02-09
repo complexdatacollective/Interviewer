@@ -1,0 +1,320 @@
+{
+  "codebook": {
+    "node": {
+      "d248f88d-2ff5-41a4-b88d-f23f78c2d25e": {
+        "color": "node-color-seq-2",
+        "variables": {
+          "744bdce0-7003-412b-a218-21a04568a97d": {
+            "type": "ordinal",
+            "name": "ord",
+            "options": [
+              {
+                "label": "grd",
+                "value": 1
+              },
+              {
+                "label": "fde",
+                "value": 0
+              }
+            ],
+            "component": "RadioGroup",
+            "validation": {}
+          },
+          "b1374173-d4b5-4739-bc8f-6317c82c338f": {
+            "type": "layout",
+            "name": "sdf."
+          },
+          "522caada-c2e4-46dd-9774-fa8fbc1247e5": {
+            "name": "dsa",
+            "type": "boolean",
+            "component": "Toggle",
+            "validation": {}
+          },
+          "740266f2-a430-4a96-8e46-ab73d3bec91b": {
+            "name": "num",
+            "type": "number",
+            "component": "Number",
+            "validation": {}
+          }
+        },
+        "iconVariant": "add-a-person",
+        "name": "fr"
+      },
+      "d248f88d-2ff5-41a4-b88d-f23f78c2d252": {
+        "name": "du"
+      },
+      "d248f88d-2ff5-41a4-b88d-f23f78c2d256": {
+        "name": "du"
+      }
+    },
+    "edge": {
+      "4be6a38f-0c5b-497f-9d95-209dea1f16e5": {
+        "color": "edge-color-seq-1",
+        "variables": {
+          "c34880c6-e8bc-4cca-856f-1fb2c78f2dec": {
+            "name": "boo",
+            "type": "boolean",
+            "component": "Toggle",
+            "validation": {}
+          },
+          "22ca4439-193f-47c2-a9be-faa3446471fc": {
+            "name": "bbbv",
+            "type": "text",
+            "component": "Text",
+            "validation": {}
+          }
+        },
+        "name": "gfd"
+      }
+    },
+    "ego": {}
+  },
+  "assetManifest": {},
+  "schemaVersion": "1.0.0",
+  "stages": [
+    {
+      "label": "ytf",
+      "type": "NameGenerator",
+      "subject": {
+        "type": "d248f88d-2ff5-41a4-b88d-f23f78c2d25e",
+        "entity": "node"
+      },
+      "form": {
+        "title": "dgr",
+        "fields": [
+          {
+            "variable": "60e5d2ab-0e3e-422d-80b5-181080742978",
+            "prompt": "hft"
+          },
+          {
+            "variable": "744bdce0-7003-412b-a218-21a04568a97d",
+            "prompt": "fg"
+          },
+          {
+            "variable": "740266f2-a430-4a96-8e46-ab73d3bec91b",
+            "prompt": "bgfn"
+          },
+          {
+            "variable": "522caada-c2e4-46dd-9774-fa8fbc1247e5",
+            "prompt": "dsa"
+          }
+        ]
+      },
+      "prompts": [
+        {
+          "id": "db1f4855-d34f-41c5-baba-97f82f6dc4b9",
+          "text": "gcr",
+          "additionalAttributes": [
+            {
+              "variable": "522caada-c2e4-46dd-9774-fa8fbc1247e5",
+              "value": false
+            }
+          ]
+        }
+      ],
+      "id": "462a6b80-87e0-11e9-bb67-5595ab3a27c2",
+      "skipLogic": {
+        "action": "SHOW",
+        "filter": {
+          "join": "OR"
+        }
+      }
+    },
+    {
+      "label": "fdd",
+      "type": "OrdinalBin",
+      "subject": {
+        "type": "d248f88d-2ff5-41a4-b88d-f23f78c2d25e",
+        "entity": "node"
+      },
+      "prompts": [
+        {
+          "color": "ord-color-seq-1",
+          "id": "90cf3bca-4b53-45d7-a5ba-b437350fc13d",
+          "text": "fe",
+          "variable": "744bdce0-7003-412b-a218-21a04568a97d"
+        }
+      ],
+      "id": "c8b6c890-87a0-11e9-8070-ed0afdc328c2",
+      "skipLogic": {
+        "action": "SKIP",
+        "filter": {
+          "join": "OR",
+          "rules": []
+        }
+      }
+    },
+    {
+      "label": "rf",
+      "type": "NameGeneratorQuickAdd",
+      "subject": {
+        "entity": "node",
+        "type": "d248f88d-2ff5-41a4-b88d-f23f78c2d25e"
+      },
+      "quickAdd": "60e5d2ab-0e3e-422d-80b5-181080742978",
+      "prompts": [
+        {
+          "id": "89ded279-f816-4e18-bd1f-729c9c66e45c",
+          "text": "gt"
+        }
+      ],
+      "id": "5f8639a0-87a0-11e9-8070-ed0afdc328c2",
+      "panels": [
+        {
+          "id": "0cb26908-58b8-4afd-a940-f356c92ce96a",
+          "title": "ghgh",
+          "dataSource": "existing"
+        }
+      ],
+      "skipLogic": {
+        "action": "SKIP",
+        "filter": {
+          "join": "AND",
+          "rules": []
+        }
+      }
+    },
+    {
+      "label": "fds",
+      "type": "Narrative",
+      "subject": {
+        "type": "d248f88d-2ff5-41a4-b88d-f23f78c2d25e",
+        "entity": "node"
+      },
+      "background": {
+        "concentricCircles": 3
+      },
+      "presets": [
+        {
+          "layoutVariable": "b1374173-d4b5-4739-bc8f-6317c82c338f",
+          "groupVariable": "",
+          "edges": {
+            "display": [
+              "f29313cc-7dbf-42e2-9b15-800e1db6ad3b"
+            ]
+          },
+          "id": "25dd7fc7-965f-491d-ac3f-62654a99f9aa",
+          "label": "fds"
+        }
+      ],
+      "id": "352a87b0-87b9-11e9-9fa2-8759bc5a27e3",
+      "behaviours": {
+        "freeDraw": true
+      },
+      "skipLogic": {
+        "action": "SKIP",
+        "filter": {
+          "join": "AND",
+          "rules": []
+        }
+      }
+    },
+    {
+      "label": "fds",
+      "type": "AlterEdgeForm",
+      "subject": {
+        "type": "4be6a38f-0c5b-497f-9d95-209dea1f16e5",
+        "entity": "edge"
+      },
+      "introductionPanel": {
+        "title": "fff",
+        "text": "ddf"
+      },
+      "form": {
+        "fields": [
+          {
+            "variable": "c34880c6-e8bc-4cca-856f-1fb2c78f2dec",
+            "prompt": "gfd"
+          },
+          {
+            "variable": "22ca4439-193f-47c2-a9be-faa3446471fc",
+            "prompt": "bfgd"
+          }
+        ]
+      },
+      "id": "d6d33520-87bf-11e9-9eda-cf4cd72bed5c",
+      "skipLogic": {
+        "action": "SKIP",
+        "filter": {
+          "join": "OR",
+          "rules": []
+        }
+      }
+    },
+    {
+      "label": "gre",
+      "type": "AlterForm",
+      "subject": {
+        "type": "d248f88d-2ff5-41a4-b88d-f23f78c2d25e",
+        "entity": "node"
+      },
+      "introductionPanel": {
+        "title": "df",
+        "text": "bth"
+      },
+      "form": {
+        "fields": [
+          {
+            "variable": "60e5d2ab-0e3e-422d-80b5-181080742978",
+            "prompt": "ht"
+          },
+          {
+            "prompt": "dsa",
+            "variable": "522caada-c2e4-46dd-9774-fa8fbc1247e5"
+          },
+          {
+            "variable": "744bdce0-7003-412b-a218-21a04568a97d",
+            "prompt": "ht"
+          }
+        ]
+      },
+      "id": "3c2d1530-87a2-11e9-8070-ed0afdc328c2",
+      "skipLogic": {
+        "action": "SKIP",
+        "filter": {
+          "join": "OR",
+          "rules": []
+        }
+      }
+    },
+    {
+      "label": "dsaf",
+      "type": "Sociogram",
+      "subject": {
+        "type": "d248f88d-2ff5-41a4-b88d-f23f78c2d25e",
+        "entity": "node"
+      },
+      "background": {
+        "concentricCircles": 3
+      },
+      "prompts": [
+        {
+          "id": "f3dda032-754e-40f4-90e8-46b01bc701dc",
+          "highlight": {
+            "allowHighlighting": false
+          },
+          "edges": {
+            "create": "4be6a38f-0c5b-497f-9d95-209dea1f16e5",
+            "display": [
+              "4be6a38f-0c5b-497f-9d95-209dea1f16e5"
+            ]
+          },
+          "text": "fds",
+          "layout": {
+            "layoutVariable": "b1374173-d4b5-4739-bc8f-6317c82c338f"
+          }
+        }
+      ],
+      "id": "c05dd930-87bf-11e9-9eda-cf4cd72bed5c",
+      "skipLogic": {
+        "action": "SKIP",
+        "filter": {
+          "join": "AND",
+          "rules": []
+        }
+      }
+    }
+  ],
+  "description": "vv",
+  "lastModified": "2019-06-07T09:02:26.371Z"
+}

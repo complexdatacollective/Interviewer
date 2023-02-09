@@ -1,0 +1,967 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$ref": "#/definitions/Protocol",
+  "definitions": {
+    "Protocol": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "lastModified": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "schemaVersion": {
+          "type": "number"
+        },
+        "codebook": {
+          "$ref": "#/definitions/codebook"
+        },
+        "assetManifest": {
+          "$ref": "#/definitions/AssetManifest"
+        },
+        "stages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Stage"
+          }
+        }
+      },
+      "required": ["stages", "codebook"],
+      "title": "Protocol"
+    },
+    "AssetManifest": {
+      "type": "object",
+      "title": "AssetManifest"
+    },
+    "Form": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Field"
+          }
+        }
+      },
+      "required": ["fields"],
+      "title": "Form"
+    },
+    "Field": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "variable": {
+          "type": "string"
+        },
+        "prompt": {
+          "type": "string"
+        }
+      },
+      "required": ["variable", "prompt"],
+      "title": "Field"
+    },
+    "Stage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "interviewScript": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "Narrative",
+            "AlterForm",
+            "AlterEdgeForm",
+            "EgoForm",
+            "NameGenerator",
+            "NameGeneratorQuickAdd",
+            "NameGeneratorList",
+            "NameGeneratorAutoComplete",
+            "Sociogram",
+            "DyadCensus",
+            "TieStrengthCensus",
+            "Information",
+            "OrdinalBin",
+            "CategoricalBin"
+          ]
+        },
+        "label": {
+          "type": "string"
+        },
+        "form": {
+          "$ref": "#/definitions/Form"
+        },
+        "quickAdd": {
+          "type": ["string", "null"]
+        },
+        "createEdge": {
+          "type": "string"
+        },
+        "dataSource": {
+          "type": ["string", "null"]
+        },
+        "subject": {
+          "$ref": "#/definitions/Subject"
+        },
+        "panels": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Panel"
+          }
+        },
+        "prompts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Prompt"
+          },
+          "minItems": 1
+        },
+        "presets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Preset"
+          },
+          "minItems": 1
+        },
+        "background": {
+          "type": "object",
+          "properties": {
+            "image": {
+              "type": "string"
+            },
+            "concentricCircles": {
+              "type": "integer"
+            },
+            "skewedTowardCenter": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false,
+          "required": ["concentricCircles", "skewedTowardCenter"]
+        },
+        "sortOptions": {
+          "$ref": "#/definitions/SortOptions"
+        },
+        "cardOptions": {
+          "type": "object",
+          "patternProperties": {
+            "^[0-9]{2,6}$": {
+              "$ref": "#/definitions/CardOptions"
+            }
+          }
+        },
+        "searchOptions": {
+          "$ref": "#/definitions/SearchOptions"
+        },
+        "behaviours": {
+          "$ref": "#/definitions/Behaviours"
+        },
+        "showExistingNodes": {
+          "type": "boolean"
+        },
+        "title": {
+          "type": "string"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Item"
+          }
+        },
+        "introductionPanel": {
+          "$ref": "#/definitions/IntroductionPanel"
+        },
+        "skipLogic": {
+          "$ref": "#/definitions/SkipLogic"
+        },
+        "filter": {
+          "$ref": "#/definitions/Filter"
+        }
+      },
+      "required": ["id", "label", "type"],
+      "title": "Interface",
+      "anyOf": [
+        {
+          "properties": {
+            "type": {
+              "const": "EgoForm"
+            }
+          },
+          "required": ["form"]
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "DyadCensus"
+            }
+          },
+          "required": ["subject", "prompts"]
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "TieStrengthCensus"
+            }
+          },
+          "required": ["subject", "prompts"]
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "AlterForm"
+            }
+          },
+          "required": ["form"]
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "AlterEdgeForm"
+            }
+          },
+          "required": ["form"]
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "Information"
+            }
+          },
+          "required": ["items"]
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "Narrative"
+            }
+          },
+          "required": ["presets", "background"]
+        },
+        {
+          "properties": {
+            "type": {
+              "enum": [
+                "NameGenerator",
+                "NameGeneratorQuickAdd",
+                "NameGeneratorList",
+                "NameGeneratorAutoComplete",
+                "Sociogram",
+                "OrdinalBin",
+                "CategoricalBin",
+                "DyadCensus"
+              ]
+            }
+          },
+          "required": ["prompts"]
+        }
+      ]
+    },
+    "Item": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["text", "asset"]
+        },
+        "content": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "size": {
+          "type": "string"
+        },
+        "loop": {
+          "type": "boolean"
+        }
+      },
+      "required": ["content", "id", "type"],
+      "title": "Item"
+    },
+    "IntroductionPanel": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        }
+      },
+      "required": ["title", "text"]
+    },
+    "Panel": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "filter": {
+          "$ref": "#/definitions/Filter"
+        },
+        "dataSource": {
+          "type": ["string", "null"]
+        }
+      },
+      "required": ["id", "title", "dataSource"],
+      "title": "Panel"
+    },
+    "Filter": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "properties": {
+        "join": {
+          "type": "string",
+          "enum": ["OR", "AND"]
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Rule"
+          }
+        }
+      },
+      "title": "Filter"
+    },
+    "Rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["alter", "ego", "edge"]
+        },
+        "id": {
+          "type": "string"
+        },
+        "options": {
+          "$ref": "#/definitions/Options"
+        }
+      },
+      "required": ["id", "options", "type"],
+      "title": "Rule"
+    },
+    "Options": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "attribute": {
+          "type": "string"
+        },
+        "operator": {
+          "type": "string",
+          "enum": [
+            "EXISTS",
+            "NOT_EXISTS",
+            "EXACTLY",
+            "NOT",
+            "GREATER_THAN",
+            "GREATER_THAN_OR_EQUAL",
+            "LESS_THAN",
+            "LESS_THAN_OR_EQUAL",
+            "INCLUDES",
+            "EXCLUDES"
+          ]
+        },
+        "value": {
+          "type": ["integer", "string", "boolean"]
+        }
+      },
+      "required": ["operator"],
+      "title": "Rule Options",
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "operator": {
+                "enum": [
+                  "EXACTLY",
+                  "NOT",
+                  "GREATER_THAN",
+                  "GREATER_THAN_OR_EQUAL",
+                  "LESS_THAN",
+                  "LESS_THAN_OR_EQUAL",
+                  "INCLUDES",
+                  "EXCLUDES"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": ["value"]
+          }
+        }
+      ]
+    },
+    "Prompt": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "additionalAttributes": {
+          "$ref": "#/definitions/AdditionalAttributes"
+        },
+        "variable": {
+          "type": "string"
+        },
+        "edgeVariable": {
+          "type": "string"
+        },
+        "negativeLabel": {
+          "type": "string"
+        },
+        "otherVariable": {
+          "type": "string"
+        },
+        "otherVariablePrompt": {
+          "type": "string"
+        },
+        "otherOptionLabel": {
+          "type": "string"
+        },
+        "bucketSortOrder": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SortOrder"
+          }
+        },
+        "binSortOrder": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SortOrder"
+          }
+        },
+        "sortOrder": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SortOrder"
+          }
+        },
+        "color": {
+          "type": "string"
+        },
+        "layout": {
+          "$ref": "#/definitions/Layout"
+        },
+        "edges": {
+          "$ref": "#/definitions/Edges"
+        },
+        "highlight": {
+          "$ref": "#/definitions/Highlight"
+        },
+        "createEdge": {
+          "type": "string"
+        }
+      },
+      "required": ["id", "text"],
+      "title": "Prompt"
+    },
+    "Preset": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "layoutVariable": {
+          "type": "string"
+        },
+        "groupVariable": {
+          "type": "string"
+        },
+        "edges": {
+          "$ref": "#/definitions/Edges"
+        },
+        "highlight": {
+          "$ref": "#/definitions/NarrativeHighlight"
+        }
+      },
+      "required": ["id", "label", "layoutVariable"],
+      "title": "Preset"
+    },
+    "Behaviours": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "freeDraw": {
+          "type": "boolean"
+        },
+        "featureNode": {
+          "type": "boolean"
+        },
+        "allowRepositioning": {
+          "type": "boolean"
+        }
+      },
+      "required": [],
+      "title": "Behaviours"
+    },
+    "AdditionalAttributes": {
+      "type": "array",
+      "title": "AdditionalAttributes",
+      "items": {
+        "$ref": "#/definitions/AdditionalAttribute"
+      }
+    },
+    "AdditionalAttribute": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "variable": {
+          "type": "string"
+        },
+        "value": {
+          "type": ["boolean"]
+        }
+      },
+      "required": ["variable", "value"],
+      "title": "AdditionalAttribute"
+    },
+    "SortOrder": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "property": {
+          "type": "string"
+        },
+        "direction": {
+          "$ref": "#/definitions/Direction"
+        }
+      },
+      "required": ["direction", "property"],
+      "title": "SortOrder"
+    },
+    "CardOptions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "displayLabel": {
+          "type": "string"
+        },
+        "additionalProperties": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Property"
+          }
+        }
+      },
+      "required": ["displayLabel"],
+      "title": "CardOptions"
+    },
+    "Property": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "variable": {
+          "type": "string"
+        }
+      },
+      "required": ["label", "variable"],
+      "title": "Property"
+    },
+    "Edges": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "display": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "create": {
+          "type": "string"
+        }
+      },
+      "required": [],
+      "title": "Edges"
+    },
+    "NarrativeHighlight": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "NarrativeHighlight"
+    },
+    "Highlight": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "variable": {
+          "type": "string"
+        },
+        "allowHighlighting": {
+          "type": "boolean"
+        }
+      },
+      "required": ["allowHighlighting"],
+      "title": "Highlight"
+    },
+    "Layout": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "layoutVariable": {
+          "type": "string"
+        },
+        "allowPositioning": {
+          "type": "boolean"
+        }
+      },
+      "required": ["layoutVariable"],
+      "title": "Layout"
+    },
+    "SearchOptions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "fuzziness": {
+          "type": "number"
+        },
+        "matchProperties": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": ["fuzziness", "matchProperties"],
+      "title": "SearchOptions"
+    },
+    "SortOptions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sortOrder": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SortOrder"
+          }
+        },
+        "sortableProperties": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Property"
+          }
+        }
+      },
+      "required": ["sortOrder", "sortableProperties"],
+      "title": "SortOptions"
+    },
+    "Subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "entity": {
+          "$ref": "#/definitions/Entity"
+        },
+        "type": {
+          "type": "string"
+        }
+      },
+      "required": ["entity", "type"],
+      "title": "Subject"
+    },
+    "SkipLogic": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "type": "string",
+          "enum": ["SHOW", "SKIP"]
+        },
+        "filter": {
+          "$ref": "#/definitions/Filter"
+        }
+      },
+      "required": ["action", "filter"],
+      "title": "SkipLogic"
+    },
+    "codebook": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "node": {
+          "$ref": "#/definitions/Node"
+        },
+        "edge": {
+          "$ref": "#/definitions/Edge"
+        },
+        "ego": {
+          "$ref": "#/definitions/Ego"
+        }
+      },
+      "required": [],
+      "title": "codebook"
+    },
+    "Edge": {
+      "type": "object",
+      "additionalProperties": false,
+      "title": "Edge",
+      "patternProperties": {
+        ".+": {
+          "$ref": "#/definitions/EdgeTypeDef"
+        }
+      }
+    },
+    "EdgeTypeDef": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "color": {
+          "type": "string"
+        },
+        "variables": {
+          "$ref": "#/definitions/Variables"
+        }
+      },
+      "required": ["name", "color"],
+      "title": "EdgeTypeDef"
+    },
+    "Variables": {
+      "type": "object",
+      "additionalProperties": false,
+      "title": "Variables",
+      "patternProperties": {
+        ".+": {
+          "$ref": "#/definitions/Variable"
+        }
+      }
+    },
+    "Variable": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9._:-]+$"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "boolean",
+            "text",
+            "number",
+            "datetime",
+            "ordinal",
+            "scalar",
+            "categorical",
+            "layout",
+            "location"
+          ]
+        },
+        "component": {
+          "type": "string",
+          "enum": [
+            "Boolean",
+            "CheckboxGroup",
+            "Number",
+            "RadioGroup",
+            "Text",
+            "TextArea",
+            "Toggle",
+            "ToggleButtonGroup",
+            "Slider",
+            "VisualAnalogScale",
+            "LikertScale",
+            "DatePicker",
+            "RelativeDatePicker"
+          ]
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OptionElement"
+          }
+        },
+        "parameters": {
+          "type": "object"
+        },
+        "validation": {
+          "$ref": "#/definitions/Validation"
+        }
+      },
+      "required": ["type", "name"],
+      "title": "Variable"
+    },
+    "OptionClass": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "value": {
+          "$ref": "#/definitions/Value"
+        },
+        "negative": {
+          "type": "boolean"
+        }
+      },
+      "required": ["label", "value"],
+      "title": "OptionClass"
+    },
+    "Validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "required": {
+          "type": "boolean"
+        },
+        "requiredAcceptsNull": {
+          "type": "boolean"
+        },
+        "minLength": {
+          "type": "integer"
+        },
+        "maxLength": {
+          "type": "integer"
+        },
+        "minValue": {
+          "type": "integer"
+        },
+        "maxValue": {
+          "type": "integer"
+        },
+        "minSelected": {
+          "type": "integer"
+        },
+        "maxSelected": {
+          "type": "integer"
+        },
+        "unique": {
+          "type": "boolean"
+        },
+        "differentFrom": {
+          "type": "string"
+        },
+        "sameAs": {
+          "type": "string"
+        }
+      },
+      "title": "Validation"
+    },
+    "Node": {
+      "type": "object",
+      "additionalProperties": false,
+      "title": "Node",
+      "patternProperties": {
+        ".+": {
+          "$ref": "#/definitions/NodeTypeDef"
+        }
+      }
+    },
+    "NodeTypeDef": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "displayVariable": {
+          "type": "string"
+        },
+        "iconVariant": {
+          "type": "string"
+        },
+        "variables": {
+          "$ref": "#/definitions/Variables"
+        },
+        "color": {
+          "type": "string"
+        }
+      },
+      "required": ["name", "color"],
+      "title": "NodeTypeDef"
+    },
+    "Ego": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "variables": {
+          "$ref": "#/definitions/Variables"
+        }
+      }
+    },
+    "OptionElement": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/OptionClass"
+        },
+        {
+          "type": "integer"
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "title": "Variable Option"
+    },
+    "Value": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9._:-]+$"
+        },
+        {
+          "type": "boolean"
+        }
+      ],
+      "title": "Value"
+    },
+    "Entity": {
+      "type": "string",
+      "enum": ["edge", "node", "ego"],
+      "title": "Entity"
+    },
+    "Direction": {
+      "type": "string",
+      "enum": ["desc", "asc"],
+      "title": "Direction"
+    }
+  }
+}

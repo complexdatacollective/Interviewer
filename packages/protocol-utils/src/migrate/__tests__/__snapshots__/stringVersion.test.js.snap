@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`string version handling migrates version "1.0.0" correctly 1`] = `
+Object {
+  "codebook": Object {
+    "node": Object {
+      "disallowedType": Object {
+        "name": "disallowed_type_name",
+        "variables": Object {
+          "invalidExampleVariable": Object {
+            "name": "variable_with_disallowed_characters",
+          },
+          "invalidExampleVariableDuplicate": Object {
+            "name": "variable_with_disallowed_characters2",
+          },
+        },
+      },
+    },
+  },
+  "schemaVersion": 4,
+  "stages": Array [],
+}
+`;
