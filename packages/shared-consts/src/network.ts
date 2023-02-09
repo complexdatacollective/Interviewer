@@ -12,6 +12,7 @@ export type NcNode = NcEntity & {
   type: string;
   stageId?: string;
   promptIDs?: string[];
+  displayVariable?: string; // @deprecated
 };
 
 export type NcEdge = NcNode & {

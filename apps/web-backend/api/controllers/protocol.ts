@@ -1,6 +1,7 @@
 import { Context, FormDataFile, FormDataBody } from "https://deno.land/x/oak@v11.1.0/mod.ts";
 import { decompress } from "https://deno.land/x/zip@v1.2.5/mod.ts";
 import { Protocol } from '../../../../packages/shared-consts/dist/index.d.ts';
+import { validateProtocol } from '../../../../packages/protocol-utils/dist/index.js';
 import demoProtocol from '../../data/test/protocol.json' assert { type: "json" };
 
 // TODO: create a function to generate mock protocols
@@ -57,9 +58,10 @@ export default {
     const protocol = await Deno.readTextFile(`${tempDir}/protocol.json`);
     const protocolJSON: Protocol = JSON.parse(protocol);
 
-    console.log(protocolJSON);
-
     // TODO: validate the protocol
+    console.log('Validating....');
+    const result = validateProtocol(protocolJSON);
+    console.log('Result: ', result);
 
 
     // TODO: save the protocol to the database

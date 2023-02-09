@@ -7,7 +7,6 @@ export enum EntityTypes {
   node = 'node',
 }
 
-
 export type EntityTypeDefinition = {
   name?: string,
   color?: Color,

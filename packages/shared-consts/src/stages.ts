@@ -29,10 +29,17 @@ export type PromptEdges = {
   create?: string;
 }
 
+export type AdditionalAttribute = {
+  variable: string;
+  value: boolean;
+}
+
+export type AdditionalAttributes = AdditionalAttribute[];
+
 export type Prompt = {
   id: string;
   text: string;
-  additionalAttributes?: object[];
+  additionalAttributes?: AdditionalAttributes;
   createEdge?: string;
   edgeVariable?: string;
   negativeLabel?: string;
@@ -93,6 +100,20 @@ export type ItemDefinition = {
   size: 'SMALL' | 'MEDIUM' | 'LARGE' | string;
 };
 
+export type StageSubject = {
+  entity: 'ego' | 'node' | 'edge';
+  type: string;
+}
+
+export type FormField = {
+  variable: string;
+  prompt: string;
+}
+
+export type Form = {
+  title: string;
+  fields: FormField[];
+}
 
 export interface Stage {
   id: string;
@@ -100,9 +121,9 @@ export interface Stage {
   label: string;
   title?: string; // Todo: remove this
   interviewScript?: string;
-  form?: object, // Todo: create a Form type
+  form?: Form;
   introductionPanel?: Object, // Todo: create a Panel type
-  subject?: object;
+  subject?: StageSubject | StageSubject[];
   panels?: object[];
   prompts?: Prompt[];
   quickAdd?: string,

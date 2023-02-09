@@ -1,9 +1,0 @@
-export default v4;
-declare namespace v4 {
-    export const version: number;
-    export { notes };
-    export { migration };
-}
-declare const notes: "\n- Automatically rename **variable names** and **ordinal/categorical values** to meet stricter requirements. Only letters, numbers, and the symbols `.`, `_`, `-`, `:` will be permitted. Spaces will be replaced with underscore characters (`_`), and any other symbols will be removed. Variables that meet these requirements already **will not be modified**.\n- Add a numerical suffix (`variable1`, `variable2`, etc.) to any variables or categorical/ordinal values that clash as a result of these changes.\n- Rename node and edge types to ensure they are unique, and conform to the same requirements as variable names. Names that clash will get a numerical suffix, as above.\n- **NOTE:** If you are using external network data, you must ensure that you update your column headings manually to meet the same requirements regarding variable names outlined above. See our revised [documentation on variable naming](https://documentation.networkcanvas.com/reference/variable-naming/).\n- Remove any non-boolean 'additional variables' from prompts. It was necessary to simplify this feature, and so only boolean variable types will be supported moving forwards. Any non-boolean variables you created that will be removed by this migration will remain in your codebook, but will be marked 'unused'. You should review and remove these manually, or replace them with equivalent boolean variables.";
-declare function migration(protocol: any): any;
-//# sourceMappingURL=4.d.ts.map

@@ -18,11 +18,25 @@ export type OptionsOption = {
   value: string | number | boolean;
 };
 
+export type VariableValidation = {
+  required?: boolean;
+  minValue?: number;
+  maxValue?: number;
+  minLength?: number;
+  maxLength?: number;
+  pattern?: string;
+  unique?: boolean;
+  sameAs?: string;
+  differentFrom?: string;
+  greaterThanVariable?: string;
+  lessThanVariable?: string;
+};
+
 export type VariableDefinition = {
   name: string;
   type: string;
   component?: string;
-  validation?: Record<string, any>;
+  validation?: VariableValidation;
   options?: OptionsOption[];
   parameters?: {
     minLabel?: string;

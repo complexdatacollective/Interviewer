@@ -2,16 +2,17 @@
   "name": "@codaco/protocol-utils",
   "version": "0.0.1-alpha.1",
   "description": "Utilities for working with Network Canvas protocols",
-  "type": "module",
   "files": [
-    "build"
+    "dist"
   ],
-  "main": "./build/index.js",
-  "types": "./build/index.d.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
   "scripts": {
     "test": "jest",
-    "clean": "rimraf build/",
-    "build": "npm run clean && tsc --project tsconfig.json",
+    "dev": "tsup --watch",
+    "build": "tsup",
     "validate-protocol": "node src/scripts/validate-protocol.js",
     "build-schemas": "node src/scripts/build-schemas.js",
     "lint": "eslint src/**/*.ts",
@@ -21,8 +22,8 @@
     "type": "git",
     "url": "git+https://github.com/complexdatacollective/protocol-utils.git"
   },
-  "author": "jthrilly",
-  "license": "MIT",
+  "author": "Joshua Melville",
+  "license": "GPLv3",
   "bugs": {
     "url": "https://github.com/complexdatacollective/protocol-utils/issues"
   },
@@ -39,6 +40,7 @@
     "jest": "^27.5.1",
     "lodash": "^4.17.21",
     "rimraf": "^4.1.2",
+    "tsup": "^6.6.0",
     "typescript": "^4.9.5",
     "uuid": "^9.0.0"
   }
