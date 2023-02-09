@@ -1,0 +1,48 @@
+{
+  "name": "@codaco/shared-consts",
+  "version": "0.0.1-alpha.3",
+  "description": "Shared constants and typescript definitions for the Network Canvas project.",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "test": "xv dist",
+    "lint": "xo",
+    "start": "esno src/index.ts",
+    "dev": "tsup --watch",
+    "build": "tsup"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/complexdatacollective/shared-consts.git"
+  },
+  "keywords": [
+    "typescript",
+    "library"
+  ],
+  "author": "codaco",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/complexdatacollective/shared-consts/issues"
+  },
+  "homepage": "https://github.com/complexdatacollective/shared-consts#readme",
+  "devDependencies": {
+    "@tsconfig/node18": "^1.0.1",
+    "@types/node": "^18.13.0",
+    "esno": "^0.12.1",
+    "tsup": "^6.6.0",
+    "typescript": "^4.9.5",
+    "xo": "0.46.4",
+    "xv": "^1.0.2"
+  },
+  "files": [
+    "dist",
+    "!dist/**/*.test.*",
+    "!dist/**/*.test.*.map",
+    "!dist/**/*.test.d.ts"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

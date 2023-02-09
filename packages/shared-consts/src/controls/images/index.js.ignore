@@ -1,0 +1,29 @@
+// import CheckboxGroup from './CheckboxGroup.png';
+// import RadioGroup from './RadioGroup.png';
+// import TextInput from './TextInput.png';
+// import TextArea from './TextArea.png';
+// import NumberInput from './NumberInput.png';
+// import Toggle from './Toggle.png';
+// import ToggleButtonGroup from './ToggleButtonGroup.png';
+// import DatePicker from './DatePicker.png';
+// import RelativeDatePicker from './RelativeDatePicker.png';
+// import LikertScale from './LikertScale.png';
+// import VisualAnalogScale from './VisualAnalogScale.png';
+// import BooleanChoice from './BooleanChoice.png';
+
+// export default {
+//   CheckboxGroup,
+//   RadioGroup,
+//   TextInput,
+//   TextArea,
+//   NumberInput,
+//   Toggle,
+//   ToggleButtonGroup,
+//   DatePicker,
+//   RelativeDatePicker,
+//   LikertScale,
+//   VisualAnalogScale,
+//   BooleanChoice,
+// };
+
+export default {};
