@@ -26,7 +26,6 @@ const EnhancedNode = DragSource(Node);
 class NodeList extends Component {
   constructor(props) {
     super(props);
-    console.log('nodelist sort order', props.sortOrder);
 
     const sorter = createSorter(props.sortOrder);
     const sortedNodes = sorter(props.items);
