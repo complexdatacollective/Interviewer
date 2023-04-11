@@ -8,14 +8,14 @@ import { entityAttributesProperty } from '@codaco/shared-consts';
 import createSorter from '../utils/createSorter';
 import { get } from '../utils/lodash-replacements';
 
-export const getFilteredList = (items, filterTerm, propertyPath) => {
+export const getFilteredList = (items, filterTerm, searchPropertyPath) => {
   if (!filterTerm) { return items; }
 
   const normalizedFilterTerm = filterTerm.toLowerCase();
 
   return items.filter(
     (item) => {
-      const itemAttributes = propertyPath ? Object.values(get(item, propertyPath, {}))
+      const itemAttributes = searchPropertyPath ? Object.values(get(item, searchPropertyPath, {}))
         : Object.values(item);
       // Include in filtered list if any of the attribute property values
       // include the filter value
@@ -62,25 +62,32 @@ const itemVariants = {
 const NewFilterableListWrapper = (props) => {
   const {
     items,
-    propertyPath,
+    searchPropertyPath,
     ItemComponent,
-    initialSortProperty,
-    initialSortDirection,
     sortableProperties,
     loading,
     onFilterChange,
   } = props;
 
-  const [filterTerm, setFilterTerm] = useState(null);
-  const [sortProperty, setSortProperty] = useState(initialSortProperty);
-  const [sortAscending, setSortAscending] = useState(initialSortDirection === 'asc');
+  // Look for the property `default: true` on a sort rule, or use the first
+  const defaultSortRule = () => {
+    const defaultSort = sortableProperties.findIndex(
+      (property) => property.default,
+    );
 
-  const handleSetSortProperty = (property) => {
-    if (sortProperty === property) {
-      setSortAscending(!sortAscending);
+    return defaultSort > -1 ? defaultSort : 0;
+  };
+
+  const [filterTerm, setFilterTerm] = useState(null);
+  const [sortRule, setSortRule] = useState(defaultSortRule());
+  const [sortDirection, setSortDirection] = useState('asc');
+
+  const handleSetSortProperty = (index) => {
+    if (sortRule === index) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
     } else {
-      setSortAscending(true);
-      setSortProperty(property);
+      setSortRule(index);
+      setSortDirection('asc');
     }
   };
 
@@ -90,12 +97,14 @@ const NewFilterableListWrapper = (props) => {
     if (onFilterChange) { onFilterChange(value); }
   };
 
-  const filteredItems = onFilterChange ? items : getFilteredList(items, filterTerm, propertyPath);
+  const filteredItems = onFilterChange
+    ? items : getFilteredList(items, filterTerm, searchPropertyPath);
 
   const sortedItems = createSorter([{
-    property: sortProperty,
-    direction: sortAscending ? 'asc' : 'desc',
-  }], {}, propertyPath)(filteredItems);
+    property: sortableProperties[sortRule].variable,
+    type: sortableProperties[sortRule].type,
+    direction: sortDirection,
+  }])(filteredItems);
 
   return (
     <div className="new-filterable-list">
@@ -104,19 +113,19 @@ const NewFilterableListWrapper = (props) => {
           {(sortableProperties && sortableProperties.length > 0)
             && (
               <div className="scroll-container">
-                {sortableProperties.map((sortField) => (
+                {sortableProperties.map((sortField, index) => (
                   <div
                     tabIndex="0"
                     role="button"
-                    className={`filter-button ${sortProperty === sortField.variable ? 'filter-button--active' : ''}`}
+                    className={`filter-button ${sortRule === index ? 'filter-button--active' : ''}`}
                     key={sortField.variable}
-                    onClick={() => handleSetSortProperty(sortField.variable)}
+                    onClick={() => handleSetSortProperty(index)}
                   >
                     {
                       (sortField.label)
                     }
                     {
-                      sortProperty === sortField.variable && (sortAscending ? ' \u25B2' : ' \u25BC')
+                      sortRule === index && (sortDirection === 'asc' ? ' \u25B2' : ' \u25BC')
                     }
                   </div>
                 ))}
@@ -177,7 +186,7 @@ const NewFilterableListWrapper = (props) => {
 NewFilterableListWrapper.propTypes = {
   ItemComponent: PropTypes.elementType.isRequired,
   items: PropTypes.array.isRequired,
-  propertyPath: PropTypes.string,
+  searchPropertyPath: PropTypes.string,
   initialSortProperty: PropTypes.string.isRequired,
   initialSortDirection: PropTypes.oneOf(['asc', 'desc']),
   sortableProperties: PropTypes.array,
@@ -188,7 +197,7 @@ NewFilterableListWrapper.propTypes = {
 
 NewFilterableListWrapper.defaultProps = {
   initialSortDirection: 'asc',
-  propertyPath: entityAttributesProperty,
+  searchPropertyPath: entityAttributesProperty,
   sortableProperties: [],
   loading: false,
   resetFilter: [],

@@ -50,21 +50,22 @@ const ResumeSessionPicker = ({
       title="Select an Interview to Resume"
       ItemComponent={SessionCard}
       items={formattedSessions}
-      propertyPath={null}
-      initialSortProperty="updatedAt"
-      initialSortDirection="desc"
       sortableProperties={[
         {
           label: 'Last Changed',
           variable: 'updatedAt',
+          type: 'date',
+          default: true,
         },
         {
           label: 'Case ID',
           variable: 'caseId',
+          type: 'string',
         },
         {
           label: 'Progress',
           variable: 'progress',
+          type: 'number',
         },
       ]}
     />

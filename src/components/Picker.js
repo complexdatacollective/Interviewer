@@ -8,9 +8,7 @@ const Picker = ({
   title,
   ItemComponent,
   items,
-  propertyPath,
-  initialSortProperty,
-  initialSortDirection,
+  searchPropertyPath,
   sortableProperties,
   footer,
   header,
@@ -22,15 +20,14 @@ const Picker = ({
     footer={footer}
     fullheight
   >
-    { header }
+    {header}
     <NewFilterableListWrapper
       ItemComponent={ItemComponent}
       items={items}
-      propertyPath={propertyPath}
-      initialSortProperty={initialSortProperty}
-      initialSortDirection={initialSortDirection}
+      searchPropertyPath={searchPropertyPath}
       sortableProperties={sortableProperties}
     />
+    <div style={{ padding: '1.2rem' }} />
   </Overlay>
 );
 

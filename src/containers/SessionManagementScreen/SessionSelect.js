@@ -142,22 +142,23 @@ const SessionSelect = ({
       <NewFilterableListWrapper
         ItemComponent={SessionCard}
         items={filteredSessions}
-        propertyPath={null}
-        initialSortProperty="updatedAt"
-        initialSortDirection="desc"
         onFilterChange={handleFilterChange}
         sortableProperties={[
           {
             label: 'Last Changed',
             variable: 'updatedAt',
+            type: 'date',
+            default: true,
           },
           {
             label: 'Case ID',
             variable: 'caseId',
+            type: 'string',
           },
           {
             label: 'Progress',
             variable: 'progress',
+            type: 'number',
           },
         ]}
       />

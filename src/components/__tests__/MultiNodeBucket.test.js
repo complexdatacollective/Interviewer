@@ -11,7 +11,7 @@ describe('MultiNodeBucket', () => {
   let bucket;
 
   beforeEach(() => {
-    bucket = mount(<MultiNodeBucket nodes={[{}]} />);
+    bucket = mount(<MultiNodeBucket nodes={[{}]} sortOrder={[]} />);
   });
 
   it('renders connected node items', () => {
