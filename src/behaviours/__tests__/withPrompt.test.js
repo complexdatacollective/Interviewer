@@ -18,6 +18,11 @@ describe('withPrompt', () => {
     },
     installedProtocols: {
       mockProtocol: {
+        codebook: {
+          node: {},
+          edge: {},
+          ego: {},
+        },
         stages: [{}, {}],
       },
     },
