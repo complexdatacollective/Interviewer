@@ -9,7 +9,7 @@ const defaultFuseOptions = {
 
 /**
  * Convert protocol config options into a format
- * usable by useSort. Essentially specific to SearchableList.
+ * usable by SearchableList.
  */
 const useFuseOptions = (searchOptions, fallbackFuseOptions = defaultFuseOptions, path = ['data', 'attributes']) => {
   const matchProperties = get(searchOptions, 'matchProperties');

@@ -16,7 +16,7 @@ import useDropMonitor from '../behaviours/DragAndDrop/useDropMonitor';
 import DropOverlay from './Interfaces/NameGeneratorRoster/DropOverlay';
 
 const SortButton = ({
-  setSortByProperty,
+  handleClick,
   variable,
   color,
   label,
@@ -27,7 +27,7 @@ const SortButton = ({
     tabIndex={0}
     role="button"
     className={`filter-button ${isActive ? 'filter-button--active' : ''}`}
-    onClick={() => setSortByProperty(variable)}
+    onClick={handleClick}
     key={variable}
     color={color}
   >
@@ -90,12 +90,14 @@ const SearchableList = (props) => {
     sortByProperty,
     sortDirection,
     setSortByProperty,
+    setSortType,
     setSortDirection,
   ] = useSort(results, initialSortOrder);
 
   useEffect(() => {
     if (hasQuery) {
       setSortByProperty(['relevance']);
+      setSortType('number');
       setSortDirection('desc');
       return;
     }
@@ -172,6 +174,8 @@ const SearchableList = (props) => {
                   className={`filter-button ${isEqual(sortByProperty, ['relevance']) ? 'filter-button--active' : ''}`}
                   onClick={() => {
                     setSortByProperty(['relevance']);
+                    setSortType('number');
+                    setSortDirection('desc');
                   }}
                   role="button"
                   tabIndex={0}
@@ -183,14 +187,20 @@ const SearchableList = (props) => {
                 </div>
               )
             }
-            {sortOptions.sortableProperties.map(({ variable, label }) => {
-              const isActive = isEqual(variable, sortByProperty);
+            {sortOptions.sortableProperties.map(({ property, type, label }) => {
+              const isActive = isEqual(property, sortByProperty);
               const color = isActive ? 'primary' : 'platinum';
+
+              const handleSort = () => {
+                setSortByProperty(property);
+                setSortType(type);
+              };
+
               return (
                 <SortButton
-                  key={variable}
-                  variable={variable}
-                  setSortByProperty={setSortByProperty}
+                  key={property}
+                  variable={property}
+                  handleClick={handleSort}
                   color={color}
                   label={label}
                   isActive={isActive}

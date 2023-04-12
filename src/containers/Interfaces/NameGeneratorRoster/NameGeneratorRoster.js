@@ -89,6 +89,8 @@ const NameGeneratorRoster = (props) => {
 
   const sortOptions = useSortableProperties(nodeVariables, stage.sortOptions);
 
+  console.log('sortOptions', sortOptions);
+
   const stageNodeCount = usePropSelector(makeGetStageNodeCount, props, true);
   // eslint-disable-next-line @codaco/spellcheck/spell-checker
   const minNodes = minNodesWithDefault(get(props, ['stage', 'behaviours', 'minNodes']));

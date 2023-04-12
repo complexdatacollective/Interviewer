@@ -27,7 +27,7 @@ const MultiNodeBucket = (props) => {
   const [sortedNodes, setSortedNodes] = useState([]);
 
   useEffect(() => {
-    const sorter = createSorter(sortOrder);
+    const sorter = createSorter(sortOrder); // Uses the new sortOrder via withPrompt
     const sorted = sorter(nodes);
 
     // On first run, just set the nodes.

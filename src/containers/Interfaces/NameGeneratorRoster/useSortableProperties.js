@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { compact } from 'lodash';
 import { convertNamesToUUIDs } from './helpers';
 import { get } from '../../../utils/lodash-replacements';
+import { mapNCType } from '../../../utils/createSorter';
 
 /**
  * Convert protocol config options into a format
@@ -19,9 +20,11 @@ const useSortableProperties = (variableDefinitions, sortOptions, path = ['data',
   const enhancedInitialSortOrder = useMemo(
     () => {
       const property = convertNamesToUUIDs(variableDefinitions, initialSortProperty);
+      const type = get(variableDefinitions, [property, 'type']);
       return {
         ...initialSortOrder,
         property: compact([...path, property]),
+        type: mapNCType(type),
       };
     },
     [initialSortOrder],
@@ -33,9 +36,11 @@ const useSortableProperties = (variableDefinitions, sortOptions, path = ['data',
       return sortableProperties
         .map(({ variable, label }) => {
           const uuid = convertNamesToUUIDs(variableDefinitions, variable);
+          const type = get(variableDefinitions, [uuid, 'type']);
           return {
-            variable: compact([...path, uuid]),
+            property: compact([...path, uuid]),
             label,
+            type: mapNCType(type),
           };
         });
     },

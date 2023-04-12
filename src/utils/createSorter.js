@@ -207,7 +207,7 @@ const createSorter = (sortRules = []) => {
  * - "layout",
  * - "location"
  */
-const mapNCType = (type) => {
+export const mapNCType = (type) => {
   switch (type) {
     case 'text':
     case 'categorical':
