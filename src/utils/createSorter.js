@@ -207,7 +207,7 @@ const createSorter = (sortRules = []) => {
  * - "layout",
  * - "location"
  */
-const mapNCType = (type) => {
+export const mapNCType = (type) => {
   switch (type) {
     case 'text':
     case 'categorical':
@@ -228,8 +228,9 @@ const mapNCType = (type) => {
   }
 };
 
-// Conditionally add the entity attributes property to the path
-// Path is assumed to be a single variable UUID.
+/**
+ * Add the entity attributes property to the property path of a sort rule.
+*/
 const propertyWithAttributePath = (rule) => {
   // 'type' rules are a special case - they exist in the protocol, but do not
   // refer to an entity attribute (they refer to a model property)
@@ -256,7 +257,8 @@ const propertyWithAttributePath = (rule) => {
 export const processProtocolSortRule = (codebookVariables) => (sortRule) => {
   const variableDefinition = get(codebookVariables, sortRule.property, null);
 
-  // Don't modify the rule there is no variable definition
+  // Don't modify the rule if there is no variable definition matching the
+  // property.
   if (variableDefinition === null) {
     return sortRule;
   }

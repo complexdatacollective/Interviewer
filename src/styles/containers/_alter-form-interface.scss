@@ -69,7 +69,7 @@
       --base-node-size: #{unit(13)};
       display: flex;
       max-height: 80%;
-      min-height: 30%;
+      min-height: unit(2);
       width: 100%;
       max-width: 65rem;
       padding: unit(1) unit(2) unit(2);

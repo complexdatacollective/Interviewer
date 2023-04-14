@@ -96,21 +96,23 @@ const ManageProtocolsOverlay = ({
       )}
       ItemComponent={SelectableProtocolCard}
       items={formattedProtocols()}
-      propertyPath={entityAttributesProperty}
-      initialSortProperty="name"
-      initialSortDirection="asc"
+      searchPropertyPath={entityAttributesProperty}
       sortableProperties={[
         {
           label: 'Name',
-          variable: 'name',
+          variable: ['attributes', 'name'],
+          type: 'string',
+          default: true,
         },
         {
           label: 'Installed',
-          variable: 'installationDate',
+          variable: ['attributes', 'installationDate'],
+          type: 'date',
         },
         {
           label: 'Modified',
-          variable: 'lastModified',
+          variable: ['attributes', 'lastModified'],
+          type: 'date',
         },
       ]}
     />

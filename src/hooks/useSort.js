@@ -5,6 +5,7 @@ import createSorter from '../utils/createSorter';
 const defaultSortOrder = {
   direction: 'asc',
   property: ['data', 'attributes', 'name'],
+  type: 'string',
 };
 
 /**
@@ -30,8 +31,14 @@ const defaultSortOrder = {
  * ] = useSort(list, { property: 'name', direction: 'asc'});
  */
 const useSort = (list, initialSortOrder = defaultSortOrder) => {
-  const { property: initialProperty, direction: initialDirection } = initialSortOrder;
+  const {
+    property: initialProperty,
+    direction: initialDirection,
+    type: initialType,
+  } = initialSortOrder;
+
   const [sortByProperty, setSortByProperty] = useState(initialProperty);
+  const [sortType, setSortType] = useState(initialType);
   const [sortDirection, setSortDirection] = useState(initialDirection);
 
   const toggleSortDirection = () => setSortDirection(
@@ -63,14 +70,22 @@ const useSort = (list, initialSortOrder = defaultSortOrder) => {
     const rule = {
       property: sortByProperty,
       direction: sortDirection,
+      type: sortType,
     };
 
     const sorter = createSorter([rule]);
 
     return sorter(list);
-  }, [list, sortByProperty, sortDirection]);
+  }, [list, sortByProperty, sortDirection, sortType]);
 
-  return [sortedList, sortByProperty, sortDirection, updateSortByProperty, setSortDirection];
+  return [
+    sortedList,
+    sortByProperty,
+    sortDirection,
+    updateSortByProperty,
+    setSortType,
+    setSortDirection,
+  ];
 };
 
 export default useSort;

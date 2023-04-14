@@ -21,6 +21,9 @@ it('it does not change order when rules are empty', () => {
 
   const sorter = createSorter();
   expect(sorter(mockItems)).toMatchObject(mockItems);
+
+  const sorter2 = createSorter([]);
+  expect(sorter2(mockItems)).toMatchObject(mockItems);
 });
 
 it('it does not add any properties to items', () => {

@@ -48,7 +48,7 @@ const NewSessionOverlay = ({
           onSubmit={onSubmitForm}
           {...formConfig} // eslint-disable-line react/jsx-props-no-spreading
         >
-          <div className="case-id-form__footer">
+          <div className="case-id-form__footer" style={{ marginBottom: '1.2rem' }}>
             <Button aria-label="Submit" type="submit">
               Start interview
             </Button>
@@ -67,7 +67,7 @@ NewSessionOverlay.propTypes = {
 
 NewSessionOverlay.defaultProps = {
   show: false,
-  onClose: () => {},
+  onClose: () => { },
 };
 
 export default NewSessionOverlay;

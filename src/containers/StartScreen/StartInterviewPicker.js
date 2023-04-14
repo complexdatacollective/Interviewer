@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ProtocolCard from '../../components/Cards/ProtocolCard';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
-import NewFilterableListWrapper from '../../components/NewFilterableListWrapper';
 import NewSessionOverlay from './NewSessionOverlay';
-import { Overlay } from '../Overlay';
+import Picker from '../../components/Picker';
 
 const StartInterviewPicker = ({
   show,
@@ -54,30 +53,29 @@ const StartInterviewPicker = ({
   });
 
   return (
-    <Overlay
-      show={show}
-      onClose={onClose}
-      title="Select a Protocol"
-      fullheight
-    >
-      <NewFilterableListWrapper
+    <>
+      <Picker
+        show={show}
+        onClose={onClose}
+        title="Select a Protocol"
         ItemComponent={ProtocolCard}
         items={formattedProtocols}
-        propertyPath={null}
-        initialSortProperty="name"
-        initialSortDirection="asc"
+        searchPropertyPath="attributes"
         sortableProperties={[
           {
             label: 'Name',
-            variable: 'name',
+            variable: ['attributes', 'name'],
+            type: 'string',
           },
           {
             label: 'Installed',
-            variable: 'installationDate',
+            variable: ['attributes', 'installationDate'],
+            type: 'number',
           },
           {
             label: 'Modified',
-            variable: 'lastModified',
+            variable: ['attributes', 'lastModified'],
+            type: 'date',
           },
         ]}
       />
@@ -86,7 +84,7 @@ const StartInterviewPicker = ({
         onClose={handleCloseNewSessionOverlay}
         show={showNewSessionOverlay}
       />
-    </Overlay>
+    </>
   );
 };
 

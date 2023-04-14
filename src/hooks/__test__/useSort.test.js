@@ -39,6 +39,7 @@ const mockList = [
 const sortOrder = {
   property: ['data', 'name'],
   direction: 'desc',
+  type: 'string',
 };
 
 const TestConsumer = ({ list, initialSortOrder }) => {
@@ -47,6 +48,7 @@ const TestConsumer = ({ list, initialSortOrder }) => {
     sortByProperty,
     sortDirection,
     updateSortByProperty,
+    setSortType,
     setSortDirection,
   ] = useSort(
     list,
@@ -60,6 +62,7 @@ const TestConsumer = ({ list, initialSortOrder }) => {
         sortByProperty,
         sortDirection,
         updateSortByProperty,
+        setSortType,
         setSortDirection,
       }}
     />

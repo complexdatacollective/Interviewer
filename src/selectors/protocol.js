@@ -140,7 +140,7 @@ export const getAllVariableUUIDsByEntity = createSelector(
       };
     });
 
-    return variables; // Spread converts Set to Array
+    return variables;
   },
 );
 
