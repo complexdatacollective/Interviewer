@@ -84,7 +84,6 @@ class NameGeneratorAutoComplete extends Component {
             id={ListId}
             listId={`${stage.id}_${prompt.id}_${ListId}`}
             items={nodesForPrompt}
-            stage={stage}
             itemType="EXISTING_NODE"
           />
         </div>
