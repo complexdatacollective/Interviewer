@@ -6,8 +6,8 @@
   "author": "Complex Data Collective",
   "private": true,
   "engines": {
-    "node": "12.14.1",
-    "npm": "7.6.3"
+    "node": "14.21.3",
+    "npm": "8.3.2"
   },
   "scripts": {
     "pack": "electron-builder --dir",
@@ -186,6 +186,7 @@
     "@babel/runtime": "7.10.1",
     "archiver": "^4.0.1",
     "d3-force": "~3.0.0",
+    "dmg-builder": "~23.6.0",
     "electron-devtools-installer": "^3.0.0",
     "zeroconf": "^0.1.4"
   },
