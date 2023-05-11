@@ -23,7 +23,7 @@ async function note(params) {
       appBundleId: 'org.codaco.NetworkCanvasInterviewer6',
       appPath,
       appleId: 'developers@coda.co',
-      appleIdPassword: '@keychain:altoolpw',
+      appleIdPassword: '@keychain:AC_PASSWORD',
     });
   } catch (error) {
     console.error(error);

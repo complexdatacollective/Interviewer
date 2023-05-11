@@ -14,7 +14,7 @@ React Scripts
 
 ## Node/NPM Version
 
-This project currently requires version `12.14.1` of node, and version `6.13.4` of npm. These are the only supported versions for this project.
+This project currently requires version `14.21.3` of node, and version `8.3.2` of npm. These are the only supported versions for this project.
 
 As a convenience, the repository contains a `.node-version` file that enables convinient use of a node environment manager.
 
@@ -63,7 +63,7 @@ Is added to to `/etc/msswitch.conf`.
   + Make sure the "rebuild" step above works
   + [More Info](https://github.com/electron/electron/blob/master/docs/tutorial/using-native-node-modules.md#using-native-node-modules)
 - MDNS doesn't work on linux (getaddr
-  + Try adding `hosts: files mdns4_minimal mdns6_minimal [NOTFOUND=return] dns` to `/etc/msswitch.conf` 
+  + Try adding `hosts: files mdns4_minimal mdns6_minimal [NOTFOUND=return] dns` to `/etc/msswitch.conf`
 
 ## Installation
 
