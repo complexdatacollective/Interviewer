@@ -6,8 +6,7 @@ import { actionCreators as toastActions } from '../ducks/modules/toasts';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../ducks/modules/dialogs';
 import { actionCreators as exportProgressActions } from '../ducks/modules/exportProgress';
-import { withErrorDialog } from '../ducks/modules/errors';
-import ApiClient from './ApiClient';
+
 import FileExportManager from './network-exporters/src/FileExportManager';
 import { getRemoteProtocolID } from './networkFormat';
 
@@ -33,10 +32,53 @@ const showCancellationToast = () => {
   }));
 };
 
-const fatalExportErrorAction = withErrorDialog((error) => ({
-  type: 'SESSION_EXPORT_FATAL_ERROR',
-  error,
-}));
+const electron = require('electron');
+
+const { BrowserWindow } = electron.remote;
+
+export const exportToPDF = async (sessionList, filename) => {
+  console.log('exportToPDF', sessionList, filename);
+
+  // filepath will be from from user selected path. maybe as a prop on this function?
+  // right now, it's just the filename saved within project.
+  const filepath = `${filename}.pdf`;
+
+  return new Promise((resolve) => {
+    // open browser window
+    const pdfWindow = new BrowserWindow({
+      parent: global.appWindow,
+      modal: true,
+      show: true,
+      webPreferences: { nodeIntegration: true },
+      height: 900,
+      width: 1024,
+      menuBarVisible: false,
+    });
+
+    pdfWindow.loadFile('index.html');
+
+    // hide browser window
+
+    // pass sessionList to browser window
+    pdfWindow.webContents.send('SESSION_DATA', sessionList);
+
+    // call remote.getCurrentWebContents();
+
+    pdfWindow.webContents.on('did-finish-load', () => {
+      pdfWindow.webContents.printToPDF({}).then((data) => {
+        // write PDF to file
+        const fs = require('fs');
+        fs.writeFile(filepath, data, (error) => {
+          if (error) {
+            console.log('error', error);
+          } else {
+            console.log('PDF saved');
+          }
+        });
+      });
+    });
+  });
+};
 
 export const exportToFile = (sessionList, filename) => {
   // Reset exportProgress state
@@ -164,94 +206,4 @@ export const exportToFile = (sessionList, filename) => {
     }), {});
 
   return fileExportManager.exportSessions(sessionList, reformatedProtocols);
-};
-
-export const exportToServer = (sessionList) => {
-  const errors = [];
-  const succeeded = [];
-
-  const { pairedServer } = getState();
-
-  const client = new ApiClient(pairedServer);
-  client.addTrustedCert();
-
-  client.on('begin', () => {
-    setInitialExportStatus();
-  });
-
-  client.on('update', ({ statusText, progress }) => {
-    dispatch(exportProgressActions.update({
-      statusText,
-      percentProgress: progress,
-    }));
-  });
-
-  client.on('session-exported', (sessionId) => {
-    succeeded.push(sessionId);
-  });
-
-  client.on('error', (error) => {
-    errors.push(error);
-  });
-
-  client.on('finished', () => {
-    dispatch(exportProgressActions.reset());
-
-    if (succeeded.length > 0) {
-      batch(() => {
-        succeeded.forEach(
-          (successfulExport) => dispatch(sessionsActions.setSessionExported(successfulExport)),
-        );
-      });
-    }
-
-    if (errors.length > 0) {
-      const errorList = errors.map((error, index) => (
-        <li key={index}>
-          <Icon name="warning" />
-          {error}
-        </li>
-      ));
-
-      dispatch(dialogActions.openDialog({
-        type: 'Warning',
-        title: 'Errors encountered during export',
-        canCancel: false,
-        message: (
-          <>
-            <p>
-              Your export completed, but non-fatal errors were encountered during the process. This
-              may mean that not all sessions were transferred to Server.
-              Review the details of these errors below, and ensure that you check the data you
-              received.
-            </p>
-            <strong>Errors:</strong>
-            <ul className="export-error-list">{errorList}</ul>
-          </>
-        ),
-      }));
-
-      return;
-    }
-
-    dispatch(toastActions.addToast({
-      type: 'success',
-      title: 'Export Complete!',
-      autoDismiss: true,
-      content: (
-        <>
-          <p>Your sessions were exported successfully.</p>
-        </>
-      ),
-    }));
-  });
-
-  const exportPromise = client.exportSessions(sessionList);
-
-  exportPromise.catch((error) => {
-    dispatch(fatalExportErrorAction(error));
-    exportPromise.abort();
-  });
-
-  return exportPromise;
 };

@@ -4,18 +4,14 @@ import sanitizeFilename from 'sanitize-filename';
 import Button from '@codaco/ui/lib/components/Button';
 import { Modal } from '@codaco/ui/lib/components/Modal';
 import ExportSprite from '@codaco/ui/lib/components/Sprites/ExportSprite';
-import { Text } from '@codaco/ui/lib/components/Fields';
-import { Scroller } from '@codaco/ui';
 import { Overlay } from '../Overlay';
-import useServerConnectionStatus from '../../hooks/useServerConnectionStatus';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { withErrorDialog } from '../../ducks/modules/errors';
-import { exportToFile, exportToServer } from '../../utils/exportProcess';
+import { exportToPDF } from '../../utils/exportProcess';
 import { asNetworkWithSessionVariables } from '../../utils/networkFormat';
 import SessionSelect from './SessionSelect';
-import ExportOptions from '../../components/SettingsMenu/Sections/ExportOptions';
-import { isCordova } from '../../utils/Environment';
+
 import { get } from '../../utils/lodash-replacements';
 
 const fatalExportErrorAction = withErrorDialog((error) => ({
@@ -29,8 +25,6 @@ const DataExportScreen = ({ show, onClose }) => {
   const [filename, setFilename] = useState('networkCanvasExport');
   const [abortHandlers, setAbortHandlers] = useState(null);
 
-  const pairedServer = useSelector((state) => state.pairedServer);
-  const pairedServerConnection = useServerConnectionStatus(pairedServer);
   const { statusText, percentProgress } = useSelector((state) => state.exportProgress);
 
   const dispatch = useDispatch();
@@ -44,10 +38,7 @@ const DataExportScreen = ({ show, onClose }) => {
 
   const forward = () => {
     setStep(step + 1);
-  };
-
-  const backward = () => {
-    setStep(step - 1);
+    console.log('step', step);
   };
 
   const sessions = useSelector((state) => state.sessions);
@@ -64,35 +55,10 @@ const DataExportScreen = ({ show, onClose }) => {
       );
     });
 
-  const exportSessions = (toServer = false) => {
-    setStep(3);
+  const exportSessions = () => {
+    setStep(2);
 
-    if (toServer) {
-      exportToServer(getExportableSessions())
-        .then(onClose)
-        .catch((error) => {
-          // Fatal error handling
-          dispatch(fatalExportErrorAction(error));
-          onClose();
-        });
-      return;
-    }
-
-    exportToFile(getExportableSessions(), filename)
-      .then(({ run, abort, setConsideringAbort }) => {
-        setAbortHandlers({
-          abort,
-          setConsideringAbort,
-        });
-
-        return run();
-      })
-      .then(onClose)
-      .catch((error) => {
-        // Fatal error handling
-        dispatch(fatalExportErrorAction(error));
-        onClose();
-      });
+    exportToPDF(getExportableSessions(), filename);
   };
 
   const handleClose = () => {
@@ -158,39 +124,22 @@ const DataExportScreen = ({ show, onClose }) => {
     return null;
   }
 
-  const renderFooter = () => {
-    if (step === 1) {
-      return (
-        <div
-          className="action-buttons"
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            flex: '1',
-          }}
-        >
-          <Button color="neon-coral" onClick={handleDeleteSessions} disabled={selectedSessions.length === 0} icon="menu-purge-data">Delete Selected</Button>
-          <div className="export-buttons">
-            {pairedServerConnection === 'ok' && (<Button onClick={() => exportSessions(true)} color="mustard" disabled={pairedServerConnection !== 'ok' || selectedSessions.length === 0}>Export Selected To Server</Button>)}
-            <Button color="platinum" onClick={forward} disabled={selectedSessions.length === 0}>Export Selected To File</Button>
-          </div>
-        </div>
-      );
-    }
-
-    return (
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          flex: '1',
-        }}
-      >
-        <Button color="platinum" onClick={backward} icon="arrow-left">Back to Selection</Button>
-        <Button color="primary" onClick={() => exportSessions(false)}>Start Export Process</Button>
+  const renderFooter = () => (
+    <div
+      className="action-buttons"
+      style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        flex: '1',
+      }}
+    >
+      <Button color="neon-coral" onClick={handleDeleteSessions} disabled={selectedSessions.length === 0} icon="menu-purge-data">Delete Selected</Button>
+      <div className="export-buttons">
+        <Button color="platinum" onClick={() => exportSessions()} disabled={selectedSessions.length === 0}>Export Selected To PDF</Button>
+        <Button color="platinum" onClick={forward} disabled={selectedSessions.length === 0}>Export Selected To File</Button>
       </div>
-    );
-  };
+    </div>
+  );
 
   const handleChangeFilename = (eventOrValue) => {
     const value = get(eventOrValue, ['target', 'value'], eventOrValue);
@@ -211,59 +160,16 @@ const DataExportScreen = ({ show, onClose }) => {
         </div>
       </Modal>
       <Overlay
-        show={step !== 3}
+        show
         onClose={handleClose}
-        title={step === 1 ? 'Select Interview Sessions to Export or Delete' : 'Confirm File Export Options'}
+        title="Select Interview Sessions to Export or Delete"
         footer={renderFooter()}
         className="export-settings-wizard"
       >
-        {step === 1 && (
-          <SessionSelect // SessionPicker
-            selectedSessions={selectedSessions}
-            setSelectedSessions={setSelectedSessions}
-          />
-        )}
-        {step === 2 && (
-          <Scroller>
-            <div style={{
-              maxWidth: '65rem',
-              padding: '0 2.4rem',
-              margin: '0 auto',
-            }}
-            >
-              {isCordova() && (
-                <>
-                  <h2>Filename for export:</h2>
-                  <p>
-                    Your data will be saved to your device in a zip file called&nbsp;
-                    <code>
-                      networkCanvasExport
-                    </code>
-                    . If you wish to change this name, you can do so here. Do not
-                    add a file extension ( such as&nbsp;
-                    <code>
-                      .ZIP
-                    </code>
-                    ) – this will be added automatically.
-                  </p>
-                  <Text
-                    placeholder="Enter a file name..."
-                    input={{
-                      value: filename,
-                      onChange: handleChangeFilename,
-                    }}
-                    adornmentRight={(
-                      <div style={{ height: '100%', display: 'flex', alignItems: 'center' }}>
-                        <pre style={{ margin: 0 }}>.ZIP</pre>
-                      </div>
-                    )}
-                  />
-                </>
-              )}
-              <ExportOptions />
-            </div>
-          </Scroller>
-        )}
+        <SessionSelect // SessionPicker
+          selectedSessions={selectedSessions}
+          setSelectedSessions={setSelectedSessions}
+        />
       </Overlay>
     </>
   );
