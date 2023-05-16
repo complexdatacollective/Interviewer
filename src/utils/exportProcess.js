@@ -36,12 +36,10 @@ const electron = require('electron');
 
 const { BrowserWindow } = electron.remote;
 
-export const exportToPDF = async (sessionList, filename) => {
-  console.log('exportToPDF', sessionList, filename);
+export const exportToPDF = async (sessionList, filepath) => {
+  console.log('exportToPDF', sessionList, filepath);
 
-  // filepath will be from from user selected path. maybe as a prop on this function?
-  // right now, it's just the filename saved within project.
-  const filepath = `${filename}.pdf`;
+  
 
   return new Promise((resolve) => {
     // open browser window

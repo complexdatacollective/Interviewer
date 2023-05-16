@@ -58,7 +58,11 @@ const DataExportScreen = ({ show, onClose }) => {
   const exportSessions = () => {
     setStep(2);
 
-    exportToPDF(getExportableSessions(), filename);
+    // filepath will be from from user selected path.
+    // right now, it's just the filename saved within project.
+    const filepath = `${filename}.pdf`;
+
+    exportToPDF(getExportableSessions(), filepath);
   };
 
   const handleClose = () => {
