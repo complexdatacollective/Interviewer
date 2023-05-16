@@ -62,7 +62,13 @@ const DataExportScreen = ({ show, onClose }) => {
     // right now, it's just the filename saved within project.
     const filepath = `${filename}.pdf`;
 
-    exportToPDF(getExportableSessions(), filepath);
+    // for each session, export to pdf
+    // right now, hard coding at first session
+
+    const exportableSessions = getExportableSessions();
+    const sessionData = exportableSessions[0];
+
+    exportToPDF(sessionData, filepath);
   };
 
   const handleClose = () => {

@@ -36,10 +36,8 @@ const electron = require('electron');
 
 const { BrowserWindow } = electron.remote;
 
-export const exportToPDF = async (sessionList, filepath) => {
-  console.log('exportToPDF', sessionList, filepath);
-
-  
+export const exportToPDF = async (sessionData, filepath) => {
+  console.log('exportToPDF', sessionData, filepath);
 
   return new Promise((resolve) => {
     // open browser window
@@ -58,7 +56,7 @@ export const exportToPDF = async (sessionList, filepath) => {
     // hide browser window
 
     // pass sessionList to browser window
-    pdfWindow.webContents.send('SESSION_DATA', sessionList);
+    pdfWindow.webContents.send('SESSION_DATA', sessionData);
 
     // call remote.getCurrentWebContents();
 
