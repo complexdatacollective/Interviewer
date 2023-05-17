@@ -8,14 +8,13 @@ import initFileOpener from './utils/initFileOpener';
 import initMenuActions from './utils/initMenuActions';
 import { history, store, persistor as storePersistor } from './ducks/store';
 import { actionCreators as deviceActions } from './ducks/modules/deviceSettings';
-import App from './containers/App';
+import ViewManager from './components/ViewManager/ViewManager';
 import {
   isCordova,
   isElectron,
   getEnv,
   isAndroid,
 } from './utils/Environment';
-import AppRouter from './routes';
 import remote from './utils/remote';
 
 // This prevents user from being able to drop a file anywhere on the app
@@ -72,9 +71,7 @@ const startApp = () => {
     <Provider store={store}>
       <Persist persistor={storePersistor}>
         <ConnectedRouter history={history}>
-          <App>
-            <AppRouter />
-          </App>
+          <ViewManager />
         </ConnectedRouter>
       </Persist>
     </Provider>,

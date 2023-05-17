@@ -6,7 +6,6 @@ import { actionCreators as toastActions } from '../ducks/modules/toasts';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../ducks/modules/dialogs';
 import { actionCreators as exportProgressActions } from '../ducks/modules/exportProgress';
-
 import FileExportManager from './network-exporters/src/FileExportManager';
 import { getRemoteProtocolID } from './networkFormat';
 
@@ -44,16 +43,16 @@ export const exportToPDF = async (sessionData, filepath) => {
     const pdfWindow = new BrowserWindow({
       parent: global.appWindow,
       modal: true,
-      show: true,
+      // hides window
+      show: false,
       webPreferences: { nodeIntegration: true },
       height: 900,
       width: 1024,
       menuBarVisible: false,
     });
 
-    pdfWindow.loadFile('index.html');
-
-    // hide browser window
+    // TODO: get url for dev or prod
+    pdfWindow.loadURL('http://localhost:3000/#/pdf-export');
 
     // pass sessionList to browser window
     pdfWindow.webContents.send('SESSION_DATA', sessionData);
@@ -61,10 +60,10 @@ export const exportToPDF = async (sessionData, filepath) => {
     // call remote.getCurrentWebContents();
 
     pdfWindow.webContents.on('did-finish-load', () => {
-      pdfWindow.webContents.printToPDF({}).then((data) => {
+      pdfWindow.webContents.printToPDF({}).then((pdf) => {
         // write PDF to file
         const fs = require('fs');
-        fs.writeFile(filepath, data, (error) => {
+        fs.writeFile(filepath, pdf, (error) => {
           if (error) {
             console.log('error', error);
           } else {
