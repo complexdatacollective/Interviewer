@@ -1,0 +1,61 @@
+.small-heading {
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+  }
+  
+  .export-table {
+    --table-color: rgba(58, 106, 117, 0.05);
+    --alternate-row-color: var(--table-color);
+    border-radius: var(--border-radius);
+    background: var(--table-color);
+    overflow: hidden;
+    margin: 1rem 0;
+    page-break-inside: avoid;
+  
+    & > thead {
+      & > tr {
+        & > th {
+          @extend .small-heading;
+          word-break: keep-all;
+        }
+      }
+    }
+  
+    & > tbody, thead {
+      tr {
+        & > td, & > th {
+  
+          & > ul, > ol {
+            padding: inherit;
+          }
+  
+          &:not(:last-child) {
+            border-right: 3px solid var(--color-white);
+          }
+  
+          padding: unit(1) unit(2);
+  
+          p {
+  
+            &:first-child {
+              margin-top: 0;
+            }
+  
+            &:last-child {
+              margin-bottom: 0;
+            }
+  
+          }
+        }
+      }
+  
+      & > tr:nth-child(2n + 1) {
+        & > td {
+          background-color: var(--alternate-row-color);
+        }
+      }
+    }
+  }
+  
