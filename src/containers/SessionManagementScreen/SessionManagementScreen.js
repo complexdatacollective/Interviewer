@@ -12,6 +12,8 @@ import { exportToPDF } from '../../utils/exportProcess';
 import { asNetworkWithSessionVariables } from '../../utils/networkFormat';
 import SessionSelect from './SessionSelect';
 
+const { ipcRenderer } = require('electron');
+
 import { get } from '../../utils/lodash-replacements';
 
 const fatalExportErrorAction = withErrorDialog((error) => ({

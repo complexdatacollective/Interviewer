@@ -35,6 +35,8 @@ const electron = require('electron');
 
 const { BrowserWindow } = electron.remote;
 
+const { ipcRenderer } = electron;
+
 export const exportToPDF = async (sessionData, filepath) => {
   console.log('exportToPDF', sessionData, filepath);
 
@@ -54,10 +56,10 @@ export const exportToPDF = async (sessionData, filepath) => {
     // TODO: get url for dev or prod
     pdfWindow.loadURL('http://localhost:3000/#/pdfview');
 
-    // pass sessionList to browser window
-    pdfWindow.webContents.send('SESSION_DATA', sessionData);
+    // send sessiondata event to pdfWindow
+    ipcRenderer.send('SESSION-DATA', sessionData);
 
-    // call remote.getCurrentWebContents();
+    // get webContents, wait for load, then printToPDF
 
     pdfWindow.webContents.on('did-finish-load', () => {
       pdfWindow.webContents.printToPDF({}).then((pdf) => {

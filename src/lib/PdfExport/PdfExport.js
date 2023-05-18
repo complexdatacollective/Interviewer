@@ -1,11 +1,18 @@
 import React from 'react';
 
-const PdfExport = ({ data }) => {
-  console.log('PdfExport data', data);
+const { ipcRenderer } = require('electron');
 
-  // const { sessionData, filePath } = data;
+const PdfExport = () => {
+  // receive sessionData via ipc
+  ipcRenderer.on('SESSION_DATA', (event, sessionData) => {
+    console.log('sessiondata from ipc method', sessionData);
+  });
+
+  const data = {};
+  console.log('sessiondata from pdfExport', data);
+
   return (
-    <div className="content-area">
+    <div>
       <h2>PDF Export</h2>
     </div>
   );
