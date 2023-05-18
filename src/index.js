@@ -8,7 +8,9 @@ import initFileOpener from './utils/initFileOpener';
 import initMenuActions from './utils/initMenuActions';
 import { history, store, persistor as storePersistor } from './ducks/store';
 import { actionCreators as deviceActions } from './ducks/modules/deviceSettings';
-import ViewManager from './components/ViewManager/ViewManager';
+import { App } from './containers';
+import AppRouter from './routes';
+
 import {
   isCordova,
   isElectron,
@@ -71,7 +73,9 @@ const startApp = () => {
     <Provider store={store}>
       <Persist persistor={storePersistor}>
         <ConnectedRouter history={history}>
-          <ViewManager />
+          <App>
+            <AppRouter />
+          </App>
         </ConnectedRouter>
       </Persist>
     </Provider>,

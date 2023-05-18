@@ -13,6 +13,7 @@ import {
   ProtocolScreen,
 } from './containers';
 import { StartScreen } from './containers/StartScreen';
+import PdfExport from './lib/PdfExport/PdfExport';
 
 function mapStateToProps(state) {
   return {
@@ -45,6 +46,7 @@ export default () => (
     <LoadParamsRoute path="/session/:sessionId" component={ProtocolScreen} />
     <LoadParamsRoute path="/reset" shouldReset component={Redirect} to={{ pathname: '/start' }} />
     <Route path="/start" component={StartScreen} />
+    <Route path="/pdfview" component={PdfExport} />
     <Redirect to={{ pathname: '/start' }} />
   </Switch>
 );

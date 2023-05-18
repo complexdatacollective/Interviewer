@@ -43,8 +43,8 @@ export const exportToPDF = async (sessionData, filepath) => {
     const pdfWindow = new BrowserWindow({
       parent: global.appWindow,
       modal: true,
-      // hides window
-      show: false,
+      // show: false hides window
+      show: true,
       webPreferences: { nodeIntegration: true },
       height: 900,
       width: 1024,
@@ -52,7 +52,7 @@ export const exportToPDF = async (sessionData, filepath) => {
     });
 
     // TODO: get url for dev or prod
-    pdfWindow.loadURL('http://localhost:3000/#/pdf-export');
+    pdfWindow.loadURL('http://localhost:3000/#/pdfview');
 
     // pass sessionList to browser window
     pdfWindow.webContents.send('SESSION_DATA', sessionData);
