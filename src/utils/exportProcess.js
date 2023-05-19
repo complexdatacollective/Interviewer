@@ -33,48 +33,11 @@ const showCancellationToast = () => {
 
 const electron = require('electron');
 
-const { BrowserWindow } = electron.remote;
-
 const { ipcRenderer } = electron;
 
 export const exportToPDF = async (sessionData, filepath) => {
-  console.log('exportToPDF', sessionData, filepath);
-
-  return new Promise((resolve) => {
-    // open browser window
-    const pdfWindow = new BrowserWindow({
-      parent: global.appWindow,
-      modal: true,
-      // show: false hides window
-      show: true,
-      webPreferences: { nodeIntegration: true },
-      height: 900,
-      width: 1024,
-      menuBarVisible: false,
-    });
-
-    // TODO: get url for dev or prod
-    pdfWindow.loadURL('http://localhost:3000/#/pdfview');
-
-    // send sessiondata event to pdfWindow
-    ipcRenderer.send('SESSION-DATA', sessionData);
-
-    // get webContents, wait for load, then printToPDF
-
-    pdfWindow.webContents.on('did-finish-load', () => {
-      pdfWindow.webContents.printToPDF({}).then((pdf) => {
-        // write PDF to file
-        const fs = require('fs');
-        fs.writeFile(filepath, pdf, (error) => {
-          if (error) {
-            console.log('error', error);
-          } else {
-            console.log('PDF saved');
-          }
-        });
-      });
-    });
-  });
+  // send ipc event with sessionData to main process
+  ipcRenderer.send('EXPORT_TO_PDF', sessionData, filepath);
 };
 
 export const exportToFile = (sessionList, filename) => {
