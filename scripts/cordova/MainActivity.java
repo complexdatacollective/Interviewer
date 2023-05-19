@@ -5,7 +5,7 @@
  * Provides a customized activity which sets status and navigation bar colors.
  */
 
-package org.codaco.networkCanvas;
+package org.codaco.NetworkCanvasInterviewer6;
 
 import android.graphics.Color;
 import android.os.Build;
@@ -15,27 +15,25 @@ import android.support.annotation.RequiresApi;
 
 import org.apache.cordova.*;
 
-public class MainActivity extends CordovaActivity
-{
-    @ColorInt
-    static final int CyberGrapeDark = 0xff2d2955;
+public class MainActivity extends CordovaActivity {
+  @ColorInt
+  static final int CyberGrapeDark = 0xff2d2955;
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
+  @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
 
-        getWindow().setStatusBarColor(CyberGrapeDark);
-        getWindow().setNavigationBarColor(Color.BLACK);
+    getWindow().setStatusBarColor(CyberGrapeDark);
+    getWindow().setNavigationBarColor(Color.BLACK);
 
-        // enable Cordova apps to be started in the background
-        Bundle extras = getIntent().getExtras();
-        if (extras != null && extras.getBoolean("cdvStartInBackground", false)) {
-            moveTaskToBack(true);
-        }
-
-        // Set by <content src="index.html" /> in config.xml
-        loadUrl(launchUrl);
+    // enable Cordova apps to be started in the background
+    Bundle extras = getIntent().getExtras();
+    if (extras != null && extras.getBoolean("cdvStartInBackground", false)) {
+      moveTaskToBack(true);
     }
+
+    // Set by <content src="index.html" /> in config.xml
+    loadUrl(launchUrl);
+  }
 }
