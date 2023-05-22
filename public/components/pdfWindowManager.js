@@ -21,7 +21,6 @@ function openPdfWindow(sessionData, filepath) {
   pdfWindow.webContents.on('did-finish-load', () => {
     pdfWindow.webContents.send('PDF_DATA', sessionData, filepath);
   });
-  console.log(pdfWindow.webContents.getURL());
 }
 
 const pdfWindowManager = {

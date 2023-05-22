@@ -48,11 +48,7 @@ const DataExportScreen = ({ show, onClose }) => {
     .map((session) => {
       const sessionProtocol = installedProtocols[sessions[session].protocolUID];
 
-      return asNetworkWithSessionVariables(
-        session,
-        sessions[session],
-        sessionProtocol,
-      );
+      return [sessions[session], sessionProtocol];
     });
 
   const exportSessions = () => {
@@ -67,8 +63,9 @@ const DataExportScreen = ({ show, onClose }) => {
 
     const exportableSessions = getExportableSessions();
     const sessionData = exportableSessions[0];
+    const protocol = sessionData[1];
 
-    exportToPDF(sessionData, filepath);
+    exportToPDF(sessionData, filepath, protocol);
   };
 
   const handleClose = () => {
