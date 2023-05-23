@@ -49,7 +49,7 @@ const PdfExport = () => {
       age: 21,
       last: '3/15/23',
       injectionDrugPartner: null,
-      height: "6'1''''",
+      height: "6'1''",
       met: 'grindr',
       freq: 10,
       role: ['top'],
@@ -69,7 +69,7 @@ const PdfExport = () => {
   // receive sessionData via ipc
   ipcRenderer.on('PDF_DATA', (event, sessionData, filepath) => {
     console.log('PDF_DATA', sessionData, filepath);
-    // setDataForPdf(sessionData);
+    setDataForPdf(sessionData);
     // setFilepathForDownload(filepath);
     console.log('ipc renderer ran');
   });
@@ -86,7 +86,8 @@ const PdfExport = () => {
     };
     // get webContents, wait for load, then printToPDF
     const wc = remote.getCurrentWebContents();
-    await wc.printToPDF(options).then((pdf) => {
+
+    wc.printToPDF(options).then((pdf) => {
       // write PDF to file
       fs.writeFile(filepathForDownload, pdf, (error) => {
         if (error) {

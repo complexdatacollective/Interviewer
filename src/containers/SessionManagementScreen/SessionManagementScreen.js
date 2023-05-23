@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import sanitizeFilename from 'sanitize-filename';
 import Button from '@codaco/ui/lib/components/Button';
+import { remote } from 'electron';
 import { Modal } from '@codaco/ui/lib/components/Modal';
 import ExportSprite from '@codaco/ui/lib/components/Sprites/ExportSprite';
 import { Overlay } from '../Overlay';
@@ -24,12 +25,13 @@ const DataExportScreen = ({ show, onClose }) => {
   const [selectedSessions, setSelectedSessions] = useState([]);
   const [filename, setFilename] = useState('networkCanvasExport');
   const [abortHandlers, setAbortHandlers] = useState(null);
+  const [saveFilePath, setSaveFilePath] = useState();
 
   const { statusText, percentProgress } = useSelector((state) => state.exportProgress);
 
   const dispatch = useDispatch();
   const deleteSession = (id) => dispatch(sessionsActions.removeSession(id));
-  const openDialog = (dialog) => dispatch(dialogActions.openDialog(dialog));
+  const openDialog = (dialogToOpen) => dispatch(dialogActions.openDialog(dialog));
 
   const reset = () => {
     setSelectedSessions([]);
@@ -51,20 +53,29 @@ const DataExportScreen = ({ show, onClose }) => {
       return [sessions[session], sessionProtocol];
     });
 
-  const exportSessions = () => {
+  const exportSessions = async () => {
     setStep(2);
 
-    // filepath will be from from user selected path.
-    // right now, it's just the filename saved within project.
-    const filepath = `${filename}.pdf`;
+    try {
+      const { canceled, filePath: userFilePath } = await remote.dialog.showSaveDialog({
+        buttonLabel: 'Save',
+        nameFieldLabel: 'Save',
+        defaultPath: `${filename}.pdf`,
+        filters: [{ extensions: ['pdf'] }],
+      });
+      if (canceled || !userFilePath) {
+        return;
+      }
+      // for each session, export to pdf
+      // right now, hard coding at first session
 
-    // for each session, export to pdf
-    // right now, hard coding at first session
+      const exportableSessions = getExportableSessions();
+      const sessionData = exportableSessions[0];
 
-    const exportableSessions = getExportableSessions();
-    const sessionData = exportableSessions[0];
-
-    exportToPDF(sessionData, filepath);
+      exportToPDF(sessionData, userFilePath);
+    } catch (error) {
+      console.log('error saving file', error);
+    }
   };
 
   const handleClose = () => {
