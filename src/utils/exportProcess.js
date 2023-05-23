@@ -35,9 +35,9 @@ const electron = require('electron');
 
 const { ipcRenderer } = electron;
 
-export const exportToPDF = async (sessionData, filepath, protocol) => {
+export const exportToPDF = async (sessionData, filepath) => {
   // send ipc event with sessionData to main process
-  ipcRenderer.send('EXPORT_TO_PDF', sessionData, filepath, protocol);
+  ipcRenderer.send('EXPORT_TO_PDF', sessionData, filepath);
   console.log('session data', sessionData);
 };
 

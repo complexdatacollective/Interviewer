@@ -1,4 +1,5 @@
 const { BrowserWindow } = require('electron');
+const appUrl = require('./appURL');
 
 function openPdfWindow(sessionData, filepath) {
   console.log('session data from pdfWindowManager', sessionData, filepath);
@@ -14,13 +15,12 @@ function openPdfWindow(sessionData, filepath) {
     menuBarVisible: false,
   });
 
-  // TODO: get url for dev or prod
-  pdfWindow.loadURL('http://localhost:3001/#/pdfview');
-
   // send sessiondata to pdfWindow after load
   pdfWindow.webContents.on('did-finish-load', () => {
     pdfWindow.webContents.send('PDF_DATA', sessionData, filepath);
   });
+
+  pdfWindow.loadURL(`${appUrl}/#/pdfview`);
 }
 
 const pdfWindowManager = {

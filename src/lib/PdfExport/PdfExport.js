@@ -67,10 +67,11 @@ const PdfExport = () => {
   const [interviewInfo, setInterviewInfo] = useState({ caseID: '123456' });
 
   // receive sessionData via ipc
-  ipcRenderer.on('PDF_DATA', (event, sessionData, filepath, protocol) => {
+  ipcRenderer.on('PDF_DATA', (event, sessionData, filepath) => {
     console.log('PDF_DATA', sessionData, filepath);
     // setDataForPdf(sessionData);
     // setFilepathForDownload(filepath);
+    console.log('ipc renderer ran');
   });
 
   console.log('ipcRenderer', ipcRenderer);

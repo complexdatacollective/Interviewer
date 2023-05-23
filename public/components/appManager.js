@@ -37,8 +37,8 @@ const appManager = {
       .then((filePath) => windowManager.getWindow().then((window) => window.webContents.send('OPEN_FILE', filePath)))
       .catch((err) => console.log(err)));
 
-    ipcMain.on('EXPORT_TO_PDF', (ev, sessionData, filepath, protocol) => {
-      pdfWindowManager.createPdfWindow(sessionData, filepath, protocol);
+    ipcMain.on('EXPORT_TO_PDF', (ev, sessionData, filepath) => {
+      pdfWindowManager.createPdfWindow(sessionData, filepath);
     });
   },
   openFileFromArgs: function openFileFromArgs(argv) {

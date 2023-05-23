@@ -63,9 +63,8 @@ const DataExportScreen = ({ show, onClose }) => {
 
     const exportableSessions = getExportableSessions();
     const sessionData = exportableSessions[0];
-    const protocol = sessionData[1];
 
-    exportToPDF(sessionData, filepath, protocol);
+    exportToPDF(sessionData, filepath);
   };
 
   const handleClose = () => {
