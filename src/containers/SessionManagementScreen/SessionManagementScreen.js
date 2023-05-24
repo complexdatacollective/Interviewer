@@ -77,8 +77,7 @@ const DataExportScreen = ({ show }) => {
         installedProtocols,
       );
 
-      console.log(formattedSessions, userFilePath[0]);
-      // exportToPDF(formattedSessions, userFilePath);
+      exportToPDF(formattedSessions, userFilePath);
     } catch (error) {
       console.log('error saving file', error); // eslint-disable-line no-console
     }
