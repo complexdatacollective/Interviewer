@@ -27,7 +27,23 @@ import {
  * If `ignoreExternalProps` is false (the default), and a key is not not found, the resulting entity
  * will contain the original key/val. (This may happen with imported external data.)
  *
- * @private
+ * @param {Object} entity - The entity to resolve
+ * @param {Object} entityVariables - The relevant section of the variable registry
+ * @param {boolean} ignoreExternalProps - Whether to ignore keys that are not found in the variable
+ * registry
+ * @returns {Object} - The entity with UUID keys resolved to variable names
+ * @example
+ * const entity = {
+ *  '1234-5678-9012-3456': 1,
+ * '2345-6789-0123-4567': 2,
+ * };
+ *
+ * const entityVariables = {
+ * '1234-5678-9012-3456': { name: 'age' },
+ * };
+ *
+ * const resolved = getEntityAttributesWithNamesResolved(entity, entityVariables);
+ * // resolved = { age: 1, '2345-6789-0123-4567': 2 }
  */
 export const getEntityAttributesWithNamesResolved = (entity, entityVariables,
   ignoreExternalProps = false) => {

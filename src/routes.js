@@ -46,7 +46,7 @@ export default () => (
     <LoadParamsRoute path="/session/:sessionId" component={ProtocolScreen} />
     <LoadParamsRoute path="/reset" shouldReset component={Redirect} to={{ pathname: '/start' }} />
     <Route path="/start" component={StartScreen} />
-    <Route path="/pdfview" component={PdfExport} />
+    <Route path="/export" component={PdfExport} />
     <Redirect to={{ pathname: '/start' }} />
   </Switch>
 );
