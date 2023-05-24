@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Button from '@codaco/ui/lib/components/Button';
-import { remote } from 'electron';
+import { ipcRenderer, remote } from 'electron';
 import { Overlay } from '../Overlay';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
-import { exportToPDF } from '../../utils/exportProcess';
 import { getEntityAttributesWithNamesResolved } from '../../utils/networkFormat';
 import SessionSelect from './SessionSelect';
 
@@ -77,7 +76,7 @@ const DataExportScreen = ({ show }) => {
         installedProtocols,
       );
 
-      exportToPDF(formattedSessions, userFilePath);
+      ipcRenderer.send('EXPORT_TO_PDF', formattedSessions, userFilePath[0]);
     } catch (error) {
       console.log('error saving file', error); // eslint-disable-line no-console
     }

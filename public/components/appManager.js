@@ -3,7 +3,7 @@ const path = require('path');
 const windowManager = require('./windowManager');
 const registerAssetProtocol = require('./assetProtocol').registerProtocol;
 const { openDialog } = require('./dialogs');
-const pdfWindowManager = require('./pdfWindowManager');
+const doPDFWindowWrite = require('./pdfWindowManager');
 
 function getFileFromArgs(argv) {
   if (argv.length >= 2) {
@@ -37,8 +37,32 @@ const appManager = {
       .then((filePath) => windowManager.getWindow().then((window) => window.webContents.send('OPEN_FILE', filePath)))
       .catch((err) => console.log(err)));
 
-    ipcMain.on('EXPORT_TO_PDF', (ev, sessionData, filepath) => {
-      pdfWindowManager.createPdfWindow(sessionData, filepath);
+    /**
+     * Example of sessionData:
+     *
+     * {
+     *   case_9: [
+     *     {
+     *       name: 'Mrs. Emmett Bechtelar',
+     *       phone: 'Divide',
+     *       age: 83,
+     *     },
+     *   ],
+     * }
+     */
+    ipcMain.on('EXPORT_TO_PDF', (_, sessionData, filepath) => {
+      console.log('ipcMain.on(EXPORT_TO_PDF)', sessionData, filepath);
+      // Iterate over the sessionData object, and call the createPdfWindow function.
+      // createPdfWindow is async, and each call will wait for the previous one to
+      // finish before starting.
+      let count = 0;
+
+      Object.entries(sessionData).forEach(([caseId, data]) => {
+        if (count < 1) {
+          doPDFWindowWrite(data, filepath, caseId);
+        }
+        count += 1;
+      });
     });
   },
   openFileFromArgs: function openFileFromArgs(argv) {

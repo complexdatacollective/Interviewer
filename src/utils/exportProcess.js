@@ -1,6 +1,7 @@
 import React from 'react';
 import { batch } from 'react-redux';
 import { Icon } from '@codaco/ui';
+
 import { store } from '../ducks/store';
 import { actionCreators as toastActions } from '../ducks/modules/toasts';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
@@ -31,16 +32,7 @@ const showCancellationToast = () => {
   }));
 };
 
-const electron = require('electron');
-
-const { ipcRenderer } = electron;
-
-export const exportToPDF = async (sessionData, filepath) => {
-  // send ipc event with sessionData to main process
-  ipcRenderer.send('EXPORT_TO_PDF', sessionData, filepath);
-  console.log('session data', sessionData);
-};
-
+// eslint-disable-next-line import/prefer-default-export
 export const exportToFile = (sessionList, filename) => {
   // Reset exportProgress state
   dispatch(exportProgressActions.reset());
