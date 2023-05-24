@@ -26,8 +26,8 @@ async function doPDFWindowWrite(sessionData, filepath, caseId) {
     ipcMain.on('PDF_READY', () => {
       console.log('ipcMain got PDF_READY');
       pdfWindow.webContents.send('PDF_DATA', sessionData, caseId);
-
       const safepath = path.join(filepath, `${sanitize(caseId)}.pdf`);
+      // pdfWindow.on('did-finish-load', () => {
       pdfWindow.webContents.printToPDF({}).then((pdf) => {
         // write PDF to file
         writeFile(safepath, pdf, (error) => {
@@ -43,6 +43,7 @@ async function doPDFWindowWrite(sessionData, filepath, caseId) {
       });
     });
   });
+  // });
 }
 
 module.exports = doPDFWindowWrite;

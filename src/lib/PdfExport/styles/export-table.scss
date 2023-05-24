@@ -3,22 +3,24 @@
     font-weight: 600;
     font-size: 11px;
     letter-spacing: 0.15em;
+    color: var(--text-dark);
   }
   
   .export-table {
     border-radius: var(--border-radius);
-    background: var(--light-background);
+    background: var(--color-platinum);
     margin: 1rem 0;
     page-break-inside: avoid;
     padding: 1.5rem;
     height: 100%;
+    color: var(--text-dark);
   
     & > thead {
       & > tr {
         & > th {
           @extend .small-heading;
           word-break: keep-all;
-          border-bottom: 3px solid var(--color-white);
+          border-bottom: 3px solid var(--color-charcoal);
         }
       }
     }
@@ -32,7 +34,7 @@
           }
 
           &:not(:last-child) {
-            border-right: 1px solid var(--color-white);
+            border-right: 1px solid var(--color-charcoal);
           }
   
           padding: 1rem;
