@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { ipcRenderer } from 'electron';
-// import ExportTable from './components/ExportTable';
+import ExportTable from './components/ExportTable';
 import './styles/export-table.scss';
 
 const PdfExport = () => {
   const [dataForPdf, setDataForPdf] = useState(null);
+  const [caseIdForPdf, setCaseIdForPdf] = useState(null);
 
   useEffect(() => {
     // receive sessionData via ipc
-    ipcRenderer.on('PDF_DATA', (_, sessionData) => {
-      console.log('ipcRenderer.on(PDF_DATA)', sessionData); // eslint-disable-line no-console
+    ipcRenderer.on('PDF_DATA', (_, sessionData, caseId) => {
+      console.log('ipcRenderer.on(PDF_DATA)', sessionData, caseId); // eslint-disable-line no-console
       setDataForPdf(sessionData);
+      setCaseIdForPdf(caseId);
     });
 
     return () => {
@@ -35,13 +37,13 @@ const PdfExport = () => {
       <h1>
         Case ID:
         {' '}
-        {/* {interviewInfo.caseID} */}
+        {caseIdForPdf}
       </h1>
       <h3>
         Partner Notification
       </h3>
       <div>
-        {/* <ExportTable data={dataForPdf} /> */}
+        <ExportTable data={dataForPdf} />
       </div>
     </div>
   );

@@ -25,7 +25,7 @@ async function doPDFWindowWrite(sessionData, filepath, caseId) {
     // Wait for the window to send back the 'ready' event via IPC, then print to PDF
     ipcMain.on('PDF_READY', () => {
       console.log('ipcMain got PDF_READY');
-      pdfWindow.webContents.send('PDF_DATA', sessionData);
+      pdfWindow.webContents.send('PDF_DATA', sessionData, caseId);
 
       const safepath = path.join(filepath, `${sanitize(caseId)}.pdf`);
       pdfWindow.webContents.printToPDF({}).then((pdf) => {

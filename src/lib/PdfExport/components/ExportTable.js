@@ -23,18 +23,18 @@ const ExportTable = ({ data }) => (
           <tr key={node}>
             <td>{row.name}</td>
             <td>{row.phone}</td>
-            <td>{row.first}</td>
-            <td>{row.last}</td>
-            <td>{row.freq}</td>
+            <td>{row.first_sex}</td>
+            <td>{row.last_sex}</td>
+            <td>{row.num_times}</td>
             <td>{row.age}</td>
             <td>{row.height}</td>
             <td>{row.weight}</td>
             <td>
-              {row.role}
+              {row.partner_sex_role}
               /
-              {row.protection}
+              {row.condoms}
             </td>
-            <td>{row.met}</td>
+            <td>{row.venue_met_text}</td>
           </tr>
         );
       }))}
