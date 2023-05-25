@@ -5,14 +5,28 @@ const ExportTable = ({ data }) => (
     <thead>
       <tr>
         <th>Name</th>
-        <th>Phone/Contact</th>
+        <th>
+          Phone
+          {' '}
+          /
+          <br />
+          Contact
+
+        </th>
         <th>First</th>
         <th>Last</th>
         <th>Freq</th>
         <th>Age</th>
         <th>Height</th>
         <th>Weight</th>
-        <th>Role/Protect</th>
+        <th>
+          Role
+          {' '}
+          /
+          <br />
+          Protect
+
+        </th>
         <th>Met?</th>
       </tr>
     </thead>
@@ -31,7 +45,9 @@ const ExportTable = ({ data }) => (
             <td>{row.weight}</td>
             <td>
               {row.partner_sex_role}
+              {' '}
               /
+              {' '}
               {row.condoms}
             </td>
             <td>{row.venue_met_text}</td>
