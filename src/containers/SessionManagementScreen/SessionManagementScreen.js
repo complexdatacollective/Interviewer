@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Button from '@codaco/ui/lib/components/Button';
+import { Spinner } from '@codaco/ui';
 import { ipcRenderer, remote } from 'electron';
 import { Overlay } from '../Overlay';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
+import { actionCreators as toastActions } from '../../ducks/modules/toasts';
+// import { actionCreators as exportProgressActions } from '../../ducks/modules/exportProgress';
 import { getEntityAttributesWithNamesResolved } from '../../utils/networkFormat';
 import SessionSelect from './SessionSelect';
 
@@ -71,6 +74,7 @@ const DataExportScreen = ({ show, onClose }) => {
       if (canceled || !userFilePath || !userFilePath[0]) {
         return;
       }
+      // loading dialog
 
       const formattedSessions = getFormattedSessions(
         selectedSessions.map((selected) => sessions[selected]),
@@ -80,8 +84,41 @@ const DataExportScreen = ({ show, onClose }) => {
       ipcRenderer.send('EXPORT_TO_PDF', formattedSessions, userFilePath[0]);
     } catch (error) {
       console.log('error saving file', error); // eslint-disable-line no-console
+      onClose();
+      return;
     }
+
+    // Close the overlay and show an exporting toast.
     onClose();
+    dispatch(toastActions.addToast({
+      id: 'exporting',
+      type: 'info',
+      title: 'Exporting...',
+      CustomIcon: (<Spinner small />),
+      autoDismiss: false,
+      content: (
+        <>
+          <p>Your sessions are being exported.</p>
+        </>
+      ),
+    }));
+
+    // Listen for the PDFS_DONE event from the main process.
+    // Toast when the export is complete.
+
+    ipcRenderer.on('PDFS_DONE', () => {
+      dispatch(toastActions.removeToast('exporting'));
+      dispatch(toastActions.addToast({
+        type: 'success',
+        title: 'Export Complete!',
+        autoDismiss: true,
+        content: (
+          <>
+            <p>Your sessions were exported successfully.</p>
+          </>
+        ),
+      }));
+    });
   };
 
   const handleClose = () => {

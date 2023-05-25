@@ -51,7 +51,8 @@ const appManager = {
      * }
      */
     ipcMain.on('EXPORT_TO_PDF', (_, sessionData, filepath) => {
-      doPDFWindowWrite(sessionData, filepath);
+      doPDFWindowWrite(sessionData, filepath)
+        .then(() => windowManager.getWindow().then((window) => window.webContents.send('PDFS_DONE')));
     });
   },
   openFileFromArgs: function openFileFromArgs(argv) {

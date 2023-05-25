@@ -135,8 +135,6 @@ async function doPDFWindowWrite(sessionData, filepath) {
   // Close the window
   pdfWindow.close();
   pdfWindow = null;
-
-  // TODO: communicate to the renderer that the PDFs are done. Dialog?
 }
 
 module.exports = doPDFWindowWrite;
