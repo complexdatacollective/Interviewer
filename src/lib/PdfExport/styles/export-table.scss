@@ -8,18 +8,17 @@
   
   .export-table {
     border-radius: var(--border-radius);
-    background: var(--color-platinum);
+    border: 1px solid var(--color-charcoal);
     margin: 1rem 0;
-    page-break-inside: avoid;
-    padding: 1.5rem;
     height: 100%;
     color: var(--text-dark);
-  
+    font-size: 10px;
+
     & > thead {
       & > tr {
         & > th {
           @extend .small-heading;
-          word-break: keep-all;
+          word-break: break-all;
           border-bottom: 3px solid var(--color-charcoal);
         }
       }
@@ -28,16 +27,11 @@
     & > tbody, thead {
       tr {
         & > td, & > th {
-  
-          & > ul, > ol {
-            padding: inherit;
-          }
 
           &:not(:last-child) {
             border-right: 1px solid var(--color-charcoal);
           }
-  
-          padding: 1rem;
+          padding: 0.7rem;
   
           p {
   
@@ -58,7 +52,7 @@
       tr {
 
         &:not(:last-child) {
-          border-bottom: 1px solid var(--color-white);
+          border-bottom: 1px solid var(--color-charcoal);
         }
 
       }
