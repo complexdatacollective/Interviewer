@@ -51,21 +51,7 @@ const appManager = {
      * }
      */
     ipcMain.on('EXPORT_TO_PDF', (_, sessionData, filepath) => {
-      console.log('ipcMain.on(EXPORT_TO_PDF)', sessionData, filepath);
-      // Iterate over the sessionData object, and call the createPdfWindow function.
-      // createPdfWindow is async, and each call will wait for the previous one to
-      // finish before starting.
-
-      // Todo: this stops at a single session. Remove this when we're ready to
-      // export multiple sessions! Not sure if it will "hang" the app if we
-      // open loads of windows at once. need to test!
-      let count = 0;
-      Object.entries(sessionData).forEach(([caseId, data]) => {
-        if (count < 1) {
-          doPDFWindowWrite(data, filepath, caseId);
-        }
-        count += 1;
-      });
+      doPDFWindowWrite(sessionData, filepath);
     });
   },
   openFileFromArgs: function openFileFromArgs(argv) {

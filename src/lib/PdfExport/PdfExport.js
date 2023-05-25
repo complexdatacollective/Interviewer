@@ -1,52 +1,70 @@
+/* eslint-disable @codaco/spellcheck/spell-checker */
 import React, { useEffect, useState } from 'react';
 import { ipcRenderer } from 'electron';
 import ExportTable from './components/ExportTable';
 import './styles/export-table.scss';
 
-const { writeFile } = require('fs-extra');
+let first = true;
 
 const PdfExport = () => {
   const [dataForPdf, setDataForPdf] = useState(null);
-  const [caseIdForPdf, setCaseIdForPdf] = useState(null);
 
   useEffect(() => {
-    // receive sessionData via ipc
-    ipcRenderer.on('PDF_DATA', (_, sessionData, caseId) => {
-      console.log('ipcRenderer.on(PDF_DATA)', sessionData, caseId); // eslint-disable-line no-console
+    ipcRenderer.send('PDF_READY');
+  }, []);
+
+  useEffect(() => {
+    ipcRenderer.on('PDF_DATA', (_, sessionData) => {
+      console.log('got sent PDF_DATA:', sessionData); // eslint-disable-line no-console
       setDataForPdf(sessionData);
-      setCaseIdForPdf(caseId);
     });
 
     return () => {
       console.log('PdfExport unmounting'); // eslint-disable-line no-console
       ipcRenderer.removeAllListeners('PDF_DATA');
-      ipcRenderer.removeAllListeners('READY_TO_PRINT');
     };
   }, []);
 
   useEffect(() => {
-    console.log('PdfExport mounting. Sending PDF_READY'); // eslint-disable-line no-console
-    ipcRenderer.send('PDF_READY');
-  }, []);
+    let timeout;
 
-  console.log('dataForPdf', dataForPdf); // eslint-disable-line no-console
+    if (!dataForPdf) { return () => { }; }
+
+    // For some reason, the first render is suuuuper slow. This is a total hack,
+    // but will work for this use-case.
+    if (first) {
+      first = false;
+
+      timeout = setTimeout(() => {
+        ipcRenderer.send('PDF_HAS_DATA');
+      }, 1500);
+    } else {
+      ipcRenderer.send('PDF_HAS_DATA');
+    }
+
+    return () => {
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+    };
+  }, [dataForPdf]);
 
   if (!dataForPdf) {
     return null;
   }
 
   return (
-    <div style={{ margin: '2rem' }}>
+    <div>
       <h1 style={{ color: 'rgb(109, 111, 118)' }}>
         Case ID:
         {' '}
-        {caseIdForPdf}
+        {Object.keys(dataForPdf)[0]}
       </h1>
       <h3 style={{ color: 'rgb(109, 111, 118)' }}>
         Partner Notification
       </h3>
       <div>
-        <ExportTable data={dataForPdf} />
+        <ExportTable data={Object.values(dataForPdf)[0]} />
       </div>
     </div>
   );
