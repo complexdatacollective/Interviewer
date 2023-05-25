@@ -51,8 +51,26 @@ const getFormattedSessions = (sessions, installedProtocols) => sessions.reduce((
 const DataExportScreen = ({ show, onClose }) => {
   const [selectedSessions, setSelectedSessions] = useState([]);
   const [abortHandlers, setAbortHandlers] = useState(null);
-
   const dispatch = useDispatch();
+
+  // Listen for the PDFS_DONE event from the main process.
+  // Toast when the export is complete.
+  useEffect(() => {
+    ipcRenderer.on('PDFS_DONE', () => {
+      dispatch(toastActions.removeToast('exporting'));
+      dispatch(toastActions.addToast({
+        type: 'success',
+        title: 'Export Complete!',
+        autoDismiss: true,
+        content: (
+          <>
+            <p>Your sessions were exported successfully.</p>
+          </>
+        ),
+      }));
+    });
+  }, []);
+
   const deleteSession = (id) => dispatch(sessionsActions.removeSession(id));
   const openDialog = (dialog) => dispatch(dialogActions.openDialog(dialog));
 
@@ -127,23 +145,6 @@ const DataExportScreen = ({ show, onClose }) => {
         </>
       ),
     }));
-
-    // Listen for the PDFS_DONE event from the main process.
-    // Toast when the export is complete.
-
-    ipcRenderer.on('PDFS_DONE', () => {
-      dispatch(toastActions.removeToast('exporting'));
-      dispatch(toastActions.addToast({
-        type: 'success',
-        title: 'Export Complete!',
-        autoDismiss: true,
-        content: (
-          <>
-            <p>Your sessions were exported successfully.</p>
-          </>
-        ),
-      }));
-    });
   };
 
   const handleClose = () => {
