@@ -111,6 +111,7 @@ const DataExportScreen = ({ show, onClose }) => {
       if (willOverwrite) {
         const overwrite = await remote.dialog.showMessageBox({
           message: `One or more selected sessions at ${userFilePath[0]} already exists. Do you want to replace it?`,
+          type: 'warning',
           detail: 'Replacing it will overwrite its current contents.',
           buttons: ['Replace', 'Cancel'],
         });
