@@ -44,8 +44,9 @@ const getFormattedSessions = (sessions, installedProtocols) => sessions.reduce((
   };
 }, {});
 
-const DataExportScreen = ({ show }) => {
+const DataExportScreen = ({ show, onClose }) => {
   const [selectedSessions, setSelectedSessions] = useState([]);
+  const [abortHandlers, setAbortHandlers] = useState(null);
 
   const dispatch = useDispatch();
   const deleteSession = (id) => dispatch(sessionsActions.removeSession(id));
@@ -80,6 +81,42 @@ const DataExportScreen = ({ show }) => {
     } catch (error) {
       console.log('error saving file', error); // eslint-disable-line no-console
     }
+    onClose();
+  };
+
+  const handleClose = () => {
+    // nothing selected, just close because no work will be lost
+    if (selectedSessions.length === 0) {
+      onClose();
+      return;
+    }
+
+    if (abortHandlers) {
+      abortHandlers.setConsideringAbort(true);
+    }
+
+    openDialog({
+      type: 'Confirm',
+      title: 'Cancel Export?',
+      confirmLabel: 'Cancel Export',
+      onConfirm: () => {
+        if (abortHandlers) {
+          abortHandlers.abort();
+        }
+        onClose();
+      },
+      onCancel: () => {
+        if (abortHandlers) {
+          abortHandlers.setConsideringAbort(false);
+        }
+      },
+      message: (
+        <p>
+          This will cancel the export process, as well as clear any previously selected sessions.
+          It cannot be undone. Are you sure you want to continue?
+        </p>
+      ),
+    });
   };
 
   const handleDeleteSessions = () => {
@@ -147,6 +184,7 @@ const DataExportScreen = ({ show }) => {
         title="Select Interview Sessions to Export or Delete"
         footer={renderFooter()}
         className="export-settings-wizard"
+        onClose={handleClose}
       >
         <SessionSelect // SessionPicker
           selectedSessions={selectedSessions}
