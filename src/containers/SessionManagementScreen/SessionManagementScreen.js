@@ -7,9 +7,10 @@ import { Overlay } from '../Overlay';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { actionCreators as toastActions } from '../../ducks/modules/toasts';
-// import { actionCreators as exportProgressActions } from '../../ducks/modules/exportProgress';
 import { getEntityAttributesWithNamesResolved } from '../../utils/networkFormat';
 import SessionSelect from './SessionSelect';
+
+const fs = require('fs');
 
 /**
  * Returns the codebook entity definition for a given node type.
@@ -64,6 +65,11 @@ const DataExportScreen = ({ show, onClose }) => {
 
   const exportSessions = async () => {
     try {
+      const formattedSessions = getFormattedSessions(
+        selectedSessions.map((selected) => sessions[selected]),
+        installedProtocols,
+      );
+
       const { canceled, filePaths: userFilePath } = await remote.dialog.showOpenDialog({
         title: 'Select a location to save the interview data',
         buttonLabel: 'Select location',
@@ -71,15 +77,34 @@ const DataExportScreen = ({ show, onClose }) => {
         message: 'Select a location to save the interview data',
       });
 
+      // if file path already exists, warn the user that they will be overwritten
+
+      const checkExists = (caseId) => {
+        const fileName = `${caseId}.pdf`;
+        const filePath = `${userFilePath[0]}/${fileName}`;
+        if (fs.existsSync(filePath)) {
+          return true;
+        }
+        return false;
+      };
+
+      const willOverwrite = Object.keys(formattedSessions).some(checkExists);
+
+      if (willOverwrite) {
+        const overwrite = await remote.dialog.showMessageBox({
+          message: `One or more selected sessions at ${userFilePath[0]} already exists. Do you want to replace it?`,
+          detail: 'Replacing it will overwrite its current contents.',
+          buttons: ['Replace', 'Cancel'],
+        });
+        if (overwrite.response === 1) {
+          // eslint-disable-next-line no-useless-return
+          return;
+        }
+      }
+
       if (canceled || !userFilePath || !userFilePath[0]) {
         return;
       }
-      // loading dialog
-
-      const formattedSessions = getFormattedSessions(
-        selectedSessions.map((selected) => sessions[selected]),
-        installedProtocols,
-      );
 
       ipcRenderer.send('EXPORT_TO_PDF', formattedSessions, userFilePath[0]);
     } catch (error) {
