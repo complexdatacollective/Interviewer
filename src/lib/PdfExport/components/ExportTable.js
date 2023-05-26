@@ -11,7 +11,6 @@ const ExportTable = ({ data }) => (
           /
           <br />
           Contact
-
         </th>
         <th>First</th>
         <th>Last</th>
@@ -28,6 +27,7 @@ const ExportTable = ({ data }) => (
 
         </th>
         <th>Met?</th>
+        <th>Drug Use Partner?</th>
       </tr>
     </thead>
     <tbody>
@@ -46,11 +46,14 @@ const ExportTable = ({ data }) => (
             <td>
               {row.partner_sex_role}
               {' '}
-              /
+              {row.partner_sex_role && row.condoms && '/'}
               {' '}
               {row.condoms}
             </td>
             <td>{row.venue_met_text}</td>
+            <td>
+              {row.ego_injection_drug_partner ? 'Yes' : 'No'}
+            </td>
           </tr>
         );
       }))}
