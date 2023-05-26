@@ -78,8 +78,7 @@ const HeaderSection = () => {
               </p>
               <p>
                 To get started right away, install one or more interview protocols
-                onto this device. For convenience, we have created a sample interview
-                protocol on the theme of &quot;public health&quot; research.
+                onto this device.
               </p>
             </div>
             <div className="welcome-actions">
@@ -100,9 +99,10 @@ const HeaderSection = () => {
               <Button
                 color="mustard"
                 disabled={!onlineStatus}
+                // TODO: replace with real protocol
                 onClick={() => importProtocolFromURI('https://documentation.networkcanvas.com/protocols/Sample%20Protocol%20v4.netcanvas')}
               >
-                Install sample protocol
+                Install HBH Protocol
               </Button>
             </div>
           </main>
