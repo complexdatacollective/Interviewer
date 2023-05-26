@@ -5,7 +5,7 @@ const config: CapacitorConfig = {
   appName: 'network-canvas-interviewer',
   webDir: 'www',
   server: {
-    androidScheme: 'https'
+    androidScheme: 'https',
   },
   cordova: {
     preferences: {
