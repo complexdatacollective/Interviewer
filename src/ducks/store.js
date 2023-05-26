@@ -22,6 +22,8 @@ const getStorageEngine = () => {
     return sqliteStorageEngine(onPersistReady);
   }
 
+  // TODO: Electron should also use sqlite. Preferably securely, with encryption.
+
   return localStorageEngine(onPersistReady);
 };
 

@@ -50,6 +50,7 @@ const App = ({
   children,
   openDialog,
 }) => {
+  console.log('App render');
   const win = useMemo(() => getElectronWindow(), []);
   const env = useMemo(() => getEnv(), []);
 
@@ -157,7 +158,7 @@ const App = ({
         })}
       >
         <SettingsMenu />
-        { children }
+        {children}
       </div>
       <DialogManager />
       <ToastManager />
