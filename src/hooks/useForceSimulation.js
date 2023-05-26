@@ -5,7 +5,6 @@ import {
   useEffect,
 } from 'react';
 import get from 'lodash/get';
-import ForceSimulationWorker from './forceSimulation.worker';
 import screenManager from '../components/RealtimeCanvas/ScreenManager';
 import useViewport from './useViewport';
 
@@ -34,7 +33,7 @@ const useForceSimulation = (listener = () => { }) => {
   const initialize = useCallback((network = {}, options = {}) => {
     if (worker.current) { worker.current.terminate(); }
 
-    worker.current = new ForceSimulationWorker();
+    worker.current = new Worker(new URL('./forceSimulation.worker', import.meta.url));
 
     const { nodes, links } = { ...emptyNetwork, ...network };
 
