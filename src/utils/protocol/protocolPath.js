@@ -15,27 +15,6 @@ const ensureArray = (filePath = []) => {
   return filePath;
 };
 
-export const factoryProtocolPath = (environment) => {
-  if (environment === environments.ELECTRON) {
-    const path = require('path');
-
-    return (protocolUID, filePath = '') => {
-      if (!isValidProtocolUID(protocolUID)) throw Error('Protocol name is not valid');
-      return path.join(appPath(), 'protocols', protocolUID, filePath);
-    };
-  }
-
-  if (environment === environments.CORDOVA) {
-    return (protocolUID, filePath) => {
-      if (!isValidProtocolUID(protocolUID)) throw Error('Protocol name is not valid');
-
-      return [appPath(), 'www', 'protocols', protocolUID].concat([filePath]).join('/');
-    };
-  }
-
-  throw new Error('factoryProtocolPath() is not supported on this platform');
-};
-
 const protocolPath = (environment) => {
   if (environment === environments.ELECTRON) {
     const path = require('path');

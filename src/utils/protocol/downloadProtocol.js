@@ -1,11 +1,14 @@
 /* eslint-disable global-require */
-/* global FileTransfer */
 import uuid from 'uuid/v4';
 import environments from '../environments';
 import inEnvironment from '../Environment';
 import { writeFile } from '../filesystem';
 import friendlyErrorMessage from '../../utils/friendlyErrorMessage';
 import ApiClient from '../../utils/ApiClient';
+import write_blob from 'capacitor-blob-writer';
+import { Directory } from '@capacitor/filesystem';
+import { CapacitorHttp } from '@capacitor/core';
+
 
 const getURL = uri =>
   new Promise((resolve, reject) => {
@@ -15,8 +18,6 @@ const getURL = uri =>
       reject(error);
     }
   });
-
-const getProtocolName = () => uuid(); // generate a filename
 
 const urlError = friendlyErrorMessage("The location you gave us doesn't seem to be a valid URL. Check the location, and try again.");
 const networkError = friendlyErrorMessage("We weren't able to fetch your protocol. Your device may not have an active network connection, or you may have mistyped the URL. Ensure you are connected to a network, double check your URL, and try again.");
@@ -37,7 +38,7 @@ const downloadProtocol = inEnvironment((environment) => {
     const path = require('path');
     const electron = require('electron');
     const tempPath = (electron.app || electron.remote.app).getPath('temp');
-    const destination = path.join(tempPath, getProtocolName());
+    const destination = path.join(tempPath, uuid());
 
     return (uri, pairedServer = false) => {
       let promisedResponse;
@@ -58,37 +59,45 @@ const downloadProtocol = inEnvironment((environment) => {
   }
 
   if (environment === environments.CORDOVA) {
-    const destination = `cdvfile://localhost/temporary/${getProtocolName()}`;
-    return (uri, pairedServer) => {
-      let promisedResponse;
-      if (pairedServer) {
-        promisedResponse = new ApiClient(pairedServer)
-          // .addTrustedCert() is not required, assuming we've just fetched the protocol list
-          .downloadProtocol(uri, destination)
-          .then(() => destination);
-      } else {
-        promisedResponse = getURL(uri)
-          .then(url => url.href)
-          .catch(urlError)
-          .then(href => new Promise((resolve, reject) => {
-            const fileTransfer = new FileTransfer();
-            fileTransfer.download(
-              href,
-              destination,
-              () => resolve(destination),
-              error => reject(error),
-            );
-          }));
-      }
-      return promisedResponse
-        .catch((error) => {
-          const getErrorMessage = ({ code }) => {
-            if (code === 3) return networkError;
-            return urlError;
-          };
 
-          getErrorMessage(error)(error);
+    // Generate a UUID to use as the temporary protocol name.
+    const protocolName = uuid();
+    return async (uri, pairedServer) => {
+      try {
+        if (pairedServer) {
+          const client = new ApiClient(pairedServer);
+
+          await client.downloadProtocol(uri, protocolName);
+
+          return protocolName;
+        }
+
+        const { href } = await getURL(uri);
+
+        const result = await CapacitorHttp.get({
+          url: href,
+          responseType: 'blob',
         });
+
+        return write_blob({
+          path: protocolName,
+          directory: Directory.Cache,
+          blob: result,
+          recursive: true,
+          on_fallback(errorDownload) {
+            console.error('An error occured while downloading:');
+            console.error(errorDownload);
+          }
+        });
+
+      } catch (error) {
+        const getErrorMessage = ({ code }) => {
+          if (code === 3) return networkError;
+          return urlError;
+        };
+
+        getErrorMessage(error)(error);
+      }
     };
   }
 

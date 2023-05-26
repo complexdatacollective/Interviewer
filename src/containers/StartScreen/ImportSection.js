@@ -4,7 +4,6 @@ import { GraphicButton, Button } from '@codaco/ui';
 import Section from './Section';
 import { actionCreators as uiActions } from '../../ducks/modules/ui';
 import ProtocolUrlForm from './ProtocolUrlForm';
-import { beginLocalProtocolImport } from '../../utils/protocol/importProtocol';
 import useOnlineStatus from '../../hooks/useOnlineStatus';
 import useServerConnectionStatus from '../../hooks/useServerConnectionStatus';
 import ManageProtocolsOverlay from './ManageProtocolsOverlay';
@@ -12,6 +11,7 @@ import urlIcon from '../../images/undraw_in_thought.svg';
 import localIcon from '../../images/undraw_selecting.svg';
 import serverIcon from '../../images/undraw_file_sync.svg';
 import FetchServerProtocolPicker from './FetchServerProtocolPicker';
+import { startImportFromFile } from '../../utils/protocol/importProtocol/importProtocol';
 
 const ImportSection = () => {
   const onlineStatus = useOnlineStatus();
@@ -49,7 +49,7 @@ const ImportSection = () => {
           }
           <GraphicButton
             color="slate-blue--dark"
-            onClick={beginLocalProtocolImport}
+            onClick={startImportFromFile}
             graphicPosition="0% 0%"
             graphicSize="15rem"
             graphic={localIcon}
@@ -73,7 +73,7 @@ const ImportSection = () => {
           }
         </div>
       </main>
-      { Object.keys(installedProtocols).length > 0 && (
+      {Object.keys(installedProtocols).length > 0 && (
         <footer className="import-section__manage-protocols">
           <Button color="platinum" onClick={() => setShowManageProtocolsOverlay(true)}>Manage Installed Protocols...</Button>
         </footer>

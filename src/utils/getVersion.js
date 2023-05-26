@@ -11,9 +11,10 @@ const getVersion = () => {
     });
   }
 
-  if (isCordova()) {
-    return cordova.getAppVersion.getVersionNumber();  // eslint-disable-line no-undef
-  }
+  console.log('todo - implement getVersion for cordova'); // eslint-disable-line no-console
+  // if (isCordova()) {
+  //   return cordova.getAppVersion.getVersionNumber();  // eslint-disable-line no-undef
+  // }
 
   return new Promise((resolve) => { resolve('0.0.0'); });
 };

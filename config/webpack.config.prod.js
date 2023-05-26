@@ -8,6 +8,7 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
+const { resolveAlias } = require('./shared');
 
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
@@ -82,12 +83,6 @@ const getStyleLoaders = (preProcessor) => {
   return loaders;
 };
 
-const resolveAlias = {
-  // TODO: Track this issue
-  // https://github.com/mapbox/concaveman/issues/18
-  tinyqueue: '../tinyqueue/tinyqueue.js',
-  '@codaco/shared-consts': require.resolve('@codaco/shared-consts/dist/index.js'),
-};
 if (!isTargetingElectron) {
   resolveAlias.electron = `${paths.appSrc}/utils/electron-shim`;
 }
@@ -112,8 +107,9 @@ module.exports = {
     archiver: "require('archiver')",
   },
   // In production, we only want to load the polyfills and the app code.
-  entry: ['regenerator-runtime', require.resolve('./polyfills'), paths.appIndexJs],
+  entry: ['regenerator-runtime', paths.appIndexJs],
   output: {
+    hashFunction: 'sha256',
     // The build folder.
     path: paths.appBuild,
     // Generated JS file names (with nested folders).

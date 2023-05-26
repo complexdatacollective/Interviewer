@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { Button } from '@codaco/ui';
 import { isValid } from 'redux-form';
 import { Overlay } from '../Overlay';
-import { importProtocolFromURI } from '../../utils/protocol/importProtocol';
+import { importProtocolFromURI } from '../../utils/protocol/importProtocol/importProtocol';
 import Form from '../Form';
 import { required, validateUrl } from '../../utils/Validations';
 

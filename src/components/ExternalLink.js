@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Browser } from '@capacitor/browser';
 import { isElectron } from '../utils/Environment';
 
-export const openExternalLink = (href) => {
+export const openExternalLink = async (href) => {
   if (isElectron()) {
     // eslint-disable-next-line global-require
     const { shell } = require('electron');
@@ -10,7 +11,7 @@ export const openExternalLink = (href) => {
     return false;
   }
 
-  window.cordova.InAppBrowser.open(href, '_system', 'location=yes');
+  await Browser.open({ url: href });
   return false;
 };
 

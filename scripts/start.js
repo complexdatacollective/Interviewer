@@ -32,7 +32,7 @@ const config = require('../config/webpack.config.dev');
 const createDevServerConfig = require('../config/webpackDevServer.config');
 
 const {
-  isTargetingCordova,
+  isTargetingCapacitor,
   isTargetingElectron,
   logPlatformInfo,
   cleanDevUrlFile,
@@ -91,13 +91,13 @@ choosePort(HOST, DEFAULT_PORT)
         logPlatformInfo();
       });
 
-      if (!isTargetingCordova && !isTargetingElectron) {
+      if (!isTargetingCapacitor && !isTargetingElectron) {
         openBrowser(urls.localUrlForBrowser);
       }
     });
 
-    ['SIGINT', 'SIGTERM'].forEach(function(sig) {
-      process.on(sig, function() {
+    ['SIGINT', 'SIGTERM'].forEach(function (sig) {
+      process.on(sig, function () {
         devServer.close();
         cleanDevUrlFile();
         process.exit();

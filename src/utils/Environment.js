@@ -17,9 +17,11 @@ export const isLinux = () => isElectron() && window.require('os').platform() ===
 
 export const isCordova = () => !!window.cordova;
 
-export const isIOS = () => isCordova() && (/iOS/i).test(window.device.platform);
+// TODO
+export const isIOS = () => isCordova() && (/iOS/i).test('window.device.platform');
 
-export const isAndroid = () => isCordova() && (/Android/i).test(window.device.platform);
+// TODO
+export const isAndroid = () => isCordova() && (/Android/i).test('window.device.platform');
 
 export const isWeb = () => (!isCordova() && !isElectron());
 

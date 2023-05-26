@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">network-canvas-interviewer</string>
+    <string name="title_activity_main">network-canvas-interviewer</string>
+    <string name="package_name">org.codaco.NetworkCanvasInterviewer6</string>
+    <string name="custom_url_scheme">org.codaco.NetworkCanvasInterviewer6</string>
+</resources>

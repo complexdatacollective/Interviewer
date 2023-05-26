@@ -79,31 +79,34 @@ class ServerDiscoverer {
     }
 
     if (isCordova()) {
-      this.zeroconf = window.cordova.plugins.zeroconf;
-      try {
-        this.zeroconf.watch('_nc-server-6._tcp.', 'local.', (result) => { // Service name must also be updated in config.xml for iOS 14 permissions
-          const { action } = result;
-          // Normalize the service object to match the mdns node module (above)
-          const normalizeService = (service) => (
-            {
-              name: service.name,
-              host: service.hostname,
-              port: service.port,
-              addresses: [...service.ipv4Addresses, ...service.ipv6Addresses],
-            }
-          );
+      // eslint-disable-next-line @codaco/spellcheck/spell-checker
+      console.log('Cordova zeroconf not implemented yet'); // eslint-disable-line no-console
+      // this.zeroconf = window.cordova.plugins.zeroconf;
+      // try {
+      //      // Service name must also be updated in config.xml for iOS 14 permissions
+      //   this.zeroconf.watch('_nc-server-6._tcp.', 'local.', (result) => {
+      //     const { action } = result;
+      //     // Normalize the service object to match the mdns node module (above)
+      //     const normalizeService = (service) => (
+      //       {
+      //         name: service.name,
+      //         host: service.hostname,
+      //         port: service.port,
+      //         addresses: [...service.ipv4Addresses, ...service.ipv6Addresses],
+      //       }
+      //     );
 
-          if (action === 'added') {
-            // Do nothing - we need a resolution which provides an IP address.
-          } else if (action === 'resolved') {
-            this.emitAnnouncement(normalizeService(result.service));
-          } else {
-            this.emitRemoval(normalizeService(result.service));
-          }
-        }, (error) => this.emitErrorMessage(error));
-      } catch (error) {
-        this.emitErrorMessage(error);
-      }
+      //     if (action === 'added') {
+      //       // Do nothing - we need a resolution which provides an IP address.
+      //     } else if (action === 'resolved') {
+      //       this.emitAnnouncement(normalizeService(result.service));
+      //     } else {
+      //       this.emitRemoval(normalizeService(result.service));
+      //     }
+      //   }, (error) => this.emitErrorMessage(error));
+      // } catch (error) {
+      //   this.emitErrorMessage(error);
+      // }
     }
   }
 

@@ -113,20 +113,6 @@ const importZip = inEnvironment((environment) => {
   return () => Promise.reject(new Error('loadZip() not available on platform'));
 });
 
-const extractProtocol = inEnvironment((environment) => {
-  if (environment === environments.ELECTRON || environment === environments.CORDOVA) {
-    return (protocolFile = isRequired('protocolFile')) => {
-      const protocolName = generateProtocolUID();
-      const destination = protocolPath(protocolName);
-      return importZip(protocolFile, protocolName, destination);
-    };
-  }
-
-  return () => Promise.reject(new Error('extractProtocol() not available on platform'));
-});
-
-export default extractProtocol;
-
 export {
   checkZipPaths,
 };

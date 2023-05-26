@@ -1,143 +1,163 @@
 {
-    "extends": "airbnb",
-    "env": {
-        "browser": true,
-        "commonjs": true,
-        "es2020": true,
-        "node": true
+  "extends": "airbnb",
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es2020": true,
+    "node": true
+  },
+  "root": true,
+  "parser": "@babel/eslint-parser",
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "ecmaFeatures": {
+      "jsx": true,
+      "spread": true,
+      "experimentalObjectRestSpread": true,
+      "object-shorthand": [
+        "error",
+        "always"
+      ]
     },
-    "root": true,
-    "parser": "@babel/eslint-parser",
-    "parserOptions": {
-        "ecmaVersion": 2018,
-        "ecmaFeatures": {
-            "jsx": true,
-            "spread": true,
-            "experimentalObjectRestSpread": true,
-            "object-shorthand": ["error", "always"]
-        },
-        "sourceType": "module"
-    },
-    "plugins": ["react", "@codaco/spellcheck"],
-    "rules": {
-      "react/prop-types": [0],
-      "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
-      "react/jsx-props-no-spreading": "off",
-      "react/forbid-prop-types": "off",
-      "react/no-array-index-key": "off",
-      "jsx-a11y/no-static-element-interactions": "off",
-      "jsx-a11y/click-events-have-key-events": "off",
-      "import/no-extraneous-dependencies": "off",
-      "import/no-named-as-default": "off",
-      "no-mixed-operators": [1, {"allowSamePrecedence": true}],
-      "@codaco/spellcheck/spell-checker": [1,
-        {
-            "comments": false,
-            "strings": true,
-            "identifiers": false,
-            "lang": "en_US",
-            "ignoreRequire": true,
-            "skipWords": [
-                "Dev",
-                "darwin",
-                "https",
-                "selectall",
-                "resetzoom",
-                "togglefullscreen",
-                "forcereload",
-                "toggledevtools",
-                "devtools",
-                "netcanvas",
-                "cancelled",
-                "utf",
-                "html",
-                "argv",
-                "asc",
-                "tcp",
-                "mdns",
-                "href",
-                "http",
-                "crapple",
-                "ontouchstart",
-                "touchend",
-                "touchstart",
-                "touchmove",
-                "mousedown",
-                "mouseup",
-                "mousemove",
-                "dragover",
-                "deviceready",
-                "datetime",
-                "graphml",
-                "networkcanvas",
-                "undirected",
-                "edgedefault",
-                "Formatter",
-                "noopener",
-                "noreferrer",
-                "csv",
-                "linux",
-                "params",
-                "Checkbox",
-                "Likert",
-                "Sociogram",
-                "localhost",
-                "desc",
-                "calc",
-                "codaco",
-                "dialogs",
-                "filesystem",
-                "Cordova",
-                "sha256",
-                "sortable",
-                "codebook",
-                "uid",
-                "cdvfile",
-                "Tmp",
-                "swiper",
-                "Swiper",
-                "prev",
-                "fullscreen",
-                "ord",
-                "scroller",
-                "resize",
-                "rerender",
-                "Rerender",
-                "vmin",
-                "320px",
-                "0px",
-                "titlebar",
-                "minimizer",
-                "Unpair",
-                "discoverability",
-                "scrollable",
-                "draggable",
-                "dyad",
-                "Dyad",
-                "hostname",
-                "searchable"
-             ],
-             "skipIfMatch": [
-                "http(s)?://[^s]*",
-                // pre/post prefixes both in kebab case and camel case
-                "(\\s|^)(pre|post)([-\\w]|[A-Z])[a-zA-Z]+(\\s|$)",
-                // mimetypes
-                "^[-\\w]+\/[-\\w\\.]+$",
-                // xml tags
-                "<(?:\/)?[\\w-]+>",
-                // cryptographic octal hashes
-                "^[0-9a-f]{5,999}$",
-                // hex colors
-                "^#[0-9a-f]{3,6}$",
-                // vh
-                "vh$",
-                // px
-                "px$"
-             ],
-             "skipWordIfMatch": [
-             ],
-             "minLength": 3
-         }
-     ]
-    }
+    "sourceType": "module"
+  },
+  "plugins": [
+    "react",
+    "@codaco/spellcheck"
+  ],
+  "rules": {
+    "react/prop-types": [
+      0
+    ],
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [
+          ".js",
+          ".jsx"
+        ]
+      }
+    ],
+    "react/jsx-props-no-spreading": "off",
+    "react/forbid-prop-types": "off",
+    "react/no-array-index-key": "off",
+    "jsx-a11y/no-static-element-interactions": "off",
+    "jsx-a11y/click-events-have-key-events": "off",
+    "import/no-extraneous-dependencies": "off",
+    "import/no-named-as-default": "off",
+    "no-mixed-operators": [
+      1,
+      {
+        "allowSamePrecedence": true
+      }
+    ],
+    "@codaco/spellcheck/spell-checker": [
+      1,
+      {
+        "comments": false,
+        "strings": true,
+        "identifiers": false,
+        "lang": "en_US",
+        "ignoreRequire": true,
+        "skipWords": [
+          "Dev",
+          "darwin",
+          "https",
+          "selectall",
+          "resetzoom",
+          "togglefullscreen",
+          "forcereload",
+          "toggledevtools",
+          "devtools",
+          "netcanvas",
+          "cancelled",
+          "utf",
+          "html",
+          "argv",
+          "asc",
+          "tcp",
+          "mdns",
+          "href",
+          "http",
+          "crapple",
+          "ontouchstart",
+          "touchend",
+          "touchstart",
+          "touchmove",
+          "mousedown",
+          "mouseup",
+          "mousemove",
+          "dragover",
+          "deviceready",
+          "datetime",
+          "graphml",
+          "networkcanvas",
+          "undirected",
+          "edgedefault",
+          "Formatter",
+          "noopener",
+          "noreferrer",
+          "csv",
+          "linux",
+          "params",
+          "Checkbox",
+          "Likert",
+          "Sociogram",
+          "localhost",
+          "desc",
+          "calc",
+          "codaco",
+          "dialogs",
+          "filesystem",
+          "Cordova",
+          "sha256",
+          "sortable",
+          "codebook",
+          "uid",
+          "Tmp",
+          "swiper",
+          "Swiper",
+          "prev",
+          "fullscreen",
+          "ord",
+          "scroller",
+          "resize",
+          "rerender",
+          "Rerender",
+          "vmin",
+          "320px",
+          "0px",
+          "titlebar",
+          "minimizer",
+          "Unpair",
+          "discoverability",
+          "scrollable",
+          "draggable",
+          "dyad",
+          "Dyad",
+          "hostname",
+          "searchable"
+        ],
+        "skipIfMatch": [
+          "http(s)?://[^s]*",
+          // pre/post prefixes both in kebab case and camel case
+          "(\\s|^)(pre|post)([-\\w]|[A-Z])[a-zA-Z]+(\\s|$)",
+          // mimetypes
+          "^[-\\w]+\/[-\\w\\.]+$",
+          // xml tags
+          "<(?:\/)?[\\w-]+>",
+          // cryptographic octal hashes
+          "^[0-9a-f]{5,999}$",
+          // hex colors
+          "^#[0-9a-f]{3,6}$",
+          // vh
+          "vh$",
+          // px
+          "px$"
+        ],
+        "skipWordIfMatch": [],
+        "minLength": 3
+      }
+    ]
+  }
 }

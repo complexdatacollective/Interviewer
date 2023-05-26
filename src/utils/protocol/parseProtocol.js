@@ -12,7 +12,7 @@ const validationError = friendlyErrorMessage('Your protocol file failed validati
 
 // Basic validation on protocol format;
 // any error will halt loading and display a message to the user.
-const validateProtocol = (protocol) => {
+export const validateProtocol = (protocol) => {
 
   const schemaErrors = validateSchema(protocol);
   const logicErrors = validateLogic(protocol);
@@ -24,13 +24,7 @@ const validateProtocol = (protocol) => {
   return Promise.resolve(protocol);
 };
 
-const checkSchemaVersion = (protocol) => {
-  if (APP_SUPPORTED_SCHEMA_VERSIONS.includes(protocol.schemaVersion)) {
-    return Promise.resolve(protocol);
-  }
 
-  return Promise.reject(new Error('The schema version of this protocol is not compatible with this version of Network Canvas Interviewer. Upgrade the protocol using Architect, and try importing it again.'));
-}
 
 const parseProtocol = (protocolUID, name) =>
   readFile(protocolPath(protocolUID, 'protocol.json'))
