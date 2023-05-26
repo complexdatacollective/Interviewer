@@ -144,6 +144,7 @@ const DataExportScreen = ({ show, onClose }) => {
       }));
 
       selectedSessions.forEach((session) => dispatch(sessionsActions.setSessionExported(session)));
+      ipcRenderer.removeAllListeners('PDFS_DONE');
     });
   };
 
