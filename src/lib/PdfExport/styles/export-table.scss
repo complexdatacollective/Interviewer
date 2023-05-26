@@ -22,20 +22,21 @@
     }
   }
 
-  & > tbody, 
+  & > tbody,
   thead {
     tr {
       & > td,
       & > th {
+        padding: 0.7rem;
         &:not(:last-child) {
           border-right: 1px solid var(--color-charcoal);
         }
-        padding: 0.7rem;
-  
+
         p {
           &:first-child {
             margin-top: 0;
           }
+
           &:last-child {
             margin-bottom: 0;
           }
