@@ -46,19 +46,6 @@ const startApp = () => {
   console.log('Start app');
   store.dispatch(deviceActions.deviceReady());
 
-  // ReactDOM.render(
-  //   <Provider store={store}>
-  //     <Persist persistor={storePersistor}>
-  //       <ConnectedRouter history={history}>
-  //         <App>
-  //           <AppRouter />
-  //         </App>
-  //       </ConnectedRouter>
-  //     </Persist>
-  //   </Provider>,
-  //   document.getElementById('root'),
-  // );
-
   ReactDOM.render(
     <Provider store={store}>
       <Persist persistor={storePersistor}>

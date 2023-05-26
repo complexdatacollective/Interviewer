@@ -8,11 +8,11 @@ module.exports = {
   // target: "electron-renderer",
   output: {
     filename: "main.js",
-    path: path.resolve(__dirname, "build"),
+    path: path.resolve(__dirname, "www"),
   },
   devServer: {
     static: {
-      directory: path.join(__dirname, "build"),
+      directory: path.join(__dirname, "www"),
     },
     port: 3000,
   },
