@@ -80,31 +80,28 @@ const DataExportScreen = ({ show, onClose }) => {
         message: 'Select a location to save the interview data',
       });
 
-      // if file path already exists, warn the user that they will be overwritten
+      // if directory is not empty, warn the user that they its contents may be overwritten
 
-      const checkExists = (caseId) => {
-        const fileName = `${caseId}.pdf`;
-        const filePath = `${userFilePath[0]}/${fileName}`;
-        if (fs.existsSync(filePath)) {
-          return true;
+      fs.readdir(userFilePath[0], async (_, files) => {
+        // Mac OS creates a hidden .DS_Store file in every directory
+        // Windows creates a hidden desktop.ini file in every directory
+        // We want to ignore these files when checking if the directory is empty
+        const includesHiddenFiles = files.includes('.DS_Store') || files.includes('desktop.ini');
+        if (
+          (files.length > 1 && includesHiddenFiles) || (files.length > 0 && !includesHiddenFiles)
+        ) {
+          const overwrite = await remote.dialog.showMessageBox({
+            message: `${userFilePath[0]} contains files.`,
+            detail: ' Any and all files in this directory may be overwritten. Are you sure you want to continue?',
+            type: 'warning',
+            buttons: ['Continue', 'Cancel'],
+          });
+          if (overwrite.response === 1) {
+            // eslint-disable-next-line no-useless-return
+            return;
+          }
         }
-        return false;
-      };
-
-      const willOverwrite = Object.keys(formattedSessions).some(checkExists);
-
-      if (willOverwrite) {
-        const overwrite = await remote.dialog.showMessageBox({
-          message: `One or more selected sessions at ${userFilePath[0]} already exists. Do you want to replace it?`,
-          type: 'warning',
-          detail: 'Replacing it will overwrite its current contents.',
-          buttons: ['Replace', 'Cancel'],
-        });
-        if (overwrite.response === 1) {
-          // eslint-disable-next-line no-useless-return
-          return;
-        }
-      }
+      });
 
       if (canceled || !userFilePath || !userFilePath[0]) {
         return;
