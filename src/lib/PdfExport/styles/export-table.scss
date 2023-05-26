@@ -17,7 +17,6 @@
       & > tr {
         & > th {
           @extend .small-heading;
-          word-break: break-all;
           border-bottom: 3px solid var(--color-charcoal);
         }
       }
