@@ -50,7 +50,7 @@ const getFormattedSessions = (sessions, installedProtocols) => sessions.reduce((
 
 const DataExportScreen = ({ show, onClose }) => {
   const [selectedSessions, setSelectedSessions] = useState([]);
-  const [abortHandlers, setAbortHandlers] = useState(null);
+  const [abortHandlers] = useState(null);
   const dispatch = useDispatch();
 
   // Listen for the PDFS_DONE event from the main process.
@@ -86,6 +86,8 @@ const DataExportScreen = ({ show, onClose }) => {
         // Mac OS creates a hidden .DS_Store file in every directory
         // Windows creates a hidden desktop.ini file in every directory
         // We want to ignore these files when checking if the directory is empty
+
+        // eslint-disable-next-line @codaco/spellcheck/spell-checker
         const includesHiddenFiles = files.includes('.DS_Store') || files.includes('desktop.ini');
         if (
           (files.length > 1 && includesHiddenFiles) || (files.length > 0 && !includesHiddenFiles)
