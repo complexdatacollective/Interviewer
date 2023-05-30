@@ -99,8 +99,7 @@ const HeaderSection = () => {
               <Button
                 color="mustard"
                 disabled={!onlineStatus}
-                // TODO: replace with real protocol
-                onClick={() => importProtocolFromURI('https://documentation.networkcanvas.com/protocols/Sample%20Protocol%20v4.netcanvas')}
+                onClick={() => importProtocolFromURI('https://documentation.networkcanvas.com/protocols/HBH-PS-v24.netcanvas')}
               >
                 Install HBH Protocol
               </Button>
