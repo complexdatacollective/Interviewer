@@ -34,7 +34,7 @@ const createWindow = async () => {
   }
 
   // Await the load URL. Same as binding to 'did-finish-loading'.
-  await pdfWindow.loadURL(`${appUrl}/#/export`);
+  await pdfWindow.loadURL(`${appUrl}#export`);
 
   let interval;
 
