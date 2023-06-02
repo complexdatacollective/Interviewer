@@ -1,0 +1,27 @@
+{
+  "appId": "org.codaco.NetworkCanvasInterviewer6",
+  "appName": "NetworkCanvasInterviewer",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  },
+  "cordova": {
+    "preferences": {
+      "Orientation": "landscape",
+      "target-device": "tablet",
+      "DisallowOverscroll": "true",
+      "Fullscreen": "true",
+      "CordovaWebViewEngine": "CDVWKWebViewEngine",
+      "BackupWebStorage": "none",
+      "AndroidPersistentFileLocation": "Internal",
+      "iosPersistentFileLocation": "Library",
+      "AllowInlineMediaPlayback": "true",
+      "android-minSdkVersion": "27",
+      "android-targetSdkVersion": "29"
+    }
+  }
+}
