@@ -35,7 +35,7 @@ const ExportTable = ({ data }) => (
         const row = data[node];
         return (
           <tr key={node}>
-            <td>{row.name}</td>
+            <td style={{ 'overflow-wrap': 'anywhere' }}>{row.name}</td>
             <td>{row.phone}</td>
             <td>{row.first_sex}</td>
             <td>{row.last_sex}</td>
@@ -50,7 +50,7 @@ const ExportTable = ({ data }) => (
               {' '}
               {row.condoms}
             </td>
-            <td>{row.venue_met_text}</td>
+            <td style={{ 'overflow-wrap': 'anywhere' }}>{row.venue_met_text}</td>
             <td>
               {row.ego_injection_drug_partner ? 'Yes' : 'No'}
             </td>

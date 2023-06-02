@@ -54,7 +54,7 @@ const PdfExport = () => {
   }
 
   return (
-    <div>
+    <div style={{ width: '100%', 'max-width': '800px' }}>
       <h1 style={{ color: 'rgb(109, 111, 118)' }}>
         Case ID:
         {' '}
