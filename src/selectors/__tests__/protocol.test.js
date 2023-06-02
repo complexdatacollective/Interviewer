@@ -37,7 +37,6 @@ const mockState = {
   },
   dialogs: { dialogs: Array(0) },
   form: {},
-  importProtocol: { status: 'inactive', step: 0 },
   installedProtocols: {
     'c67ae04d-e5d8-402a-9ded-49205bf6f290': {
       name: 'Protocol Name',

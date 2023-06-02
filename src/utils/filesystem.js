@@ -618,7 +618,7 @@ export const createWriteStream = inEnvironment((environment) => {
 });
 
 // FIXME: this implies that it will recursively create directories, but if targetPath's parent
-//        doesn't already exist, this will error on both platforms
+//  doesn't already exist, this will error on both platforms
 const ensurePathExists = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
     const path = require('path');

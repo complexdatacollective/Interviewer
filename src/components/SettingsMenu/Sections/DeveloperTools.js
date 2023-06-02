@@ -7,18 +7,18 @@ import { motion } from 'framer-motion';
 import { Button } from '@codaco/ui/lib/components';
 import { Number } from '@codaco/ui/lib/components/Fields';
 import Toggle from '@codaco/ui/lib/components/Fields/Toggle';
-import { importProtocolFromURI } from '../../../utils/protocol/importProtocol/importProtocol';
-import { actionCreators as dialogsActions } from '../../../ducks/modules/dialogs';
-import { actionCreators as mockActions } from '../../../ducks/modules/mock';
-import { getAdditionalAttributesForCurrentPrompt, getNodeEntryForCurrentPrompt } from '../../../selectors/session';
+import importProtocol from '~/utils/protocol/importProtocol';
+import { actionCreators as dialogsActions } from '~/ducks/modules/dialogs';
+import { actionCreators as mockActions } from '~/ducks/modules/mock';
+import { getAdditionalAttributesForCurrentPrompt, getNodeEntryForCurrentPrompt } from '~/selectors/session';
 import {
   DEVELOPMENT_PROTOCOL_URL_V4,
   DEVELOPMENT_PROTOCOL_URL_V5,
   DEVELOPMENT_PROTOCOL_URL_V6,
   DEVELOPMENT_PROTOCOL_URL_V7,
-} from '../../../config';
-import { actionCreators as deviceSettingsActions } from '../../../ducks/modules/deviceSettings';
-import { isAndroid } from '../../../utils/Environment';
+} from '~/config';
+import { actionCreators as deviceSettingsActions } from '~/ducks/modules/deviceSettings';
+import { isAndroid } from '~/utils/Environment';
 
 const DeveloperTools = (props) => {
   const {
@@ -107,28 +107,28 @@ const DeveloperTools = (props) => {
         <div className="form-field-container">
           <div className="form-field">
             <Button
-              onClick={() => importProtocolFromURI(DEVELOPMENT_PROTOCOL_URL_V4)}
+              onClick={() => importProtocol(DEVELOPMENT_PROTOCOL_URL_V4)}
             >
               Import v4 Protocol
             </Button>
           </div>
           <div className="form-field">
             <Button
-              onClick={() => importProtocolFromURI(DEVELOPMENT_PROTOCOL_URL_V5)}
+              onClick={() => importProtocol(DEVELOPMENT_PROTOCOL_URL_V5)}
             >
               Import v5 Protocol
             </Button>
           </div>
           <div className="form-field">
             <Button
-              onClick={() => importProtocolFromURI(DEVELOPMENT_PROTOCOL_URL_V6)}
+              onClick={() => importProtocol(DEVELOPMENT_PROTOCOL_URL_V6)}
             >
               Import v6 Protocol
             </Button>
           </div>
           <div className="form-field">
             <Button
-              onClick={() => importProtocolFromURI(DEVELOPMENT_PROTOCOL_URL_V7)}
+              onClick={() => importProtocol(DEVELOPMENT_PROTOCOL_URL_V7)}
             >
               Import v7 Protocol
             </Button>

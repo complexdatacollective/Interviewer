@@ -11,7 +11,6 @@
     "electron-log": "^3.0.7",
     "electron-devtools-installer": "^3.0.0",
     "mdns": "^2.5.1",
-    "archiver": "^4.0.1",
     "secure-comms-api": "github:complexdatacollective/secure-comms-api#npm7"
   }
 }

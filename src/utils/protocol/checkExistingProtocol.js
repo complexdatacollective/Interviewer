@@ -1,4 +1,3 @@
-import { CancellationError } from 'builder-util-runtime';
 import { findKey } from 'lodash';
 import { store } from '../../ducks/store';
 
@@ -79,7 +78,7 @@ export const checkForUnexportedSessions = async (protocolName) => {
       title: 'Overwrite existing protocol?',
       confirmLabel: 'Overwrite protocol',
       onConfirm: () => resolve(existingIndex),
-      onCancel: () => reject(new CancellationError('Installation of this protocol cancelled.')),
+      onCancel: () => reject(new Error('Installation of this protocol cancelled.')),
       message: 'This protocol is already installed. Overwriting the previous installation of this protocol may prevent you from modifying previously created sessions.',
     })));
   }

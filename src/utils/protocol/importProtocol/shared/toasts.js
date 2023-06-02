@@ -19,10 +19,22 @@ export const showCancellationToast = () => {
     type: 'warning',
     title: 'Import cancelled',
     content: (
-      <React.Fragment>
+      <>
         <p>You cancelled the import of this protocol.</p>
-      </React.Fragment>
+      </>
     ),
   }));
 }
 
+export const showImportCompleteToast = () => {
+  dispatch(toastActions.addToast({
+    type: 'success',
+    title: 'Finished!',
+    autoDismiss: true,
+    content: (
+      <>
+        <p>Protocol installed successfully.</p>
+      </>
+    ),
+  }));
+}

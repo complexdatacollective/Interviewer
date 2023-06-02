@@ -18,9 +18,11 @@ export const validateProtocol = (protocol) => {
   const logicErrors = validateLogic(protocol);
 
   if (schemaErrors.length > 0 || logicErrors.length > 0) {
+    console.info("Protocol failed validation");
     return Promise.reject(new Error([...schemaErrors, ...logicErrors].map(errToString).join('')));
   }
 
+  console.info("Protocol passed validation");
   return Promise.resolve(protocol);
 };
 

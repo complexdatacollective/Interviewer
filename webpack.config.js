@@ -83,7 +83,7 @@ module.exports = {
       "crypto": false,
       "url": false,
     },
-    extensions: ["*", ".js", ".jsx", ".json"],
+    extensions: ["*", ".*", ".js", ".jsx", ".json"],
     alias: {
       '~': appSrc,
       '~behaviours': path.join(appSrc, 'behaviours'),

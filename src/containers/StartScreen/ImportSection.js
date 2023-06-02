@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { GraphicButton, Button } from '@codaco/ui';
 import Section from './Section';
-import { actionCreators as uiActions } from '../../ducks/modules/ui';
+import { actionCreators as uiActions } from '~/ducks/modules/ui';
 import ProtocolUrlForm from './ProtocolUrlForm';
-import useOnlineStatus from '../../hooks/useOnlineStatus';
-import useServerConnectionStatus from '../../hooks/useServerConnectionStatus';
+import useOnlineStatus from '~/hooks/useOnlineStatus';
+import useServerConnectionStatus from '~/hooks/useServerConnectionStatus';
 import ManageProtocolsOverlay from './ManageProtocolsOverlay';
-import urlIcon from '../../images/undraw_in_thought.svg';
-import localIcon from '../../images/undraw_selecting.svg';
-import serverIcon from '../../images/undraw_file_sync.svg';
+import urlIcon from '~/images/undraw_in_thought.svg';
+import localIcon from '~/images/undraw_selecting.svg';
+import serverIcon from '~/images/undraw_file_sync.svg';
 import FetchServerProtocolPicker from './FetchServerProtocolPicker';
-import { startImportFromFile } from '../../utils/protocol/importProtocol/importProtocol';
+import importProtocol from '~/utils/protocol/importProtocol';
 
 const ImportSection = () => {
   const onlineStatus = useOnlineStatus();
@@ -49,7 +49,7 @@ const ImportSection = () => {
           }
           <GraphicButton
             color="slate-blue--dark"
-            onClick={startImportFromFile}
+            onClick={() => importProtocol()}
             graphicPosition="0% 0%"
             graphicSize="15rem"
             graphic={localIcon}

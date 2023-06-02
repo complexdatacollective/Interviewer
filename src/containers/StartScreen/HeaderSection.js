@@ -3,15 +3,15 @@ import { motion } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@codaco/ui';
 import Section from './Section';
-import NCLogo from '../../images/NC-Flat@4x.png';
+import NCLogo from '~/images/NC-Flat@4x.png';
 import networkCanvasLogo from '../../images/NC-Mark.svg';
-import { actionCreators as deviceSettingsActions } from '../../ducks/modules/deviceSettings';
-import { importProtocolFromURI } from '../../utils/protocol/importProtocol/importProtocol';
-import { SettingsMenuButton } from '../../components/SettingsMenu';
-import { openExternalLink } from '../../components/ExternalLink';
-import { Switch } from '../../components';
-import getVersion from '../../utils/getVersion';
-import useOnlineStatus from '../../hooks/useOnlineStatus';
+import { actionCreators as deviceSettingsActions } from '~/ducks/modules/deviceSettings';
+import importProtocol from '~/utils/protocol/importProtocol';
+import { SettingsMenuButton } from '~/components/SettingsMenu';
+import { openExternalLink } from '~/components/ExternalLink';
+import { Switch } from '~/components';
+import getVersion from '~/utils/getVersion';
+import useOnlineStatus from '~/hooks/useOnlineStatus';
 
 const HeaderSection = () => {
   const onlineStatus = useOnlineStatus();
@@ -100,7 +100,7 @@ const HeaderSection = () => {
               <Button
                 color="mustard"
                 disabled={!onlineStatus}
-                onClick={() => importProtocolFromURI('https://documentation.networkcanvas.com/protocols/Sample%20Protocol%20v4.netcanvas')}
+                onClick={() => importProtocol('https://documentation.networkcanvas.com/protocols/Sample%20Protocol%20v4.netcanvas')}
               >
                 Install sample protocol
               </Button>

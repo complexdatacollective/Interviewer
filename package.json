@@ -1,35 +1,31 @@
 {
   "name": "network-canvas-interviewer",
-  "version": "6.4.1",
+  "version": "7.0.0",
   "productName": "Network Canvas Interviewer",
   "description": "A tool for conducting Network Canvas Interviews.",
   "author": "Complex Data Collective",
   "private": true,
   "engines": {
     "node": "18.16.0",
-    "npm": "8.3.2"
+    "npm": "9.5.1"
   },
   "scripts": {
-    "pack": "electron-builder --dir",
+    "dev:ios": "npm run config-cap-dev && npx cap sync ios && npx cap open ios",
+    "dev:android": "npm run config-cap-dev && npx cap sync android && npx cap open android",
+    "config-cap-dev": "node ./scripts/generateCapacitorConfig.js dev",
+    "config-cap-prod": "node ./scripts/generateCapacitorConfig.js",
     "build": "webpack --mode production",
-    "ionic:build": "webpack --mode production",
-    "ionic:serve": "webpack serve --mode development",
     "start": "webpack serve --mode development",
-    "lint": "eslint src && eslint public",
-    "sass-lint": "sass-lint -vc .sass-lint.yml",
+    "lint:js": "eslint src && eslint public",
+    "lint:sass": "sass-lint -vc .sass-lint.yml",
+    "lint": "npm run lint:js && npm run lint:sass",
     "test": "node scripts/test.js",
     "test:update-snapshots": "node scripts/test.js --env=jsdom --updateSnapshot",
     "electron": "electron ./www",
-    "dev:electron": "cross-env NODE_ENV=development NC_DEVSERVER_FILE=\".devserver\" electron public/",
-    "dev:capacitor": "node scripts/check-dev-server.js && cross-env LIVE_RELOAD=1 cap run android",
-    "generate-icons": "node scripts/generate-app-icons.js",
-    "dist:android": "npm run build:android && cordova build android --release",
-    "dist:ios": "npm run build:ios && cordova build ios --release --developmentTeam=85EZ69PQHJ",
     "dist:linux": "npm run build:electron && electron-builder -l",
     "dist:mac": "npm run build:electron && electron-builder -m",
     "dist:win": "npm run build:electron && electron-builder -w",
-    "bump": "sh scripts/bump",
-    "preflight": "npm run lint -- --max-warnings 0 && npm run sass-lint -- --max-warnings 0 && npm test -- --coverage"
+    "bump": "sh scripts/bump"
   },
   "repository": {
     "type": "git"
@@ -91,7 +87,6 @@
     "jest": "^26.0.1",
     "jest-image-snapshot": "^4.0.2",
     "jssha": "^3.1.0",
-    "jszip": "^3.7.0",
     "lodash": "^4.17.11",
     "mdns": "~2.7.2",
     "object-assign": "4.1.1",
@@ -156,12 +151,12 @@
     "@capacitor/share": "~5.0.2",
     "@capacitor/status-bar": "5.0.2",
     "@capawesome/capacitor-file-picker": "~5.0.0",
-    "archiver": "^4.0.1",
     "capacitor-blob-writer": "~1.1.10",
     "cordova-sqlite-storage": "~6.1.0",
     "d3-force": "~3.0.0",
     "dmg-builder": "~23.6.0",
     "electron-devtools-installer": "^3.0.0",
+    "fflate": "~0.8.0",
     "sass": "~1.62.1",
     "xcode": "~3.0.1",
     "zeroconf": "^0.1.4"
@@ -232,11 +227,6 @@
       }
     ]
   },
-  "browserslist": [
-    "Electron 9.2.0",
-    "ChromeAndroid >= 84",
-    "iOS >= 13.6"
-  ],
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}"

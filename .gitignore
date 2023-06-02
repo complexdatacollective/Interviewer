@@ -1,14 +1,12 @@
 .DS_Store
 /node_modules
-/bower_components
-/platforms
-/coverage
+/android
 /release-builds
 /www
 /build
-/.idea
-/docs-build
-/plugins
+
+# Capacitor config (generated in scripts/generateCapacitorConfig.js)
+capacitor.config.json
 
 npm-debug.log*
 yarn-debug.log*
@@ -17,19 +15,7 @@ yarn.lock
 build.json
 
 *.zip
-plugins/**/*.pbxproj
 Icon^M^M
-
-.devserver
-config.xml.original
-chromedriver.log
-
-# Xcode (Cordova plugin)
-xcuserdata/
-IDEWorkspaceChecks.plist
-
-# Ignore protocol template used for schema generation
-src/schemas/abstract-protocol.json
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json

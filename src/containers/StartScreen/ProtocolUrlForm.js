@@ -4,9 +4,9 @@ import { useSelector } from 'react-redux';
 import { Button } from '@codaco/ui';
 import { isValid } from 'redux-form';
 import { Overlay } from '../Overlay';
-import { importProtocolFromURI } from '../../utils/protocol/importProtocol/importProtocol';
+import importProtocol from '~/utils/protocol/importProtocol';
 import Form from '../Form';
-import { required, validateUrl } from '../../utils/Validations';
+import { required, validateUrl } from '~/utils/Validations';
 
 const FORM_NAME = 'import_protocol_url';
 
@@ -18,7 +18,7 @@ const ProtocolUrlForm = ({
 
   const handleSubmit = (fields) => {
     if (fields) {
-      importProtocolFromURI(fields.protocol_url).then(() => {
+      importProtocol(fields.protocol_url).then(() => {
         handleClose();
       }, () => {
         // Keep dialog open so user can retry after error.
@@ -40,7 +40,7 @@ const ProtocolUrlForm = ({
   };
 
   const initialValues = {
-    protocol_url: 'https://',
+    protocol_url: 'https://assets.networkcanvas.com/public/protocols/HBH_PS_v24.netcanvas',
   };
 
   return (

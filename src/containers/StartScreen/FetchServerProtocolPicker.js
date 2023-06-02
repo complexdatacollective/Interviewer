@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { entityAttributesProperty } from '@codaco/shared-consts';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
-import { importProtocolFromURI } from '../../utils/protocol/importProtocol/importProtocol';
+import importProtocol from '~/utils/protocol/importProtocol';
 import NewFilterableListWrapper from '../../components/NewFilterableListWrapper';
 import { Overlay } from '../Overlay';
 import ApiClient from '../../utils/ApiClient';
@@ -14,7 +14,7 @@ const FetchServerProtocolPicker = ({
   onClose,
 }) => {
   const handleProtocolCardClick = (downloadPath) => {
-    importProtocolFromURI(downloadPath, true);
+    importProtocol(downloadPath);
     onClose();
   };
 
