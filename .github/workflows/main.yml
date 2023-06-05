@@ -71,8 +71,10 @@ jobs:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
 
-      - name: Install MDNS build dependencies
-        run: sudo apt-get install libavahi-compat-libdnssd-dev
+      - name: Install MDNS build dependencies    
+        run: |
+          sudo apt-get update
+          sudo apt-get install libavahi-compat-libdnssd-dev
 
       - name: Install node modules
         run: npm install
