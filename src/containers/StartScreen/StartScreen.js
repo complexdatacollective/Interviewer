@@ -5,7 +5,6 @@ import { Redirect } from 'react-router-dom';
 import HeaderSection from './HeaderSection';
 import InterviewSection from './InterviewSection';
 import ImportSection from './ImportSection';
-import ServerSection from './ServerSection';
 import WhatsNewSection from './WhatsNewSection';
 import SessionManagementSection from './SessionManagementSection';
 
@@ -43,7 +42,6 @@ const StartScreen = ({
         <InterviewSection />
         <SessionManagementSection />
         <ImportSection />
-        <ServerSection />
       </motion.div>
     </div>
   );

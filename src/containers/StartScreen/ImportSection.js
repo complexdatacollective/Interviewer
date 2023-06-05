@@ -5,26 +5,19 @@ import Section from './Section';
 import { actionCreators as uiActions } from '~/ducks/modules/ui';
 import ProtocolUrlForm from './ProtocolUrlForm';
 import useOnlineStatus from '~/hooks/useOnlineStatus';
-import useServerConnectionStatus from '~/hooks/useServerConnectionStatus';
 import ManageProtocolsOverlay from './ManageProtocolsOverlay';
 import urlIcon from '~/images/undraw_in_thought.svg';
 import localIcon from '~/images/undraw_selecting.svg';
-import serverIcon from '~/images/undraw_file_sync.svg';
-import FetchServerProtocolPicker from './FetchServerProtocolPicker';
 import importProtocol from '~/utils/protocol/importProtocol';
 
 const ImportSection = () => {
   const onlineStatus = useOnlineStatus();
-  const pairedServer = useSelector((state) => state.pairedServer);
-  const pairedServerConnection = useServerConnectionStatus(pairedServer);
   const installedProtocols = useSelector((state) => state.installedProtocols);
   const showProtocolUrlForm = useSelector((state) => state.ui.showProtocolUrlForm);
-  const showFetchProtocolPicker = useSelector((state) => state.ui.showFetchProtocolPicker);
   const [showManageProtocolsOverlay, setShowManageProtocolsOverlay] = useState(false);
 
   const dispatch = useDispatch();
   const toggleShowProtocolUrlForm = () => dispatch(uiActions.toggle('showProtocolUrlForm'));
-  const toggleShowFetchProtocolPicker = () => dispatch(uiActions.toggle('showFetchProtocolPicker'));
 
   return (
     <Section className="start-screen-section import-section">
@@ -57,20 +50,6 @@ const ImportSection = () => {
             <h3>Import</h3>
             <h2>From File</h2>
           </GraphicButton>
-          {
-            onlineStatus && pairedServerConnection === 'ok' && (
-              <GraphicButton
-                color="mustard"
-                onClick={toggleShowFetchProtocolPicker}
-                graphicPosition="4rem 0rem"
-                graphicSize="14rem"
-                graphic={serverIcon}
-              >
-                <h3>Import</h3>
-                <h2>From Server</h2>
-              </GraphicButton>
-            )
-          }
         </div>
       </main>
       {Object.keys(installedProtocols).length > 0 && (
@@ -82,10 +61,6 @@ const ImportSection = () => {
       <ManageProtocolsOverlay
         show={showManageProtocolsOverlay}
         onClose={() => setShowManageProtocolsOverlay(false)}
-      />
-      <FetchServerProtocolPicker
-        show={showFetchProtocolPicker}
-        onClose={() => toggleShowFetchProtocolPicker()}
       />
     </Section>
   );

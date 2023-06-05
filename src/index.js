@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { PersistGate } from 'redux-persist/integration/react';
-import { ready as secureCommsReady } from 'secure-comms-api/cipher';
 import { Provider } from 'react-redux';
 import { ConnectedRouter, push } from 'connected-react-router';
 import initFileOpener from './utils/initFileOpener';
@@ -13,7 +12,6 @@ import {
   isCordova,
   isElectron,
   getEnv,
-  isAndroid,
 } from './utils/Environment';
 import AppRouter from './routes';
 import remote from './utils/remote';
@@ -71,9 +69,7 @@ if (isElectron()) {
   ipcRenderer.on('RESET_STATE', () => {
     store.dispatch(push('/reset'));
   });
-}
-
-secureCommsReady.then(() => {
+} else {
   if (isCordova()) {
     document.addEventListener('deviceready', startApp, false);
   } else if (document.readyState === 'complete') {
@@ -89,4 +85,4 @@ secureCommsReady.then(() => {
       }
     };
   }
-});
+}

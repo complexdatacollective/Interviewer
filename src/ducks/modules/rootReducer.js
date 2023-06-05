@@ -12,7 +12,6 @@ import toasts from './toasts';
 import search from './search';
 import ui from './ui';
 import dismissedUpdates from './dismissedUpdates';
-import pairedServer from './pairedServer';
 import exportProgress from './exportProgress';
 import { actionTypes as resetActionTypes } from './reset';
 
@@ -29,7 +28,6 @@ const appReducer = (history) => combineReducers({
   search,
   ui,
   dismissedUpdates,
-  pairedServer,
   exportProgress,
 });
 

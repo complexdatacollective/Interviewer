@@ -18,6 +18,11 @@ export class CapacitorImportManager extends ImportManager {
 
     this.emit('start');
 
+    this.emit('update', {
+      title: 'Downloading protocol...',
+      progress: 5,
+    })
+
     const name = filenameFromURI(uri);
 
     // This method is broken: https://github.com/ionic-team/capacitor/issues/6126
@@ -55,28 +60,21 @@ export class CapacitorImportManager extends ImportManager {
   }
 
 
-  importFromFile = async (file = null, protocolName = null, callback = null) => {
+  importFromFile = async (fileData = null, protocolName = null, callback = null) => {
     let protocolUUID = uuid();
-    let cancelled = false;
 
     this.emit('start');
 
-    let data;
-    let name;
-
-    if (!file) {
+    // if no file was provided, prompt the user to choose one
+    if (!fileData) {
       const picker = await this.chooseFile();
 
       if (!picker) {
-        cancelled = true;
-        return;
+        throw new Error('No file chosen.');
       }
 
-      data = picker.file;
-      name = picker.name;
-    } else {
-      data = file;
-      name = protocolName;
+      fileData = picker.file;
+      protocolName = picker.name;
     }
 
     this.emit('update', {
@@ -85,7 +83,7 @@ export class CapacitorImportManager extends ImportManager {
     })
 
     // Check if a protocol with the same name already exists
-    const existingProtocolUUID = getExistingProtocolUid(name);
+    const existingProtocolUUID = getExistingProtocolUid(protocolName);
 
     // If it does, check if any unexported sessions are using it
     if (existingProtocolUUID) {
@@ -104,7 +102,7 @@ export class CapacitorImportManager extends ImportManager {
 
     // Use fflate to decompress the zip file
     const extractedFiles = await new Promise(async (resolve, reject) => {
-      await unzip(file, (err, files) => {
+      await unzip(fileData, (err, files) => {
         if (err) {
           reject(err);
           return;
@@ -117,8 +115,6 @@ export class CapacitorImportManager extends ImportManager {
     console.log('extractedFiles', extractedFiles);
 
     const protocolFile = String.fromCharCode.apply(null, extractedFiles['protocol.json']);
-
-    console.log('protocolFile', protocolFile);
 
     this.emit('update', {
       title: 'Validating protocol',
@@ -148,14 +144,21 @@ export class CapacitorImportManager extends ImportManager {
     })
 
     const handler = async (key) => {
+      console.log('Extracting file:', key);
       const file = extractedFiles[key]; // Uint8Array representing the file
 
       // If the file is empty, skip it
       if (file.length === 0) {
-        return Promise.resolve();
+        console.log("Skipping empty file:", key)
+        return;
       }
 
       console.info('Writing ', key);
+
+      this.emit('update', {
+        title: 'Copying protocol contents to device storage...Extracting ' + key + '...',
+        progress: 70,
+      })
 
       // Convert the Uint8Array to a base 64 encoded string
       const fileString = btoa(String.fromCharCode.apply(null, file));
@@ -174,9 +177,15 @@ export class CapacitorImportManager extends ImportManager {
     const q = queue(handler, 1);
 
     // Write each file to the cache directory
-    Object.keys(extractedFiles).map(key => q.push(key))
+    Object.keys(extractedFiles).map(key => {
+      console.log('Queing file for extraction:', key);
+      q.push(key);
+    })
+
+
 
     await q.drain();
+
 
     const protocolWithName = {
       ...protocolJson,

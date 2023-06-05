@@ -40,7 +40,7 @@ const ProtocolUrlForm = ({
   };
 
   const initialValues = {
-    protocol_url: 'https://assets.networkcanvas.com/public/protocols/HBH_PS_v24.netcanvas',
+    protocol_url: 'https://assets.networkcanvas.com/public/protocols/Sample%20Protocol%20v4.netcanvas',
   };
 
   return (

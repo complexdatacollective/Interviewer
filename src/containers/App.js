@@ -13,7 +13,6 @@ import {
 import DialogManager from '../components/DialogManager';
 import ToastManager from '../components/ToastManager';
 import { SettingsMenu } from '../components/SettingsMenu';
-import useUpdater from '../hooks/useUpdater';
 import { actionCreators as dialogActions } from '../ducks/modules/dialogs';
 
 const getElectronWindow = () => {
@@ -62,8 +61,6 @@ const App = ({
 
     root.style.setProperty('--base-font-size', newFontSize);
   }, [useDynamicScaling, interfaceScale]);
-
-  useUpdater('https://api.github.com/repos/complexdatacollective/Interviewer/releases/latest', 2500);
 
   useEffect(() => {
     if (isIOS()) {
