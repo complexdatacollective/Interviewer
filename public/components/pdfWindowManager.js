@@ -27,6 +27,7 @@ const createWindow = async () => {
     webPreferences: { nodeIntegration: true },
     height: 900,
     width: 1024,
+    fullscreen: false,
   });
 
   if (process.env.NODE_ENV === 'development') {
