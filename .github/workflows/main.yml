@@ -23,7 +23,7 @@ jobs:
         with:
           node-version: "14.21.3"
       - name: Set NPM 7
-        run: npm install -g npm@8.18.4
+        run: npm install -g npm@8.19.4
       # Cache node_modules
       - uses: actions/cache@v2
         env:
@@ -62,7 +62,7 @@ jobs:
         with:
           node-version: "14.21.3"
       - name: Set NPM 7
-        run: npm install -g npm@8.18.4
+        run: npm install -g npm@8.19.4
       # Cache node_modules
       - uses: actions/cache@v2
         env:
