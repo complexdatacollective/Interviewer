@@ -7,7 +7,7 @@
   "private": true,
   "engines": {
     "node": "14.21.3",
-    "npm": "8.3.2"
+    "npm": "8.19.4"
   },
   "scripts": {
     "pack": "electron-builder --dir",
@@ -127,7 +127,7 @@
     "lodash": "^4.17.11",
     "mdns": "~2.7.2",
     "mini-css-extract-plugin": "^0.8.0",
-    "node-sass": "^4.12.0",
+    "node-sass": "^8.0.0",
     "object-assign": "4.1.1",
     "object-hash": "^1.3.0",
     "postcss-flexbugs-fixes": "~4.2.1",
@@ -159,8 +159,7 @@
     "rxjs": "^5.5.12",
     "sanitize-filename": "^1.6.3",
     "sass-lint": "^1.12.1",
-    "sass-loader": "^6.0.6",
-    "sass-svg": "^1.0.1",
+    "sass-loader": "~10.4.1",
     "secure-comms-api": "git+https://github.com/complexdatacollective/secure-comms-api.git#npm7",
     "sockjs-client": "^1.3.0",
     "style-loader": "0.18.2",
