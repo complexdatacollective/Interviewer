@@ -1,7 +1,7 @@
 name: CI
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
 
   # Allows you to run this workflow manually from the Actions tab
@@ -17,19 +17,19 @@ jobs:
       # Set python version to 2.x due to node-gyp and sass
       - uses: actions/setup-python@v4
         with:
-          python-version: '2.7.18'
+          python-version: "3.10.12"
       # Set node version
       - uses: actions/setup-node@v2
         with:
-          node-version: '14.21.3'
+          node-version: "14.21.3"
       - name: Set NPM 7
-        run: npm install -g npm@8.3.2
+        run: npm install -g npm@8.19.4
       # Cache node_modules
       - uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
         with:
-          path: '**/node_modules'
+          path: "**/node_modules"
           key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
 
       - name: Install MDNS build dependencies
@@ -56,19 +56,19 @@ jobs:
       # Set python version to 2.x due to node-gyp and sass
       - uses: actions/setup-python@v4
         with:
-          python-version: '2.7.18'
+          python-version: "3.10.12"
       # Set node version
       - uses: actions/setup-node@v2
         with:
-          node-version: '14.21.3'
+          node-version: "14.21.3"
       - name: Set NPM 7
-        run: npm install -g npm@8.3.2
+        run: npm install -g npm@8.19.4
       # Cache node_modules
       - uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
         with:
-          path: '**/node_modules'
+          path: "**/node_modules"
           key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
 
       - name: Install MDNS build dependencies
@@ -81,5 +81,3 @@ jobs:
 
       - name: Build
         run: npm run build:electron
-
-
