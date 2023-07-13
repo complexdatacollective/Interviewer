@@ -304,7 +304,6 @@
       "cordova-plugin-chooser": {},
       "cordova-plugin-network-information": {},
       "cordova-plugin-wkwebview-engine": {},
-      "cordova-plugin-network-canvas-client": {},
       "cordova-sqlite-storage": {},
       "cordova-plugin-keyboard": {},
       "cordova-plugin-x-socialsharing-android12": {
