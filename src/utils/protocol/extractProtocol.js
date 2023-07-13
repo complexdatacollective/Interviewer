@@ -22,9 +22,15 @@ const isRequired = (param) => { throw new Error(`${param} is required`); };
 const openError = friendlyErrorMessage("We couldn't open that Network Canvas protocol. Check the format, and try again.");
 const loadError = friendlyErrorMessage("We couldn't load that Network Canvas protocol. Try importing again.");
 
-const prepareDestination = destination =>
-  removeDirectory(destination)
-    .then(() => ensurePathExists(destination));
+const prepareDestination = async (destination) => {
+  console.log('prepareDestination', destination);
+  await removeDirectory(destination);
+  console.log('prepareDestination remove complete');
+  await ensurePathExists(destination);
+  console.log('prepareDestination ensure complete');
+  return;
+}
+
 
 const generateProtocolUID = () => uuid(); // generate a filename
 
@@ -118,6 +124,7 @@ const extractProtocol = inEnvironment((environment) => {
     return (protocolFile = isRequired('protocolFile')) => {
       const protocolName = generateProtocolUID();
       const destination = protocolPath(protocolName);
+      console.log('extractProtocol', protocolFile, protocolName, destination);
       return importZip(protocolFile, protocolName, destination);
     };
   }

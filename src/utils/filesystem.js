@@ -38,22 +38,10 @@ const userDataPath = inEnvironment((environment) => {
   }
 
   if (environment === environments.CORDOVA) {
-    return () => 'cdvfile://localhost/persistent';
+    return () => cordova.file.applicationStorageDirectory;
   }
 
   throw new Error(`userDataPath() not available on platform ${environment}`);
-});
-
-export const getFileNativePath = inEnvironment((environment) => {
-  if (environment === environments.CORDOVA) {
-    return (filePath) => new Promise((resolve, reject) => {
-      window.resolveLocalFileSystemURL(filePath, (fileEntry) => {
-        resolve(fileEntry.toURL());
-      }, (error) => reject(error));
-    });
-  }
-
-  throw new Error(`getFileNativePath() not available on platform ${environment}`);
 });
 
 const tempDataPath = inEnvironment((environment) => {
@@ -106,7 +94,9 @@ export const getTempFileSystem = () => new Promise((resolve, reject) => {
 const resolveFileSystemUrl = inEnvironment((environment) => {
   if (environment === environments.CORDOVA) {
     return (path) => new Promise(
-      (resolve, reject) => window.resolveLocalFileSystemURL(path, resolve, reject),
+      (resolve, reject) => {
+        window.resolveLocalFileSystemURL(path, resolve, reject);
+      },
     );
   }
 
@@ -127,10 +117,12 @@ const readFile = inEnvironment((environment) => {
 
   if (environment === environments.CORDOVA) {
     const fileReader = (fileEntry) => new Promise((resolve, reject) => {
+      console.log('fileEntry', fileEntry);
       fileEntry.file((file) => {
         const reader = new FileReader();
 
         reader.onloadend = (event) => {
+          console.log('fileReader onloadend', event.target.result);
           resolve(Buffer.from(event.target.result));
         };
 
@@ -260,6 +252,7 @@ const createDirectory = inEnvironment((environment) => {
     );
 
     return (targetUrl) => {
+      console.log('createDirectory', targetUrl);
       const [baseDirectory, directoryToAppend] = splitUrl(targetUrl);
 
       return resolveFileSystemUrl(baseDirectory)
@@ -338,6 +331,18 @@ const removeDirectory = inEnvironment((environment) => {
   throw new Error(`removeDirectory() not available on platform ${environment}`);
 });
 
+/**
+ * Given a path, return an array of paths that are progressively more nested.
+ * @param {string} targetPath
+ * @returns {string[]}
+ * @example
+ * getNestedPaths('a/b/c') // ['a', 'a/b', 'a/b/c']
+ * getNestedPaths('a') // ['a']
+ * getNestedPaths('') // []
+ * getNestedPaths('a/b/c/') // ['a', 'a/b', 'a/b/c']
+ * getNestedPaths('a/b/c/d') // ['a', 'a/b', 'a/b/c', 'a/b/c/d']
+ */
+
 const getNestedPaths = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
     const path = require('path');
@@ -355,10 +360,15 @@ const getNestedPaths = inEnvironment((environment) => {
   }
 
   if (environment === environments.CORDOVA) {
-    // Only tested for cdvfile:// format paths
     return (targetUrl) => {
-      const pathMatcher = /^([a-z]+:\/\/[a-z]+\/[a-z]+\/)(.*)/;
+      console.log('getNestedPaths targetUrl', targetUrl);
+      // Regular expression that matches `file:///data/user/0/<Java app identifier>/`
+      const pathMatcher = /^([a-z]+:\/\/\/data+\/user+\/0+\/org.codaco.NetworkCanvasInterviewer6+\/)(.*)/;
       const matches = pathMatcher.exec(targetUrl);
+
+      if (!matches) {
+        throw new Error(`Invalid path ${targetUrl}`);
+      }
 
       const location = matches[1];
       const path = trimPath(matches[2]).split('/');
@@ -617,8 +627,17 @@ export const createWriteStream = inEnvironment((environment) => {
   throw new Error(`writeStream() not available on platform ${environment}`);
 });
 
-// FIXME: this implies that it will recursively create directories, but if targetPath's parent
-//        doesn't already exist, this will error on both platforms
+/**
+ * Creates a directory at a given path if it doesn't already exist.
+ * Note that the base directory must already exist!
+ * @param  {string} targetPath
+ * @return {Promise}
+ * @private
+ * @example
+ * createDirectory('/path/to/dir')
+ *  .then(() => console.log('Directory created!'))
+ *  .catch((err) => console.error(err));
+*/
 const ensurePathExists = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
     const path = require('path');

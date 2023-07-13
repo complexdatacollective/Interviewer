@@ -14,12 +14,21 @@ describe('filesystem', () => {
 
     it('getNestedPaths', () => {
       expect(
-        getNestedPaths('cdvfile://localhost/persistent/protocols/development.netcanvas/assets'),
+        getNestedPaths('file:///data/user/0/org.codaco.NetworkCanvasInterviewer6/protocols/15f6f8aa-1442-4ade-8475-3dd66828fac2/assets/'),
       ).toEqual([
-        'cdvfile://localhost/persistent/protocols/',
-        'cdvfile://localhost/persistent/protocols/development.netcanvas/',
-        'cdvfile://localhost/persistent/protocols/development.netcanvas/assets/',
+        'file:///data/user/0/org.codaco.NetworkCanvasInterviewer6/protocols/',
+        'file:///data/user/0/org.codaco.NetworkCanvasInterviewer6/protocols/15f6f8aa-1442-4ade-8475-3dd66828fac2/',
+        'file:///data/user/0/org.codaco.NetworkCanvasInterviewer6/protocols/15f6f8aa-1442-4ade-8475-3dd66828fac2/assets/',
       ]);
+
+      // expect(
+      //   getNestedPaths('file:///data/user/0/com.some.app/data/nested/paths/here/'),
+      // ).toEqual([
+      //   'file:///data/user/0/com.some.app/data/',
+      //   'file:///data/user/0/com.some.app/data/nested/',
+      //   'file:///data/user/0/com.some.app/data/nested/paths/',
+      //   'file:///data/user/0/com.some.app/data/nested/paths/here/',
+      // ]);
     });
 
     describe('with mocked fs', () => {
