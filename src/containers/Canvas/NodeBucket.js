@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { isUndefined } from 'lodash';
+import { isNull, isUndefined } from 'lodash';
 import { compose } from 'recompose';
 import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -23,7 +23,7 @@ const NodeBucket = React.forwardRef((props, ref) => {
 
   return (
     <AnimatePresence>
-      {!isUndefined(node) && allowPositioning && !allowAutomaticLayout && (
+      {!(isNull(node) || isUndefined(node)) && allowPositioning && !allowAutomaticLayout && (
         <motion.div
           className="node-bucket"
           ref={ref}
