@@ -6,6 +6,7 @@ import inEnvironment from '../Environment';
 import { writeFile, tempDataPath } from '../filesystem';
 import friendlyErrorMessage from '../../utils/friendlyErrorMessage';
 import ApiClient from '../../utils/ApiClient';
+import path from 'path';
 
 const getURL = uri =>
   new Promise((resolve, reject) => {

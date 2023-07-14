@@ -117,12 +117,10 @@ const readFile = inEnvironment((environment) => {
 
   if (environment === environments.CORDOVA) {
     const fileReader = (fileEntry) => new Promise((resolve, reject) => {
-      console.log('fileEntry', fileEntry);
       fileEntry.file((file) => {
         const reader = new FileReader();
 
         reader.onloadend = (event) => {
-          console.log('fileReader onloadend', event.target.result);
           resolve(Buffer.from(event.target.result));
         };
 
@@ -252,7 +250,6 @@ const createDirectory = inEnvironment((environment) => {
     );
 
     return (targetUrl) => {
-      console.log('createDirectory', targetUrl);
       const [baseDirectory, directoryToAppend] = splitUrl(targetUrl);
 
       return resolveFileSystemUrl(baseDirectory)
@@ -361,7 +358,6 @@ const getNestedPaths = inEnvironment((environment) => {
 
   if (environment === environments.CORDOVA) {
     return (targetUrl) => {
-      console.log('getNestedPaths targetUrl', targetUrl);
       // Regular expression that matches `file:///data/user/0/<Java app identifier>/`
       const pathMatcher = /^([a-z]+:\/\/\/data+\/user+\/0+\/org.codaco.NetworkCanvasInterviewer6+\/)(.*)/;
       const matches = pathMatcher.exec(targetUrl);
