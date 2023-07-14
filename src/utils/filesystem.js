@@ -2,10 +2,9 @@
 /* global FileWriter, FileError, cordova */
 import { Writable } from 'stream';
 import { trimChars } from 'lodash/fp';
+import { Buffer } from 'buffer';
 import environments from './environments';
 import inEnvironment from './Environment';
-
-const Buffer = require('buffer/').Buffer; // eslint-disable-line prefer-destructuring
 
 const trimPath = trimChars('/ ');
 
@@ -30,20 +29,6 @@ const inSequence = (items, apply) => items
     Promise.resolve(),
   );
 
-const userDataPath = inEnvironment((environment) => {
-  if (environment === environments.ELECTRON) {
-    const electron = window.require('electron');
-
-    return () => (electron.app || electron.remote.app).getPath('userData');
-  }
-
-  if (environment === environments.CORDOVA) {
-    return () => cordova.file.applicationStorageDirectory;
-  }
-
-  throw new Error(`userDataPath() not available on platform ${environment}`);
-});
-
 const tempDataPath = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
     const electron = window.require('electron');
@@ -53,6 +38,20 @@ const tempDataPath = inEnvironment((environment) => {
 
   if (environment === environments.CORDOVA) {
     return () => cordova.file.cacheDirectory;
+  }
+
+  throw new Error(`userDataPath() not available on platform ${environment}`);
+});
+
+const userDataPath = inEnvironment((environment) => {
+  if (environment === environments.ELECTRON) {
+    const electron = window.require('electron');
+
+    return () => (electron.app || electron.remote.app).getPath('userData');
+  }
+
+  if (environment === environments.CORDOVA) {
+    return () => cordova.file.applicationStorageDirectory;
   }
 
   throw new Error(`userDataPath() not available on platform ${environment}`);
@@ -105,14 +104,9 @@ const resolveFileSystemUrl = inEnvironment((environment) => {
 
 const readFile = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const fs = require('fs');
+    const fse = require('fs-extra');
 
-    return (filename) => new Promise((resolve, reject) => {
-      fs.readFile(filename, null, (err, data) => {
-        if (err) { reject(err); }
-        resolve(data);
-      });
-    });
+    return (filename) => fse.readFile(filename, null);
   }
 
   if (environment === environments.CORDOVA) {
@@ -130,43 +124,11 @@ const readFile = inEnvironment((environment) => {
       }, reject);
     });
 
-    return (filename) => resolveFileSystemUrl(filename).then(fileReader);
+    return (filename) => resolveFileSystemUrl(filename)
+      .then(fileReader);
   }
 
   throw new Error(`readFile() not available on platform ${environment}`);
-});
-
-/**
- * Deprecated.
- * This reads the binary contents of a file into a base-64 encoded data URL,
- * which works as long as the file is small enough (but is slow).
- * On iOS, asset loading currently relies on observed behavior of the tmp fs;
- * this may be useful as a fallback in the future (see #681).
- */
-const readFileAsDataUrl = inEnvironment((environment) => {
-  if (environment === environments.CORDOVA) {
-    const fileReader = (fileEntry) => new Promise((resolve, reject) => {
-      // TODO: reject with error
-      // eslint-disable-next-line prefer-promise-reject-errors
-      if (!fileEntry) { reject('File not found'); }
-
-      fileEntry.file((file) => {
-        const reader = new FileReader();
-
-        reader.onloadend = (event) => {
-          resolve(event.target.result);
-        };
-
-        reader.onerror = (error) => reject(error, 'filesystem.readFileAsDataUrl');
-
-        reader.readAsDataURL(file);
-      }, reject);
-    });
-
-    return (filename) => resolveFileSystemUrl(filename).then(fileReader);
-  }
-
-  throw new Error(`readFileAsDataUrl() not available on platform ${environment}`);
 });
 
 export const makeFileWriter = (fileEntry) => new Promise((resolve, reject) => {
@@ -660,36 +622,36 @@ const ensurePathExists = inEnvironment((environment) => {
   throw new Error(`ensurePathExists() not available on platform ${environment}`);
 });
 
-/**
- * Creates a temp file from a given source filename if it doesn't already exist.
- * This is useful on iOS, where video can be served using native file:// URLs.
- * Note that this should not be needed on Android, but if called there, the
- * cache directory will be used.
- *
- * Resolves with the fileEntry of the temp file.
- *
- * @param {string} sourceFilename existing file on the permanent FS
- * @param {string} tmpFilename unique name for the temporary file
- * @async
- *
- */
-const makeTmpDirCopy = inEnvironment((environment) => {
-  if (environment === environments.CORDOVA) {
-    return (sourceFilename, tmpFilename) => new Promise((resolve, reject) => {
-      window.requestFileSystem(window.TEMPORARY, 0, (tempFs) => {
-        tempFs.root.getFile(tmpFilename, { create: false }, (fileEntry) => {
-          resolve(fileEntry); // Temp file already exists
-        }, () => {
-          window.resolveLocalFileSystemURL(sourceFilename, (sourceEntry) => {
-            sourceEntry.copyTo(tempFs.root, tmpFilename, resolve, reject);
-          }, reject);
-        });
-      }, reject);
-    });
-  }
+// /**
+//  * Creates a temp file from a given source filename if it doesn't already exist.
+//  * This is useful on iOS, where video can be served using native file:// URLs.
+//  * Note that this should not be needed on Android, but if called there, the
+//  * cache directory will be used.
+//  *
+//  * Resolves with the fileEntry of the temp file.
+//  *
+//  * @param {string} sourceFilename existing file on the permanent FS
+//  * @param {string} tmpFilename unique name for the temporary file
+//  * @async
+//  *
+//  */
+// const makeTmpDirCopy = inEnvironment((environment) => {
+//   if (environment === environments.CORDOVA) {
+//     return (sourceFilename, tmpFilename) => new Promise((resolve, reject) => {
+//       window.requestFileSystem(window.TEMPORARY, 0, (tempFs) => {
+//         tempFs.root.getFile(tmpFilename, { create: false }, (fileEntry) => {
+//           resolve(fileEntry); // Temp file already exists
+//         }, () => {
+//           window.resolveLocalFileSystemURL(sourceFilename, (sourceEntry) => {
+//             sourceEntry.copyTo(tempFs.root, tmpFilename, resolve, reject);
+//           }, reject);
+//         });
+//       }, reject);
+//     });
+//   }
 
-  throw new Error(`makeTmpDirCopy() not available on platform ${environment}`);
-});
+//   throw new Error(`makeTmpDirCopy() not available on platform ${environment}`);
+// });
 
 export {
   getFileEntry,
@@ -698,12 +660,11 @@ export {
   appPath,
   getNestedPaths,
   ensurePathExists,
-  makeTmpDirCopy,
+  // makeTmpDirCopy,
   createDirectory,
   rename,
   removeDirectory,
   readFile,
-  readFileAsDataUrl,
   resolveFileSystemUrl,
   writeFile,
   writeStream,

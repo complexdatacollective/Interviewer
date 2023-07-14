@@ -26,7 +26,9 @@ const fatalExportErrorAction = withErrorDialog((error) => ({
 const DataExportScreen = ({ show, onClose }) => {
   const [step, setStep] = useState(3);
   const [selectedSessions, setSelectedSessions] = useState([]);
-  const [filename, setFilename] = useState('networkCanvasExport');
+
+  // Set the default filename to 'networkCanvasExport-<timestamp>'
+  const [filename, setFilename] = useState(`networkCanvasExport-${Date.now()}`);
   const [abortHandlers, setAbortHandlers] = useState(null);
 
   const pairedServer = useSelector((state) => state.pairedServer);
