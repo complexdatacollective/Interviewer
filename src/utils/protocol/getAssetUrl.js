@@ -1,6 +1,7 @@
 import environments from '../environments';
 import inEnvironment from '../Environment';
 import protocolPath from './protocolPath';
+import { resolveFileSystemUrl } from '../filesystem';
 
 const isRequired = (param) => { throw new Error(`${param} is required`); };
 
@@ -23,7 +24,31 @@ const assetUrl = (environment) => {
       assetPath = isRequired('assetPath'),
     ) => {
       const sourceFilename = protocolPath(protocolUID, `assets/${assetPath}`);
-      return Promise.resolve(sourceFilename);
+      return resolveFileSystemUrl(sourceFilename).then((url) => {
+        const toURL = url.toURL();
+
+        /**
+         * If we are in development mode, the path returned by toURL() will
+         * include the host's IP address and port, which we use for the hot
+         * reload functionality.
+         *
+         * This will not work with the `WebViewAssetLoader` in Android, which
+         * only catches requests to http://localhost
+         *
+         * We therefore need to replace the host with localhost, and remove the
+         * port number, only in development mode.
+         */
+
+        if (process.env.NODE_ENV === 'development') {
+          console.info('assetUrl: replacing host with localhost');
+          const url = new URL(toURL);
+          url.host = 'localhost';
+          url.port = '';
+          return url.toString();
+        }
+
+        return toURL;
+      });
     };
   }
 
