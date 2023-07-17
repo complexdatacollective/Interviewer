@@ -51,7 +51,7 @@ const userDataPath = inEnvironment((environment) => {
   }
 
   if (environment === environments.CORDOVA) {
-    return () => cordova.file.applicationStorageDirectory;
+    return () => cordova.file.dataDirectory;
   }
 
   throw new Error(`userDataPath() not available on platform ${environment}`);
@@ -212,6 +212,7 @@ const createDirectory = inEnvironment((environment) => {
     );
 
     return (targetUrl) => {
+      console.log('createDirectory', targetUrl);
       const [baseDirectory, directoryToAppend] = splitUrl(targetUrl);
 
       return resolveFileSystemUrl(baseDirectory)
@@ -288,63 +289,6 @@ const removeDirectory = inEnvironment((environment) => {
   }
 
   throw new Error(`removeDirectory() not available on platform ${environment}`);
-});
-
-/**
- * Given a path, return an array of paths that are progressively more nested.
- * @param {string} targetPath
- * @returns {string[]}
- * @example
- * getNestedPaths('a/b/c') // ['a', 'a/b', 'a/b/c']
- * getNestedPaths('a') // ['a']
- * getNestedPaths('') // []
- * getNestedPaths('a/b/c/') // ['a', 'a/b', 'a/b/c']
- * getNestedPaths('a/b/c/d') // ['a', 'a/b', 'a/b/c', 'a/b/c/d']
- */
-
-const getNestedPaths = inEnvironment((environment) => {
-  if (environment === environments.ELECTRON) {
-    const path = require('path');
-
-    return (targetPath) => targetPath
-      .split(path.sep)
-      .reduce(
-        (memo, dir) => (
-          memo.length === 0
-            ? [dir]
-            : [...memo, path.join(memo[memo.length - 1], dir)]
-        ),
-        [],
-      );
-  }
-
-  if (environment === environments.CORDOVA) {
-    return (targetUrl) => {
-      // Regular expression that matches `file:///data/user/0/<Java app identifier>/`
-      const pathMatcher = /^([a-z]+:\/\/\/data+\/user+\/0+\/org.codaco.NetworkCanvasInterviewer6+\/)(.*)/;
-      const matches = pathMatcher.exec(targetUrl);
-
-      if (!matches) {
-        throw new Error(`Invalid path ${targetUrl}`);
-      }
-
-      const location = matches[1];
-      const path = trimPath(matches[2]).split('/');
-
-      return path
-        .reduce(
-          (memo, dir) => (
-            memo.length === 0
-              ? [dir]
-              : [...memo, `${memo[memo.length - 1]}${dir}/`]
-          ),
-          [location],
-        )
-        .slice(1);
-    };
-  }
-
-  throw new Error(`getNestedPaths() not available on platform ${environment}`);
 });
 
 const writeStream = inEnvironment((environment) => {
@@ -598,25 +542,54 @@ export const createWriteStream = inEnvironment((environment) => {
 */
 const ensurePathExists = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const path = require('path');
+    const fs = require('fs');
 
     return (targetPath) => {
-      const relativePath = path.relative(userDataPath(), targetPath);
-      const nestedPaths = getNestedPaths(relativePath)
-        .map((pathSegment) => path.join(userDataPath(), pathSegment));
+      if (!targetPath) {
+        throw new Error('No path provided to ensurePathExists');
+      }
+
+      if (!fs.existsSync(targetPath)) {
+        fs.mkdirSync(targetPath, { recursive: true });
+      }
+
+      return targetPath;
+    };
+  }
+
+  if (environment === environments.CORDOVA) {
+    return (targetUrl, basePath = cordova.file.dataDirectory) => {
+      console.log('ensurePathExists target', targetUrl, basePath);
+      const targetUrlWithoutBasePath = targetUrl.replace(basePath, '');
+
+      console.log('ensurePathExists withoutbase', targetUrlWithoutBasePath);
+
+      /**
+       * Given a string in the format '/path/to/dir', returns an array of paths
+       * to ensure exist, in order, e.g. ['/path', '/path/to', '/path/to/dir'].
+       * @param {} pathstring
+       * @returns {Array<string>}
+       *
+       */
+      const getNestedPaths = (pathstring) => {
+        const paths = [];
+        const pathParts = pathstring.split('/').filter((path) => path.length);
+        pathParts.reduce((prev, curr) => {
+          const next = `${prev}/${curr}`;
+          paths.push(next);
+          return next;
+        }, '');
+        return paths;
+      };
+
+      const nestedPaths = getNestedPaths(targetUrlWithoutBasePath).map((path) => `${basePath}${path}`);
+      console.log('ensurePathExists nested', nestedPaths);
 
       return inSequence(
         nestedPaths,
         createDirectory,
       );
     };
-  }
-
-  if (environment === environments.CORDOVA) {
-    return (targetUrl) => inSequence(
-      getNestedPaths(targetUrl),
-      createDirectory,
-    );
   }
 
   throw new Error(`ensurePathExists() not available on platform ${environment}`);
@@ -658,7 +631,6 @@ export {
   userDataPath,
   tempDataPath,
   appPath,
-  getNestedPaths,
   ensurePathExists,
   // makeTmpDirCopy,
   createDirectory,

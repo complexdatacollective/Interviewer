@@ -26,7 +26,7 @@ const prepareDestination = async (destination) => {
   console.log('prepareDestination', destination);
   await removeDirectory(destination);
   console.log('prepareDestination remove complete');
-  await ensurePathExists(destination);
+  ensurePathExists(destination);
   console.log('prepareDestination ensure complete');
   return;
 }
@@ -109,11 +109,17 @@ const loadZip = inEnvironment((environment) => {
 
 const importZip = inEnvironment((environment) => {
   if (environment === environments.CORDOVA || environment === environments.ELECTRON) {
-    return (protocolFile, protocolName, destination) =>
-      loadZip(protocolFile)
+    return (protocolFile, protocolName, destination) => {
+      console.log('importZip', protocolFile, protocolName, destination);
+      return loadZip(protocolFile)
         .then(zip => extractZip(zip, destination))
-        .catch(openError)
+        .catch((error) => {
+          console.log(error)
+          return openError;
+        })
         .then(() => protocolName);
+    }
+
   }
 
   return () => Promise.reject(new Error('loadZip() not available on platform'));
