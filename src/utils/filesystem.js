@@ -552,13 +552,19 @@ const ensurePathExists = inEnvironment((environment) => {
         fs.mkdirSync(targetPath, { recursive: true });
       }
 
-      return targetPath;
+      return Promise.resolve();
     };
   }
 
   if (environment === environments.CORDOVA) {
     return (targetUrl, basePath = cordova.file.dataDirectory) => {
+      if (!targetUrl) {
+        throw new Error('No path provided to ensurePathExists');
+      }
+
+      // Remove the basePath string, since we can only create directories relative to it.
       const targetUrlWithoutBasePath = targetUrl.replace(basePath, '');
+
       /**
        * Given a string in the format '/path/to/dir', returns an array of paths
        * to ensure exist, in order, e.g. ['/path', '/path/to', '/path/to/dir'].

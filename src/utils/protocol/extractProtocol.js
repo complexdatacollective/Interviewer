@@ -23,11 +23,8 @@ const openError = friendlyErrorMessage("We couldn't open that Network Canvas pro
 const loadError = friendlyErrorMessage("We couldn't load that Network Canvas protocol. Try importing again.");
 
 const prepareDestination = async (destination) => {
-  console.log('prepareDestination', destination);
   await removeDirectory(destination);
-  console.log('prepareDestination remove complete');
-  ensurePathExists(destination);
-  console.log('prepareDestination ensure complete');
+  await ensurePathExists(destination);
   return;
 }
 
