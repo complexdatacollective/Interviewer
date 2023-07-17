@@ -4,31 +4,12 @@
 import environments from '../environments';
 // eslint-disable-next-line import/named
 import { getEnvironment } from '../Environment';
-import { getNestedPaths, writeStream } from '../filesystem';
+import { writeStream } from '../filesystem';
 
 describe('filesystem', () => {
   describe('Cordova', () => {
     beforeAll(() => {
       getEnvironment.mockReturnValue(environments.CORDOVA);
-    });
-
-    it('getNestedPaths', () => {
-      expect(
-        getNestedPaths('file:///data/user/0/org.codaco.NetworkCanvasInterviewer6/protocols/15f6f8aa-1442-4ade-8475-3dd66828fac2/assets/'),
-      ).toEqual([
-        'file:///data/user/0/org.codaco.NetworkCanvasInterviewer6/protocols/',
-        'file:///data/user/0/org.codaco.NetworkCanvasInterviewer6/protocols/15f6f8aa-1442-4ade-8475-3dd66828fac2/',
-        'file:///data/user/0/org.codaco.NetworkCanvasInterviewer6/protocols/15f6f8aa-1442-4ade-8475-3dd66828fac2/assets/',
-      ]);
-
-      // expect(
-      //   getNestedPaths('file:///data/user/0/com.some.app/data/nested/paths/here/'),
-      // ).toEqual([
-      //   'file:///data/user/0/com.some.app/data/',
-      //   'file:///data/user/0/com.some.app/data/nested/',
-      //   'file:///data/user/0/com.some.app/data/nested/paths/',
-      //   'file:///data/user/0/com.some.app/data/nested/paths/here/',
-      // ]);
     });
 
     describe('with mocked fs', () => {

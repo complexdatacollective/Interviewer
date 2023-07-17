@@ -212,7 +212,6 @@ const createDirectory = inEnvironment((environment) => {
     );
 
     return (targetUrl) => {
-      console.log('createDirectory', targetUrl);
       const [baseDirectory, directoryToAppend] = splitUrl(targetUrl);
 
       return resolveFileSystemUrl(baseDirectory)
@@ -559,11 +558,7 @@ const ensurePathExists = inEnvironment((environment) => {
 
   if (environment === environments.CORDOVA) {
     return (targetUrl, basePath = cordova.file.dataDirectory) => {
-      console.log('ensurePathExists target', targetUrl, basePath);
       const targetUrlWithoutBasePath = targetUrl.replace(basePath, '');
-
-      console.log('ensurePathExists withoutbase', targetUrlWithoutBasePath);
-
       /**
        * Given a string in the format '/path/to/dir', returns an array of paths
        * to ensure exist, in order, e.g. ['/path', '/path/to', '/path/to/dir'].
@@ -583,7 +578,6 @@ const ensurePathExists = inEnvironment((environment) => {
       };
 
       const nestedPaths = getNestedPaths(targetUrlWithoutBasePath).map((path) => `${basePath}${path}`);
-      console.log('ensurePathExists nested', nestedPaths);
 
       return inSequence(
         nestedPaths,
