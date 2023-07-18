@@ -80,6 +80,7 @@
     "cordova-ios": "~7.0.0",
     "cordova-plugin-file": "github:apache/cordova-plugin-file",
     "cordova-plugin-file-transfer": "github:apache/cordova-plugin-file-transfer",
+    "cordova-plugin-network-canvas-client": "github:complexdatacollective/cordova-plugin-network-canvas-client",
     "cross-env": "^5.2.0",
     "css-loader": "^3.4.2",
     "csvtojson": "^2.0.8",
@@ -310,7 +311,8 @@
         "PHOTO_LIBRARY_USAGE_DESCRIPTION": "This app requires photo library access to function properly."
       },
       "cordova-plugin-androidx-adapter": {},
-      "cordova-plugin-file": {}
+      "cordova-plugin-file": {},
+      "cordova-plugin-network-canvas-client": {}
     }
   }
 }

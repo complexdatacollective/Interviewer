@@ -107,7 +107,6 @@ export const importProtocolFromURI = (uri, usePairedServer) => {
           ),
         }));
 
-        console.log('tempLocation', tempLocation);
         return extractProtocol(tempLocation);
       }, catchError)
       .then((protocolLocation) => {

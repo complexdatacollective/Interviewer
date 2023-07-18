@@ -107,7 +107,6 @@ const loadZip = inEnvironment((environment) => {
 const importZip = inEnvironment((environment) => {
   if (environment === environments.CORDOVA || environment === environments.ELECTRON) {
     return (protocolFile, protocolName, destination) => {
-      console.log('importZip', protocolFile, protocolName, destination);
       return loadZip(protocolFile)
         .then(zip => extractZip(zip, destination))
         .catch((error) => {
@@ -127,7 +126,6 @@ const extractProtocol = inEnvironment((environment) => {
     return (protocolFile = isRequired('protocolFile')) => {
       const protocolName = generateProtocolUID();
       const destination = protocolPath(protocolName);
-      console.log('extractProtocol', protocolFile, protocolName, destination);
       return importZip(protocolFile, protocolName, destination);
     };
   }
