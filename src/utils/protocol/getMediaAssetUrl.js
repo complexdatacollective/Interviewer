@@ -16,6 +16,7 @@ const getMediaAssetUrl = (protocolName, assetPath) => {
         // takes a file:// path, and converts it to use the scheme preference
         // from our config.xml (which is app://).
         const convertedPath = window.WkWebView.convertFilePath(sourceFilename);
+        console.info('getMediaAssetUrl: converting file path', sourceFilename, convertedPath);
         return convertedPath;
       });
   }
