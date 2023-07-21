@@ -35,7 +35,7 @@ import { convertNamesToUUIDs } from './helpers';
 import DropOverlay from './DropOverlay';
 import {
   MaxNodesReached, maxNodesWithDefault, MinNodesNotMet, minNodesWithDefault,
-} from '../NameGeneratorQuickAdd';
+} from '../utils/StageLevelValidation';
 import { get } from '../../../utils/lodash-replacements';
 
 const countColumns = (width) => (

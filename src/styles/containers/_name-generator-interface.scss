@@ -32,18 +32,11 @@
     display: flex;
   }
 
-  &__add-node {
-    &--disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-
-      .icon {
-        pointer-events: none;
-      }
-    }
-
-    .icon {
-      @include floating-action-button;
-    }
+  &__add-button {
+    position: absolute;
+    bottom: unit(2);
+    right: unit(2);
+    z-index: var(--z-global-ui);
+    margin-right: unit(1.5);
   }
 }
