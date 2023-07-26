@@ -15,11 +15,11 @@ import NodePanels from '../NodePanels';
 import NodeForm from '../NodeForm';
 import { NodeList, NodeBin } from '../../components';
 import {
-  MaxNodesReached, maxNodesWithDefault, MinNodesNotMet, minNodesWithDefault,
+  MaxNodesMet, maxNodesWithDefault, MinNodesNotMet, minNodesWithDefault,
 } from './utils/StageLevelValidation';
 import { get } from '../../utils/lodash-replacements';
 import QuickNodeForm from '../QuickNodeForm';
-import { getNodeColor, getNodeTypeLabel, makeGetNodeTypeDefinition } from '../../selectors/network';
+import { getNodeColor, getNodeTypeLabel } from '../../selectors/network';
 
 const NameGenerator = (props) => {
   const {
@@ -56,13 +56,16 @@ const NameGenerator = (props) => {
   const dispatch = useDispatch();
 
   const addNode = (...properties) => dispatch(sessionsActions.addNode(...properties));
-  const updateNode = (properties) => dispatch(sessionsActions.updateNode(properties));
-  const removeNode = (properties) => dispatch(sessionsActions.removeNode(properties));
+  const updateNode = (...properties) => dispatch(sessionsActions.updateNode(...properties));
+  const removeNode = (uid) => dispatch(sessionsActions.removeNode(uid));
 
   const maxNodesReached = stageNodeCount >= maxNodes;
 
   useEffect(() => {
-    setShowMinWarning(false);
+    console.log('stageNodeCount changed', stageNodeCount, minNodes);
+    if (stageNodeCount >= minNodes) {
+      setShowMinWarning(false);
+    }
   }, [stageNodeCount]);
 
   // Prevent leaving the stage if the minimum number of nodes has not been met
@@ -80,6 +83,7 @@ const NameGenerator = (props) => {
     // is triggered by Stages Menu. Use this to skip message if user has
     // navigated directly using stages menu.
     if (isUndefined(destination) && isLeavingStage && stageNodeCount < minNodes) {
+      console.log('showing min warning', isUndefined(destination), isLeavingStage, stageNodeCount < minNodes, stageNodeCount, minNodes);
       setShowMinWarning(true);
       return;
     }
@@ -87,11 +91,9 @@ const NameGenerator = (props) => {
     onComplete();
   };
 
-  useEffect(() => {
-    if (registerBeforeNext) {
-      registerBeforeNext(handleBeforeLeaving);
-    }
-  }, [registerBeforeNext]);
+  if (registerBeforeNext) {
+    registerBeforeNext(handleBeforeLeaving);
+  }
 
   /**
    * Drop node handler
@@ -99,9 +101,12 @@ const NameGenerator = (props) => {
    * @param {object} item - key/value object containing node object from the network store
    */
   const handleDropNode = (item) => {
+    console.log('hannleDropNode', item, 'newNodeAttributes', newNodeAttributes, 'newNodeModelData', newNodeModelData);
     const node = { ...item.meta };
     // Test if we are updating an existing network node, or adding it to the network
     if (has(node, 'promptIDs')) {
+      console.log('has promptids', newNodeModelData, newNodeAttributes);
+
       updateNode(
         node[entityPrimaryKeyProperty],
         { ...newNodeModelData },
@@ -139,7 +144,7 @@ const NameGenerator = (props) => {
         updateNode(selectedUID, {}, form);
       }
       setShowNodeForm(false);
-      setSelectedNode(false);
+      setSelectedNode(null);
     }
 
     if (quickAdd) {
@@ -152,8 +157,11 @@ const NameGenerator = (props) => {
 
   // When a node is tapped, trigger editing.
   const handleSelectNode = (node) => {
+    if (!form) {
+      return;
+    }
     setSelectedNode(node);
-    setShowNodeForm(false);
+    setShowNodeForm(true);
   };
 
   return (
@@ -181,8 +189,12 @@ const NameGenerator = (props) => {
           />
         </div>
       </div>
-      <MaxNodesReached show={maxNodesReached} />
-      <MinNodesNotMet show={showMinWarning} minNodes={minNodes} />
+      <MaxNodesMet show={maxNodesReached} timeoutDuration={0} />
+      <MinNodesNotMet
+        show={showMinWarning}
+        minNodes={minNodes}
+        onHideCallback={() => setShowMinWarning(false)}
+      />
       {form
         && (
           <NodeForm
@@ -207,6 +219,7 @@ const NameGenerator = (props) => {
             newNodeModelData={newNodeModelData}
             newNodeAttributes={newNodeAttributes}
             targetVariable={quickAdd}
+            onShowForm={() => setShowMinWarning(false)}
           />
         )}
       <NodeBin

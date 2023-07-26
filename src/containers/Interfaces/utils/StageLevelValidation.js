@@ -1,126 +1,192 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Icon } from '@codaco/ui';
+import uuid from 'uuid';
 import { defaultTo } from 'lodash';
+import { createPortal } from 'react-dom';
 
+/**
+ * Simple wrapper to add self-dismissing behaviour to a component
+ * @param {*} Wrapped - Component to wrap
+ * @param {*} show - Whether to show the component
+ * @param {*} dontHide - Whether to hide the component after a timeout
+ * @param {*} onHideCallback - Callback to run when the component is hidden
+ * @param {*} timeoutDuration - How long to wait before hiding the component
+ * @param {*} rest - Other props to pass to the component
+ * @returns {Component} - Wrapped component
+ */
 export const SelfDismissingNote = (Wrapped) => (
   {
     show,
-    dontHide = false,
     onHideCallback = () => { },
+    timeoutDuration = 4000,
     ...rest
   },
 ) => {
   const [visible, setVisible] = useState(show);
+  const [mouseOver, setMouseOver] = useState(false);
+  const timeout = useRef(null);
+  const key = useRef(uuid());
+
+  const handleHide = () => {
+    if (timeoutDuration > 0) {
+      setVisible(false);
+      onHideCallback();
+    }
+  };
+
   useEffect(() => {
-    let timeout;
     if (show) {
       setVisible(true);
-
-      if (!dontHide) {
-        timeout = setTimeout(() => {
-          onHideCallback();
-          setVisible(false);
-        }, 4000);
-      }
     }
 
     if (!show) {
       setVisible(false);
+    }
+  }, [show]);
+
+  useEffect(() => {
+    if (mouseOver) {
+      clearTimeout(timeout.current);
+    }
+
+    if (!mouseOver && visible) {
+      timeout.current = setTimeout(() => {
+        handleHide();
+      }, timeoutDuration);
+    }
+  }, [mouseOver]);
+
+  useEffect(() => {
+    if (visible) {
+      if (timeoutDuration && timeoutDuration > 0) {
+        timeout.current = setTimeout(() => {
+          handleHide();
+        }, timeoutDuration);
+      }
+    }
+
+    if (!visible) {
       clearTimeout(timeout);
     }
 
     return () => {
-      if (timeout) {
-        clearTimeout(timeout);
+      if (timeout.current) {
+        clearTimeout(timeout.current);
       }
     };
-  }, [show, dontHide, onHideCallback]);
+  }, [visible, timeoutDuration, onHideCallback]);
 
-  return (
-    <AnimatePresence>
-      {visible && (
-        <Wrapped {...rest} />
-      )}
-    </AnimatePresence>
+  return createPortal(
+    <div
+      style={{
+        position: 'absolute',
+        bottom: '2.4rem',
+        left: 0,
+        right: 0,
+        display: 'flex',
+        justifyContent: 'center',
+      }}
+      onClick={handleHide}
+      onMouseEnter={() => setMouseOver(true)}
+      onMouseLeave={() => setMouseOver(false)}
+    >
+      <AnimatePresence>
+        {visible && (
+          <Wrapped key={key} {...rest} />
+        )}
+      </AnimatePresence>
+    </div>,
+    document.body,
   );
 };
 
-export const MaxNodesReached = SelfDismissingNote(() => (
-  <motion.div
-    className="alter-limit-nudge"
-    style={{
-      bottom: '2.4rem',
-      width: '40rem',
-      alignItems: 'center',
-      left: 'calc(50% - 20rem)',
-      animation: 'shake 1.32s cubic-bezier(.36, .07, .19, .97) both',
-      animationDelay: '1s',
-    }}
-    initial={{ opacity: 0, y: '100%' }}
-    animate={{ opacity: 1, y: 0, transition: { delay: 1, type: 'spring' } }}
-    exit={{ opacity: 0, y: '100%' }}
-  >
-    <div
-      style={{
-        flex: '0 0 1.8rem',
-      }}
-    >
-      <Icon name="info" style={{ height: '3rem', width: '3rem' }} />
-    </div>
-    <div
-      style={{
-        flex: '1 1 auto',
-        margin: '0 1.8rem',
-      }}
-    >
-      <p>
-        You have added the maximum number of items. Click
-        the down arrow to continue.
-      </p>
-    </div>
-  </motion.div>
-));
+const containerVariants = {
+  show: {
+    opacity: 1,
+    y: '0%',
+    transition: {
+      when: 'beforeChildren',
+    },
+  },
+  hide: {
+    opacity: 0,
+    y: '50%',
+    transition: {
+      when: 'afterChildren',
+    },
+  },
+};
+
+const wrapperVariants = {
+  show: {
+    width: '36rem',
+    transition: {
+      type: 'spring',
+      stiffness: 100,
+      damping: 15,
+    },
+  },
+  hide: {
+    width: '6rem',
+    transition: {
+      type: 'easeIn',
+    },
+  },
+};
 
 export const MinNodesNotMet = SelfDismissingNote(({ minNodes }) => (
   <motion.div
     className="alter-limit-nudge"
-    style={{
-      bottom: '2.4rem',
-      width: '30rem',
-      alignItems: 'center',
-      left: 'calc(50% - 15rem)',
-      animation: 'shake 1.32s cubic-bezier(.36, .07, .19, .97) both',
-    }}
-    initial={{ opacity: 0, y: '100%' }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: '100%' }}
+    variants={containerVariants}
+    initial="hide"
+    animate="show"
+    exit="hide"
+    key="min-nodes-not-met"
   >
-    <div
-      style={{
-        flex: '0 0 1.8rem',
-      }}
-    >
-      <Icon name="error" style={{ height: '3rem', width: '3rem' }} />
-    </div>
-    <div
-      style={{
-        flex: '1 1 auto',
-        margin: '0 1.8rem',
-      }}
-    >
-      <p>
-        You must create at least
-        {' '}
-        <strong>
-          {minNodes}
-        </strong>
-        {' '}
-        {minNodes > 1 ? 'items' : 'item'}
-        {' '}
-        before you can continue.
-      </p>
-    </div>
+    <motion.div className="alter-limit-nudge__wrapper" variants={wrapperVariants}>
+      <div className="alter-limit-nudge__icon">
+        <Icon name="error" />
+      </div>
+      <motion.div
+        className="alter-limit-nudge__content"
+      >
+        <p>
+          You must create at least
+          {' '}
+          <strong>
+            {minNodes}
+          </strong>
+          {' '}
+          {minNodes > 1 ? 'items' : 'item'}
+          {' '}
+          before you can continue.
+        </p>
+      </motion.div>
+    </motion.div>
+  </motion.div>
+));
+
+export const MaxNodesMet = SelfDismissingNote(() => (
+  <motion.div
+    className="alter-limit-nudge"
+    variants={containerVariants}
+    initial="hide"
+    animate="show"
+    exit="hide"
+    key="min-nodes-not-met"
+  >
+    <motion.div className="alter-limit-nudge__wrapper" variants={wrapperVariants}>
+      <div className="alter-limit-nudge__icon">
+        <Icon name="info" />
+      </div>
+      <motion.div className="alter-limit-nudge__content">
+        <p>
+          You have added the maximum number of items for this screen. Click
+          the down arrow to continue.
+        </p>
+      </motion.div>
+    </motion.div>
   </motion.div>
 ));
 

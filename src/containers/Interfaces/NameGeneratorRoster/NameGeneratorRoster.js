@@ -34,7 +34,7 @@ import useItems from './useItems';
 import { convertNamesToUUIDs } from './helpers';
 import DropOverlay from './DropOverlay';
 import {
-  MaxNodesReached, maxNodesWithDefault, MinNodesNotMet, minNodesWithDefault,
+  MaxNodesMet, maxNodesWithDefault, MinNodesNotMet, minNodesWithDefault,
 } from '../utils/StageLevelValidation';
 import { get } from '../../../utils/lodash-replacements';
 
@@ -238,7 +238,7 @@ const NameGeneratorRoster = (props) => {
                   disabled={disabled}
                 />
               </div>
-              <MaxNodesReached show={stageNodeCount >= maxNodes} dontHide />
+              <MaxNodesMet show={stageNodeCount >= maxNodes} dontHide />
               <div className="name-generator-roster-interface__node-panel">
                 <Panel
                   title="Added"

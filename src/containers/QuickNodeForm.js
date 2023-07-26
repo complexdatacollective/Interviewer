@@ -1,6 +1,9 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, {
+  useState, useMemo, useEffect, useRef,
+} from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ActionButton, Node } from '@codaco/ui';
+import { createPortal } from 'react-dom';
 import { FIRST_LOAD_UI_ELEMENT_DELAY } from './Interfaces/utils/constants';
 
 const buttonVariants = {
@@ -47,12 +50,29 @@ const QuickAddForm = ({
   targetVariable,
 }) => {
   const [showForm, setShowForm] = useState(false);
+  const tooltipTimer = useRef(null);
+  const [showTooltip, setShowTooltip] = useState(false);
   const [nodeLabel, setNodeLabel] = useState('');
 
   const handleBlur = () => {
     setNodeLabel('');
     setShowForm(false);
   };
+
+  // Handle showing/hiding the tooltip based on the nodeLabel
+  // Logic: wait 5 seconds after the user last typed something
+  useEffect(() => {
+    if (nodeLabel !== '') {
+      setShowTooltip(false);
+      clearTimeout(tooltipTimer.current);
+      tooltipTimer.current = setTimeout(() => {
+        setShowTooltip(true);
+      }, 5000);
+    } else {
+      setShowTooltip(false);
+      clearTimeout(tooltipTimer.current);
+    }
+  }, [nodeLabel]);
 
   const isValid = useMemo(() => nodeLabel !== '', [nodeLabel]);
 
@@ -79,11 +99,11 @@ const QuickAddForm = ({
     }
   }, [disabled]);
 
-  return (
+  return createPortal(
     <motion.div
       initial={{
         opacity: 0,
-        y: '10rem',
+        y: '100%',
       }}
       animate={{
         opacity: 1,
@@ -104,6 +124,20 @@ const QuickAddForm = ({
             exit={buttonVariants.hide}
           >
             <form autoComplete="off" onSubmit={handleSubmit}>
+              <motion.div
+                key="tool-tip"
+                className="tool-tip"
+                initial={{
+                  opacity: 0,
+                }}
+                animate={{
+                  opacity: showTooltip ? 1 : 0,
+                }}
+              >
+                <span>
+                  Press enter to add...
+                </span>
+              </motion.div>
               <motion.input
                 initial={inputVariants.hide}
                 animate={inputVariants.show}
@@ -120,9 +154,9 @@ const QuickAddForm = ({
             </form>
             <Node
               label={nodeLabel}
-              inactive={!isValid}
               selected={isValid}
               color={nodeColor}
+              onClick={handleSubmit}
             />
           </motion.div>
         )}
@@ -144,7 +178,8 @@ const QuickAddForm = ({
         )}
 
       </AnimatePresence>
-    </motion.div>
+    </motion.div>,
+    document.body,
   );
 };
 

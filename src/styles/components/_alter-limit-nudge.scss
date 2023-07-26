@@ -1,0 +1,40 @@
+.alter-limit-nudge {
+  background: var(--color-slate-blue--dark);
+  color: var(--color-white);
+  border-radius: 99999px;
+  box-shadow: 0 unit(.5) unit(2) unit(1) rgba(0, 0, 0, 0.25); //sass-lint:disable-line no-color-literals
+  z-index: var(--z-tooltip);
+  font-size: 1.25rem;
+  cursor: pointer;
+
+  &__wrapper {
+    position: relative;
+    height: 6rem;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__icon {
+    position: absolute;
+    left: 0;
+    height: 6rem;
+    width: 6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .icon {
+      height: 3rem;
+      width: 3rem;
+    }
+  }
+
+  &__content {
+    position: absolute;
+    left: 6rem;
+    width: calc(30rem - #{unit(2)}); // ~2.4rem for padding
+
+  }
+}
