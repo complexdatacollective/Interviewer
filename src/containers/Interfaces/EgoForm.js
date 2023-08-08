@@ -149,8 +149,6 @@ const EgoForm = ({
     [scrollProgress, showScrollStatus, isOverflowing],
   );
 
-  console.log(form);
-
   return (
     <div className="ego-form alter-form">
       <div className="ego-form__form-container">

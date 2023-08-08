@@ -1,8 +1,12 @@
-import React, { useEffect, useState, useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import React, {
+  useEffect, useState, useMemo, useCallback,
+} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { submit } from 'redux-form';
 import { ActionButton, Button, Scroller } from '@codaco/ui';
 import { motion, AnimatePresence } from 'framer-motion';
 import { entityPrimaryKeyProperty, entityAttributesProperty } from '@codaco/shared-consts';
+import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import Overlay from './Overlay';
 import Form from './Form';
 import FormWizard from './FormWizard';
@@ -18,31 +22,40 @@ const NodeForm = (props) => {
     disabled,
     icon,
     nodeType,
-    addNode,
     newNodeModelData,
     newNodeAttributes,
     onClose,
   } = props;
 
-  const useFullScreenForms = useSelector((state) => state.deviceSettings.useFullScreenForms);
-
   const [show, setShow] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const dispatch = useDispatch();
+  const submitForm = () => dispatch(submit(reduxFormName));
+  const addNode = (...properties) => dispatch(sessionsActions.addNode(...properties));
+  const updateNode = (...properties) => dispatch(sessionsActions.updateNode(...properties));
 
-    if (isValid && !disabled) {
+  const useFullScreenForms = useSelector((state) => state.deviceSettings.useFullScreenForms);
+
+  const handleSubmit = useCallback((formData) => {
+    if (!selectedNode) {
+      /**
+      *  addNode(modelData, attributeData);
+      */
       addNode(
         newNodeModelData,
-        {
-          ...newNodeAttributeData,
-          [targetVariable]: nodeLabel,
-        },
+        { ...newNodeAttributes, ...formData },
       );
-
-      setNodeLabel('');
+    } else {
+      /**
+      * updateNode(nodeId, newModelData, newAttributeData)
+      */
+      const selectedUID = selectedNode[entityPrimaryKeyProperty];
+      updateNode(selectedUID, {}, formData);
     }
-  };
+
+    setShow(false);
+    onClose();
+  }, [selectedNode, newNodeModelData, newNodeAttributes, onClose]);
 
   // When a selected node is passed in, we are editing an existing node.
   // We need to show the form and populate it with the node's data.
@@ -60,13 +73,10 @@ const NodeForm = (props) => {
     return (formProps) => (<Scroller><Form {...formProps} /></Scroller>);
   }, [useFullScreenForms]);
 
-  console.log('form', form, selectedNode);
-
-  const handleClose = () => {
-    console.log('handleClose');
+  const handleClose = useCallback(() => {
     setShow(false);
     onClose();
-  };
+  }, [onClose]);
 
   return (
     <>
@@ -99,20 +109,19 @@ const NodeForm = (props) => {
         onClose={handleClose}
         className="node-form"
         forceEnableFullscreen={useFullScreenForms}
-        footer={!useFullScreenForms && (<Button key="submit" aria-label="Submit" type="submit" onClick={handleSubmit}>Finished</Button>)}
+        footer={!useFullScreenForms && (<Button key="submit" aria-label="Submit" type="submit" onClick={submitForm}>Finished</Button>)}
         allowMaximize={false}
       >
         <FormComponent
           {...form}
           subject={subject}
           initialValues={selectedNode?.[entityAttributesProperty]}
-          onSubmit={addNode}
+          onSubmit={handleSubmit}
           autoFocus
           form={reduxFormName}
           validationMeta={{
             entityId: selectedNode?.[entityPrimaryKeyProperty],
           }}
-        // otherNetworkEntities,
         />
       </Overlay>
     </>

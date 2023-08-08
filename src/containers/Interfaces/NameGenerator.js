@@ -118,37 +118,6 @@ const NameGenerator = (props) => {
     }
   };
 
-  /**
-  * Node Form submit handler
-  */
-  const handleAddNode = (nodeData) => {
-    if (form) {
-      if (!selectedNode) {
-        /**
-        *  addNode(modelData, attributeData);
-        */
-        addNode(
-          newNodeModelData,
-          { ...newNodeAttributes, ...nodeData },
-        );
-      } else {
-        /**
-        * updateNode(nodeId, newModelData, newAttributeData)
-        */
-        const selectedUID = selectedNode[entityPrimaryKeyProperty];
-        updateNode(selectedUID, {}, form);
-      }
-      setSelectedNode(null);
-    }
-
-    if (quickAdd) {
-      addNode(
-        newNodeModelData,
-        { ...newNodeAttributes, ...nodeData },
-      );
-    }
-  };
-
   // When a node is tapped, trigger editing.
   const handleSelectNode = (node) => {
     if (!form) {
@@ -201,7 +170,6 @@ const NameGenerator = (props) => {
             disabled={maxNodesReached}
             icon={nodeIconName}
             nodeType={nodeType}
-            addNode={handleAddNode}
             newNodeModelData={newNodeModelData}
             newNodeAttributes={newNodeAttributes}
             onClose={() => setSelectedNode(null)}
@@ -213,7 +181,6 @@ const NameGenerator = (props) => {
           icon={nodeIconName}
           nodeColor={nodeColor}
           nodeType={nodeType}
-          addNode={addNode}
           newNodeModelData={newNodeModelData}
           newNodeAttributes={newNodeAttributes}
           targetVariable={quickAdd}

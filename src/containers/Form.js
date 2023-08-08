@@ -142,7 +142,8 @@ Form.propTypes = {
   tooltip: PropTypes.string,
   submitButton: PropTypes.object,
   initialValues: PropTypes.object,
-  validationMeta: PropTypes.object.isRequired,
+  validationMeta: PropTypes.object,
+  otherNetworkEntities: PropTypes.object,
   subject: PropTypes.object.isRequired,
 };
 
@@ -152,8 +153,10 @@ Form.defaultProps = {
   className: null,
   tooltip: 'none',
   initialValues: null,
-  submitButton: <button type="submit" key="submit" aria-label="Submit" hidden />,
   // redux wants a "submit" button in order to enable submit with an enter key, even if hidden
+  submitButton: <button type="submit" key="submit" aria-label="Submit" hidden />,
+  validationMeta: {},
+  otherNetworkEntities: {},
 };
 
 function makeMapStateToProps() {

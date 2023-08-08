@@ -2,8 +2,10 @@ import React, {
   useState, useMemo, useEffect, useRef,
 } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useDispatch } from 'react-redux';
 import { ActionButton, Node } from '@codaco/ui';
 import { FIRST_LOAD_UI_ELEMENT_DELAY } from './Interfaces/utils/constants';
+import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 
 const containerVariants = {
   normal: {
@@ -62,7 +64,6 @@ const QuickAddForm = ({
   icon,
   nodeColor,
   nodeType,
-  addNode,
   newNodeModelData,
   newNodeAttributeData,
   targetVariable,
@@ -71,6 +72,10 @@ const QuickAddForm = ({
   const tooltipTimer = useRef(null);
   const [showTooltip, setShowTooltip] = useState(false);
   const [nodeLabel, setNodeLabel] = useState('');
+
+  const dispatch = useDispatch();
+
+  const addNode = (...properties) => dispatch(sessionsActions.addNode(...properties));
 
   const handleBlur = () => {
     setNodeLabel('');
