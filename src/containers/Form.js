@@ -50,7 +50,7 @@ const scrollToFirstError = (errors) => {
   // When used on alter form, multiple forms can be differentiated by the active slide
   // class. This needs priority, so look it up first.
   const el = document.querySelector(`.swiper-slide-active [name="${firstError}"]`)
-             || document.querySelector(`[name="${firstError}"]`);
+    || document.querySelector(`[name="${firstError}"]`);
 
   // If element is not found, prevent crash.
   if (!el) {
@@ -101,11 +101,16 @@ class Form extends Component {
       className,
       submitButton,
       children,
+      subject,
     } = this.props;
+
+    if (!subject) {
+      throw new Error('Form has an implicit dependency on stage subject. Pass subject prop to Form.');
+    }
 
     return (
       <form className={className} onSubmit={handleSubmit} autoComplete="off">
-        { fields.map((field, index) => {
+        {fields.map((field, index) => {
           const isFirst = autoFocus && index === 0;
           return (
             <Field
@@ -116,7 +121,7 @@ class Form extends Component {
               tooltip={tooltip}
             />
           );
-        }) }
+        })}
         {submitButton}
         {children}
       </form>
@@ -137,7 +142,8 @@ Form.propTypes = {
   tooltip: PropTypes.string,
   submitButton: PropTypes.object,
   initialValues: PropTypes.object,
-  validationMeta: PropTypes.object,
+  validationMeta: PropTypes.object.isRequired,
+  subject: PropTypes.object.isRequired,
 };
 
 Form.defaultProps = {
@@ -146,7 +152,6 @@ Form.defaultProps = {
   className: null,
   tooltip: 'none',
   initialValues: null,
-  validationMeta: {},
   submitButton: <button type="submit" key="submit" aria-label="Submit" hidden />,
   // redux wants a "submit" button in order to enable submit with an enter key, even if hidden
 };

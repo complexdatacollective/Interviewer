@@ -1,8 +1,5 @@
 .name-generator-interface {
-  @include interface-centering;
-  height: 100%;
-  overflow: hidden;
-  display: flex;
+  @include interface-centering-padding;
   flex-direction: column;
 
   &__prompt {
@@ -35,8 +32,7 @@
   &__add-button {
     position: absolute;
     bottom: unit(2);
-    right: unit(2);
+    right: unit(6);
     z-index: var(--z-global-ui);
-    margin-right: unit(1.5);
   }
 }

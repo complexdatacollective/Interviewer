@@ -3,10 +3,28 @@ import React, {
 } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ActionButton, Node } from '@codaco/ui';
-import { createPortal } from 'react-dom';
 import { FIRST_LOAD_UI_ELEMENT_DELAY } from './Interfaces/utils/constants';
 
-const buttonVariants = {
+const containerVariants = {
+  normal: {
+    width: 'var(--closed-width)',
+    y: '0rem',
+    transition: {
+      delay: FIRST_LOAD_UI_ELEMENT_DELAY,
+    },
+  },
+  wide: {
+    width: 'var(--open-width)',
+    transition: {
+      duration: 0,
+    },
+  },
+  hide: {
+    y: '100%',
+  },
+};
+
+const itemVariants = {
   show: {
     opacity: 1,
     x: '0px',
@@ -27,7 +45,7 @@ const inputVariants = {
   show: {
     opacity: 1,
     x: '0px',
-    width: '25rem',
+    width: 'calc(var(--open-width) - 15rem)',
     transition: {
       delay: 0.2,
     },
@@ -35,7 +53,7 @@ const inputVariants = {
   hide: {
     opacity: 0,
     x: '4rem',
-    width: '10rem',
+    width: 'calc(var(--open-width) - 20rem)',
   },
 };
 
@@ -99,29 +117,21 @@ const QuickAddForm = ({
     }
   }, [disabled]);
 
-  return createPortal(
+  return (
     <motion.div
-      initial={{
-        opacity: 0,
-        y: '100%',
-      }}
-      animate={{
-        opacity: 1,
-        y: '0rem',
-        transition: {
-          delay: FIRST_LOAD_UI_ELEMENT_DELAY,
-        },
-      }}
       className="flip-form"
+      variants={containerVariants}
+      initial="hide"
+      animate={showForm ? 'wide' : 'normal'}
     >
       <AnimatePresence initial={false}>
         {showForm && (
           <motion.div
             key="form-container"
             className="form-container"
-            initial={buttonVariants.hide}
-            animate={buttonVariants.show}
-            exit={buttonVariants.hide}
+            initial={itemVariants.hide}
+            animate={itemVariants.show}
+            exit={itemVariants.hide}
           >
             <form autoComplete="off" onSubmit={handleSubmit}>
               <motion.div
@@ -164,9 +174,9 @@ const QuickAddForm = ({
           <motion.div
             key="button-container"
             className="button-container"
-            initial={buttonVariants.hide}
-            animate={buttonVariants.show}
-            exit={buttonVariants.hide}
+            initial={itemVariants.hide}
+            animate={itemVariants.show}
+            exit={itemVariants.hide}
           >
             <ActionButton
               disabled={disabled}
@@ -178,8 +188,7 @@ const QuickAddForm = ({
         )}
 
       </AnimatePresence>
-    </motion.div>,
-    document.body,
+    </motion.div>
   );
 };
 

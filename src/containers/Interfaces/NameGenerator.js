@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { compose } from 'redux';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
   has, isUndefined, omit,
 } from 'lodash';
+import { createPortal } from 'react-dom';
 import { entityAttributesProperty, entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import Prompts from '../../components/Prompts';
 import withPrompt from '../../behaviours/withPrompt';
@@ -36,10 +37,9 @@ const NameGenerator = (props) => {
     subject,
   } = stage;
 
-  console.log('props', props);
+  const interfaceRef = useRef(null);
 
   const [selectedNode, setSelectedNode] = useState(null);
-  const [showNodeForm, setShowNodeForm] = useState(false);
   const [showMinWarning, setShowMinWarning] = useState(false);
 
   const minNodes = minNodesWithDefault(behaviours?.minNodes);
@@ -62,7 +62,6 @@ const NameGenerator = (props) => {
   const maxNodesReached = stageNodeCount >= maxNodes;
 
   useEffect(() => {
-    console.log('stageNodeCount changed', stageNodeCount, minNodes);
     if (stageNodeCount >= minNodes) {
       setShowMinWarning(false);
     }
@@ -83,7 +82,6 @@ const NameGenerator = (props) => {
     // is triggered by Stages Menu. Use this to skip message if user has
     // navigated directly using stages menu.
     if (isUndefined(destination) && isLeavingStage && stageNodeCount < minNodes) {
-      console.log('showing min warning', isUndefined(destination), isLeavingStage, stageNodeCount < minNodes, stageNodeCount, minNodes);
       setShowMinWarning(true);
       return;
     }
@@ -101,12 +99,9 @@ const NameGenerator = (props) => {
    * @param {object} item - key/value object containing node object from the network store
    */
   const handleDropNode = (item) => {
-    console.log('hannleDropNode', item, 'newNodeAttributes', newNodeAttributes, 'newNodeModelData', newNodeModelData);
     const node = { ...item.meta };
     // Test if we are updating an existing network node, or adding it to the network
     if (has(node, 'promptIDs')) {
-      console.log('has promptids', newNodeModelData, newNodeAttributes);
-
       updateNode(
         node[entityPrimaryKeyProperty],
         { ...newNodeModelData },
@@ -143,7 +138,6 @@ const NameGenerator = (props) => {
         const selectedUID = selectedNode[entityPrimaryKeyProperty];
         updateNode(selectedUID, {}, form);
       }
-      setShowNodeForm(false);
       setSelectedNode(null);
     }
 
@@ -161,11 +155,10 @@ const NameGenerator = (props) => {
       return;
     }
     setSelectedNode(node);
-    setShowNodeForm(true);
   };
 
   return (
-    <div className="name-generator-interface">
+    <div className="name-generator-interface" ref={interfaceRef}>
       <div className="name-generator-interface__prompt">
         <Prompts
           prompts={prompts}
@@ -189,39 +182,44 @@ const NameGenerator = (props) => {
           />
         </div>
       </div>
-      <MaxNodesMet show={maxNodesReached} timeoutDuration={0} />
-      <MinNodesNotMet
+      {interfaceRef.current && createPortal(
+        <MaxNodesMet show={maxNodesReached} timeoutDuration={0} />,
+        interfaceRef.current,
+      )}
+      {interfaceRef.current && createPortal(<MinNodesNotMet
         show={showMinWarning}
         minNodes={minNodes}
         onHideCallback={() => setShowMinWarning(false)}
-      />
-      {form
-        && (
+      />, interfaceRef.current)}
+
+      {form && interfaceRef.current
+        && createPortal(
           <NodeForm
-            show={showNodeForm}
+            subject={subject}
             selectedNode={selectedNode}
             form={form}
             disabled={maxNodesReached}
             icon={nodeIconName}
+            nodeType={nodeType}
             addNode={handleAddNode}
             newNodeModelData={newNodeModelData}
             newNodeAttributes={newNodeAttributes}
-          />
+            onClose={() => setSelectedNode(null)}
+          />, interfaceRef.current,
         )}
-      {!form
-        && (
-          <QuickNodeForm
-            disabled={maxNodesReached}
-            icon={nodeIconName}
-            nodeColor={nodeColor}
-            nodeType={nodeType}
-            addNode={addNode}
-            newNodeModelData={newNodeModelData}
-            newNodeAttributes={newNodeAttributes}
-            targetVariable={quickAdd}
-            onShowForm={() => setShowMinWarning(false)}
-          />
-        )}
+      {!form && interfaceRef.current && createPortal(
+        <QuickNodeForm
+          disabled={maxNodesReached}
+          icon={nodeIconName}
+          nodeColor={nodeColor}
+          nodeType={nodeType}
+          addNode={addNode}
+          newNodeModelData={newNodeModelData}
+          newNodeAttributes={newNodeAttributes}
+          targetVariable={quickAdd}
+          onShowForm={() => setShowMinWarning(false)}
+        />, interfaceRef.current,
+      )}
       <NodeBin
         accepts={(meta) => meta.itemType === 'EXISTING_NODE'}
         dropHandler={(meta) => removeNode(meta[entityPrimaryKeyProperty])}

@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Icon } from '@codaco/ui';
 import uuid from 'uuid';
 import { defaultTo } from 'lodash';
-import { createPortal } from 'react-dom';
+import { FIRST_LOAD_UI_ELEMENT_DELAY } from './constants';
 
 /**
  * Simple wrapper to add self-dismissing behaviour to a component
@@ -77,7 +77,7 @@ export const SelfDismissingNote = (Wrapped) => (
     };
   }, [visible, timeoutDuration, onHideCallback]);
 
-  return createPortal(
+  return (
     <div
       style={{
         position: 'absolute',
@@ -96,19 +96,19 @@ export const SelfDismissingNote = (Wrapped) => (
           <Wrapped key={key} {...rest} />
         )}
       </AnimatePresence>
-    </div>,
-    document.body,
+    </div>
   );
 };
 
 const containerVariants = {
-  show: {
+  show: (delay = 0) => ({
     opacity: 1,
     y: '0%',
     transition: {
       when: 'beforeChildren',
+      delay,
     },
-  },
+  }),
   hide: {
     opacity: 0,
     y: '50%',
@@ -174,6 +174,7 @@ export const MaxNodesMet = SelfDismissingNote(() => (
     initial="hide"
     animate="show"
     exit="hide"
+    custom={FIRST_LOAD_UI_ELEMENT_DELAY}
     key="min-nodes-not-met"
   >
     <motion.div className="alter-limit-nudge__wrapper" variants={wrapperVariants}>

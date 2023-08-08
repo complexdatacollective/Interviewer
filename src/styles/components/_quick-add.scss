@@ -1,25 +1,30 @@
 .flip-form {
+  --open-width: 40rem;
+  --closed-width: 13rem;
+  --height: 11rem;
+
+  position: absolute;
+  height: var(--height);
+  width: var(--closed-width);
+  bottom: 0;
+  right: 0;
   display: flex;
   align-items: center;
-  height: 7.8rem;
-  position: absolute;
-  bottom: unit(2);
-  right: unit(4);
   z-index: var(--z-global-ui);
+  overflow: hidden;
 
   .button-container {
     position: absolute;
-    bottom: 0;
-    right: unit(2); // The node needs to be offset to account for the button's plus icon
+
+    right: unit(2);
+    margin-right: 2rem; // The node needs to be offset to account for the button's plus icon
   }
 
   .form-container {
     position: absolute;
-    bottom: 0;
-    right: 0;
+    right: unit(2);
     display: flex;
     align-items: center;
-    margin-bottom: -#{unit(1.5)};
 
     form {
       display: flex;
@@ -31,6 +36,7 @@
     .tool-tip {
       height: unit(2);
       margin-bottom: unit(1);
+      text-shadow: 0 0 0.5rem var(--text-dark);
     }
 
       .label-input {
