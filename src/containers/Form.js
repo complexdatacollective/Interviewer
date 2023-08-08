@@ -101,12 +101,7 @@ class Form extends Component {
       className,
       submitButton,
       children,
-      subject,
     } = this.props;
-
-    if (!subject) {
-      throw new Error('Form has an implicit dependency on stage subject. Pass subject prop to Form.');
-    }
 
     return (
       <form className={className} onSubmit={handleSubmit} autoComplete="off">
@@ -144,7 +139,7 @@ Form.propTypes = {
   initialValues: PropTypes.object,
   validationMeta: PropTypes.object,
   otherNetworkEntities: PropTypes.object,
-  subject: PropTypes.object.isRequired,
+  subject: PropTypes.object.isRequired, // Implicit dependency used by autoInitialisedForm
 };
 
 Form.defaultProps = {
