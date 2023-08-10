@@ -57,7 +57,9 @@ const NameGenerator = (props) => {
 
   const addNode = (...properties) => dispatch(sessionsActions.addNode(...properties));
   const updateNode = (...properties) => dispatch(sessionsActions.updateNode(...properties));
-  const removeNode = (uid) => dispatch(sessionsActions.removeNode(uid));
+  const removeNode = (uid) => {
+    dispatch(sessionsActions.removeNode(uid));
+  };
 
   const maxNodesReached = stageNodeCount >= maxNodes;
 

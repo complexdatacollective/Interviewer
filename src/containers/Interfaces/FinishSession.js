@@ -1,14 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button } from '@codaco/ui';
 import { isPreview } from '../../utils/Environment';
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
+import useSound from '../../hooks/useSound';
+import finishSessionSound from '../../interaction-sounds/finish-interview.wav';
 
 const FinishSession = ({ endSession }) => {
   const handleFinishSession = () => {
     endSession(false, true);
   };
+
+  const { play: playFinishSound } = useSound({ src: finishSessionSound });
+
+  useEffect(() => {
+    playFinishSound();
+  }, [playFinishSound]);
 
   return (
     <div className="interface finish-session-interface">
@@ -23,7 +31,7 @@ const FinishSession = ({ endSession }) => {
             interview now.
           </p>
         </div>
-        { !isPreview()
+        {!isPreview()
           && (
             <div className="finish-session-interface__section finish-session-interface__section--buttons">
               <Button onClick={handleFinishSession}>
