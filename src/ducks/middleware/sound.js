@@ -36,6 +36,9 @@ const sound = (store) => (next) => (action) => {
   }
 
   switch (action.type) {
+    // 'PLAY_SOUND' and 'STOP_SOUND' are generic actions so that components
+    // can play sounds without having to import the sounds module or the
+    // .wav files.
     case 'PLAY_SOUND':
       sounds[action.sound].play();
       break;
@@ -46,7 +49,7 @@ const sound = (store) => (next) => (action) => {
       sounds.open.play();
       break;
     case 'UPDATE_PROMPT': {
-      sounds.link.stop();
+      sounds.link.stop(); // If we change prompt, stop the node linking sound.
       break;
     }
     case networkActionTypes.ADD_NODE: {
@@ -54,6 +57,9 @@ const sound = (store) => (next) => (action) => {
       break;
     }
     case networkActionTypes.UPDATE_NODE: {
+      // Because UPDATE_NODE is quite generic, I added an additional 'sound'
+      // property to the action to allow for sounds to be triggered where
+      // necessary.
       if (action.sound) {
         playSound({ src: action.sound }).play();
       }
@@ -85,11 +91,11 @@ const sound = (store) => (next) => (action) => {
       break;
     }
     case networkActionTypes.TOGGLE_NODE_ATTRIBUTES: {
-      // When toggling on, action.attributes[variableUID] = true
-      // When toggling off, action.attributes[variableUID] = false
       const { attributes } = action;
 
       if (attributes) {
+        // When toggling an attribute on, action.attributes[variableUID] = true
+        // When toggling an attribute off, action.attributes[variableUID] = false
         const toggledOn = Object.values(attributes).includes(true);
 
         if (toggledOn) {
@@ -108,7 +114,7 @@ const sound = (store) => (next) => (action) => {
       sounds.toggleOff.play();
       break;
     // eslint-disable-next-line @codaco/spellcheck/spell-checker
-    case '@@redux-form/SET_SUBMIT_FAILED':
+    case '@@redux-form/SET_SUBMIT_FAILED': // Handles validation errors in forms
       sounds.error.play();
       break;
     default:
