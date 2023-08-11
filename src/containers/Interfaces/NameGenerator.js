@@ -56,7 +56,9 @@ const NameGenerator = (props) => {
   const dispatch = useDispatch();
 
   const addNode = (...properties) => dispatch(sessionsActions.addNode(...properties));
-  const updateNode = (...properties) => dispatch(sessionsActions.updateNode(...properties));
+  const addNodeToPrompt = (...properties) => dispatch(
+    sessionsActions.addNodeToPrompt(...properties),
+  );
   const removeNode = (uid) => {
     dispatch(sessionsActions.removeNode(uid));
   };
@@ -104,9 +106,9 @@ const NameGenerator = (props) => {
     const node = { ...item.meta };
     // Test if we are updating an existing network node, or adding it to the network
     if (has(node, 'promptIDs')) {
-      updateNode(
+      addNodeToPrompt(
         node[entityPrimaryKeyProperty],
-        { ...newNodeModelData },
+        prompt.id,
         { ...newNodeAttributes },
       );
     } else {

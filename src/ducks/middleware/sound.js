@@ -1,47 +1,115 @@
-import { playSound } from '../../hooks/useSound';
+import { playSound } from '../../utils/playSound';
+import { actionTypes as networkActionTypes } from '../modules/network';
 import createNodeSound from '../../interaction-sounds/create-node.wav';
 import removeNodeSound from '../../interaction-sounds/discard.wav';
 import toggleOnSound from '../../interaction-sounds/toggle-on.wav';
 import toggleOffSound from '../../interaction-sounds/toggle-off.wav';
-import dropSound from '../../interaction-sounds/drop-node.wav';
-import openApp from '../../interaction-sounds/open-app.wav';
+import openAppSound from '../../interaction-sounds/open-app.wav';
+import addEdgeSound from '../../interaction-sounds/create-edge.wav';
+import errorSound from '../../interaction-sounds/error.wav';
+import edgeLinkingSound from '../../interaction-sounds/node-linking-mode.wav';
+import finishSessionSound from '../../interaction-sounds/finish-interview.wav';
+import { getNetworkEdges } from '../../selectors/network';
 
-// Debounced action handler, that prevents the same sound from playing multiple times in a row
-
+const sounds = {
+  open: playSound({ src: openAppSound }),
+  createNode: playSound({ src: createNodeSound }),
+  createEdge: playSound({ src: addEdgeSound }),
+  removeNode: playSound({ src: removeNodeSound }),
+  toggleOn: playSound({ src: toggleOnSound, debounceInterval: 0 }),
+  toggleOff: playSound({ src: toggleOffSound, debounceInterval: 0 }),
+  error: playSound({ src: errorSound }),
+  link: playSound({ src: edgeLinkingSound, loop: true }),
+  finishSession: playSound({ src: finishSessionSound }),
+};
 /**
  * Redux middleware that plays sounds on certain actions
- * @param storeAPI
+ * @param store
  * @returns
  */
-const sound = (storeAPI) => (next) => (action) => {
+const sound = (store) => (next) => (action) => {
   const result = next(action);
+  const enableSounds = store.getState().deviceSettings.enableExperimentalSounds;
 
-  // Sound sprites
-  const openSound = playSound(openApp);
-  const addSound = playSound(createNodeSound);
-  const removeSound = playSound(removeNodeSound);
-  const toggleOn = playSound(toggleOnSound);
-  const toggleOff = playSound(toggleOffSound);
-  const dropNodeSound = playSound(dropSound);
+  if (!enableSounds) {
+    return result;
+  }
 
   switch (action.type) {
-    case 'DEVICE_READY':
-      openSound.play();
+    case 'PLAY_SOUND':
+      sounds[action.sound].play();
       break;
-    case 'ADD_NODE': {
-      addSound.play();
+    case 'STOP_SOUND':
+      sounds[action.sound].stop();
+      break;
+    case 'DEVICE_READY':
+      sounds.open.play();
+      break;
+    case 'UPDATE_PROMPT': {
+      sounds.link.stop();
       break;
     }
-    case 'REMOVE_NODE':
-      removeSound.play();
+    case networkActionTypes.ADD_NODE: {
+      sounds.createNode.play();
       break;
-    case 'REMOVE_NODE_FROM_PROMPT': // Dragging node out of main panel and into side panel
-      dropNodeSound.play();
+    }
+    case networkActionTypes.UPDATE_NODE: {
+      if (action.sound) {
+        playSound({ src: action.sound }).play();
+      }
+
       break;
-    case 'UPDATE_NODE': // for dropping nodes into main node list
-      // Todo: implement this as sound in meta property of action. this
-      // will allow different sound for node side panel vs ordinal bin.
-      dropNodeSound.play();
+    }
+    case networkActionTypes.REMOVE_NODE:
+      sounds.removeNode.play();
+      break;
+    case networkActionTypes.REMOVE_NODE_FROM_PROMPT:
+      sounds.toggleOff.play();
+      break;
+    case networkActionTypes.ADD_NODE_TO_PROMPT:
+      sounds.toggleOn.play();
+      break;
+    case networkActionTypes.TOGGLE_EDGE: {
+      const { from, to, type } = action.modelData;
+      const sessionEdges = getNetworkEdges(store.getState());
+
+      const edgeExists = sessionEdges.some((edge) => (
+        edge.from === from && edge.to === to && edge.type === type
+      ));
+
+      if (edgeExists) {
+        sounds.createEdge.play();
+      } else {
+        sounds.toggleOff.play();
+      }
+      break;
+    }
+    case networkActionTypes.TOGGLE_NODE_ATTRIBUTES: {
+      // When toggling on, action.attributes[variableUID] = true
+      // When toggling off, action.attributes[variableUID] = false
+      const { attributes } = action;
+
+      if (attributes) {
+        const toggledOn = Object.values(attributes).includes(true);
+
+        if (toggledOn) {
+          playSound({ src: toggleOnSound, debounceInterval: 0 }).play();
+        } else {
+          playSound({ src: toggleOffSound, debounceInterval: 0 }).play();
+        }
+      }
+
+      break;
+    }
+    case networkActionTypes.ADD_EDGE:
+      sounds.createEdge.play();
+      break;
+    case networkActionTypes.REMOVE_EDGE:
+      sounds.toggleOff.play();
+      break;
+    // eslint-disable-next-line @codaco/spellcheck/spell-checker
+    case '@@redux-form/SET_SUBMIT_FAILED':
+      sounds.error.play();
       break;
     default:
       break;

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';

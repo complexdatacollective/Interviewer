@@ -1,22 +1,19 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { Button } from '@codaco/ui';
 import { isPreview } from '../../utils/Environment';
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
-import useSound from '../../hooks/useSound';
-import finishSessionSound from '../../interaction-sounds/finish-interview.wav';
 
 const FinishSession = ({ endSession }) => {
+  const dispatch = useDispatch();
   const handleFinishSession = () => {
     endSession(false, true);
   };
 
-  const { play: playFinishSound } = useSound({ src: finishSessionSound });
-
   useEffect(() => {
-    playFinishSound();
-  }, [playFinishSound]);
+    dispatch({ type: 'PLAY_SOUND', sound: 'finishSession' });
+  }, []);
 
   return (
     <div className="interface finish-session-interface">

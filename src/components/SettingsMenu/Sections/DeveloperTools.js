@@ -29,6 +29,7 @@ const DeveloperTools = (props) => {
     generateMockSessions,
     toggleSetting,
     enableExperimentalTTS,
+    enableExperimentalSounds,
   } = props;
 
   const [sessionCount, setSessionCount] = useState(10);
@@ -36,6 +37,22 @@ const DeveloperTools = (props) => {
 
   return (
     <>
+      <motion.article className="settings-element">
+        <Toggle
+          input={{
+            value: enableExperimentalSounds,
+            onChange: () => toggleSetting('enableExperimentalSounds'),
+          }}
+        />
+        <div>
+          <h2>Use experimental interaction sounds</h2>
+          <p>
+            This feature adds interaction sounds to common actions in the app, which
+            may improve the interview experience. These sounds were developed by our
+            summer intern, Anika Wilsnack.
+          </p>
+        </div>
+      </motion.article>
       <motion.article className="settings-element">
         <Toggle
           disabled={!!isAndroid()}
@@ -76,25 +93,25 @@ const DeveloperTools = (props) => {
       {
         shouldShowMocksItem
         && (
-        <motion.article className="settings-element">
-          <div className="form-field-container">
-            <div className="form-field">
-              <Button
-                id="add-mock-nodes"
-                onClick={handleAddMockNodes}
-              >
-                Add nodes
-              </Button>
+          <motion.article className="settings-element">
+            <div className="form-field-container">
+              <div className="form-field">
+                <Button
+                  id="add-mock-nodes"
+                  onClick={handleAddMockNodes}
+                >
+                  Add nodes
+                </Button>
+              </div>
             </div>
-          </div>
-          <div>
-            <h2>Add Mock Nodes</h2>
-            <p>
-              During an active interview session, clicking this button will create
-              mock nodes for testing purposes.
-            </p>
-          </div>
-        </motion.article>
+            <div>
+              <h2>Add Mock Nodes</h2>
+              <p>
+                During an active interview session, clicking this button will create
+                mock nodes for testing purposes.
+              </p>
+            </div>
+          </motion.article>
         )
       }
       <motion.article className="settings-element--sub-item">
@@ -230,6 +247,7 @@ const mapStateToProps = (state) => ({
   shouldShowMocksItem: !!getNodeEntryForCurrentPrompt(state),
   additionalMockAttributes: getAdditionalAttributesForCurrentPrompt(state),
   enableExperimentalTTS: !!state.deviceSettings.enableExperimentalTTS, // boolean value for Toggle
+  enableExperimentalSounds: !!state.deviceSettings.enableExperimentalSounds,
 });
 
 export default compose(
