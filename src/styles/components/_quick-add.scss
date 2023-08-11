@@ -39,21 +39,21 @@
       text-shadow: 0 0 0.5rem var(--text-dark);
     }
 
-      .label-input {
-        padding: unit(2) unit(4);
-        margin-right: unit(0.5);
-        border-radius: 5rem;
-        border: 0;
-        background: var(--text);
-        color: var(--text-dark);
-        font-size: 1.2rem;
-        font-weight: bold;
-        font-family: var(--body-font-family);
+    .label-input {
+      padding: unit(2) unit(4);
+      margin-right: unit(0.5);
+      border-radius: 5rem;
+      border: 0;
+      background: var(--text);
+      color: var(--text-dark);
+      font-size: 1.2rem;
+      font-weight: bold;
+      font-family: var(--body-font-family);
+    }
 
-      &::placeholder {
-        font-style: italic;
-        font-weight: 300;
-      }
+    &::placeholder {
+      font-style: italic;
+      font-weight: 300;
     }
   }
 }
