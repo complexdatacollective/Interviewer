@@ -73,6 +73,12 @@ Is added to to `/etc/msswitch.conf`.
 3. Enter the directory where the repository is cloned, and install the project dependencies by typing `npm install`.
 4. Refer to the development tasks section below to learn how to test and build the app.
 
+Note: for Apple Silicon users, you need to install the `electron` package manually:
+
+```sh
+  npm install electron --arch=x64
+```
+
 ## Development Tasks
 
 |`npm run <script>`|Description|
@@ -134,6 +140,11 @@ Troubleshooting:
 
 - If a dev cordova build is interrupted, you may find that `config.xml` has changes, and that there's a `config.xml.original` file (ignored by git). You may restore the contents of `config.xml` from git or the original, and delete the '.original' file.
 - The webpack dev server writes a `.devserver` file on startup, which is removed when it exits. The file is used by the cordova dev build; it should contain the LAN URL of the running dev server.
+- Apple sillicon users may encounter a node-sass runtime error: `(mach-o file, but is an incompatible architecture (have 'x86_64', need 'arm64'))`, you can fix this by rebuilding node-sass for your platform:
+
+```
+npm rebuild node-sass
+```
 
 ### Dev tools
 
