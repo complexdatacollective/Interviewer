@@ -182,7 +182,7 @@ const NameGenerator = (props) => {
           nodeColor={nodeColor}
           nodeType={nodeType}
           newNodeModelData={newNodeModelData}
-          newNodeAttributeData={newNodeAttributes}
+          newNodeAttributes={newNodeAttributes}
           targetVariable={quickAdd}
           onShowForm={() => setShowMinWarning(false)}
         />, interfaceRef.current,
