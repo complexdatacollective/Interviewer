@@ -4,22 +4,12 @@
 import environments from '../environments';
 // eslint-disable-next-line import/named
 import { getEnvironment } from '../Environment';
-import { getNestedPaths, writeStream } from '../filesystem';
+import { writeStream } from '../filesystem';
 
 describe('filesystem', () => {
   describe('Cordova', () => {
     beforeAll(() => {
       getEnvironment.mockReturnValue(environments.CORDOVA);
-    });
-
-    it('getNestedPaths', () => {
-      expect(
-        getNestedPaths('cdvfile://localhost/persistent/protocols/development.netcanvas/assets'),
-      ).toEqual([
-        'cdvfile://localhost/persistent/protocols/',
-        'cdvfile://localhost/persistent/protocols/development.netcanvas/',
-        'cdvfile://localhost/persistent/protocols/development.netcanvas/assets/',
-      ]);
     });
 
     describe('with mocked fs', () => {

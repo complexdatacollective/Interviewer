@@ -193,24 +193,3 @@
     width: units.unit(2);
   }
 }
-
-.alter-limit-nudge {
-  position: absolute;
-  bottom: units.unit(2);
-  background: var(--color-slate-blue--dark);
-  color: var(--color-white);
-  padding: units.unit(1) units.unit(3);
-  border-radius: 10rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 units.unit(.5) units.unit(2) units.unit(1) rgb(0 0 0 / 25%); // sass-lint:disable-line no-color-literals
-  z-index: var(--z-dialog);
-  font-size: 1.25rem;
-
-  .icon {
-    margin-left: units.unit(1);
-    height: units.unit(2);
-    width: units.unit(2);
-  }
-}

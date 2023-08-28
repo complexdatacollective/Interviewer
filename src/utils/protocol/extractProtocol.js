@@ -22,9 +22,12 @@ const isRequired = (param) => { throw new Error(`${param} is required`); };
 const openError = friendlyErrorMessage("We couldn't open that Network Canvas protocol. Check the format, and try again.");
 const loadError = friendlyErrorMessage("We couldn't load that Network Canvas protocol. Try importing again.");
 
-const prepareDestination = destination =>
-  removeDirectory(destination)
-    .then(() => ensurePathExists(destination));
+const prepareDestination = async (destination) => {
+  await removeDirectory(destination);
+  await ensurePathExists(destination);
+  return;
+}
+
 
 const generateProtocolUID = () => uuid(); // generate a filename
 
@@ -103,11 +106,16 @@ const loadZip = inEnvironment((environment) => {
 
 const importZip = inEnvironment((environment) => {
   if (environment === environments.CORDOVA || environment === environments.ELECTRON) {
-    return (protocolFile, protocolName, destination) =>
-      loadZip(protocolFile)
+    return (protocolFile, protocolName, destination) => {
+      return loadZip(protocolFile)
         .then(zip => extractZip(zip, destination))
-        .catch(openError)
+        .catch((error) => {
+          console.log(error)
+          return openError;
+        })
         .then(() => protocolName);
+    }
+
   }
 
   return () => Promise.reject(new Error('loadZip() not available on platform'));

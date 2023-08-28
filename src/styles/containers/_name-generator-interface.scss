@@ -1,9 +1,6 @@
 .name-generator-interface {
-  @include interface-centering;
+  @include interface-centering-padding;
 
-  height: 100%;
-  overflow: hidden;
-  display: flex;
   flex-direction: column;
 
   &__prompt {
@@ -33,18 +30,10 @@
     display: flex;
   }
 
-  &__add-node {
-    &--disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-
-      .icon {
-        pointer-events: none;
-      }
-    }
-
-    .icon {
-      @include floating-action-button;
-    }
+  &__add-button {
+    position: absolute;
+    bottom: unit(2);
+    right: unit(6);
+    z-index: var(--z-global-ui);
   }
 }

@@ -81,7 +81,7 @@ export const unique = (_, store) => {
   return (value, __, { validationMeta }, name) => {
     const otherNetworkEntities = getOtherNetworkEntities(
       networkEntitiesForType(store.getState()),
-      validationMeta.entityId,
+      validationMeta?.entityId,
     );
 
     return isSomeValueMatching(value, otherNetworkEntities, name) ? 'Your answer must be unique' : undefined;

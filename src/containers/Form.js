@@ -50,7 +50,7 @@ const scrollToFirstError = (errors) => {
   // When used on alter form, multiple forms can be differentiated by the active slide
   // class. This needs priority, so look it up first.
   const el = document.querySelector(`.swiper-slide-active [name="${firstError}"]`)
-             || document.querySelector(`[name="${firstError}"]`);
+    || document.querySelector(`[name="${firstError}"]`);
 
   // If element is not found, prevent crash.
   if (!el) {
@@ -105,7 +105,7 @@ class Form extends Component {
 
     return (
       <form className={className} onSubmit={handleSubmit} autoComplete="off">
-        { fields.map((field, index) => {
+        {fields.map((field, index) => {
           const isFirst = autoFocus && index === 0;
           return (
             <Field
@@ -116,7 +116,7 @@ class Form extends Component {
               tooltip={tooltip}
             />
           );
-        }) }
+        })}
         {submitButton}
         {children}
       </form>
@@ -138,6 +138,8 @@ Form.propTypes = {
   submitButton: PropTypes.object,
   initialValues: PropTypes.object,
   validationMeta: PropTypes.object,
+  otherNetworkEntities: PropTypes.object,
+  subject: PropTypes.object.isRequired, // Implicit dependency used by autoInitialisedForm
 };
 
 Form.defaultProps = {
@@ -146,9 +148,10 @@ Form.defaultProps = {
   className: null,
   tooltip: 'none',
   initialValues: null,
-  validationMeta: {},
-  submitButton: <button type="submit" key="submit" aria-label="Submit" hidden />,
   // redux wants a "submit" button in order to enable submit with an enter key, even if hidden
+  submitButton: <button type="submit" key="submit" aria-label="Submit" hidden />,
+  validationMeta: {},
+  otherNetworkEntities: {},
 };
 
 function makeMapStateToProps() {

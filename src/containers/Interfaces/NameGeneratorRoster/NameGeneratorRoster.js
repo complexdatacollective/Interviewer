@@ -1,5 +1,5 @@
 import React, {
-  useCallback, useEffect, useMemo, useState,
+  useCallback, useEffect, useMemo, useRef, useState,
 } from 'react';
 import { compose } from 'redux';
 import { useDispatch, useSelector } from 'react-redux';
@@ -34,8 +34,8 @@ import useItems from './useItems';
 import { convertNamesToUUIDs } from './helpers';
 import DropOverlay from './DropOverlay';
 import {
-  MaxNodesReached, maxNodesWithDefault, MinNodesNotMet, minNodesWithDefault,
-} from '../NameGeneratorQuickAdd';
+  MaxNodesMet, maxNodesWithDefault, MinNodesNotMet, minNodesWithDefault,
+} from '../utils/StageLevelValidation';
 import { get } from '../../../utils/lodash-replacements';
 
 const countColumns = (width) => (
@@ -74,6 +74,8 @@ const NameGeneratorRoster = (props) => {
   const {
     prompts,
   } = stage;
+
+  const interfaceRef = useRef(null);
 
   const dispatch = useDispatch();
   const { duration } = useAnimationSettings();
@@ -182,7 +184,7 @@ const NameGeneratorRoster = (props) => {
   const disabled = useMemo(() => stageNodeCount >= maxNodes, [stageNodeCount, maxNodes]);
 
   return (
-    <div className="name-generator-roster-interface">
+    <div className="name-generator-roster-interface" ref={interfaceRef}>
       <AnimatePresence exitBeforeEnter>
         {itemsStatus.isLoading ? (
           <motion.div
@@ -199,10 +201,6 @@ const NameGeneratorRoster = (props) => {
           <>
             <motion.div
               className="name-generator-roster-interface__prompt"
-              // initial="hidden"
-              // animate="visible"
-              // exit="hidden"
-              // variants={variants}
               key="prompts"
             >
               <Prompts
@@ -238,7 +236,6 @@ const NameGeneratorRoster = (props) => {
                   disabled={disabled}
                 />
               </div>
-              <MaxNodesReached show={stageNodeCount >= maxNodes} dontHide />
               <div className="name-generator-roster-interface__node-panel">
                 <Panel
                   title="Added"
@@ -277,11 +274,17 @@ const NameGeneratorRoster = (props) => {
           </>
         )}
       </AnimatePresence>
-      <MinNodesNotMet
-        show={showMinWarning}
-        minNodes={minNodes}
-        onHideCallback={() => setShowMinWarning(false)}
-      />
+      {interfaceRef.current && (
+        <MinNodesNotMet
+          show={showMinWarning}
+          minNodes={minNodes}
+          onHideCallback={() => setShowMinWarning(false)}
+        />
+      )}
+      {interfaceRef.current && (
+        <MaxNodesMet show={stageNodeCount >= maxNodes} timeoutDuration={0} />
+      )}
+
     </div>
   );
 };

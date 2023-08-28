@@ -3,9 +3,10 @@
 import uuid from 'uuid/v4';
 import environments from '../environments';
 import inEnvironment from '../Environment';
-import { writeFile } from '../filesystem';
+import { writeFile, tempDataPath } from '../filesystem';
 import friendlyErrorMessage from '../../utils/friendlyErrorMessage';
 import ApiClient from '../../utils/ApiClient';
+import path from 'path';
 
 const getURL = uri =>
   new Promise((resolve, reject) => {
@@ -34,10 +35,7 @@ const fileError = friendlyErrorMessage('The protocol could not be saved to your 
 const downloadProtocol = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
     const request = require('request-promise-native');
-    const path = require('path');
-    const electron = require('electron');
-    const tempPath = (electron.app || electron.remote.app).getPath('temp');
-    const destination = path.join(tempPath, getProtocolName());
+    const destination = path.join(tempDataPath(), getProtocolName());
 
     return (uri, pairedServer = false) => {
       let promisedResponse;
@@ -58,7 +56,7 @@ const downloadProtocol = inEnvironment((environment) => {
   }
 
   if (environment === environments.CORDOVA) {
-    const destination = `cdvfile://localhost/temporary/${getProtocolName()}`;
+    const destination = `${tempDataPath()}${getProtocolName()}`
     return (uri, pairedServer) => {
       let promisedResponse;
       if (pairedServer) {
@@ -72,6 +70,7 @@ const downloadProtocol = inEnvironment((environment) => {
           .catch(urlError)
           .then(href => new Promise((resolve, reject) => {
             const fileTransfer = new FileTransfer();
+            console.log('fileTransfer', destination);
             fileTransfer.download(
               href,
               destination,
