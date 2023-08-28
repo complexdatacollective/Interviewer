@@ -2,6 +2,7 @@ $node-inset: 1rem;  // approximate scaled margin + 'outer-trim' of a node
 
 .node-list {
   @include gpu;
+
   display: flex;
   flex-wrap: wrap;
   justify-content: center;

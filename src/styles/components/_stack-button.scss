@@ -38,7 +38,7 @@
       height: 8rem;
       border-radius: var(--border-radius);
       background: var(--color-slate-blue--dark);
-      box-shadow: 0.2rem 0.2rem 0.5rem rgba(0, 0, 0, 0.3); //sass-lint:disable-line no-color-literals
+      box-shadow: 0.2rem 0.2rem 0.5rem rgb(0 0 0 / 30%); // sass-lint:disable-line no-color-literals
       overflow: hidden;
 
       .main {

@@ -3,12 +3,12 @@
 }
 
 .pairing-form {
-  margin-bottom: unit(4);
+  margin-bottom: units.unit(4);
 
   &--loading {
     display: flex;
     background: var(--background);
-    padding: unit(4);
+    padding: units.unit(4);
     align-items: center;
     justify-content: center;
     flex-direction: column;
@@ -36,7 +36,7 @@
     .pairing-form-buttons {
       .button {
         &:last-child {
-          margin-left: unit(2);
+          margin-left: units.unit(2);
         }
       }
     }

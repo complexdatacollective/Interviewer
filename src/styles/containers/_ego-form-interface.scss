@@ -1,5 +1,6 @@
 .ego-form {
   @include interface-centering(false);
+
   padding: 0;
   height: 100%;
   overflow: hidden;
@@ -11,9 +12,9 @@
     width: 100%;
     border-radius: var(--border-radius);
     background: var(--form-intro-panel-background);
-    padding: unit(2) unit(4);
+    padding: units.unit(2) units.unit(4);
     flex-direction: column;
-    margin-bottom: unit(4);
+    margin-bottom: units.unit(4);
     max-width: 55rem; // same as ego form max width
 
     h1 {
@@ -30,7 +31,7 @@
   }
 
   &__form-container-scroller {
-    padding: unit(4) 0;
+    padding: units.unit(4) 0;
     max-height: 100%;
     display: flex;
     flex-direction: column;

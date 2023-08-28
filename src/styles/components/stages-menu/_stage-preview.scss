@@ -14,7 +14,7 @@
 
   display: flex;
   align-items: center;
-  padding: 0 unit(4);
+  padding: 0 units.unit(4);
   height: 8rem;
   transition: background var(--animation-easing) var(--animation-duration-fast);
 
@@ -24,7 +24,7 @@
 
   &__image {
     flex: 0 0 8rem;
-    margin-right: unit(2);
+    margin-right: units.unit(2);
 
     img {
       max-width: 100%;
@@ -46,19 +46,16 @@
 
 .dimmer {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  inset: 0;
   background: var(--modal-overlay);
   z-index: var(--z-background);
-  padding: unit(4);
+  padding: units.unit(4);
   text-align: right;
 
   .close-button-wrapper {
     position: absolute;
-    top: unit(4);
-    right: unit(4);
+    top: units.unit(4);
+    right: units.unit(4);
   }
 }
 
@@ -69,7 +66,7 @@
     height: 100%;
     flex: 0 0 1.5rem;
     position: relative;
-    margin-right: unit(2);
+    margin-right: units.unit(2);
     overflow: hidden;
 
 
