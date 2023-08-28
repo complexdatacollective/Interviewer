@@ -53,7 +53,7 @@ const sound = (store) => (next) => (action) => {
       break;
     }
     case networkActionTypes.ADD_NODE: {
-      sounds.createNode.play();
+      playSound({ src: createNodeSound }).play();
       break;
     }
     case networkActionTypes.UPDATE_NODE: {
