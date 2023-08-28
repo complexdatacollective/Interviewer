@@ -2,9 +2,11 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+
   @include breakpoint(full) {
     margin: 0 100px;
   }
+
   max-height: inherit;
   overflow: hidden;
   position: relative;

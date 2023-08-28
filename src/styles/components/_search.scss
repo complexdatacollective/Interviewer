@@ -94,6 +94,7 @@ $results-height: calc(100vh - 23rem);
 
   &__results {
     display: block;
+
     // A calculated height here attempts to use all available space without
     // hiding the prompt question. min-height ensures results are readable,
     // even if prompt is hidden at very short viewport heights.

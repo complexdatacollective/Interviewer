@@ -9,8 +9,10 @@
 }
 
 @mixin interface-centering($margins: true) {
-  padding: unit(2) 0;
-  $margin: if($margins, unit(4), 0px); // sass-lint:disable-line zero-unit
+  padding: units.unit(2) 0;
+
+  $margin: if($margins, units.unit(4), 0); // sass-lint:disable-line zero-unit
+
   margin-left: calc(#{$margin} + var(--session-panel-width));
   margin-right: $margin;
   position: relative; // so that absolutely positioned child elements are correctly centered

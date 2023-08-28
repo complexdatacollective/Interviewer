@@ -15,14 +15,14 @@
     align-items: center;
 
     .scrollable {
-      padding: unit(4) 0;
+      padding: units.unit(4) 0;
     }
 
   }
 
   footer {
     display: flex;
-    padding: unit(2) unit(4);
+    padding: units.unit(2) units.unit(4);
     flex-direction: column;
     flex: 0 0 auto;
     background: var(--light-background);

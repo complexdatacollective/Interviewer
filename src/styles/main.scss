@@ -6,6 +6,7 @@ $image-path: '~@codaco/ui/lib/assets/images';
 @import 'components/all';
 @import 'containers/all';
 @import 'transitions';
+@use '~@codaco/ui/src/styles/global/core/units';
 
 // Remove touch and focus outlines
 * {
@@ -25,7 +26,6 @@ $image-path: '~@codaco/ui/lib/assets/images';
   --base-font-size: 1.75vmin;
   --border-radius: .75rem;
   --padding-unit: 1rem;
-
   --form-intro-panel-background: var(--color-cyber-grape);
 }
 
@@ -56,7 +56,7 @@ a {
 
     button {
       &:not(:last-child) {
-        margin-right: unit(1);
+        margin-right: units.unit(1);
       }
     }
   }

@@ -8,21 +8,21 @@ $session-panel-button-size: 6rem;
   align-content: center;
   align-items: center;
   height: 100%;
-  padding: unit(2);
+  padding: units.unit(2);
   width: var(--session-panel-width);
 
   @keyframes pulse {
     // sass-lint:disable-block no-color-literals
     0% {
-      box-shadow: 0 0 0 0 rgba(var(--color-sea-green---rgb), 0.8);
+      box-shadow: 0 0 0 0 rgb(var(--color-sea-green---rgb) 0.8);
     }
 
     70% {
-      box-shadow: 0 0 0 1rem rgba(var(--color-sea-green---rgb), 0);
+      box-shadow: 0 0 0 1rem rgb(var(--color-sea-green---rgb) 0);
     }
 
     100% {
-      box-shadow: 0 0 4rem 1rem rgba(var(--color-sea-green---rgb), 0);
+      box-shadow: 0 0 4rem 1rem rgb(var(--color-sea-green---rgb) 0);
     }
   }
 
@@ -100,7 +100,6 @@ $session-panel-button-size: 6rem;
     }
 
     &--back {
-
       .cls-2 {
         fill: var(--transparent-light);
       }

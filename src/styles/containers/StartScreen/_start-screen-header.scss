@@ -6,7 +6,7 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  margin: unit(4) auto;
+  margin: units.unit(4) auto;
   overflow: hidden;
   border-radius: var(--border-radius);
 
@@ -21,12 +21,12 @@
 
   &__top {
     display: flex;
-    background: #404088; //sass-lint:disable-line no-color-literals
+    background: #404088; // sass-lint:disable-line no-color-literals
     flex: 1;
     width: 100%;
     align-items: center;
     justify-content: space-between;
-    padding: unit(2) unit(4);
+    padding: units.unit(2) units.unit(4);
 
     .header-toggle {
       .switch__label {
@@ -40,11 +40,11 @@
     justify-content: center;
     align-items: center;
     width: 100%;
-    padding: unit(2) unit(4) unit(4);
-    background: linear-gradient(#404088, rgb(58, 58, 117)); //sass-lint:disable-line no-color-literals
+    padding: units.unit(2) units.unit(4) units.unit(4);
+    background: linear-gradient(#404088, rgb(58 58 117)); // sass-lint:disable-line no-color-literals
 
     .header-brand {
-      flex: 0 0 unit(15);
+      flex: 0 0 units.unit(15);
       z-index: var(--z-global-ui);
 
       img {
@@ -64,13 +64,13 @@
 
     .header-mark {
       flex: 0 0 auto;
-      margin-left: unit(2);
+      margin-left: units.unit(2);
 
       h1 {
         font-size: 3.052rem;
         letter-spacing: .15em;
         margin: 0;
-        margin-bottom: unit(1);
+        margin-bottom: units.unit(1);
       }
 
       h4 {

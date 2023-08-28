@@ -1,5 +1,6 @@
 .narrative-interface {
   @include interface-centering(false);
+
   height: 100%;
 
   &__canvas {

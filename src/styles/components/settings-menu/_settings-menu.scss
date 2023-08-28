@@ -22,7 +22,7 @@
       z-index: var(--z-modal);
 
       h1 {
-        padding: unit(2) unit(4);
+        padding: units.unit(2) units.unit(4);
       }
 
       ul {
@@ -38,7 +38,7 @@
           }
         }
 
-        padding: unit(4);
+        padding: units.unit(4);
         list-style: none;
         transition: background var(--animation-duration-fast) var(--animation-easing), font-weight var(--animation-duration-fast) var(--animation-easing);
         cursor: pointer;
@@ -63,8 +63,8 @@
 
       .close-button-wrapper {
         position: absolute;
-        top: unit(4);
-        right: unit(4);
+        top: units.unit(4);
+        right: units.unit(4);
         z-index: var(--z-modal);
       }
 
@@ -80,8 +80,13 @@
 
       .settings-element {
         display: flex;
-        margin-bottom: 2rem;
-        margin: 0 unit(8);
+        margin: 0 units.unit(8);
+
+        .form-field {
+          button {
+            width: 12rem;
+          }
+        }
 
         >.form-field-container {
           .form-field-toggle {
@@ -95,20 +100,14 @@
           }
         }
 
-        .form-field {
-          button {
-            width: 12rem;
-          }
-        }
-
         &--wide {
           display: flex;
           flex-direction: column;
-          margin: 0 unit(8);
+          margin: 0 units.unit(8);
         }
 
         &--sub-item {
-          margin: 0 unit(8);
+          margin: 0 units.unit(8);
 
           .form-field-container {
             margin: 0;

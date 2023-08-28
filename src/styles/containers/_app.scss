@@ -37,6 +37,7 @@
   // page wrap for content
   &__content {
     @include vcjc; // vertical center, justify center
+
     background: palette('background');
     box-sizing: border-box;
     height: 100%;

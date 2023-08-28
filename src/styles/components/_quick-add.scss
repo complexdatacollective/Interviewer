@@ -1,7 +1,7 @@
 .quick-add {
   position: absolute;
-  bottom: unit(2);
-  right: unit(1.5);
+  bottom: units.unit(2);
+  right: units.unit(1.5);
   display: flex;
   align-items: center;
 
@@ -12,12 +12,13 @@
 
   .quick-add-form {
     @include transition-properties((opacity transform), var(--animation-easing), var(--animation-duration-fast));
+
     width: 25rem;
     opacity: 0;
     transform-origin: center right;
     transform: scaleX(0);
     z-index: var(--z-global-ui);
-    margin-right: unit(1);
+    margin-right: units.unit(1);
 
     &--show {
       opacity: 1;
@@ -26,7 +27,7 @@
 
     &__label-input {
       width: 100%;
-      padding: unit(2) unit(4);
+      padding: units.unit(2) units.unit(4);
       border-radius: 5rem;
       border: 0;
       background: var(--text);
@@ -42,8 +43,8 @@
   }
 
   .flip-button {
-    width: unit(13); // Keep same as floating-action-buttin mixin
-    height: unit(13);
+    width: units.unit(13); // Keep same as floating-action-buttin mixin
+    height: units.unit(13);
     perspective: 1000px;
     cursor: pointer;
   }
