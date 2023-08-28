@@ -1,3 +1,5 @@
+@use '~@codaco/ui/src/styles/global/core/units';
+
 .flip-form {
   --open-width: 40rem;
   --closed-width: 13rem;
@@ -15,14 +17,13 @@
 
   .button-container {
     position: absolute;
-
-    right: unit(2);
+    right: units.unit(2);
     margin-right: 2rem; // The node needs to be offset to account for the button's plus icon
   }
 
   .form-container {
     position: absolute;
-    right: unit(2);
+    right: units.unit(2);
     display: flex;
     align-items: center;
 
@@ -30,18 +31,18 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-top: -#{unit(3)};
+      margin-top: -#{units.unit(3)};
     }
 
     .tool-tip {
-      height: unit(2);
-      margin-bottom: unit(1);
+      height: units.unit(2);
+      margin-bottom: units.unit(1);
       text-shadow: 0 0 0.5rem var(--text-dark);
     }
 
     .label-input {
-      padding: unit(2) unit(4);
-      margin-right: unit(0.5);
+      padding: units.unit(2) units.unit(4);
+      margin-right: units.unit(0.5);
       border-radius: 5rem;
       border: 0;
       background: var(--text);

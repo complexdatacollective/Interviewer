@@ -22,7 +22,7 @@ $search-z-index: var(--z-global-ui);
       // Position collapsed search element around the 'core' of the icon
       bottom: $search-icon-offset-y;
       right: var(--right-offset);
-      width: calc(100% - calc(var(--right-offset)*1.2) - var(--session-panel-width));
+      width: calc(100% - calc(var(--right-offset) * 1.2) - var(--session-panel-width));
       z-index: $search-z-index;
     }
   }

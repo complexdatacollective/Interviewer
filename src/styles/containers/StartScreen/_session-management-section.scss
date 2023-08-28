@@ -1,8 +1,8 @@
 .session-management-section {
-  background: linear-gradient(#404088, var(--color-cyber-grape)); //sass-lint:disable-line no-color-literals
+  background: linear-gradient(#404088, var(--color-cyber-grape)); // sass-lint:disable-line no-color-literals
 
   &__main {
-    padding: unit(4) unit(6);
+    padding: units.unit(4) units.unit(6);
 
     > .content-buttons {
       display: flex;
@@ -23,7 +23,7 @@
     .export-buttons {
       .button {
         &:last-child {
-          margin-left: unit(2);
+          margin-left: units.unit(2);
         }
       }
     }

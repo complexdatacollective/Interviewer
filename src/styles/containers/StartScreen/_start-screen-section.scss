@@ -1,7 +1,7 @@
 .start-screen-section {
   border-radius: var(--border-radius);
-  box-shadow: 0 unit(1) .2rem 0 rgba(0, 0, 0, 0.25); //sass-lint:disable-line no-color-literals
-  margin: unit(6) auto;
+  box-shadow: 0 units.unit(1) .2rem 0 rgb(0 0 0 / 25%); // sass-lint:disable-line no-color-literals
+  margin: units.unit(6) auto;
   max-width: 68rem;
   width: 100%;
   overflow: hidden;

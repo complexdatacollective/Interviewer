@@ -1,5 +1,9 @@
+@use '~@codaco/ui/src/styles/global/core/units';
+
 .new-filterable-list {
-  --transparent-background: #{transparentize(rgb(0, 0, 0), 0.8)};
+  /* stylelint-disable-next-line color-function-notation */
+  --transparent-background: rgba(0, 0, 0, 20%);
+
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
@@ -18,17 +22,17 @@
     align-items: center;
     align-content: space-evenly;
     justify-content: space-between;
-    margin: unit(1) 0;
+    margin: units.unit(1) 0;
 
     &-section {
-
       &--sort {
         overflow-x: auto;
         flex: 1 1 auto;
-        $opaque: rgba(0, 0, 0, 1);
-        $distance: unit(2);
-        -webkit-mask-image: linear-gradient(90deg, transparent, $opaque unit(2), $opaque calc(100% - #{unit(2)}), transparent 100%); //sass-lint:disable-line no-vendor-prefixes
-        mask-image: linear-gradient(90deg, transparent, $opaque unit(2), $opaque calc(100% - #{unit(2)}), transparent 100%);
+
+        $opaque: rgb(0 0 0 / 100%);
+        $distance: units.unit(2);
+
+        mask-image: linear-gradient(90deg, transparent, $opaque units.unit(2), $opaque calc(100% - #{units.unit(2)}), transparent 100%);
 
         .scroll-container {
           white-space: nowrap;
@@ -37,7 +41,7 @@
 
       &--filter {
         flex: 1 1 auto;
-        padding: 0 unit(2);
+        padding: 0 units.unit(2);
         display: flex;
         max-width: 30rem;
       }
@@ -51,7 +55,7 @@
         display: inline-block;
         margin: 0;
         flex: 1;
-        min-width: unit(25);
+        min-width: units.unit(25);
       }
 
       input {
@@ -61,14 +65,15 @@
   }
 
   &__main {
-    @include scrollable(unit(1));
+    @include scrollable(units.unit(1));
+
     flex: 1 1 auto;
-    padding: 0 unit(1);
+    padding: 0 units.unit(1);
 
     > * {
       width: 50%;
       float: left;
-      padding: unit(1);
+      padding: units.unit(1);
     }
 
     &:empty {
@@ -79,7 +84,7 @@
       &::after {
         width: 100%;
         height: 100%;
-        min-height: unit(20);
+        min-height: units.unit(20);
         display: flex;
         justify-content: center;
         align-items: center;
@@ -88,7 +93,7 @@
     }
 
     .loading-state {
-      padding: unit(4);
+      padding: units.unit(4);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -106,8 +111,8 @@
   text-transform: uppercase;
   color: var(--white);
   opacity: 0.5;
-  margin: 0 unit(2);
-  padding: unit(2);
+  margin: 0 units.unit(2);
+  padding: units.unit(2);
   transition: color var(--animation-easing) var(--animation-duration-standard), opacity var(--animation-easing) var(--animation-duration-standard);
 
   &:hover {

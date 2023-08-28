@@ -1,9 +1,9 @@
 .import-section {
-  background: linear-gradient(#404088, var(--color-cyber-grape)); //sass-lint:disable-line no-color-literals
+  background: linear-gradient(#404088, var(--color-cyber-grape)); // sass-lint:disable-line no-color-literals
 
   &__manage-protocols {
     background: var(--color-slate-blue);
-    padding: unit(2) unit(6);
+    padding: units.unit(2) units.unit(6);
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -14,7 +14,7 @@
   }
 
   &__install-section {
-    padding: unit(4) unit(6);
+    padding: units.unit(4) units.unit(6);
 
     > .content-buttons {
       display: flex;
@@ -26,15 +26,15 @@
 
       > :only-child {
         max-width: 30rem;
-        margin-left: -50% !important; //sass-lint:disable-line no-important
+        margin-left: -50% !important; // sass-lint:disable-line no-important
       }
 
       > :first-child {
-        margin-right: unit(2);
+        margin-right: units.unit(2);
       }
 
       > :last-child {
-        margin-left: unit(2);
+        margin-left: units.unit(2);
       }
     }
   }

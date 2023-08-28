@@ -13,7 +13,7 @@
     height: 100%;
 
     h1 {
-      padding: unit(2) unit(4);
+      padding: units.unit(2) units.unit(4);
     }
   }
 
@@ -22,7 +22,7 @@
   }
 
   .item {
-    padding: unit(4);
+    padding: units.unit(4);
     transition: background var(--animation-duration-fast) var(--animation-easing), font-weight var(--animation-duration-fast) var(--animation-easing);
     cursor: pointer;
     font-weight: 700;

@@ -65,7 +65,7 @@ const QuickAddForm = ({
   nodeColor,
   nodeType,
   newNodeModelData,
-  newNodeAttributeData,
+  newNodeAttributes,
   targetVariable,
 }) => {
   const [showForm, setShowForm] = useState(false);
@@ -106,7 +106,7 @@ const QuickAddForm = ({
       addNode(
         newNodeModelData,
         {
-          ...newNodeAttributeData,
+          ...newNodeAttributes,
           [targetVariable]: nodeLabel,
         },
       );

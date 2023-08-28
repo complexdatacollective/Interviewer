@@ -59,7 +59,7 @@
 
       .icon {
         .cls-2 {
-          fill: rgba(255, 255, 255, .2); //sass-lint:disable-line no-color-literals
+          fill: rgb(255 255 255 / 20%); // sass-lint:disable-line no-color-literals
         }
       }
     }
@@ -75,7 +75,7 @@
 
     h4 {
       margin: 0;
-      padding: unit(3) unit(2);
+      padding: units.unit(3) units.unit(2);
       text-align: center;
       background: var(--light-background);
       text-overflow: ellipsis;

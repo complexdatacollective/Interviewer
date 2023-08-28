@@ -1,5 +1,7 @@
+@use '~@codaco/ui/src/styles/global/core/units';
+
 .form-wizard {
-  --button-size: #{unit(10)};
+  --button-size: #{units.unit(10)};
 
   margin: 0 calc(var(--button-size));
   justify-self: center;
@@ -12,6 +14,7 @@
   }
 
   // Used to hide the visible button
+  /* stylelint-disable-next-line  */
   .form__next-button {
     background: none;
     border: 0;
@@ -22,6 +25,7 @@
 
   .wizard-navigation-button {
     @include clickable;
+
     height: var(--button-size);
     width: var(--button-size);
     display: flex;
