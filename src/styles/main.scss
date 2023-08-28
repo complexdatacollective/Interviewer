@@ -1,12 +1,12 @@
 $font-path: '~@codaco/ui/lib/assets/fonts';
 $image-path: '~@codaco/ui/lib/assets/images';
 
+@use '~@codaco/ui/src/styles/global/core/units';
 @import '~@codaco/ui/lib/styles/all';
 @import 'helpers/all';
 @import 'components/all';
 @import 'containers/all';
 @import 'transitions';
-@use '~@codaco/ui/src/styles/global/core/units';
 
 // Remove touch and focus outlines
 * {
