@@ -1,3 +1,5 @@
+@use '~@codaco/ui/src/styles/global/core/units';
+
 .name-generator-interface {
   @include interface-centering-padding;
 
@@ -32,8 +34,8 @@
 
   &__add-button {
     position: absolute;
-    bottom: unit(2);
-    right: unit(6);
+    bottom: units.unit(2);
+    right: units.unit(6);
     z-index: var(--z-global-ui);
   }
 }

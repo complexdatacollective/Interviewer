@@ -1,3 +1,5 @@
+@use '~@codaco/ui/src/styles/global/core/units';
+
 .overlay {
   &.protocol-url-form-overlay {
     max-width: 65rem;
@@ -18,6 +20,6 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    margin-bottom: unit(2);
+    margin-bottom: units.unit(2);
   }
 }

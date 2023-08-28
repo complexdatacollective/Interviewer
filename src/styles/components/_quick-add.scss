@@ -1,3 +1,5 @@
+@use '~@codaco/ui/src/styles/global/core/units';
+
 .flip-form {
   --open-width: 40rem;
   --closed-width: 13rem;
@@ -15,8 +17,7 @@
 
   .button-container {
     position: absolute;
-
-    right: unit(2);
+    right: units.unit(2);
     margin-right: 2rem; // The node needs to be offset to account for the button's plus icon
   }
 
@@ -34,8 +35,8 @@
     }
 
     .tool-tip {
-      height: unit(2);
-      margin-bottom: unit(1);
+      height: units.unit(2);
+      margin-bottom: units.unit(1);
       text-shadow: 0 0 0.5rem var(--text-dark);
     }
 
