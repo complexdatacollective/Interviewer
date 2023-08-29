@@ -13,6 +13,7 @@ export const primaryKeyPropertyForWorker = 'networkCanvasId';
 export const nodeTypePropertyForWorker = 'networkCanvasType';
 
 const ADD_NODE = 'ADD_NODE';
+const ADD_NODE_TO_PROMPT = 'ADD_NODE_TO_PROMPT';
 const BATCH_ADD_NODES = 'BATCH_ADD_NODES';
 const REMOVE_NODE = 'REMOVE_NODE';
 const REMOVE_NODE_FROM_PROMPT = 'REMOVE_NODE_FROM_PROMPT';
@@ -240,6 +241,23 @@ export default function reducer(state = getInitialState(), action = {}) {
         ),
       };
     }
+    case ADD_NODE_TO_PROMPT: {
+      return {
+        ...state,
+        nodes: (() => state.nodes.map(
+          (node) => {
+            if (node[entityPrimaryKeyProperty] !== action.nodeId) { return node; }
+            return {
+              ...node,
+              [entityAttributesProperty]:
+                { ...node[entityAttributesProperty], ...action.promptAttributes },
+              promptIDs: [...node.promptIDs, action.promptId],
+            };
+          },
+        )
+        )(),
+      };
+    }
     case REMOVE_NODE_FROM_PROMPT: {
       const togglePromptAttributes = keys(action.promptAttributes)
         .reduce(
@@ -321,6 +339,7 @@ export default function reducer(state = getInitialState(), action = {}) {
 
 const actionTypes = {
   ADD_NODE,
+  ADD_NODE_TO_PROMPT,
   BATCH_ADD_NODES,
   UPDATE_NODE,
   TOGGLE_NODE_ATTRIBUTES,

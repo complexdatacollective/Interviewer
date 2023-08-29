@@ -46,3 +46,51 @@ export const getReplacement = (object, path, defaultValue = undefined) => {
 };
 
 export const get = getReplacement;
+
+// Replacement for lodash debounce supporting leading and trailing options
+export const debounce = (func, wait, options = {}) => {
+  const { leading, trailing } = options;
+  let timeout;
+  let lastArgs;
+  let lastThis;
+  let result;
+
+  const later = () => {
+    timeout = null;
+    if (lastArgs) {
+      result = func.apply(lastThis, lastArgs);
+      lastArgs = null;
+      lastThis = null;
+    }
+  };
+
+  const debounced = (...args) => {
+    if (!timeout && leading) {
+      result = func.apply(this, args);
+    } else {
+      lastArgs = args;
+      lastThis = this;
+    }
+
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+
+    return result;
+  };
+
+  debounced.cancel = () => {
+    clearTimeout(timeout);
+    timeout = null;
+    lastArgs = null;
+    lastThis = null;
+  };
+
+  if (trailing) {
+    debounced.flush = () => {
+      clearTimeout(timeout);
+      later();
+    };
+  }
+
+  return debounced;
+};

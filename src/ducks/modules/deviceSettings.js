@@ -33,6 +33,9 @@ const initialState = {
 
   // Experimental TTS feature for reading prompts
   enableExperimentalTTS: false,
+
+  // Experimental interaction sounds
+  enableExperimentalSounds: false,
 };
 
 // This provides additional default state based on information unavailable before 'deviceready'.
