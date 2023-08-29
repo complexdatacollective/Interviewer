@@ -12,7 +12,6 @@ import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { NodeList } from '../components';
 import { MonitorDragSource } from '../behaviours/DragAndDrop';
 import { getEntityAttributes } from '../ducks/modules/network';
-import dropSound from '../interaction-sounds/drop-node.wav';
 
 class OrdinalBins extends PureComponent {
   promptColor = () => {
@@ -68,7 +67,7 @@ class OrdinalBins extends PureComponent {
         meta[entityPrimaryKeyProperty],
         {},
         { [activePromptVariable]: bin.value },
-        dropSound,
+        'drop',
       );
     };
 

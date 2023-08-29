@@ -6,30 +6,35 @@ export const playSound = ({
   src,
   loop = false,
   volume = 1,
-  debounceInterval = 1000,
+  debounceInterval = 0,
 }) => {
   if (!src) {
     throw new Error('No sound source provided');
   }
 
-  let isPlaying = false;
-  const audio = new Audio(src);
-  audio.volume = volume;
-  audio.loop = loop;
+  let audio;
 
   const debouncedPlay = debounce(() => {
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0;
+    }
+
+    audio = new Audio(src);
+    audio.volume = volume;
+    audio.loop = loop;
     audio.play();
-    isPlaying = true;
   }, debounceInterval, { leading: true, trailing: false });
 
   const stop = () => {
+    if (!audio) {
+      return;
+    }
     audio.pause();
     audio.currentTime = 0;
-    isPlaying = false;
   };
 
   return {
-    isPlaying,
     play: debouncedPlay,
     stop,
   };

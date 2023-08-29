@@ -9,17 +9,19 @@ import addEdgeSound from '../../interaction-sounds/create-edge.wav';
 import errorSound from '../../interaction-sounds/error.wav';
 import edgeLinkingSound from '../../interaction-sounds/node-linking-mode.wav';
 import finishSessionSound from '../../interaction-sounds/finish-interview.wav';
+import dropSound from '../../interaction-sounds/drop-node.wav';
 import { getNetworkEdges } from '../../selectors/network';
 
 const sounds = {
   open: playSound({ src: openAppSound }),
-  createNode: playSound({ src: createNodeSound }),
+  createNode: playSound({ src: createNodeSound, debounceInterval: 200 }),
   createEdge: playSound({ src: addEdgeSound }),
   removeNode: playSound({ src: removeNodeSound }),
-  toggleOn: playSound({ src: toggleOnSound, debounceInterval: 0 }),
-  toggleOff: playSound({ src: toggleOffSound, debounceInterval: 0 }),
+  toggleOn: playSound({ src: toggleOnSound }),
+  toggleOff: playSound({ src: toggleOffSound }),
   error: playSound({ src: errorSound }),
   link: playSound({ src: edgeLinkingSound, loop: true }),
+  drop: playSound({ src: dropSound }),
   finishSession: playSound({ src: finishSessionSound }),
 };
 /**
@@ -53,7 +55,7 @@ const sound = (store) => (next) => (action) => {
       break;
     }
     case networkActionTypes.ADD_NODE: {
-      playSound({ src: createNodeSound }).play();
+      sounds.createNode.play();
       break;
     }
     case networkActionTypes.UPDATE_NODE: {
@@ -61,7 +63,7 @@ const sound = (store) => (next) => (action) => {
       // property to the action to allow for sounds to be triggered where
       // necessary.
       if (action.sound) {
-        playSound({ src: action.sound }).play();
+        sounds[action.sound].play();
       }
 
       break;
@@ -99,9 +101,9 @@ const sound = (store) => (next) => (action) => {
         const toggledOn = Object.values(attributes).includes(true);
 
         if (toggledOn) {
-          playSound({ src: toggleOnSound, debounceInterval: 0 }).play();
+          playSound({ src: toggleOnSound }).play();
         } else {
-          playSound({ src: toggleOffSound, debounceInterval: 0 }).play();
+          playSound({ src: toggleOffSound }).play();
         }
       }
 

@@ -9,7 +9,6 @@ import { CategoricalItem } from '../../components';
 import Overlay from '../Overlay';
 import OtherVariableForm from './OtherVariableForm';
 import { get } from '../../utils/lodash-replacements';
-import dropSound from '../../interaction-sounds/drop-node.wav';
 
 const formatBinDetails = (nodes, getNodeLabel) => {
   if (nodes.length === 0) {
@@ -86,7 +85,7 @@ const CategoricalListItem = (props) => {
         // otherVariable we need to reset the alternate.
         [resetVariable]: null,
       },
-      dropSound,
+      'drop',
     );
   };
 
