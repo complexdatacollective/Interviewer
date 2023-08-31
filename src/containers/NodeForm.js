@@ -1,113 +1,131 @@
-import React, { Component } from 'react';
-import { bindActionCreators, compose } from 'redux';
-import { connect } from 'react-redux';
+import React, {
+  useEffect, useState, useMemo, useCallback,
+} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { submit } from 'redux-form';
-import { debounce } from 'lodash';
-import { Button, Scroller } from '@codaco/ui';
+import { ActionButton, Button, Scroller } from '@codaco/ui';
+import { motion, AnimatePresence } from 'framer-motion';
 import { entityPrimaryKeyProperty, entityAttributesProperty } from '@codaco/shared-consts';
+import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import Overlay from './Overlay';
 import Form from './Form';
 import FormWizard from './FormWizard';
+import { FIRST_LOAD_UI_ELEMENT_DELAY } from './Interfaces/utils/constants';
 
 const reduxFormName = 'NODE_FORM';
 
-class NodeForm extends Component {
-  constructor(props) {
-    super(props);
+const NodeForm = (props) => {
+  const {
+    subject,
+    selectedNode,
+    form,
+    disabled,
+    icon,
+    nodeType,
+    newNodeModelData,
+    newNodeAttributes,
+    onClose,
+  } = props;
 
-    this.overlay = React.createRef();
-  }
+  const [show, setShow] = useState(false);
 
-  handleSubmit = debounce((form) => {
-    const {
-      onSubmit,
-      onClose,
-    } = this.props;
+  const dispatch = useDispatch();
+  const submitForm = () => dispatch(submit(reduxFormName));
+  const addNode = (...properties) => dispatch(sessionsActions.addNode(...properties));
+  const updateNode = (...properties) => dispatch(sessionsActions.updateNode(...properties));
 
-    onSubmit({ form });
+  const useFullScreenForms = useSelector((state) => state.deviceSettings.useFullScreenForms);
+
+  const handleSubmit = useCallback((formData) => {
+    if (!selectedNode) {
+      /**
+      *  addNode(modelData, attributeData);
+      */
+      addNode(
+        newNodeModelData,
+        { ...newNodeAttributes, ...formData },
+      );
+    } else {
+      /**
+      * updateNode(nodeId, newModelData, newAttributeData)
+      */
+      const selectedUID = selectedNode[entityPrimaryKeyProperty];
+      updateNode(selectedUID, {}, formData);
+    }
+
+    setShow(false);
     onClose();
-  }, 1000, { // This is needed to prevent double submit.
-    leading: true,
-    trailing: false,
-  })
+  }, [selectedNode, newNodeModelData, newNodeAttributes, onClose]);
 
-  render() {
-    const {
-      show,
-      form,
-      initialValues,
-      submitForm,
-      stage,
-      onClose,
-      useFullScreenForms,
-      validationMeta,
-      otherNetworkEntities,
-    } = this.props;
+  // When a selected node is passed in, we are editing an existing node.
+  // We need to show the form and populate it with the node's data.
+  useEffect(() => {
+    if (selectedNode) {
+      setShow(true);
+    }
+  }, [selectedNode]);
 
-    const formProps = {
-      ...form,
-      initialValues,
-      onSubmit: this.handleSubmit,
-      autoFocus: true,
-      subject: stage.subject,
-      form: reduxFormName,
-      validationMeta,
-      otherNetworkEntities,
-    };
+  const FormComponent = useMemo(() => {
+    if (useFullScreenForms) {
+      return FormWizard;
+    }
 
-    return (
+    return (formProps) => (<Scroller><Form {...formProps} /></Scroller>);
+  }, [useFullScreenForms]);
+
+  const handleClose = useCallback(() => {
+    setShow(false);
+    onClose();
+  }, [onClose]);
+
+  return (
+    <>
+      <AnimatePresence>
+        <motion.div
+          className="name-generator-interface__add-button"
+          initial={{
+            opacity: 0,
+            y: '100%',
+          }}
+          animate={{
+            opacity: 1,
+            y: '0rem',
+            transition: {
+              delay: FIRST_LOAD_UI_ELEMENT_DELAY,
+            },
+          }}
+        >
+          <ActionButton
+            disabled={disabled}
+            onClick={() => setShow(true)}
+            icon={icon}
+            title={`Add ${nodeType}...`}
+          />
+        </motion.div>
+      </AnimatePresence>
       <Overlay
         show={show}
         title={form.title}
-        onClose={onClose}
+        onClose={handleClose}
         className="node-form"
         forceEnableFullscreen={useFullScreenForms}
         footer={!useFullScreenForms && (<Button key="submit" aria-label="Submit" type="submit" onClick={submitForm}>Finished</Button>)}
         allowMaximize={false}
       >
-        {useFullScreenForms
-          ? (
-            <FormWizard
-              {...formProps}
-            />
-          )
-          : (
-            <>
-              <Scroller>
-                <Form
-                  {...formProps}
-                />
-              </Scroller>
-            </>
-          )}
+        <FormComponent
+          {...form}
+          subject={subject}
+          initialValues={selectedNode?.[entityAttributesProperty]}
+          onSubmit={handleSubmit}
+          autoFocus
+          form={reduxFormName}
+          validationMeta={{
+            entityId: selectedNode?.[entityPrimaryKeyProperty],
+          }}
+        />
       </Overlay>
-    );
-  }
-}
-
-const mapStateToProps = (state, props) => {
-  const nodeAttributes = props.node ? props.node[entityAttributesProperty] : {};
-
-  const initialValues = {
-    ...nodeAttributes,
-  };
-
-  const entityId = props.node && props.node[entityPrimaryKeyProperty];
-
-  return {
-    form: props.stage.form,
-    useFullScreenForms: state.deviceSettings.useFullScreenForms,
-    initialValues,
-    validationMeta: { entityId }, // used for validation functions
-  };
+    </>
+  );
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  submitForm: bindActionCreators(() => submit(reduxFormName), dispatch),
-});
-
-export { NodeForm };
-
-export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
-)(NodeForm);
+export default NodeForm;

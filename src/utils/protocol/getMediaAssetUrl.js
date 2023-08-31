@@ -1,7 +1,6 @@
 /* global device */
 
-import inEnvironment, { isIOS } from '../Environment';
-import { makeTmpDirCopy, resolveFileSystemUrl } from '../filesystem';
+import { isIOS } from '../Environment';
 import getAssetUrl from './getAssetUrl';
 
 /**
@@ -9,18 +8,16 @@ import getAssetUrl from './getAssetUrl';
  * video/audio on cordova.
  */
 const getMediaAssetUrl = (protocolName, assetPath) => {
+  // iOS needs special handling, because it doesn't support file:// URLs for WKWebView.
   if (isIOS()) {
-    // iOS doesn't support cdvfile:// urls (limitation of wkwebview), so we need to copy
-    // the file to a temporary directory and return a file:// url.
-
-    // files stored in a flat hierarchy under tmp/; prepend protocolName to ensure uniqueness
-    const tmpFilename = `${protocolName}-${assetPath}`;
     return getAssetUrl(protocolName, assetPath)
-      .then(sourceFilename => makeTmpDirCopy(sourceFilename, tmpFilename))
-      .then(fileEntry => fileEntry.nativeURL)
-      .catch((err) => {
-        console.error(err); // eslint-disable-line no-console
-        return '';
+      .then(sourceFilename => {
+        // convertFilePath is an undocumented method (classic cordova! 🙄). It
+        // takes a file:// path, and converts it to use the scheme preference
+        // from our config.xml (which is app://).
+        const convertedPath = window.WkWebView.convertFilePath(sourceFilename);
+        console.info('getMediaAssetUrl: converting file path', sourceFilename, convertedPath);
+        return convertedPath;
       });
   }
 

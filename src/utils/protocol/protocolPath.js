@@ -52,10 +52,10 @@ const protocolPath = (environment) => {
 
       if (!filePath) {
         // Cordova expects a trailing slash:
-        return [userDataPath(), 'protocols', protocolUID, undefined].join('/');
+        return `${userDataPath()}protocols/${protocolUID}/`;
       }
 
-      return [userDataPath(), 'protocols', protocolUID].concat(ensureArray(filePath)).join('/');
+      return `${userDataPath()}protocols/${protocolUID}/${filePath}`;
     };
   }
 

@@ -34,6 +34,7 @@ const getReducer = (network) => (state = initialState, action = {}) => {
         return result;
       }, {});
     case networkActionTypes.ADD_NODE:
+    case networkActionTypes.ADD_NODE_TO_PROMPT:
     case networkActionTypes.BATCH_ADD_NODES:
     case networkActionTypes.REMOVE_NODE:
     case networkActionTypes.REMOVE_NODE_FROM_PROMPT:
@@ -224,7 +225,12 @@ const addNode = (modelData, attributeData = {}) => (dispatch, getState) => {
   });
 };
 
-const updateNode = (nodeId, newModelData = {}, newAttributeData = {}) => (dispatch, getState) => {
+const updateNode = (
+  nodeId,
+  newModelData = {},
+  newAttributeData = {},
+  sound,
+) => (dispatch, getState) => {
   const { activeSessionId } = getState();
 
   dispatch({
@@ -233,6 +239,19 @@ const updateNode = (nodeId, newModelData = {}, newAttributeData = {}) => (dispat
     nodeId,
     newModelData,
     newAttributeData,
+    sound,
+  });
+};
+
+const addNodeToPrompt = (nodeId, promptId, promptAttributes) => (dispatch, getState) => {
+  const { activeSessionId } = getState();
+
+  dispatch({
+    type: networkActionTypes.ADD_NODE_TO_PROMPT,
+    sessionId: activeSessionId,
+    nodeId,
+    promptId,
+    promptAttributes,
   });
 };
 
@@ -444,6 +463,7 @@ const setSessionExported = (id) => ({
 
 const actionCreators = {
   addNode,
+  addNodeToPrompt,
   batchAddNodes,
   updateNode,
   removeNode,

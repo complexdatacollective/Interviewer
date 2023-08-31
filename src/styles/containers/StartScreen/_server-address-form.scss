@@ -1,9 +1,11 @@
+@use '~@codaco/ui/src/styles/global/core/units';
+
 .server-address-form {
   &__form {
-    padding: unit(4);
+    padding: units.unit(4);
     background: var(--background);
     border-radius: var(--border-radius);
-    margin-bottom: unit(2);
+    margin-bottom: units.unit(2);
   }
 
   &__footer {
@@ -11,5 +13,6 @@
     align-items: center;
     justify-content: space-between;
     flex-direction: row-reverse;
+    margin-bottom: units.unit(2);
   }
 }

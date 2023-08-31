@@ -67,6 +67,7 @@ class OrdinalBins extends PureComponent {
         meta[entityPrimaryKeyProperty],
         {},
         { [activePromptVariable]: bin.value },
+        'drop',
       );
     };
 

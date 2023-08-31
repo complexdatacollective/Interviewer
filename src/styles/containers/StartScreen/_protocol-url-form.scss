@@ -1,3 +1,5 @@
+@use '~@codaco/ui/src/styles/global/core/units';
+
 .overlay {
   &.protocol-url-form-overlay {
     max-width: 65rem;
@@ -9,14 +11,15 @@
 
   .form-field-container {
     background: var(--background);
-    padding: unit(4);
+    padding: units.unit(4);
     border-radius: var(--border-radius);
-    margin-bottom: unit(2);
+    margin-bottom: units.unit(2);
   }
 
   &__footer {
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    margin-bottom: units.unit(2);
   }
 }

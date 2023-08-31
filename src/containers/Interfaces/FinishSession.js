@@ -1,14 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { Button } from '@codaco/ui';
 import { isPreview } from '../../utils/Environment';
 import { actionCreators as sessionActions } from '../../ducks/modules/session';
 
 const FinishSession = ({ endSession }) => {
+  const dispatch = useDispatch();
   const handleFinishSession = () => {
     endSession(false, true);
   };
+
+  useEffect(() => {
+    dispatch({ type: 'PLAY_SOUND', sound: 'finishSession' });
+  }, []);
 
   return (
     <div className="interface finish-session-interface">
@@ -23,7 +28,7 @@ const FinishSession = ({ endSession }) => {
             interview now.
           </p>
         </div>
-        { !isPreview()
+        {!isPreview()
           && (
             <div className="finish-session-interface__section finish-session-interface__section--buttons">
               <Button onClick={handleFinishSession}>

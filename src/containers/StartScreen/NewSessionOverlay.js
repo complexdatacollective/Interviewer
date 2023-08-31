@@ -44,6 +44,7 @@ const NewSessionOverlay = ({
         <Form
           className="case-id-form__form"
           form={formConfig.formName}
+          subject={{ entity: 'ego' }}
           autoFocus
           onSubmit={onSubmitForm}
           {...formConfig} // eslint-disable-line react/jsx-props-no-spreading

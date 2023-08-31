@@ -1,8 +1,8 @@
 .interview-section {
-  background: linear-gradient(#404088, var(--color-cyber-grape)); //sass-lint:disable-line no-color-literals
+  background: linear-gradient(#404088, var(--color-cyber-grape)); // sass-lint:disable-line no-color-literals
 
   &__manage-protocols {
-    padding: unit(2) unit(6);
+    padding: units.unit(2) units.unit(6);
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -17,7 +17,7 @@
       display: flex;
 
       &__last-used {
-        padding: unit(4) unit(6);
+        padding: units.unit(4) units.unit(6);
         flex: 1 1 auto;
 
         > .protocol-card {
@@ -34,13 +34,13 @@
   }
 
   &__resume-section {
-    background: rgba(22, 21, 43, 0.15); //sass-lint:disable-line no-color-literals
+    background: rgb(22 21 43 / 15%); // sass-lint:disable-line no-color-literals
 
     .content-area {
       display: flex;
 
       &__last-session {
-        padding: unit(4) unit(6);
+        padding: units.unit(4) units.unit(6);
         flex: 1 1 auto;
         width: 60%;
 

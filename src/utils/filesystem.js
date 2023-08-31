@@ -2,10 +2,9 @@
 /* global FileWriter, FileError, cordova */
 import { Writable } from 'stream';
 import { trimChars } from 'lodash/fp';
+import { Buffer } from 'buffer';
 import environments from './environments';
 import inEnvironment from './Environment';
-
-const Buffer = require('buffer/').Buffer; // eslint-disable-line prefer-destructuring
 
 const trimPath = trimChars('/ ');
 
@@ -30,32 +29,6 @@ const inSequence = (items, apply) => items
     Promise.resolve(),
   );
 
-const userDataPath = inEnvironment((environment) => {
-  if (environment === environments.ELECTRON) {
-    const electron = window.require('electron');
-
-    return () => (electron.app || electron.remote.app).getPath('userData');
-  }
-
-  if (environment === environments.CORDOVA) {
-    return () => 'cdvfile://localhost/persistent';
-  }
-
-  throw new Error(`userDataPath() not available on platform ${environment}`);
-});
-
-export const getFileNativePath = inEnvironment((environment) => {
-  if (environment === environments.CORDOVA) {
-    return (filePath) => new Promise((resolve, reject) => {
-      window.resolveLocalFileSystemURL(filePath, (fileEntry) => {
-        resolve(fileEntry.toURL());
-      }, (error) => reject(error));
-    });
-  }
-
-  throw new Error(`getFileNativePath() not available on platform ${environment}`);
-});
-
 const tempDataPath = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
     const electron = window.require('electron');
@@ -65,6 +38,20 @@ const tempDataPath = inEnvironment((environment) => {
 
   if (environment === environments.CORDOVA) {
     return () => cordova.file.cacheDirectory;
+  }
+
+  throw new Error(`userDataPath() not available on platform ${environment}`);
+});
+
+const userDataPath = inEnvironment((environment) => {
+  if (environment === environments.ELECTRON) {
+    const electron = window.require('electron');
+
+    return () => (electron.app || electron.remote.app).getPath('userData');
+  }
+
+  if (environment === environments.CORDOVA) {
+    return () => cordova.file.dataDirectory;
   }
 
   throw new Error(`userDataPath() not available on platform ${environment}`);
@@ -106,7 +93,9 @@ export const getTempFileSystem = () => new Promise((resolve, reject) => {
 const resolveFileSystemUrl = inEnvironment((environment) => {
   if (environment === environments.CORDOVA) {
     return (path) => new Promise(
-      (resolve, reject) => window.resolveLocalFileSystemURL(path, resolve, reject),
+      (resolve, reject) => {
+        window.resolveLocalFileSystemURL(path, resolve, reject);
+      },
     );
   }
 
@@ -115,14 +104,9 @@ const resolveFileSystemUrl = inEnvironment((environment) => {
 
 const readFile = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const fs = require('fs');
+    const fse = require('fs-extra');
 
-    return (filename) => new Promise((resolve, reject) => {
-      fs.readFile(filename, null, (err, data) => {
-        if (err) { reject(err); }
-        resolve(data);
-      });
-    });
+    return (filename) => fse.readFile(filename, null);
   }
 
   if (environment === environments.CORDOVA) {
@@ -140,43 +124,11 @@ const readFile = inEnvironment((environment) => {
       }, reject);
     });
 
-    return (filename) => resolveFileSystemUrl(filename).then(fileReader);
+    return (filename) => resolveFileSystemUrl(filename)
+      .then(fileReader);
   }
 
   throw new Error(`readFile() not available on platform ${environment}`);
-});
-
-/**
- * Deprecated.
- * This reads the binary contents of a file into a base-64 encoded data URL,
- * which works as long as the file is small enough (but is slow).
- * On iOS, asset loading currently relies on observed behavior of the tmp fs;
- * this may be useful as a fallback in the future (see #681).
- */
-const readFileAsDataUrl = inEnvironment((environment) => {
-  if (environment === environments.CORDOVA) {
-    const fileReader = (fileEntry) => new Promise((resolve, reject) => {
-      // TODO: reject with error
-      // eslint-disable-next-line prefer-promise-reject-errors
-      if (!fileEntry) { reject('File not found'); }
-
-      fileEntry.file((file) => {
-        const reader = new FileReader();
-
-        reader.onloadend = (event) => {
-          resolve(event.target.result);
-        };
-
-        reader.onerror = (error) => reject(error, 'filesystem.readFileAsDataUrl');
-
-        reader.readAsDataURL(file);
-      }, reject);
-    });
-
-    return (filename) => resolveFileSystemUrl(filename).then(fileReader);
-  }
-
-  throw new Error(`readFileAsDataUrl() not available on platform ${environment}`);
 });
 
 export const makeFileWriter = (fileEntry) => new Promise((resolve, reject) => {
@@ -336,47 +288,6 @@ const removeDirectory = inEnvironment((environment) => {
   }
 
   throw new Error(`removeDirectory() not available on platform ${environment}`);
-});
-
-const getNestedPaths = inEnvironment((environment) => {
-  if (environment === environments.ELECTRON) {
-    const path = require('path');
-
-    return (targetPath) => targetPath
-      .split(path.sep)
-      .reduce(
-        (memo, dir) => (
-          memo.length === 0
-            ? [dir]
-            : [...memo, path.join(memo[memo.length - 1], dir)]
-        ),
-        [],
-      );
-  }
-
-  if (environment === environments.CORDOVA) {
-    // Only tested for cdvfile:// format paths
-    return (targetUrl) => {
-      const pathMatcher = /^([a-z]+:\/\/[a-z]+\/[a-z]+\/)(.*)/;
-      const matches = pathMatcher.exec(targetUrl);
-
-      const location = matches[1];
-      const path = trimPath(matches[2]).split('/');
-
-      return path
-        .reduce(
-          (memo, dir) => (
-            memo.length === 0
-              ? [dir]
-              : [...memo, `${memo[memo.length - 1]}${dir}/`]
-          ),
-          [location],
-        )
-        .slice(1);
-    };
-  }
-
-  throw new Error(`getNestedPaths() not available on platform ${environment}`);
 });
 
 const writeStream = inEnvironment((environment) => {
@@ -617,16 +528,62 @@ export const createWriteStream = inEnvironment((environment) => {
   throw new Error(`writeStream() not available on platform ${environment}`);
 });
 
-// FIXME: this implies that it will recursively create directories, but if targetPath's parent
-//        doesn't already exist, this will error on both platforms
+/**
+ * Creates a directory at a given path if it doesn't already exist.
+ * Note that the base directory must already exist!
+ * @param  {string} targetPath
+ * @return {Promise}
+ * @private
+ * @example
+ * createDirectory('/path/to/dir')
+ *  .then(() => console.log('Directory created!'))
+ *  .catch((err) => console.error(err));
+*/
 const ensurePathExists = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const path = require('path');
+    const fs = require('fs');
 
     return (targetPath) => {
-      const relativePath = path.relative(userDataPath(), targetPath);
-      const nestedPaths = getNestedPaths(relativePath)
-        .map((pathSegment) => path.join(userDataPath(), pathSegment));
+      if (!targetPath) {
+        throw new Error('No path provided to ensurePathExists');
+      }
+
+      if (!fs.existsSync(targetPath)) {
+        fs.mkdirSync(targetPath, { recursive: true });
+      }
+
+      return Promise.resolve();
+    };
+  }
+
+  if (environment === environments.CORDOVA) {
+    return (targetUrl, basePath = cordova.file.dataDirectory) => {
+      if (!targetUrl) {
+        throw new Error('No path provided to ensurePathExists');
+      }
+
+      // Remove the basePath string, since we can only create directories relative to it.
+      const targetUrlWithoutBasePath = targetUrl.replace(basePath, '');
+
+      /**
+       * Given a string in the format '/path/to/dir', returns an array of paths
+       * to ensure exist, in order, e.g. ['/path', '/path/to', '/path/to/dir'].
+       * @param {} pathstring
+       * @returns {Array<string>}
+       *
+       */
+      const getNestedPaths = (pathstring) => {
+        const paths = [];
+        const pathParts = pathstring.split('/').filter((path) => path.length);
+        pathParts.reduce((prev, curr) => {
+          const next = `${prev}/${curr}`;
+          paths.push(next);
+          return next;
+        }, '');
+        return paths;
+      };
+
+      const nestedPaths = getNestedPaths(targetUrlWithoutBasePath).map((path) => `${basePath}${path}`);
 
       return inSequence(
         nestedPaths,
@@ -635,45 +592,7 @@ const ensurePathExists = inEnvironment((environment) => {
     };
   }
 
-  if (environment === environments.CORDOVA) {
-    return (targetUrl) => inSequence(
-      getNestedPaths(targetUrl),
-      createDirectory,
-    );
-  }
-
   throw new Error(`ensurePathExists() not available on platform ${environment}`);
-});
-
-/**
- * Creates a temp file from a given source filename if it doesn't already exist.
- * This is useful on iOS, where video can be served using native file:// URLs.
- * Note that this should not be needed on Android, but if called there, the
- * cache directory will be used.
- *
- * Resolves with the fileEntry of the temp file.
- *
- * @param {string} sourceFilename existing file on the permanent FS
- * @param {string} tmpFilename unique name for the temporary file
- * @async
- *
- */
-const makeTmpDirCopy = inEnvironment((environment) => {
-  if (environment === environments.CORDOVA) {
-    return (sourceFilename, tmpFilename) => new Promise((resolve, reject) => {
-      window.requestFileSystem(window.TEMPORARY, 0, (tempFs) => {
-        tempFs.root.getFile(tmpFilename, { create: false }, (fileEntry) => {
-          resolve(fileEntry); // Temp file already exists
-        }, () => {
-          window.resolveLocalFileSystemURL(sourceFilename, (sourceEntry) => {
-            sourceEntry.copyTo(tempFs.root, tmpFilename, resolve, reject);
-          }, reject);
-        });
-      }, reject);
-    });
-  }
-
-  throw new Error(`makeTmpDirCopy() not available on platform ${environment}`);
 });
 
 export {
@@ -681,14 +600,11 @@ export {
   userDataPath,
   tempDataPath,
   appPath,
-  getNestedPaths,
   ensurePathExists,
-  makeTmpDirCopy,
   createDirectory,
   rename,
   removeDirectory,
   readFile,
-  readFileAsDataUrl,
   resolveFileSystemUrl,
   writeFile,
   writeStream,

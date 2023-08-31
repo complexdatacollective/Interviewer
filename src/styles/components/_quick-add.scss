@@ -1,92 +1,60 @@
-.quick-add {
+@use '~@codaco/ui/src/styles/global/core/units';
+
+.flip-form {
+  --open-width: 40rem;
+  --closed-width: 13rem;
+  --height: 11rem;
+
   position: absolute;
-  bottom: unit(2);
-  right: unit(1.5);
+  height: var(--height);
+  width: var(--closed-width);
+  bottom: 0;
+  right: 0;
   display: flex;
   align-items: center;
+  z-index: var(--z-global-ui);
+  overflow: hidden;
 
-  &--disabled {
-    pointer-events: none;
-    opacity: 0.5;
+  .button-container {
+    position: absolute;
+    right: units.unit(2);
+    margin-right: 2rem; // The node needs to be offset to account for the button's plus icon
   }
 
-  .quick-add-form {
-    @include transition-properties((opacity transform), var(--animation-easing), var(--animation-duration-fast));
-    width: 25rem;
-    opacity: 0;
-    transform-origin: center right;
-    transform: scaleX(0);
-    z-index: var(--z-global-ui);
-    margin-right: unit(1);
+  .form-container {
+    position: absolute;
+    right: units.unit(2);
+    display: flex;
+    align-items: center;
 
-    &--show {
-      opacity: 1;
-      transform: scaleX(1);
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: -#{units.unit(3)};
     }
 
-    &__label-input {
-      width: 100%;
-      padding: unit(2) unit(4);
+    .tool-tip {
+      height: units.unit(2);
+      margin-bottom: units.unit(1);
+      text-shadow: 0 0 0.5rem var(--text-dark);
+    }
+
+    .label-input {
+      padding: units.unit(2) units.unit(4);
+      margin-right: units.unit(0.5);
       border-radius: 5rem;
       border: 0;
       background: var(--text);
       color: var(--text-dark);
       font-size: 1.2rem;
       font-weight: bold;
+      font-family: var(--body-font-family);
+    }
 
-      &::placeholder {
-        font-style: italic;
-        font-weight: 100;
-      }
+    &::placeholder {
+      font-style: italic;
+      font-weight: 300;
     }
   }
-
-  .flip-button {
-    width: unit(13); // Keep same as floating-action-buttin mixin
-    height: unit(13);
-    perspective: 1000px;
-    cursor: pointer;
-  }
-
-  /* This container is needed to position the front and back side */
-  .flip-button-inner {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    text-align: center;
-    transition: transform var(--animation-duration-fast);
-    transform-style: preserve-3d;
-  }
-
-  .flip-button--flip {
-    .flip-button-inner {
-      transform: rotateY(180deg);
-    }
-  }
-
-  .flip-button-front,
-  .flip-button-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-
-    .node,
-    .icon {
-      font-size: 9rem;
-      width: 100%;
-      height: 100%;
-    }
-  }
-
-  .flip-button-front {
-    transform-origin: 1rem 0;
-    margin: 0 0 0 0.7rem;
-    padding-bottom: 0.3rem;
-  }
-
-  .flip-button-back {
-    transform: rotateY(180deg);
-  }
-
 }

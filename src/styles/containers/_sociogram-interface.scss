@@ -1,5 +1,6 @@
 .sociogram-interface {
   @include interface-centering(false);
+
   align-items: center;
   display: flex;
   flex: 1 1 auto;
@@ -10,10 +11,7 @@
 
   &__drag-safe {
     position: absolute;
-    top: 25px;
     left: 0;
-    right: 0;
-    bottom: 0;
   }
 
   &__concentric-circles {
@@ -32,7 +30,7 @@
     position: absolute;
     z-index: var(--z-panel);
     background: var(--light-background);
-    width: unit(40);
+    width: units.unit(40);
     bottom: spacing(large);
     right: spacing(large);
     border-bottom: 5px solid var(--primary);
@@ -44,15 +42,15 @@
       display: flex;
       justify-content: flex-end;
       text-align: center;
-      padding: 0 unit(2);
-      flex: 0 0 unit(4);
+      padding: 0 units.unit(2);
+      flex: 0 0 units.unit(4);
     }
 
     .prompts {
       --number-of-lines: 13;
       --prompt-text-size: 1.2rem;
 
-      padding: 0 unit(2);
+      padding: 0 units.unit(2);
       line-height: 1.1;
 
       .prompt {

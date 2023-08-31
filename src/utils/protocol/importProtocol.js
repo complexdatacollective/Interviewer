@@ -18,7 +18,7 @@ const cleanUpProtocol = (uid) => {
   if (uid) {
     const cancelledDir = protocolPath(uid);
     removeDirectory(cancelledDir)
-      .catch(() => {}); // best effort
+      .catch(() => { }); // best effort
   }
 };
 
@@ -106,6 +106,7 @@ export const importProtocolFromURI = (uri, usePairedServer) => {
             </React.Fragment>
           ),
         }));
+
         return extractProtocol(tempLocation);
       }, catchError)
       .then((protocolLocation) => {
@@ -256,22 +257,22 @@ export const importProtocolFromFile = (filePath, name) => {
     })
     .then((protocolContent) => {
       if (cancelled) return cancelledImport(protocolContent.uid);
-        // Send the payload to installedProtocols
-        dispatch(installedProtocolActions.importProtocolCompleteAction(protocolContent));
+      // Send the payload to installedProtocols
+      dispatch(installedProtocolActions.importProtocolCompleteAction(protocolContent));
 
-        // Remove the status toast
-        dispatch(toastActions.removeToast(toastUUID));
-        dispatch(toastActions.addToast({
-          type: 'success',
-          title: 'Finished!',
-          autoDismiss: true,
-          content: (
-            <React.Fragment>
-              <p>Protocol installed successfully.</p>
-            </React.Fragment>
-          ),
-        }));
-        return Promise.resolve();
+      // Remove the status toast
+      dispatch(toastActions.removeToast(toastUUID));
+      dispatch(toastActions.addToast({
+        type: 'success',
+        title: 'Finished!',
+        autoDismiss: true,
+        content: (
+          <React.Fragment>
+            <p>Protocol installed successfully.</p>
+          </React.Fragment>
+        ),
+      }));
+      return Promise.resolve();
     }, catchError)
     .catch(
       (error) => {

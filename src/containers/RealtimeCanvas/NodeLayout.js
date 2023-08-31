@@ -6,6 +6,7 @@ import { actionCreators as sessionsActions } from '../../ducks/modules/sessions'
 import { DropTarget } from '../../behaviours/DragAndDrop';
 import NodeLayout from '../../components/RealtimeCanvas/NodeLayout';
 import { get } from '../../utils/lodash-replacements';
+import { store } from '../../ducks/store';
 
 const relativeCoords = (container, node) => ({
   x: (node.x - container.x) / container.width,
@@ -15,7 +16,21 @@ const relativeCoords = (container, node) => ({
 const withConnectFrom = withState('connectFrom', 'setConnectFrom', null);
 
 const withConnectFromHandler = withHandlers({
-  handleConnectFrom: ({ setConnectFrom }) => (id) => setConnectFrom(id),
+  handleConnectFrom: ({ setConnectFrom }) => (id) => {
+    if (id === null) {
+      store.dispatch({
+        type: 'STOP_SOUND',
+        sound: 'link',
+      });
+    } else {
+      store.dispatch({
+        type: 'PLAY_SOUND',
+        sound: 'link',
+      });
+    }
+
+    setConnectFrom(id);
+  },
   handleResetConnectFrom: ({ setConnectFrom }) => () => setConnectFrom(null),
 });
 

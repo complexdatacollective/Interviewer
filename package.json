@@ -1,6 +1,6 @@
 {
   "name": "network-canvas-interviewer",
-  "version": "6.4.2",
+  "version": "6.5.0",
   "productName": "Network Canvas Interviewer",
   "description": "A tool for conducting Network Canvas Interviews.",
   "author": "Complex Data Collective",
@@ -20,7 +20,7 @@
     "build:ci": "cross-env NC_TARGET_PLATFORM=electron REACT_APP_NO_FULLSCREEN=true REACT_APP_NO_PERSIST=true node scripts/build.js",
     "build:ios": "cross-env NC_TARGET_PLATFORM=ios node scripts/build.js && cordova prepare ios",
     "lint": "eslint src && eslint public",
-    "sass-lint": "sass-lint -vc .sass-lint.yml",
+    "sass-lint": "stylelint '**/*.scss'",
     "test": "node scripts/test.js",
     "test:integration": "cross-env TEST_ENV=development jest --config=integration-tests/jest.config.js --runInBand",
     "test:integration:ci": "jest --config=integration-tests/jest.config.js --runInBand",
@@ -32,7 +32,7 @@
     "dev:ios": "node scripts/check-dev-server.js && cross-env LIVE_RELOAD=1 cordova run ios --developmentTeam=85EZ69PQHJ",
     "dev:android": "node scripts/check-dev-server.js && cross-env LIVE_RELOAD=1 cordova run android",
     "generate-icons": "node scripts/generate-app-icons.js",
-    "dist:android": "npm run build:android && cordova build android --release",
+    "dist:android": "npm run build:android && cordova build android --release -- --packageType=apk",
     "dist:ios": "npm run build:ios && cordova build ios --release --developmentTeam=85EZ69PQHJ",
     "dist:linux": "npm run build:electron && electron-builder -l",
     "dist:mac": "npm run build:electron && electron-builder -m --x64",
@@ -55,14 +55,14 @@
     "@babel/preset-react": "7.10.1",
     "@codaco/eslint-plugin-spellcheck": "0.0.14",
     "@codaco/shared-consts": "~0.0.1-alpha.3",
-    "@codaco/ui": "5.8.0",
+    "@codaco/ui": "~5.8.3",
     "@electron/notarize": "~1.2.3",
     "@faker-js/faker": "~6.0.0-alpha.5",
     "@zippytech/sorty": "^2.0.0",
     "ajv": "^6.5.4",
     "animejs": "^2.2.0",
     "async": "^3.2.0",
-    "autoprefixer": "^9.8.5",
+    "autoprefixer": "~9.8.8",
     "axios": "^0.21.2",
     "babel-jest": "25.1.0",
     "babel-loader": "8.0.6",
@@ -76,15 +76,13 @@
     "concaveman": "^1.2.0",
     "connect-history-api-fallback": "1.3.0",
     "connected-react-router": "^6.8.0",
-    "cordova-android": "~8.1.0",
-    "cordova-ios": "~5.1.1",
-    "cordova-plugin-androidx-adapter": "~1.1.3",
-    "cordova-plugin-app-version": "~0.1.14",
-    "cordova-plugin-file": "~5.0.0",
-    "cordova-plugin-ionic-keyboard": "2.2.0",
-    "cordova-plugin-keyboard": "~1.2.0",
+    "cordova-android": "~12.0.0",
+    "cordova-ios": "~7.0.0",
+    "cordova-plugin-file": "github:apache/cordova-plugin-file",
+    "cordova-plugin-file-transfer": "github:apache/cordova-plugin-file-transfer",
+    "cordova-plugin-fullscreen": "github:mesmotronic/cordova-plugin-fullscreen",
+    "cordova-plugin-ionic-keyboard": "github:ionic-team/cordova-plugin-ionic-keyboard",
     "cordova-plugin-network-canvas-client": "github:complexdatacollective/cordova-plugin-network-canvas-client",
-    "cordova-plugin-x-socialsharing-android12": "~6.0.5",
     "cross-env": "^5.2.0",
     "css-loader": "^3.4.2",
     "csvtojson": "^2.0.8",
@@ -126,12 +124,13 @@
     "jszip": "^3.7.0",
     "lodash": "^4.17.11",
     "mdns": "~2.7.2",
-    "mini-css-extract-plugin": "^0.8.0",
-    "node-sass": "^8.0.0",
+    "mini-css-extract-plugin": "~1.6.2",
     "object-assign": "4.1.1",
     "object-hash": "^1.3.0",
+    "postcss": "~8.4.28",
     "postcss-flexbugs-fixes": "~4.2.1",
-    "postcss-loader": "~2.0.6",
+    "postcss-loader": "~4.3.0",
+    "postcss-preset-env": "~9.1.2",
     "promise": "7.1.1",
     "prop-types": "^15.6.2",
     "react": "^16.13.1",
@@ -158,11 +157,14 @@
     "reselect": "^3.0.0",
     "rxjs": "^5.5.12",
     "sanitize-filename": "^1.6.3",
-    "sass-lint": "^1.12.1",
+    "sass": "~1.66.1",
     "sass-loader": "~10.4.1",
     "secure-comms-api": "git+https://github.com/complexdatacollective/secure-comms-api.git#npm7",
     "sockjs-client": "^1.3.0",
     "style-loader": "0.18.2",
+    "stylelint": "~15.10.3",
+    "stylelint-config-standard": "~34.0.0",
+    "stylelint-config-standard-scss": "~10.0.0",
     "svg2png": "^4.1.1",
     "thread-loader": "^1.2.0",
     "upgrade": "^1.1.0",
@@ -177,16 +179,13 @@
     "xmldom": "~0.1.27",
     "xss": "^0.3.4"
   },
-  "optionalDependencies": {
-    "ios-deploy": "^1.9.4",
-    "ios-sim": "^8.0.1"
-  },
   "dependencies": {
     "@babel/runtime": "7.10.1",
     "archiver": "^4.0.1",
     "d3-force": "~3.0.0",
     "dmg-builder": "~23.6.0",
     "electron-devtools-installer": "^3.0.0",
+    "xcode": "~3.0.1",
     "zeroconf": "^0.1.4"
   },
   "homepage": ".",
@@ -255,11 +254,6 @@
       }
     ]
   },
-  "browserslist": [
-    "Electron 9.2.0",
-    "ChromeAndroid >= 84",
-    "iOS >= 13.6"
-  ],
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}"
@@ -298,30 +292,27 @@
   },
   "cordova": {
     "platforms": [
-      "ios",
-      "android"
+      "android",
+      "ios"
     ],
     "plugins": {
       "cordova-plugin-file-transfer": {},
-      "cordova-plugin-whitelist": {},
       "cordova-plugin-device": {},
       "cordova-plugin-app-version": {},
-      "cordova-plugin-ionic-keyboard": {},
-      "cordova-plugin-fullscreen": {},
       "cordova-plugin-zeroconf": {},
       "cordova-plugin-inappbrowser": {},
       "cordova-plugin-chooser": {},
       "cordova-plugin-network-information": {},
-      "cordova-plugin-wkwebview-engine": {},
-      "cordova-plugin-network-canvas-client": {},
       "cordova-sqlite-storage": {},
-      "cordova-plugin-file": {},
-      "cordova-plugin-keyboard": {},
       "cordova-plugin-x-socialsharing-android12": {
         "PHOTO_LIBRARY_ADD_USAGE_DESCRIPTION": "This app requires photo library access to function properly.",
         "PHOTO_LIBRARY_USAGE_DESCRIPTION": "This app requires photo library access to function properly."
       },
-      "cordova-plugin-androidx-adapter": {}
+      "cordova-plugin-androidx-adapter": {},
+      "cordova-plugin-file": {},
+      "cordova-plugin-network-canvas-client": {},
+      "cordova-plugin-fullscreen": {},
+      "cordova-plugin-ionic-keyboard": {}
     }
   }
 }

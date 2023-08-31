@@ -14,7 +14,6 @@ import DialogManager from '../components/DialogManager';
 import ToastManager from '../components/ToastManager';
 import { SettingsMenu } from '../components/SettingsMenu';
 import useUpdater from '../hooks/useUpdater';
-import { actionCreators as dialogActions } from '../ducks/modules/dialogs';
 
 const getElectronWindow = () => {
   if (isElectron()) {
@@ -45,10 +44,7 @@ const App = ({
   setStartFullScreen,
   interfaceScale,
   useDynamicScaling,
-  crappleWarningHeeded,
-  setCrappleWarningHeeded,
   children,
-  openDialog,
 }) => {
   const win = useMemo(() => getElectronWindow(), []);
   const env = useMemo(() => getEnv(), []);
@@ -63,43 +59,6 @@ const App = ({
   }, [useDynamicScaling, interfaceScale]);
 
   useUpdater('https://api.github.com/repos/complexdatacollective/Interviewer/releases/latest', 2500);
-
-  useEffect(() => {
-    if (isIOS()) {
-      // Enable viewport shrinking on iOS to mirror behaviour on android.
-      window.Keyboard.shrinkView(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    // Ugh.
-    if ((isIOS()) && !crappleWarningHeeded) {
-      openDialog({
-        type: 'Confirm',
-        title: 'Important requirements specific to iPad users',
-        message: (
-          <>
-            <p>
-              By using this app you confirm that you have submitted documents
-              to us that demonstrate compliance with all App Store policies regarding
-              human subjects research (including proof of full IRB or ethics board approval), and
-              have been formally approved by us (CODACO) to use this software for your specific
-              research,
-              {' '}
-              <strong>
-                and your specific research only
-              </strong>
-              . You also confirm that you will inform us immediately of
-              any changes to your IRB status that might impact our approval.
-            </p>
-          </>
-        ),
-        confirmLabel: 'I confirm the above',
-        canCancel: false,
-        onConfirm: setCrappleWarningHeeded,
-      });
-    }
-  }, [crappleWarningHeeded]);
 
   useEffect(() => {
     if (!env.REACT_APP_NO_FULLSCREEN) {
@@ -157,7 +116,7 @@ const App = ({
         })}
       >
         <SettingsMenu />
-        { children }
+        {children}
       </div>
       <DialogManager />
       <ToastManager />
@@ -179,8 +138,6 @@ App.defaultProps = {
 
 const mapDispatchToProps = (dispatch) => ({
   setStartFullScreen: (value) => dispatch(deviceSettingsActions.setSetting('startFullScreen', value)),
-  setCrappleWarningHeeded: () => dispatch(deviceSettingsActions.setSetting('crappleWarningHeeded', true)),
-  openDialog: (dialog) => dispatch(dialogActions.openDialog(dialog)),
 });
 
 function mapStateToProps(state) {
@@ -188,7 +145,6 @@ function mapStateToProps(state) {
     interfaceScale: state.deviceSettings.interfaceScale,
     useDynamicScaling: state.deviceSettings.useDynamicScaling,
     startFullScreen: state.deviceSettings.startFullScreen,
-    crappleWarningHeeded: state.deviceSettings.crappleWarningHeeded,
   };
 }
 

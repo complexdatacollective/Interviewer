@@ -1,5 +1,6 @@
  .alter-form {
   @include interface-centering;
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -20,7 +21,7 @@
     border-radius: var(--border-radius);
     background: var(--form-intro-panel-background);
     width: 100%;
-    padding: unit(2) unit(4);
+    padding: units.unit(2) units.unit(4);
     left: 0;
     overflow-x: hidden;
     overflow-y: auto;
@@ -53,7 +54,7 @@
     align-items: center;
 
     .scrollable {
-      padding: 0 unit(2);
+      padding: 0 units.unit(2);
       height: 100%;
     }
   }
@@ -66,13 +67,14 @@
     height: 100%;
 
     .slide-content {
-      --base-node-size: #{unit(13)};
+      --base-node-size: #{units.unit(13)};
+
       display: flex;
       max-height: 80%;
-      min-height: unit(2);
+      min-height: units.unit(2);
       width: 100%;
       max-width: 65rem;
-      padding: unit(1) unit(2) unit(2);
+      padding: units.unit(1) units.unit(2) units.unit(2);
       border-radius: var(--border-radius);
       background: var(--light-background);
       position: relative;
@@ -83,8 +85,8 @@
 
   .node {
     position: absolute;
-    top: calc(var(--base-node-size)*-0.5);
-    left: calc(50% - (var(--base-node-size) /2));
+    top: calc(var(--base-node-size) * -0.5);
+    left: calc(50% - (var(--base-node-size) / 2));
     background: var(--light-background);
     border-radius: 50%;
   }
@@ -117,11 +119,11 @@
     flex: 0 0 auto;
     z-index: var(--z-panel);
     position: absolute;
-    bottom: unit(2);
+    bottom: units.unit(2);
 
     &__status-text {
       margin: 0;
-      margin-bottom: unit(1);
+      margin-bottom: units.unit(1);
     }
 
     &--status-only {
@@ -142,7 +144,6 @@
 }
 
 .alter-edge-form {
-
   .fake-edge {
     position: absolute;
     left: calc(50% - 5rem);
@@ -154,7 +155,7 @@
 
   .node {
     position: absolute;
-    left: calc(8rem + 50% - var(--base-node-size) /2);
+    left: calc(8rem + 50% - var(--base-node-size) / 2);
     background: var(--light-background);
     border-radius: 50%;
 
@@ -163,7 +164,7 @@
     }
 
     &:first-of-type {
-      left: calc(-8rem + 50% - var(--base-node-size) /2);
+      left: calc(-8rem + 50% - var(--base-node-size) / 2);
     }
   }
 }
@@ -171,15 +172,15 @@
 // TODO: move to its own component
 .scroll-nudge {
   position: absolute;
-  bottom: unit(2);
+  bottom: units.unit(2);
   background: var(--color-slate-blue--dark);
   color: var(--color-white);
-  padding: unit(1) unit(2);
+  padding: units.unit(1) units.unit(2);
   border-radius: 10rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 unit(.5) unit(2) unit(1) rgba(0, 0, 0, 0.25); //sass-lint:disable-line no-color-literals
+  box-shadow: 0 units.unit(.5) units.unit(2) units.unit(1) rgb(0 0 0 / 25%); // sass-lint:disable-line no-color-literals
   z-index: var(--z-dialog);
 
   h5 {
@@ -187,29 +188,8 @@
   }
 
   .icon {
-    margin-left: unit(1);
-    height: unit(2);
-    width: unit(2);
-  }
-}
-
-.alter-limit-nudge {
-  position: absolute;
-  bottom: unit(2);
-  background: var(--color-slate-blue--dark);
-  color: var(--color-white);
-  padding: unit(1) unit(3);
-  border-radius: 10rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 unit(.5) unit(2) unit(1) rgba(0, 0, 0, 0.25); //sass-lint:disable-line no-color-literals
-  z-index: var(--z-dialog);
-  font-size: 1.25rem;
-
-  .icon {
-    margin-left: unit(1);
-    height: unit(2);
-    width: unit(2);
+    margin-left: units.unit(1);
+    height: units.unit(2);
+    width: units.unit(2);
   }
 }

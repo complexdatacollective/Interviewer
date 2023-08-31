@@ -48,7 +48,7 @@ export const getWorkerNetwork = createDeepEqualSelector(
 // The user-defined name of a node type; e.g. `codebook.node[uuid].name == 'person'`
 export const makeGetNodeTypeDefinition = () => createDeepEqualSelector(
   (state, props) => getProtocolCodebook(state, props),
-  (state, props) => get(props, 'type') // When used in <Node />
+  (state, props) => get(props, 'type') // When used in <Node /> // TODO: should use makeGetSubject
     || get(props, 'stage.subject.type') // Standard location
     || get(state, 'type'), // Unknown - perhaps worker?
   (codebook, nodeType) => {
@@ -121,6 +121,13 @@ export const getNodeColor = (nodeType) => (state) => {
   const nodeDefinitions = codebook.node;
   const nodeColor = get(nodeDefinitions, [nodeType, 'color'], 'node-color-seq-1');
   return nodeColor;
+};
+
+export const getNodeTypeLabel = (nodeType) => (state) => {
+  const codebook = getProtocolCodebook(state);
+  const nodeDefinitions = codebook.node;
+  const nodeLabel = get(nodeDefinitions, [nodeType, 'name'], '');
+  return nodeLabel;
 };
 
 export const makeGetEdgeLabel = () => createDeepEqualSelector(

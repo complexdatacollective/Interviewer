@@ -1,5 +1,4 @@
 .overlay {
-
   &:not(.overlay--fullscreen) {
     &.node-form {
       max-width: 65rem;
@@ -10,7 +9,7 @@
 
       .overlay__content {
         .scrollable {
-          padding: 0 unit(4);
+          padding: 0 units.unit(4);
         }
       }
     }

@@ -85,6 +85,7 @@ const CategoricalListItem = (props) => {
         // otherVariable we need to reset the alternate.
         [resetVariable]: null,
       },
+      'drop',
     );
   };
 

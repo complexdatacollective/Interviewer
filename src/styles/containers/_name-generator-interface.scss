@@ -1,8 +1,8 @@
+@use '~@codaco/ui/src/styles/global/core/units';
+
 .name-generator-interface {
-  @include interface-centering;
-  height: 100%;
-  overflow: hidden;
-  display: flex;
+  @include interface-centering-padding;
+
   flex-direction: column;
 
   &__prompt {
@@ -32,18 +32,10 @@
     display: flex;
   }
 
-  &__add-node {
-    &--disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-
-      .icon {
-        pointer-events: none;
-      }
-    }
-
-    .icon {
-      @include floating-action-button;
-    }
+  &__add-button {
+    position: absolute;
+    bottom: units.unit(2);
+    right: units.unit(6);
+    z-index: var(--z-global-ui);
   }
 }

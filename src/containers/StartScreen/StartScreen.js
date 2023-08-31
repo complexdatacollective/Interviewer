@@ -9,20 +9,20 @@ import ServerSection from './ServerSection';
 import WhatsNewSection from './WhatsNewSection';
 import SessionManagementSection from './SessionManagementSection';
 
+const variants = {
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.32, when: 'beforeChildren' },
+  },
+  hide: {
+    opacity: 0,
+  },
+};
+
 const StartScreen = ({
   activeSessionId,
   sessions,
 }) => {
-  const variants = {
-    show: {
-      opacity: 1,
-      transition: { staggerChildren: 0.32, when: 'beforeChildren' },
-    },
-    hide: {
-      opacity: 0,
-    },
-  };
-
   if (activeSessionId) {
     const { stageIndex } = sessions[activeSessionId];
     const pathname = `/session/${activeSessionId}/${stageIndex}`;

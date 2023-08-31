@@ -73,7 +73,7 @@ const ImportSection = () => {
           }
         </div>
       </main>
-      { Object.keys(installedProtocols).length > 0 && (
+      {Object.keys(installedProtocols).length > 0 && (
         <footer className="import-section__manage-protocols">
           <Button color="platinum" onClick={() => setShowManageProtocolsOverlay(true)}>Manage Installed Protocols...</Button>
         </footer>

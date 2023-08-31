@@ -1,5 +1,4 @@
 /* eslint-disable global-require */
-const autoprefixer = require('autoprefixer');
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -29,58 +28,8 @@ if (env.stringified['process.env'].NODE_ENV !== '"production"') {
   throw new Error('Production builds must have NODE_ENV=production.');
 }
 
-const isProduction = env.stringified['process.env'].NODE_ENV === '"production"';
-const shouldUseSourceMap = isProduction && (process.env.GENERATE_SOURCEMAP !== 'false');
-
 const cssFilenameTemplate = 'static/css/[name].[contenthash:8].css';
-
-// common function to get style loaders
-const getStyleLoaders = (preProcessor) => {
-  // importLoaders: See https://webpack.js.org/loaders/css-loader/#importloaders
-  let importLoaders = 1; // for postcss-loader
-  if (preProcessor) {
-    importLoaders += 1; // for preProcessor
-  }
-
-  let inlineStyleLoader = require.resolve('style-loader');
-  if (isProduction) {
-    // Output CSS files, and rewrite paths relative from CSS dir
-    const cssRelativePath = Array(cssFilenameTemplate.split('/').length).join('../');
-    inlineStyleLoader = {
-      loader: MiniCssExtractPlugin.loader,
-      options: { publicPath: cssRelativePath },
-    };
-  }
-
-  const loaders = [
-    inlineStyleLoader,
-    {
-      loader: require.resolve('css-loader'),
-      options: { importLoaders },
-    },
-    {
-      // Options for PostCSS as we reference these options twice
-      // Adds vendor prefixing based on your specified browser support in
-      // package.json
-      loader: require.resolve('postcss-loader'),
-      options: {
-        // Necessary for external CSS imports to work
-        // https://github.com/facebook/create-react-app/issues/2677
-        ident: 'postcss',
-        plugins: () => [
-          autoprefixer({
-            flexbox: 'no-2009',
-          }),
-        ],
-        sourceMap: shouldUseSourceMap,
-      },
-    },
-  ];
-  if (preProcessor) {
-    loaders.push(require.resolve(preProcessor));
-  }
-  return loaders;
-};
+const cssRelativePath = Array(cssFilenameTemplate.split('/').length).join('../');
 
 const resolveAlias = {
   // TODO: Track this issue
@@ -232,24 +181,11 @@ module.exports = {
             }],
           },
           {
-            test: /\.scss$/,
-            use: getStyleLoaders('sass-loader'),
-          },
-          // The notation here is somewhat confusing.
-          // "postcss" loader applies autoprefixer to our CSS.
-          // "css" loader resolves paths in CSS and adds assets as dependencies.
-          // "style" loader normally turns CSS into JS modules injecting <style>,
-          // but unlike in development configuration, we do something different.
-          // `ExtractTextPlugin` first applies the "postcss" and "css" loaders
-          // (second argument), then grabs the result CSS and puts it into a
-          // separate file in our build process. This way we actually ship
-          // a single CSS file in production instead of JS code injecting <style>
-          // tags. If you use code splitting, however, any async bundles will still
-          // use the "style" loader inside the async code so CSS from them won't be
-          // in the main CSS file.
-          {
-            test: /\.css$/,
-            use: getStyleLoaders(),
+            test: /\.s?css$/i,
+            use: [{
+              loader: MiniCssExtractPlugin.loader,
+              options: { publicPath: cssRelativePath }
+            }, 'css-loader', 'postcss-loader', 'sass-loader'],
           },
           // "file" loader makes sure assets end up in the `build` folder.
           // When you `import` an asset, you get its filename.

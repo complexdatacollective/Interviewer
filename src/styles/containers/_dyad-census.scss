@@ -1,6 +1,5 @@
 @mixin recolor-toggle($color) {
   .form-field-togglebutton__checkbox {
-
     &::before {
       border-color: $color;
     }
@@ -36,6 +35,7 @@
 
 .dyad-census {
   @include interface-centering;
+
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -64,7 +64,7 @@
     max-height: 100%;
     background: var(--light-background);
     border-radius: var(--border-radius);
-    padding: unit(2) unit(4);
+    padding: units.unit(2) units.unit(4);
     max-width: 55rem;
 
     h1 {
@@ -103,7 +103,7 @@
     width: 70vmin;
     z-index: var(--z-panel);
     position: relative;
-    padding: unit(2);
+    padding: units.unit(2);
 
     &--invalid {
       border-color: var(--error);
@@ -155,7 +155,6 @@
       }
 
       .boolean-option--selected {
-
         &.boolean-option {
           &--no {
             border-color: var(--error);
