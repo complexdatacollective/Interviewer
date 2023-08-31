@@ -11,7 +11,8 @@
 @mixin interface-centering($margins: true) {
   padding: units.unit(2) 0;
 
-  $margin: if($margins, units.unit(4), 0); // sass-lint:disable-line zero-unit
+  /* stylelint-disable-next-line length-zero-no-unit */
+  $margin: if($margins, units.unit(4), 0px);
 
   margin-left: calc(#{$margin} + var(--session-panel-width));
   margin-right: $margin;
