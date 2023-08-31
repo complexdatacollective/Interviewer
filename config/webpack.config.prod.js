@@ -29,6 +29,7 @@ if (env.stringified['process.env'].NODE_ENV !== '"production"') {
 }
 
 const cssFilenameTemplate = 'static/css/[name].[contenthash:8].css';
+const cssRelativePath = Array(cssFilenameTemplate.split('/').length).join('../');
 
 const resolveAlias = {
   // TODO: Track this issue
@@ -181,7 +182,10 @@ module.exports = {
           },
           {
             test: /\.s?css$/i,
-            use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader'],
+            use: [{
+              loader: MiniCssExtractPlugin.loader,
+              options: { publicPath: cssRelativePath }
+            }, 'css-loader', 'postcss-loader', 'sass-loader'],
           },
           // "file" loader makes sure assets end up in the `build` folder.
           // When you `import` an asset, you get its filename.
