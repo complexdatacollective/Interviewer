@@ -80,6 +80,8 @@
     "cordova-ios": "~7.0.0",
     "cordova-plugin-file": "github:apache/cordova-plugin-file",
     "cordova-plugin-file-transfer": "github:apache/cordova-plugin-file-transfer",
+    "cordova-plugin-fullscreen": "github:mesmotronic/cordova-plugin-fullscreen",
+    "cordova-plugin-keyboard": "github:cjpearson/cordova-plugin-keyboard",
     "cordova-plugin-network-canvas-client": "github:complexdatacollective/cordova-plugin-network-canvas-client",
     "cross-env": "^5.2.0",
     "css-loader": "^3.4.2",
@@ -308,7 +310,9 @@
       },
       "cordova-plugin-androidx-adapter": {},
       "cordova-plugin-file": {},
-      "cordova-plugin-network-canvas-client": {}
+      "cordova-plugin-network-canvas-client": {},
+      "cordova-plugin-keyboard": {},
+      "cordova-plugin-fullscreen": {}
     }
   }
 }

@@ -61,6 +61,13 @@ const App = ({
   useUpdater('https://api.github.com/repos/complexdatacollective/Interviewer/releases/latest', 2500);
 
   useEffect(() => {
+    if (isIOS()) {
+      // Enable viewport shrinking on iOS to mirror behaviour on android.
+      window.Keyboard.shrinkView(true);
+    }
+  }, []);
+
+  useEffect(() => {
     if (!env.REACT_APP_NO_FULLSCREEN) {
       // Spy on window fullscreen status
       if (isElectron() && !isPreview()) {
