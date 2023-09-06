@@ -88,7 +88,7 @@
     "csvtojson": "^2.0.8",
     "detect-port": "1.1.0",
     "dotenv": "4.0.0",
-    "electron": "~9.4.4",
+    "electron": "~22.3.21",
     "electron-builder": "~22.7.0",
     "electron-log": "^4.2.2",
     "electron-winstaller": "^4.0.0",
