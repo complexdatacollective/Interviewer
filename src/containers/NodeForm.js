@@ -97,7 +97,7 @@ const NodeForm = (props) => {
         >
           <ActionButton
             disabled={disabled}
-            onClick={() => !disabled && setShow(true)}
+            onClick={() => setShow(true)}
             icon={icon}
             title={`Add ${nodeType}...`}
           />

@@ -185,7 +185,7 @@ const QuickAddForm = ({
           >
             <ActionButton
               disabled={disabled}
-              onClick={() => !disabled && setShowForm(true)}
+              onClick={() => setShowForm(true)}
               icon={icon}
               title={`Add ${nodeType}...`}
             />
