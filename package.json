@@ -185,6 +185,7 @@
     "d3-force": "~3.0.0",
     "dmg-builder": "~23.6.0",
     "electron-devtools-installer": "^3.0.0",
+    "papaparse": "~5.4.1",
     "xcode": "~3.0.1",
     "zeroconf": "^0.1.4"
   },
