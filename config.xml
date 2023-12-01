@@ -10,7 +10,7 @@
   <author email="developers@coda.co" href="http://coda.co">
         Complex Data Collective
   </author>
-  <content src="http://192.168.1.210:3000/"/>
+  <content src="index.html"/>
   <access origin="*"/>
   <access origin="cdvfile://*"/>
   <allow-intent href="http://*/*"/>
