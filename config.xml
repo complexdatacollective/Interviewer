@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget android-versionCode="6374" id="org.codaco.NetworkCanvasInterviewer6" ios-CFBundleIdentifier="org.codaco.networkCanvasInterviewerBusiness" ios-CFBundleVersion="6374" version="6.5.1" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="6388" id="org.codaco.NetworkCanvasInterviewer6" ios-CFBundleIdentifier="org.codaco.networkCanvasInterviewerBusiness" ios-CFBundleVersion="6388" version="6.5.1" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>Network Canvas Interviewer</name>
   <description>
         A tool for conducting Network Canvas Interviews.
@@ -28,6 +28,7 @@
     <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
       <application android:largeHeap="true"/>
       <application android:usesCleartextTraffic="true"/>
+      <application android:debuggable="true"/>
     </edit-config>
     <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/supports-screens">
       <supports-screens android:anyDensity="false" android:largeScreens="true" android:normalScreens="false" android:requiresSmallestWidthDp="600" android:resizeable="false" android:smallScreens="false" android:xlargeScreens="true"/>
@@ -37,6 +38,7 @@
     </edit-config>
   </platform>
   <platform name="ios">
+    <allow-navigation href="*"/>
     <allow-navigation href="*"/>
     <preference name="WKWebViewOnly" value="true"/>
     <preference name="Allow3DTouchLinkPreview" value="false"/>
@@ -64,6 +66,7 @@
     <icon height="1024" src="www/icons/ios/NC-Square-1024.png" width="1024"/>
     <splash src="www/icons/ios/Default@2x~universal~anyany.png"/>
   </platform>
+  <preference name="scheme" value="http"/>
   <preference name="Orientation" value="landscape"/>
   <preference name="target-device" value="tablet"/>
   <preference name="DisallowOverscroll" value="true"/>

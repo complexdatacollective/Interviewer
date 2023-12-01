@@ -75,7 +75,9 @@ const devServerContentBase = () => {
 };
 
 // Webpack default is 'web'. To get electron working with dev server, use 'electron-renderer'.
-const reactBundleTarget = () => (isTargetingElectron ? 'electron-renderer' : 'web');
+// const reactBundleTarget = () => (isTargetingElectron ? 'electron-renderer' : 'web');
+
+const reactBundleTarget = () => 'web';
 
 module.exports = {
   cleanDevUrlFile,
