@@ -23,12 +23,14 @@ const fatalExportErrorAction = withErrorDialog((error) => ({
   error,
 }));
 
+const getInitialFilename = () => `networkCanvasExport-${Date.now()}`;
+
 const DataExportScreen = ({ show, onClose }) => {
   const [step, setStep] = useState(3);
   const [selectedSessions, setSelectedSessions] = useState([]);
 
   // Set the default filename to 'networkCanvasExport-<timestamp>'
-  const [filename, setFilename] = useState(`networkCanvasExport-${Date.now()}`);
+  const [filename, setFilename] = useState(getInitialFilename());
   const [abortHandlers, setAbortHandlers] = useState(null);
 
   const pairedServer = useSelector((state) => state.pairedServer);
@@ -40,6 +42,7 @@ const DataExportScreen = ({ show, onClose }) => {
   const openDialog = (dialog) => dispatch(dialogActions.openDialog(dialog));
 
   const reset = () => {
+    setFilename(getInitialFilename());
     setSelectedSessions([]);
     setStep(1);
   };
