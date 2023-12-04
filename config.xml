@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget android-versionCode="6395" id="org.codaco.NetworkCanvasInterviewer6" ios-CFBundleIdentifier="org.codaco.networkCanvasInterviewerBusiness" ios-CFBundleVersion="6395" version="6.5.2"
-  xmlns="http://www.w3.org/ns/widgets"
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="6405" id="org.codaco.NetworkCanvasInterviewer6" ios-CFBundleIdentifier="org.codaco.networkCanvasInterviewerBusiness" ios-CFBundleVersion="6405" version="6.5.2" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>Network Canvas Interviewer</name>
   <description>
         A tool for conducting Network Canvas Interviews.
@@ -10,7 +7,7 @@
   <author email="developers@coda.co" href="http://coda.co">
         Complex Data Collective
   </author>
-  <content src="index.html"/>
+  <content src="http://192.168.1.210:3000/index.html"/>
   <access origin="*"/>
   <access origin="cdvfile://*"/>
   <allow-intent href="http://*/*"/>
@@ -19,6 +16,7 @@
   <hook src="scripts/cordova/after-run.js" type="after_run"/>
   <hook src="scripts/cordova/before-prepare.js" type="before_prepare"/>
   <platform name="android">
+    <preference name="scheme" value="http"/>
     <allow-intent href="market:*"/>
     <allow-navigation href="https://*/*"/>
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -40,6 +38,7 @@
     </edit-config>
   </platform>
   <platform name="ios">
+    <allow-navigation href="*"/>
     <allow-navigation href="*"/>
     <allow-navigation href="*"/>
     <preference name="WKWebViewOnly" value="true"/>
@@ -68,7 +67,6 @@
     <icon height="1024" src="www/icons/ios/NC-Square-1024.png" width="1024"/>
     <splash src="www/icons/ios/Default@2x~universal~anyany.png"/>
   </platform>
-  <preference name="scheme" value="http"/>
   <preference name="Orientation" value="landscape"/>
   <preference name="target-device" value="tablet"/>
   <preference name="DisallowOverscroll" value="true"/>

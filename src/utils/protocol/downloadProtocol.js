@@ -36,8 +36,8 @@ const downloadProtocol = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
     const request = require('request-promise-native');
     const destination = path.join(tempDataPath(), getProtocolName());
-
     return (uri, pairedServer = false) => {
+
       let promisedResponse;
       if (pairedServer) {
         promisedResponse = new ApiClient(pairedServer).downloadProtocol(uri);
@@ -56,29 +56,38 @@ const downloadProtocol = inEnvironment((environment) => {
   }
 
   if (environment === environments.CORDOVA) {
-    const destination = `${tempDataPath()}${getProtocolName()}`
     return (uri, pairedServer) => {
       let promisedResponse;
+
       if (pairedServer) {
+        // In cordova, the cordova-plugin-network-canvas-client wants the destination
+        // to be a folder, not a file. It assigns a temp filename itself.
+        const destination = tempDataPath();
         promisedResponse = new ApiClient(pairedServer)
           // .addTrustedCert() is not required, assuming we've just fetched the protocol list
           .downloadProtocol(uri, destination)
-          .then(() => destination);
+          .then((result) => {
+            // Result is a FileEntry object
+            return result.nativeURL;
+          })
       } else {
         promisedResponse = getURL(uri)
           .then(url => url.href)
           .catch(urlError)
           .then(href => new Promise((resolve, reject) => {
+            // The filetransfer plugin requires a folder to write to
+            const destinationWithFolder = `${tempDataPath()}${getProtocolName()}`;
+
             const fileTransfer = new FileTransfer();
-            console.log('fileTransfer', destination);
             fileTransfer.download(
               href,
-              destination,
-              () => resolve(destination),
+              destinationWithFolder,
+              () => resolve(destinationWithFolder),
               error => reject(error),
             );
           }));
       }
+
       return promisedResponse
         .catch((error) => {
           const getErrorMessage = ({ code }) => {
