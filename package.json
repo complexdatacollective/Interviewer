@@ -78,8 +78,8 @@
     "connected-react-router": "^6.8.0",
     "cordova-android": "~12.0.0",
     "cordova-ios": "~7.0.0",
-    "cordova-plugin-file": "github:apache/cordova-plugin-file",
-    "cordova-plugin-file-transfer": "github:apache/cordova-plugin-file-transfer",
+    "cordova-plugin-file": "github:apache/cordova-plugin-file#265a932",
+    "cordova-plugin-file-transfer": "github:apache/cordova-plugin-file-transfer#f12b73e",
     "cordova-plugin-fullscreen": "github:mesmotronic/cordova-plugin-fullscreen",
     "cordova-plugin-ionic-keyboard": "github:ionic-team/cordova-plugin-ionic-keyboard",
     "cordova-plugin-network-canvas-client": "github:complexdatacollective/cordova-plugin-network-canvas-client",
@@ -185,7 +185,6 @@
     "d3-force": "~3.0.0",
     "dmg-builder": "~23.6.0",
     "electron-devtools-installer": "^3.0.0",
-    "papaparse": "~5.4.1",
     "xcode": "~3.0.1",
     "zeroconf": "^0.1.4"
   },
