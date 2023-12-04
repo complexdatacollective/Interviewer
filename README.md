@@ -38,7 +38,7 @@ Once you've completed `npm install`, you will need to rebuild MDNS with the Elec
 
 ```
 cd node_modules\mdns
-npx node-gyp rebuild --target=9.0.0 --arch=x64 --dist-url=https://atom.io/download/electron
+npx node-gyp rebuild --target=9.0.0 --arch=x64 --dist-url=https://electronjs.org/headers
 ```
 
 `target` must match the electron version installed by npm
