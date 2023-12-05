@@ -176,11 +176,11 @@
     "whatwg-fetch": "2.0.3",
     "worker-loader": "^2.0.0",
     "xml2js": "~0.4.23",
-    "xmldom": "~0.1.27",
     "xss": "^0.3.4"
   },
   "dependencies": {
     "@babel/runtime": "7.10.1",
+    "@xmldom/xmldom": "~0.8.10",
     "archiver": "^4.0.1",
     "d3-force": "~3.0.0",
     "dmg-builder": "~23.6.0",
