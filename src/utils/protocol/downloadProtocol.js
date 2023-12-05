@@ -2,7 +2,7 @@
 /* global FileTransfer */
 import uuid from 'uuid/v4';
 import environments from '../environments';
-import inEnvironment from '../Environment';
+import inEnvironment, { isIOS } from '../Environment';
 import { writeFile, tempDataPath } from '../filesystem';
 import friendlyErrorMessage from '../../utils/friendlyErrorMessage';
 import ApiClient from '../../utils/ApiClient';
@@ -60,9 +60,12 @@ const downloadProtocol = inEnvironment((environment) => {
       let promisedResponse;
 
       if (pairedServer) {
-        // In cordova, the cordova-plugin-network-canvas-client wants the destination
+        // on iOS, the cordova-plugin-network-canvas-client wants the destination
         // to be a folder, not a file. It assigns a temp filename itself.
-        const destination = tempDataPath();
+        //
+        // however, on android it needs to be a file.
+        const destination = isIOS() ? tempDataPath() : `${tempDataPath()}${getProtocolName()}`;
+
         promisedResponse = new ApiClient(pairedServer)
           // .addTrustedCert() is not required, assuming we've just fetched the protocol list
           .downloadProtocol(uri, destination)
