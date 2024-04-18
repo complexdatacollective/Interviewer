@@ -320,6 +320,117 @@ describe('Types', () => {
   });
 });
 
+describe('Categorical sorting', () => {
+  it('sorts items based on categorical values', () => {
+    const mockItems = [
+      {
+        category: ['cow'],
+        name: 'alice',
+      },
+      {
+        category: ['duck'],
+        name: 'bob',
+      },
+      {
+        category: ['lizard'],
+        name: 'charlie',
+      },
+      {
+        category: ['cow'],
+        name: 'david',
+      },
+    ];
+
+    const sorter = createSorter([
+      {
+        property: 'category',
+        type: 'categorical',
+        hierarchy: ['duck', 'lizard', 'cow'],
+      },
+      {
+        property: 'name',
+        type: 'string',
+        direction: 'asc',
+      },
+    ]);
+
+    const result = sorter(mockItems).map((item) => item.name);
+    expect(result).toEqual(['alice', 'david', 'charlie', 'bob']);
+  });
+
+  it('handles items with multiple categories', () => {
+    const mockItems = [
+      {
+        category: ['duck', 'lizard'],
+        name: 'alice',
+      },
+      {
+        category: ['cow', 'duck'],
+        name: 'bob',
+      },
+      {
+        category: ['cow'],
+        name: 'charlie',
+      },
+      {
+        category: ['lizard'],
+        name: 'david',
+      },
+    ];
+
+    const sorter = createSorter([
+      {
+        property: 'category',
+        type: 'categorical',
+        hierarchy: ['cow', 'duck', 'lizard'],
+      },
+      {
+        property: 'name',
+        type: 'string',
+        direction: 'asc',
+      },
+    ]);
+
+    const result = sorter(mockItems).map((item) => item.name);
+    expect(result).toEqual(['david', 'alice', 'bob', 'charlie']);
+  });
+
+  it('handles missing categories', () => {
+    const mockItems = [
+      {
+        name: 'alice',
+      },
+      {
+        category: ['duck'],
+        name: 'bob',
+      },
+      {
+        category: ['lizard'],
+        name: 'charlie',
+      },
+      {
+        name: 'david',
+      },
+    ];
+
+    const sorter = createSorter([
+      {
+        property: 'category',
+        type: 'categorical',
+        hierarchy: ['lizard', 'duck', 'cow'],
+      },
+      {
+        property: 'name',
+        type: 'string',
+        direction: 'asc',
+      },
+    ]);
+
+    const result = sorter(mockItems).map((item) => item.name);
+    expect(result).toEqual(['bob', 'charlie', 'alice', 'david']);
+  });
+});
+
 describe('Order direction', () => {
   it('orders ascending with "asc"', () => {
     const mockItems = [
@@ -994,7 +1105,7 @@ describe('processProtocolSortRule', () => {
         property: 'category',
         direction: 'asc',
       };
-      expect(processProtocolSortRule(codebookVariables)(rule).type).toEqual('string');
+      expect(processProtocolSortRule(codebookVariables)(rule).type).toEqual('categorical');
     });
 
     it('ordinal', () => {

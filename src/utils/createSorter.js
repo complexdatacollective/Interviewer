@@ -74,6 +74,36 @@ const stringFunction = ({ property, direction }) => (a, b) => {
   return collator.compare(secondValue, firstValue);
 };
 
+const categoricalFunction = ({ property, direction, hierarchy = [] }) => (a, b) => {
+  // hierarchy is whatever order the variables were specified in the variable definition
+  const firstValues = get(a, property, []);
+  const secondValues = get(b, property, []);
+
+  for (let i = 0; i < Math.max(firstValues.length, secondValues.length); i += 1) {
+    const firstValue = i < firstValues.length ? firstValues[i] : null;
+    const secondValue = i < secondValues.length ? secondValues[i] : null;
+
+    if (firstValue !== secondValue) {
+      // If one of the values is not in the hierarchy, it is sorted to the end of the list
+      const firstIndex = hierarchy.indexOf(firstValue);
+      const secondIndex = hierarchy.indexOf(secondValue);
+
+      if (firstIndex === -1) {
+        return 1;
+      }
+      if (secondIndex === -1) {
+        return -1;
+      }
+
+      if (direction === 'asc') {
+        return firstIndex - secondIndex;
+      } return secondIndex - firstIndex; // desc
+    }
+  }
+
+  return 0;
+};
+
 /**
  * Creates a sort function that sorts items according to the index of their
  * property value in a hierarchy array.
@@ -163,8 +193,10 @@ const getSortFunction = (rule) => {
 
   if (type === 'hierarchy') { return hierarchyFunction(rule); }
 
+  if (type === 'categorical') { return categoricalFunction(rule); }
+
   // eslint-disable-next-line no-console
-  console.warn('🤔 Sort rule missing required property \'type\', or type was not recognized. Sorting as a string, which may cause incorrect results. Supported types are: number, boolean, string, date, hierarchy.');
+  console.warn('🤔 Sort rule missing required property \'type\', or type was not recognized. Sorting as a string, which may cause incorrect results. Supported types are: number, boolean, string, date, hierarchy, categorical');
   return stringFunction(rule);
 };
 
@@ -193,6 +225,7 @@ const createSorter = (sortRules = []) => {
  * - hierarchy
  * - number
  * - date
+ * - categorical
  *
  * Network Canvas Variables can be of type:
  * - "boolean",
@@ -208,7 +241,6 @@ const createSorter = (sortRules = []) => {
 export const mapNCType = (type) => {
   switch (type) {
     case 'text':
-    case 'categorical':
     case 'layout':
       return 'string';
     case 'number':
@@ -219,6 +251,8 @@ export const mapNCType = (type) => {
       return 'date';
     case 'ordinal':
       return 'hierarchy';
+    case 'categorical':
+      return 'categorical';
     case 'scalar':
       return 'number';
     default:
@@ -269,6 +303,7 @@ export const processProtocolSortRule = (codebookVariables) => (sortRule) => {
     type: mapNCType(type),
     // Generate a hierarchy if the variable is ordinal based on the ordinal options
     ...type === 'ordinal' && { hierarchy: variableDefinition.options.map((option) => option.value) },
+    ...type === 'categorical' && { hierarchy: variableDefinition.options.map((option) => option.value) },
   };
 };
 
