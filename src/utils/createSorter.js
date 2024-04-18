@@ -95,19 +95,17 @@ const hierarchyFunction = ({ property, direction = 'desc', hierarchy = [] }) => 
 
   if (direction === 'asc') {
     if (firstIndex > secondIndex) {
-      return -1;
-    }
-
-    if (firstIndex < secondIndex) {
       return 1;
+    }
+    if (firstIndex < secondIndex) {
+      return -1;
     }
   } else {
     if (firstIndex < secondIndex) {
-      return -1;
-    }
-
-    if (firstIndex > secondIndex) {
       return 1;
+    }
+    if (firstIndex > secondIndex) {
+      return -1;
     }
   }
   return 0;
