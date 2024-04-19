@@ -175,7 +175,7 @@ const getSortFunction = (rule) => {
   const {
     property,
     direction = 'asc',
-    type, // REQUIRED! number, boolean, string, date, hierarchy
+    type, // REQUIRED! number, boolean, string, date, hierarchy, categorical
   } = rule;
 
   // LIFO/FIFO rule sorted by _createdIndex
