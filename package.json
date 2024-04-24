@@ -1,6 +1,6 @@
 {
   "name": "network-canvas-interviewer",
-  "version": "6.5.2",
+  "version": "6.5.3",
   "productName": "Network Canvas Interviewer",
   "description": "A tool for conducting Network Canvas Interviews.",
   "author": "Complex Data Collective",
@@ -56,7 +56,7 @@
     "@codaco/eslint-plugin-spellcheck": "0.0.14",
     "@codaco/shared-consts": "~0.0.1-alpha.3",
     "@codaco/ui": "~5.8.5",
-    "@electron/notarize": "~1.2.3",
+    "@electron/notarize": "~2.3.0",
     "@faker-js/faker": "~6.0.0-alpha.5",
     "@zippytech/sorty": "^2.0.0",
     "ajv": "^6.5.4",
