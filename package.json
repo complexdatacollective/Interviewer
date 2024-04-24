@@ -89,7 +89,7 @@
     "detect-port": "1.1.0",
     "dotenv": "4.0.0",
     "electron": "~9.4.4",
-    "electron-builder": "~22.7.0",
+    "electron-builder": "~24.13.3",
     "electron-log": "^4.2.2",
     "electron-winstaller": "^4.0.0",
     "emoji-dictionary": "^1.0.9",
@@ -183,7 +183,7 @@
     "@xmldom/xmldom": "~0.8.10",
     "archiver": "^4.0.1",
     "d3-force": "~3.0.0",
-    "dmg-builder": "~23.6.0",
+    "dmg-builder": "~25.0.0-alpha.6",
     "electron-devtools-installer": "^3.0.0",
     "xcode": "~3.0.1",
     "zeroconf": "^0.1.4"
