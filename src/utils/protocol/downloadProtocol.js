@@ -44,7 +44,7 @@ const downloadProtocol = inEnvironment((environment) => {
       } else {
         promisedResponse = getURL(uri)
           .catch(urlError)
-          .then(url => request({ method: 'GET', encoding: null, uri: url.href }));
+          .then(url => request({ method: 'GET', encoding: null, uri: url.href, strictSSL: false }));
       }
 
       return promisedResponse
