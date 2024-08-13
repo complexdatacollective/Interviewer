@@ -81,9 +81,8 @@ const CategoricalListItem = (props) => {
       {},
       {
         [variable]: value,
-        // because category can now be promptVariable or
-        // otherVariable we need to reset the alternate.
-        [resetVariable]: null,
+        // reset is used to clear the variable when a node is moved to a different bin
+        ...(!!resetVariable && { [resetVariable]: null }),
       },
       'drop',
     );
