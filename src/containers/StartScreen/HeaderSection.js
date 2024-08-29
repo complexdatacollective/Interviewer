@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
@@ -12,6 +13,21 @@ import { openExternalLink } from '../../components/ExternalLink';
 import { Switch } from '../../components';
 import getVersion from '../../utils/getVersion';
 import useOnlineStatus from '../../hooks/useOnlineStatus';
+
+const handleSaveZip = () => {
+  const base64Data = 'UEsFBgAAAAAAAAAAAAAAAAAAAAAAAA=='; // Example base64 encoded ZIP data
+  const fileName = 'example.zip';
+
+  if (window.ZipFileWriter) {
+    window.ZipFileWriter.saveZipFile(base64Data, fileName, (successMessage) => {
+      alert(`Success: ${successMessage}`);
+    }, (errorMessage) => {
+      alert(`Error: ${errorMessage}`);
+    });
+  } else {
+    alert('ZipFileWriter plugin not available.');
+  }
+};
 
 const HeaderSection = () => {
   const onlineStatus = useOnlineStatus();
@@ -83,6 +99,7 @@ const HeaderSection = () => {
               </p>
             </div>
             <div className="welcome-actions">
+              <Button color="neon-carrot" onclick={handleSaveZip}>Save ZIP</Button>
               <Button
                 className="button button--cerulean-blue button--with-new"
                 color="cerulean-blue"

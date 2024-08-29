@@ -1,0 +1,27 @@
+{
+  "name": "com.example.zipfilewriter",
+  "version": "1.0.0",
+  "description": "Cordova Plugin to save ZIP files to a chosen location on Android devices",
+  "cordova": {
+    "id": "com.example.zipfilewriter",
+    "platforms": [
+      "android"
+    ]
+  },
+  "keywords": [
+    "cordova",
+    "zip",
+    "file",
+    "writer",
+    "ecosystem:cordova",
+    "cordova-android"
+  ],
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=8.0.0"
+    }
+  ],
+  "author": "",
+  "license": "MIT"
+}
