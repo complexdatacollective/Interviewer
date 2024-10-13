@@ -7,7 +7,7 @@
   <author email="hello@complexdatacollective.org" href="http://complexdatacollective.org">
         Complex Data Collective
   </author>
-  <content src="http://192.168.0.42:3000/index.html"/>
+  <content src="http://192.168.1.106:3000/index.html"/>
   <access origin="*"/>
   <access origin="cdvfile://*"/>
   <allow-intent href="http://*/*"/>
