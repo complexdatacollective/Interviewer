@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget android-versionCode="6415" id="org.codaco.NetworkCanvasInterviewer6" ios-CFBundleIdentifier="org.codaco.networkCanvasInterviewerBusiness" ios-CFBundleVersion="6415" version="6.5.3"
-  xmlns="http://www.w3.org/ns/widgets"
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="6417" id="org.codaco.NetworkCanvasInterviewer6" ios-CFBundleIdentifier="org.codaco.networkCanvasInterviewerBusiness" ios-CFBundleVersion="6417" version="6.5.3" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>Network Canvas Interviewer</name>
   <description>
         A tool for conducting Network Canvas Interviews.
@@ -10,7 +7,7 @@
   <author email="hello@complexdatacollective.org" href="http://complexdatacollective.org">
         Complex Data Collective
   </author>
-  <content src="index.html"/>
+  <content src="http://192.168.0.42:3000/index.html"/>
   <access origin="*"/>
   <access origin="cdvfile://*"/>
   <allow-intent href="http://*/*"/>

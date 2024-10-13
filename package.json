@@ -76,7 +76,7 @@
     "concaveman": "^1.2.0",
     "connect-history-api-fallback": "1.3.0",
     "connected-react-router": "^6.8.0",
-    "cordova-android": "~12.0.0",
+    "cordova-android": "~13.0.0",
     "cordova-ios": "~7.0.0",
     "cordova-plugin-file": "github:apache/cordova-plugin-file#265a932",
     "cordova-plugin-file-transfer": "github:apache/cordova-plugin-file-transfer#f12b73e",
@@ -292,8 +292,8 @@
   },
   "cordova": {
     "platforms": [
-      "android",
-      "ios"
+      "ios",
+      "android"
     ],
     "plugins": {
       "cordova-plugin-file-transfer": {},
