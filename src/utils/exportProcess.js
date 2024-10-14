@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Icon } from '@codaco/ui';
+import { Icon } from '@codaco/ui';
 import { batch } from 'react-redux';
 import { store } from '../ducks/store';
 import { actionCreators as toastActions } from '../ducks/modules/toasts';
@@ -13,13 +13,6 @@ import { getRemoteProtocolID } from './networkFormat';
 
 const { dispatch } = store;
 const { getState } = store;
-
-function selectAllText() {
-  const textarea = document.getElementById('debug');
-  if (textarea) {
-    textarea.select();
-  }
-}
 
 const setInitialExportStatus = () => {
   dispatch(exportProgressActions.update({
@@ -108,7 +101,7 @@ export const exportToFile = (sessionList, filename) => {
     errors.push(error);
   });
 
-  fileExportManager.on('finished', (logData) => {
+  fileExportManager.on('finished', () => {
     dispatch(exportProgressActions.reset());
 
     if (succeeded.length > 0) {
@@ -147,28 +140,6 @@ export const exportToFile = (sessionList, filename) => {
       }));
 
       return;
-    }
-
-    if (logData && logData.length > 0) {
-      dispatch(dialogActions.openDialog({
-        type: 'Notice',
-        title: 'Export Log',
-        message: (
-          <>
-            <p>
-              The export log contains detailed information about the export process.
-            </p>
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-            }}
-            >
-              <textarea id="debug" className="form-field form-field-text form-field-text--area form-field-text__input" value={JSON.stringify(logData, null, 2)} />
-              <Button onClick={selectAllText}>Select All</Button>
-            </div>
-          </>
-        ),
-      }));
     }
 
     dispatch(toastActions.addToast({
