@@ -78,7 +78,7 @@
     "connected-react-router": "^6.8.0",
     "cordova-android": "~13.0.0",
     "cordova-ios": "~7.0.0",
-    "cordova-plugin-file": "github:apache/cordova-plugin-file#265a932",
+    "cordova-plugin-file": "~8.1.0",
     "cordova-plugin-file-transfer": "github:apache/cordova-plugin-file-transfer#f12b73e",
     "cordova-plugin-fullscreen": "github:mesmotronic/cordova-plugin-fullscreen",
     "cordova-plugin-ionic-keyboard": "github:ionic-team/cordova-plugin-ionic-keyboard",
@@ -309,10 +309,12 @@
         "PHOTO_LIBRARY_USAGE_DESCRIPTION": "This app requires photo library access to function properly."
       },
       "cordova-plugin-androidx-adapter": {},
-      "cordova-plugin-file": {},
       "cordova-plugin-network-canvas-client": {},
       "cordova-plugin-fullscreen": {},
-      "cordova-plugin-ionic-keyboard": {}
+      "cordova-plugin-ionic-keyboard": {},
+      "cordova-plugin-file": {
+        "ANDROIDX_WEBKIT_VERSION": "1.4.0"
+      }
     }
   }
 }
