@@ -1,5 +1,8 @@
 import { findKey, find, get } from 'lodash';
-import { getActiveSession, getStageSubjectType } from './session';
+import {
+  getActiveSession,
+  getStageSubjectType,
+} from './session';
 import { createDeepEqualSelector } from './utils';
 import { getProtocolCodebook } from './protocol';
 import { asWorkerAgentNetwork } from '../utils/networkFormat';
@@ -49,8 +52,8 @@ export const getWorkerNetwork = createDeepEqualSelector(
 export const makeGetNodeTypeDefinition = () => createDeepEqualSelector(
   (state, props) => getProtocolCodebook(state, props),
   (state, props) => get(props, 'type') // When used in <Node /> // TODO: should use makeGetSubject
-    || get(props, 'stage.subject.type') // Standard location
-    || get(state, 'type'), // Unknown - perhaps worker?
+      || get(props, 'stage.subject.type') // Standard location
+      || get(state, 'type'), // Unknown - perhaps worker?
   (codebook, nodeType) => {
     const nodeDefinitions = codebook && codebook.node;
     return nodeDefinitions && nodeDefinitions[nodeType];
@@ -65,7 +68,10 @@ export const labelLogic = (codebookForNodeType, nodeAttributes) => {
   const variableCalledName = codebookForNodeType
     && codebookForNodeType.variables
     // Ignore case when looking for 'name'
-    && findKey(codebookForNodeType.variables, (variable) => variable.name.toLowerCase() === 'name');
+    && findKey(
+      codebookForNodeType.variables,
+      (variable) => variable.name.toLowerCase() === 'name',
+    );
 
   if (variableCalledName && nodeAttributes[variableCalledName]) {
     return nodeAttributes[variableCalledName];
@@ -85,7 +91,7 @@ export const labelLogic = (codebookForNodeType, nodeAttributes) => {
   }
 
   // 3. Last resort!
-  return 'No \'name\' variable!';
+  return "No 'name' variable!";
 };
 
 // Gets the node label variable and returns its value, or "No label".
@@ -110,7 +116,11 @@ export const makeGetNodeColor = () => createDeepEqualSelector(
   (_, props) => props.type,
   (codebook, nodeType) => {
     const nodeDefinitions = codebook.node;
-    const nodeColor = get(nodeDefinitions, [nodeType, 'color'], 'node-color-seq-1');
+    const nodeColor = get(
+      nodeDefinitions,
+      [nodeType, 'color'],
+      'node-color-seq-1',
+    );
     return nodeColor;
   },
 );
@@ -119,7 +129,11 @@ export const makeGetNodeColor = () => createDeepEqualSelector(
 export const getNodeColor = (nodeType) => (state) => {
   const codebook = getProtocolCodebook(state);
   const nodeDefinitions = codebook.node;
-  const nodeColor = get(nodeDefinitions, [nodeType, 'color'], 'node-color-seq-1');
+  const nodeColor = get(
+    nodeDefinitions,
+    [nodeType, 'color'],
+    'node-color-seq-1',
+  );
   return nodeColor;
 };
 
@@ -162,7 +176,7 @@ export const makeGetNodeAttributeLabel = () => createDeepEqualSelector(
   },
 );
 
-export const makeGetCategoricalOptions = () => createDeepEqualSelector(
+export const getCategoricalOptions = createDeepEqualSelector(
   (state, props) => getProtocolCodebook(state, props),
   getStageSubjectType(),
   (_, props) => props.variableId,
@@ -173,3 +187,5 @@ export const makeGetCategoricalOptions = () => createDeepEqualSelector(
     return options;
   },
 );
+
+export const makeGetCategoricalOptions = () => getCategoricalOptions;

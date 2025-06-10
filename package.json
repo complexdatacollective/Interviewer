@@ -20,6 +20,7 @@
     "build:ci": "cross-env NC_TARGET_PLATFORM=electron REACT_APP_NO_FULLSCREEN=true REACT_APP_NO_PERSIST=true node scripts/build.js",
     "build:ios": "cross-env NC_TARGET_PLATFORM=ios node scripts/build.js && cordova prepare ios",
     "lint": "eslint src && eslint public",
+    "lint:fix": "eslint src --fix && eslint public --fix",
     "sass-lint": "stylelint '**/*.scss'",
     "test": "node scripts/test.js",
     "test:integration": "cross-env TEST_ENV=development jest --config=integration-tests/jest.config.js --runInBand",
