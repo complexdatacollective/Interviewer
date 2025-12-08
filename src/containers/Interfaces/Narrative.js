@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import PropTypes from 'prop-types';
-import ConvexHulls from '../Canvas/ConvexHulls';
+import ConvexHulls from '../../components/Canvas/ConvexHulls';
 import NodeLayout from '../RealtimeCanvas/NodeLayout';
 import Background from '../Canvas/Background';
 import PresetSwitcher from '../Canvas/PresetSwitcher';

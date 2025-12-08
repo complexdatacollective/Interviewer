@@ -1,6 +1,6 @@
 {
   "name": "network-canvas-interviewer",
-  "version": "6.5.3",
+  "version": "6.5.4",
   "productName": "Network Canvas Interviewer",
   "description": "A tool for conducting Network Canvas Interviews.",
   "author": "Complex Data Collective",
@@ -20,6 +20,7 @@
     "build:ci": "cross-env NC_TARGET_PLATFORM=electron REACT_APP_NO_FULLSCREEN=true REACT_APP_NO_PERSIST=true node scripts/build.js",
     "build:ios": "cross-env NC_TARGET_PLATFORM=ios node scripts/build.js && cordova prepare ios",
     "lint": "eslint src && eslint public",
+    "lint:fix": "eslint src --fix && eslint public --fix",
     "sass-lint": "stylelint '**/*.scss'",
     "test": "node scripts/test.js",
     "test:integration": "cross-env TEST_ENV=development jest --config=integration-tests/jest.config.js --runInBand",
@@ -55,7 +56,7 @@
     "@babel/preset-react": "7.10.1",
     "@codaco/eslint-plugin-spellcheck": "0.0.14",
     "@codaco/shared-consts": "~0.0.1-alpha.3",
-    "@codaco/ui": "~5.8.5",
+    "@codaco/ui": "~5.8.6",
     "@electron/notarize": "~2.3.0",
     "@faker-js/faker": "~6.0.0-alpha.5",
     "@zippytech/sorty": "^2.0.0",
@@ -76,9 +77,9 @@
     "concaveman": "^1.2.0",
     "connect-history-api-fallback": "1.3.0",
     "connected-react-router": "^6.8.0",
-    "cordova-android": "~12.0.0",
+    "cordova-android": "~13.0.0",
     "cordova-ios": "~7.0.0",
-    "cordova-plugin-file": "github:apache/cordova-plugin-file#265a932",
+    "cordova-plugin-file": "~8.1.0",
     "cordova-plugin-file-transfer": "github:apache/cordova-plugin-file-transfer#f12b73e",
     "cordova-plugin-fullscreen": "github:mesmotronic/cordova-plugin-fullscreen",
     "cordova-plugin-ionic-keyboard": "github:ionic-team/cordova-plugin-ionic-keyboard",
@@ -205,8 +206,7 @@
       "include": "build-resources/scripts/bonjour.nsh"
     },
     "win": {
-      "target": "nsis",
-      "certificateSha1": "8F1243989C0B23B29B50E872282AAB00A4302CCD"
+      "target": "nsis"
     },
     "mac": {
       "category": "public.app-category.education",
@@ -292,8 +292,8 @@
   },
   "cordova": {
     "platforms": [
-      "android",
-      "ios"
+      "ios",
+      "android"
     ],
     "plugins": {
       "cordova-plugin-file-transfer": {},
@@ -309,10 +309,12 @@
         "PHOTO_LIBRARY_USAGE_DESCRIPTION": "This app requires photo library access to function properly."
       },
       "cordova-plugin-androidx-adapter": {},
-      "cordova-plugin-file": {},
       "cordova-plugin-network-canvas-client": {},
       "cordova-plugin-fullscreen": {},
-      "cordova-plugin-ionic-keyboard": {}
+      "cordova-plugin-ionic-keyboard": {},
+      "cordova-plugin-file": {
+        "ANDROIDX_WEBKIT_VERSION": "1.4.0"
+      }
     }
   }
 }

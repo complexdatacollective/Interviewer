@@ -1,6 +1,6 @@
 import React from 'react';
-import { batch } from 'react-redux';
 import { Icon } from '@codaco/ui';
+import { batch } from 'react-redux';
 import { store } from '../ducks/store';
 import { actionCreators as toastActions } from '../ducks/modules/toasts';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';

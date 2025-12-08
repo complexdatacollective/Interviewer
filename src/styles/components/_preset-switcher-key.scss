@@ -1,11 +1,12 @@
 .preset-switcher-key {
   display: flex;
   bottom: 7rem;
-  width: 18rem;
+  width: auto;
+  min-width: 18rem;
   position: absolute;
   right: 0;
   margin-right: 6.1rem; // distance of preset-switcher from right side
-  max-height: 85%;
+  max-height: 75%;
 
   &__content {
     background-color: var(--light-background);
