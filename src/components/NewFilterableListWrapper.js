@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import objectHash from 'object-hash';
+import { hash as objectHash } from 'ohash';
 import { motion, AnimatePresence } from 'framer-motion';
 import PropTypes from 'prop-types';
 import { Spinner } from '@codaco/ui';

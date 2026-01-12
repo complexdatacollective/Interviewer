@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { connect } from 'react-redux';
-import objectHash from 'object-hash';
+import { hash as objectHash } from 'ohash';
 import {
   compose,
   withState,

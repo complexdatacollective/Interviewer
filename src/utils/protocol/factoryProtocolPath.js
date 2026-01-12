@@ -1,19 +1,23 @@
-/* eslint-disable global-require */
-
+/**
+ * Factory protocol path utilities with secure API support.
+ *
+ * Note: In Electron, this function is now async because it depends on
+ * IPC calls to get the app path.
+ */
 import { isString } from 'lodash';
 import environments from '../environments';
 import inEnvironment from '../Environment';
 import { appPath } from '../filesystem';
+import { pathSync } from '../electronAPI';
 
-const isValidProtocolName = protocolName => (isString(protocolName) && protocolName.length > 0);
+const isValidProtocolName = (protocolName) => (isString(protocolName) && protocolName.length > 0);
 
 const factoryProtocolPath = (environment) => {
   if (environment === environments.ELECTRON) {
-    const path = require('path');
-
-    return (protocolName, filePath = '') => {
+    return async (protocolName, filePath = '') => {
       if (!isValidProtocolName(protocolName)) throw Error('Protocol name is not valid');
-      return path.join(appPath(), 'protocols', protocolName, filePath);
+      const basePath = await appPath();
+      return pathSync.join(basePath, 'protocols', protocolName, filePath);
     };
   }
 

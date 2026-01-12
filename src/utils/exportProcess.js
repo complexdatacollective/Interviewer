@@ -7,8 +7,6 @@ import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import { actionCreators as dialogActions } from '../ducks/modules/dialogs';
 import { actionCreators as exportProgressActions } from '../ducks/modules/exportProgress';
 import { withErrorDialog } from '../ducks/modules/errors';
-import ApiClient from './ApiClient';
-import FileExportManager from './network-exporters/src/FileExportManager';
 import { getRemoteProtocolID } from './networkFormat';
 
 const { dispatch } = store;
@@ -69,39 +67,46 @@ export const exportToFile = (sessionList, filename) => {
   const errors = [];
   const succeeded = [];
 
-  const fileExportManager = new FileExportManager(exportOptions);
+  // Store cleanup functions for IPC listeners
+  const cleanupListeners = [];
 
-  fileExportManager.on('begin', () => {
-    // Create a toast to show the status as it updates
+  const cleanup = () => {
+    cleanupListeners.forEach((fn) => fn());
+    cleanupListeners.length = 0;
+  };
+
+  // Set up IPC event listeners
+  cleanupListeners.push(window.electronAPI.export.onBegin(() => {
     setInitialExportStatus();
-  });
+  }));
 
-  fileExportManager.on('update', ({ statusText, progress }) => {
+  cleanupListeners.push(window.electronAPI.export.onUpdate(({ statusText, progress }) => {
     dispatch(exportProgressActions.update({
       statusText,
       percentProgress: progress,
     }));
-  });
+  }));
 
-  fileExportManager.on('cancelled', () => {
+  cleanupListeners.push(window.electronAPI.export.onCancelled(() => {
     dispatch(exportProgressActions.reset());
     showCancellationToast();
-  });
+    cleanup();
+  }));
 
-  fileExportManager.on('session-exported', (sessionId) => {
+  cleanupListeners.push(window.electronAPI.export.onSessionExported((sessionId) => {
     if (!sessionId || typeof sessionId !== 'string') {
       // eslint-disable-next-line no-console
       console.warn('session-exported event did not contain a sessionID');
       return;
     }
     succeeded.push(sessionId);
-  });
+  }));
 
-  fileExportManager.on('error', (error) => {
+  cleanupListeners.push(window.electronAPI.export.onError((error) => {
     errors.push(error);
-  });
+  }));
 
-  fileExportManager.on('finished', () => {
+  cleanupListeners.push(window.electronAPI.export.onFinished(() => {
     dispatch(exportProgressActions.reset());
 
     if (succeeded.length > 0) {
@@ -139,6 +144,7 @@ export const exportToFile = (sessionList, filename) => {
         ),
       }));
 
+      cleanup();
       return;
     }
 
@@ -152,106 +158,38 @@ export const exportToFile = (sessionList, filename) => {
         </>
       ),
     }));
-  });
+
+    cleanup();
+  }));
 
   // The protocol object needs to be reformatted so that it is keyed by
   // the sha of protocol.name, since this is what Server and network-exporters
   // use.
-  const reformatedProtocols = Object.values(installedProtocols)
-    .reduce((acc, protocol) => ({
-      ...acc,
-      [getRemoteProtocolID(protocol.name)]: protocol,
-    }), {});
+  const buildReformattedProtocols = async () => {
+    const protocols = Object.values(installedProtocols);
+    const entries = await Promise.all(
+      protocols.map(async (protocol) => [await getRemoteProtocolID(protocol.name), protocol]),
+    );
+    return Object.fromEntries(entries);
+  };
 
-  return fileExportManager.exportSessions(sessionList, reformatedProtocols);
-};
-
-export const exportToServer = (sessionList) => {
-  const errors = [];
-  const succeeded = [];
-
-  const { pairedServer } = getState();
-
-  const client = new ApiClient(pairedServer);
-  client.addTrustedCert();
-
-  client.on('begin', () => {
-    setInitialExportStatus();
-  });
-
-  client.on('update', ({ statusText, progress }) => {
-    dispatch(exportProgressActions.update({
-      statusText,
-      percentProgress: progress,
-    }));
-  });
-
-  client.on('session-exported', (sessionId) => {
-    succeeded.push(sessionId);
-  });
-
-  client.on('error', (error) => {
-    errors.push(error);
-  });
-
-  client.on('finished', () => {
-    dispatch(exportProgressActions.reset());
-
-    if (succeeded.length > 0) {
-      batch(() => {
-        succeeded.forEach(
-          (successfulExport) => dispatch(sessionsActions.setSessionExported(successfulExport)),
-        );
-      });
+  // Start export via IPC to main process
+  return buildReformattedProtocols().then((reformatedProtocols) => (
+    window.electronAPI.export.start({
+      sessions: sessionList,
+      protocols: reformatedProtocols,
+      exportOptions,
+    })
+  )).then((result) => {
+    if (!result.success) {
+      dispatch(fatalExportErrorAction(new Error(result.error)));
+      cleanup();
     }
-
-    if (errors.length > 0) {
-      const errorList = errors.map((error, index) => (
-        <li key={index}>
-          <Icon name="warning" />
-          {error}
-        </li>
-      ));
-
-      dispatch(dialogActions.openDialog({
-        type: 'Warning',
-        title: 'Errors encountered during export',
-        canCancel: false,
-        message: (
-          <>
-            <p>
-              Your export completed, but non-fatal errors were encountered during the process. This
-              may mean that not all sessions were transferred to Server.
-              Review the details of these errors below, and ensure that you check the data you
-              received.
-            </p>
-            <strong>Errors:</strong>
-            <ul className="export-error-list">{errorList}</ul>
-          </>
-        ),
-      }));
-
-      return;
-    }
-
-    dispatch(toastActions.addToast({
-      type: 'success',
-      title: 'Export Complete!',
-      autoDismiss: true,
-      content: (
-        <>
-          <p>Your sessions were exported successfully.</p>
-        </>
-      ),
-    }));
-  });
-
-  const exportPromise = client.exportSessions(sessionList);
-
-  exportPromise.catch((error) => {
+    return result;
+  }).catch((error) => {
     dispatch(fatalExportErrorAction(error));
-    exportPromise.abort();
+    cleanup();
+    throw error;
   });
-
-  return exportPromise;
 };
+

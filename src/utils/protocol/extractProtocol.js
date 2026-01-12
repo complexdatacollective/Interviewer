@@ -1,5 +1,6 @@
-/* eslint-disable global-require */
-
+/**
+ * Extract protocol utility with secure API support.
+ */
 import Zip from 'jszip';
 import uuid from 'uuid/v4';
 import environments from '../environments';
@@ -13,6 +14,7 @@ import {
   inSequence,
 } from '../filesystem';
 import protocolPath from './protocolPath';
+import { pathSync } from '../electronAPI';
 import {
   checkZipPaths,
 } from './protocol-validation/validation/zipValidation';
@@ -25,19 +27,14 @@ const loadError = friendlyErrorMessage("We couldn't load that Network Canvas pro
 const prepareDestination = async (destination) => {
   await removeDirectory(destination);
   await ensurePathExists(destination);
-  return;
-}
+};
 
-
-const generateProtocolUID = () => uuid(); // generate a filename
+const generateProtocolUID = () => uuid();
 
 const extractZipDirectory = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const path = require('path');
-
     return (zipObject, destination) => {
-      const extractPath = path.join(destination, zipObject.name);
-
+      const extractPath = pathSync.join(destination, zipObject.name);
       return ensurePathExists(extractPath);
     };
   }
@@ -45,7 +42,6 @@ const extractZipDirectory = inEnvironment((environment) => {
   if (environment === environments.CORDOVA) {
     return (zipObject, destination) => {
       const extractPath = `${destination}${zipObject.name}`;
-
       return ensurePathExists(extractPath);
     };
   }
@@ -55,10 +51,8 @@ const extractZipDirectory = inEnvironment((environment) => {
 
 const extractZipFile = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const path = require('path');
-
     return (zipObject, destination) => {
-      const extractPath = path.join(destination, zipObject.name);
+      const extractPath = pathSync.join(destination, zipObject.name);
       return writeStream(extractPath, zipObject.nodeStream());
     };
   }
@@ -75,19 +69,16 @@ const extractZipFile = inEnvironment((environment) => {
 
 const extractZip = inEnvironment((environment) => {
   if (environment === environments.CORDOVA || environment === environments.ELECTRON) {
-    return (zip, destination) =>
-      prepareDestination(destination)
-        .then(() => checkZipPaths(Object.keys(zip.files)))
-        .then(() =>
-          inSequence(
-            Object.values(zip.files),
-            zipObject => (
-              zipObject.dir ?
-                extractZipDirectory(zipObject, destination) :
-                extractZipFile(zipObject, destination)
-            ),
-          ),
-        );
+    return (zip, destination) => prepareDestination(destination)
+      .then(() => checkZipPaths(Object.keys(zip.files)))
+      .then(() => inSequence(
+        Object.values(zip.files),
+        (zipObject) => (
+          zipObject.dir
+            ? extractZipDirectory(zipObject, destination)
+            : extractZipFile(zipObject, destination)
+        ),
+      ));
   }
 
   return () => Promise.reject(new Error('extractZip() not available on platform'));
@@ -95,10 +86,9 @@ const extractZip = inEnvironment((environment) => {
 
 const loadZip = inEnvironment((environment) => {
   if (environment === environments.CORDOVA || environment === environments.ELECTRON) {
-    return source =>
-      readFile(source)
-        .then(data => Zip.loadAsync(data))
-        .catch(loadError);
+    return (source) => readFile(source)
+      .then((data) => Zip.loadAsync(data))
+      .catch(loadError);
   }
 
   throw new Error(`loadZip() not available on platform ${environment}`);
@@ -106,16 +96,13 @@ const loadZip = inEnvironment((environment) => {
 
 const importZip = inEnvironment((environment) => {
   if (environment === environments.CORDOVA || environment === environments.ELECTRON) {
-    return (protocolFile, protocolName, destination) => {
-      return loadZip(protocolFile)
-        .then(zip => extractZip(zip, destination))
-        .catch((error) => {
-          console.log(error)
-          return openError;
-        })
-        .then(() => protocolName);
-    }
-
+    return (protocolFile, protocolName, destination) => loadZip(protocolFile)
+      .then((zip) => extractZip(zip, destination))
+      .catch((error) => {
+        console.log(error);
+        return openError;
+      })
+      .then(() => protocolName);
   }
 
   return () => Promise.reject(new Error('loadZip() not available on platform'));
@@ -123,9 +110,9 @@ const importZip = inEnvironment((environment) => {
 
 const extractProtocol = inEnvironment((environment) => {
   if (environment === environments.ELECTRON || environment === environments.CORDOVA) {
-    return (protocolFile = isRequired('protocolFile')) => {
+    return async (protocolFile = isRequired('protocolFile')) => {
       const protocolName = generateProtocolUID();
-      const destination = protocolPath(protocolName);
+      const destination = await protocolPath(protocolName);
       return importZip(protocolFile, protocolName, destination);
     };
   }

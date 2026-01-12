@@ -1,8 +1,18 @@
-import { VariableType } from './utils/network-exporters/src/utils/protocol-consts';
-
 // String consts used by protocol files
 // Note: these values are no longer used to produce JSON schemas; the schemas must
 // be kept in sync manually.
+
+// Docs: https://github.com/codaco/Network-Canvas/wiki/Variable-Types
+export const VariableType = Object.freeze({
+  boolean: 'boolean',
+  text: 'text',
+  number: 'number',
+  ordinal: 'ordinal',
+  categorical: 'categorical',
+  layout: 'layout',
+  scalar: 'scalar',
+  datetime: 'datetime',
+});
 
 // Docs: https://github.com/complexdatacollective/Network-Canvas/wiki/protocol.json#variable-registry
 export const Entity = Object.freeze({
@@ -103,9 +113,6 @@ export const StageType = Object.freeze({
   DyadCensus: 'DyadCensus',
   TieStrengthCensus: 'TieStrengthCensus',
 });
-
-// VariableTYpe imported from network-exporters submodule
-// Docs: https://github.com/complexdatacollective/Network-Canvas/wiki/Variable-Types
 
 const enumValueMaps = Object.freeze({
   Entity,

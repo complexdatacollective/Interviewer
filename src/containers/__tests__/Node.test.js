@@ -37,7 +37,6 @@ const mockState = {
       stages: [],
     },
   },
-  pairedServer: null,
   search: {
     collapsed: true,
     selectedResults: [],

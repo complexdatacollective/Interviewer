@@ -1,6 +1,5 @@
 import { omit } from 'lodash';
-import crypto from 'crypto';
-import objectHash from 'object-hash';
+import { hash as objectHash } from 'ohash';
 import {
   entityAttributesProperty,
   entityPrimaryKeyProperty,
@@ -81,14 +80,22 @@ export const getNodeWithIdAttributes = (node, nodeVariables) => {
 /**
  * Get the remote protocol name for a protocol, which Server uses to uniquely identify it
  * @param {string} name the name of a protocol
+ * @returns {Promise<string>} SHA-256 hash of the protocol name
  */
-export const getRemoteProtocolID = (name) => name && crypto.createHash('sha256').update(name).digest('hex');
+export const getRemoteProtocolID = async (name) => {
+  if (!name) return null;
+  const encoder = new TextEncoder();
+  const data = encoder.encode(name);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
+};
 
 /**
  * Creates an object containing all required session metadata for export
  * and appends it to the session
  */
-export const asNetworkWithSessionVariables = (sessionId, session, protocol) => {
+export const asNetworkWithSessionVariables = async (sessionId, session, protocol) => {
   // Required:
   // caseId,
   // sessionId,
@@ -101,7 +108,7 @@ export const asNetworkWithSessionVariables = (sessionId, session, protocol) => {
   const sessionVariables = {
     [caseProperty]: session.caseId,
     [sessionProperty]: sessionId,
-    [protocolProperty]: getRemoteProtocolID(protocol.name),
+    [protocolProperty]: await getRemoteProtocolID(protocol.name),
     [protocolName]: protocol.name,
     [codebookHashProperty]: objectHash(protocol.codebook),
     ...(session.startedAt && {

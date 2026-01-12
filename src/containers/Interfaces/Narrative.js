@@ -11,9 +11,10 @@ import EdgeLayout from '../../components/Canvas/EdgeLayout';
 import Canvas from '../../components/Canvas/Canvas';
 import { getNetworkEdges, getNetworkNodes } from '../../selectors/network';
 import { edgesToCoords } from '../../selectors/canvas';
-import { entityAttributesProperty } from '../../utils/network-exporters/src/utils/reservedAttributes';
 import { get } from '../../utils/lodash-replacements';
 import { LayoutProvider } from '../../contexts/LayoutContext';
+
+const entityAttributesProperty = 'attributes';
 
 /**
   * Narrative Interface

@@ -3,7 +3,7 @@ import environments from './environments';
 import inEnvironment from './Environment';
 import { readFile } from './filesystem';
 import getAssetUrl from './protocol/getAssetUrl';
-import CSVWorker from './csvDecoder.worker';
+import CSVWorker from './csvDecoder.worker?worker';
 import { get } from './lodash-replacements';
 
 /**

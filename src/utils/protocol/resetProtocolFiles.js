@@ -1,15 +1,16 @@
-/* eslint-disable global-require */
-
+/**
+ * Reset protocol files utility with secure API support.
+ */
 import environments from '../environments';
 import inEnvironment from '../Environment';
 import { userDataPath, removeDirectory } from '../filesystem';
+import { pathSync } from '../electronAPI';
 
 const resetProtocolFiles = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const path = require('path');
-
-    return () => {
-      const protocolsPath = path.join(userDataPath(), 'protocols');
+    return async () => {
+      const basePath = await userDataPath();
+      const protocolsPath = pathSync.join(basePath, 'protocols');
       return removeDirectory(protocolsPath);
     };
   }

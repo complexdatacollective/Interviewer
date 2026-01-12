@@ -50,7 +50,6 @@ const mockState = {
     },
     mockProtocol,
   },
-  pairedServer: null,
   search: {
     collapsed: true,
     selectedResults: [],

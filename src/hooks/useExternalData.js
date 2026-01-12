@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import objectHash from 'object-hash';
+import { hash as objectHash } from 'ohash';
 import { mapValues, mapKeys } from 'lodash';
 import { entityAttributesProperty, entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import loadExternalData from '../utils/loadExternalData';

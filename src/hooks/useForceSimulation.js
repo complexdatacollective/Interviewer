@@ -5,7 +5,7 @@ import {
   useEffect,
 } from 'react';
 import get from 'lodash/get';
-import ForceSimulationWorker from './forceSimulation.worker';
+import ForceSimulationWorker from './forceSimulation.worker?worker';
 import screenManager from '../components/RealtimeCanvas/ScreenManager';
 import useViewport from './useViewport';
 

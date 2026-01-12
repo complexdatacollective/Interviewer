@@ -7,11 +7,10 @@ import ExportSprite from '@codaco/ui/lib/components/Sprites/ExportSprite';
 import { Text } from '@codaco/ui/lib/components/Fields';
 import { Scroller } from '@codaco/ui';
 import { Overlay } from '../Overlay';
-import useServerConnectionStatus from '../../hooks/useServerConnectionStatus';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import { withErrorDialog } from '../../ducks/modules/errors';
-import { exportToFile, exportToServer } from '../../utils/exportProcess';
+import { exportToFile } from '../../utils/exportProcess';
 import { asNetworkWithSessionVariables } from '../../utils/networkFormat';
 import SessionSelect from './SessionSelect';
 import ExportOptions from '../../components/SettingsMenu/Sections/ExportOptions';
@@ -33,8 +32,6 @@ const DataExportScreen = ({ show, onClose }) => {
   const [filename, setFilename] = useState(getInitialFilename());
   const [abortHandlers, setAbortHandlers] = useState(null);
 
-  const pairedServer = useSelector((state) => state.pairedServer);
-  const pairedServerConnection = useServerConnectionStatus(pairedServer);
   const { statusText, percentProgress } = useSelector((state) => state.exportProgress);
 
   const dispatch = useDispatch();
@@ -69,19 +66,8 @@ const DataExportScreen = ({ show, onClose }) => {
       );
     });
 
-  const exportSessions = (toServer = false) => {
+  const exportSessions = () => {
     setStep(3);
-
-    if (toServer) {
-      exportToServer(getExportableSessions())
-        .then(onClose)
-        .catch((error) => {
-          // Fatal error handling
-          dispatch(fatalExportErrorAction(error));
-          onClose();
-        });
-      return;
-    }
 
     exportToFile(getExportableSessions(), filename)
       .then(({ run, abort, setConsideringAbort }) => {
@@ -176,7 +162,6 @@ const DataExportScreen = ({ show, onClose }) => {
         >
           <Button color="neon-coral" onClick={handleDeleteSessions} disabled={selectedSessions.length === 0} icon="menu-purge-data">Delete Selected</Button>
           <div className="export-buttons">
-            {pairedServerConnection === 'ok' && (<Button onClick={() => exportSessions(true)} color="mustard" disabled={pairedServerConnection !== 'ok' || selectedSessions.length === 0}>Export Selected To Server</Button>)}
             <Button color="platinum" onClick={forward} disabled={selectedSessions.length === 0}>Export Selected To File</Button>
           </div>
         </div>
@@ -192,7 +177,7 @@ const DataExportScreen = ({ show, onClose }) => {
         }}
       >
         <Button color="platinum" onClick={backward} icon="arrow-left">Back to Selection</Button>
-        <Button color="primary" onClick={() => exportSessions(false)}>Start Export Process</Button>
+        <Button color="primary" onClick={() => exportSessions()}>Start Export Process</Button>
       </div>
     );
   };

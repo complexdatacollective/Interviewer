@@ -1,3 +1,6 @@
+/**
+ * Visual preferences with secure API support.
+ */
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
@@ -17,22 +20,13 @@ const VisualPreferences = (props) => {
     interfaceScale,
   } = props;
 
-  const getElectronWindow = () => {
-    if (isElectron()) {
-      const electron = window.require('electron');
-      return electron.remote.getCurrentWindow();
-    }
-    return false;
-  };
-
-  const handleToggleUseFullScreenApp = () => {
-    const electronWindow = getElectronWindow();
-
-    if (electronWindow) {
-      if (electronWindow.isFullScreen()) {
-        electronWindow.setFullScreen(false);
-      } else {
-        electronWindow.setFullScreen(true);
+  const handleToggleUseFullScreenApp = async () => {
+    if (isElectron() && window.electronAPI?.window) {
+      try {
+        const isCurrentlyFullScreen = await window.electronAPI.window.isFullScreen();
+        await window.electronAPI.window.setFullScreen(!isCurrentlyFullScreen);
+      } catch {
+        // ignore errors
       }
     }
 

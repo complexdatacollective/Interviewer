@@ -1,9 +1,11 @@
+/**
+ * Preload workers utility with secure API support.
+ */
 import { readFile } from '../filesystem';
 import { isCordova } from '../Environment';
 import protocolPath from './protocolPath';
 import { urlForWorkerSource, supportedWorkers } from '../WorkerAgent';
-
-const path = require('path');
+import { pathSync } from '../electronAPI';
 
 /**
  * Builds source code for a Web Worker based on the protocol's
@@ -29,33 +31,33 @@ const compileWorker = (src, funcName) => {
     ${src}
     ;
     onmessage = ((userFunc) => ${
-      ({ data }) => {
-        const messageId = data.messageId;
-        const onError = (scriptErr) => {
-          postMessage({
-            messageId,
-            error: {
-              name: scriptErr.name,
-              message: scriptErr.message,
-            },
-          });
-        };
+    ({ data }) => {
+      const messageId = data.messageId;
+      const onError = (scriptErr) => {
+        postMessage({
+          messageId,
+          error: {
+            name: scriptErr.name,
+            message: scriptErr.message,
+          },
+        });
+      };
 
-        let result;
-        try {
-          result = userFunc(data);
-        } catch (err) {
-          onError(err);
-        }
-        if (result instanceof Promise) {
-          result
-            .then(val => postMessage({ messageId, value: val }))
-            .catch(onError);
-        } else {
-          postMessage({ messageId, value: result });
-        }
+      let result;
+      try {
+        result = userFunc(data);
+      } catch (err) {
+        onError(err);
       }
-    })(${funcName});
+      if (result instanceof Promise) {
+        result
+          .then((val) => postMessage({ messageId, value: val }))
+          .catch(onError);
+      } else {
+        postMessage({ messageId, value: result });
+      }
+    }
+  })(${funcName});
     `;
   /* eslint-enable */
 };
@@ -65,26 +67,25 @@ const compileWorker = (src, funcName) => {
  * @description Read custom worker scripts from the protocol package, if any.
  * By preloading any existing, we can bootstrap before protocol.json is parsed.
  */
-const preloadWorkers = (protocolUID) => {
+const preloadWorkers = async (protocolUID) => {
+  const basePath = await protocolPath(protocolUID);
+
   return Promise.all(supportedWorkers.map((workerName) => {
     let workerFile;
 
     if (isCordova()) {
-      workerFile = `${protocolPath(protocolUID)}${workerName}.js`;
+      workerFile = `${basePath}${workerName}.js`;
     } else {
-      workerFile = path.join(protocolPath(protocolUID), `${workerName}.js`);
+      workerFile = pathSync.join(basePath, `${workerName}.js`);
     }
 
     const promise = readFile(workerFile);
 
     return promise
-      /**
-       * Load from blob so that script inherits CSP
-       */
-      .then(buf => new TextDecoder().decode(buf))
-      .then(str => compileWorker(str, workerName))
-      .then(source => new Blob([source], { type: 'text/plain' }))
-      .then(blob => urlForWorkerSource(blob))
+      .then((buf) => new TextDecoder().decode(buf))
+      .then((str) => compileWorker(str, workerName))
+      .then((source) => new Blob([source], { type: 'text/plain' }))
+      .then((blob) => urlForWorkerSource(blob))
       .catch(() => null);
   }));
 };

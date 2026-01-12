@@ -1,3 +1,6 @@
+/**
+ * Import protocol utility with secure API support.
+ */
 import React from 'react';
 import uuid from 'uuid';
 import { CancellationError } from 'builder-util-runtime';
@@ -14,24 +17,26 @@ import protocolPath from '../../utils/protocol/protocolPath';
 import { PROTOCOL_EXTENSION } from '../../config';
 import { isCordova, isElectron } from '../../utils/Environment';
 
-const cleanUpProtocol = (uid) => {
+const cleanUpProtocol = async (uid) => {
   if (uid) {
-    const cancelledDir = protocolPath(uid);
-    removeDirectory(cancelledDir)
-      .catch(() => { }); // best effort
+    try {
+      const cancelledDir = await protocolPath(uid);
+      await removeDirectory(cancelledDir);
+    } catch {
+      // best effort
+    }
   }
 };
 
 const cancelledImport = () => Promise.reject(new CancellationError('Import cancelled.'));
 
-export const filenameFromURI = uri =>
-  decodeURIComponent(uri.split('/').pop().split('#')[0].split('?')[0]);
+export const filenameFromURI = (uri) => decodeURIComponent(uri.split('/').pop().split('#')[0].split('?')[0]);
 
-const filenameFromPath = path => path.split(/.*[/|\\]/)[1];
+const filenameFromPath = (path) => path.split(/.*[/|\\]/)[1];
 
-const protocolNameFromFilename = filename => filename.slice(0, -PROTOCOL_EXTENSION.length);
+const protocolNameFromFilename = (filename) => filename.slice(0, -PROTOCOL_EXTENSION.length);
 
-const catchError = error => Promise.reject(error);
+const catchError = (error) => Promise.reject(error);
 
 const dispatch = store.dispatch;
 const getState = store.getState;
@@ -46,23 +51,17 @@ const showCancellationToast = () => {
       </React.Fragment>
     ),
   }));
-}
+};
 
-export const importProtocolFromURI = (uri, usePairedServer) => {
-  let cancelled = false; // Top-level cancelled property used to abort promise chain
-  let pairedServer;
+export const importProtocolFromURI = (uri) => {
+  let cancelled = false;
   let protocolUid;
   let previousUid;
   const filename = filenameFromURI(uri);
   const protocolName = protocolNameFromFilename(filename);
 
-  if (usePairedServer) {
-    pairedServer = getState().pairedServer;
-  }
-
   const toastUUID = uuid();
 
-  // Create a toast to show the status as it updates
   dispatch(toastActions.addToast({
     id: toastUUID,
     type: 'info',
@@ -80,7 +79,7 @@ export const importProtocolFromURI = (uri, usePairedServer) => {
     ),
   }));
 
-  const importPromise = new Promise((resolve, reject) => {
+  const importPromise = new Promise((resolve) => {
     checkExistingProtocol(protocolName)
       .then((existingUid) => {
         previousUid = existingUid;
@@ -93,7 +92,7 @@ export const importProtocolFromURI = (uri, usePairedServer) => {
             </React.Fragment>
           ),
         }));
-        return downloadProtocol(uri, pairedServer);
+        return downloadProtocol(uri);
       })
       .then((tempLocation) => {
         if (cancelled) return cancelledImport();
@@ -133,10 +132,8 @@ export const importProtocolFromURI = (uri, usePairedServer) => {
       .then((protocolContent) => {
         if (cancelled) return cancelledImport();
 
-        // Send the payload to installedProtocols
         dispatch(installedProtocolActions.importProtocolCompleteAction(protocolContent));
 
-        // Remove the status toast
         dispatch(toastActions.removeToast(toastUUID));
         dispatch(toastActions.addToast({
           type: 'success',
@@ -152,13 +149,10 @@ export const importProtocolFromURI = (uri, usePairedServer) => {
       }, catchError)
       .catch(
         (error) => {
-          // Remove the status toast
           dispatch(toastActions.removeToast(toastUUID));
 
-          // attempt to clean up files
           if (protocolUid) cleanUpProtocol(protocolUid);
 
-          // If this wasn't user cancellation, dispatch an error
           if (!(error instanceof CancellationError)) {
             dispatch(installedProtocolActions.importProtocolFailedAction(error));
           }
@@ -168,7 +162,7 @@ export const importProtocolFromURI = (uri, usePairedServer) => {
 
   importPromise.abort = () => {
     cancelled = true;
-    if (protocolUid) cleanUpProtocol(protocolUid); // attempt to clean up files
+    if (protocolUid) cleanUpProtocol(protocolUid);
   };
 
   return importPromise;
@@ -176,8 +170,10 @@ export const importProtocolFromURI = (uri, usePairedServer) => {
 
 export const beginLocalProtocolImport = () => {
   if (isElectron()) {
-    const ipcRenderer = window.require('electron').ipcRenderer;
-    ipcRenderer.send('OPEN_DIALOG');
+    // Use secure IPC API instead of window.require('electron')
+    if (window.electronAPI?.ipc?.send) {
+      window.electronAPI.ipc.send('OPEN_DIALOG');
+    }
   }
 
   if (isCordova()) {
@@ -192,9 +188,8 @@ export const beginLocalProtocolImport = () => {
   return Error('Environment not supported');
 };
 
-
 export const importProtocolFromFile = (filePath, name) => {
-  let cancelled = false; // Top-level cancelled property used to abort promise chain
+  let cancelled = false;
   let protocolUid;
   let previousUid;
 
@@ -203,7 +198,6 @@ export const importProtocolFromFile = (filePath, name) => {
 
   const toastUUID = uuid();
 
-  // Create a toast to show the status as it updates
   dispatch(toastActions.addToast({
     id: toastUUID,
     type: 'info',
@@ -257,10 +251,8 @@ export const importProtocolFromFile = (filePath, name) => {
     })
     .then((protocolContent) => {
       if (cancelled) return cancelledImport(protocolContent.uid);
-      // Send the payload to installedProtocols
       dispatch(installedProtocolActions.importProtocolCompleteAction(protocolContent));
 
-      // Remove the status toast
       dispatch(toastActions.removeToast(toastUUID));
       dispatch(toastActions.addToast({
         type: 'success',
@@ -276,17 +268,13 @@ export const importProtocolFromFile = (filePath, name) => {
     }, catchError)
     .catch(
       (error) => {
-        // Remove the status toast
         dispatch(toastActions.removeToast(toastUUID));
 
-        // attempt to clean up files
         if (protocolUid) cleanUpProtocol(protocolUid);
 
-        // If this wasn't user cancellation, dispatch an error
         if (!(error instanceof CancellationError)) {
           dispatch(installedProtocolActions.importProtocolFailedAction(error));
         }
       },
     );
 };
-

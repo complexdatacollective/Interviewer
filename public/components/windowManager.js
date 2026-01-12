@@ -1,9 +1,17 @@
 const { BrowserWindow, Menu, shell } = require('electron');
+const path = require('path');
 const mainMenu = require('./mainMenu');
 const appUrl = require('./appURL');
 
 const isMacOS = () => process.platform === 'darwin';
 const isTest = () => !!process.env.TEST;
+
+// Get path to the preload script
+// electron-vite builds preload to dist/preload/ in both dev and prod
+function getPreloadPath() {
+  // __dirname is dist/main/components/ since main process runs from dist/
+  return path.join(__dirname, '../../preload/index.js');
+}
 
 const titlebarParameters = isMacOS() ? { titleBarStyle: 'hidden', frame: false } : {};
 
@@ -36,9 +44,12 @@ function createWindow() {
       center: true,
       title: 'Network Canvas Interviewer',
       webPreferences: {
-        nodeIntegration: true,
+        nodeIntegration: false,
+        contextIsolation: true,
+        preload: getPreloadPath(),
         spellcheck: false,
         backgroundThrottling: false, // animations continue when the app isn't focused.
+        webSecurity: true,
       },
       ...minDimensions,
       ...titlebarParameters,

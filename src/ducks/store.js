@@ -32,7 +32,6 @@ const persistConfig = {
   storage: getStorageEngine(),
   whitelist: [
     'deviceSettings',
-    'pairedServer',
     'installedProtocols',
     'router',
     'search',

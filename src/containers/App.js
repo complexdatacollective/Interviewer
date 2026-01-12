@@ -1,9 +1,12 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+/**
+ * Main app container with secure API support.
+ */
+import React, { useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
+import { withRouter } from 'react-router-dom';
 import cx from 'classnames';
 import { actionCreators as deviceSettingsActions } from '../ducks/modules/deviceSettings';
 import '../styles/main.scss';
@@ -14,14 +17,6 @@ import DialogManager from '../components/DialogManager';
 import ToastManager from '../components/ToastManager';
 import { SettingsMenu } from '../components/SettingsMenu';
 import useUpdater from '../hooks/useUpdater';
-
-const getElectronWindow = () => {
-  if (isElectron()) {
-    const electron = window.require('electron'); // eslint-disable-line global-require
-    return electron.remote.getCurrentWindow();
-  }
-  return false;
-};
 
 const list = {
   visible: {
@@ -36,9 +31,9 @@ const list = {
 };
 
 /**
-  * Main app container.
-  * @param props {object} - children
-  */
+ * Main app container.
+ * @param props {object} - children
+ */
 const App = ({
   startFullScreen,
   setStartFullScreen,
@@ -46,8 +41,8 @@ const App = ({
   useDynamicScaling,
   children,
 }) => {
-  const win = useMemo(() => getElectronWindow(), []);
-  const env = useMemo(() => getEnv(), []);
+  const env = getEnv();
+  const [isFullScreen, setIsFullScreen] = useState(startFullScreen);
 
   const setFontSize = useCallback(() => {
     const root = document.documentElement;
@@ -62,31 +57,34 @@ const App = ({
 
   useEffect(() => {
     if (!env.REACT_APP_NO_FULLSCREEN) {
-      // Spy on window fullscreen status
-      if (isElectron() && !isPreview()) {
-        win.setFullScreen(!!startFullScreen);
+      if (isElectron() && !isPreview() && window.electronAPI?.window) {
+        // Set initial fullscreen state
+        window.electronAPI.window.setFullScreen(!!startFullScreen);
 
-        win.on('enter-full-screen', () => {
-          if (startFullScreen) { return; }
-          setStartFullScreen(true);
-        });
+        // Poll for fullscreen state changes
+        // Note: Without electron.remote, we can't use event listeners directly
+        // Instead we use a polling approach or could add IPC events for this
+        const checkFullScreen = async () => {
+          try {
+            const currentFullScreen = await window.electronAPI.window.isFullScreen();
+            if (currentFullScreen !== isFullScreen) {
+              setIsFullScreen(currentFullScreen);
+              setStartFullScreen(currentFullScreen);
+            }
+          } catch {
+            // ignore errors
+          }
+        };
 
-        // For some reason, this fires when the window loses focus (when
-        // switching workspaces) on linux.
-        win.on('leave-full-screen', () => {
-          if (!startFullScreen) { return; }
+        const interval = setInterval(checkFullScreen, 1000);
 
-          setStartFullScreen(false);
-        });
+        return () => {
+          clearInterval(interval);
+        };
       }
     }
-
-    return () => {
-      if (win) {
-        win.removeAllListeners();
-      }
-    };
-  }, [win, startFullScreen, setStartFullScreen]);
+    return undefined;
+  }, [startFullScreen, setStartFullScreen, isFullScreen, env.REACT_APP_NO_FULLSCREEN]);
 
   setFontSize();
 

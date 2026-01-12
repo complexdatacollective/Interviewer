@@ -1,20 +1,91 @@
-/* eslint-disable global-require */
 /* global FileWriter, FileError, cordova */
-import { Writable } from 'stream';
+/**
+ * Filesystem utilities with secure API support.
+ *
+ * This module provides filesystem operations for both Electron and Cordova platforms.
+ * In Electron, it uses the secure electronAPI (via IPC) instead of direct Node.js access.
+ */
 import { trimChars } from 'lodash/fp';
 import { Buffer } from 'buffer';
 import environments from './environments';
-import inEnvironment from './Environment';
+import inEnvironment, { isElectron } from './Environment';
+
+/**
+ * A browser-compatible writable stream that buffers data.
+ * Used as a replacement for Node.js Writable in the renderer process.
+ */
+class BufferWriteStream {
+  constructor(options = {}) {
+    this.chunks = [];
+    this.onFinish = options.onFinish || (() => {});
+    this.onError = options.onError || (() => {});
+    this._finished = false;
+    this._destroyed = false;
+  }
+
+  write(chunk, encoding, callback) {
+    if (this._destroyed) {
+      const err = new Error('Stream destroyed');
+      if (callback) callback(err);
+      return false;
+    }
+
+    // Convert to Uint8Array if needed
+    if (typeof chunk === 'string') {
+      this.chunks.push(new TextEncoder().encode(chunk));
+    } else if (Buffer.isBuffer(chunk)) {
+      this.chunks.push(new Uint8Array(chunk));
+    } else if (chunk instanceof Uint8Array) {
+      this.chunks.push(chunk);
+    } else if (chunk instanceof ArrayBuffer) {
+      this.chunks.push(new Uint8Array(chunk));
+    } else {
+      this.chunks.push(chunk);
+    }
+
+    if (callback) callback();
+    return true;
+  }
+
+  end(chunk, encoding, callback) {
+    if (chunk) {
+      this.write(chunk, encoding);
+    }
+    this._finished = true;
+    this.onFinish();
+    if (callback) callback();
+  }
+
+  on(event, handler) {
+    if (event === 'finish') {
+      this.onFinish = handler;
+    } else if (event === 'error') {
+      this.onError = handler;
+    }
+    return this;
+  }
+
+  destroy(err) {
+    this._destroyed = true;
+    if (err) {
+      this.onError(err);
+    }
+  }
+
+  getBuffer() {
+    // Concatenate all chunks into a single Buffer
+    const totalLength = this.chunks.reduce((sum, chunk) => sum + chunk.length, 0);
+    const result = new Uint8Array(totalLength);
+    let offset = 0;
+    for (const chunk of this.chunks) {
+      result.set(chunk, offset);
+      offset += chunk.length;
+    }
+    return Buffer.from(result);
+  }
+}
 
 const trimPath = trimChars('/ ');
-
-const resolveOrRejectWith = (resolve, reject) => (err, ...args) => {
-  if (err) {
-    reject(err);
-  } else {
-    resolve(...args);
-  }
-};
 
 export const splitUrl = (targetPath) => {
   const pathParts = trimPath(targetPath).split('/');
@@ -29,25 +100,57 @@ const inSequence = (items, apply) => items
     Promise.resolve(),
   );
 
+const concatTypedArrays = (a, b) => {
+  const combined = new Uint8Array(a.byteLength + b.byteLength);
+  combined.set(a);
+  combined.set(b, a.length);
+  return combined;
+};
+
+// Path cache for frequently accessed paths (populated on first access)
+let pathCache = {};
+
+/**
+ * Get the temporary data path.
+ * Returns a Promise in Electron (using secure IPC).
+ */
 const tempDataPath = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const electron = window.require('electron');
-
-    return () => (electron.app || electron.remote.app).getPath('temp');
+    return async () => {
+      if (pathCache.temp) {
+        return pathCache.temp;
+      }
+      if (isElectron() && window.electronAPI?.app?.getPath) {
+        pathCache.temp = await window.electronAPI.app.getPath('temp');
+        return pathCache.temp;
+      }
+      throw new Error('electronAPI not available');
+    };
   }
 
   if (environment === environments.CORDOVA) {
     return () => cordova.file.cacheDirectory;
   }
 
-  throw new Error(`userDataPath() not available on platform ${environment}`);
+  throw new Error(`tempDataPath() not available on platform ${environment}`);
 });
 
+/**
+ * Get the user data path.
+ * Returns a Promise in Electron (using secure IPC).
+ */
 const userDataPath = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const electron = window.require('electron');
-
-    return () => (electron.app || electron.remote.app).getPath('userData');
+    return async () => {
+      if (pathCache.userData) {
+        return pathCache.userData;
+      }
+      if (isElectron() && window.electronAPI?.app?.getPath) {
+        pathCache.userData = await window.electronAPI.app.getPath('userData');
+        return pathCache.userData;
+      }
+      throw new Error('electronAPI not available');
+    };
   }
 
   if (environment === environments.CORDOVA) {
@@ -57,19 +160,37 @@ const userDataPath = inEnvironment((environment) => {
   throw new Error(`userDataPath() not available on platform ${environment}`);
 });
 
+/**
+ * Get the application path.
+ * Returns a Promise in Electron (using secure IPC).
+ */
 const appPath = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const electron = require('electron');
-
-    return () => (electron.app || electron.remote.app).getAppPath();
+    return async () => {
+      if (pathCache.appPath) {
+        return pathCache.appPath;
+      }
+      if (isElectron() && window.electronAPI?.app?.getAppPath) {
+        pathCache.appPath = await window.electronAPI.app.getAppPath();
+        return pathCache.appPath;
+      }
+      throw new Error('electronAPI not available');
+    };
   }
 
   if (environment === environments.CORDOVA) {
     return () => cordova.file.applicationDirectory;
   }
 
-  throw new Error(`appDataPath() not available on platform ${environment}`);
+  throw new Error(`appPath() not available on platform ${environment}`);
 });
+
+/**
+ * Clear the path cache (useful for testing)
+ */
+export const clearPathCache = () => {
+  pathCache = {};
+};
 
 const getFileEntry = (filename, fileSystem) => new Promise((resolve, reject) => {
   fileSystem.root.getFile(
@@ -102,11 +223,24 @@ const resolveFileSystemUrl = inEnvironment((environment) => {
   throw new Error(`resolveFileSystemUrl() not available on platform ${environment}`);
 });
 
+/**
+ * Read a file from the filesystem.
+ * In Electron, uses secure IPC.
+ */
 const readFile = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const fse = require('fs-extra');
-
-    return (filename) => fse.readFile(filename, null);
+    return async (filename) => {
+      if (!isElectron() || !window.electronAPI?.fs?.readFile) {
+        throw new Error('electronAPI not available');
+      }
+      // readFile returns base64 encoded data for binary files
+      const data = await window.electronAPI.fs.readFile(filename);
+      // Convert base64 back to Buffer
+      if (typeof data === 'string') {
+        return Buffer.from(data, 'base64');
+      }
+      return data;
+    };
   }
 
   if (environment === environments.CORDOVA) {
@@ -146,13 +280,10 @@ export const newFile = (directoryEntry, filename) => new Promise((resolve, rejec
   directoryEntry.getFile(filename, { create: true }, resolve, reject);
 });
 
-const concatTypedArrays = (a, b) => {
-  const combined = new Uint8Array(a.byteLength + b.byteLength);
-  combined.set(a);
-  combined.set(b, a.length);
-  return combined;
-};
-
+/**
+ * Write a file to the filesystem.
+ * In Electron, uses secure IPC.
+ */
 const writeFile = inEnvironment((environment) => {
   if (environment === environments.CORDOVA) {
     return (fileUrl, data) => {
@@ -162,41 +293,58 @@ const writeFile = inEnvironment((environment) => {
         .then((directoryEntry) => newFile(directoryEntry, filename))
         .then(makeFileWriter)
         .then((fileWriter) => new Promise((resolve, reject) => {
-          fileWriter.onwriteend = () => resolve(fileUrl); // eslint-disable-line no-param-reassign
-          fileWriter.onerror = (error) => reject(error); // eslint-disable-line no-param-reassign
+          /* eslint-disable-next-line no-param-reassign */
+          fileWriter.onwriteend = () => resolve(fileUrl);
+          /* eslint-disable-next-line no-param-reassign */
+          fileWriter.onerror = (error) => reject(error);
           fileWriter.write(data);
         }));
     };
   }
 
   if (environment === environments.ELECTRON) {
-    const fs = require('fs');
-
-    return (filePath, data) => new Promise((resolve, reject) => {
-      fs.writeFile(filePath, data, (error) => {
-        if (error) { reject(error); }
-        resolve(filePath);
-      });
-    });
+    return async (filePath, data) => {
+      if (!isElectron() || !window.electronAPI?.fs?.writeFile) {
+        throw new Error('electronAPI not available');
+      }
+      // Convert Buffer/ArrayBuffer to base64 for IPC transfer
+      let dataToWrite = data;
+      if (Buffer.isBuffer(data)) {
+        dataToWrite = data.toString('base64');
+      } else if (data instanceof ArrayBuffer) {
+        dataToWrite = Buffer.from(data).toString('base64');
+      } else if (data instanceof Uint8Array) {
+        dataToWrite = Buffer.from(data).toString('base64');
+      }
+      await window.electronAPI.fs.writeFile(filePath, dataToWrite);
+      return filePath;
+    };
   }
 
   throw new Error(`writeFile() not available on platform ${environment}`);
 });
 
+/**
+ * Create a directory.
+ * In Electron, uses secure IPC.
+ */
 const createDirectory = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const fs = require('fs');
-
-    return (targetPath) => new Promise((resolve, reject) => {
-      try {
-        fs.mkdir(targetPath, () => {
-          resolve(targetPath);
-        });
-      } catch (error) {
-        if (error.code !== 'EEXISTS') { reject(error); }
-        throw error;
+    return async (targetPath) => {
+      if (!isElectron() || !window.electronAPI?.fs?.mkdir) {
+        throw new Error('electronAPI not available');
       }
-    });
+      try {
+        await window.electronAPI.fs.mkdir(targetPath);
+        return targetPath;
+      } catch (error) {
+        // Ignore EEXIST errors
+        if (error.code !== 'EEXIST') {
+          throw error;
+        }
+        return targetPath;
+      }
+    };
   }
 
   if (environment === environments.CORDOVA) {
@@ -222,19 +370,22 @@ const createDirectory = inEnvironment((environment) => {
   throw new Error(`createDirectory() not available on platform ${environment}`);
 });
 
+/**
+ * Rename a file or directory.
+ * In Electron, uses secure IPC.
+ */
 const rename = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const fs = require('fs');
-
-    return (oldPath, newPath) => (new Promise((resolve, reject) => {
-      try {
-        fs.rename(oldPath, newPath, resolveOrRejectWith(resolve, reject));
-      } catch (err) { reject(err); }
-    }));
+    return async (oldPath, newPath) => {
+      if (!isElectron() || !window.electronAPI?.fs?.rename) {
+        throw new Error('electronAPI not available');
+      }
+      await window.electronAPI.fs.rename(oldPath, newPath);
+      return newPath;
+    };
   }
 
   if (environment === environments.CORDOVA) {
-    // TODO: verify this rewrite
     return async (oldPath, newPath) => {
       const [parent, name] = splitUrl(newPath);
       const toDirectory = await resolveFileSystemUrl(parent);
@@ -248,27 +399,31 @@ const rename = inEnvironment((environment) => {
   throw new Error(`rename() not available on platform ${environment}`);
 });
 
+/**
+ * Remove a directory recursively.
+ * In Electron, uses secure IPC with safety checks.
+ */
 const removeDirectory = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const fs = require('fs');
-
-    return (targetPath) => new Promise((resolve, reject) => {
-      try {
-        if (
-          !targetPath.includes(userDataPath())
-          && !targetPath.includes(tempDataPath())
-        ) {
-          // TODO: reject error
-          // eslint-disable-next-line prefer-promise-reject-errors
-          reject('Attempted to remove path outside of safe directories!');
-          return;
-        }
-        fs.rmdir(targetPath, { recursive: true }, resolve);
-      } catch (error) {
-        if (error.code !== 'EEXISTS') { reject(error); }
-        throw error;
+    return async (targetPath) => {
+      if (!isElectron() || !window.electronAPI?.fs?.rmdir) {
+        throw new Error('electronAPI not available');
       }
-    });
+
+      // Safety check: only allow removal of paths within safe directories
+      const safeDirectories = [
+        await userDataPath(),
+        await tempDataPath(),
+      ];
+
+      const isSafe = safeDirectories.some((safePath) => targetPath.includes(safePath));
+      if (!isSafe) {
+        throw new Error('Attempted to remove path outside of safe directories!');
+      }
+
+      await window.electronAPI.fs.rmdir(targetPath);
+      return targetPath;
+    };
   }
 
   if (environment === environments.CORDOVA) {
@@ -276,7 +431,6 @@ const removeDirectory = inEnvironment((environment) => {
       directoryEntry.removeRecursively(resolve, reject);
     });
 
-    // If folder doesn't exist that's fine
     const ignoreMissingEntry = (e) => (
       e.code === FileError.NOT_FOUND_ERR
         ? Promise.resolve()
@@ -290,39 +444,38 @@ const removeDirectory = inEnvironment((environment) => {
   throw new Error(`removeDirectory() not available on platform ${environment}`);
 });
 
+/**
+ * Write a stream to a file.
+ * In Electron, uses secure IPC (collects stream data and writes as single file).
+ */
 const writeStream = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const fs = require('fs');
-
     return (destination, stream) => new Promise((resolve, reject) => {
-      try {
-        stream
-          .pipe(fs.createWriteStream(destination))
-          .on('error', reject)
-          .on('finish', () => {
-            resolve(destination);
-          });
-      } catch (error) {
-        reject(error);
+      if (!isElectron() || !window.electronAPI?.fs?.writeFile) {
+        reject(new Error('electronAPI not available'));
+        return;
       }
+
+      const chunks = [];
+      stream
+        .on('data', (chunk) => {
+          chunks.push(chunk);
+        })
+        .on('error', reject)
+        .on('end', async () => {
+          try {
+            const buffer = Buffer.concat(chunks);
+            const base64Data = buffer.toString('base64');
+            await window.electronAPI.fs.writeFile(destination, base64Data);
+            resolve(destination);
+          } catch (error) {
+            reject(error);
+          }
+        });
     });
   }
 
   if (environment === environments.CORDOVA) {
-    /**
-     * Provides a pseudo-streaming mechanism for writing files.
-     * Passes each chunk to a fileWriter, and on writeend, continues with the next chunk.
-     * The file can be written to as long as its readyState is not WRITING.
-     *
-     * The goal here is to reduce the memory footprint on mobile as much as possible, but we
-     * have to buffer each chunk sent temporarily, since the native stream may not write all bytes.
-     * Still, we provide as much backpressure to JSZip's stream as possible (with `pause`).
-     *
-     * @param  {string} destUrl filePath to write to
-     * @param  {StreamHelper} stream A JSZip "internal" stream of type "arraybuffer" or "uint8array"
-     *                               (see [JSZip docs]{@link https://stuk.github.io/jszip/documentation/api_zipobject/internal_stream.html})
-     * @private
-     */
     return (destUrl, stream) => {
       const [baseDirectory, filename] = splitUrl(destUrl);
       return new Promise((resolve, reject) => {
@@ -331,14 +484,11 @@ const writeStream = inEnvironment((environment) => {
           .then(makeFileWriter)
           .then((fileWriter) => {
             let bufferedChunkBytes = new Uint8Array();
-            // Needed to calculate bytesWritten since not provided by Cordova
             let previousFileWriterLength = 0;
-            // We won't know how many bytes we need to write until we're done
-            // This flag lets writeend handler know not to expect any more
             let reachedEndOfInputStream = false;
 
             const handleError = (err) => {
-              console.error(err); // eslint-disable-line no-console
+              console.error(err);
               if (stream) {
                 stream.pause();
               }
@@ -353,8 +503,6 @@ const writeStream = inEnvironment((environment) => {
               const { byteLength } = chunkByteArray;
               const data = chunkByteArray.slice(0, byteLength);
               try {
-                // fileWriter.write documents a blob arg, but called with a blob,
-                // it will read the blob to an arraybuffer and then re-call itself.
                 fileWriter.write(data.buffer);
               } catch (err) {
                 handleError(err);
@@ -365,7 +513,7 @@ const writeStream = inEnvironment((environment) => {
               const bytesWritten = fileWriter.length - previousFileWriterLength;
               bufferedChunkBytes = bufferedChunkBytes.slice(bytesWritten);
               if (fileWriter.error) {
-                // already handled by onerror; ignore here
+                // already handled by onerror
               } else if (bufferedChunkBytes.length) {
                 writeChunk(bufferedChunkBytes);
               } else if (reachedEndOfInputStream) {
@@ -378,15 +526,15 @@ const writeStream = inEnvironment((environment) => {
             const onChunkReceived = (chunkByteArray) => {
               stream.pause();
               bufferedChunkBytes = concatTypedArrays(bufferedChunkBytes, chunkByteArray);
-              // Despite pausing, we may receive additional chunks before previous has completed,
-              // in which case we wait until the current write ends.
               if (fileWriter.readyState !== FileWriter.WRITING) {
                 writeChunk(chunkByteArray);
               }
             };
 
-            fileWriter.onwriteend = onChunkWritten; // eslint-disable-line no-param-reassign
-            fileWriter.onerror = handleError; // eslint-disable-line no-param-reassign
+            /* eslint-disable-next-line no-param-reassign */
+            fileWriter.onwriteend = onChunkWritten;
+            /* eslint-disable-next-line no-param-reassign */
+            fileWriter.onerror = handleError;
 
             stream
               .on('error', handleError)
@@ -407,37 +555,38 @@ const writeStream = inEnvironment((environment) => {
   throw new Error(`writeStream() not available on platform ${environment}`);
 });
 
-// Objective here is to abstract fs.createWriteStream.
-// Needs to return a writeable stream.
+/**
+ * Create a writable stream for a destination path.
+ * In Electron, returns a Writable stream that buffers data and writes via IPC on end.
+ */
 export const createWriteStream = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const fs = require('fs');
-
-    return (destination) => new Promise((resolve, reject) => {
-      try {
-        const ws = fs.createWriteStream(destination);
-        resolve(ws);
-      } catch (error) {
-        reject(error);
+    return (destination) => {
+      if (!isElectron() || !window.electronAPI?.fs?.writeFile) {
+        return Promise.reject(new Error('electronAPI not available'));
       }
-    });
+
+      const ws = new BufferWriteStream();
+
+      // Override the onFinish to write the file via IPC
+      const originalOnFinish = ws.onFinish;
+      ws.onFinish = () => {
+        const buffer = ws.getBuffer();
+        const base64Data = buffer.toString('base64');
+        window.electronAPI.fs.writeFile(destination, base64Data)
+          .then(() => {
+            if (originalOnFinish) originalOnFinish();
+          })
+          .catch((err) => {
+            ws.onError(err);
+          });
+      };
+
+      return Promise.resolve(ws);
+    };
   }
 
   if (environment === environments.CORDOVA) {
-    /**
-     * Provides a pseudo-streaming mechanism for writing files.
-     * Passes each chunk to a fileWriter, and on writeend, continues with the next chunk.
-     * The file can be written to as long as its readyState is not WRITING.
-     *
-     * The goal here is to reduce the memory footprint on mobile as much as possible, but we
-     * have to buffer each chunk sent temporarily, since the native stream may not write all bytes.
-     * Still, we provide as much backpressure to JSZip's stream as possible (with `pause`).
-     *
-     * @param  {string} destUrl filePath to write to
-     * @param  {StreamHelper} stream A JSZip "internal" stream of type "arraybuffer" or "uint8array"
-     *                               (see [JSZip docs]{@link https://stuk.github.io/jszip/documentation/api_zipobject/internal_stream.html})
-     * @private
-     */
     return (destUrl) => {
       const [baseDirectory, filename] = splitUrl(destUrl);
       return new Promise((resolve, reject) => {
@@ -446,17 +595,10 @@ export const createWriteStream = inEnvironment((environment) => {
           .then(makeFileWriter)
           .then((fileWriter) => {
             let bufferedChunkBytes = new Uint8Array();
-            // Needed to calculate bytesWritten since not provided by Cordova
             let previousFileWriterLength = 0;
-            // We won't know how many bytes we need to write until we're done
-            // This flag lets writeend handler know not to expect any more
-            // let reachedEndOfInputStream = false;
 
             const handleError = (err) => {
-              console.error(err); // eslint-disable-line no-console
-              // if (stream) {
-              //   stream.pause();
-              // }
+              console.error(err);
               if (fileWriter && fileWriter.readyState === FileWriter.WRITING) {
                 fileWriter.abort();
               }
@@ -468,8 +610,6 @@ export const createWriteStream = inEnvironment((environment) => {
               const { byteLength } = chunkByteArray;
               const data = chunkByteArray.slice(0, byteLength);
               try {
-                // fileWriter.write documents a blob arg, but called with a blob,
-                // it will read the blob to an arraybuffer and then re-call itself.
                 fileWriter.write(data.buffer);
               } catch (err) {
                 handleError(err);
@@ -480,7 +620,7 @@ export const createWriteStream = inEnvironment((environment) => {
               const bytesWritten = fileWriter.length - previousFileWriterLength;
               bufferedChunkBytes = bufferedChunkBytes.slice(bytesWritten);
               if (fileWriter.error) {
-                // already handled by onerror; ignore here
+                // already handled by onerror
               } else if (bufferedChunkBytes.length) {
                 writeChunk(bufferedChunkBytes);
               }
@@ -488,71 +628,47 @@ export const createWriteStream = inEnvironment((environment) => {
 
             const onChunkReceived = (chunkByteArray) => {
               bufferedChunkBytes = concatTypedArrays(bufferedChunkBytes, chunkByteArray);
-              // Despite pausing, we may receive additional chunks before previous has completed,
-              // in which case we wait until the current write ends.
               if (fileWriter.readyState !== FileWriter.WRITING) {
                 writeChunk(chunkByteArray);
               }
             };
 
-            fileWriter.onwriteend = onChunkWritten; // eslint-disable-line no-param-reassign
-            fileWriter.onerror = handleError; // eslint-disable-line no-param-reassign
+            /* eslint-disable-next-line no-param-reassign */
+            fileWriter.onwriteend = onChunkWritten;
+            /* eslint-disable-next-line no-param-reassign */
+            fileWriter.onerror = handleError;
 
-            // // Readable stream.
-            // stream
-            //   .on('error', handleError)
-            //   .on('data', onChunkReceived)
-            //   .on('end', () => {
-            //     if (bufferedChunkBytes.length === 0) {
-            //       resolve(destUrl);
-            //     } else {
-            //       reachedEndOfInputStream = true;
-            //     }
-            //   })
-            //   .resume();
-
-            const ws = new Writable({
-              // Implementing write function
-              write(chunk, encoding, callback) {
-                // Defining string
-                onChunkReceived(chunk);
-                callback();
-              },
-            });
+            const ws = new BufferWriteStream();
+            ws.write = (chunk, encoding, callback) => {
+              onChunkReceived(chunk);
+              if (callback) callback();
+              return true;
+            };
             resolve(ws);
           });
       });
     };
   }
 
-  throw new Error(`writeStream() not available on platform ${environment}`);
+  throw new Error(`createWriteStream() not available on platform ${environment}`);
 });
 
 /**
- * Creates a directory at a given path if it doesn't already exist.
- * Note that the base directory must already exist!
- * @param  {string} targetPath
- * @return {Promise}
- * @private
- * @example
- * createDirectory('/path/to/dir')
- *  .then(() => console.log('Directory created!'))
- *  .catch((err) => console.error(err));
-*/
+ * Ensure a path exists, creating directories as needed.
+ * In Electron, uses secure IPC.
+ */
 const ensurePathExists = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const fs = require('fs');
-
-    return (targetPath) => {
+    return async (targetPath) => {
       if (!targetPath) {
         throw new Error('No path provided to ensurePathExists');
       }
 
-      if (!fs.existsSync(targetPath)) {
-        fs.mkdirSync(targetPath, { recursive: true });
+      if (!isElectron() || !window.electronAPI?.fs?.mkdirp) {
+        throw new Error('electronAPI not available');
       }
 
-      return Promise.resolve();
+      await window.electronAPI.fs.mkdirp(targetPath);
     };
   }
 
@@ -562,16 +678,8 @@ const ensurePathExists = inEnvironment((environment) => {
         throw new Error('No path provided to ensurePathExists');
       }
 
-      // Remove the basePath string, since we can only create directories relative to it.
       const targetUrlWithoutBasePath = targetUrl.replace(basePath, '');
 
-      /**
-       * Given a string in the format '/path/to/dir', returns an array of paths
-       * to ensure exist, in order, e.g. ['/path', '/path/to', '/path/to/dir'].
-       * @param {} pathstring
-       * @returns {Array<string>}
-       *
-       */
       const getNestedPaths = (pathstring) => {
         const paths = [];
         const pathParts = pathstring.split('/').filter((path) => path.length);

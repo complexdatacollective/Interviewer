@@ -48,7 +48,6 @@ const initialState = {
       stages: [{ subject: { type: 'abcdef' }, prompts: [{}] }],
     },
   },
-  pairedServer: null,
   search: {
     collapsed: true,
     selectedResults: [],

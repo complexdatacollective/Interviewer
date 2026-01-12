@@ -3,22 +3,23 @@ const path = require('path');
 const log = require('./log');
 
 const appUrl = (function getAppUrl() {
-  if (
-    (process.env.NODE_ENV === 'development') && process.env.NC_DEVSERVER_FILE
-  ) {
-    // This method is more robust than Architect & Server to support multiple platforms & devices
-    // NC_DEVSERVER_FILE contains the URL of a running webpack-dev-server, relative to app root
-    try {
-      const relativePath = path.join(__dirname, '..', '..', process.env.NC_DEVSERVER_FILE);
-      return require('fs').readFileSync(relativePath, 'utf-8'); // eslint-disable-line global-require
-    } catch (err) {
-      log.warn('Error loading dev server config -', err.message);
-      log.warn('Are you running dev server?');
-      log.warn('Continuing with index.html');
+  // In development, electron-vite provides the dev server URL
+  if (process.env.NODE_ENV === 'development') {
+    // electron-vite uses ELECTRON_RENDERER_URL for the dev server
+    if (process.env.ELECTRON_RENDERER_URL) {
+      log.info(`Using dev server URL: ${process.env.ELECTRON_RENDERER_URL}`);
+      return process.env.ELECTRON_RENDERER_URL;
     }
+    // Fallback to localhost:3000
+    log.info('Using fallback dev server URL: http://localhost:3000');
+    return 'http://localhost:3000';
   }
+
+  // In production, load from the built renderer
+  const rendererPath = path.join(__dirname, '../../renderer/index.html');
+  log.info(`Loading production renderer from: ${rendererPath}`);
   return url.format({
-    pathname: path.join(__dirname, '..', 'index.html'),
+    pathname: rendererPath,
     protocol: 'file:',
   });
 }());

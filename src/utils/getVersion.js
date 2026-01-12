@@ -1,21 +1,22 @@
-/* eslint-disable */
-import { isElectron, isCordova } from '../utils/Environment';
+/**
+ * Get app version with secure API support.
+ */
+/* global cordova */
+import { isElectron, isCordova } from './Environment';
 
 const getVersion = () => {
   if (isElectron()) {
-    const remote = require('electron').remote;  // eslint-disable-line global-require
-
-    return new Promise((resolve) => {
-      const version = remote.app.getVersion();
-      resolve(version);
-    });
+    if (window.electronAPI?.app?.getVersion) {
+      return window.electronAPI.app.getVersion();
+    }
+    return Promise.resolve('0.0.0');
   }
 
   if (isCordova()) {
-    return cordova.getAppVersion.getVersionNumber();  // eslint-disable-line no-undef
+    return cordova.getAppVersion.getVersionNumber();
   }
 
-  return new Promise((resolve) => { resolve('0.0.0'); });
+  return Promise.resolve('0.0.0');
 };
 
 export default getVersion;

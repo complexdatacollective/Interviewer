@@ -1,3 +1,6 @@
+/**
+ * Device information with secure API support.
+ */
 /* globals device */
 import { isCordova, isElectron } from './Environment';
 
@@ -6,24 +9,20 @@ const versioned = (name) => `${name} - ${device.version || '?'}`;
 const esc = (string) => (string || '').replace(/\W/g, ' ');
 
 const electronDescription = () => {
-  // https://nodejs.org/api/os.html#os_os_type
+  // Get platform from secure API
+  const platform = window.electronAPI?.env?.platform || 'unknown';
+
   const osTypeMap = {
-    Darwin: 'macOS',
-    Windows_NT: 'Windows',
+    darwin: 'macOS',
+    win32: 'Windows',
+    linux: 'Linux',
   };
 
-  const os = window.require('os');
-  const osType = os.type();
-  const osName = osTypeMap[osType] || esc(osType) || '?';
-  // Strip '.local', etc. from hostname
-  const host = esc((os.hostname() || '').replace(/\.\w+$/, ''));
-  return `${host} (${osName})`;
+  const osName = osTypeMap[platform] || platform;
+  // We can't get hostname without Node access, use a generic description
+  return `Desktop (${osName})`;
 };
 
-// As of now (both ee3cb6d and v2.0.2), the cordova-plugin-device docs are wrong; device.model
-// [uses](https://github.com/apache/cordova-plugin-device/blob/rel/2.0.2/src/android/Device.java#L75)
-// [Build.MODEL](https://developer.android.com/reference/android/os/Build#MODEL), which is a
-// user-friendly name.
 const androidDescription = () => {
   if (device.isVirtual) {
     return versioned('Android emulator');
@@ -32,8 +31,6 @@ const androidDescription = () => {
 };
 
 const iosDescription = () => {
-  // Only iPads are officially supported
-  // http://theiphonewiki.com/wiki/index.php?title=Models
   const { model } = device;
   switch (true) {
     case (device.isVirtual): return versioned('iOS Simulator');
@@ -74,10 +71,8 @@ const deviceDescription = () => {
   return 'Unknown device';
 };
 
-// Disable dynamic scaling on android because vmin is resized by software keyboard
 const shouldUseDynamicScaling = () => !isCordova();
 
-// Set fullscreenforms to true for tablets
 const shouldUseFullScreenForm = () => isCordova();
 
 export default deviceDescription;
