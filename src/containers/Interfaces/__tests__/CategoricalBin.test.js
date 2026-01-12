@@ -1,4 +1,5 @@
-/* eslint-env jest */
+/* eslint-disable @codaco/spellcheck/spell-checker */
+import { vi } from 'vitest';
 import React from 'react';
 import { shallow } from 'enzyme';
 import { UnconnectedCategoricalBin as CategoricalBin } from '../CategoricalBin';
@@ -7,8 +8,8 @@ const requiredProps = {
   nodesForPrompt: [],
   prompt: {},
   stage: {},
-  promptBackward: jest.fn(),
-  promptForward: jest.fn(),
+  promptBackward: vi.fn(),
+  promptForward: vi.fn(),
 };
 
 describe('CategoricalBin', () => {

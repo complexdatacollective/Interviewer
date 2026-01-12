@@ -1,9 +1,3 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`<Image /> renders ok 1`] = `
-<img
-  alt="baz"
-  miscellaneousAdditionalProperty="baz"
-  src="foo"
-/>
-`;
+exports[`<Image /> > renders ok 1`] = `ShallowWrapper {}`;

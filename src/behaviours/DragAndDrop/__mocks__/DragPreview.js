@@ -1,16 +1,22 @@
-/* eslint-env jest */
+import { vi } from 'vitest';
 
-const position = jest.fn();
-const cleanup = jest.fn();
+const position = vi.fn();
+const cleanup = vi.fn();
 
-const DragPreview = jest.fn(() => ({
-  position,
-  cleanup,
-}));
+// Use a constructor function so it can be called with `new`
+function DragPreview() {
+  return {
+    position,
+    cleanup,
+  };
+}
+
+// Make it a mock so we can track calls and use mockClear
+const MockedDragPreview = vi.fn(DragPreview);
 
 export {
   position,
   cleanup,
 };
 
-export default DragPreview;
+export default MockedDragPreview;

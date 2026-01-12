@@ -1,10 +1,11 @@
-/* eslint-env jest */
+/* eslint-disable @codaco/spellcheck/spell-checker */
+import { vi } from 'vitest';
 import { last } from 'lodash';
 import { actionCreators } from '../navigate';
 
-const getState = jest.fn();
+const getState = vi.fn();
 
-const dispatch = jest.fn((arg) => {
+const dispatch = vi.fn((arg) => {
   if (typeof arg === 'function') {
     return arg(dispatch, getState);
   }

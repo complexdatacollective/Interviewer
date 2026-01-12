@@ -1,4 +1,5 @@
-/* eslint-env jest */
+/* eslint-disable @codaco/spellcheck/spell-checker */
+import { vi } from 'vitest';
 import React from 'react';
 import { shallow } from 'enzyme';
 import { AlterEdgeForm } from '../AlterEdgeForm';
@@ -11,9 +12,9 @@ const requiredProps = {
   },
   stageEdges: [{ name: 'One' }, { name: 'Two' }],
   stage: { introductionPanel: { title: 'intro', text: 'content' } },
-  formEnabled: jest.fn(),
-  submitForm: jest.fn(),
-  updateEdge: jest.fn(),
+  formEnabled: vi.fn(),
+  submitForm: vi.fn(),
+  updateEdge: vi.fn(),
 };
 
 describe('AlterEdgeForm', () => {

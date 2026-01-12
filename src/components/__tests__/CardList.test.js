@@ -1,4 +1,5 @@
-/* eslint-env jest */
+/* eslint-disable @codaco/spellcheck/spell-checker */
+import { vi } from 'vitest';
 /* eslint-disable @codaco/spellcheck/spell-checker */
 
 import React from 'react';
@@ -7,7 +8,7 @@ import { Provider } from 'react-redux';
 import { shallow } from 'enzyme';
 import CardList from '../CardList';
 
-jest.mock('@codaco/ui/lib/utils/CSSVariables');
+vi.mock('@codaco/ui/lib/utils/CSSVariables');
 
 const mockState = {
   activeSessionId: '62415a79-cd46-409a-98b3-5a0a2fef1f97',

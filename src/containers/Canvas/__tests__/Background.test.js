@@ -1,11 +1,12 @@
-/* eslint-env jest */
+/* eslint-disable @codaco/spellcheck/spell-checker */
+import { vi } from 'vitest';
 /* eslint-disable @codaco/spellcheck/spell-checker */
 
 import React from 'react';
 import { shallow } from 'enzyme';
 import { Background } from '../Background';
 
-jest.mock('@codaco/ui/lib/utils/CSSVariables');
+vi.mock('@codaco/ui/lib/utils/CSSVariables');
 
 const sociogramOptionsDefault = {
   layoutVariable: 'foo',

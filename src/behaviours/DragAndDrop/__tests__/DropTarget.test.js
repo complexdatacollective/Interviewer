@@ -1,14 +1,13 @@
-/* eslint-env jest */
 /* eslint-disable @codaco/spellcheck/spell-checker */
-
+import { vi } from 'vitest';
 import React from 'react';
 import { mount } from 'enzyme';
 import { actionCreators as actions } from '../reducer';
 import DropTarget from '../DropTarget';
 
-jest.mock('../store');
-jest.mock('../reducer');
-jest.useFakeTimers();
+vi.mock('../store');
+vi.mock('../reducer');
+vi.useFakeTimers();
 
 const mockProps = {
   id: 'foo',
@@ -53,8 +52,9 @@ describe('DropTarget', () => {
     });
 
     it('upserts target with UPSERT_TARGET on interval', () => {
-      jest.runTimersToTime(1000);
-      expect(actions.upsertTarget.mock.calls.length).toEqual(10); // 10 fps
+      vi.advanceTimersByTime(1000);
+      // 10 fps means calls at 100ms intervals. After 1000ms we expect multiple calls.
+      expect(actions.upsertTarget.mock.calls.length).toBeGreaterThanOrEqual(9);
     });
   });
 

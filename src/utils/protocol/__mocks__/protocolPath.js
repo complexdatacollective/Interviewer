@@ -1,5 +1,5 @@
-/* eslint-env jest */
+import { vi } from 'vitest';
 
-const protocolPath = jest.fn((...args) => `tmp/mock/path/protocols/${args.join('/')}`);
+const protocolPath = vi.fn((...args) => `tmp/mock/path/protocols/${args.join('/')}`);
 
 export default protocolPath;

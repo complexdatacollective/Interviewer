@@ -1,14 +1,17 @@
-/* eslint-env jest */
 /* eslint-disable @codaco/spellcheck/spell-checker */
-
+import { vi, describe, it, expect, beforeEach } from 'vitest';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import uuid from 'uuid/v4';
 import reducer, { getReducer, actionCreators, actionTypes } from '../sessions';
 import { actionTypes as networkActionTypes, actionCreators as networkActions } from '../network';
 import { actionTypes as installedProtocolsActionTypes } from '../installedProtocols';
 
-jest.mock('../network');
+const mockSessionId = 'session-1';
+
+vi.mock('../network');
+vi.mock('uuid/v4', () => ({
+  default: vi.fn(() => mockSessionId),
+}));
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -16,9 +19,7 @@ const mockStore = configureMockStore(middlewares);
 const mockState = {};
 
 const now = Date.now();
-Date.now = jest.fn().mockReturnValue(now);
-
-const mockSessionId = 'session-1';
+vi.spyOn(Date, 'now').mockReturnValue(now);
 
 const mockStateWithSession = {
   ...mockState,
@@ -37,9 +38,6 @@ const mockStateWithProtocol = {
     network: { ego: {}, nodes: [], edges: [] },
   },
 };
-
-jest.mock('uuid/v4');
-uuid.mockImplementation(() => mockSessionId);
 
 describe('sessions', () => {
   describe('reducer', () => {
@@ -142,7 +140,7 @@ describe('sessions', () => {
     });
 
     it('network actions defer to network reducer', () => {
-      const mockNetworkReducer = jest.fn();
+      const mockNetworkReducer = vi.fn();
       const sessionReducer = getReducer(mockNetworkReducer);
 
       const networkActionList = [

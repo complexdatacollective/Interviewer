@@ -1,4 +1,5 @@
-/* eslint-env jest */
+/* eslint-disable @codaco/spellcheck/spell-checker */
+import { vi } from 'vitest';
 
 import React from 'react';
 import { shallow } from 'enzyme';
@@ -14,7 +15,7 @@ describe('<PresetSwitcher />', () => {
   });
 
   it('handles navigation', () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
     const subject = shallow(<PresetSwitcher {...props} onChangePreset={handler} />);
     const next = subject.dive().find('.preset-switcher__navigation--next');
     next.simulate('click');
@@ -22,7 +23,7 @@ describe('<PresetSwitcher />', () => {
   });
 
   it('enables freeze button', () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
     const subject = shallow(<PresetSwitcher
       {...props}
       shouldShowFreezeButton

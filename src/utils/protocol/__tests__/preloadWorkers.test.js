@@ -1,4 +1,5 @@
-/* eslint-env jest */
+/* eslint-disable @codaco/spellcheck/spell-checker */
+import { vi } from 'vitest';
 
 import preloadWorkers from '../preloadWorkers';
 import environments from '../../environments';
@@ -6,12 +7,12 @@ import { getEnvironment } from '../../Environment';
 import { readFile } from '../../filesystem';
 import * as workerAgentHelpers from '../../WorkerAgent';
 
-jest.mock('../../filesystem');
+vi.mock('../../filesystem');
 
 const mockUrl = 'blob:file://script.js';
 
 global.TextDecoder = class TextDecoder {
-  decode = jest.fn().mockReturnValue('')
+  decode = vi.fn().mockReturnValue('')
 };
 
 describe('preloadWorkers', () => {
@@ -22,7 +23,7 @@ describe('preloadWorkers', () => {
   describe('when script exists', () => {
     beforeAll(() => {
       readFile.mockReturnValue(Promise.resolve('function myWorker() {}'));
-      workerAgentHelpers.urlForWorkerSource = jest.fn().mockReturnValue(mockUrl);
+      workerAgentHelpers.urlForWorkerSource = vi.fn().mockReturnValue(mockUrl);
     });
 
     it('returns a promise', () => {

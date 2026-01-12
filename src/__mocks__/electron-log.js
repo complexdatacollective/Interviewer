@@ -1,4 +1,4 @@
-/* eslint-env jest */
+import { vi } from 'vitest';
 
 module.exports = {
   transports: {
@@ -7,7 +7,7 @@ module.exports = {
     file: {
     },
   },
-  debug: jest.fn(),
-  error: jest.fn(),
-  info: jest.fn(),
+  debug: vi.fn(),
+  error: vi.fn(),
+  info: vi.fn(),
 };

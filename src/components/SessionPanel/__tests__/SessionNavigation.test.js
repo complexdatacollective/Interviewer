@@ -1,4 +1,5 @@
-/* eslint-env jest */
+/* eslint-disable @codaco/spellcheck/spell-checker */
+import { vi } from 'vitest';
 /* eslint-disable @codaco/spellcheck/spell-checker */
 
 import React from 'react';
@@ -9,12 +10,12 @@ import { Provider } from 'react-redux';
 import SessionNavigation from '../SessionNavigation';
 
 describe('Session Navigation Component', () => {
-  const showSubMenuMock = jest.fn();
-  const setExpandedMock = jest.fn();
-  const backMock = jest.fn();
-  const nextMock = jest.fn();
+  const showSubMenuMock = vi.fn();
+  const setExpandedMock = vi.fn();
+  const backMock = vi.fn();
+  const nextMock = vi.fn();
 
-  framer.useInvertedScale = jest.fn(() => ({ scaleX: 1, scaleY: 1 }));
+  framer.useInvertedScale = vi.fn(() => ({ scaleX: 1, scaleY: 1 }));
 
   let component = null;
 

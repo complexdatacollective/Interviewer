@@ -1,4 +1,5 @@
-/* eslint-env jest */
+/* eslint-disable @codaco/spellcheck/spell-checker */
+import { vi } from 'vitest';
 /* eslint-disable @codaco/spellcheck/spell-checker */
 
 import React from 'react';
@@ -8,7 +9,7 @@ import { shallow, mount } from 'enzyme';
 import Form from '../Form';
 import Field from '../Field';
 
-jest.mock('@codaco/ui/lib/utils/CSSVariables');
+vi.mock('@codaco/ui/lib/utils/CSSVariables');
 
 const mockStore = () => createStore(
   () => (

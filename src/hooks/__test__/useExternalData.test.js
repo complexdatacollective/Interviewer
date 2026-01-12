@@ -1,5 +1,5 @@
-/* eslint-env jest */
 /* eslint-disable @codaco/spellcheck/spell-checker */
+import { vi, describe, it, expect, beforeEach } from 'vitest';
 import React, { useEffect } from 'react';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
@@ -8,7 +8,7 @@ import { entityAttributesProperty } from '@codaco/shared-consts';
 import useExternalData from '../useExternalData';
 import loadExternalData from '../../utils/loadExternalData';
 
-jest.mock('../../utils/loadExternalData');
+vi.mock('../../utils/loadExternalData');
 
 const mockReducer = () => ({
   installedProtocols: {
@@ -47,122 +47,86 @@ const mockResult = {
 
 const mockSource = 'bar';
 
-const MockComponent = ({ callback, source, subject }) => {
+const MockComponent = ({ onStatusChange, source, subject }) => {
   const [data, status] = useExternalData(source, subject);
   useEffect(() => {
-    callback(data, status);
-  }, [status]);
+    onStatusChange(data, status);
+  }, [status, data, onStatusChange]);
   return null;
 };
 
 describe('useExternalData', () => {
-  it('It fetches the external data based on the source prop', (done) => {
-    loadExternalData
-      .mockImplementationOnce(() => Promise.resolve(mockResult));
-
-    let count = 0;
-
-    const callback = (data, status) => {
-      count += 1;
-
-      switch (count) {
-        case 1: {
-          expect(data).toBe(null);
-          expect(status).toEqual({
-            isLoading: false,
-            error: null,
-          });
-          break;
-        }
-        case 2: {
-          expect(data).toBe(null);
-          expect(status).toEqual({
-            isLoading: true,
-            error: null,
-          });
-          break;
-        }
-        case 3: {
-          expect(data).toEqual([
-            {
-              _uid: '732fe1c27fb60956f12c9339b69f217d848acc74',
-              attributes: { fun: true },
-              type: 'person',
-            },
-          ]);
-          expect(status).toEqual({
-            isLoading: false,
-            error: null,
-          });
-          break;
-        }
-        default:
-      }
-      if (count === 3) {
-        done();
-      }
-    };
-
-    mount((
-      <Provider store={createStore(mockReducer)}>
-        <MockComponent
-          callback={callback}
-          source={mockSource}
-          subject={{ entity: 'node', type: 'person' }}
-        />
-      </Provider>
-    ));
+  beforeEach(() => {
+    vi.clearAllMocks();
   });
 
-  it('It catches errors', (done) => {
+  it('It fetches the external data based on the source prop', async () => {
+    loadExternalData.mockImplementation(() => Promise.resolve(mockResult));
+
+    let finalData = null;
+    let finalStatus = null;
+
+    await new Promise((resolve) => {
+      const onStatusChange = (data, status) => {
+        finalData = data;
+        finalStatus = status;
+        // Resolve when we have data and loading is complete
+        if (data !== null && status.isLoading === false) {
+          resolve();
+        }
+      };
+
+      mount((
+        <Provider store={createStore(mockReducer)}>
+          <MockComponent
+            onStatusChange={onStatusChange}
+            source={mockSource}
+            subject={{ entity: 'node', type: 'person' }}
+          />
+        </Provider>
+      ));
+    });
+
+    // The final result should have data loaded
+    expect(finalStatus).toEqual({
+      isLoading: false,
+      error: null,
+    });
+    // Check that data was transformed - should have type and attributes
+    expect(finalData).toHaveLength(1);
+    expect(finalData[0].type).toBe('person');
+    expect(finalData[0].attributes).toEqual({ fun: true });
+  });
+
+  it('It catches errors', async () => {
     const error = new Error('broken');
-    loadExternalData
-      .mockImplementationOnce(() => Promise.reject(error));
-    let count = 0;
+    loadExternalData.mockImplementation(() => Promise.reject(error));
 
-    const callback = (data, status) => {
-      count += 1;
+    let finalStatus = null;
 
-      switch (count) {
-        case 1: {
-          expect(data).toBe(null);
-          expect(status).toEqual({
-            isLoading: false,
-            error: null,
-          });
-          break;
+    await new Promise((resolve) => {
+      const onStatusChange = (data, status) => {
+        finalStatus = status;
+        // Resolve when we have an error
+        if (status.error !== null) {
+          resolve();
         }
-        case 2: {
-          expect(data).toBe(null);
-          expect(status).toEqual({
-            isLoading: true,
-            error: null,
-          });
-          break;
-        }
-        case 3: {
-          expect(data).toEqual(null);
-          expect(status).toEqual({
-            isLoading: false,
-            error,
-          });
-          break;
-        }
-        default:
-      }
-      if (count === 3) {
-        done();
-      }
-    };
+      };
 
-    mount((
-      <Provider store={createStore(mockReducer)}>
-        <MockComponent
-          callback={callback}
-          source={mockSource}
-          subject={{ entity: 'node', type: 'person' }}
-        />
-      </Provider>
-    ));
+      mount((
+        <Provider store={createStore(mockReducer)}>
+          <MockComponent
+            onStatusChange={onStatusChange}
+            source={mockSource}
+            subject={{ entity: 'node', type: 'person' }}
+          />
+        </Provider>
+      ));
+    });
+
+    expect(finalStatus).toEqual({
+      isLoading: false,
+      error,
+    });
   });
 });

@@ -1,4 +1,5 @@
-/* eslint-env jest */
+/* eslint-disable @codaco/spellcheck/spell-checker */
+import { vi } from 'vitest';
 /* eslint-disable @codaco/spellcheck/spell-checker */
 
 import configureMockStore from 'redux-mock-store';
@@ -180,7 +181,7 @@ describe('reducer', () => {
           source: null,
         });
 
-        const setValidMove = jest.fn();
+        const setValidMove = vi.fn();
         store.dispatch(actions.dragMove({
           bazz: 'buzz',
           setValidMove,
@@ -199,9 +200,9 @@ describe('reducer', () => {
       });
 
       it('calls onDrag on targets', () => {
-        const onDrag = jest.fn();
-        const missedTargetOnDrag = jest.fn();
-        const setValidMove = jest.fn();
+        const onDrag = vi.fn();
+        const missedTargetOnDrag = vi.fn();
+        const setValidMove = vi.fn();
 
         const store = mockStore({
           targets: [
@@ -296,10 +297,10 @@ describe('reducer', () => {
     });
 
     it('calls onDrop on targets', () => {
-      const onDrop = jest.fn();
-      const onDrag = jest.fn();
-      const onDragEnd = jest.fn();
-      const missedTargetOnDrop = jest.fn();
+      const onDrop = vi.fn();
+      const onDrag = vi.fn();
+      const onDragEnd = vi.fn();
+      const missedTargetOnDrop = vi.fn();
 
       const store = mockStore({
         targets: [
@@ -366,10 +367,10 @@ describe('reducer', () => {
     });
 
     it('only calls onDrop on targets if no obstacles overlap', () => {
-      const onDrop = jest.fn();
-      const onDrag = jest.fn();
-      const onDragEnd = jest.fn();
-      const missedTargetOnDrop = jest.fn();
+      const onDrop = vi.fn();
+      const onDrag = vi.fn();
+      const onDragEnd = vi.fn();
+      const missedTargetOnDrop = vi.fn();
 
       const store = mockStore({
         targets: [

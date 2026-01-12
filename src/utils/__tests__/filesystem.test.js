@@ -1,10 +1,10 @@
-/* eslint-env jest */
 /* eslint-disable @codaco/spellcheck/spell-checker */
-
+import { vi, describe, it, expect, beforeAll } from 'vitest';
 import environments from '../environments';
-// eslint-disable-next-line import/named
 import { getEnvironment } from '../Environment';
 import { writeStream } from '../filesystem';
+
+vi.mock('../Environment');
 
 describe('filesystem', () => {
   describe('Cordova', () => {
@@ -15,28 +15,28 @@ describe('filesystem', () => {
     describe('with mocked fs', () => {
       const mockFileWriter = ({
         readyState: 0,
-        abort: jest.fn(),
-        write: jest.fn(),
+        abort: vi.fn(),
+        write: vi.fn(),
       });
 
       const mockFileEntry = ({
-        createWriter: jest.fn().mockImplementation((resolve) => resolve(mockFileWriter)),
+        createWriter: vi.fn().mockImplementation((resolve) => resolve(mockFileWriter)),
       });
 
       const mockDirectoryEntry = ({
-        getFile: jest.fn().mockImplementation((filename, opts, resolve) => resolve(mockFileEntry)),
+        getFile: vi.fn().mockImplementation((filename, opts, resolve) => resolve(mockFileEntry)),
       });
 
       const mockZipStream = {
-        on: jest.fn().mockImplementation((evt, cb) => {
+        on: vi.fn().mockImplementation((evt, cb) => {
           if (evt === 'end') { cb(); }
           return mockZipStream;
         }),
-        resume: jest.fn(),
+        resume: vi.fn(),
       };
 
       beforeAll(() => {
-        global.resolveLocalFileSystemURL = jest.fn().mockImplementation((path, resolve) => {
+        global.resolveLocalFileSystemURL = vi.fn().mockImplementation((path, resolve) => {
           resolve(mockDirectoryEntry);
         });
       });

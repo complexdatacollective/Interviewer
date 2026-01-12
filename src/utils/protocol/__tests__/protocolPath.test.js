@@ -1,11 +1,12 @@
-/* eslint-env jest */
+/* eslint-disable @codaco/spellcheck/spell-checker */
+import { vi } from 'vitest';
 
 import path from 'path';
 import environments from '../../environments';
 import { getEnvironment } from '../../Environment';
 import protocolPath from '../protocolPath';
 
-jest.mock('../../filesystem');
+vi.mock('../../filesystem');
 
 describe('protocolPath', () => {
   describe('Electron', () => {

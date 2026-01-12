@@ -1,4 +1,5 @@
-/* eslint-env jest */
+/* eslint-disable @codaco/spellcheck/spell-checker */
+import { vi } from 'vitest';
 /* eslint-disable @codaco/spellcheck/spell-checker */
 
 import React from 'react';
@@ -27,7 +28,7 @@ describe('CategoricalItem component', () => {
   });
 
   it('registers click', () => {
-    const clickDummy = jest.fn();
+    const clickDummy = vi.fn();
 
     const component = shallow(
       <CategoricalItem onClick={clickDummy} />,

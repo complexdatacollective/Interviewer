@@ -1,18 +1,23 @@
-/* eslint-env jest */
 /* eslint-disable @codaco/spellcheck/spell-checker */
-
+import { vi } from 'vitest';
 import React from 'react';
 import { mount, shallow } from 'enzyme';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 
+const mocksendMessageAsync = vi.fn().mockResolvedValue('');
+
+vi.mock('../../utils/WorkerAgent', () => ({
+  default: function MockWorkerAgent() {
+    return { sendMessageAsync: mocksendMessageAsync };
+  },
+  NodeLabelWorkerName: 'nodeLabelWorker',
+  supportedWorkers: ['nodeLabelWorker'],
+  urlForWorkerSource: vi.fn((blob) => URL.createObjectURL(blob)),
+}));
+
+// Import after mock setup
 import Node, { Node as UnconnectedNode } from '../Node';
-
-const mocksendMessageAsync = jest.fn().mockResolvedValue('');
-
-jest.mock('../../utils/WorkerAgent', () => function MockWorkerAgent() {
-  return { sendMessageAsync: mocksendMessageAsync };
-});
 
 const mockState = {
   activeSessionId: '62415a79-cd46-409a-98b3-5a0a2fef1f97',
@@ -54,7 +59,7 @@ const mockState = {
   ui: { settingsMenuOpen: false },
 };
 
-global.console.warn = jest.fn();
+global.console.warn = vi.fn();
 
 describe('a connected <Node />', () => {
   let wrapper;
@@ -74,7 +79,7 @@ describe('a connected <Node />', () => {
 
 describe('<Node />', () => {
   let wrapper;
-  const props = { getLabel: jest.fn(), type: 'person' };
+  const props = { getLabel: vi.fn(), type: 'person' };
 
   beforeEach(() => {
     wrapper = shallow(<UnconnectedNode {...props} />);
@@ -87,7 +92,7 @@ describe('<Node />', () => {
   });
 
   it('cancels any pending messages when unmounting', () => {
-    const cancelMessage = jest.fn();
+    const cancelMessage = vi.fn();
     wrapper.instance().webWorker = { cancelMessage };
     wrapper.instance().outstandingMessage = {};
     expect(cancelMessage).not.toHaveBeenCalled();
@@ -96,7 +101,7 @@ describe('<Node />', () => {
   });
 
   describe('dynamic labeler', () => {
-    const flushPromises = () => new Promise((resolve) => setImmediate(resolve));
+    const flushPromises = () => new Promise((resolve) => { setTimeout(resolve, 0); });
 
     it('sets a label on state', async () => {
       mocksendMessageAsync.mockResolvedValue('dynamic-label');

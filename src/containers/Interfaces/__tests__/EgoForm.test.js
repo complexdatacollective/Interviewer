@@ -1,4 +1,5 @@
-/* eslint-env jest */
+/* eslint-disable @codaco/spellcheck/spell-checker */
+import { vi } from 'vitest';
 /* eslint-disable @codaco/spellcheck/spell-checker */
 
 import React from 'react';
@@ -14,11 +15,11 @@ const requiredProps = {
   },
   introductionPanel: { title: 'intro', text: 'text' },
   ego: {},
-  formEnabled: jest.fn(),
-  submitForm: jest.fn(),
-  updateEgo: jest.fn(),
-  registerBeforeNext: jest.fn(),
-  isFormValid: jest.fn(() => true),
+  formEnabled: vi.fn(),
+  submitForm: vi.fn(),
+  updateEgo: vi.fn(),
+  registerBeforeNext: vi.fn(),
+  isFormValid: vi.fn(() => true),
 };
 
 const store = createStore(() => ({

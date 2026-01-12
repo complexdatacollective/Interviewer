@@ -105,7 +105,9 @@ describe('network selector', () => {
       },
     };
 
-    expect(Network.getNodeLabel(mockState, 'person')(mockNode1))
-      .toEqual('Node Label');
+    it('returns the correct node label', () => {
+      expect(Network.getNodeLabel(mockState, 'person')(mockNode1))
+        .toEqual('Node Label');
+    });
   });
 });

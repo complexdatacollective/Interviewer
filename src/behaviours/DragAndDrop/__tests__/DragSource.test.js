@@ -1,6 +1,5 @@
-/* eslint-env jest */
 /* eslint-disable @codaco/spellcheck/spell-checker */
-
+import { vi } from 'vitest';
 import React from 'react';
 import { mount } from 'enzyme';
 import DragManager from '../DragManager';
@@ -9,10 +8,10 @@ import DragPreview, { position as previewPosition, cleanup as previewCleanup } f
 import { actionCreators as actions } from '../reducer';
 import DragSource from '../DragSource';
 
-jest.mock('../DragManager');
-jest.mock('../DragPreview');
-jest.mock('../store');
-jest.mock('../reducer');
+vi.mock('../DragManager');
+vi.mock('../DragPreview');
+vi.mock('../store');
+vi.mock('../reducer');
 
 describe('DragSource', () => {
   describe('on drag start', () => {

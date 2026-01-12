@@ -1,9 +1,9 @@
 /* eslint-disable @codaco/spellcheck/spell-checker */
-/* eslint-env jest */
+import { vi, describe, it, expect, beforeEach, afterEach, beforeAll, afterAll } from 'vitest';
 import { checkEndpoint, getPlatformSpecificContent } from '../useUpdater';
 import * as Environment from '../../utils/Environment';
 
-jest.useFakeTimers();
+vi.useFakeTimers();
 
 const mockAssets = [
   {
@@ -52,66 +52,68 @@ const mockAssets = [
   },
 ];
 
-const mockJson = jest.fn(() => ({
+const mockJson = vi.fn(() => ({
   name: '1.0.0',
   body: 'This is a newer version probably',
   assets: mockAssets, // eslint-disable-line
 }));
 
 describe('getPlatformSpecificContent()', () => {
+  let isWindowsSpy;
+  let isMacOSSpy;
+  let isLinuxSpy;
+  let isAndroidSpy;
+  let isIOSSpy;
+
   beforeEach(() => {
-    Environment.isWindows = jest.fn().mockReturnValue(false);
-    Environment.isMacOS = jest.fn().mockReturnValue(false);
-    Environment.isLinux = jest.fn().mockReturnValue(false);
-    Environment.isAndroid = jest.fn().mockReturnValue(false);
-    Environment.isIOS = jest.fn().mockReturnValue(false);
+    isWindowsSpy = vi.spyOn(Environment, 'isWindows').mockReturnValue(false);
+    isMacOSSpy = vi.spyOn(Environment, 'isMacOS').mockReturnValue(false);
+    isLinuxSpy = vi.spyOn(Environment, 'isLinux').mockReturnValue(false);
+    isAndroidSpy = vi.spyOn(Environment, 'isAndroid').mockReturnValue(false);
+    isIOSSpy = vi.spyOn(Environment, 'isIOS').mockReturnValue(false);
   });
 
   afterEach(() => {
-    Environment.isWindows = jest.fn().mockReturnValue(false);
-    Environment.isMacOS = jest.fn().mockReturnValue(false);
-    Environment.isLinux = jest.fn().mockReturnValue(false);
-    Environment.isAndroid = jest.fn().mockReturnValue(false);
-    Environment.isIOS = jest.fn().mockReturnValue(false);
+    vi.restoreAllMocks();
   });
 
   it('gets EXE asset for Windows platform', () => {
-    Environment.isWindows = jest.fn().mockReturnValue(true);
+    isWindowsSpy.mockReturnValue(true);
 
     const content = getPlatformSpecificContent(mockAssets);
     expect(content.buttonLink).toBe('https://website.com/installer.exe');
   });
 
   it('gets DMG asset for macoS platform', () => {
-    Environment.isMacOS = jest.fn().mockReturnValue(true);
+    isMacOSSpy.mockReturnValue(true);
 
     const content = getPlatformSpecificContent(mockAssets);
     expect(content.buttonLink).toBe('https://website.com/installer.dmg');
   });
 
   it('links to GitHub for Linux platform', () => {
-    Environment.isLinux = jest.fn().mockReturnValue(true);
+    isLinuxSpy.mockReturnValue(true);
 
     const content = getPlatformSpecificContent(mockAssets);
     expect(content.buttonLink).toBe('https://github.com/complexdatacollective/Interviewer/releases/latest');
   });
 
   it('links to download page if asset not available', () => {
-    Environment.isLinux = jest.fn().mockReturnValue(true);
+    isLinuxSpy.mockReturnValue(true);
 
     const content = getPlatformSpecificContent([]);
     expect(content.buttonLink).toBe('https://networkcanvas.com/download.html');
   });
 
   it('links to Play Store on Android', () => {
-    Environment.isAndroid = jest.fn().mockReturnValue(true);
+    isAndroidSpy.mockReturnValue(true);
 
     const content = getPlatformSpecificContent(mockAssets);
     expect(content.buttonLink).toBe('https://play.google.com/store/apps/details?id=org.codaco.NetworkCanvasInterviewer6');
   });
 
   it('links to App Store on iOS', () => {
-    Environment.isIOS = jest.fn().mockReturnValue(true);
+    isIOSSpy.mockReturnValue(true);
 
     const content = getPlatformSpecificContent(mockAssets);
     expect(content.buttonLink).toBe('https://apps.apple.com/us/app/network-canvas-interviewer/id1538673677');
@@ -123,7 +125,7 @@ describe('checkEndpoint()', () => {
 
   beforeAll(() => {
     originalFetch = global.fetch;
-    global.fetch = jest.fn(() => Promise.resolve({ json: mockJson }));
+    global.fetch = vi.fn(() => Promise.resolve({ json: mockJson }));
   });
 
   afterAll(() => {
@@ -150,7 +152,7 @@ describe('checkEndpoint()', () => {
   });
 
   it('fails silently', async () => {
-    global.fetch = jest.fn(() => Promise.reject(new Error('bad url')));
+    global.fetch = vi.fn(() => Promise.reject(new Error('bad url')));
 
     const subject = await checkEndpoint('foo', '0.5.0');
 

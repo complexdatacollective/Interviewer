@@ -1,4 +1,5 @@
-/* eslint-env jest */
+/* eslint-disable @codaco/spellcheck/spell-checker */
+import { vi } from 'vitest';
 /* eslint-disable @codaco/spellcheck/spell-checker */
 
 import { createStore, applyMiddleware } from 'redux';
@@ -50,8 +51,8 @@ describe('dialogs', () => {
     let store;
     const getDialog = () => ({
       foo: 'bar',
-      onCancel: jest.fn(),
-      onConfirm: jest.fn(),
+      onCancel: vi.fn(),
+      onConfirm: vi.fn(),
     });
 
     beforeEach(() => {

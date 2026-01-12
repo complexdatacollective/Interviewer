@@ -1,6 +1,5 @@
-/* eslint-env jest */
 /* eslint-disable @codaco/spellcheck/spell-checker */
-
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import React from 'react';
 import { createStore, applyMiddleware, compose } from 'redux';
 import { routerMiddleware } from 'connected-react-router';
@@ -11,7 +10,33 @@ import thunk from 'redux-thunk';
 import SettingsMenu from '../SettingsMenu';
 import createRootReducer from '../../../ducks/modules/rootReducer';
 
-jest.mock('@codaco/ui/lib/utils/CSSVariables');
+vi.mock('@codaco/ui/lib/utils/CSSVariables');
+
+vi.mock('framer-motion', async () => {
+  const React = await import('react');
+  const createMotionComponent = (tag) => {
+    const Component = React.forwardRef(({ children, layout, variants, animate, initial, exit, ...props }, ref) => (
+      React.createElement(tag, { ...props, ref }, children)
+    ));
+    Component.displayName = `motion.${tag}`;
+    return Component;
+  };
+
+  return {
+    motion: {
+      div: createMotionComponent('div'),
+      span: createMotionComponent('span'),
+      ul: createMotionComponent('ul'),
+      li: createMotionComponent('li'),
+      nav: createMotionComponent('nav'),
+      article: createMotionComponent('article'),
+      section: createMotionComponent('section'),
+    },
+    AnimatePresence: ({ children }) => children,
+    useMotionValue: () => ({ get: () => 0, set: () => {} }),
+    useSpring: () => ({ get: () => 0, set: () => {} }),
+  };
+});
 
 const actionLogger = (actions) => () => (next) => (action) => {
   actions.push(action);

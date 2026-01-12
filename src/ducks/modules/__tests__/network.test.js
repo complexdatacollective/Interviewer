@@ -1,4 +1,5 @@
-/* eslint-env jest */
+/* eslint-disable @codaco/spellcheck/spell-checker */
+import { vi } from 'vitest';
 /* eslint-disable @codaco/spellcheck/spell-checker */
 import uuid from 'uuid/v4';
 import {
@@ -11,7 +12,7 @@ import reducer,
   actionCreators,
 } from '../network';
 
-jest.mock('uuid');
+vi.mock('uuid');
 
 const mockState = {
   ego: {

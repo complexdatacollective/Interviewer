@@ -1,27 +1,19 @@
-/* eslint-env jest */
-
+import { vi } from 'vitest';
 import environments from '../environments';
 
-export const isElectron = () => !!window.require;
+export const isElectron = vi.fn(() => false);
+export const isDevMode = vi.fn(() => false);
+export const isPreview = vi.fn(() => false);
+export const getEnv = vi.fn(() => ({}));
+export const isMacOS = vi.fn(() => false);
+export const isWindows = vi.fn(() => false);
+export const isLinux = vi.fn(() => false);
+export const isCordova = vi.fn(() => false);
+export const isIOS = vi.fn(() => false);
+export const isAndroid = vi.fn(() => false);
+export const isWeb = vi.fn(() => true);
+export const getEnvironment = vi.fn(() => environments.WEB);
 
-export const getEnv = () => ({});
-
-export const isCordova = () => !!window.cordova;
-
-export const isIOS = () => isCordova() && (/iOS/i).test(window.device.platform);
-
-export const isAndroid = () => isCordova() && (/Android/i).test(window.device.platform);
-
-export const isWindows = () => false;
-
-export const isPreview = () => false;
-
-export const isWeb = () => (!isCordova() && !isElectron());
-
-const getEnvironment = jest.fn().mockReturnValue(environments.WEB);
-
-const inEnvironment = (tree) => (...args) => tree(getEnvironment())(...args);
-
-export { getEnvironment };
+const inEnvironment = vi.fn((tree) => (...args) => tree(getEnvironment())(...args));
 
 export default inEnvironment;

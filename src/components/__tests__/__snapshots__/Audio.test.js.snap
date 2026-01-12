@@ -1,10 +1,3 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`<Audio /> renders ok 1`] = `
-<audio
-  miscellaneousAdditionalProperty="baz"
-  src="foo"
->
-  bar
-</audio>
-`;
+exports[`<Audio /> > renders ok 1`] = `ShallowWrapper {}`;

@@ -1,4 +1,5 @@
-/* eslint-env jest */
+/* eslint-disable @codaco/spellcheck/spell-checker */
+import { vi } from 'vitest';
 /* eslint-disable @codaco/spellcheck/spell-checker, max-classes-per-file */
 
 import WorkerAgent, { urlForWorkerSource } from '../WorkerAgent';
@@ -6,15 +7,15 @@ import WorkerAgent, { urlForWorkerSource } from '../WorkerAgent';
 const mockUrl = 'blob:file://script.js';
 
 global.URL = class URL {
-  static createObjectURL = jest.fn().mockReturnValue(mockUrl)
+  static createObjectURL = vi.fn().mockReturnValue(mockUrl)
 
-  static revokeObjectURL = jest.fn()
+  static revokeObjectURL = vi.fn()
 };
 
 global.Worker = class Worker {
-  onmessage = jest.fn()
+  onmessage = vi.fn()
 
-  postMessage = jest.fn().mockResolvedValue({})
+  postMessage = vi.fn().mockResolvedValue({})
 };
 
 describe('WorkerAgent', () => {
@@ -66,8 +67,8 @@ describe('WorkerAgent', () => {
     beforeEach(() => {
       mockJob = {
         msg: { mockMessageId },
-        resolve: jest.fn().mockResolvedValue({}),
-        reject: jest.fn(),
+        resolve: vi.fn().mockResolvedValue({}),
+        reject: vi.fn(),
       };
       agent.worker.workMap[mockMessageId] = mockJob;
     });

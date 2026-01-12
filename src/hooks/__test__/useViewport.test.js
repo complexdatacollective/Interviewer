@@ -1,12 +1,13 @@
 /* eslint-disable @codaco/spellcheck/spell-checker */
-/* eslint-env jest */
+import { vi } from 'vitest';
+/* eslint-disable @codaco/spellcheck/spell-checker */
 
 import React from 'react';
 import { mount } from 'enzyme';
 import { useSpring, useMotionValue } from 'framer-motion';
 import useViewport from '../useViewport';
 
-jest.mock('framer-motion');
+vi.mock('framer-motion');
 
 expect.extend({
   toMatchCoords(received, coords) {

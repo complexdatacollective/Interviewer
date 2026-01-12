@@ -1,4 +1,5 @@
-/* eslint-env jest */
+/* eslint-disable @codaco/spellcheck/spell-checker */
+import { vi } from 'vitest';
 /* eslint-disable @codaco/spellcheck/spell-checker */
 
 import React from 'react';
@@ -6,7 +7,7 @@ import { shallow } from 'enzyme';
 import * as redux from 'react-redux';
 import Field, { getInputComponent } from '../Field';
 
-const spy = jest.spyOn(redux, 'useStore');
+const spy = vi.spyOn(redux, 'useStore');
 spy.mockReturnValue(() => ({}));
 
 const attributes = {

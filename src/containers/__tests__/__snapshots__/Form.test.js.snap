@@ -1,28 +1,3 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`<Form /> should render 1`] = `
-<ContextProvider
-  value={null}
->
-  <AutoInitialisedForm
-    dispatch={[Function]}
-    fields={Array []}
-    form="form1"
-    meta={
-      Object {
-        "fields": Object {},
-        "values": undefined,
-      }
-    }
-    store={
-      Object {
-        "@@observable": [Function],
-        "dispatch": [Function],
-        "getState": [Function],
-        "replaceReducer": [Function],
-        "subscribe": [Function],
-      }
-    }
-  />
-</ContextProvider>
-`;
+exports[`<Form /> > should render 1`] = `ShallowWrapper {}`;

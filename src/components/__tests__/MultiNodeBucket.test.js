@@ -1,11 +1,12 @@
-/* eslint-env jest */
+/* eslint-disable @codaco/spellcheck/spell-checker */
+import { vi } from 'vitest';
 import React from 'react';
 import { mount } from 'enzyme';
 
+vi.mock('../../containers/Node');
+
 import MultiNodeBucket from '../MultiNodeBucket';
 import { NO_SCROLL } from '../../behaviours/DragAndDrop/DragManager';
-
-jest.mock('../../containers/Node');
 
 describe('MultiNodeBucket', () => {
   let bucket;

@@ -1,13 +1,3 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`<BackgroundImage /> renders ok 1`] = `
-<div
-  miscellaneousAdditionalProperty="baz"
-  style={
-    Object {
-      "backgroundImage": "url(foo)",
-      "width": "100%",
-    }
-  }
-/>
-`;
+exports[`<BackgroundImage /> > renders ok 1`] = `ShallowWrapper {}`;

@@ -1,5 +1,5 @@
-/* eslint-env jest */
 /* eslint-disable @codaco/spellcheck/spell-checker */
+import { vi, describe, it, expect, beforeEach } from 'vitest';
 import React from 'react';
 import { createStore } from 'redux';
 import { mount } from 'enzyme';
@@ -8,7 +8,7 @@ import { entityAttributesProperty } from '@codaco/shared-consts';
 import withExternalData from '../withExternalData';
 import loadExternalData from '../../utils/loadExternalData';
 
-jest.mock('../../utils/loadExternalData');
+vi.mock('../../utils/loadExternalData');
 
 const mockReducer = () => ({
   installedProtocols: {
@@ -123,8 +123,8 @@ describe('withExternalDataLoader', () => {
     withExternalDataConfigured = withExternalData('source', 'externalData');
   });
 
-  it('It fetches the external data based on the source prop', (done) => {
-    const MockComponent = jest.fn(() => '');
+  it('It fetches the external data based on the source prop', async () => {
+    const MockComponent = vi.fn(() => '');
     const EnhancedComponent = withExternalDataConfigured(MockComponent);
 
     mount((
@@ -135,19 +135,17 @@ describe('withExternalDataLoader', () => {
       />
     ));
 
-    setImmediate(() => {
-      expect(last(MockComponent.mock.calls)[0])
-        .toMatchObject({
-          externalData: mockResult1,
-          source: mockSource1,
-        });
+    await new Promise((resolve) => { setImmediate(resolve); });
 
-      done();
-    });
+    expect(last(MockComponent.mock.calls)[0])
+      .toMatchObject({
+        externalData: mockResult1,
+        source: mockSource1,
+      });
   });
 
-  it('It converts external csv data based on the codebook', (done) => {
-    const MockComponent = jest.fn(() => '');
+  it('It converts external csv data based on the codebook', async () => {
+    const MockComponent = vi.fn(() => '');
     const EnhancedComponent = withExternalDataConfigured(MockComponent);
 
     mount((
@@ -158,14 +156,12 @@ describe('withExternalDataLoader', () => {
       />
     ));
 
-    setImmediate(() => {
-      expect(last(MockComponent.mock.calls)[0])
-        .toMatchObject({
-          externalData: mockCsvResult2,
-          source: mockSource2,
-        });
+    await new Promise((resolve) => { setImmediate(resolve); });
 
-      done();
-    });
+    expect(last(MockComponent.mock.calls)[0])
+      .toMatchObject({
+        externalData: mockCsvResult2,
+        source: mockSource2,
+      });
   });
 });

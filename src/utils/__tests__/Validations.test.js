@@ -1,4 +1,5 @@
-/* eslint-env jest */
+/* eslint-disable @codaco/spellcheck/spell-checker */
+import { vi, describe, it, expect } from 'vitest';
 import {
   entityAttributesProperty,
 } from '@codaco/shared-consts';
@@ -19,8 +20,13 @@ import {
 import { getCodebookVariablesForType } from '../../selectors/session';
 import { makeNetworkEntitiesForType } from '../../selectors/interface';
 
-jest.mock('../../selectors/interface');
-jest.mock('../../selectors/session');
+vi.mock('../../selectors/interface', () => ({
+  makeNetworkEntitiesForType: vi.fn(),
+}));
+
+vi.mock('../../selectors/session', () => ({
+  getCodebookVariablesForType: vi.fn(),
+}));
 
 const mockStore = { getState: () => ({}) };
 

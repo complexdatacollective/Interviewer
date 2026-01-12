@@ -1,10 +1,11 @@
 /* eslint-disable @codaco/spellcheck/spell-checker */
-/* eslint-env jest */
+import { vi } from 'vitest';
+/* eslint-disable @codaco/spellcheck/spell-checker */
 
 import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
 import { getLinks } from '../LayoutContext';
 
-jest.mock('../../hooks/forceSimulation.worker');
+vi.mock('../../hooks/forceSimulation.worker');
 
 const testNodes = [
   { [entityPrimaryKeyProperty]: '1111' },

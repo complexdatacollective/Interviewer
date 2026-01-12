@@ -1,15 +1,15 @@
-/* eslint-env jest */
+import { vi } from 'vitest';
 
-const upsertTarget = jest.fn(() => ({ type: null }));
-const renameTarget = jest.fn(() => ({ type: null }));
-const removeTarget = jest.fn(() => ({ type: null }));
+const upsertTarget = vi.fn(() => ({ type: null }));
+const renameTarget = vi.fn(() => ({ type: null }));
+const removeTarget = vi.fn(() => ({ type: null }));
 
-const upsertObstacle = jest.fn(() => ({ type: null }));
-const removeObstacle = jest.fn(() => ({ type: null }));
+const upsertObstacle = vi.fn(() => ({ type: null }));
+const removeObstacle = vi.fn(() => ({ type: null }));
 
-const dragStart = jest.fn(() => ({ type: null }));
-const dragMove = jest.fn(() => ({ type: null }));
-const dragEnd = jest.fn(() => ({ type: null }));
+const dragStart = vi.fn(() => ({ type: null }));
+const dragMove = vi.fn(() => ({ type: null }));
+const dragEnd = vi.fn(() => ({ type: null }));
 
 const actionCreators = {
   upsertTarget,
@@ -22,7 +22,7 @@ const actionCreators = {
   dragEnd,
 };
 
-const reducer = jest.fn();
+const reducer = vi.fn();
 
 export {
   actionCreators,
