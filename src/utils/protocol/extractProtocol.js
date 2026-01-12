@@ -15,9 +15,7 @@ import {
 } from '../filesystem';
 import protocolPath from './protocolPath';
 import { pathSync } from '../electronAPI';
-import {
-  checkZipPaths,
-} from './protocol-validation/validation/zipValidation';
+import { checkZipPaths } from './zipValidation';
 
 const isRequired = (param) => { throw new Error(`${param} is required`); };
 

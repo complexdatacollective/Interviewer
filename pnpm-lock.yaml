@@ -79,6 +79,9 @@ importers:
       '@codaco/eslint-plugin-spellcheck':
         specifier: 0.0.14
         version: 0.0.14(eslint@7.32.0)
+      '@codaco/protocol-validation':
+        specifier: ^5.0.2
+        version: 5.0.2
       '@codaco/shared-consts':
         specifier: ~0.0.1-alpha.3
         version: 0.0.2
@@ -935,8 +938,17 @@ packages:
     peerDependencies:
       eslint: '>=0.8.0'
 
+  '@codaco/protocol-validation@5.0.2':
+    resolution: {integrity: sha512-HH68/XTI4dPy1WDTpNzhn5PM44+0fj4ZNFkWMqRsPpRgRvhbnnVR+bynDsk/BGKxPF9gdvqx2wvBX0AUbdGOMw==}
+    engines: {node: '>=20.0.0'}
+    hasBin: true
+
   '@codaco/shared-consts@0.0.2':
     resolution: {integrity: sha512-qPmZQm50NhIuQGznQx00kdCxXJ/rOW8UkCrLPQObmPFjq3iIOTwBjAWddq7gRBsDByRfdB/gMCwcd7Pay2aOFQ==}
+
+  '@codaco/shared-consts@4.0.0':
+    resolution: {integrity: sha512-j39tdNf93FlZ4R2ycZ+FpHNjzgAXcz92fVpC59Cg7k0loWkuMpoEfArzaZyI0mXGT0BEned5BJ+kG7hBu77wDw==}
+    engines: {node: '>=20.0.0'}
 
   '@codaco/ui@5.8.6':
     resolution: {integrity: sha512-vjrAI2YPvzg55F5EpVXae7RAZzIpqTsUSjUcQ/laPaH3ZWjVgMeiMEFPCE+C85Oe16rNh0iOMN/XU7kxGaK4Vg==}
@@ -6834,6 +6846,9 @@ packages:
     resolution: {integrity: sha512-r+JdDipt93ttDjsOVPU5zaq5bAyY+3H19bDrThkvuVxC0xMQzU1PJcS6D+KrP3u96gH9XLomcHPb+2skoDjulQ==}
     engines: {node: '>= 8'}
 
+  zod@3.25.76:
+    resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
+
   zwitch@1.0.5:
     resolution: {integrity: sha512-V50KMwwzqJV0NpZIZFwfOD5/lyny3WlSzRiXgA0G7VUnRlqttta1L6UQIHzd6EuBY/cHGfwTIck7w1yH6Q5zUw==}
 
@@ -7615,7 +7630,17 @@ snapshots:
       hunspell-spellchecker: 1.0.2
       lodash: 4.17.21
 
+  '@codaco/protocol-validation@5.0.2':
+    dependencies:
+      '@codaco/shared-consts': 4.0.0
+      ajv: 8.17.1
+      zod: 3.25.76
+
   '@codaco/shared-consts@0.0.2': {}
+
+  '@codaco/shared-consts@4.0.0':
+    dependencies:
+      zod: 3.25.76
 
   '@codaco/ui@5.8.6(@types/react@19.2.8)(react-dom@16.14.0(react@16.14.0))(react@16.14.0)':
     dependencies:
@@ -14408,5 +14433,7 @@ snapshots:
       archiver-utils: 2.1.0
       compress-commons: 3.0.0
       readable-stream: 3.6.2
+
+  zod@3.25.76: {}
 
   zwitch@1.0.5: {}
