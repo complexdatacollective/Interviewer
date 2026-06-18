@@ -1,17 +1,19 @@
-/* eslint-disable @codaco/spellcheck/spell-checker */
-import { createStore, applyMiddleware, compose } from 'redux';
-import { persistStore, persistReducer } from 'redux-persist';
-import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
-import thunk from 'redux-thunk';
 import { routerMiddleware } from 'connected-react-router';
 import { createHashHistory as createHistory } from 'history';
-import { getEnv, isCordova } from '../utils/Environment';
+import { applyMiddleware, compose, createStore } from 'redux';
+import { persistReducer, persistStore } from 'redux-persist';
+import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
+import thunk from 'redux-thunk';
+
+import { getEnv, isCapacitor } from '../utils/Environment';
+import {
+  localforageStorageEngine,
+  localStorageEngine,
+} from '../utils/storageAdapters';
 import logger from './middleware/logger';
 import sound from './middleware/sound';
 import createRootReducer from './modules/rootReducer';
-import { localStorageEngine, sqliteStorageEngine } from '../utils/storageAdapters';
 
-// eslint-disable-next-line import/no-mutable-exports
 let persistor;
 
 const getStorageEngine = () => {
@@ -19,8 +21,8 @@ const getStorageEngine = () => {
     persistor.persist();
   };
 
-  if (isCordova()) {
-    return sqliteStorageEngine(onPersistReady);
+  if (isCapacitor()) {
+    return localforageStorageEngine(onPersistReady);
   }
 
   return localStorageEngine(onPersistReady);
@@ -32,7 +34,6 @@ const persistConfig = {
   storage: getStorageEngine(),
   whitelist: [
     'deviceSettings',
-    'pairedServer',
     'installedProtocols',
     'router',
     'search',
@@ -58,7 +59,8 @@ export const store = createStore(
   undefined,
   compose(
     applyMiddleware(routerMiddleware(history), thunk, logger, sound),
-    typeof window === 'object' && typeof window.devToolsExtension !== 'undefined'
+    typeof window === 'object' &&
+      typeof window.devToolsExtension !== 'undefined'
       ? window.devToolsExtension()
       : (f) => f,
   ),

@@ -1,9 +1,9 @@
-/* eslint-env jest */
+import { vi } from 'vitest';
 
 class DragManager {
   static options = {};
 
-  static unmount = jest.fn();
+  static unmount = vi.fn();
 
   static setOptions(options) {
     DragManager.options = options;
@@ -19,7 +19,7 @@ class DragManager {
 
   unmount = () => {
     DragManager.unmount();
-  }
+  };
 }
 
 export default DragManager;

@@ -3,7 +3,7 @@
   color: var(--white);
   background-color: var(--color-cyber-grape);
   width: 100%;
-  background-image: url('../images/getting-started.svg');
+  background-image: url('@/images/getting-started.svg');
   background-size: 50%;
   background-repeat: no-repeat;
   background-position: 100% 0;
@@ -33,9 +33,9 @@
         left: -5px;
         background-color: var(--color-white);
         color: var(--color-rich-black);
-        font-size: .6rem;
+        font-size: 0.6rem;
         font-weight: 900;
-        padding: units.unit(.5) units.unit(1);
+        padding: units.unit(0.5) units.unit(1);
         border-radius: var(--border-radius);
         margin-right: units.unit(1);
       }

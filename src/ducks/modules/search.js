@@ -62,7 +62,4 @@ const actionTypes = {
   TOGGLE_SEARCH,
 };
 
-export {
-  actionCreators,
-  actionTypes,
-};
+export { actionCreators, actionTypes };

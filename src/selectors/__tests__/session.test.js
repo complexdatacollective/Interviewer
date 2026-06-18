@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import { getSessionPath } from '../session';
 
 const activeSessionId = 'foo';
@@ -11,8 +9,12 @@ describe('getSessionPath()', () => {
   });
 
   it('returns stage path for any index', () => {
-    expect(getSessionPath(mockState, 0)).toEqual(`/session/${activeSessionId}/0`);
+    expect(getSessionPath(mockState, 0)).toEqual(
+      `/session/${activeSessionId}/0`,
+    );
 
-    expect(getSessionPath(mockState, 5)).toEqual(`/session/${activeSessionId}/5`);
+    expect(getSessionPath(mockState, 5)).toEqual(
+      `/session/${activeSessionId}/5`,
+    );
   });
 });

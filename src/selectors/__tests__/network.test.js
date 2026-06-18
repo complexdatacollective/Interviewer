@@ -1,6 +1,3 @@
-/* eslint-env jest */
-/* eslint-disable @codaco/spellcheck/spell-checker */
-
 import * as Network from '../network';
 
 const mockNodeCodebookDefinition = {
@@ -67,12 +64,15 @@ describe('network selector', () => {
     });
 
     it('handles irregularly capitalized codebook variable name', () => {
-      const label = Network.labelLogic(mockNodeCodebookDefinitionWithCaps, mockNode1);
+      const label = Network.labelLogic(
+        mockNodeCodebookDefinitionWithCaps,
+        mockNode1,
+      );
       expect(label).toEqual('Node Label');
     });
 
     // Handles external data
-    it('uses the a variable called \'name\' on the node itself', () => {
+    it("uses the a variable called 'name' on the node itself", () => {
       const label = Network.labelLogic(mockNodeCodebookDefinition, mockNode2);
       expect(label).toEqual('Node Label');
     });
@@ -84,7 +84,7 @@ describe('network selector', () => {
 
     it('returns fallback message when no suitable label is available', () => {
       const label = Network.labelLogic(mockNodeCodebookDefinition, mockNode3);
-      expect(label).toEqual('No \'name\' variable!');
+      expect(label).toEqual("No 'name' variable!");
     });
 
     it('correctly handles multiple possible node attributes by using the first', () => {
@@ -105,7 +105,10 @@ describe('network selector', () => {
       },
     };
 
-    expect(Network.getNodeLabel(mockState, 'person')(mockNode1))
-      .toEqual('Node Label');
+    it('returns the correct node label', () => {
+      expect(Network.getNodeLabel(mockState, 'person')(mockNode1)).toEqual(
+        'Node Label',
+      );
+    });
   });
 });

@@ -1,10 +1,17 @@
 /* eslint-env jest */
 
+import path from 'node:path';
+
+import { get, kebabCase } from 'lodash';
 import { Application } from 'spectron';
 import dialogAddon from 'spectron-dialog-addon';
-import path from 'path';
-import { kebabCase, get } from 'lodash';
-import { getAppConfiguration, defaultImageSnaphotConfig, timing, testSizes } from '../config';
+
+import {
+  defaultImageSnaphotConfig,
+  getAppConfiguration,
+  testSizes,
+  timing,
+} from '../config';
 
 let appSize = 'not-set';
 let _app; // eslint-disable-line
@@ -16,8 +23,9 @@ export const resetApp = async (app) => {
 
 export const resizeApp = async (app, size = 'wide') => {
   const dimensions = get(testSizes, size);
-  if (!dimensions) { return; }
-  console.info(`resize to: ${dimensions[0]}x${dimensions[1]}`);
+  if (!dimensions) {
+    return;
+  }
   appSize = `${dimensions[0]}x${dimensions[1]}`;
   await app.browserWindow.setSize(dimensions[0], dimensions[1]);
   await resetApp(app);
@@ -39,7 +47,7 @@ export const makeTestingApp = async () => {
 };
 
 export const stopApp = async () => {
-  if (_app && _app.isRunning()) {
+  if (_app?.isRunning()) {
     return _app.stop().catch(() => {});
   }
   return Promise.resolve();
@@ -61,13 +69,15 @@ export const forceClick = async (app, _selector) => {
   }, _selector);
 };
 
-const getImageSnaphotConfig = async app =>
-  app.client.execute(() => window.devicePixelRatio)
+const getImageSnaphotConfig = async (app) =>
+  app.client
+    .execute(() => window.devicePixelRatio)
     .then(({ value: devicePixelRatio }) => ({
       ...defaultImageSnaphotConfig,
       customSnapshotIdentifier: ({ testPath, currentTestName, counter }) =>
-        `${devicePixelRatio}x-${appSize}-`
-          .concat(kebabCase(`${path.basename(testPath)}-${currentTestName}-${counter}`)),
+        `${devicePixelRatio}x-${appSize}-`.concat(
+          kebabCase(`${path.basename(testPath)}-${currentTestName}-${counter}`),
+        ),
     }));
 
 export const matchImageSnapshot = async (app, rect = null) => {
@@ -77,11 +87,11 @@ export const matchImageSnapshot = async (app, rect = null) => {
   }
 
   await app.client.pause(timing.long);
-  await getImageSnaphotConfig(app)
-    .then(imageSnaphotConfig =>
-      expect(app.browserWindow.capturePage(rect))
-        .resolves.toMatchImageSnapshot(imageSnaphotConfig),
-    );
+  await getImageSnaphotConfig(app).then((imageSnaphotConfig) =>
+    expect(app.browserWindow.capturePage(rect)).resolves.toMatchImageSnapshot(
+      imageSnaphotConfig,
+    ),
+  );
 };
 
 export const pause = async (app, duration = 'medium') => {

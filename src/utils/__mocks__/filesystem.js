@@ -1,28 +1,28 @@
-/* eslint-disable import/prefer-default-export, no-console */
-/* eslint-disable @codaco/spellcheck/spell-checker */
-/* eslint-env jest */
+import { vi } from 'vitest';
 
-const readFile = jest.fn(console.log);
-const writeFile = jest.fn(() => Promise.resolve());
-const ensurePathExists = jest.fn(console.log);
-const writeStream = jest.fn(console.log);
-const userDataPath = jest.fn(() => 'tmp/mock/user/path/');
+const readFile = vi.fn(console.log);
+const readDirectory = vi.fn(() => Promise.resolve([]));
+const writeFile = vi.fn(() => Promise.resolve());
+const ensurePathExists = vi.fn(console.log);
+const userDataPath = vi.fn(() => 'tmp/mock/user/path/');
 
-const resolveFileSystemUrl = jest.fn(() => Promise.resolve({
-  isFile: true,
-  name: 'mockFileSystemUrl',
-  fullPath: 'file:///mockFileSystemUrl/mock/url',
-  toURL: () => 'http://localhost/mock/url',
-}));
+const resolveFileSystemUrl = vi.fn(() =>
+  Promise.resolve({
+    isFile: true,
+    name: 'mockFileSystemUrl',
+    fullPath: 'file:///mockFileSystemUrl/mock/url',
+    toURL: () => 'http://localhost/mock/url',
+  }),
+);
 
-const tempDataPath = jest.fn(() => 'tmp/mock/temp/path');
+const tempDataPath = vi.fn(() => 'tmp/mock/temp/path');
 
 export {
   readFile,
+  readDirectory,
   writeFile,
   ensurePathExists,
   resolveFileSystemUrl,
-  writeStream,
   userDataPath,
   tempDataPath,
 };

@@ -1,27 +1,30 @@
-/* eslint-disable global-require */
+/**
+ * Reset protocol files utility with secure API support.
+ */
 
-import environments from '../environments';
+import { pathSync } from '../electronAPI';
 import inEnvironment from '../Environment';
-import { userDataPath, removeDirectory } from '../filesystem';
+import environments from '../environments';
+import { removeDirectory, userDataPath } from '../filesystem';
 
 const resetProtocolFiles = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const path = require('path');
-
-    return () => {
-      const protocolsPath = path.join(userDataPath(), 'protocols');
+    return async () => {
+      const basePath = await userDataPath();
+      const protocolsPath = pathSync.join(basePath, 'protocols');
       return removeDirectory(protocolsPath);
     };
   }
 
-  if (environment === environments.CORDOVA) {
+  if (environment === environments.CAPACITOR) {
     return () => {
       const protocolsPath = [userDataPath(), 'protocols'].join('/');
       return removeDirectory(protocolsPath);
     };
   }
 
-  return () => Promise.reject(new Error('resetProtocolFiles() not available on platform'));
+  return () =>
+    Promise.reject(new Error('resetProtocolFiles() not available on platform'));
 });
 
 export default resetProtocolFiles;

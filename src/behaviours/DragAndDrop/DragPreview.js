@@ -1,5 +1,3 @@
-/* eslint-disable no-underscore-dangle */
-
 import getAbsoluteBoundingRect from '../../utils/getAbsoluteBoundingRect';
 
 const getSize = (element) => {
@@ -40,14 +38,18 @@ export default class DraggablePreview {
   }
 
   size() {
-    if (!this.node) { return { width: 0, height: 0 }; }
+    if (!this.node) {
+      return { width: 0, height: 0 };
+    }
     const element = this.node.firstChild;
     const size = getSize(element);
     return size;
   }
 
   center() {
-    if (!this.node) { return { x: 0, y: 0 }; }
+    if (!this.node) {
+      return { x: 0, y: 0 };
+    }
 
     if (!this._center) {
       const size = this.size();
@@ -66,15 +68,21 @@ export default class DraggablePreview {
   update = () => {
     this.render();
     this.animationFrame = window.requestAnimationFrame(this.update);
-  }
+  };
 
   render() {
-    this.node.setAttribute('style', styles(this.initialSize.width, this.initialSize.height, this.x, this.y));
+    this.node.setAttribute(
+      'style',
+      styles(this.initialSize.width, this.initialSize.height, this.x, this.y),
+    );
 
     if (this.validMove) {
       this.node.setAttribute('class', 'draggable-preview');
     } else {
-      this.node.setAttribute('class', 'draggable-preview draggable-preview--invalid');
+      this.node.setAttribute(
+        'class',
+        'draggable-preview draggable-preview--invalid',
+      );
     }
   }
 

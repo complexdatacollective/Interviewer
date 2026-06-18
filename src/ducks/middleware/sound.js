@@ -1,16 +1,16 @@
-import { playSound } from '../../utils/playSound';
-import { actionTypes as networkActionTypes } from '../modules/network';
+import addEdgeSound from '../../interaction-sounds/create-edge.wav';
 import createNodeSound from '../../interaction-sounds/create-node.wav';
 import removeNodeSound from '../../interaction-sounds/discard.wav';
-import toggleOnSound from '../../interaction-sounds/toggle-on.wav';
-import toggleOffSound from '../../interaction-sounds/toggle-off.wav';
-import openAppSound from '../../interaction-sounds/open-app.wav';
-import addEdgeSound from '../../interaction-sounds/create-edge.wav';
-import errorSound from '../../interaction-sounds/error.wav';
-import edgeLinkingSound from '../../interaction-sounds/node-linking-mode.wav';
-import finishSessionSound from '../../interaction-sounds/finish-interview.wav';
 import dropSound from '../../interaction-sounds/drop-node.wav';
+import errorSound from '../../interaction-sounds/error.wav';
+import finishSessionSound from '../../interaction-sounds/finish-interview.wav';
+import edgeLinkingSound from '../../interaction-sounds/node-linking-mode.wav';
+import openAppSound from '../../interaction-sounds/open-app.wav';
+import toggleOffSound from '../../interaction-sounds/toggle-off.wav';
+import toggleOnSound from '../../interaction-sounds/toggle-on.wav';
 import { getNetworkEdges } from '../../selectors/network';
+import { playSound } from '../../utils/playSound';
+import { actionTypes as networkActionTypes } from '../modules/network';
 
 const sounds = {
   open: playSound({ src: openAppSound }),
@@ -81,9 +81,9 @@ const sound = (store) => (next) => (action) => {
       const { from, to, type } = action.modelData;
       const sessionEdges = getNetworkEdges(store.getState());
 
-      const edgeExists = sessionEdges.some((edge) => (
-        edge.from === from && edge.to === to && edge.type === type
-      ));
+      const edgeExists = sessionEdges.some(
+        (edge) => edge.from === from && edge.to === to && edge.type === type,
+      );
 
       if (edgeExists) {
         sounds.createEdge.play();
@@ -115,7 +115,6 @@ const sound = (store) => (next) => (action) => {
     case networkActionTypes.REMOVE_EDGE:
       sounds.toggleOff.play();
       break;
-    // eslint-disable-next-line @codaco/spellcheck/spell-checker
     case '@@redux-form/SET_SUBMIT_FAILED': // Handles validation errors in forms
       sounds.error.play();
       break;

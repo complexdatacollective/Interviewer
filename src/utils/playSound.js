@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import { debounce } from './lodash-replacements';
 
 // Play a given sound
@@ -14,17 +13,21 @@ export const playSound = ({
 
   let audio;
 
-  const debouncedPlay = debounce(() => {
-    if (audio) {
-      audio.pause();
-      audio.currentTime = 0;
-    }
+  const debouncedPlay = debounce(
+    () => {
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+      }
 
-    audio = new Audio(src);
-    audio.volume = volume;
-    audio.loop = loop;
-    audio.play();
-  }, debounceInterval, { leading: true, trailing: false });
+      audio = new Audio(src);
+      audio.volume = volume;
+      audio.loop = loop;
+      audio.play();
+    },
+    debounceInterval,
+    { leading: true, trailing: false },
+  );
 
   const stop = () => {
     if (!audio) {

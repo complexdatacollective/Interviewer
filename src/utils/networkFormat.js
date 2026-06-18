@@ -1,18 +1,10 @@
 import { omit } from 'lodash';
-import crypto from 'crypto';
-import objectHash from 'object-hash';
+
 import {
   entityAttributesProperty,
   entityPrimaryKeyProperty,
-  sessionProperty,
-  caseProperty,
-  codebookHashProperty,
-  protocolProperty,
-  protocolName,
-  sessionStartTimeProperty,
-  sessionFinishTimeProperty,
-  sessionExportTimeProperty,
 } from '@codaco/shared-consts';
+
 import {
   getEntityAttributes,
   nodeTypePropertyForWorker,
@@ -29,14 +21,17 @@ import {
  *
  * @private
  */
-export const getEntityAttributesWithNamesResolved = (entity, entityVariables,
-  ignoreExternalProps = false) => {
+const getEntityAttributesWithNamesResolved = (
+  entity,
+  entityVariables,
+  ignoreExternalProps = false,
+) => {
   if (!entityVariables) {
     return {};
   }
   const attrs = getEntityAttributes(entity);
   return Object.keys(attrs).reduce((acc, uuid) => {
-    if (entityVariables[uuid] && entityVariables[uuid].name) {
+    if (entityVariables[uuid]?.name) {
       acc[entityVariables[uuid].name] = attrs[uuid];
     } else if (!ignoreExternalProps) {
       acc[uuid] = attrs[uuid];
@@ -46,77 +41,17 @@ export const getEntityAttributesWithNamesResolved = (entity, entityVariables,
 };
 
 /**
- * Given a variable name ("age") and the relevant section of the variable registry, returns the
- * ID/key for that name.
- */
-const getVariableIdFromName = (variableName, variableDefinitions) => {
-  const entry = Object.entries(variableDefinitions).find(
-    ([, variable]) => variable.name === variableName,
-  );
-  return entry && entry[0];
-};
-
-/**
- * The inverse of getEntityAttributesWithNamesResolved
- */
-export const getNodeWithIdAttributes = (node, nodeVariables) => {
-  if (!nodeVariables) {
-    return {};
-  }
-  const attrs = getEntityAttributes(node);
-  const mappedAttrs = Object.keys(attrs).reduce((acc, varName) => {
-    const variableId = getVariableIdFromName(varName, nodeVariables);
-    if (variableId) {
-      acc[variableId] = attrs[varName];
-    }
-    return acc;
-  }, {});
-
-  return {
-    ...node,
-    [entityAttributesProperty]: mappedAttrs,
-  };
-};
-
-/**
  * Get the remote protocol name for a protocol, which Server uses to uniquely identify it
  * @param {string} name the name of a protocol
+ * @returns {Promise<string>} SHA-256 hash of the protocol name
  */
-export const getRemoteProtocolID = (name) => name && crypto.createHash('sha256').update(name).digest('hex');
-
-/**
- * Creates an object containing all required session metadata for export
- * and appends it to the session
- */
-export const asNetworkWithSessionVariables = (sessionId, session, protocol) => {
-  // Required:
-  // caseId,
-  // sessionId,
-  // remoteProtocolID - format Server uniquely identifies protocols by
-  // codebookHash - used to compare server version with local version
-  // protocol name
-  // interview start and finish. If not available don't include
-  // export date
-
-  const sessionVariables = {
-    [caseProperty]: session.caseId,
-    [sessionProperty]: sessionId,
-    [protocolProperty]: getRemoteProtocolID(protocol.name),
-    [protocolName]: protocol.name,
-    [codebookHashProperty]: objectHash(protocol.codebook),
-    ...(session.startedAt && {
-      [sessionStartTimeProperty]: new Date(session.startedAt).toISOString(),
-    }),
-    ...(session.finishedAt && {
-      [sessionFinishTimeProperty]: new Date(session.finishedAt).toISOString(),
-    }),
-    [sessionExportTimeProperty]: new Date().toISOString(),
-  };
-
-  return ({
-    ...session.network,
-    sessionVariables,
-  });
+export const getRemoteProtocolID = async (name) => {
+  if (!name) return null;
+  const encoder = new TextEncoder();
+  const data = encoder.encode(name);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
 };
 
 /**
@@ -131,8 +66,11 @@ export const asNetworkWithSessionVariables = (sessionId, session, protocol) => {
  */
 export const asWorkerAgentEntity = (entity, entityTypeDefinition) => ({
   [primaryKeyPropertyForWorker]: entity[entityPrimaryKeyProperty],
-  [nodeTypePropertyForWorker]: entityTypeDefinition && entityTypeDefinition.name,
-  ...getEntityAttributesWithNamesResolved(entity, (entityTypeDefinition || {}).variables),
+  [nodeTypePropertyForWorker]: entityTypeDefinition?.name,
+  ...getEntityAttributesWithNamesResolved(
+    entity,
+    entityTypeDefinition?.variables,
+  ),
 });
 
 export const asWorkerAgentEdge = (edge, edgeTypeDefinition) => ({
@@ -149,10 +87,18 @@ export const asWorkerAgentEdge = (edge, edgeTypeDefinition) => ({
  */
 export const asWorkerAgentNetwork = (network = {}, registry = {}) => {
   const { nodes = [], edges = [], ego = {} } = network;
-  const { node: nodeRegistry = {}, edge: edgeRegistry = {}, ego: egoRegistry = {} } = registry;
-  return ({
-    nodes: nodes.map((node) => asWorkerAgentEntity(node, nodeRegistry[node.type])),
-    edges: edges.map((edge) => asWorkerAgentEdge(edge, edgeRegistry[edge.type])),
+  const {
+    node: nodeRegistry = {},
+    edge: edgeRegistry = {},
+    ego: egoRegistry = {},
+  } = registry;
+  return {
+    nodes: nodes.map((node) =>
+      asWorkerAgentEntity(node, nodeRegistry[node.type]),
+    ),
+    edges: edges.map((edge) =>
+      asWorkerAgentEdge(edge, edgeRegistry[edge.type]),
+    ),
     ego: asWorkerAgentEntity(ego, egoRegistry),
-  });
+  };
 };

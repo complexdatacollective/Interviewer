@@ -1,6 +1,4 @@
-import {
-  filter, reject, omit, isEmpty, thru, some,
-} from 'lodash';
+import { filter, isEmpty, omit, reject, some, thru } from 'lodash';
 
 const UPSERT_TARGET = Symbol('DRAG_AND_DROP/UPSERT_TARGET');
 const RENAME_TARGET = Symbol('DRAG_AND_DROP/RENAME_TARGET');
@@ -11,7 +9,7 @@ const DRAG_START = Symbol('DRAG_AND_DROP/DRAG_START');
 const DRAG_MOVE = Symbol('DRAG_AND_DROP/DRAG_MOVE');
 const DRAG_END = Symbol('DRAG_AND_DROP/DRAG_END');
 
-const initialState = {
+const _initialState = {
   targets: [],
   obstacles: [],
   source: null,
@@ -28,32 +26,31 @@ const willAccept = (accepts, source) => {
       ...defaultSource,
       ...source,
     });
-  } catch (e) {
-    console.warn('Error in accept() function', e, source); // eslint-disable-line no-console
+  } catch (_e) {
     return false;
   }
 };
 
 const markOutOfBounds = (source) => {
-  const isOutOfBounds = (
-    source.x > window.innerWidth
-    || source.x < 0
-    || source.y > window.innerHeight
-    || source.y < 0
-  );
+  const isOutOfBounds =
+    source.x > window.innerWidth ||
+    source.x < 0 ||
+    source.y > window.innerHeight ||
+    source.y < 0;
 
   return isOutOfBounds;
 };
 
 const markHitTarget = ({ target, source }) => {
-  if (!source) { return { ...target, isOver: false, willAccept: false }; }
+  if (!source) {
+    return { ...target, isOver: false, willAccept: false };
+  }
 
-  const isOver = (
-    source.x >= target.x
-    && source.x <= target.x + target.width
-    && source.y >= target.y
-    && source.y <= target.y + target.height
-  );
+  const isOver =
+    source.x >= target.x &&
+    source.x <= target.x + target.width &&
+    source.y >= target.y &&
+    source.y <= target.y + target.height;
 
   return {
     ...target,
@@ -62,24 +59,23 @@ const markHitTarget = ({ target, source }) => {
   };
 };
 
-const markHitTargets = ({
-  targets,
-  source,
-}) => targets.map((target) => markHitTarget({ target, source }));
+const markHitTargets = ({ targets, source }) =>
+  targets.map((target) => markHitTarget({ target, source }));
 
-const markHitSource = ({ targets, source }) => thru(source, (s) => {
-  if (isEmpty(s)) { return s; }
+const markHitSource = ({ targets, source }) =>
+  thru(source, (s) => {
+    if (isEmpty(s)) {
+      return s;
+    }
 
-  return {
-    ...s,
-    isOver: filter(targets, 'isOver').length > 0,
-    isOutOfBounds: markOutOfBounds(s),
-  };
-});
+    return {
+      ...s,
+      isOver: filter(targets, 'isOver').length > 0,
+      isOutOfBounds: markOutOfBounds(s),
+    };
+  });
 
-const markHitAll = ({
-  targets, obstacles, source, ...rest
-}) => {
+const markHitAll = ({ targets, obstacles, source, ...rest }) => {
   const targetsWithHits = markHitTargets({ targets, source });
   const obstaclesWithHits = markHitTargets({ targets: obstacles, source });
   const sourceWithHits = markHitSource({ targets: targetsWithHits, source });
@@ -113,11 +109,10 @@ const triggerDrag = (state, source) => {
     return;
   }
 
-  filter(hits.targets, { isOver: true, willAccept: true })
-    .forEach((target) => {
-      source.setValidMove(true);
-      target.onDrag(hits.source);
-    });
+  filter(hits.targets, { isOver: true, willAccept: true }).forEach((target) => {
+    source.setValidMove(true);
+    target.onDrag(hits.source);
+  });
 };
 
 const triggerDrop = (state, source) => {
@@ -129,22 +124,20 @@ const triggerDrop = (state, source) => {
     },
   });
 
-  filter(hits.targets, { willAccept: true })
-    .forEach((target) => {
-      target.onDragEnd(hits.source);
-    });
+  filter(hits.targets, { willAccept: true }).forEach((target) => {
+    target.onDragEnd(hits.source);
+  });
 
   if (some(hits.obstacles, { isOver: true })) {
     return;
   }
 
-  filter(hits.targets, { isOver: true, willAccept: true })
-    .forEach((target) => {
-      target.onDrop(hits.source);
-    });
+  filter(hits.targets, { isOver: true, willAccept: true }).forEach((target) => {
+    target.onDrop(hits.source);
+  });
 };
 
-const reducer = (state = initialState, action) => {
+const reducer = (state = _initialState, action) => {
   switch (action.type) {
     case UPSERT_TARGET: {
       const targets = [
@@ -167,7 +160,9 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         targets: state.targets.map((target) => {
-          if (action.from !== target.id) { return target; }
+          if (action.from !== target.id) {
+            return target;
+          }
 
           return {
             ...target,
@@ -203,7 +198,10 @@ const reducer = (state = initialState, action) => {
     }
     case REMOVE_OBSTACLE: {
       const obstacles = reject(state.obstacles, ['id', action.id]);
-      const source = markHitSource({ targets: obstacles, source: state.source });
+      const source = markHitSource({
+        targets: obstacles,
+        source: state.source,
+      });
 
       return {
         ...state,
@@ -218,7 +216,9 @@ const reducer = (state = initialState, action) => {
       });
     }
     case DRAG_MOVE:
-      if (state.source === null) { return state; }
+      if (state.source === null) {
+        return state;
+      }
 
       return markHitAll({
         ...state,
@@ -323,10 +323,6 @@ const actionTypes = {
   DRAG_END,
 };
 
-export {
-  actionCreators,
-  actionTypes,
-  reducer,
-};
+export { actionCreators, actionTypes };
 
 export default reducer;

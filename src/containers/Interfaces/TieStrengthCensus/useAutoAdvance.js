@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+
 import { getCSSVariableAsNumber } from '@codaco/ui/lib/utils/CSSVariables';
 
 /**
@@ -20,7 +21,9 @@ const useAutoAdvance = (_next, isTouched, isChanged) => {
   // Auto advance
   useEffect(() => {
     if (isTouched) {
-      if (timer.current) { clearTimeout(timer.current); }
+      if (timer.current) {
+        clearTimeout(timer.current);
+      }
 
       if (isChanged) {
         timer.current = setTimeout(next.current, delay);
@@ -30,10 +33,12 @@ const useAutoAdvance = (_next, isTouched, isChanged) => {
     }
 
     return () => {
-      if (!timer.current) { return () => {}; }
+      if (!timer.current) {
+        return () => {};
+      }
       return clearTimeout(timer.current);
     };
-  }, [isTouched]);
+  }, [isTouched, delay, isChanged]);
 };
 
 export default useAutoAdvance;

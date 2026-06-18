@@ -1,4 +1,4 @@
-const path = require('path');
+const path = require('node:path');
 const electron = require('electron');
 const fs = require('fs-extra');
 const { kebabCase } = require('lodash');
@@ -21,9 +21,11 @@ const paths = {
   dataDir: path.join(__dirname, '.data'),
 };
 
-const developmentProtocol = process.env.DEVELOPMENT_PROTOCOL_URL || DEVELOPMENT_PROTOCOL_URL;
+const developmentProtocol =
+  process.env.DEVELOPMENT_PROTOCOL_URL || DEVELOPMENT_PROTOCOL_URL;
 
-const mockProtocol = 'https://raw.githubusercontent.com/codaco/Network-Canvas/master/integration-tests/data/mock.netcanvas';
+const mockProtocol =
+  'https://raw.githubusercontent.com/codaco/Network-Canvas/master/integration-tests/data/mock.netcanvas';
 
 const defaultImageSnaphotConfig = {
   // { testPath, currentTestName, counter, defaultIdentifier }

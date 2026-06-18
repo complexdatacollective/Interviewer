@@ -1,31 +1,40 @@
+import { useEffect, useState } from 'react';
+
 import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
-import { useState, useEffect } from 'react';
+
 import { actionCreators as sessionsActions } from '../../../ducks/modules/sessions';
 
 export const getEdgeInNetwork = (edges, pair, edgeType) => {
-  if (!pair) { return null; }
+  if (!pair) {
+    return null;
+  }
   const [a, b] = pair;
 
-  const edge = edges.find(({ from, to, type }) => (
-    type === edgeType
-    && ((from === a && to === b) || (to === a && from === b))
-  ));
+  const edge = edges.find(
+    ({ from, to, type }) =>
+      type === edgeType &&
+      ((from === a && to === b) || (to === a && from === b)),
+  );
 
-  if (!edge) { return null; }
+  if (!edge) {
+    return null;
+  }
 
   return edge;
 };
 
-export const matchEntry = (prompt, pair) => ([p, a, b]) => (
-  (p === prompt && a === pair[0] && b === pair[1])
-  || (p === prompt && b === pair[0] && a === pair[1])
-);
+export const matchEntry =
+  (prompt, pair) =>
+  ([p, a, b]) =>
+    (p === prompt && a === pair[0] && b === pair[1]) ||
+    (p === prompt && b === pair[0] && a === pair[1]);
 
 export const getIsPreviouslyAnsweredNo = (state, prompt, pair) => {
-  if (!state || pair.length !== 2) { return false; }
+  if (!state || pair.length !== 2) {
+    return false;
+  }
 
-  const answer = state
-    .find(matchEntry(prompt, pair));
+  const answer = state.find(matchEntry(prompt, pair));
 
   if (answer && answer[3] === false) {
     return true;
@@ -76,10 +85,14 @@ const useEdgeState = (
   const [isChanged, setIsChanged] = useState(false);
 
   const getHasEdge = () => {
-    if (!pair) { return null; }
+    if (!pair) {
+      return null;
+    }
 
     // Either we set a value for this or it already has an edge
-    if (edgeState !== null) { return !!edgeState; }
+    if (edgeState !== null) {
+      return !!edgeState;
+    }
 
     // Check if this pair was marked as no before
     if (getIsPreviouslyAnsweredNo(stageState, promptIndex, pair)) {
@@ -91,7 +104,9 @@ const useEdgeState = (
   };
 
   const setEdge = (value = true) => {
-    if (!pair) { return; }
+    if (!pair) {
+      return;
+    }
 
     const existingEdge = getEdgeInNetwork(edges, pair, edgeType);
 
@@ -102,12 +117,20 @@ const useEdgeState = (
     const addEdge = value && !existingEdge;
     const removeEdge = !value && existingEdge;
 
-    const newStageState = stageStateReducer(stageState, { pair, prompt: promptIndex, value });
+    const newStageState = stageStateReducer(stageState, {
+      pair,
+      prompt: promptIndex,
+      value,
+    });
 
     if (addEdge) {
-      dispatch(sessionsActions.addEdge({ from: pair[0], to: pair[1], type: edgeType }));
+      dispatch(
+        sessionsActions.addEdge({ from: pair[0], to: pair[1], type: edgeType }),
+      );
     } else if (removeEdge) {
-      dispatch(sessionsActions.removeEdge(existingEdge[entityPrimaryKeyProperty]));
+      dispatch(
+        sessionsActions.removeEdge(existingEdge[entityPrimaryKeyProperty]),
+      );
     }
 
     dispatch(sessionsActions.updateStageState(newStageState));

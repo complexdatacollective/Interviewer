@@ -23,7 +23,9 @@
 
   .item {
     padding: units.unit(4);
-    transition: background var(--animation-duration-fast) var(--animation-easing), font-weight var(--animation-duration-fast) var(--animation-easing);
+    transition:
+      background var(--animation-duration-fast) var(--animation-easing),
+      font-weight var(--animation-duration-fast) var(--animation-easing);
     cursor: pointer;
     font-weight: 700;
     font-size: 0.8rem;

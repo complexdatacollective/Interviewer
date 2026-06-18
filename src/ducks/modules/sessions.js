@@ -1,9 +1,14 @@
 import { has, omit, reduce } from 'lodash';
-import uuid from 'uuid/v4';
+import { v4 as uuid } from 'uuid';
+
 import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
-import { actionCreators as SessionWorkerActions } from './sessionWorkers';
+
 import { actionTypes as installedProtocolsActionTypes } from './installedProtocols';
-import networkReducer, { actionTypes as networkActionTypes, actionCreators as networkActions } from './network';
+import networkReducer, {
+  actionCreators as networkActions,
+  actionTypes as networkActionTypes,
+} from './network';
+import { actionCreators as SessionWorkerActions } from './sessionWorkers';
 
 const ADD_SESSION = 'ADD_SESSION';
 const SET_SESSION_FINISHED = 'SET_SESSION_FINISHED';
@@ -24,124 +29,146 @@ const withTimestamp = (session) => ({
 
 const sessionExists = (sessionId, sessions) => has(sessions, sessionId);
 
-const getReducer = (network) => (state = initialState, action = {}) => {
-  switch (action.type) {
-    case installedProtocolsActionTypes.DELETE_PROTOCOL:
-      return reduce(state, (result, sessionData, sessionId) => {
-        if (sessionData.protocolUID !== action.protocolUID) {
-          return { ...result, [sessionId]: sessionData };
-        }
-        return result;
-      }, {});
-    case networkActionTypes.ADD_NODE:
-    case networkActionTypes.ADD_NODE_TO_PROMPT:
-    case networkActionTypes.BATCH_ADD_NODES:
-    case networkActionTypes.REMOVE_NODE:
-    case networkActionTypes.REMOVE_NODE_FROM_PROMPT:
-    case networkActionTypes.UPDATE_NODE:
-    case networkActionTypes.TOGGLE_NODE_ATTRIBUTES:
-    case networkActionTypes.ADD_EDGE:
-    case networkActionTypes.UPDATE_EDGE:
-    case networkActionTypes.TOGGLE_EDGE:
-    case networkActionTypes.REMOVE_EDGE:
-    case networkActionTypes.UPDATE_EGO: {
-      if (!sessionExists(action.sessionId, state)) { return state; }
-      return {
-        ...state,
-        [action.sessionId]: withTimestamp({
-          ...state[action.sessionId],
-          // Reset finished and exported state if network changes
-          finishedAt: null,
-          exportedAt: null,
-          network: network(state[action.sessionId].network, action),
-        }),
-      };
-    }
-    case ADD_SESSION:
-      return {
-        ...state,
-        [action.sessionId]: withTimestamp({
-          protocolUID: action.protocolUID,
-          promptIndex: 0,
-          stageIndex: 0,
-          caseId: action.caseId,
-          network: action.network ? action.network : network(state.network, action),
-          startedAt: Date.now(),
-        }),
-      };
-    case SET_SESSION_FINISHED: {
-      if (!sessionExists(action.sessionId, state)) { return state; }
-      return {
-        ...state,
-        [action.sessionId]: withTimestamp({
-          ...state[action.sessionId],
-          finishedAt: Date.now(),
-        }),
-      };
-    }
-
-    case SET_SESSION_EXPORTED: {
-      if (!sessionExists(action.sessionId, state)) { return state; }
-      return {
-        ...state,
-        [action.sessionId]: {
-          ...state[action.sessionId],
-          exportedAt: Date.now(),
-        },
-      };
-    }
-    case LOAD_SESSION:
-      return state;
-    case UPDATE_PROMPT: {
-      if (!sessionExists(action.sessionId, state)) { return state; }
-      return {
-        ...state,
-        [action.sessionId]: withTimestamp({
-          ...state[action.sessionId],
-          promptIndex: action.promptIndex,
-        }),
-      };
-    }
-    case UPDATE_STAGE: {
-      if (!sessionExists(action.sessionId, state)) { return state; }
-      return {
-        ...state,
-        [action.sessionId]: withTimestamp({
-          ...state[action.sessionId],
-          stageIndex: action.stageIndex,
-        }),
-      };
-    }
-    case UPDATE_CASE_ID: {
-      if (!sessionExists(action.sessionId, state)) { return state; }
-      return {
-        ...state,
-        [action.sessionId]: withTimestamp({
-          ...state[action.sessionId],
-          caseId: action.caseId,
-        }),
-      };
-    }
-    case UPDATE_STAGE_STATE: {
-      if (!sessionExists(action.sessionId, state)) { return state; }
-      const session = state[action.sessionId];
-      return {
-        ...state,
-        [action.sessionId]: withTimestamp({
-          ...session,
-          stages: {
-            ...session.stages,
-            [action.stageIndex]: action.state,
+const getReducer =
+  (network) =>
+  (state = initialState, action = {}) => {
+    switch (action.type) {
+      case installedProtocolsActionTypes.DELETE_PROTOCOL:
+        return reduce(
+          state,
+          (result, sessionData, sessionId) => {
+            if (sessionData.protocolUID !== action.protocolUID) {
+              return { ...result, [sessionId]: sessionData };
+            }
+            return result;
           },
-        }),
-      };
+          {},
+        );
+      case networkActionTypes.ADD_NODE:
+      case networkActionTypes.ADD_NODE_TO_PROMPT:
+      case networkActionTypes.BATCH_ADD_NODES:
+      case networkActionTypes.REMOVE_NODE:
+      case networkActionTypes.REMOVE_NODE_FROM_PROMPT:
+      case networkActionTypes.UPDATE_NODE:
+      case networkActionTypes.TOGGLE_NODE_ATTRIBUTES:
+      case networkActionTypes.ADD_EDGE:
+      case networkActionTypes.UPDATE_EDGE:
+      case networkActionTypes.TOGGLE_EDGE:
+      case networkActionTypes.REMOVE_EDGE:
+      case networkActionTypes.UPDATE_EGO: {
+        if (!sessionExists(action.sessionId, state)) {
+          return state;
+        }
+        return {
+          ...state,
+          [action.sessionId]: withTimestamp({
+            ...state[action.sessionId],
+            // Reset finished and exported state if network changes
+            finishedAt: null,
+            exportedAt: null,
+            network: network(state[action.sessionId].network, action),
+          }),
+        };
+      }
+      case ADD_SESSION:
+        return {
+          ...state,
+          [action.sessionId]: withTimestamp({
+            protocolUID: action.protocolUID,
+            promptIndex: 0,
+            stageIndex: 0,
+            caseId: action.caseId,
+            network: action.network
+              ? action.network
+              : network(state.network, action),
+            startedAt: Date.now(),
+          }),
+        };
+      case SET_SESSION_FINISHED: {
+        if (!sessionExists(action.sessionId, state)) {
+          return state;
+        }
+        return {
+          ...state,
+          [action.sessionId]: withTimestamp({
+            ...state[action.sessionId],
+            finishedAt: Date.now(),
+          }),
+        };
+      }
+
+      case SET_SESSION_EXPORTED: {
+        if (!sessionExists(action.sessionId, state)) {
+          return state;
+        }
+        return {
+          ...state,
+          [action.sessionId]: {
+            ...state[action.sessionId],
+            exportedAt: Date.now(),
+          },
+        };
+      }
+      case LOAD_SESSION:
+        return state;
+      case UPDATE_PROMPT: {
+        if (!sessionExists(action.sessionId, state)) {
+          return state;
+        }
+        return {
+          ...state,
+          [action.sessionId]: withTimestamp({
+            ...state[action.sessionId],
+            promptIndex: action.promptIndex,
+          }),
+        };
+      }
+      case UPDATE_STAGE: {
+        if (!sessionExists(action.sessionId, state)) {
+          return state;
+        }
+        return {
+          ...state,
+          [action.sessionId]: withTimestamp({
+            ...state[action.sessionId],
+            stageIndex: action.stageIndex,
+          }),
+        };
+      }
+      case UPDATE_CASE_ID: {
+        if (!sessionExists(action.sessionId, state)) {
+          return state;
+        }
+        return {
+          ...state,
+          [action.sessionId]: withTimestamp({
+            ...state[action.sessionId],
+            caseId: action.caseId,
+          }),
+        };
+      }
+      case UPDATE_STAGE_STATE: {
+        if (!sessionExists(action.sessionId, state)) {
+          return state;
+        }
+        const session = state[action.sessionId];
+        return {
+          ...state,
+          [action.sessionId]: withTimestamp({
+            ...session,
+            stages: {
+              ...session.stages,
+              [action.stageIndex]: action.state,
+            },
+          }),
+        };
+      }
+      case REMOVE_SESSION:
+        return omit(state, [action.sessionId]);
+      default:
+        return state;
     }
-    case REMOVE_SESSION:
-      return omit(state, [action.sessionId]);
-    default:
-      return state;
-  }
-};
+  };
 
 /**
  * This function generates default values for all variables in the variable registry for this node
@@ -186,74 +213,77 @@ const withActiveSessionId = (action) => (dispatch, getState) => {
  * @memberof! NetworkActionCreators
  * TODO: is `type` superfluous as contained by nodes in nodeList?
  */
-const batchAddNodes = (nodeList, attributeData, type) => (dispatch, getState) => {
-  const { activeSessionId, sessions, installedProtocols } = getState();
+const batchAddNodes =
+  (nodeList, attributeData, type) => (dispatch, getState) => {
+    const { activeSessionId, sessions, installedProtocols } = getState();
 
-  const session = sessions[activeSessionId];
-  const activeProtocol = installedProtocols[session.protocolUID];
-  const nodeRegistry = activeProtocol.codebook.node;
-  const registryForType = nodeRegistry[type].variables;
-  const defaultAttributes = getDefaultAttributesForEntityType(registryForType);
+    const session = sessions[activeSessionId];
+    const activeProtocol = installedProtocols[session.protocolUID];
+    const nodeRegistry = activeProtocol.codebook.node;
+    const registryForType = nodeRegistry[type].variables;
+    const defaultAttributes =
+      getDefaultAttributesForEntityType(registryForType);
 
-  dispatch(
-    withActiveSessionId(
-      networkActions.batchAddNodes(
-        nodeList,
-        attributeData,
-        defaultAttributes,
+    dispatch(
+      withActiveSessionId(
+        networkActions.batchAddNodes(
+          nodeList,
+          attributeData,
+          defaultAttributes,
+        ),
       ),
-    ),
-  );
-};
+    );
+  };
 
-const addNode = (modelData, attributeData = {}) => (dispatch, getState) => {
-  const { activeSessionId, sessions, installedProtocols } = getState();
+const addNode =
+  (modelData, attributeData = {}) =>
+  (dispatch, getState) => {
+    const { activeSessionId, sessions, installedProtocols } = getState();
 
-  const activeProtocol = installedProtocols[sessions[activeSessionId].protocolUID];
-  const nodeRegistry = activeProtocol.codebook.node;
+    const activeProtocol =
+      installedProtocols[sessions[activeSessionId].protocolUID];
+    const nodeRegistry = activeProtocol.codebook.node;
 
-  const registryForType = nodeRegistry[modelData.type].variables;
+    const registryForType = nodeRegistry[modelData.type].variables;
 
-  dispatch({
-    type: networkActionTypes.ADD_NODE,
-    sessionId: activeSessionId,
-    modelData,
-    attributeData: {
-      ...getDefaultAttributesForEntityType(registryForType),
-      ...attributeData,
-    },
-  });
-};
+    dispatch({
+      type: networkActionTypes.ADD_NODE,
+      sessionId: activeSessionId,
+      modelData,
+      attributeData: {
+        ...getDefaultAttributesForEntityType(registryForType),
+        ...attributeData,
+      },
+    });
+  };
 
-const updateNode = (
-  nodeId,
-  newModelData = {},
-  newAttributeData = {},
-  sound,
-) => (dispatch, getState) => {
-  const { activeSessionId } = getState();
+const updateNode =
+  (nodeId, newModelData = {}, newAttributeData = {}, sound) =>
+  (dispatch, getState) => {
+    const { activeSessionId } = getState();
 
-  dispatch({
-    type: networkActionTypes.UPDATE_NODE,
-    sessionId: activeSessionId,
-    nodeId,
-    newModelData,
-    newAttributeData,
-    sound,
-  });
-};
+    dispatch({
+      type: networkActionTypes.UPDATE_NODE,
+      sessionId: activeSessionId,
+      nodeId,
+      newModelData,
+      newAttributeData,
+      sound,
+    });
+  };
 
-const addNodeToPrompt = (nodeId, promptId, promptAttributes) => (dispatch, getState) => {
-  const { activeSessionId } = getState();
+const addNodeToPrompt =
+  (nodeId, promptId, promptAttributes) => (dispatch, getState) => {
+    const { activeSessionId } = getState();
 
-  dispatch({
-    type: networkActionTypes.ADD_NODE_TO_PROMPT,
-    sessionId: activeSessionId,
-    nodeId,
-    promptId,
-    promptAttributes,
-  });
-};
+    dispatch({
+      type: networkActionTypes.ADD_NODE_TO_PROMPT,
+      sessionId: activeSessionId,
+      nodeId,
+      promptId,
+      promptAttributes,
+    });
+  };
 
 const toggleNodeAttributes = (uid, attributes) => (dispatch, getState) => {
   const { activeSessionId } = getState();
@@ -276,84 +306,96 @@ const removeNode = (uid) => (dispatch, getState) => {
   });
 };
 
-const removeNodeFromPrompt = (nodeId, promptId, promptAttributes) => (dispatch, getState) => {
-  const { activeSessionId } = getState();
+const removeNodeFromPrompt =
+  (nodeId, promptId, promptAttributes) => (dispatch, getState) => {
+    const { activeSessionId } = getState();
 
-  dispatch({
-    type: networkActionTypes.REMOVE_NODE_FROM_PROMPT,
-    sessionId: activeSessionId,
-    nodeId,
-    promptId,
-    promptAttributes,
-  });
-};
+    dispatch({
+      type: networkActionTypes.REMOVE_NODE_FROM_PROMPT,
+      sessionId: activeSessionId,
+      nodeId,
+      promptId,
+      promptAttributes,
+    });
+  };
 
-const updateEgo = (modelData = {}, attributeData = {}) => (dispatch, getState) => {
-  const { activeSessionId, sessions, installedProtocols } = getState();
+const updateEgo =
+  (modelData = {}, attributeData = {}) =>
+  (dispatch, getState) => {
+    const { activeSessionId, sessions, installedProtocols } = getState();
 
-  const activeProtocol = installedProtocols[sessions[activeSessionId].protocolUID];
-  const egoRegistry = activeProtocol.codebook.ego || {};
+    const activeProtocol =
+      installedProtocols[sessions[activeSessionId].protocolUID];
+    const egoRegistry = activeProtocol.codebook.ego || {};
 
-  dispatch({
-    type: networkActionTypes.UPDATE_EGO,
-    sessionId: activeSessionId,
-    modelData,
-    attributeData: {
-      ...getDefaultAttributesForEntityType(egoRegistry.variables),
-      ...attributeData,
-    },
-  });
-};
+    dispatch({
+      type: networkActionTypes.UPDATE_EGO,
+      sessionId: activeSessionId,
+      modelData,
+      attributeData: {
+        ...getDefaultAttributesForEntityType(egoRegistry.variables),
+        ...attributeData,
+      },
+    });
+  };
 
-const addEdge = (modelData, attributeData = {}) => (dispatch, getState) => {
-  const { activeSessionId, sessions, installedProtocols } = getState();
+const addEdge =
+  (modelData, attributeData = {}) =>
+  (dispatch, getState) => {
+    const { activeSessionId, sessions, installedProtocols } = getState();
 
-  const activeProtocol = installedProtocols[sessions[activeSessionId].protocolUID];
-  const edgeRegistry = activeProtocol.codebook.edge;
+    const activeProtocol =
+      installedProtocols[sessions[activeSessionId].protocolUID];
+    const edgeRegistry = activeProtocol.codebook.edge;
 
-  const registryForType = edgeRegistry[modelData.type].variables;
+    const registryForType = edgeRegistry[modelData.type].variables;
 
-  dispatch({
-    type: networkActionTypes.ADD_EDGE,
-    sessionId: activeSessionId,
-    modelData,
-    attributeData: {
-      ...getDefaultAttributesForEntityType(registryForType),
-      ...attributeData,
-    },
-  });
-};
+    dispatch({
+      type: networkActionTypes.ADD_EDGE,
+      sessionId: activeSessionId,
+      modelData,
+      attributeData: {
+        ...getDefaultAttributesForEntityType(registryForType),
+        ...attributeData,
+      },
+    });
+  };
 
-const updateEdge = (edgeId, newModelData = {}, newAttributeData = {}) => (dispatch, getState) => {
-  const { activeSessionId } = getState();
+const updateEdge =
+  (edgeId, newModelData = {}, newAttributeData = {}) =>
+  (dispatch, getState) => {
+    const { activeSessionId } = getState();
 
-  dispatch({
-    type: networkActionTypes.UPDATE_EDGE,
-    sessionId: activeSessionId,
-    edgeId,
-    newModelData,
-    newAttributeData,
-  });
-};
+    dispatch({
+      type: networkActionTypes.UPDATE_EDGE,
+      sessionId: activeSessionId,
+      edgeId,
+      newModelData,
+      newAttributeData,
+    });
+  };
 
-const toggleEdge = (modelData, attributeData = {}) => (dispatch, getState) => {
-  const { activeSessionId, sessions, installedProtocols } = getState();
+const toggleEdge =
+  (modelData, attributeData = {}) =>
+  (dispatch, getState) => {
+    const { activeSessionId, sessions, installedProtocols } = getState();
 
-  const activeProtocol = installedProtocols[sessions[activeSessionId].protocolUID];
-  const edgeRegistry = activeProtocol.codebook.edge;
+    const activeProtocol =
+      installedProtocols[sessions[activeSessionId].protocolUID];
+    const edgeRegistry = activeProtocol.codebook.edge;
 
-  const registryForType = edgeRegistry[modelData.type].variables;
+    const registryForType = edgeRegistry[modelData.type].variables;
 
-  dispatch({
-    type: networkActionTypes.TOGGLE_EDGE,
-    sessionId: activeSessionId,
-    modelData,
-    attributeData: {
-      ...getDefaultAttributesForEntityType(registryForType),
-      ...attributeData,
-    },
-  });
-};
+    dispatch({
+      type: networkActionTypes.TOGGLE_EDGE,
+      sessionId: activeSessionId,
+      modelData,
+      attributeData: {
+        ...getDefaultAttributesForEntityType(registryForType),
+        ...attributeData,
+      },
+    });
+  };
 
 const removeEdge = (edgeId) => (dispatch, getState) => {
   const { activeSessionId } = getState();
@@ -365,26 +407,30 @@ const removeEdge = (edgeId) => (dispatch, getState) => {
   });
 };
 
-const addSession = (caseId, protocolUID, sessionNetwork) => (dispatch, getState) => {
-  const id = uuid();
+const addSession =
+  (caseId, protocolUID, sessionNetwork) => (dispatch, getState) => {
+    const id = uuid();
 
-  const { installedProtocols } = getState();
-  const activeProtocol = installedProtocols[protocolUID];
-  const egoRegistry = activeProtocol.codebook.ego || {};
-  const egoAttributeData = getDefaultAttributesForEntityType(egoRegistry.variables);
+    const { installedProtocols } = getState();
+    const activeProtocol = installedProtocols[protocolUID];
+    const egoRegistry = activeProtocol.codebook.ego || {};
+    const egoAttributeData = getDefaultAttributesForEntityType(
+      egoRegistry.variables,
+    );
 
-  dispatch({
-    type: ADD_SESSION,
-    sessionId: id,
-    ...(sessionNetwork && { network: sessionNetwork }),
-    caseId,
-    protocolUID,
-    egoAttributeData, // initial values for ego
-  });
+    dispatch({
+      type: ADD_SESSION,
+      sessionId: id,
+      ...(sessionNetwork && { network: sessionNetwork }),
+      caseId,
+      protocolUID,
+      egoAttributeData, // initial values for ego
+    });
 
-  return dispatch(SessionWorkerActions.initializeSessionWorkersThunk(protocolUID))
-    .then(() => id);
-};
+    return dispatch(
+      SessionWorkerActions.initializeSessionWorkersThunk(protocolUID),
+    ).then(() => id);
+  };
 
 const updateCaseId = (caseId) => (dispatch, getState) => {
   const { activeSessionId } = getState();
@@ -437,11 +483,13 @@ const updateStageState = (state) => (dispatch, getState) => {
   const { activeSessionId, sessions } = getState();
   const { stageIndex } = sessions[activeSessionId];
 
-  dispatch(withSessionId({
-    type: UPDATE_STAGE_STATE,
-    stageIndex,
-    state,
-  }));
+  dispatch(
+    withSessionId({
+      type: UPDATE_STAGE_STATE,
+      stageIndex,
+      state,
+    }),
+  );
 };
 
 function removeSession(id) {
@@ -497,10 +545,6 @@ const actionTypes = {
   REMOVE_SESSION,
 };
 
-export {
-  actionCreators,
-  actionTypes,
-  getReducer,
-};
+export { actionCreators, actionTypes, getReducer };
 
 export default getReducer(networkReducer);

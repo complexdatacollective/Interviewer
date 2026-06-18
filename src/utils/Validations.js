@@ -1,13 +1,7 @@
-import {
-  filter,
-  isEqual,
-  isNil,
-  isNumber,
-  isString,
-  some,
-  get,
-} from 'lodash';
+import { filter, get, isEqual, isNil, isNumber, isString, some } from 'lodash';
+
 import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
+
 import { makeNetworkEntitiesForType } from '../selectors/interface';
 import { getCodebookVariablesForType } from '../selectors/session';
 
@@ -15,9 +9,9 @@ import { getCodebookVariablesForType } from '../selectors/session';
 // or a single value
 const coerceArray = (value) => {
   if (value instanceof Object) {
-    return value.reduce((acc, individual) => ([...acc, individual.value]), []);
+    return value.reduce((acc, individual) => [...acc, individual.value], []);
   }
-  if (value instanceof Array) {
+  if (Array.isArray(value)) {
     return value;
   }
   return [];
@@ -27,10 +21,13 @@ export const validateUrl = (message) => (url) => {
   try {
     const constructURL = new URL(url);
 
-    if (constructURL.protocol !== 'http:' && constructURL.protocol !== 'https:') {
+    if (
+      constructURL.protocol !== 'http:' &&
+      constructURL.protocol !== 'https:'
+    ) {
       throw new Error('Invalid protocol');
     }
-  } catch (e) {
+  } catch (_e) {
     return message || 'Please enter a valid URL, including http:// or https://';
   }
 
@@ -47,18 +44,40 @@ export const required = (message) => (value) => {
   return undefined;
 };
 
-export const maxLength = (max) => (value) => (value && value.length > max ? `Your answer must be ${max} characters or less` : undefined);
-export const minLength = (min) => (value) => (!value || value.length < min ? `Your answer must be ${min} characters or more` : undefined);
-export const minValue = (min) => (value) => (isNumber(value) && value < min ? `Your answer must be at least ${min}` : undefined);
-export const maxValue = (max) => (value) => (isNumber(value) && value > max ? `Your answer must be less than ${max}` : undefined);
+export const maxLength = (max) => (value) =>
+  value && value.length > max
+    ? `Your answer must be ${max} characters or less`
+    : undefined;
+export const minLength = (min) => (value) =>
+  !value || value.length < min
+    ? `Your answer must be ${min} characters or more`
+    : undefined;
+export const minValue = (min) => (value) =>
+  isNumber(value) && value < min
+    ? `Your answer must be at least ${min}`
+    : undefined;
+export const maxValue = (max) => (value) =>
+  isNumber(value) && value > max
+    ? `Your answer must be less than ${max}`
+    : undefined;
 
-export const minSelected = (min) => (value) => (!value || coerceArray(value).length < min ? `You must choose a minimum of ${min} option(s)` : undefined);
+export const minSelected = (min) => (value) =>
+  !value || coerceArray(value).length < min
+    ? `You must choose a minimum of ${min} option(s)`
+    : undefined;
 
-export const maxSelected = (max) => (value) => (value && coerceArray(value).length > max ? `You must choose a maximum of ${max} option(s)` : undefined);
+export const maxSelected = (max) => (value) =>
+  value && coerceArray(value).length > max
+    ? `You must choose a maximum of ${max} option(s)`
+    : undefined;
 
 const isMatchingValue = (submittedValue, existingValue) => {
-  if (submittedValue && existingValue && existingValue instanceof Array) {
-    return isEqual(submittedValue.sort(), existingValue.sort());
+  if (submittedValue && existingValue && Array.isArray(existingValue)) {
+    const compare = (a, b) => String(a).localeCompare(String(b));
+    return isEqual(
+      submittedValue.toSorted(compare),
+      existingValue.toSorted(compare),
+    );
   }
   if (submittedValue && existingValue && existingValue instanceof Object) {
     return isEqual(submittedValue, existingValue);
@@ -66,14 +85,18 @@ const isMatchingValue = (submittedValue, existingValue) => {
   return submittedValue === existingValue;
 };
 
-const isSomeValueMatching = (value, otherNetworkEntities, name) => (
-  some(otherNetworkEntities, (entity) => entity.attributes
-    && isMatchingValue(value, entity.attributes[name])));
+const isSomeValueMatching = (value, otherNetworkEntities, name) =>
+  some(
+    otherNetworkEntities,
+    (entity) =>
+      entity.attributes && isMatchingValue(value, entity.attributes[name]),
+  );
 
-const getOtherNetworkEntities = (entities, entityId) => filter(
-  entities,
-  (node) => (!entityId || node[entityPrimaryKeyProperty] !== entityId),
-);
+const getOtherNetworkEntities = (entities, entityId) =>
+  filter(
+    entities,
+    (node) => !entityId || node[entityPrimaryKeyProperty] !== entityId,
+  );
 
 export const unique = (_, store) => {
   const networkEntitiesForType = makeNetworkEntitiesForType();
@@ -84,28 +107,40 @@ export const unique = (_, store) => {
       validationMeta?.entityId,
     );
 
-    return isSomeValueMatching(value, otherNetworkEntities, name) ? 'Your answer must be unique' : undefined;
+    return isSomeValueMatching(value, otherNetworkEntities, name)
+      ? 'Your answer must be unique'
+      : undefined;
   };
 };
 
 const getVariableName = (variableId, store) => {
-  const codebookVariablesForType = getCodebookVariablesForType()(store.getState());
+  const codebookVariablesForType = getCodebookVariablesForType()(
+    store.getState(),
+  );
   return get(codebookVariablesForType, [variableId, 'name']);
 };
 
 const getVariableType = (variableId, store) => {
-  const codebookVariablesForType = getCodebookVariablesForType()(store.getState());
+  const codebookVariablesForType = getCodebookVariablesForType()(
+    store.getState(),
+  );
   return get(codebookVariablesForType, [variableId, 'type']);
 };
 
 export const differentFrom = (variableId, store) => {
   const variableName = getVariableName(variableId, store);
-  return (value, allValues) => (isMatchingValue(value, allValues[variableId]) ? `Your answer must be different from ${variableName}` : undefined);
+  return (value, allValues) =>
+    isMatchingValue(value, allValues[variableId])
+      ? `Your answer must be different from ${variableName}`
+      : undefined;
 };
 
 export const sameAs = (variableId, store) => {
   const variableName = getVariableName(variableId, store);
-  return (value, allValues) => (!isMatchingValue(value, allValues[variableId]) ? `Your answer must be the same as ${variableName}` : undefined);
+  return (value, allValues) =>
+    !isMatchingValue(value, allValues[variableId])
+      ? `Your answer must be the same as ${variableName}`
+      : undefined;
 };
 
 const compareVariables = (value1, value2, type) => {
@@ -132,13 +167,21 @@ const compareVariables = (value1, value2, type) => {
 export const greaterThanVariable = (variableId, store) => {
   const variableName = getVariableName(variableId, store);
   const variableType = getVariableType(variableId, store);
-  return (value, allValues) => (isNil(value) || (compareVariables(value, allValues[variableId], variableType) <= 0) ? `Your answer must be greater than ${variableName}` : undefined);
+  return (value, allValues) =>
+    isNil(value) ||
+    compareVariables(value, allValues[variableId], variableType) <= 0
+      ? `Your answer must be greater than ${variableName}`
+      : undefined;
 };
 
 export const lessThanVariable = (variableId, store) => {
   const variableName = getVariableName(variableId, store);
   const variableType = getVariableType(variableId, store);
-  return (value, allValues) => (isNil(value) || (compareVariables(value, allValues[variableId], variableType) >= 0) ? `Your answer must be less than ${variableName}` : undefined);
+  return (value, allValues) =>
+    isNil(value) ||
+    compareVariables(value, allValues[variableId], variableType) >= 0
+      ? `Your answer must be less than ${variableName}`
+      : undefined;
 };
 
 export default {

@@ -1,20 +1,24 @@
-/* eslint-disable global-require */
+/**
+ * Remote control handler for preview mode with secure API support.
+ */
 
-import environments from './environments';
-import inEnvironment from './Environment';
-import { store } from '../ducks/store';
 import { actionCreators as remoteActions } from '../ducks/modules/remote';
+import { store } from '../ducks/store';
+import inEnvironment, { isElectron } from './Environment';
+import environments from './environments';
 
 const init = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const { ipcRenderer } = window.require('electron');
-
     return () => {
-      ipcRenderer.on('remote:preview', (event, protocol, stageId) => {
+      if (!isElectron() || !window.electronAPI?.ipc?.on) {
+        return;
+      }
+
+      window.electronAPI.ipc.on('remote:preview', (protocol, stageId) => {
         store.dispatch(remoteActions.previewStage(protocol, stageId));
       });
 
-      ipcRenderer.on('remote:reset', () => {
+      window.electronAPI.ipc.on('remote:reset', () => {
         store.dispatch(remoteActions.reset());
       });
     };

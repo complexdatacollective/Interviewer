@@ -1,14 +1,20 @@
-/* eslint-env jest */
-/* eslint-disable @codaco/spellcheck/spell-checker */
-
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import uuid from 'uuid/v4';
-import reducer, { getReducer, actionCreators, actionTypes } from '../sessions';
-import { actionTypes as networkActionTypes, actionCreators as networkActions } from '../network';
-import { actionTypes as installedProtocolsActionTypes } from '../installedProtocols';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-jest.mock('../network');
+import { actionTypes as installedProtocolsActionTypes } from '../installedProtocols';
+import {
+  actionCreators as networkActions,
+  actionTypes as networkActionTypes,
+} from '../network';
+import reducer, { actionCreators, actionTypes, getReducer } from '../sessions';
+
+const mockSessionId = 'session-1';
+
+vi.mock('../network');
+vi.mock('uuid', () => ({
+  v4: vi.fn(() => mockSessionId),
+}));
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -16,9 +22,7 @@ const mockStore = configureMockStore(middlewares);
 const mockState = {};
 
 const now = Date.now();
-Date.now = jest.fn().mockReturnValue(now);
-
-const mockSessionId = 'session-1';
+vi.spyOn(Date, 'now').mockReturnValue(now);
 
 const mockStateWithSession = {
   ...mockState,
@@ -38,9 +42,6 @@ const mockStateWithProtocol = {
   },
 };
 
-jest.mock('uuid/v4');
-uuid.mockImplementation(() => mockSessionId);
-
 describe('sessions', () => {
   describe('reducer', () => {
     beforeEach(() => {
@@ -48,13 +49,15 @@ describe('sessions', () => {
     });
 
     it('should handle ADD_SESSION', () => {
-      const newState = reducer({},
+      const newState = reducer(
+        {},
         {
           type: actionTypes.ADD_SESSION,
           caseId: 'case1',
           sessionId: 'a',
           protocolUID: 'mockProtocol',
-        });
+        },
+      );
 
       expect(newState).toEqual({
         a: {
@@ -77,72 +80,73 @@ describe('sessions', () => {
     });
 
     it('should handle UPDATE_SESSION', () => {
-      const newState = reducer(mockStateWithSession,
-        {
-          type: actionTypes.UPDATE_SESSION,
-          sessionId: mockSessionId,
-        });
+      const newState = reducer(mockStateWithSession, {
+        type: actionTypes.UPDATE_SESSION,
+        sessionId: mockSessionId,
+      });
 
-      expect(newState[mockSessionId]).toEqual(expect.objectContaining({
-        caseId: undefined,
-        network: { edges: [], ego: {}, nodes: [] },
-        protocolUID: undefined,
-      }));
+      expect(newState[mockSessionId]).toEqual(
+        expect.objectContaining({
+          caseId: undefined,
+          network: { edges: [], ego: {}, nodes: [] },
+          protocolUID: undefined,
+        }),
+      );
     });
 
     it('should handle UPDATE_CASE_ID', () => {
-      const newState = reducer(mockStateWithSession,
-        {
-          type: actionTypes.UPDATE_CASE_ID,
-          sessionId: mockSessionId,
-          caseId: 'case2',
-        });
-
-      expect(newState[mockSessionId]).toEqual(expect.objectContaining({
+      const newState = reducer(mockStateWithSession, {
+        type: actionTypes.UPDATE_CASE_ID,
+        sessionId: mockSessionId,
         caseId: 'case2',
-        network: { edges: [], ego: {}, nodes: [] },
-        protocolUID: undefined,
-      }));
+      });
+
+      expect(newState[mockSessionId]).toEqual(
+        expect.objectContaining({
+          caseId: 'case2',
+          network: { edges: [], ego: {}, nodes: [] },
+          protocolUID: undefined,
+        }),
+      );
     });
 
     it('should handle DELETE_PROTOCOL', () => {
-      const newState = reducer(mockStateWithProtocol,
-        {
-          type: installedProtocolsActionTypes.DELETE_PROTOCOL,
-          protocolUID: '1234',
-        });
+      const newState = reducer(mockStateWithProtocol, {
+        type: installedProtocolsActionTypes.DELETE_PROTOCOL,
+        protocolUID: '1234',
+      });
 
       expect(newState).toEqual(mockState);
     });
 
     it('should handle UPDATE_PROMPT', () => {
-      const newState = reducer(mockStateWithSession,
-        {
-          type: actionTypes.UPDATE_PROMPT,
-          sessionId: mockSessionId,
-          promptIndex: 2,
-        });
-
-      expect(newState[mockSessionId]).toEqual(expect.objectContaining({
-        caseId: undefined,
-        network: { edges: [], ego: {}, nodes: [] },
-        protocolUID: undefined,
+      const newState = reducer(mockStateWithSession, {
+        type: actionTypes.UPDATE_PROMPT,
+        sessionId: mockSessionId,
         promptIndex: 2,
-      }));
+      });
+
+      expect(newState[mockSessionId]).toEqual(
+        expect.objectContaining({
+          caseId: undefined,
+          network: { edges: [], ego: {}, nodes: [] },
+          protocolUID: undefined,
+          promptIndex: 2,
+        }),
+      );
     });
 
     it('should handle REMOVE_SESSION', () => {
-      const newState = reducer(mockStateWithSession,
-        {
-          type: actionTypes.REMOVE_SESSION,
-          sessionId: mockSessionId,
-        });
+      const newState = reducer(mockStateWithSession, {
+        type: actionTypes.REMOVE_SESSION,
+        sessionId: mockSessionId,
+      });
 
       expect(newState[mockSessionId]).toEqual(undefined);
     });
 
     it('network actions defer to network reducer', () => {
-      const mockNetworkReducer = jest.fn();
+      const mockNetworkReducer = vi.fn();
       const sessionReducer = getReducer(mockNetworkReducer);
 
       const networkActionList = [
@@ -161,7 +165,7 @@ describe('sessions', () => {
 
       networkActionList.forEach((actionType) => {
         const state = {
-          a: { network: { } },
+          a: { network: {} },
         };
         const action = { type: actionType, sessionId: 'a' };
         sessionReducer(state, action);
@@ -206,13 +210,13 @@ describe('sessions', () => {
         },
       });
 
-      store.dispatch(actionCreators.batchAddNodes(nodeList, attributeData, type));
+      store.dispatch(
+        actionCreators.batchAddNodes(nodeList, attributeData, type),
+      );
 
-      expect(networkActions.batchAddNodes.mock.calls).toEqual([[
-        nodeList,
-        attributeData,
-        defaultProperties,
-      ]]);
+      expect(networkActions.batchAddNodes.mock.calls).toEqual([
+        [nodeList, attributeData, defaultProperties],
+      ]);
 
       const dispatchedActions = store.getActions();
       expect(dispatchedActions).toHaveLength(1);

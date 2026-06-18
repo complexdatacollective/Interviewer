@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
+const fs = require('node:fs');
 const svg2png = require('svg2png');
-const path = require('path');
+const path = require('node:path');
 const icongen = require('icon-gen');
 
 const jobs = [
@@ -21,7 +21,6 @@ const jobs = [
     sizes: [76, 152, 40, 80, 72, 144, 50, 100, 167, 1024],
     fileName: 'NC-Square-',
     append: 'size',
-
   },
   {
     type: 'electron',
@@ -39,11 +38,9 @@ const jobs = [
 ];
 
 function generateElectronIcons(job) {
-  icongen(job.inputFile, job.outputPath, job.options).then((results) => {
-    console.log(results);
-  }).catch((err) => {
-    console.log(err);
-  });
+  icongen(job.inputFile, job.outputPath, job.options)
+    .then((_results) => {})
+    .catch((_err) => {});
 }
 
 const createDir = (dir) => {
@@ -86,7 +83,6 @@ function generateCordovaIcons(job) {
       createDir(job.outputPath);
       fs.writeFile(dest, output, (err) => {
         if (err) {
-          console.log(err);
         }
       });
     });
@@ -103,11 +99,12 @@ function parseJobs(jobList) {
   });
 }
 
-
 parseJobs(jobs);
 
 // TODO: remove once underlying issue fixed: https://github.com/akabekobeko/npm-icon-gen/issues/86
-const warn = (msg) => { console.warn(require('chalk').yellow(msg)); }; // eslint-disable-line
+const warn = (_msg) => {}; // eslint-disable-line
 warn('Warning: *.ico output for Windows may be corrupted.');
 warn('You should re-export from another editor.');
-warn('Issue: https://github.com/complexdatacollective/Network-Canvas/issues/602');
+warn(
+  'Issue: https://github.com/complexdatacollective/Network-Canvas/issues/602',
+);

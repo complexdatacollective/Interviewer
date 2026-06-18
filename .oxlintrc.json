@@ -1,0 +1,17 @@
+{
+  "extends": ["../../.oxlintrc.json", "../../tooling/oxlint/react.json"],
+  "jsPlugins": ["oxlint-tailwindcss"],
+  "settings": {
+    "tailwindcss": {
+      "entryPoint": "tooling/tailwind/fresco/fresco.css"
+    }
+  },
+  "rules": {
+    "react/exhaustive-deps": "warn",
+    "tailwindcss/no-unknown-classes": "off",
+    "tailwindcss/no-duplicate-classes": "error",
+    "tailwindcss/no-conflicting-classes": "warn",
+    "tailwindcss/no-unnecessary-whitespace": "error",
+    "tailwindcss/enforce-canonical": "warn"
+  }
+}

@@ -1,4 +1,4 @@
-@use '~@codaco/ui/src/styles/global/core/units';
+@use '@codaco/ui/src/styles/global/core/units';
 
 .form-wizard {
   --button-size: #{units.unit(10)};
@@ -55,11 +55,10 @@
 
       &[name='tick'],
       &[name='chevron-right'] {
-        .cls-1  {
+        .cls-1 {
           fill: var(--color-white);
         }
       }
-
 
       &[name='chevron-left'] {
         .cls-2 {
@@ -68,5 +67,4 @@
       }
     }
   }
-
 }

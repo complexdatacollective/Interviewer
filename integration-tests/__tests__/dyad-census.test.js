@@ -1,13 +1,10 @@
 /* eslint-env jest */
+
+import { timing } from '../config';
+import { makeTestingApp, matchImageSnapshot } from './helpers';
 import {
-  makeTestingApp,
-  startApps,
-  stopApps,
-  matchImageSnapshot,
-} from './helpers';
-import {
-  startInterview,
   goToStage,
+  startInterview,
   timelineNext,
   timelinePrevious,
 } from './playbook';
@@ -15,7 +12,6 @@ import {
   createNodes,
   loadDevelopmentProtocol,
 } from './playbook-development-protocol';
-import { timing } from '../config';
 
 let app;
 
@@ -43,19 +39,31 @@ describe('Dyad Census Interface', () => {
 
   it('Renders the dyad census correctly', async () => {
     await timelineNext(app);
-    await app.client.waitForExist('//div[@class="progress-bar__filler" and style="width: 33.333%;"]', 500, true);
+    await app.client.waitForExist(
+      '//div[@class="progress-bar__filler" and style="width: 33.333%;"]',
+      500,
+      true,
+    );
     await matchImageSnapshot(app);
   });
 
   it('Advances the progress bar', async () => {
     await app.client.click('div=Yes');
-    await app.client.waitForExist('//div[@class="progress-bar__filler" and style="width: 66.667%;"]', 500, true);
+    await app.client.waitForExist(
+      '//div[@class="progress-bar__filler" and style="width: 66.667%;"]',
+      500,
+      true,
+    );
   });
 
   it('Shows previously created links', async () => {
     await app.client.pause(timing.medium);
     await timelinePrevious(app);
-    await app.client.waitForExist('//div[@class="progress-bar__filler" and style="width: 33.333%;"]', 500, true);
+    await app.client.waitForExist(
+      '//div[@class="progress-bar__filler" and style="width: 33.333%;"]',
+      500,
+      true,
+    );
     await app.client.pause(timing.long);
     await matchImageSnapshot(app);
   });
@@ -63,17 +71,29 @@ describe('Dyad Census Interface', () => {
   it('Cannot advance past unanswered pairs', async () => {
     await timelineNext(app);
     await timelineNext(app);
-    await app.client.waitForExist('//div[@class="progress-bar__filler" and style="width: 66.667%;"]', 500, true);
+    await app.client.waitForExist(
+      '//div[@class="progress-bar__filler" and style="width: 66.667%;"]',
+      500,
+      true,
+    );
     await app.client.pause(timing.long);
     await matchImageSnapshot(app);
   });
 
   it('Advances to the next prompt', async () => {
     await app.client.click('div=Yes');
-    await app.client.waitForExist('//div[@class="progress-bar__filler" and style="width: 100%;"]', 500, true);
+    await app.client.waitForExist(
+      '//div[@class="progress-bar__filler" and style="width: 100%;"]',
+      500,
+      true,
+    );
     await app.client.pause(timing.long);
     await app.client.click('div=No');
-    await app.client.waitForExist('//div[@class="progress-bar__filler" and style="width: 33.333%;"]', 500, true);
+    await app.client.waitForExist(
+      '//div[@class="progress-bar__filler" and style="width: 33.333%;"]',
+      500,
+      true,
+    );
     await app.client.pause(timing.long);
     await matchImageSnapshot(app);
   });
@@ -81,7 +101,15 @@ describe('Dyad Census Interface', () => {
   it('Remembers previous no answers', async () => {
     await timelinePrevious(app);
     await app.client.pause(timing.long);
-    await app.client.waitForExist('//div[@class="progress-bar__filler" and style="width: 100%;"]', 500, true);
-    await app.client.waitForExist('//div[@class="dyad-census__no"]//input[@class="form-field-togglebutton__input" and value="true" and checked]', 500, true);
+    await app.client.waitForExist(
+      '//div[@class="progress-bar__filler" and style="width: 100%;"]',
+      500,
+      true,
+    );
+    await app.client.waitForExist(
+      '//div[@class="dyad-census__no"]//input[@class="form-field-togglebutton__input" and value="true" and checked]',
+      500,
+      true,
+    );
   });
 });

@@ -19,7 +19,7 @@
     }
 
     h4 {
-      letter-spacing: .15rem;
+      letter-spacing: 0.15rem;
       text-transform: uppercase;
       margin: 0;
     }
@@ -46,28 +46,30 @@
   align-items: center;
 
   .icon {
-    margin: .5rem;
+    margin: 0.5rem;
   }
 
   &__radio {
-    border: solid .1rem;
+    border: solid 0.1rem;
     border-color: var(--input-border);
     border-radius: 50%;
     height: 2rem;
-    margin: .5rem;
+    margin: 0.5rem;
     width: 2rem;
-    transition: border-color var(--animation-easing) var(--animation-duration-standard);
+    transition: border-color var(--animation-easing)
+      var(--animation-duration-standard);
 
     &::before {
       background-color: var(--input-accent);
       border-radius: 50%;
       content: '';
       height: 1.3rem;
-      margin: .25rem;
+      margin: 0.25rem;
       opacity: 0;
       position: absolute;
       width: 1.3rem;
-      transition: opacity var(--animation-easing) var(--animation-duration-standard);
+      transition: opacity var(--animation-easing)
+        var(--animation-duration-standard);
     }
 
     &--selected {
@@ -75,7 +77,8 @@
 
       &::before {
         opacity: 1;
-        transition: opacity var(--animation-easing) var(--animation-duration-standard);
+        transition: opacity var(--animation-easing)
+          var(--animation-duration-standard);
       }
     }
   }

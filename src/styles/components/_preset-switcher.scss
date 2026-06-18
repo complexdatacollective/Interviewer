@@ -33,7 +33,8 @@
     justify-content: center;
     opacity: 1;
     cursor: pointer;
-    transition: opacity var(--animation-duration-standard) var(--animation-duration-standard) var(--animation-easing);
+    transition: opacity var(--animation-duration-standard)
+      var(--animation-duration-standard) var(--animation-easing);
 
     .icon {
       height: 30px;
@@ -59,7 +60,9 @@
 
       .icon {
         .cls-2 {
-          fill: rgb(255 255 255 / 20%); // sass-lint:disable-line no-color-literals
+          fill: rgb(
+            255 255 255 / 20%
+          ); // sass-lint:disable-line no-color-literals
         }
       }
     }

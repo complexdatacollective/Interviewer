@@ -1,19 +1,14 @@
-/* eslint-env jest */
+import { vi } from 'vitest';
 
-const reducer = jest.requireActual('../network').default;
-const {
-  actionTypes,
-  actionCreators: networkActionCreators,
-} = jest.requireActual('../network');
+const reducer = await vi.importActual('../network').then((m) => m.default);
+const { actionTypes, actionCreators: networkActionCreators } =
+  await vi.importActual('../network');
 
 const actionCreators = {
   ...networkActionCreators,
-  batchAddNodes: jest.fn(networkActionCreators.batchAddNodes),
+  batchAddNodes: vi.fn(networkActionCreators.batchAddNodes),
 };
 
 export default reducer;
 
-export {
-  actionTypes,
-  actionCreators,
-};
+export { actionTypes, actionCreators };

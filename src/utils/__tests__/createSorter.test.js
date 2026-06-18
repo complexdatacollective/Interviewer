@@ -1,6 +1,5 @@
-/* eslint-env jest */
-/* eslint-disable @codaco/spellcheck/spell-checker */
 import { entityAttributesProperty } from '@codaco/shared-consts';
+
 import createSorter, { processProtocolSortRule } from '../createSorter';
 
 it('it does not change order when rules are empty', () => {
@@ -56,21 +55,25 @@ describe('Types', () => {
 
     let sorter;
 
-    sorter = createSorter([{
-      property: 'age',
-      type: 'number',
-      direction: 'asc',
-    }]);
+    sorter = createSorter([
+      {
+        property: 'age',
+        type: 'number',
+        direction: 'asc',
+      },
+    ]);
     const result = sorter(mockItems);
     const resultAges = result.map((item) => item.age);
 
     expect(resultAges).toEqual([10, 20, 30, undefined]);
 
-    sorter = createSorter([{
-      property: 'age',
-      type: 'number',
-      direction: 'desc',
-    }]);
+    sorter = createSorter([
+      {
+        property: 'age',
+        type: 'number',
+        direction: 'desc',
+      },
+    ]);
     const result2 = sorter(mockItems);
     const resultAges2 = result2.map((item) => item.age);
 
@@ -95,25 +98,37 @@ describe('Types', () => {
 
     let sorter;
 
-    sorter = createSorter([{
-      property: 'birthdate',
-      type: 'date',
-      direction: 'asc',
-    }]);
+    sorter = createSorter([
+      {
+        property: 'birthdate',
+        type: 'date',
+        direction: 'asc',
+      },
+    ]);
     const result = sorter(mockItems);
     const resultBirthdates = result.map((item) => item.birthdate);
 
-    expect(resultBirthdates).toEqual(['1970-01-01', '1980-01-01', '1990-01-01']);
+    expect(resultBirthdates).toEqual([
+      '1970-01-01',
+      '1980-01-01',
+      '1990-01-01',
+    ]);
 
-    sorter = createSorter([{
-      property: 'birthdate',
-      type: 'date',
-      direction: 'desc',
-    }]);
+    sorter = createSorter([
+      {
+        property: 'birthdate',
+        type: 'date',
+        direction: 'desc',
+      },
+    ]);
 
     const result2 = sorter(mockItems);
     const result2Birthdates = result2.map((item) => item.birthdate);
-    expect(result2Birthdates).toEqual(['1990-01-01', '1980-01-01', '1970-01-01']);
+    expect(result2Birthdates).toEqual([
+      '1990-01-01',
+      '1980-01-01',
+      '1970-01-01',
+    ]);
   });
 
   it('orders boolean values', () => {
@@ -135,21 +150,25 @@ describe('Types', () => {
       },
     ];
 
-    const sorter = createSorter([{
-      property: 'isAlive',
-      type: 'boolean',
-      direction: 'asc',
-    }]);
+    const sorter = createSorter([
+      {
+        property: 'isAlive',
+        type: 'boolean',
+        direction: 'asc',
+      },
+    ]);
     const result = sorter(mockItems);
     const resultNames = result.map((item) => item.name);
 
     expect(resultNames).toEqual(['benjamin', 'abigail', 'carolyn']);
 
-    const sorter2 = createSorter([{
-      property: 'isAlive',
-      type: 'boolean',
-      direction: 'desc',
-    }]);
+    const sorter2 = createSorter([
+      {
+        property: 'isAlive',
+        type: 'boolean',
+        direction: 'desc',
+      },
+    ]);
     const result2 = sorter2(mockItems);
     const resultNames2 = result2.map((item) => item.name);
 
@@ -181,14 +200,22 @@ describe('Types', () => {
         },
       ];
 
-      const sorter = createSorter([{
-        property: 'ordinal',
-        type: 'hierarchy',
-        hierarchy: [4, 3, 2, 1, -1],
-      }]);
+      const sorter = createSorter([
+        {
+          property: 'ordinal',
+          type: 'hierarchy',
+          hierarchy: [4, 3, 2, 1, -1],
+        },
+      ]);
 
       const result = sorter(mockItems).map((item) => item.name);
-      expect(result).toEqual(['daniel', 'carolyn', 'benjamin', 'abigail', 'eugine']);
+      expect(result).toEqual([
+        'daniel',
+        'carolyn',
+        'benjamin',
+        'abigail',
+        'eugine',
+      ]);
     });
 
     it('multiple hierarchies', () => {
@@ -241,7 +268,14 @@ describe('Types', () => {
 
       const result = sorter(mockItems).map((item) => item.name);
 
-      expect(result).toEqual(['benjamin', 'abigail', 'aardvark', 'cow', 'zebra', 'eucalyptus']);
+      expect(result).toEqual([
+        'benjamin',
+        'abigail',
+        'aardvark',
+        'cow',
+        'zebra',
+        'eucalyptus',
+      ]);
     });
 
     it('handles missing hierarchy', () => {
@@ -268,12 +302,20 @@ describe('Types', () => {
         },
       ];
 
-      const sorter = createSorter([{
-        property: 'type',
-        type: 'hierarchy',
-      }]);
+      const sorter = createSorter([
+        {
+          property: 'type',
+          type: 'hierarchy',
+        },
+      ]);
       const result = sorter(mockItems).map((item) => item.name);
-      expect(result).toEqual(['zebra', 'abigail', 'benjamin', 'cow', 'eucalyptus']);
+      expect(result).toEqual([
+        'zebra',
+        'abigail',
+        'benjamin',
+        'cow',
+        'eucalyptus',
+      ]);
     });
 
     it('sorts hierarchies ascending or descending', () => {
@@ -300,22 +342,38 @@ describe('Types', () => {
         },
       ];
 
-      const sorter = createSorter([{
-        property: 'type',
-        type: 'hierarchy',
-        hierarchy: ['human', 'animal'],
-      }]);
+      const sorter = createSorter([
+        {
+          property: 'type',
+          type: 'hierarchy',
+          hierarchy: ['human', 'animal'],
+        },
+      ]);
       const result = sorter(mockItems).map((item) => item.name);
-      expect(result).toEqual(['abigail', 'benjamin', 'zebra', 'cow', 'eucalyptus']);
+      expect(result).toEqual([
+        'abigail',
+        'benjamin',
+        'zebra',
+        'cow',
+        'eucalyptus',
+      ]);
 
-      const sorter2 = createSorter([{
-        property: 'type',
-        type: 'hierarchy',
-        direction: 'asc',
-        hierarchy: ['human', 'animal'],
-      }]);
+      const sorter2 = createSorter([
+        {
+          property: 'type',
+          type: 'hierarchy',
+          direction: 'asc',
+          hierarchy: ['human', 'animal'],
+        },
+      ]);
       const result2 = sorter2(mockItems).map((item) => item.name);
-      expect(result2).toEqual(['zebra', 'cow', 'abigail', 'benjamin', 'eucalyptus']);
+      expect(result2).toEqual([
+        'zebra',
+        'cow',
+        'abigail',
+        'benjamin',
+        'eucalyptus',
+      ]);
     });
   });
 });
@@ -445,11 +503,13 @@ describe('Order direction', () => {
       },
     ];
 
-    const sorter = createSorter([{
-      property: 'name',
-      type: 'string',
-      direction: 'asc',
-    }]);
+    const sorter = createSorter([
+      {
+        property: 'name',
+        type: 'string',
+        direction: 'asc',
+      },
+    ]);
 
     const result = sorter(mockItems);
     const resultNames = result.map((item) => item.name);
@@ -470,11 +530,13 @@ describe('Order direction', () => {
       },
     ];
 
-    const sorter = createSorter([{
-      property: 'name',
-      type: 'string',
-      direction: 'desc',
-    }]);
+    const sorter = createSorter([
+      {
+        property: 'name',
+        type: 'string',
+        direction: 'desc',
+      },
+    ]);
 
     const result = sorter(mockItems);
     const resultNames = result.map((item) => item.name);
@@ -526,7 +588,14 @@ describe('Order direction', () => {
     const result = sorter(mockItems);
     const resultNames = result.map((item) => item.name);
 
-    expect(resultNames).toEqual(['timmy', 'eugine', 'richard', 'carolyn', 'benjamin', 'abigail']);
+    expect(resultNames).toEqual([
+      'timmy',
+      'eugine',
+      'richard',
+      'carolyn',
+      'benjamin',
+      'abigail',
+    ]);
   });
 });
 
@@ -718,20 +787,24 @@ describe('Attribute path', () => {
       },
     ];
 
-    const sorter = createSorter([{
-      property: ['name', 'first'],
-      type: 'string',
-      direction: 'asc',
-    }]);
+    const sorter = createSorter([
+      {
+        property: ['name', 'first'],
+        type: 'string',
+        direction: 'asc',
+      },
+    ]);
 
     const result = sorter(mockItems);
     const resultNames = result.map((item) => item.name.first);
 
-    const sorter2 = createSorter([{
-      property: ['name', 'first'],
-      type: 'string',
-      direction: 'desc',
-    }]);
+    const sorter2 = createSorter([
+      {
+        property: ['name', 'first'],
+        type: 'string',
+        direction: 'desc',
+      },
+    ]);
 
     const result2 = sorter2(mockItems);
     const resultNames2 = result2.map((item) => item.name.first);
@@ -771,18 +844,22 @@ describe('Attribute path', () => {
       },
     ];
 
-    const sorter = createSorter([{
-      property: ['name', 'middle', 'initial'],
-      direction: 'asc',
-    }]);
+    const sorter = createSorter([
+      {
+        property: ['name', 'middle', 'initial'],
+        direction: 'asc',
+      },
+    ]);
 
     const result = sorter(mockItems);
     const resultNames = result.map((item) => item.name.first);
 
-    const sorter2 = createSorter([{
-      property: ['name', 'middle', 'initial'],
-      direction: 'desc',
-    }]);
+    const sorter2 = createSorter([
+      {
+        property: ['name', 'middle', 'initial'],
+        direction: 'desc',
+      },
+    ]);
 
     const result2 = sorter2(mockItems);
     const resultNames2 = result2.map((item) => item.name.first);
@@ -801,11 +878,13 @@ describe('Special cases', () => {
       { name: 'á' },
       { name: 'â' },
     ];
-    const sorter = createSorter([{
-      property: 'name',
-      direction: 'asc',
-      type: 'string',
-    }]);
+    const sorter = createSorter([
+      {
+        property: 'name',
+        direction: 'asc',
+        type: 'string',
+      },
+    ]);
 
     const sorted = sorter(mockItems).map((item) => item.name);
 
@@ -853,7 +932,13 @@ describe('Special cases', () => {
         },
       ]);
       const result = sorter(mockItems).map((item) => item.name);
-      expect(result).toEqual(['abigail', 'benjamin', 'cow', 'zebra', 'eucalyptus']);
+      expect(result).toEqual([
+        'abigail',
+        'benjamin',
+        'cow',
+        'zebra',
+        'eucalyptus',
+      ]);
     });
     it('handles node type sort rules', () => {
       const mockItems = [
@@ -871,11 +956,13 @@ describe('Special cases', () => {
         },
       ];
 
-      const sorter = createSorter([{
-        property: 'type',
-        type: 'hierarchy',
-        hierarchy: ['human', 'animal'],
-      }]);
+      const sorter = createSorter([
+        {
+          property: 'type',
+          type: 'hierarchy',
+          hierarchy: ['human', 'animal'],
+        },
+      ]);
 
       const result = sorter(mockItems).map((item) => item.name);
       expect(result).toEqual(['abigail', 'benjamin', 'cow']);
@@ -905,11 +992,13 @@ describe('Special cases', () => {
         },
       ];
 
-      const sorter = createSorter([{
-        property: 'type',
-        type: 'hierarchy',
-        hierarchy: ['human', 'animal'],
-      }]);
+      const sorter = createSorter([
+        {
+          property: 'type',
+          type: 'hierarchy',
+          hierarchy: ['human', 'animal'],
+        },
+      ]);
       const result = sorter(mockItems).map((item) => item.name);
       expect(result).toEqual(['abigail', 'benjamin', 'cow', 'zebra', 'eugine']);
     });
@@ -929,17 +1018,21 @@ describe('Special cases', () => {
       },
     ];
 
-    sorter = createSorter([{
-      property: '*',
-      direction: 'asc',
-    }]);
+    sorter = createSorter([
+      {
+        property: '*',
+        direction: 'asc',
+      },
+    ]);
 
     const resultPositionsAsc = sorter(mockItems).map((item) => item.position);
 
-    sorter = createSorter([{
-      property: '*',
-      direction: 'desc',
-    }]);
+    sorter = createSorter([
+      {
+        property: '*',
+        direction: 'desc',
+      },
+    ]);
 
     const resultPositionsDesc = sorter(mockItems).map((item) => item.position);
 
@@ -1073,7 +1166,9 @@ describe('processProtocolSortRule', () => {
         property: 'name',
         direction: 'asc',
       };
-      expect(processProtocolSortRule(codebookVariables)(rule).type).toEqual('string');
+      expect(processProtocolSortRule(codebookVariables)(rule).type).toEqual(
+        'string',
+      );
     });
 
     it('number', () => {
@@ -1081,7 +1176,9 @@ describe('processProtocolSortRule', () => {
         property: 'age',
         direction: 'asc',
       };
-      expect(processProtocolSortRule(codebookVariables)(rule).type).toEqual('number');
+      expect(processProtocolSortRule(codebookVariables)(rule).type).toEqual(
+        'number',
+      );
     });
 
     it('datetime', () => {
@@ -1089,7 +1186,9 @@ describe('processProtocolSortRule', () => {
         property: 'date',
         direction: 'asc',
       };
-      expect(processProtocolSortRule(codebookVariables)(rule).type).toEqual('date');
+      expect(processProtocolSortRule(codebookVariables)(rule).type).toEqual(
+        'date',
+      );
     });
 
     it('boolean', () => {
@@ -1097,7 +1196,9 @@ describe('processProtocolSortRule', () => {
         property: 'isAlive',
         direction: 'asc',
       };
-      expect(processProtocolSortRule(codebookVariables)(rule).type).toEqual('boolean');
+      expect(processProtocolSortRule(codebookVariables)(rule).type).toEqual(
+        'boolean',
+      );
     });
 
     it('categorical', () => {
@@ -1105,7 +1206,9 @@ describe('processProtocolSortRule', () => {
         property: 'category',
         direction: 'asc',
       };
-      expect(processProtocolSortRule(codebookVariables)(rule).type).toEqual('categorical');
+      expect(processProtocolSortRule(codebookVariables)(rule).type).toEqual(
+        'categorical',
+      );
     });
 
     it('ordinal', () => {
@@ -1113,7 +1216,9 @@ describe('processProtocolSortRule', () => {
         property: 'order',
         direction: 'asc',
       };
-      expect(processProtocolSortRule(codebookVariables)(rule).type).toEqual('hierarchy');
+      expect(processProtocolSortRule(codebookVariables)(rule).type).toEqual(
+        'hierarchy',
+      );
     });
 
     it('scalar', () => {
@@ -1121,7 +1226,9 @@ describe('processProtocolSortRule', () => {
         property: 'scale',
         direction: 'asc',
       };
-      expect(processProtocolSortRule(codebookVariables)(rule).type).toEqual('number');
+      expect(processProtocolSortRule(codebookVariables)(rule).type).toEqual(
+        'number',
+      );
     });
 
     it('layout', () => {
@@ -1129,7 +1236,9 @@ describe('processProtocolSortRule', () => {
         property: 'layout',
         direction: 'asc',
       };
-      expect(processProtocolSortRule(codebookVariables)(rule).type).toEqual('string');
+      expect(processProtocolSortRule(codebookVariables)(rule).type).toEqual(
+        'string',
+      );
     });
   });
 
@@ -1141,7 +1250,7 @@ describe('processProtocolSortRule', () => {
         _uid: '0e09311ce13248772645155bd78705e2636f8f15',
         itemType: 'NEW_NODE',
         attributes: {
-          name_variable: 'Albert',
+          'name_variable': 'Albert',
           '0ff25001-a2b8-46de-82a9-53143aa00d10': null,
           'c5fee926-855d-4419-b5bb-54e89010cea6': 49,
           '0e75ec18-2cb1-4606-9f18-034d28b07c19': 'Albert',
@@ -1156,8 +1265,8 @@ describe('processProtocolSortRule', () => {
           'e343a91f-628d-4175-870c-957beffa0154': null,
           'e343a91f-628d-4175-870c-957beffa0151': null,
           '4ccba4e2-a246-46ee-a3ff-1c70fb4c449c': null,
-          layout_variable: null,
-          layout_variable_manual: null,
+          'layout_variable': null,
+          'layout_variable_manual': null,
           'e13ca72d-aefe-4f48-841d-09f020e0e987': null,
           'd2d8091e-8170-42c1-9dc0-c0d54553b3e6': null,
           '04298634-eb5f-450a-84dd-95d2708e10c1': null,
@@ -1167,9 +1276,7 @@ describe('processProtocolSortRule', () => {
           '979c9ad7-74cb-402d-8574-3f0a91c9174d': null,
           'e1dda563-f6f6-47b7-91cb-31b4c2fdb73a': null,
         },
-        promptIDs: [
-          '2wedwee',
-        ],
+        promptIDs: ['2wedwee'],
       },
       {
         type: 'person_node_type',
@@ -1177,7 +1284,7 @@ describe('processProtocolSortRule', () => {
         _uid: '5b909d77cee1b8d8bcb44562f4c736aaf9bb3868',
         itemType: 'NEW_NODE',
         attributes: {
-          name_variable: 'Benjamin',
+          'name_variable': 'Benjamin',
           '0ff25001-a2b8-46de-82a9-53143aa00d10': null,
           'c5fee926-855d-4419-b5bb-54e89010cea6': 67,
           '0e75ec18-2cb1-4606-9f18-034d28b07c19': 'Benjamin',
@@ -1192,8 +1299,8 @@ describe('processProtocolSortRule', () => {
           'e343a91f-628d-4175-870c-957beffa0154': null,
           'e343a91f-628d-4175-870c-957beffa0151': null,
           '4ccba4e2-a246-46ee-a3ff-1c70fb4c449c': null,
-          layout_variable: null,
-          layout_variable_manual: null,
+          'layout_variable': null,
+          'layout_variable_manual': null,
           'e13ca72d-aefe-4f48-841d-09f020e0e987': null,
           'd2d8091e-8170-42c1-9dc0-c0d54553b3e6': null,
           '04298634-eb5f-450a-84dd-95d2708e10c1': null,
@@ -1203,9 +1310,7 @@ describe('processProtocolSortRule', () => {
           '979c9ad7-74cb-402d-8574-3f0a91c9174d': null,
           'e1dda563-f6f6-47b7-91cb-31b4c2fdb73a': null,
         },
-        promptIDs: [
-          '2wedwee',
-        ],
+        promptIDs: ['2wedwee'],
       },
       {
         type: 'person_node_type',
@@ -1213,7 +1318,7 @@ describe('processProtocolSortRule', () => {
         _uid: '41ecadb17067e2eecc58ce735d9036705db15900',
         itemType: 'NEW_NODE',
         attributes: {
-          name_variable: 'Charlie',
+          'name_variable': 'Charlie',
           '0ff25001-a2b8-46de-82a9-53143aa00d10': null,
           'c5fee926-855d-4419-b5bb-54e89010cea6': 32,
           '0e75ec18-2cb1-4606-9f18-034d28b07c19': 'Charlie',
@@ -1228,8 +1333,8 @@ describe('processProtocolSortRule', () => {
           'e343a91f-628d-4175-870c-957beffa0154': null,
           'e343a91f-628d-4175-870c-957beffa0151': null,
           '4ccba4e2-a246-46ee-a3ff-1c70fb4c449c': null,
-          layout_variable: null,
-          layout_variable_manual: null,
+          'layout_variable': null,
+          'layout_variable_manual': null,
           'e13ca72d-aefe-4f48-841d-09f020e0e987': null,
           'd2d8091e-8170-42c1-9dc0-c0d54553b3e6': null,
           '04298634-eb5f-450a-84dd-95d2708e10c1': null,
@@ -1239,18 +1344,16 @@ describe('processProtocolSortRule', () => {
           '979c9ad7-74cb-402d-8574-3f0a91c9174d': null,
           'e1dda563-f6f6-47b7-91cb-31b4c2fdb73a': null,
         },
-        promptIDs: [
-          '2wedwee',
-        ],
+        promptIDs: ['2wedwee'],
       },
       {
         type: 'venue_node_type',
         stageId: 'namegen2',
         _uid: 'ea3bebf8-4c3b-419b-a998-05db3e2a936a',
         attributes: {
-          name_variable: 'One',
+          'name_variable': 'One',
           '7316d500-6c1e-4188-a531-b2ef587721e0': null,
-          venueVisitFreqVariable: 1,
+          'venueVisitFreqVariable': 1,
           '55f1fbbe-2fe5-42a7-88fb-9a8e5e659d2f': true,
           '8a35cd77-7bc4-4c7e-b98a-673b6a21321f': null,
           '8ee3a187-d4be-458e-8abb-71efcc071949': null,
@@ -1260,21 +1363,19 @@ describe('processProtocolSortRule', () => {
           'bdc60147-fe7a-4c3c-a164-e5b370f6a281': null,
           '931a7b23-e433-4e7e-8e13-48b72e5f0549': null,
           '0a5f7952-a9a7-4e87-9353-2d17a59284ee': null,
-          venue_layout_variable: null,
-          venue_layout_variable_manual: null,
+          'venue_layout_variable': null,
+          'venue_layout_variable_manual': null,
         },
-        promptIDs: [
-          '6cl',
-        ],
+        promptIDs: ['6cl'],
       },
       {
         type: 'venue_node_type',
         stageId: 'namegen2',
         _uid: '3e7ee30a-9b6d-4e35-a721-9d8bec70b6e4',
         attributes: {
-          name_variable: 'Two',
+          'name_variable': 'Two',
           '7316d500-6c1e-4188-a531-b2ef587721e0': null,
-          venueVisitFreqVariable: 3,
+          'venueVisitFreqVariable': 3,
           '55f1fbbe-2fe5-42a7-88fb-9a8e5e659d2f': true,
           '8a35cd77-7bc4-4c7e-b98a-673b6a21321f': null,
           '8ee3a187-d4be-458e-8abb-71efcc071949': null,
@@ -1284,21 +1385,19 @@ describe('processProtocolSortRule', () => {
           'bdc60147-fe7a-4c3c-a164-e5b370f6a281': null,
           '931a7b23-e433-4e7e-8e13-48b72e5f0549': null,
           '0a5f7952-a9a7-4e87-9353-2d17a59284ee': null,
-          venue_layout_variable: null,
-          venue_layout_variable_manual: null,
+          'venue_layout_variable': null,
+          'venue_layout_variable_manual': null,
         },
-        promptIDs: [
-          '6cl',
-        ],
+        promptIDs: ['6cl'],
       },
       {
         type: 'venue_node_type',
         stageId: 'namegen2',
         _uid: '5fd6cb24-281c-46d0-af18-033c0fe85879',
         attributes: {
-          name_variable: 'Three',
+          'name_variable': 'Three',
           '7316d500-6c1e-4188-a531-b2ef587721e0': null,
-          venueVisitFreqVariable: 4,
+          'venueVisitFreqVariable': 4,
           '55f1fbbe-2fe5-42a7-88fb-9a8e5e659d2f': true,
           '8a35cd77-7bc4-4c7e-b98a-673b6a21321f': null,
           '8ee3a187-d4be-458e-8abb-71efcc071949': null,
@@ -1308,12 +1407,10 @@ describe('processProtocolSortRule', () => {
           'bdc60147-fe7a-4c3c-a164-e5b370f6a281': null,
           '931a7b23-e433-4e7e-8e13-48b72e5f0549': null,
           '0a5f7952-a9a7-4e87-9353-2d17a59284ee': null,
-          venue_layout_variable: null,
-          venue_layout_variable_manual: null,
+          'venue_layout_variable': null,
+          'venue_layout_variable_manual': null,
         },
-        promptIDs: [
-          '6cl',
-        ],
+        promptIDs: ['6cl'],
       },
     ];
 
@@ -1321,10 +1418,7 @@ describe('processProtocolSortRule', () => {
       {
         property: 'type',
         type: 'hierarchy',
-        hierarchy: [
-          'venue_node_type',
-          'person_node_type',
-        ],
+        hierarchy: ['venue_node_type', 'person_node_type'],
       },
       {
         property: 'venueVisitFreqVariable',
@@ -1370,10 +1464,14 @@ describe('processProtocolSortRule', () => {
       },
     };
 
-    const processedRules = rules.map(processProtocolSortRule(codebookVariables));
+    const processedRules = rules.map(
+      processProtocolSortRule(codebookVariables),
+    );
     const sorter = createSorter(processedRules);
 
-    const sorted = sorter(mockItems).map((item) => item.attributes.name_variable);
+    const sorted = sorter(mockItems).map(
+      (item) => item.attributes.name_variable,
+    );
     expect(sorted).toEqual([
       'Three',
       'Two',

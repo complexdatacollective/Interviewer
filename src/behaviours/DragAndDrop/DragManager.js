@@ -1,7 +1,7 @@
 import { throttle } from 'lodash';
 
 export const VERTICAL_SCROLL = 'VERTICAL_SCROLL';
-export const HORIZONTAL_SCROLL = 'HORIZONTAL_SCROLL';
+const HORIZONTAL_SCROLL = 'HORIZONTAL_SCROLL';
 export const NO_SCROLL = 'NO_SCROLL';
 
 function isTouch(event) {
@@ -34,7 +34,7 @@ function moveDelta(start, end) {
 }
 
 function moveDistance({ dx, dy }) {
-  return ((dx ** 2) + (dy ** 2)) ** 0.5;
+  return (dx ** 2 + dy ** 2) ** 0.5;
 }
 
 function moveAngle({ dx, dy }) {
@@ -48,12 +48,18 @@ function axisProximityFromAngle(angle) {
 function determineMoveType(movement, scrollDirection) {
   switch (scrollDirection) {
     case VERTICAL_SCROLL:
-      if (movement.axisProximity > 0.9 || movement.velocity / movement.axisProximity < 0.15) {
+      if (
+        movement.axisProximity > 0.9 ||
+        movement.velocity / movement.axisProximity < 0.15
+      ) {
         return 'SWIPE';
       }
       return 'DRAG';
     case HORIZONTAL_SCROLL:
-      if (movement.axisProximity < 0.1 || movement.velocity / (1 - movement.axisProximity) < 0.15) {
+      if (
+        movement.axisProximity < 0.1 ||
+        movement.velocity / (1 - movement.axisProximity) < 0.15
+      ) {
         return 'SWIPE';
       }
       return 'DRAG';
@@ -69,13 +75,7 @@ const initalState = {
 };
 
 class dragManager {
-  constructor({
-    el,
-    onDragStart,
-    onDragMove,
-    onDragEnd,
-    scrollDirection,
-  }) {
+  constructor({ el, onDragStart, onDragMove, onDragEnd, scrollDirection }) {
     this.state = { ...initalState };
     this.el = el;
     this.onDragStart = onDragStart;
@@ -102,18 +102,18 @@ class dragManager {
   trackMouse = () => {
     window.addEventListener('mousemove', this.onMove, { passive: false });
     window.addEventListener('mouseup', this.onMoveEnd, { passive: true });
-  }
+  };
 
   removeMouseTracking = () => {
     window.removeEventListener('mousemove', this.onMove);
     window.removeEventListener('mouseup', this.onMoveEnd);
-  }
+  };
 
   movementFromEvent = (e) => {
     const { state } = this;
     const { x, y } = getCoords(e);
     const { dy, dx } = moveDelta(state, { x, y });
-    const t = new Date().getTime();
+    const t = Date.now();
     const dt = t - state.t;
     const distance = moveDistance({ dy, dx });
     const angle = moveAngle({ dy, dx });
@@ -129,10 +129,11 @@ class dragManager {
       axisProximity,
       angle,
     };
-  }
+  };
 
   detectMoveType = (e, movement) => {
-    const moveType = this.state.type || determineMoveType(movement, this.scrollDirection);
+    const moveType =
+      this.state.type || determineMoveType(movement, this.scrollDirection);
 
     if (moveType === 'DRAG') {
       e.preventDefault();
@@ -141,14 +142,18 @@ class dragManager {
     if (!this.state.type) {
       this.state.type = moveType;
     }
-  }
+  };
 
   detectDragStart = (movement) => {
-    if (this.state.type === 'DRAG' && this.state.dragStart === false && movement.distance > 4) {
+    if (
+      this.state.type === 'DRAG' &&
+      !this.state.dragStart &&
+      movement.distance > 4
+    ) {
       this.state.dragStart = true;
       this.onDragStart(movement);
     }
-  }
+  };
 
   onMoveStart = (e) => {
     this.trackMouse();
@@ -159,14 +164,14 @@ class dragManager {
       dragStart: false,
       type: isTouch(e) ? null : 'DRAG', // if mouse, assume drag
       start: { x, y },
-      t: new Date().getTime(),
+      t: Date.now(),
       x,
       y,
     };
-  }
+  };
 
   onMove = (e) => {
-    if (this.state.moveStart === true) {
+    if (this.state.moveStart) {
       const movement = this.movementFromEvent(e);
 
       const { x, y, t } = movement;
@@ -177,7 +182,7 @@ class dragManager {
       // Detect drag start
       this.detectDragStart(movement);
 
-      if (this.state.dragStart === true) {
+      if (this.state.dragStart) {
         this.onDragMove(movement);
       }
 
@@ -188,23 +193,23 @@ class dragManager {
         t,
       };
     }
-  }
+  };
 
   onMoveEnd = (e) => {
     this.removeMouseTracking();
 
     this.onDragMove.flush();
 
-    if (this.state.dragStart === true) {
+    if (this.state.dragStart) {
       const movement = this.movementFromEvent(e);
 
       this.onDragEnd(movement);
     } else {
       this.state = { ...initalState };
     }
-  }
+  };
 
-  isDragging = () => this.state.dragStart === true;
+  isDragging = () => this.state.dragStart;
 }
 
 export default dragManager;

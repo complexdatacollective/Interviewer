@@ -1,11 +1,9 @@
-/* eslint-disable react/sort-comp */
-
-import {
-  compose, withHandlers, lifecycle, withPropsOnChange,
-} from 'recompose';
-import { connect } from 'react-redux';
 import { debounce } from 'lodash';
+import { connect } from 'react-redux';
+import { compose, lifecycle, withHandlers, withPropsOnChange } from 'recompose';
+
 import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
+
 import { LEGACY_makeGetFuse as makeGetFuse } from '../../selectors/search';
 
 /**
@@ -31,41 +29,46 @@ const mapStateToProps = (state, props) => ({
 const withReduxState = connect(mapStateToProps);
 
 const withSearch = withHandlers({
-  search: ({ fuse, excludedNodes, setResults }) => (query) => {
-    if (query.length === 0) {
-      setResults([]);
-      return;
-    }
+  search:
+    ({ fuse, excludedNodes, setResults }) =>
+    (query) => {
+      if (query.length === 0) {
+        setResults([]);
+        return;
+      }
 
-    // If false, suppress candidate from appearing in search results —
-    // for example, if the node has already been selected.
-    // Assumption:
-    //   `excludedNodes` size is small, but search set may be large,
-    //   and so preferable to filter found results dynamically.
-    const isAllowedResult = (candidate) => excludedNodes.every(
-      (excluded) => excluded[entityPrimaryKeyProperty] !== candidate[entityPrimaryKeyProperty],
-    );
+      // If false, suppress candidate from appearing in search results —
+      // for example, if the node has already been selected.
+      // Assumption:
+      //   `excludedNodes` size is small, but search set may be large,
+      //   and so preferable to filter found results dynamically.
+      const isAllowedResult = (candidate) =>
+        excludedNodes.every(
+          (excluded) =>
+            excluded[entityPrimaryKeyProperty] !==
+            candidate[entityPrimaryKeyProperty],
+        );
 
-    const searchResults = fuse.search(query);
-    const results = searchResults.filter(isAllowedResult);
+      const searchResults = fuse.search(query);
+      const results = searchResults.filter(isAllowedResult);
 
-    setResults(results);
-  },
+      setResults(results);
+    },
 });
 
 const withLifecycle = lifecycle({
-  onComponentWillUnmount: ({ search }) => () => search.cancel(), // cancel debounce when unmounting
+  onComponentWillUnmount:
+    ({ search }) =>
+    () =>
+      search.cancel(), // cancel debounce when unmounting
 });
 
 export default compose(
   withReduxState,
   withSearch,
-  withPropsOnChange(
-    ['search'],
-    ({ search }) => ({
-      // TODO: Could use items length to determine debounce (e.g. loading) time
-      search: debounce(search, 500), // simulate 'deeper' search for better ux?
-    }),
-  ),
+  withPropsOnChange(['search'], ({ search }) => ({
+    // TODO: Could use items length to determine debounce (e.g. loading) time
+    search: debounce(search, 500), // simulate 'deeper' search for better ux?
+  })),
   withLifecycle,
 );

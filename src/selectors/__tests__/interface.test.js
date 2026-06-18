@@ -1,6 +1,3 @@
-/* eslint-env jest */
-/* eslint-disable @codaco/spellcheck/spell-checker */
-
 import * as Interface from '../interface';
 
 const mockPrompt = {
@@ -78,7 +75,7 @@ const mockProtocol = {
     node: {
       person: {
         displayVariable: 'name',
-        iconVariant: 'add-a-person',
+        icon: 'add-a-person',
         variables: {
           nickname: {
             type: 'text',
@@ -110,20 +107,32 @@ const emptyProps = {
 };
 
 const personNode = {
-  uid: 1, promptIDs: ['promptIdxxx'], type: 'person', attributes: { name: 'foo' },
+  uid: 1,
+  promptIDs: ['promptIdxxx'],
+  type: 'person',
+  attributes: { name: 'foo' },
 };
 const closeFriendNode = {
-  uid: 2, promptIDs: ['promptId123'], type: 'person', attributes: { name: 'bar', close_friend: true },
+  uid: 2,
+  promptIDs: ['promptId123'],
+  type: 'person',
+  attributes: { name: 'bar', close_friend: true },
 };
 const nodes = [
   personNode,
   closeFriendNode,
   {
-    uid: 3, promptIDs: ['promptId456'], attributes: { name: 'baz' }, type: 'venue',
+    uid: 3,
+    promptIDs: ['promptId456'],
+    attributes: { name: 'baz' },
+    type: 'venue',
   },
 ];
 
-const edges = [{ to: 'bar', from: 'foo' }, { to: 'asdf', from: 'qwerty' }];
+const edges = [
+  { to: 'bar', from: 'foo' },
+  { to: 'asdf', from: 'qwerty' },
+];
 
 const mockState = {
   sessions: {
@@ -149,7 +158,9 @@ describe('interface selector', () => {
 
     it('makeGetAdditionalAttributes()', () => {
       const selected = Interface.makeGetAdditionalAttributes();
-      expect(selected(mockState, mockProps)).toEqual({ 'b6f2c4b9-e42f-459b-8f59-a11a685f460d': 2 });
+      expect(selected(mockState, mockProps)).toEqual({
+        'b6f2c4b9-e42f-459b-8f59-a11a685f460d': 2,
+      });
       expect(selected(null, emptyProps)).toEqual({});
     });
 
@@ -166,8 +177,18 @@ describe('interface selector', () => {
 
     it('makeGetVariableOptions', () => {
       const selected = Interface.makeGetVariableOptions();
-      expect(selected(mockState, { ...mockProps, prompt: { ...mockPrompt, variable: 'cat1' } })).toEqual([123, 456]);
-      expect(selected(mockState, { ...mockProps, prompt: { ...mockPrompt, variable: 'ord1' } })).toEqual([]);
+      expect(
+        selected(mockState, {
+          ...mockProps,
+          prompt: { ...mockPrompt, variable: 'cat1' },
+        }),
+      ).toEqual([123, 456]);
+      expect(
+        selected(mockState, {
+          ...mockProps,
+          prompt: { ...mockPrompt, variable: 'ord1' },
+        }),
+      ).toEqual([]);
     });
 
     it('makeNetworkNodesForType()', () => {
@@ -190,9 +211,7 @@ describe('interface selector', () => {
 
     it('makeNetworkNodesForPrompt()', () => {
       const selected = Interface.makeNetworkNodesForPrompt();
-      expect(selected(mockState, mockProps)).toEqual([
-        closeFriendNode,
-      ]);
+      expect(selected(mockState, mockProps)).toEqual([closeFriendNode]);
       expect(selected(mockState, emptyProps).length).toEqual(0);
     });
 

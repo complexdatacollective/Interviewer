@@ -1,7 +1,0 @@
-{
-  "scss.validate": false,
-  "stylelint.validate": [
-    "css",
-    "scss"
-  ],
-}

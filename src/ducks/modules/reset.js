@@ -1,8 +1,9 @@
 import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
-import { actionCreators as sessionsActions } from './sessions';
-import { actionCreators as deviceActions } from './deviceSettings';
-import resetProtocolFiles from '../../utils/protocol/resetProtocolFiles';
+
 import { get } from '../../utils/lodash-replacements';
+import resetProtocolFiles from '../../utils/protocol/resetProtocolFiles';
+import { actionCreators as deviceActions } from './deviceSettings';
+import { actionCreators as sessionsActions } from './sessions';
 
 const RESET_STATE = 'RESET_STATE';
 const RESET_EDGES_OF_TYPE = 'RESET/EDGES_OF_TYPE';
@@ -19,9 +20,7 @@ const resetPropertyForAllNodes = (property) => (dispatch, getState) => {
     },
     installedProtocols: {
       [protocolUID]: {
-        codebook: {
-          node: nodeRegistry,
-        },
+        codebook: { node: nodeRegistry },
       },
     },
   } = getState();
@@ -47,7 +46,13 @@ const resetPropertyForAllNodes = (property) => (dispatch, getState) => {
 
 const resetEdgesOfType = (edgeType) => (dispatch, getState) => {
   const { activeSessionId } = getState();
-  const { sessions: { [activeSessionId]: { network: { edges } } } } = getState();
+  const {
+    sessions: {
+      [activeSessionId]: {
+        network: { edges },
+      },
+    },
+  } = getState();
 
   edges.forEach((edge) => {
     if (edge.type !== edgeType) {
@@ -59,9 +64,8 @@ const resetEdgesOfType = (edgeType) => (dispatch, getState) => {
 const resetAppState = () => (dispatch) => {
   dispatch({ type: RESET_STATE });
   resetProtocolFiles();
-  // Dispatch deviceReady to re-populate any device defaults.
-  // On Cordova, reset is guaranteed to happen after 'deviceready';
-  // on other platforms, it's safe to call at any time (even after page load).
+  // Dispatch deviceReady to re-populate any device defaults. Safe to call at any
+  // time on every platform (no native deviceready handshake under Capacitor).
   dispatch(deviceActions.deviceReady());
 };
 
@@ -77,7 +81,4 @@ const actionTypes = {
   RESET_PROPERTY_FOR_ALL_NODES,
 };
 
-export {
-  actionCreators,
-  actionTypes,
-};
+export { actionCreators, actionTypes };

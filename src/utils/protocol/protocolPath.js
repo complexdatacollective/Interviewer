@@ -1,11 +1,18 @@
-/* eslint-disable global-require */
-
+/**
+ * Protocol path utilities with secure API support.
+ *
+ * Note: In Electron, these functions are now async because they depend on
+ * IPC calls to get user data and app paths.
+ */
 import { isArray, isString } from 'lodash';
-import environments from '../environments';
-import inEnvironment from '../Environment';
-import { userDataPath, appPath } from '../filesystem';
 
-const isValidProtocolUID = protocolUID => (isString(protocolUID) && protocolUID.length > 0);
+import { pathSync } from '../electronAPI';
+import inEnvironment from '../Environment';
+import environments from '../environments';
+import { userDataPath } from '../filesystem';
+
+const isValidProtocolUID = (protocolUID) =>
+  isString(protocolUID) && protocolUID.length > 0;
 
 const ensureArray = (filePath = []) => {
   if (!isArray(filePath)) {
@@ -15,47 +22,33 @@ const ensureArray = (filePath = []) => {
   return filePath;
 };
 
-export const factoryProtocolPath = (environment) => {
-  if (environment === environments.ELECTRON) {
-    const path = require('path');
-
-    return (protocolUID, filePath = '') => {
-      if (!isValidProtocolUID(protocolUID)) throw Error('Protocol name is not valid');
-      return path.join(appPath(), 'protocols', protocolUID, filePath);
-    };
-  }
-
-  if (environment === environments.CORDOVA) {
-    return (protocolUID, filePath) => {
-      if (!isValidProtocolUID(protocolUID)) throw Error('Protocol name is not valid');
-
-      return [appPath(), 'www', 'protocols', protocolUID].concat([filePath]).join('/');
-    };
-  }
-
-  throw new Error('factoryProtocolPath() is not supported on this platform');
-};
-
+/**
+ * Get path to user protocol (installed by user).
+ * Returns a Promise in Electron.
+ */
 const protocolPath = (environment) => {
   if (environment === environments.ELECTRON) {
-    const path = require('path');
-
-    return (protocolUID, filePath = []) => {
-      if (!isValidProtocolUID(protocolUID)) throw Error('Protocol name is not valid');
-      return path.join(userDataPath(), 'protocols', protocolUID, ...ensureArray(filePath));
+    return async (protocolUID, filePath = []) => {
+      if (!isValidProtocolUID(protocolUID))
+        throw Error('Protocol name is not valid');
+      const basePath = await userDataPath();
+      return pathSync.join(
+        basePath,
+        'protocols',
+        protocolUID,
+        ...ensureArray(filePath),
+      );
     };
   }
 
-  if (environment === environments.CORDOVA) {
-    return (protocolUID, filePath) => {
-      if (!isValidProtocolUID(protocolUID)) throw Error('Protocol name is not valid');
-
-      if (!filePath) {
-        // Cordova expects a trailing slash:
-        return `${userDataPath()}protocols/${protocolUID}/`;
-      }
-
-      return `${userDataPath()}protocols/${protocolUID}/${filePath}`;
+  if (environment === environments.CAPACITOR) {
+    // Async to match the Electron contract: callers (e.g. parseProtocol) do
+    // `protocolPath(...).then(...)`, and others `await` it.
+    return async (protocolUID, filePath) => {
+      if (!isValidProtocolUID(protocolUID))
+        throw Error('Protocol name is not valid');
+      if (!filePath) return `protocols/${protocolUID}/`;
+      return `protocols/${protocolUID}/${filePath}`;
     };
   }
 

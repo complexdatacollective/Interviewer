@@ -1,0 +1,84 @@
+// User-agent stylesheet compatibility (Electron 9 / Chrome 83 -> Electron 42 /
+// Chrome 148).
+//
+// Newer Chromium changed two user-agent defaults the app relied on. We restore
+// the old defaults inside a cascade LAYER. Layered rules rank below every
+// unlayered author rule regardless of specificity, which mirrors the old
+// user-agent ORIGIN priority exactly: where the app sets a property its own
+// rule still wins, but where the app leaves a property to the browser it gets
+// the previous default back (instead of the new Chrome 148 default).
+@layer legacy-ua {
+  // 1. Chrome 148 gates the nested-<h1> font-size/margin cascade behind the
+  //    default-off `SpecialRulesForNestedH1Elements` feature, so nested <h1>s
+  //    fall back to the base `margin-block: 0.67em`. The app overrides <h1>
+  //    font-size (via @codaco/ui) but not its margins, so the visible change is
+  //    the margin. Restore the Chrome 83 cascade (font-size included for
+  //    faithfulness; it loses to the app's own h1 size, as it did before).
+  :is(article, aside, nav, section) h1 {
+    font-size: 1.5em;
+    margin-block: 0.83em;
+  }
+
+  :is(article, aside, nav, section) :is(article, aside, nav, section) h1 {
+    font-size: 1.17em;
+    margin-block: 1em;
+  }
+
+  :is(article, aside, nav, section)
+    :is(article, aside, nav, section)
+    :is(article, aside, nav, section)
+    h1 {
+    font-size: 1em;
+    margin-block: 1.33em;
+  }
+
+  :is(article, aside, nav, section)
+    :is(article, aside, nav, section)
+    :is(article, aside, nav, section)
+    :is(article, aside, nav, section)
+    h1 {
+    font-size: 0.83em;
+    margin-block: 1.67em;
+  }
+
+  :is(article, aside, nav, section)
+    :is(article, aside, nav, section)
+    :is(article, aside, nav, section)
+    :is(article, aside, nav, section)
+    :is(article, aside, nav, section)
+    h1 {
+    font-size: 0.67em;
+    margin-block: 2.33em;
+  }
+
+  // 2. Form controls now inherit `text-align` from their ancestors; previously
+  //    they defaulted to `start` and did not inherit. Without this, inputs in a
+  //    centered container (case-id and developer-options forms) have their text
+  //    centered instead of left-aligned.
+  //    The reset is `input,textarea,select { text-align: start }`, but
+  //    lightningcss strips it from the production bundle as a redundant initial
+  //    value, so it lives instead as an inline <style> in index.html (unbundled,
+  //    where Chromium 148 honors the native @layer). See index.html.
+}
+
+// @codaco/ui's `.form-field` applies flex centering (`justify-items: center`)
+// for its flex field types. The shared text control (Text/Number/Search/
+// TextArea all render `.form-field-text__input`) overrides `display` to `block`
+// but not `justify-items`; under Chrome 83 that was inert on a block element,
+// but Chrome 148 honors `justify-items` on the input's value box — which both
+// centers the value and pulls the number spinner in next to it. Reset it to the
+// default so the value is left-aligned and the spinner returns to the right
+// edge. Unlayered and class-targeted so it outranks `.form-field` (same
+// specificity, later source order wins).
+.form-field-text__input {
+  justify-items: normal;
+}
+
+// The multi-line textarea variant additionally inherits `.form-field`'s
+// `align-content: center`, which Chrome 148 honors on its value box and centers
+// the text block vertically. Reset it so text starts at the top. (Single-line
+// inputs keep `align-content: center` — for one line that reads as correct
+// vertical centering, so only the textarea needs this.)
+.form-field-text--area {
+  align-content: normal;
+}

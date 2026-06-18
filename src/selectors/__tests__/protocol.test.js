@@ -1,11 +1,8 @@
-/* eslint-env jest */
-/* eslint-disable @codaco/spellcheck/spell-checker */
-
 import * as Protocol from '../protocol';
 
 const nodeVariables = {
   person: {
-    iconVariant: 'add-a-person',
+    icon: 'add-a-person',
     color: 'node-color-seq-2',
   },
 };
@@ -28,7 +25,10 @@ const mockProtocol = {
 
 const mockState = {
   activeSessionId: 'mockSession',
-  activeSessionWorkers: { nodeLabelWorker: 'blob:http://192.168.1.196:3000/b6cac5c5-1b4d-4db0-be86-fa55239fd62c' },
+  activeSessionWorkers: {
+    nodeLabelWorker:
+      'blob:http://192.168.1.196:3000/b6cac5c5-1b4d-4db0-be86-fa55239fd62c',
+  },
   deviceSettings: {
     description: 'Kirby (macOS)',
     useDynamicScaling: true,
@@ -50,7 +50,6 @@ const mockState = {
     },
     mockProtocol,
   },
-  pairedServer: null,
   search: {
     collapsed: true,
     selectedResults: [],
@@ -64,7 +63,7 @@ const mockState = {
       stageIndex: 0,
       updatedAt: 1554130548004,
     },
-    mockSession: {
+    'mockSession': {
       protocolUID: 'mockProtocol',
     },
   },
@@ -78,7 +77,9 @@ const emptyState = {
 describe('protocol selector', () => {
   describe('memoed selectors', () => {
     it('should get protocol codebook', () => {
-      expect(Protocol.getProtocolCodebook(mockState)).toEqual({ node: nodeVariables });
+      expect(Protocol.getProtocolCodebook(mockState)).toEqual({
+        node: nodeVariables,
+      });
       expect(Protocol.getProtocolCodebook(emptyState)).toEqual(undefined);
     });
   });

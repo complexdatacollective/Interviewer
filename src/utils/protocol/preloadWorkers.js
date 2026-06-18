@@ -1,9 +1,12 @@
-import { readFile } from '../filesystem';
-import { isCordova } from '../Environment';
-import protocolPath from './protocolPath';
-import { urlForWorkerSource, supportedWorkers } from '../WorkerAgent';
+/**
+ * Preload workers utility with secure API support.
+ */
 
-const path = require('path');
+import { pathSync } from '../electronAPI';
+import { isCapacitor } from '../Environment';
+import { readDirectory, readFile } from '../filesystem';
+import { supportedWorkers, urlForWorkerSource } from '../WorkerAgent';
+import protocolPath from './protocolPath';
 
 /**
  * Builds source code for a Web Worker based on the protocol's
@@ -24,40 +27,36 @@ const compileWorker = (src, funcName) => {
   if (supportedWorkers.indexOf(funcName) < 0) {
     throw new Error('Unsupported worker function name', funcName);
   }
-  /* eslint-disable indent, no-undef, no-console */
   return `
     ${src}
     ;
-    onmessage = ((userFunc) => ${
-      ({ data }) => {
-        const messageId = data.messageId;
-        const onError = (scriptErr) => {
-          postMessage({
-            messageId,
-            error: {
-              name: scriptErr.name,
-              message: scriptErr.message,
-            },
-          });
-        };
+    onmessage = ((userFunc) => ${({ data }) => {
+      const messageId = data.messageId;
+      const onError = (scriptErr) => {
+        postMessage({
+          messageId,
+          error: {
+            name: scriptErr.name,
+            message: scriptErr.message,
+          },
+        });
+      };
 
-        let result;
-        try {
-          result = userFunc(data);
-        } catch (err) {
-          onError(err);
-        }
-        if (result instanceof Promise) {
-          result
-            .then(val => postMessage({ messageId, value: val }))
-            .catch(onError);
-        } else {
-          postMessage({ messageId, value: result });
-        }
+      let result;
+      try {
+        result = userFunc(data);
+      } catch (err) {
+        onError(err);
       }
-    })(${funcName});
+      if (result instanceof Promise) {
+        result
+          .then((val) => postMessage({ messageId, value: val }))
+          .catch(onError);
+      } else {
+        postMessage({ messageId, value: result });
+      }
+    }})(${funcName});
     `;
-  /* eslint-enable */
 };
 
 /**
@@ -65,28 +64,37 @@ const compileWorker = (src, funcName) => {
  * @description Read custom worker scripts from the protocol package, if any.
  * By preloading any existing, we can bootstrap before protocol.json is parsed.
  */
-const preloadWorkers = (protocolUID) => {
-  return Promise.all(supportedWorkers.map((workerName) => {
-    let workerFile;
+const preloadWorkers = async (protocolUID) => {
+  const basePath = await protocolPath(protocolUID);
 
-    if (isCordova()) {
-      workerFile = `${protocolPath(protocolUID)}${workerName}.js`;
-    } else {
-      workerFile = path.join(protocolPath(protocolUID), `${workerName}.js`);
-    }
+  // On Capacitor, reading a non-existent worker file logs a native error, so
+  // list the protocol directory up front and only read workers that exist.
+  // Other platforms fall through to readFile's own (quiet) miss handling.
+  let presentFiles = null;
+  if (isCapacitor()) {
+    presentFiles = await readDirectory(basePath).catch(() => []);
+  }
 
-    const promise = readFile(workerFile);
+  return Promise.all(
+    supportedWorkers.map((workerName) => {
+      const workerFileName = `${workerName}.js`;
 
-    return promise
-      /**
-       * Load from blob so that script inherits CSP
-       */
-      .then(buf => new TextDecoder().decode(buf))
-      .then(str => compileWorker(str, workerName))
-      .then(source => new Blob([source], { type: 'text/plain' }))
-      .then(blob => urlForWorkerSource(blob))
-      .catch(() => null);
-  }));
+      if (presentFiles && !presentFiles.includes(workerFileName)) {
+        return Promise.resolve(null);
+      }
+
+      const workerFile = isCapacitor()
+        ? `${basePath}${workerFileName}`
+        : pathSync.join(basePath, workerFileName);
+
+      return readFile(workerFile)
+        .then((buf) => new TextDecoder().decode(buf))
+        .then((str) => compileWorker(str, workerName))
+        .then((source) => new Blob([source], { type: 'text/plain' }))
+        .then((blob) => urlForWorkerSource(blob))
+        .catch(() => null);
+    }),
+  );
 };
 
 export default preloadWorkers;

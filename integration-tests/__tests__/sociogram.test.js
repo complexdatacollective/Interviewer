@@ -1,20 +1,11 @@
 /* eslint-env jest */
 
-import {
-  makeTestingApp,
-  startApps,
-  stopApps,
-  matchImageSnapshot,
-  pause,
-} from './helpers';
-import {
-  startInterview,
-  goToStage,
-} from './playbook';
+import { makeTestingApp, matchImageSnapshot, pause } from './helpers';
+import { goToStage, startInterview } from './playbook';
 import {
   createNodes,
-  loadDevelopmentProtocol,
   getSociogramCenter,
+  loadDevelopmentProtocol,
 } from './playbook-development-protocol';
 
 let app;
@@ -44,7 +35,9 @@ describe('Sociogram', () => {
   it('Can place nodes', async () => {
     // const size = await app.client.getViewportSize();
     const center = await getSociogramCenter(app);
-    await app.client.moveToObject('//div[@class="node-bucket"]//div[@class="node"]');
+    await app.client.moveToObject(
+      '//div[@class="node-bucket"]//div[@class="node"]',
+    );
     await app.client.buttonDown(0);
     await app.client.moveToObject(
       '//div[@class="sociogram-interface"]',
@@ -54,7 +47,9 @@ describe('Sociogram', () => {
     await pause(app, 'medium');
     await app.client.buttonUp(0);
 
-    await app.client.moveToObject('//div[@class="node-bucket"]//div[@class="node"]');
+    await app.client.moveToObject(
+      '//div[@class="node-bucket"]//div[@class="node"]',
+    );
     await app.client.buttonDown(0);
     await app.client.moveToObject(
       '//div[@class="sociogram-interface"]',
@@ -64,7 +59,9 @@ describe('Sociogram', () => {
     await pause(app, 'medium');
     await app.client.buttonUp(0);
 
-    await app.client.moveToObject('//div[@class="node-bucket"]//div[@class="node"]');
+    await app.client.moveToObject(
+      '//div[@class="node-bucket"]//div[@class="node"]',
+    );
     await app.client.buttonDown(0);
     await app.client.moveToObject(
       '//div[@class="sociogram-interface"]',

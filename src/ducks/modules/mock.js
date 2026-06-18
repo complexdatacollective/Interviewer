@@ -1,14 +1,16 @@
-/* eslint-disable import/prefer-default-export */
-
 import faker from '@faker-js/faker';
-import uuid from 'uuid/v4';
-import { has, times, omit } from 'lodash';
-import { entityPrimaryKeyProperty, entityAttributesProperty } from '@codaco/shared-consts';
+import { has, omit, times } from 'lodash';
+import { v4 as uuid } from 'uuid';
+
+import {
+  entityAttributesProperty,
+  entityPrimaryKeyProperty,
+} from '@codaco/shared-consts';
+
 import { actionCreators as sessionsActions } from './sessions';
 
-const MOCK_GENERATE_NODES = 'MOCK/GENERATE_NODES';
-
-const mockCoord = () => faker.random.number({ min: 0, max: 1, precision: 0.000001 });
+const mockCoord = () =>
+  faker.random.number({ min: 0, max: 1, precision: 0.000001 });
 
 // Todo: make these mock values reflect validation
 const mockValue = (variable) => {
@@ -28,7 +30,10 @@ const mockValue = (variable) => {
     case 'layout':
       return { x: mockCoord(), y: mockCoord() };
     case 'text': {
-      if (variable.name.toLowerCase() === 'name' || variable.name.toLowerCase().includes('name')) {
+      if (
+        variable.name.toLowerCase() === 'name' ||
+        variable.name.toLowerCase().includes('name')
+      ) {
         return faker.name.findName();
       }
 
@@ -49,7 +54,8 @@ const makeEntity = (typeID, variables = {}, promptAttributes = {}) => {
         acc[variableId] = mockValue(variable);
       }
       return acc;
-    }, {},
+    },
+    {},
   );
 
   const modelData = {
@@ -78,36 +84,35 @@ const makeNetwork = (protocol) => {
 
   codebookNodeTypes.forEach((nodeType) => {
     const nodesOfThisType = Math.round(
-      Math.random() * ((networkMaxNodes - networkMinNodes) + networkMinNodes),
+      Math.random() * (networkMaxNodes - networkMinNodes + networkMinNodes),
     );
-    nodes.push(...[...Array(nodesOfThisType)].map(() => makeEntity(
-      nodeType,
-      protocol.codebook.node[nodeType].variables,
-    )));
+    nodes.push(
+      ...[...Array(nodesOfThisType)].map(() =>
+        makeEntity(nodeType, protocol.codebook.node[nodeType].variables),
+      ),
+    );
   });
 
-  const ego = makeEntity(null, (protocol.codebook.ego || {}).variables);
+  const ego = makeEntity(null, protocol.codebook.ego?.variables);
 
   const edges = [];
   const networkMaxEdges = 20;
   const networkMinEdges = 1;
-  const pickNodeUid = () => nodes[
-    Math.floor(Math.random() * nodes.length)
-  ][entityPrimaryKeyProperty];
+  const pickNodeUid = () =>
+    nodes[Math.floor(Math.random() * nodes.length)][entityPrimaryKeyProperty];
 
   codebookEdgeTypes.forEach((edgeType) => {
     const edgesOfThisType = Math.round(
-      Math.random() * ((networkMaxEdges - networkMinEdges) + networkMinEdges),
+      Math.random() * (networkMaxEdges - networkMinEdges + networkMinEdges),
     );
 
-    edges.push(...[...Array(edgesOfThisType)].map(() => ({
-      ...makeEntity(
-        edgeType,
-        protocol.codebook.edge[edgeType].variables,
-      ),
-      from: pickNodeUid(),
-      to: pickNodeUid(),
-    })));
+    edges.push(
+      ...[...Array(edgesOfThisType)].map(() => ({
+        ...makeEntity(edgeType, protocol.codebook.edge[edgeType].variables),
+        from: pickNodeUid(),
+        to: pickNodeUid(),
+      })),
+    );
   });
 
   return {
@@ -117,44 +122,31 @@ const makeNetwork = (protocol) => {
   };
 };
 
-const generateMockNodes = (
-  variableDefs,
-  typeKey,
-  howMany = 0,
-  additionalAttributes = {},
-) => (dispatch) => times(
-  howMany,
-  () => {
-    const node = makeEntity(typeKey, variableDefs, additionalAttributes);
-    const modelData = omit(node, entityAttributesProperty);
-    const attributeData = node[entityAttributesProperty];
+const generateMockNodes =
+  (variableDefs, typeKey, howMany = 0, additionalAttributes = {}) =>
+  (dispatch) =>
+    times(howMany, () => {
+      const node = makeEntity(typeKey, variableDefs, additionalAttributes);
+      const modelData = omit(node, entityAttributesProperty);
+      const attributeData = node[entityAttributesProperty];
 
-    dispatch(sessionsActions.addNode(modelData, attributeData));
-  },
-);
+      dispatch(sessionsActions.addNode(modelData, attributeData));
+    });
 
-const generateMockSessions = (protocolId, protocol, sessionCount) => (dispatch) => {
-  [...Array(sessionCount)].forEach((_, i) => {
-    const network = makeNetwork(protocol);
+const generateMockSessions =
+  (protocolId, protocol, sessionCount) => (dispatch) => {
+    [...Array(sessionCount)].forEach((_, i) => {
+      const network = makeNetwork(protocol);
 
-    dispatch(sessionsActions.addSession(
-      `case_${i + 1}`,
-      protocolId,
-      network,
-    ));
-  });
-};
+      dispatch(
+        sessionsActions.addSession(`case_${i + 1}`, protocolId, network),
+      );
+    });
+  };
 
 const actionCreators = {
   generateMockNodes,
   generateMockSessions,
 };
 
-const actionTypes = {
-  MOCK_GENERATE_NODES,
-};
-
-export {
-  actionCreators,
-  actionTypes,
-};
+export { actionCreators };

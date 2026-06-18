@@ -1,8 +1,10 @@
 /* eslint-env jest */
 
-import path from 'path';
+import path from 'node:path';
+
 import dialogAddon from 'spectron-dialog-addon';
-import { timing, paths, mockProtocol } from '../config';
+
+import { mockProtocol, paths, timing } from '../config';
 import getData from '../getData';
 import { forceClick } from './helpers';
 
@@ -14,7 +16,12 @@ export const loadProtocolFromFile = async (app, filename, repeat = false) => {
   const mockProtocolPath = path.join(paths.dataDir, filename);
   const mockFilenames = [mockProtocolPath];
 
-  dialogAddon.mock([{ method: 'showOpenDialog', value: { canceled: false, filePaths: mockFilenames } }]);
+  dialogAddon.mock([
+    {
+      method: 'showOpenDialog',
+      value: { canceled: false, filePaths: mockFilenames },
+    },
+  ]);
   await app.client.isVisible('.getting-started');
   await app.client.click('[name=add-a-protocol]');
   await app.client.waitForVisible('.protocol-import-dialog__tabs');
@@ -36,19 +43,15 @@ export const loadProtocolFromFile = async (app, filename, repeat = false) => {
  * For reuse when testing interfaces
  */
 export const loadMockProtocolAsFile = async (app) => {
-  await getData(mockProtocol)
-    .then(([, filename]) => {
-      console.info(`loading protocol at "${filename}".`);
-      return loadProtocolFromFile(app, filename);
-    });
+  await getData(mockProtocol).then(([, filename]) => {
+    return loadProtocolFromFile(app, filename);
+  });
 };
 
 export const loadMockProtocolAsFileAgain = async (app) => {
-  await getData(mockProtocol)
-    .then(([, filename]) => {
-      console.info(`loading protocol at "${filename}" (again).`);
-      return loadProtocolFromFile(app, filename, true);
-    });
+  await getData(mockProtocol).then(([, filename]) => {
+    return loadProtocolFromFile(app, filename, true);
+  });
 };
 
 export const startInterview = async (app, caseId = 'test') => {
@@ -60,8 +63,9 @@ export const startInterview = async (app, caseId = 'test') => {
 };
 
 export const goToStage = async (app, stageId) => {
-  console.log('Going to stage ', stageId);
-  if (!stageId) { throw Error('goToStage() requires a stageId'); }
+  if (!stageId) {
+    throw Error('goToStage() requires a stageId');
+  }
   await app.client.waitForVisible('.session-navigation__progress-bar');
   await app.client.click('.session-navigation__progress-bar');
   await app.client.waitForVisible('.stages-menu');

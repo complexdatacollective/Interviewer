@@ -1,17 +1,25 @@
-/* eslint-env jest */
+import { vi } from 'vitest';
 
-import preloadWorkers from '../preloadWorkers';
-import environments from '../../environments';
 import { getEnvironment } from '../../Environment';
+import environments from '../../environments';
 import { readFile } from '../../filesystem';
-import * as workerAgentHelpers from '../../WorkerAgent';
+import { urlForWorkerSource } from '../../WorkerAgent';
+import preloadWorkers from '../preloadWorkers';
 
-jest.mock('../../filesystem');
+vi.mock('../../Environment');
+vi.mock('../../filesystem');
+vi.mock('../../WorkerAgent', async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    urlForWorkerSource: vi.fn(),
+  };
+});
 
 const mockUrl = 'blob:file://script.js';
 
 global.TextDecoder = class TextDecoder {
-  decode = jest.fn().mockReturnValue('')
+  decode = vi.fn().mockReturnValue('');
 };
 
 describe('preloadWorkers', () => {
@@ -22,7 +30,7 @@ describe('preloadWorkers', () => {
   describe('when script exists', () => {
     beforeAll(() => {
       readFile.mockReturnValue(Promise.resolve('function myWorker() {}'));
-      workerAgentHelpers.urlForWorkerSource = jest.fn().mockReturnValue(mockUrl);
+      urlForWorkerSource.mockReturnValue(mockUrl);
     });
 
     it('returns a promise', () => {
@@ -32,7 +40,9 @@ describe('preloadWorkers', () => {
     it('resolves to an array of URLs', async () => {
       const promise = preloadWorkers('development', false);
       await expect(promise).resolves.toBeInstanceOf(Array);
-      await expect(promise).resolves.toContainEqual(expect.stringMatching(mockUrl));
+      await expect(promise).resolves.toContainEqual(
+        expect.stringMatching(mockUrl),
+      );
     });
   });
 

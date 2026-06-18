@@ -1,5 +1,6 @@
 /* eslint-env jest */
 import { toMatchImageSnapshot } from 'jest-image-snapshot';
+
 import { makeTestingApp, stopApp } from './__tests__/helpers';
 
 beforeAll(async () => {

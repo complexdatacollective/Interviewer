@@ -1,4 +1,5 @@
-import { throttle, clamp } from 'lodash';
+import { clamp, throttle } from 'lodash';
+
 import getAbsoluteBoundingRect from '../../utils/getAbsoluteBoundingRect';
 
 const screenManager = () => {
@@ -14,12 +15,7 @@ const screenManager = () => {
   };
 
   const measureScreen = () => {
-    const {
-      width,
-      height,
-      left,
-      top,
-    } = getAbsoluteBoundingRect(el.current);
+    const { width, height, left, top } = getAbsoluteBoundingRect(el.current);
 
     state.width = width;
     state.height = height;
@@ -27,9 +23,13 @@ const screenManager = () => {
     state.top = top;
   };
 
-  const watchScreen = throttle(() => {
-    measureScreen();
-  }, 1000, { leading: true });
+  const watchScreen = throttle(
+    () => {
+      measureScreen();
+    },
+    1000,
+    { leading: true },
+  );
 
   const initialize = (_el) => {
     el.current = _el;
@@ -46,24 +46,17 @@ const screenManager = () => {
     const { width, height } = state;
 
     return {
-      x: (((x - 0.5) * width) + (0.5 * width)),
-      y: (((y - 0.5) * height) + (0.5 * height)),
+      x: (x - 0.5) * width + 0.5 * width,
+      y: (y - 0.5) * height + 0.5 * height,
     };
   };
 
   // Given a position on the screen calculate the relative coordinate for the viewport
   const calculateRelativeCoords = ({ x, y, ...rest } = { x: 0, y: 0 }) => {
-    const {
-      width,
-      height,
-      left: viewportX,
-      top: viewportY,
-    } = state;
+    const { width, height, left: viewportX, top: viewportY } = state;
 
     const hasDelta = rest.dy && rest.dx;
-    const delta = hasDelta
-      ? { dy: rest.dy / height, dx: rest.dx / width }
-      : {};
+    const delta = hasDelta ? { dy: rest.dy / height, dx: rest.dx / width } : {};
 
     return {
       x: clamp((x - viewportX) / width, 0, 1),

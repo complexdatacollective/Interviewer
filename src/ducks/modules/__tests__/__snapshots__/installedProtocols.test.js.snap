@@ -1,9 +1,9 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`protocols reducer deleteProtocolAction() Has existing sessions warns user about existing sessions 1`] = `
-Array [
-  Array [
-    Object {
+exports[`protocols reducer > deleteProtocolAction() > Has existing sessions > warns user about existing sessions 1`] = `
+[
+  [
+    {
       "confirmLabel": "Delete protocol and sessions",
       "message": <React.Fragment>
         <p>
@@ -24,10 +24,10 @@ Array [
 ]
 `;
 
-exports[`protocols reducer deleteProtocolAction() Has non-exported existing sessions warns user about existing sessions 1`] = `
-Array [
-  Array [
-    Object {
+exports[`protocols reducer > deleteProtocolAction() > Has non-exported existing sessions > warns user about existing sessions 1`] = `
+[
+  [
+    {
       "confirmLabel": "Delete protocol and sessions",
       "message": <React.Fragment>
         <p>

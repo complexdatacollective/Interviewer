@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import reducer, { actionCreators, actionTypes } from '../search';
 
 const initialState = {
@@ -9,9 +7,7 @@ const initialState = {
 
 describe('search reducer', () => {
   it('should return the initial state', () => {
-    expect(
-      reducer(undefined, {}),
-    ).toEqual(initialState);
+    expect(reducer(undefined, {})).toEqual(initialState);
   });
 
   it('should handle OPEN_SEARCH', () => {
@@ -20,12 +16,15 @@ describe('search reducer', () => {
   });
 
   it('should handle CLOSE_SEARCH', () => {
-    const newState = reducer({
-      ...initialState,
-      collapsed: false,
-    }, {
-      type: actionTypes.CLOSE_SEARCH,
-    });
+    const newState = reducer(
+      {
+        ...initialState,
+        collapsed: false,
+      },
+      {
+        type: actionTypes.CLOSE_SEARCH,
+      },
+    );
     expect(newState.collapsed).toBe(true);
   });
 

@@ -1,11 +1,7 @@
 /* eslint-env jest */
 
-import { timing, mockProtocol } from '../config';
-import {
-  makeTestingApp,
-  forceClick,
-  matchImageSnapshot,
-} from './helpers';
+import { mockProtocol, timing } from '../config';
+import { forceClick, makeTestingApp, matchImageSnapshot } from './helpers';
 import {
   loadMockProtocolAsFile,
   loadMockProtocolAsFileAgain,
@@ -63,7 +59,10 @@ describe('Start screen', () => {
     await app.client.waitForVisible('input[name=protocol_url]');
     await app.client.setValue('input[name=protocol_url]', mockProtocol);
     await app.client.click('button=Import');
-    await app.client.waitForVisible('h4=Protocol imported successfully!', 120000); // 2 minutes
+    await app.client.waitForVisible(
+      'h4=Protocol imported successfully!',
+      120000,
+    ); // 2 minutes
     await app.client.click('button=Continue');
     await app.client.waitForExist('.modal', timing.long, true); // wait for not exist
     await matchImageSnapshot(app);

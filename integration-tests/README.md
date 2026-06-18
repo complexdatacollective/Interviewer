@@ -23,7 +23,7 @@ await matchImageSnapshot(app) // Use helper to run image snapshot test
 
 #### Creating/updating snapshots
 
-__requires: `docker` and `docker-compose`__
+**requires: `docker` and `docker-compose`**
 
 New/changed snapshots need to be created and verified locally, before they
 can be run on the CI service.
@@ -47,7 +47,7 @@ $ npm run test:integration:ci # to run tests
 
 ### Run CI-like environment locally (docker)
 
-__requires: `docker` and `docker-compose`__
+**requires: `docker` and `docker-compose`**
 
 ```
 $ npm run test:integration:docker

@@ -18,7 +18,7 @@ export const getPairs = (nodes) => {
         return result;
       }
 
-      const newPairs = nextPool.map((alterId) => ([id, alterId]));
+      const newPairs = nextPool.map((alterId) => [id, alterId]);
 
       return {
         result: [...result, ...newPairs],
@@ -31,9 +31,12 @@ export const getPairs = (nodes) => {
   return pairs;
 };
 
-export const getNode = (nodes, id) => nodes.find((node) => node[entityPrimaryKeyProperty] === id);
+const getNode = (nodes, id) =>
+  nodes.find((node) => node[entityPrimaryKeyProperty] === id);
 
 export const getNodePair = (nodes, pair) => {
-  if (!pair) { return []; }
+  if (!pair) {
+    return [];
+  }
   return pair.map((id) => getNode(nodes, id));
 };

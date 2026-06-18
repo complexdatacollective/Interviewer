@@ -1,16 +1,22 @@
 .panel {
   --base-node-size: calc(var(--base-font-size) * 6.6);
 
-  @include transition-properties((opacity flex-basis flex-grow margin-bottom border-bottom-width), var(--animation-easing), var(--animation-duration-standard));
+  @include transition-properties(
+    (opacity flex-basis flex-grow margin-bottom border-bottom-width),
+    var(--animation-easing),
+    var(--animation-duration-standard)
+  );
 
   flex: 1 0 5rem;
   display: flex;
   flex-direction: column;
-  background-color: var(--panel-bg-muted); // Replaced light background palette because it was too strong. This seems to be a one-off color, but migrate to UI if used elsewhere
+  background-color: var(
+    --panel-bg-muted
+  ); // Replaced light background palette because it was too strong. This seems to be a one-off color, but migrate to UI if used elsewhere
   border-color: palette('primary');
   border-style: solid;
   border-width: 0;
-  border-bottom-width: .5rem;
+  border-bottom-width: 0.5rem;
   border-radius: var(--border-radius);
   margin: 0 0 1rem;
   overflow: hidden;
@@ -23,7 +29,7 @@
   &__heading {
     flex: 0 0 5rem;
     padding: var(--padding-unit);
-    border-bottom: .1rem solid palette('background');
+    border-bottom: 0.1rem solid palette('background');
     display: flex;
     justify-content: center;
     flex-direction: column;

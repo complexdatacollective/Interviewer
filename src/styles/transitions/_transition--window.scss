@@ -12,12 +12,15 @@
 
     &-active {
       [transition-role='background'] {
-        transition: opacity var(--animation-easing) var(--animation-duration-fast);
+        transition: opacity var(--animation-easing)
+          var(--animation-duration-fast);
         opacity: 1;
       }
 
       [transition-role='window'] {
-        transition: transform var(--animation-easing) var(--animation-duration-standard), opacity var(--animation-easing) var(--animation-duration-standard);
+        transition:
+          transform var(--animation-easing) var(--animation-duration-standard),
+          opacity var(--animation-easing) var(--animation-duration-standard);
         transform: translate(0, 0);
         opacity: 1;
       }
@@ -28,7 +31,8 @@
     opacity: 1;
 
     &-active {
-      transition: opacity var(--animation-easing) var(--animation-duration-standard);
+      transition: opacity var(--animation-easing)
+        var(--animation-duration-standard);
       opacity: 0;
     }
   }

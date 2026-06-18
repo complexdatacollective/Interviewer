@@ -1,6 +1,6 @@
-const path = require('path');
-const crypto = require('crypto');
-const fs = require('fs');
+const path = require('node:path');
+const crypto = require('node:crypto');
+const fs = require('node:fs');
 const request = require('request');
 const { paths } = require('./config');
 
@@ -15,14 +15,11 @@ const getDataFileName = (url) => {
   return [fullPath, fileName];
 };
 
-const getData = url =>
+const getData = (url) =>
   new Promise((resolve) => {
     const [fullPath, fileName] = getDataFileName(url);
 
-    console.log(`getData ${url} -> ${fileName}`);
-
     if (fs.existsSync(fullPath)) {
-      console.log(`getData  ${fileName} in cache`);
       resolve([fullPath, fileName]);
       return;
     }
@@ -30,7 +27,6 @@ const getData = url =>
     const writeStream = fs.createWriteStream(fullPath);
 
     writeStream.on('close', () => {
-      console.log(`getData fetched  ${fileName} from network`);
       resolve([fullPath, fileName]);
     });
 

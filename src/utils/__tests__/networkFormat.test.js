@@ -1,13 +1,10 @@
-/* eslint-env jest */
-/* eslint-disable @codaco/spellcheck/spell-checker */
+import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
+
 import {
-  entityPrimaryKeyProperty,
-} from '@codaco/shared-consts';
-import { primaryKeyPropertyForWorker, nodeTypePropertyForWorker } from '../../ducks/modules/network';
-import {
-  asWorkerAgentEntity,
-  asWorkerAgentEdge,
-} from '../networkFormat';
+  nodeTypePropertyForWorker,
+  primaryKeyPropertyForWorker,
+} from '../../ducks/modules/network';
+import { asWorkerAgentEdge, asWorkerAgentEntity } from '../networkFormat';
 
 describe('asWorkerAgentEntity', () => {
   const nodeInNetwork = {
@@ -26,23 +23,38 @@ describe('asWorkerAgentEntity', () => {
   };
 
   it('returns a node’s attributes', () => {
-    expect(asWorkerAgentEntity(nodeInNetwork, nodeTypeDefinition).userProp1).toEqual('userProp1value');
+    expect(
+      asWorkerAgentEntity(nodeInNetwork, nodeTypeDefinition).userProp1,
+    ).toEqual('userProp1value');
   });
 
   it('returns a unique ID for the node', () => {
-    expect(asWorkerAgentEntity(nodeInNetwork, nodeTypeDefinition)[primaryKeyPropertyForWorker]).toEqual('node1');
+    expect(
+      asWorkerAgentEntity(nodeInNetwork, nodeTypeDefinition)[
+        primaryKeyPropertyForWorker
+      ],
+    ).toEqual('node1');
   });
 
   it('returns a type for the node', () => {
-    expect(asWorkerAgentEntity(nodeInNetwork, nodeTypeDefinition)[nodeTypePropertyForWorker]).toEqual('person');
+    expect(
+      asWorkerAgentEntity(nodeInNetwork, nodeTypeDefinition)[
+        nodeTypePropertyForWorker
+      ],
+    ).toEqual('person');
   });
 
   it('does not contain other private attrs props', () => {
-    expect(asWorkerAgentEntity(nodeInNetwork, nodeTypeDefinition)).not.toHaveProperty('stageId');
+    expect(
+      asWorkerAgentEntity(nodeInNetwork, nodeTypeDefinition),
+    ).not.toHaveProperty('stageId');
   });
 
   it('allows pass-though props from external data', () => {
-    const externalNode = { ...nodeInNetwork, attributes: { ...nodeInNetwork.attributes, unknownProp: 'foo' } };
+    const externalNode = {
+      ...nodeInNetwork,
+      attributes: { ...nodeInNetwork.attributes, unknownProp: 'foo' },
+    };
     const node = asWorkerAgentEntity(externalNode, nodeTypeDefinition);
     expect(node.unknownProp).toEqual('foo');
   });
@@ -67,6 +79,10 @@ describe('asWorkerAgentEdge', () => {
   });
 
   it('returns a user-friendly edge type', () => {
-    expect(asWorkerAgentEntity(edgeInNetwork, edgeTypeDefinition)[nodeTypePropertyForWorker]).toEqual('friend');
+    expect(
+      asWorkerAgentEntity(edgeInNetwork, edgeTypeDefinition)[
+        nodeTypePropertyForWorker
+      ],
+    ).toEqual('friend');
   });
 });

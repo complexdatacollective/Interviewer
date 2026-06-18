@@ -1,8 +1,5 @@
 module.exports = {
-  presets: [
-    '@babel/preset-env',
-    '@babel/react',
-  ],
+  presets: ['@babel/preset-env', '@babel/react'],
   plugins: [
     '@babel/plugin-syntax-import-meta',
     [

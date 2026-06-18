@@ -1,10 +1,5 @@
-import { useEffect, useState, useRef } from 'react';
-import {
-  find,
-  get,
-  pick,
-  isEqual,
-} from 'lodash';
+import { find, get, isEqual, pick } from 'lodash';
+import { useEffect, useRef, useState } from 'react';
 
 import store from './store';
 
@@ -13,7 +8,9 @@ const defaultProps = ['isOver', 'willAccept'];
 const getMonitorProps = (state, id, props) => {
   const target = find(state.targets, ['id', id]);
 
-  if (!target) { return null; }
+  if (!target) {
+    return null;
+  }
 
   const monitorProps = {
     isOver: get(target, 'isOver', false),
@@ -28,7 +25,9 @@ const useDropMonitor = (id, props = defaultProps) => {
   const [state, setState] = useState();
 
   const updateState = (newState) => {
-    if (isEqual(internalState.current, newState)) { return; }
+    if (isEqual(internalState.current, newState)) {
+      return;
+    }
     internalState.current = newState;
     setState(newState);
   };
@@ -38,8 +37,11 @@ const useDropMonitor = (id, props = defaultProps) => {
     updateState(status);
   };
 
+  const updateMonitorPropsRef = useRef(updateMonitorProps);
+  updateMonitorPropsRef.current = updateMonitorProps;
+
   useEffect(() => {
-    const unsubscribe = store.subscribe(updateMonitorProps);
+    const unsubscribe = store.subscribe(() => updateMonitorPropsRef.current());
 
     return unsubscribe;
   }, []);

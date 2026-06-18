@@ -1,34 +1,68 @@
 import environments from './environments';
 
-export const isElectron = () => !!window.require;
+/**
+ * Environment detection utilities.
+ *
+ * This module provides environment detection without direct Node.js access.
+ * It uses the secure electronAPI exposed via the preload script.
+ */
 
-export const isDevMode = () => isElectron() && process.env.NODE_ENV === 'development';
+// Check if running in Electron with the secure API
+export const isElectron = () =>
+  typeof window !== 'undefined' && !!window.electronAPI;
 
-export const isPreview = () => isElectron() && window.require('electron').remote.getGlobal('NETWORK_CANVAS_PREVIEW');
+// Check if in development mode
+export const isDevMode = () =>
+  isElectron() && window.electronAPI.env?.isDevelopment;
 
-// Not supported on Cordova
-export const getEnv = () => (isElectron() ? process.env : {});
+// Check if running as preview window in Architect
+export const isPreview = () =>
+  isElectron() && window.electronAPI.env?.isPreview;
 
-export const isMacOS = () => isElectron() && window.require('os').platform() === 'darwin';
+// Get environment variables (limited - no direct process.env access)
+// Returns empty object for security - use specific env flags instead
+export const getEnv = () => ({});
 
-export const isWindows = () => isElectron() && window.require('os').platform() === 'win32';
+// Platform detection using secure API
+const getPlatform = () => {
+  if (isElectron()) {
+    return (
+      window.electronAPI.env?.platform ||
+      window.electronAPI.platform ||
+      'unknown'
+    );
+  }
+  return 'unknown';
+};
 
-export const isLinux = () => isElectron() && window.require('os').platform() === 'linux';
+export const isMacOS = () => isElectron() && getPlatform() === 'darwin';
 
-export const isCordova = () => !!window.cordova;
+export const isWindows = () => isElectron() && getPlatform() === 'win32';
 
-export const isIOS = () => isCordova() && (/iOS/i).test(window.device.platform);
+export const isLinux = () => isElectron() && getPlatform() === 'linux';
 
-export const isAndroid = () => isCordova() && (/Android/i).test(window.device.platform);
+export const isCapacitor = () =>
+  typeof window !== 'undefined' &&
+  !!window.Capacitor &&
+  typeof window.Capacitor.isNativePlatform === 'function' &&
+  window.Capacitor.isNativePlatform();
 
-export const isWeb = () => (!isCordova() && !isElectron());
+const getCapacitorPlatform = () =>
+  isCapacitor() ? window.Capacitor.getPlatform() : 'web';
+
+export const isIOS = () => getCapacitorPlatform() === 'ios';
+
+export const isAndroid = () => getCapacitorPlatform() === 'android';
 
 const getEnvironment = () => {
-  if (isCordova()) return environments.CORDOVA;
+  if (isCapacitor()) return environments.CAPACITOR;
   if (isElectron()) return environments.ELECTRON;
   return environments.WEB;
 };
 
-const inEnvironment = (tree) => (...args) => tree(getEnvironment())(...args);
+const inEnvironment =
+  (tree) =>
+  (...args) =>
+    tree(getEnvironment())(...args);
 
 export default inEnvironment;

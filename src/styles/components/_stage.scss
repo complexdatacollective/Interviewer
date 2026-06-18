@@ -9,7 +9,11 @@
   }
 
   &--transition {
-    @include group-transition-with-delay(fade, var(--animation-duration-slow), var(--animation-duration-slow));
+    @include group-transition-with-delay(
+      fade,
+      var(--animation-duration-slow),
+      var(--animation-duration-slow)
+    );
 
     @include group-transition-leave {
       .node-list,
