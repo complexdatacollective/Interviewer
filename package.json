@@ -45,7 +45,7 @@
     "type": "git"
   },
   "devDependencies": {
-    "@babel/core": "7.11.1",
+    "@babel/core": "7.29.6",
     "@babel/eslint-parser": "~7.13.10",
     "@babel/plugin-proposal-class-properties": "7.7.4",
     "@babel/plugin-proposal-json-strings": "7.7.4",
