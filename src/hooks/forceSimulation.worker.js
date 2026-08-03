@@ -1,10 +1,9 @@
-/* eslint-disable no-console, func-names */
 import {
+  forceLink,
+  forceManyBody,
   forceSimulation,
   forceX,
   forceY,
-  forceManyBody,
-  forceLink,
 } from 'd3-force';
 
 const DEFAULT_OPTIONS = {
@@ -20,7 +19,7 @@ let options = { ...DEFAULT_OPTIONS };
 
 const cloneLinks = (ls) => ls.map((link) => ({ ...link }));
 
-const updateOptions = function (newOptions) {
+const updateOptions = (newOptions) => {
   Object.keys(newOptions).forEach((option) => {
     const value = newOptions[option];
     switch (option) {
@@ -43,21 +42,15 @@ const updateOptions = function (newOptions) {
 
   options = { ...options, ...newOptions }; // Update saved options
 
-  simulation
-    .alpha(0.3)
-    .restart();
+  simulation.alpha(0.3).restart();
 };
 
-onmessage = function ({ data }) {
+onmessage = ({ data }) => {
   switch (data.type) {
     case 'initialize': {
-      const {
-        network,
-      } = data;
+      const { network } = data;
 
       links = network.links;
-
-      console.debug('worker:initialize', network.nodes);
 
       const initialOptions = {
         ...DEFAULT_OPTIONS,
@@ -69,9 +62,7 @@ onmessage = function ({ data }) {
       updateOptions(initialOptions);
 
       // do not auto run
-      simulation
-        .alpha(0)
-        .stop();
+      simulation.alpha(0).stop();
 
       simulation.on('tick', () => {
         postMessage({
@@ -81,7 +72,6 @@ onmessage = function ({ data }) {
       });
 
       simulation.on('end', () => {
-        console.debug('worker:end');
         postMessage({
           type: 'end',
           nodes: simulation.nodes(),
@@ -94,8 +84,9 @@ onmessage = function ({ data }) {
       break;
     }
     case 'stop': {
-      if (!simulation) { return; }
-      console.debug('worker:stop');
+      if (!simulation) {
+        return;
+      }
       simulation.stop();
       postMessage({
         type: 'end',
@@ -104,49 +95,50 @@ onmessage = function ({ data }) {
       break;
     }
     case 'start': {
-      if (!simulation) { return; }
-      console.debug('worker:start');
-      simulation
-        .alpha(1)
-        .restart();
+      if (!simulation) {
+        return;
+      }
+      simulation.alpha(1).restart();
       break;
     }
     case 'reheat': {
-      if (!simulation) { return; }
-      console.debug('worker:start');
-      simulation
-        .alpha(0.3)
-        .restart();
+      if (!simulation) {
+        return;
+      }
+      simulation.alpha(0.3).restart();
       break;
     }
     case 'update_network': {
-      if (!simulation) { return; }
+      if (!simulation) {
+        return;
+      }
 
-      const {
-        network,
-      } = data;
+      const { network } = data;
 
       links = network.links;
 
-      simulation
-        .nodes(network.nodes);
+      simulation.nodes(network.nodes);
 
-      simulation
-        .force('links', forceLink(cloneLinks(links)).distance(options.linkDistance));
+      simulation.force(
+        'links',
+        forceLink(cloneLinks(links)).distance(options.linkDistance),
+      );
 
       if (data.restart) {
         // TODO: don't run this on "first run"?
-        simulation
-          .alpha(0.3)
-          .restart();
+        simulation.alpha(0.3).restart();
       }
       break;
     }
     case 'update_node': {
-      if (!simulation) { return; }
+      if (!simulation) {
+        return;
+      }
 
       const nodes = simulation.nodes().map((node, index) => {
-        if (index !== data.index) { return node; }
+        if (index !== data.index) {
+          return node;
+        }
 
         const newNode = {
           ...node,
@@ -156,15 +148,14 @@ onmessage = function ({ data }) {
         return newNode;
       });
 
-      simulation
-        .nodes(nodes);
+      simulation.nodes(nodes);
 
-      simulation
-        .force('links', forceLink(cloneLinks(links)).distance(options.linkDistance));
+      simulation.force(
+        'links',
+        forceLink(cloneLinks(links)).distance(options.linkDistance),
+      );
 
-      simulation
-        .alpha(0.3)
-        .restart();
+      simulation.alpha(0.3).restart();
       break;
     }
     default:

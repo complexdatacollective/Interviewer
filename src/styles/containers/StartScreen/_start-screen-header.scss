@@ -13,7 +13,7 @@
   .version-string {
     font-weight: bolder;
     font-size: 0.64rem;
-    letter-spacing: .15em;
+    letter-spacing: 0.15em;
     align-self: flex-start;
     margin-left: 0;
     margin-top: 1rem;
@@ -41,7 +41,10 @@
     align-items: center;
     width: 100%;
     padding: units.unit(2) units.unit(4) units.unit(4);
-    background: linear-gradient(#404088, rgb(58 58 117)); // sass-lint:disable-line no-color-literals
+    background: linear-gradient(
+      #404088,
+      rgb(58 58 117)
+    ); // sass-lint:disable-line no-color-literals
 
     .header-brand {
       flex: 0 0 units.unit(15);
@@ -57,7 +60,7 @@
         display: inline-block;
         font-family: var(--heading-font-family);
         font-weight: 900;
-        letter-spacing: .15em;
+        letter-spacing: 0.15em;
         margin: 0;
       }
     }
@@ -68,7 +71,7 @@
 
       h1 {
         font-size: 3.052rem;
-        letter-spacing: .15em;
+        letter-spacing: 0.15em;
         margin: 0;
         margin-bottom: units.unit(1);
       }

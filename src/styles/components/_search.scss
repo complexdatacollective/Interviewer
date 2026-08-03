@@ -17,7 +17,9 @@ $results-height: calc(100vh - 23rem);
 
   &__loading {
     position: absolute;
-    width: calc(100% - var(--session-panel-width)) !important; // sass-lint:disable-line no-important
+    width: calc(
+      100% - var(--session-panel-width)
+    ) !important; // sass-lint:disable-line no-important
     bottom: 0;
     left: var(--session-panel-width);
     overflow: hidden;
@@ -25,7 +27,8 @@ $results-height: calc(100vh - 23rem);
 
   &__search-button {
     cursor: pointer;
-    transition: opacity var(--animation-duration-standard) var(--animation-easing);
+    transition: opacity var(--animation-duration-standard)
+      var(--animation-easing);
 
     &.icon {
       position: absolute;
@@ -39,7 +42,6 @@ $results-height: calc(100vh - 23rem);
       opacity: 0;
       z-index: -1;
     }
-
   }
 
   &__header {
@@ -64,7 +66,8 @@ $results-height: calc(100vh - 23rem);
     top: 0;
     z-index: 1;
 
-    &[name='close'] { // specificity needed to override NC-UI
+    &[name='close'] {
+      // specificity needed to override NC-UI
       height: 1rem;
       width: 1rem;
     }
@@ -123,7 +126,7 @@ $results-height: calc(100vh - 23rem);
 
   &__result {
     &--selected {
-      background-color: color('white', .15);
+      background-color: color('white', 0.15);
       border: 1px solid color('white');
     }
   }
@@ -135,5 +138,4 @@ $results-height: calc(100vh - 23rem);
     top: 30%;
     z-index: 1;
   }
-
 }

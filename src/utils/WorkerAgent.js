@@ -1,4 +1,4 @@
-import uuid from 'uuid/v4';
+import { v4 as uuid } from 'uuid';
 
 export const NodeLabelWorkerName = 'nodeLabelWorker';
 export const supportedWorkers = [NodeLabelWorkerName];
@@ -48,7 +48,7 @@ class WorkerAgent {
   constructor(url) {
     try {
       this.worker = getSharedWorker(url);
-    } catch (e) {
+    } catch (_e) {
       // no-op. Check isReady() or catch postMessage().
     }
   }
@@ -87,7 +87,11 @@ class WorkerAgent {
       return Promise.reject(new Error('Worker unavailable'));
     }
     if (this.worker.globalError) {
-      return Promise.reject(new Error(`Worker has global error: ${this.worker.globalError.message}`));
+      return Promise.reject(
+        new Error(
+          `Worker has global error: ${this.worker.globalError.message}`,
+        ),
+      );
     }
     const messageId = uuid();
     const taggedMsg = { ...msg, messageId };

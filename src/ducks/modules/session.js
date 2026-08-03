@@ -1,7 +1,11 @@
 import { push } from 'connected-react-router';
-import { actionTypes as SessionsActionTypes, actionCreators as SessionsActions } from './sessions';
-import { actionCreators as SessionWorkerActions } from './sessionWorkers';
+
 import { actionTypes as installedProtocolsActionTypes } from './installedProtocols';
+import {
+  actionCreators as SessionsActions,
+  actionTypes as SessionsActionTypes,
+} from './sessions';
+import { actionCreators as SessionWorkerActions } from './sessionWorkers';
 
 const { ADD_SESSION } = SessionsActionTypes;
 const SET_SESSION = 'SET_SESSION';
@@ -27,11 +31,15 @@ export default function reducer(state = initialState, action = {}) {
  */
 const setSession = (id) => (dispatch, getState) => {
   const { sessions } = getState();
-  if (!sessions[id]) { return; }
+  if (!sessions[id]) {
+    return;
+  }
 
   const sessionProtocolUID = sessions[id].protocolUID;
 
-  dispatch(SessionWorkerActions.initializeSessionWorkersThunk(sessionProtocolUID));
+  dispatch(
+    SessionWorkerActions.initializeSessionWorkersThunk(sessionProtocolUID),
+  );
 
   dispatch({
     type: SET_SESSION,
@@ -39,25 +47,27 @@ const setSession = (id) => (dispatch, getState) => {
   });
 };
 
-const endSession = (alsoDelete = false, markAsFinished = false) => (dispatch, getState) => {
-  if (markAsFinished) {
-    const { activeSessionId } = getState();
-    dispatch(SessionsActions.setSessionFinished(activeSessionId));
-  }
+const endSession =
+  (alsoDelete = false, markAsFinished = false) =>
+  (dispatch, getState) => {
+    if (markAsFinished) {
+      const { activeSessionId } = getState();
+      dispatch(SessionsActions.setSessionFinished(activeSessionId));
+    }
 
-  dispatch({
-    type: END_SESSION,
-  });
+    dispatch({
+      type: END_SESSION,
+    });
 
-  dispatch(push('/'));
+    dispatch(push('/'));
 
-  dispatch(SessionWorkerActions.resetWorkerMapAction());
+    dispatch(SessionWorkerActions.resetWorkerMapAction());
 
-  if (alsoDelete) {
-    const { activeSessionId } = getState();
-    dispatch(SessionsActions.removeSession(activeSessionId));
-  }
-};
+    if (alsoDelete) {
+      const { activeSessionId } = getState();
+      dispatch(SessionsActions.removeSession(activeSessionId));
+    }
+  };
 
 const actionCreators = {
   endSession,
@@ -69,8 +79,4 @@ const actionTypes = {
   SET_SESSION,
 };
 
-export {
-  actionCreators,
-  actionTypes,
-  initialState,
-};
+export { actionCreators, actionTypes };

@@ -1,6 +1,3 @@
-/* eslint-env jest */
-/* eslint-disable @codaco/spellcheck/spell-checker */
-
 import * as Search from '../search';
 
 const DefaultFuseOpts = {
@@ -25,9 +22,12 @@ const mockProps = {
 const mockState = {
   externalData: {
     schoolPupils: {
-      nodes: [externalNode, {
-        name: 'C. Ronaldo',
-      }],
+      nodes: [
+        externalNode,
+        {
+          name: 'C. Ronaldo',
+        },
+      ],
     },
   },
 };

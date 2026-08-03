@@ -1,5 +1,9 @@
 .panels {
-  @include transition-properties((opacity width margin-right), var(--animation-easing), var(--animation-duration-standard));
+  @include transition-properties(
+    (opacity width margin-right),
+    var(--animation-easing),
+    var(--animation-duration-standard)
+  );
 
   display: flex;
   flex-direction: column;

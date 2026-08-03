@@ -1,4 +1,4 @@
- .alter-form {
+.alter-form {
   @include interface-centering;
 
   display: flex;
@@ -42,7 +42,6 @@
     overflow: hidden;
   }
 
-
   .slide-wrapper {
     box-sizing: border-box;
     max-width: 80rem;
@@ -78,8 +77,6 @@
       border-radius: var(--border-radius);
       background: var(--light-background);
       position: relative;
-
-
     }
   }
 
@@ -93,7 +90,7 @@
 
   &__form-container {
     height: inherit;
-    margin-top: calc(var(--base-node-size) * .4);
+    margin-top: calc(var(--base-node-size) * 0.4);
     width: 100%;
   }
 
@@ -138,9 +135,7 @@
       width: 20rem;
       height: 1.5rem;
     }
-
   }
-
 }
 
 .alter-edge-form {
@@ -159,7 +154,8 @@
     background: var(--light-background);
     border-radius: 50%;
 
-    > * { // Render first node on top of fake edge
+    > * {
+      // Render first node on top of fake edge
       z-index: 2;
     }
 
@@ -180,8 +176,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 units.unit(.5) units.unit(2) units.unit(1) rgb(0 0 0 / 25%); // sass-lint:disable-line no-color-literals
-  z-index: var(--z-dialog);
+  box-shadow: 0 units.unit(0.5) units.unit(2) units.unit(1) rgb(0 0 0 / 25%); // sass-lint:disable-line no-color-literals
 
   h5 {
     margin: 0;

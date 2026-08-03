@@ -1,11 +1,13 @@
-/* eslint-env jest */
+import path from 'node:path';
 
-import path from 'path';
-import environments from '../../environments';
+import { vi } from 'vitest';
+
 import { getEnvironment } from '../../Environment';
+import environments from '../../environments';
 import protocolPath from '../protocolPath';
 
-jest.mock('../../filesystem');
+vi.mock('../../Environment');
+vi.mock('../../filesystem');
 
 describe('protocolPath', () => {
   describe('Electron', () => {
@@ -13,38 +15,48 @@ describe('protocolPath', () => {
       getEnvironment.mockReturnValue(environments.ELECTRON);
     });
 
-    it('Generates an asset path for the file', () => {
-      expect(
+    it('Generates an asset path for the file', async () => {
+      await expect(
         protocolPath('foo.canvas', 'protocol.json'),
-      ).toEqual(path.join('tmp', 'mock', 'user', 'path', 'protocols', 'foo.canvas', 'protocol.json'));
+      ).resolves.toEqual(
+        path.join(
+          'tmp',
+          'mock',
+          'user',
+          'path',
+          'protocols',
+          'foo.canvas',
+          'protocol.json',
+        ),
+      );
 
-      expect(
-        protocolPath('foo.canvas'),
-      ).toEqual(path.join('tmp', 'mock', 'user', 'path', 'protocols', 'foo.canvas'));
+      await expect(protocolPath('foo.canvas')).resolves.toEqual(
+        path.join('tmp', 'mock', 'user', 'path', 'protocols', 'foo.canvas'),
+      );
     });
 
-    it('Thows an error if the protocol is not specified', () => {
-      expect(() => protocolPath()).toThrow();
+    it('Thows an error if the protocol is not specified', async () => {
+      await expect(protocolPath()).rejects.toThrow();
     });
   });
 
-  describe('Cordova', () => {
+  describe('Capacitor', () => {
     beforeAll(() => {
-      getEnvironment.mockReturnValue(environments.CORDOVA);
+      getEnvironment.mockReturnValue(environments.CAPACITOR);
     });
 
-    it('Generates an asset path for the file', () => {
-      expect(
+    it('Generates an asset path for the file', async () => {
+      await expect(
         protocolPath('foo.canvas', 'protocol.json'),
-      ).toEqual('tmp/mock/user/path/protocols/foo.canvas/protocol.json');
+      ).resolves.toEqual('protocols/foo.canvas/protocol.json');
 
-      expect(
-        protocolPath('foo.canvas'),
-      ).toEqual('tmp/mock/user/path/protocols/foo.canvas/');
+      await expect(protocolPath('foo.canvas')).resolves.toEqual(
+        'protocols/foo.canvas/',
+      );
     });
 
-    it('Thows an error if the protocol is not specified', () => {
-      expect(() => protocolPath()).toThrow();
+    it('Thows an error if the protocol is not specified', async () => {
+      await expect(protocolPath()).rejects.toThrow();
     });
   });
 });

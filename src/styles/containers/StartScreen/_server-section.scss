@@ -1,6 +1,9 @@
 .server-section {
   &__main {
-    background: linear-gradient(#404088, var(--color-cyber-grape)); // sass-lint:disable-line no-color-literals
+    background: linear-gradient(
+      #404088,
+      var(--color-cyber-grape)
+    ); // sass-lint:disable-line no-color-literals
     padding: 0;
 
     .content-area {

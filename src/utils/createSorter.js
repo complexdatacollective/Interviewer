@@ -1,4 +1,5 @@
 import { entityAttributesProperty } from '@codaco/shared-consts';
+
 import { get } from './lodash-replacements';
 
 /**
@@ -11,13 +12,12 @@ import { get } from './lodash-replacements';
 const collator = new Intl.Collator();
 
 /* Maps a `_createdIndex` index value to all items in an array */
-const withCreatedIndex = (items) => items.map(
-  (item, _createdIndex) => ({ ...item, _createdIndex }),
-);
+const withCreatedIndex = (items) =>
+  items.map((item, _createdIndex) => ({ ...item, _createdIndex }));
 
 /* all items without the '_createdIndex' prop */
-const withoutCreatedIndex = (items) => items
-  .map(({ _createdIndex, ...originalItem }) => originalItem);
+const withoutCreatedIndex = (items) =>
+  items.map(({ _createdIndex, ...originalItem }) => originalItem);
 
 /**
  * Helper that returns a function compatible with Array.sort that uses an
@@ -35,7 +35,7 @@ const asc = (propertyGetter) => (a, b) => {
     return -1;
   }
 
-  return -(firstValue < secondValue) || +(firstValue > secondValue);
+  return -Number(firstValue < secondValue) || Number(firstValue > secondValue);
 };
 
 /* As above, but with the items reversed (thereby reversing the sort order) */
@@ -47,121 +47,143 @@ const desc = (propertyGetter) => (a, b) => asc(propertyGetter)(b, a);
  *
  * Used to chain together multiple sort functions.
  */
-const chain = (...fns) => (a, b) => fns.reduce((diff, fn) => diff || fn(a, b), 0);
+const chain =
+  (...fns) =>
+  (a, b) =>
+    fns.reduce((diff, fn) => diff || fn(a, b), 0);
 
 /**
-  * Generates a sort function for strings that handles null/undefined values by
-  * placing them at the end of the list.
-  *
-  * Also places non-strings at the end of the sorting order.
+ * Generates a sort function for strings that handles null/undefined values by
+ * placing them at the end of the list.
+ *
+ * Also places non-strings at the end of the sorting order.
  */
-const stringFunction = ({ property, direction }) => (a, b) => {
-  const firstValue = get(a, property, null);
-  const secondValue = get(b, property, null);
+const stringFunction =
+  ({ property, direction }) =>
+  (a, b) => {
+    const firstValue = get(a, property, null);
+    const secondValue = get(b, property, null);
 
-  if (firstValue === null || typeof firstValue !== 'string') {
-    return 1;
-  }
-
-  if (secondValue === null || typeof secondValue !== 'string') {
-    return -1;
-  }
-
-  if (direction === 'asc') {
-    return collator.compare(firstValue, secondValue);
-  }
-
-  return collator.compare(secondValue, firstValue);
-};
-
-const categoricalFunction = ({ property, direction, hierarchy = [] }) => (a, b) => {
-  // hierarchy is whatever order the variables were specified in the variable definition
-  const firstValues = get(a, property, []);
-  const secondValues = get(b, property, []);
-
-  for (let i = 0; i < Math.max(firstValues.length, secondValues.length); i += 1) {
-    const firstValue = i < firstValues.length ? firstValues[i] : null;
-    const secondValue = i < secondValues.length ? secondValues[i] : null;
-
-    if (firstValue !== secondValue) {
-      // If one of the values is not in the hierarchy, it is sorted to the end of the list
-      const firstIndex = hierarchy.indexOf(firstValue);
-      const secondIndex = hierarchy.indexOf(secondValue);
-
-      if (firstIndex === -1) {
-        return 1;
-      }
-      if (secondIndex === -1) {
-        return -1;
-      }
-
-      if (direction === 'asc') {
-        return firstIndex - secondIndex;
-      } return secondIndex - firstIndex; // desc
+    if (firstValue === null || typeof firstValue !== 'string') {
+      return 1;
     }
-  }
 
-  return 0;
-};
+    if (secondValue === null || typeof secondValue !== 'string') {
+      return -1;
+    }
+
+    if (direction === 'asc') {
+      return collator.compare(firstValue, secondValue);
+    }
+
+    return collator.compare(secondValue, firstValue);
+  };
+
+const categoricalFunction =
+  ({ property, direction, hierarchy = [] }) =>
+  (a, b) => {
+    // hierarchy is whatever order the variables were specified in the variable definition
+    const firstValues = get(a, property, []);
+    const secondValues = get(b, property, []);
+
+    for (
+      let i = 0;
+      i < Math.max(firstValues.length, secondValues.length);
+      i += 1
+    ) {
+      const firstValue = i < firstValues.length ? firstValues[i] : null;
+      const secondValue = i < secondValues.length ? secondValues[i] : null;
+
+      if (firstValue !== secondValue) {
+        // If one of the values is not in the hierarchy, it is sorted to the end of the list
+        const firstIndex = hierarchy.indexOf(firstValue);
+        const secondIndex = hierarchy.indexOf(secondValue);
+
+        if (firstIndex === -1) {
+          return 1;
+        }
+        if (secondIndex === -1) {
+          return -1;
+        }
+
+        if (direction === 'asc') {
+          return firstIndex - secondIndex;
+        }
+        return secondIndex - firstIndex; // desc
+      }
+    }
+
+    return 0;
+  };
 
 /**
  * Creates a sort function that sorts items according to the index of their
  * property value in a hierarchy array.
  */
-const hierarchyFunction = ({ property, direction = 'desc', hierarchy = [] }) => (a, b) => {
-  const firstValue = get(a, property);
-  const secondValue = get(b, property);
+const hierarchyFunction =
+  ({ property, direction = 'desc', hierarchy = [] }) =>
+  (a, b) => {
+    const firstValue = get(a, property);
+    const secondValue = get(b, property);
 
-  const firstIndex = hierarchy.indexOf(firstValue);
-  const secondIndex = hierarchy.indexOf(secondValue);
+    const firstIndex = hierarchy.indexOf(firstValue);
+    const secondIndex = hierarchy.indexOf(secondValue);
 
-  // If the value is not in the hierarchy, it is sorted to the end of the list
-  if (firstIndex === -1) {
-    return 1;
-  }
-  if (secondIndex === -1) {
-    return -1;
-  }
-
-  if (direction === 'asc') {
-    if (firstIndex > secondIndex) {
-      return -1;
-    }
-    if (firstIndex < secondIndex) {
+    // If the value is not in the hierarchy, it is sorted to the end of the list
+    if (firstIndex === -1) {
       return 1;
     }
-  } else {
-    if (firstIndex < secondIndex) {
+    if (secondIndex === -1) {
       return -1;
     }
-    if (firstIndex > secondIndex) {
+
+    if (direction === 'asc') {
+      if (firstIndex > secondIndex) {
+        return -1;
+      }
+      if (firstIndex < secondIndex) {
+        return 1;
+      }
+    } else {
+      if (firstIndex < secondIndex) {
+        return -1;
+      }
+      if (firstIndex > secondIndex) {
+        return 1;
+      }
+    }
+    return 0;
+  };
+
+const dateFunction =
+  ({ property, direction }) =>
+  (a, b) => {
+    const firstValueString = get(a, property, null);
+    const secondValueString = get(b, property, null);
+
+    const firstValueDate = Date.parse(firstValueString);
+    const secondValueDate = Date.parse(secondValueString);
+
+    if (Number.isNaN(firstValueDate)) {
       return 1;
     }
-  }
-  return 0;
-};
 
-const dateFunction = ({ property, direction }) => (a, b) => {
-  const firstValueString = get(a, property, null);
-  const secondValueString = get(b, property, null);
+    if (Number.isNaN(secondValueDate)) {
+      return -1;
+    }
 
-  const firstValueDate = Date.parse(firstValueString);
-  const secondValueDate = Date.parse(secondValueString);
+    if (direction === 'asc') {
+      return (
+        -Number(firstValueDate < secondValueDate) ||
+        Number(firstValueDate > secondValueDate)
+      );
+    }
 
-  if (Number.isNaN(firstValueDate)) {
-    return 1;
-  }
-
-  if (Number.isNaN(secondValueDate)) {
-    return -1;
-  }
-
-  if (direction === 'asc') {
-    return -(firstValueDate < secondValueDate) || +(firstValueDate > secondValueDate);
-  }
-
-  return -(firstValueDate > secondValueDate) || +(firstValueDate < secondValueDate);
-};
+    return (
+      -Number(firstValueDate > secondValueDate) ||
+      Number(firstValueDate < secondValueDate)
+    );
+  };
 
 /**
  * Transforms sort rules into sort functions compatible with Array.sort.
@@ -180,23 +202,38 @@ const getSortFunction = (rule) => {
 
   // LIFO/FIFO rule sorted by _createdIndex
   if (property === '*') {
-    return direction === 'asc' ? asc((item) => get(item, '_createdIndex')) : desc((item) => get(item, '_createdIndex'));
+    return direction === 'asc'
+      ? asc((item) => get(item, '_createdIndex'))
+      : desc((item) => get(item, '_createdIndex'));
   }
 
-  if (type === 'string') { return stringFunction(rule); }
+  if (type === 'string') {
+    return stringFunction(rule);
+  }
 
-  if (type === 'boolean') { return direction === 'asc' ? asc((item) => get(item, property, false)) : desc((item) => get(item, property, true)); }
+  if (type === 'boolean') {
+    return direction === 'asc'
+      ? asc((item) => get(item, property, false))
+      : desc((item) => get(item, property, true));
+  }
 
-  if (type === 'number') { return direction === 'asc' ? asc((item) => get(item, property, Infinity)) : desc((item) => get(item, property, -Infinity)); }
+  if (type === 'number') {
+    return direction === 'asc'
+      ? asc((item) => get(item, property, Number.POSITIVE_INFINITY))
+      : desc((item) => get(item, property, Number.NEGATIVE_INFINITY));
+  }
 
-  if (type === 'date') { return dateFunction(rule); }
+  if (type === 'date') {
+    return dateFunction(rule);
+  }
 
-  if (type === 'hierarchy') { return hierarchyFunction(rule); }
+  if (type === 'hierarchy') {
+    return hierarchyFunction(rule);
+  }
 
-  if (type === 'categorical') { return categoricalFunction(rule); }
-
-  // eslint-disable-next-line no-console
-  console.warn('🤔 Sort rule missing required property \'type\', or type was not recognized. Sorting as a string, which may cause incorrect results. Supported types are: number, boolean, string, date, hierarchy, categorical');
+  if (type === 'categorical') {
+    return categoricalFunction(rule);
+  }
   return stringFunction(rule);
 };
 
@@ -210,9 +247,10 @@ const getSortFunction = (rule) => {
  */
 const createSorter = (sortRules = []) => {
   const sortFunctions = sortRules.map(getSortFunction);
-  return (items) => withoutCreatedIndex(withCreatedIndex(items).sort(chain(
-    ...sortFunctions,
-  )));
+  return (items) =>
+    withoutCreatedIndex(
+      withCreatedIndex(items).toSorted(chain(...sortFunctions)),
+    );
 };
 
 /**
@@ -262,7 +300,7 @@ export const mapNCType = (type) => {
 
 /**
  * Add the entity attributes property to the property path of a sort rule.
-*/
+ */
 const propertyWithAttributePath = (rule) => {
   // 'type' rules are a special case - they exist in the protocol, but do not
   // refer to an entity attribute (they refer to a model property)
@@ -302,8 +340,12 @@ export const processProtocolSortRule = (codebookVariables) => (sortRule) => {
     property: propertyWithAttributePath(sortRule),
     type: mapNCType(type),
     // Generate a hierarchy if the variable is ordinal based on the ordinal options
-    ...type === 'ordinal' && { hierarchy: variableDefinition.options.map((option) => option.value) },
-    ...type === 'categorical' && { hierarchy: variableDefinition.options.map((option) => option.value) },
+    ...(type === 'ordinal' && {
+      hierarchy: variableDefinition.options.map((option) => option.value),
+    }),
+    ...(type === 'categorical' && {
+      hierarchy: variableDefinition.options.map((option) => option.value),
+    }),
   };
 };
 

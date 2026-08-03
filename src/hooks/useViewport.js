@@ -1,8 +1,7 @@
-import { useCallback } from 'react';
 import { useMotionValue } from 'framer-motion';
-import {
-  clamp, max, min,
-} from 'lodash';
+import { clamp, max, min } from 'lodash';
+import { useCallback } from 'react';
+
 import { get } from '../utils/lodash-replacements';
 
 const LAYOUT_SPACE = 1000;
@@ -17,7 +16,7 @@ const suggestZoom = (nodes, layoutSpace = LAYOUT_SPACE, screen) => {
 
   const nodeSize = 65; // pixels
   const availableSpace = max([screen.width, screen.height]);
-  const zoomArea = 1 - (nodeSize / availableSpace);
+  const zoomArea = 1 - nodeSize / availableSpace;
 
   const bound = nodes.reduce((acc, { x, y }, index) => {
     if (index === 0) {
@@ -47,51 +46,68 @@ const useViewport = (layoutSpace = LAYOUT_SPACE) => {
     },
   };
 
-  const zoomViewport = useCallback((factor = 1.5, absolute = false) => {
-    if (absolute) {
-      zoom.set(factor);
-      return;
-    }
+  const zoomViewport = useCallback(
+    (factor = 1.5, absolute = false) => {
+      if (absolute) {
+        zoom.set(factor);
+        return;
+      }
 
-    zoom.set(zoom.get() * factor);
-  }, []);
+      zoom.set(zoom.get() * factor);
+    },
+    [zoom.get, zoom.set],
+  );
 
-  const moveViewport = useCallback((x = 0, y = 0, absolute = false) => {
-    if (absolute) {
-      centerX.set(x * layoutSpace);
-      centerY.set(y * layoutSpace);
-      return;
-    }
+  const moveViewport = useCallback(
+    (x = 0, y = 0, absolute = false) => {
+      if (absolute) {
+        centerX.set(x * layoutSpace);
+        centerY.set(y * layoutSpace);
+        return;
+      }
 
-    centerX.set(centerX.get() + (x * layoutSpace / zoom.get()));
-    centerY.set(centerY.get() + (y * layoutSpace / zoom.get()));
-  }, []);
+      centerX.set(centerX.get() + (x * layoutSpace) / zoom.get());
+      centerY.set(centerY.get() + (y * layoutSpace) / zoom.get());
+    },
+    [centerX.get, centerX.set, centerY.get, centerY.set, layoutSpace, zoom.get],
+  );
 
   // Convert relative coordinates (0-1) into pixel coordinates for d3-force accounting for viewport
   // -1000 - -1000 space, 0,0 center
-  const calculateLayoutCoords = useCallback((coords) => {
-    // Nodes may have no layoutVariable value, so start with 0.5
-    const x = get(coords, 'x', 0.5);
-    const y = get(coords, 'y', 0.5);
+  const calculateLayoutCoords = useCallback(
+    (coords) => {
+      // Nodes may have no layoutVariable value, so start with 0.5
+      const x = get(coords, 'x', 0.5);
+      const y = get(coords, 'y', 0.5);
 
-    return {
-      x: (((x - 0.5) / zoom.get()) * layoutSpace) + centerX.get(),
-      y: (((y - 0.5) / zoom.get()) * layoutSpace) + centerY.get(),
-    };
-  }, []);
-
-  // Calculate relative position accounting for viewport
-  const calculateRelativeCoords = useCallback(({ x, y }) => ({
-    x: clamp((((x - centerX.get()) / layoutSpace) * zoom.get()) + 0.5, 0, 1),
-    y: clamp((((y - centerY.get()) / layoutSpace) * zoom.get()) + 0.5, 0, 1),
-  }), []);
+      return {
+        x: ((x - 0.5) / zoom.get()) * layoutSpace + centerX.get(),
+        y: ((y - 0.5) / zoom.get()) * layoutSpace + centerY.get(),
+      };
+    },
+    [centerX.get, centerY.get, layoutSpace, zoom.get],
+  );
 
   // Calculate relative position accounting for viewport
-  const autoZoom = useCallback((nodes, screen) => {
-    if (!screen) { return; }
-    const suggestedZoom = suggestZoom(nodes, layoutSpace, screen);
-    zoom.set(suggestedZoom);
-  }, []);
+  const calculateRelativeCoords = useCallback(
+    ({ x, y }) => ({
+      x: clamp(((x - centerX.get()) / layoutSpace) * zoom.get() + 0.5, 0, 1),
+      y: clamp(((y - centerY.get()) / layoutSpace) * zoom.get() + 0.5, 0, 1),
+    }),
+    [centerX.get, centerY.get, layoutSpace, zoom.get],
+  );
+
+  // Calculate relative position accounting for viewport
+  const autoZoom = useCallback(
+    (nodes, screen) => {
+      if (!screen) {
+        return;
+      }
+      const suggestedZoom = suggestZoom(nodes, layoutSpace, screen);
+      zoom.set(suggestedZoom);
+    },
+    [layoutSpace, zoom.set],
+  );
 
   return {
     viewport,

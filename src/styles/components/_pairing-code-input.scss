@@ -16,10 +16,10 @@
   }
 
   &__character {
-    --character-padding: .75rem;
+    --character-padding: 0.75rem;
 
     appearance: none;
-    border-radius: .25rem;
+    border-radius: 0.25rem;
     font-family: var(--code-font);
     font-size: 2rem;
     font-weight: medium;
@@ -27,7 +27,7 @@
     text-align: center;
     width: calc(1rem + var(--character-padding) * 2);
     border: 0;
-    margin: .25rem;
+    margin: 0.25rem;
 
     &:nth-of-type(4n) {
       margin-right: 1rem;

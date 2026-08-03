@@ -1,14 +1,14 @@
-/* eslint-disable global-require */
-/* global FileTransfer */
-import uuid from 'uuid/v4';
-import environments from '../environments';
-import inEnvironment, { isIOS } from '../Environment';
-import { writeFile, tempDataPath } from '../filesystem';
-import friendlyErrorMessage from '../../utils/friendlyErrorMessage';
-import ApiClient from '../../utils/ApiClient';
-import path from 'path';
+import { Buffer } from 'buffer';
 
-const getURL = uri =>
+import { CapacitorHttp } from '@capacitor/core';
+import { v4 as uuid } from 'uuid';
+
+import friendlyErrorMessage from '../../utils/friendlyErrorMessage';
+import inEnvironment from '../Environment';
+import environments from '../environments';
+import { tempDataPath, writeFile } from '../filesystem';
+
+const getURL = (uri) =>
   new Promise((resolve, reject) => {
     try {
       resolve(new URL(uri));
@@ -19,91 +19,60 @@ const getURL = uri =>
 
 const getProtocolName = () => uuid(); // generate a filename
 
-const urlError = friendlyErrorMessage("The location you gave us doesn't seem to be a valid URL. Check the location, and try again.");
-const networkError = friendlyErrorMessage("We weren't able to fetch your protocol. Your device may not have an active network connection, or you may have mistyped the URL. Ensure you are connected to a network, double check your URL, and try again.");
-const fileError = friendlyErrorMessage('The protocol could not be saved to your device. You might not have enough storage available. ');
+const urlError = friendlyErrorMessage(
+  "The location you gave us doesn't seem to be a valid URL. Check the location, and try again.",
+);
+const networkError = friendlyErrorMessage(
+  "We weren't able to fetch your protocol. Your device may not have an active network connection, or you may have mistyped the URL. Ensure you are connected to a network, double check your URL, and try again.",
+);
 
 /**
- * Download a protocol from a remote server.
- *
- * If the URL points to an instance of a Network Canvas Server, then the caller must ensure
- * that the SSL certificate has been trusted. See {@link ApiClient#addTrustedCert}.
+ * Download a protocol from a remote URL.
  *
  * @param {string} uri
  * @return {string} output filepath
  */
 const downloadProtocol = inEnvironment((environment) => {
   if (environment === environments.ELECTRON) {
-    const request = require('request-promise-native');
-    const destination = path.join(tempDataPath(), getProtocolName());
-    return (uri, pairedServer = false) => {
+    return async (uri) => {
+      const url = await getURL(uri).catch(urlError);
 
-      let promisedResponse;
-      if (pairedServer) {
-        promisedResponse = new ApiClient(pairedServer).downloadProtocol(uri);
-      } else {
-        promisedResponse = getURL(uri)
-          .catch(urlError)
-          .then(url => request({ method: 'GET', encoding: null, uri: url.href }));
+      if (!window.electronAPI?.protocol?.download) {
+        throw new Error('electronAPI not available');
       }
 
-      return promisedResponse
-        .catch(networkError)
-        .then(data => writeFile(destination, data))
-        .catch(fileError)
-        .then(() => destination);
+      // Download in the main process to avoid renderer cross-origin (CORS) restrictions.
+      return window.electronAPI.protocol.download(url.href).catch(networkError);
     };
   }
 
-  if (environment === environments.CORDOVA) {
-    return (uri, pairedServer) => {
-      let promisedResponse;
+  if (environment === environments.CAPACITOR) {
+    return async (uri) => {
+      const url = await getURL(uri).catch(urlError);
+      const destination = `${tempDataPath()}${getProtocolName()}`;
 
-      if (pairedServer) {
-        // on iOS, the cordova-plugin-network-canvas-client wants the destination
-        // to be a folder, not a file. It assigns a temp filename itself.
-        //
-        // however, on android it needs to be a file.
-        const destination = isIOS() ? tempDataPath() : `${tempDataPath()}${getProtocolName()}`;
+      // Download via native HTTP (CapacitorHttp), not a webview fetch: the
+      // webview is subject to CORS and most protocol hosts don't send CORS
+      // headers — the same reason the Electron branch downloads in its main
+      // process. CapacitorHttp follows redirects (e.g. a GitHub release to its
+      // CDN) and returns an `arraybuffer` response body as a base64 string.
+      const response = await CapacitorHttp.get({
+        url: url.href,
+        responseType: 'arraybuffer',
+      }).catch(networkError);
 
-        promisedResponse = new ApiClient(pairedServer)
-          // .addTrustedCert() is not required, assuming we've just fetched the protocol list
-          .downloadProtocol(uri, destination)
-          .then((result) => {
-            // Result is a FileEntry object
-            return result.nativeURL;
-          })
-      } else {
-        promisedResponse = getURL(uri)
-          .then(url => url.href)
-          .catch(urlError)
-          .then(href => new Promise((resolve, reject) => {
-            // The filetransfer plugin requires a folder to write to
-            const destinationWithFolder = `${tempDataPath()}${getProtocolName()}`;
-
-            const fileTransfer = new FileTransfer();
-            fileTransfer.download(
-              href,
-              destinationWithFolder,
-              () => resolve(destinationWithFolder),
-              error => reject(error),
-            );
-          }));
+      if (response.status < 200 || response.status >= 300) {
+        throw new Error(`Failed to download protocol: HTTP ${response.status}`);
       }
 
-      return promisedResponse
-        .catch((error) => {
-          const getErrorMessage = ({ code }) => {
-            if (code === 3) return networkError;
-            return urlError;
-          };
-
-          getErrorMessage(error)(error);
-        });
+      const data = Buffer.from(response.data, 'base64');
+      await writeFile(destination, data);
+      return destination;
     };
   }
 
-  return () => Promise.reject(new Error('downloadProtocol() not available on platform'));
+  return () =>
+    Promise.reject(new Error('downloadProtocol() not available on platform'));
 });
 
 export default downloadProtocol;

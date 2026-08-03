@@ -1,4 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
+
 import { actionCreators, selectors } from '../ducks/modules/dismissedUpdates';
 
 const useDismissedUpdatesState = () => {

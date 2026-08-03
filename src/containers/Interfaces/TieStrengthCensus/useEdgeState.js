@@ -1,34 +1,47 @@
-import { useState, useEffect } from 'react';
-import { entityAttributesProperty, entityPrimaryKeyProperty } from '@codaco/shared-consts';
+import { useEffect, useState } from 'react';
+
+import {
+  entityAttributesProperty,
+  entityPrimaryKeyProperty,
+} from '@codaco/shared-consts';
+
 import { actionCreators as sessionsActions } from '../../../ducks/modules/sessions';
 import { get } from '../../../utils/lodash-replacements';
 
 export const getEdgeInNetwork = (edges, pair, edgeType) => {
-  if (!pair) { return null; }
+  if (!pair) {
+    return null;
+  }
   const [a, b] = pair;
 
-  const edge = edges.find(({ from, to, type }) => (
-    type === edgeType
-    && ((from === a && to === b) || (to === a && from === b))
-  ));
+  const edge = edges.find(
+    ({ from, to, type }) =>
+      type === edgeType &&
+      ((from === a && to === b) || (to === a && from === b)),
+  );
 
-  if (!edge) { return null; }
+  if (!edge) {
+    return null;
+  }
 
   return edge;
 };
 
-const edgeExistsInNetwork = (edges, pair, edgeType) => !!getEdgeInNetwork(edges, pair, edgeType);
+const edgeExistsInNetwork = (edges, pair, edgeType) =>
+  !!getEdgeInNetwork(edges, pair, edgeType);
 
-export const matchEntry = (prompt, pair) => ([p, a, b]) => (
-  (p === prompt && a === pair[0] && b === pair[1])
-  || (p === prompt && b === pair[0] && a === pair[1])
-);
+export const matchEntry =
+  (prompt, pair) =>
+  ([p, a, b]) =>
+    (p === prompt && a === pair[0] && b === pair[1]) ||
+    (p === prompt && b === pair[0] && a === pair[1]);
 
 export const getIsPreviouslyAnsweredNo = (state, prompt, pair) => {
-  if (!state || pair.length !== 2) { return false; }
+  if (!state || pair.length !== 2) {
+    return false;
+  }
 
-  const answer = state
-    .find(matchEntry(prompt, pair));
+  const answer = state.find(matchEntry(prompt, pair));
 
   if (answer && answer[3] === false) {
     return true;
@@ -79,7 +92,11 @@ const useEdgeState = (
 
   // Internal state for edge variable value. `value` or null,
   const [edgeValueState, setEdgeValueState] = useState(
-    get(getEdgeInNetwork(edges, pair, edgeType), [entityAttributesProperty, edgeVariable], null),
+    get(
+      getEdgeInNetwork(edges, pair, edgeType),
+      [entityAttributesProperty, edgeVariable],
+      null,
+    ),
   );
 
   const [isTouched, setIsTouched] = useState(false);
@@ -90,7 +107,9 @@ const useEdgeState = (
   // False: user declined edge (based on stageState)
   // Null: user hasn't decided
   const getHasEdge = () => {
-    if (!pair) { return null; }
+    if (!pair) {
+      return null;
+    }
 
     // Check if this pair was marked as no before
     if (getIsPreviouslyAnsweredNo(stageState, promptIndex, pair)) {
@@ -103,7 +122,9 @@ const useEdgeState = (
 
   // Return current edgeValue
   const getEdgeValue = () => {
-    if (!pair) { return null; }
+    if (!pair) {
+      return null;
+    }
 
     return edgeValueState;
   };
@@ -112,31 +133,49 @@ const useEdgeState = (
   // False for user denying edge
   // any value for setting edge variable value
   const setEdge = (value) => {
-    if (!pair) { return; }
+    if (!pair) {
+      return;
+    }
     // Determine what we need to do:
 
     // If truthy value and edge exists, we are changing an edge
-    const changeEdge = value !== false
-      && edgeExistsInNetwork(edges, pair, edgeType)
-      && value !== get(
-        getEdgeInNetwork(edges, pair, edgeType), [entityAttributesProperty, edgeVariable],
-      );
+    const changeEdge =
+      value !== false &&
+      edgeExistsInNetwork(edges, pair, edgeType) &&
+      value !==
+        get(getEdgeInNetwork(edges, pair, edgeType), [
+          entityAttributesProperty,
+          edgeVariable,
+        ]);
 
     // If truthy value but no existing edge, adding an edge
-    const addEdge = value !== false && !edgeExistsInNetwork(edges, pair, edgeType);
+    const addEdge =
+      value !== false && !edgeExistsInNetwork(edges, pair, edgeType);
 
     // If value is false and edge exists, removing an edge
-    const removeEdge = value === false && edgeExistsInNetwork(edges, pair, edgeType);
+    const removeEdge =
+      value === false && edgeExistsInNetwork(edges, pair, edgeType);
 
-    const existingEdgeID = get(getEdgeInNetwork(edges, pair, edgeType), entityPrimaryKeyProperty);
+    const existingEdgeID = get(
+      getEdgeInNetwork(edges, pair, edgeType),
+      entityPrimaryKeyProperty,
+    );
 
     if (changeEdge) {
-      dispatch(sessionsActions.updateEdge(existingEdgeID, {}, { [edgeVariable]: value }));
+      dispatch(
+        sessionsActions.updateEdge(
+          existingEdgeID,
+          {},
+          { [edgeVariable]: value },
+        ),
+      );
     } else if (addEdge) {
-      dispatch(sessionsActions.addEdge(
-        { from: pair[0], to: pair[1], type: edgeType },
-        { [edgeVariable]: value },
-      ));
+      dispatch(
+        sessionsActions.addEdge(
+          { from: pair[0], to: pair[1], type: edgeType },
+          { [edgeVariable]: value },
+        ),
+      );
     } else if (removeEdge) {
       dispatch(sessionsActions.removeEdge(existingEdgeID));
     }
@@ -149,7 +188,11 @@ const useEdgeState = (
     setIsTouched(true);
 
     // Update our private stage state
-    const newStageState = stageStateReducer(stageState, { pair, prompt: promptIndex, value });
+    const newStageState = stageStateReducer(stageState, {
+      pair,
+      prompt: promptIndex,
+      value,
+    });
     dispatch(sessionsActions.updateStageState(newStageState));
   };
 
@@ -157,11 +200,13 @@ const useEdgeState = (
   // we are internally keeping track of the edge state.
   useEffect(() => {
     setEdgeState(edgeExistsInNetwork(edges, pair, edgeType));
-    setEdgeValueState(get(getEdgeInNetwork(
-      edges,
-      pair,
-      edgeType,
-    ), [entityAttributesProperty, edgeVariable], null));
+    setEdgeValueState(
+      get(
+        getEdgeInNetwork(edges, pair, edgeType),
+        [entityAttributesProperty, edgeVariable],
+        null,
+      ),
+    );
     setIsTouched(false);
     setIsChanged(false);
   }, deps);

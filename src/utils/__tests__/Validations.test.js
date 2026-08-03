@@ -1,26 +1,31 @@
-/* eslint-env jest */
+import { describe, expect, it, vi } from 'vitest';
+
+import { entityAttributesProperty } from '@codaco/shared-consts';
+
+import { makeNetworkEntitiesForType } from '../../selectors/interface';
+import { getCodebookVariablesForType } from '../../selectors/session';
 import {
-  entityAttributesProperty,
-} from '@codaco/shared-consts';
-import {
-  required,
-  minLength,
-  maxLength,
-  minValue,
-  maxValue,
-  minSelected,
-  maxSelected,
-  unique,
   differentFrom,
-  sameAs,
   greaterThanVariable,
   lessThanVariable,
+  maxLength,
+  maxSelected,
+  maxValue,
+  minLength,
+  minSelected,
+  minValue,
+  required,
+  sameAs,
+  unique,
 } from '../Validations';
-import { getCodebookVariablesForType } from '../../selectors/session';
-import { makeNetworkEntitiesForType } from '../../selectors/interface';
 
-jest.mock('../../selectors/interface');
-jest.mock('../../selectors/session');
+vi.mock('../../selectors/interface', () => ({
+  makeNetworkEntitiesForType: vi.fn(),
+}));
+
+vi.mock('../../selectors/session', () => ({
+  getCodebookVariablesForType: vi.fn(),
+}));
 
 const mockStore = { getState: () => ({}) };
 
@@ -216,15 +221,17 @@ describe('Validations', () => {
     const entities = [
       {
         [entityAttributesProperty]: {
-          uid1: 1, uid2: false, uid3: 'word', uid4: [1, 2, 3], uid5: { x: 1.2, y: 2.3 },
+          uid1: 1,
+          uid2: false,
+          uid3: 'word',
+          uid4: [1, 2, 3],
+          uid5: { x: 1.2, y: 2.3 },
         },
       },
     ];
     const errorMessage = 'Your answer must be unique';
 
-    makeNetworkEntitiesForType.mockReturnValue(
-      () => entities,
-    );
+    makeNetworkEntitiesForType.mockReturnValue(() => entities);
 
     const subject = unique(null, mockStore);
 
@@ -278,18 +285,20 @@ describe('Validations', () => {
     const errorMessage = 'Your answer must be different from';
 
     const allValues = {
-      uid1: 1, uid2: false, uid3: 'word', uid4: [1, 2, 3], uid5: { x: 1.2, y: 2.3 },
+      uid1: 1,
+      uid2: false,
+      uid3: 'word',
+      uid4: [1, 2, 3],
+      uid5: { x: 1.2, y: 2.3 },
     };
 
-    getCodebookVariablesForType.mockReturnValue(
-      () => ({
-        uid1: { name: 1 },
-        uid2: { name: false },
-        uid3: { name: 'word' },
-        uid4: { name: [1, 2, 3] },
-        uid5: { name: { x: 1.2, y: 2.3 } },
-      }),
-    );
+    getCodebookVariablesForType.mockReturnValue(() => ({
+      uid1: { name: 1 },
+      uid2: { name: false },
+      uid3: { name: 'word' },
+      uid4: { name: [1, 2, 3] },
+      uid5: { name: { x: 1.2, y: 2.3 } },
+    }));
 
     const subject1 = differentFrom('uid1', mockStore);
     const subject2 = differentFrom('uid2', mockStore);
@@ -339,7 +348,9 @@ describe('Validations', () => {
     });
 
     it('fails for a matching object', () => {
-      expect(subject5({ y: 2.3, x: 1.2 }, allValues)).toBe(`${errorMessage} [object Object]`);
+      expect(subject5({ y: 2.3, x: 1.2 }, allValues)).toBe(
+        `${errorMessage} [object Object]`,
+      );
     });
   });
 
@@ -347,18 +358,20 @@ describe('Validations', () => {
     const errorMessage = 'Your answer must be the same as';
 
     const allValues = {
-      uid1: 1, uid2: false, uid3: 'word', uid4: [1, 2, 3], uid5: { x: 1.2, y: 2.3 },
+      uid1: 1,
+      uid2: false,
+      uid3: 'word',
+      uid4: [1, 2, 3],
+      uid5: { x: 1.2, y: 2.3 },
     };
 
-    getCodebookVariablesForType.mockReturnValue(
-      () => ({
-        uid1: { name: 1 },
-        uid2: { name: false },
-        uid3: { name: 'word' },
-        uid4: { name: [1, 2, 3] },
-        uid5: { name: { x: 1.2, y: 2.3 } },
-      }),
-    );
+    getCodebookVariablesForType.mockReturnValue(() => ({
+      uid1: { name: 1 },
+      uid2: { name: false },
+      uid3: { name: 'word' },
+      uid4: { name: [1, 2, 3] },
+      uid5: { name: { x: 1.2, y: 2.3 } },
+    }));
 
     const subject1 = sameAs('uid1', mockStore);
     const subject2 = sameAs('uid2', mockStore);
@@ -408,7 +421,9 @@ describe('Validations', () => {
     });
 
     it('fails for a different object', () => {
-      expect(subject5({ x: 2.1, y: 3.2 }, allValues)).toBe(`${errorMessage} [object Object]`);
+      expect(subject5({ x: 2.1, y: 3.2 }, allValues)).toBe(
+        `${errorMessage} [object Object]`,
+      );
     });
   });
 });
@@ -417,16 +432,16 @@ describe('greaterThanVariable()', () => {
   const errorMessage = 'Your answer must be greater than';
 
   const allValues = {
-    uid1: 1, uid2: '2012-10-07', uid3: 'word',
+    uid1: 1,
+    uid2: '2012-10-07',
+    uid3: 'word',
   };
 
-  getCodebookVariablesForType.mockReturnValue(
-    () => ({
-      uid1: { name: 1 },
-      uid2: { name: '2012-10-07', type: 'datetime' },
-      uid3: { name: 'word' },
-    }),
-  );
+  getCodebookVariablesForType.mockReturnValue(() => ({
+    uid1: { name: 1 },
+    uid2: { name: '2012-10-07', type: 'datetime' },
+    uid3: { name: 'word' },
+  }));
 
   const subject1 = greaterThanVariable('uid1', mockStore);
   const subject2 = greaterThanVariable('uid2', mockStore);
@@ -450,7 +465,9 @@ describe('greaterThanVariable()', () => {
   });
 
   it('fails if date is less than', () => {
-    expect(subject2('2012-09-07', allValues)).toBe(`${errorMessage} 2012-10-07`);
+    expect(subject2('2012-09-07', allValues)).toBe(
+      `${errorMessage} 2012-10-07`,
+    );
   });
 
   it('passes if string is greater than', () => {
@@ -466,16 +483,16 @@ describe('lessThanVariable()', () => {
   const errorMessage = 'Your answer must be less than';
 
   const allValues = {
-    uid1: 1, uid2: '2012-10-07', uid3: 'word',
+    uid1: 1,
+    uid2: '2012-10-07',
+    uid3: 'word',
   };
 
-  getCodebookVariablesForType.mockReturnValue(
-    () => ({
-      uid1: { name: 1 },
-      uid2: { name: '2012-10-07' },
-      uid3: { name: 'word' },
-    }),
-  );
+  getCodebookVariablesForType.mockReturnValue(() => ({
+    uid1: { name: 1 },
+    uid2: { name: '2012-10-07' },
+    uid3: { name: 'word' },
+  }));
 
   const subject1 = lessThanVariable('uid1', mockStore);
   const subject2 = lessThanVariable('uid2', mockStore);
@@ -499,7 +516,9 @@ describe('lessThanVariable()', () => {
   });
 
   it('fails if date is greater than', () => {
-    expect(subject2('2012-11-07', allValues)).toBe(`${errorMessage} 2012-10-07`);
+    expect(subject2('2012-11-07', allValues)).toBe(
+      `${errorMessage} 2012-10-07`,
+    );
   });
 
   it('passes if string is less than', () => {

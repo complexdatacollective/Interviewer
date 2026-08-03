@@ -23,13 +23,17 @@ export default function getAbsoluteBoundingRect(el) {
     return 0;
   }
 
-  let offsetX = (window.pageXOffset !== undefined)
-    ? window.pageXOffset
-    : (document.documentElement || document.body.parentNode || document.body).scrollLeft;
+  let offsetX =
+    window.pageXOffset !== undefined
+      ? window.pageXOffset
+      : (document.documentElement || document.body.parentNode || document.body)
+          .scrollLeft;
 
-  let offsetY = (window.pageYOffset !== undefined)
-    ? window.pageYOffset
-    : (document.documentElement || document.body.parentNode || document.body).scrollTop;
+  let offsetY =
+    window.pageYOffset !== undefined
+      ? window.pageYOffset
+      : (document.documentElement || document.body.parentNode || document.body)
+          .scrollTop;
 
   const rect = el.getBoundingClientRect();
 

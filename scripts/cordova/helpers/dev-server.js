@@ -1,11 +1,11 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require('node:fs');
+const path = require('node:path');
 // This file contains the LAN URL for the dev server while running
 const DevServerFilename = '.devserver';
 const ConfigFilename = 'config.xml';
 const BackupConfigFilename = `${ConfigFilename}.original`;
 
-const cordovaContentNode = entry => `<content src="${entry}" />`;
+const cordovaContentNode = (entry) => `<content src="${entry}" />`;
 
 /**
  * Update config.xml:
@@ -22,7 +22,7 @@ function useDevConfig(ctx) {
 
   try {
     devServerUrl = fs.readFileSync(devServerConf, 'utf-8');
-  } catch (err) {
+  } catch (_err) {
     return;
   }
 
@@ -31,45 +31,45 @@ function useDevConfig(ctx) {
   }
 
   if (fs.existsSync(backupXml)) {
-    console.warn(`Warning: Backup config already exists. Please check the state of ${ConfigFilename}.`);
     return;
   }
 
   try {
     fs.copyFileSync(configXml, backupXml);
-  } catch (err) {
-    console.log(err);
+  } catch (_err) {
     return;
   }
 
   try {
     const defaultConfig = fs.readFileSync(configXml, 'utf-8');
-    let devConfig = defaultConfig.replace(new RegExp(cordovaContentNode('index.html')), cordovaContentNode(devServerUrl));
-    if (ctx.opts.platforms.some(p => (/ios/i).test(p))) {
+    let devConfig = defaultConfig.replace(
+      new RegExp(cordovaContentNode('index.html')),
+      cordovaContentNode(devServerUrl),
+    );
+    if (ctx.opts.platforms.some((p) => /ios/i.test(p))) {
       const iosPlatform = '<platform name="ios">';
       const allowAllNav = '<allow-navigation href="*" />';
-      devConfig = devConfig.replace(iosPlatform, `${iosPlatform}\n${allowAllNav}`);
+      devConfig = devConfig.replace(
+        iosPlatform,
+        `${iosPlatform}\n${allowAllNav}`,
+      );
     }
     if (devConfig) {
       fs.writeFileSync(configXml, devConfig);
     }
-  } catch (err) {
-    console.warn(err);
-  }
+  } catch (_err) {}
 }
 
 function revertDevConfig(ctx) {
   const projRoot = ctx.opts.projectRoot;
   const configXml = path.join(projRoot, ConfigFilename);
   const backupXml = path.join(projRoot, BackupConfigFilename);
-  const devServerConf = path.join(projRoot, DevServerFilename);
+  const _devServerConf = path.join(projRoot, DevServerFilename);
 
   try {
     fs.copyFileSync(backupXml, configXml);
     fs.unlinkSync(backupXml);
-  } catch (err) {
-    console.warn(err);
-  }
+  } catch (_err) {}
 }
 
 module.exports = {

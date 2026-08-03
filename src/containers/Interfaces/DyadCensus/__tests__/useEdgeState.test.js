@@ -1,10 +1,8 @@
-/* eslint-env jest */
-
 import {
   getEdgeInNetwork,
+  getIsPreviouslyAnsweredNo,
   matchEntry,
   stageStateReducer,
-  getIsPreviouslyAnsweredNo,
 } from '../useEdgeState';
 
 describe('useEdgeState', () => {
@@ -50,55 +48,42 @@ describe('useEdgeState', () => {
 
   describe('stageStateReducer(state, { pair, prompt, value })', () => {
     it('replaces existing entries', () => {
-      const state = [
-        [0, 1, 2, false],
-      ];
+      const state = [[0, 1, 2, false]];
 
-      expect(stageStateReducer(state, { pair: [1, 2], prompt: 0, value: true }))
-        .toEqual([
-          [0, 1, 2, true],
-        ]);
+      expect(
+        stageStateReducer(state, { pair: [1, 2], prompt: 0, value: true }),
+      ).toEqual([[0, 1, 2, true]]);
     });
 
     it('adds new entries', () => {
-      const state = [
-        [0, 1, 2, false],
-      ];
+      const state = [[0, 1, 2, false]];
 
-      expect(stageStateReducer(state, { pair: [1, 2], prompt: 1, value: true }))
-        .toEqual([
-          [0, 1, 2, false],
-          [1, 1, 2, true],
-        ]);
+      expect(
+        stageStateReducer(state, { pair: [1, 2], prompt: 1, value: true }),
+      ).toEqual([
+        [0, 1, 2, false],
+        [1, 1, 2, true],
+      ]);
     });
   });
 
   describe('getIsPreviouslyAnsweredNo(state, prompt, pair)', () => {
     it('if match is false, returns true', () => {
-      const state = [
-        [0, 1, 2, false],
-      ];
+      const state = [[0, 1, 2, false]];
 
-      expect(getIsPreviouslyAnsweredNo(state, 0, [1, 2]))
-        .toEqual(true);
+      expect(getIsPreviouslyAnsweredNo(state, 0, [1, 2])).toEqual(true);
     });
 
     it('if match is true, returns false', () => {
-      const state = [
-        [0, 1, 2, true],
-      ];
+      const state = [[0, 1, 2, true]];
 
-      expect(getIsPreviouslyAnsweredNo(state, 0, [1, 2]))
-        .toEqual(false);
+      expect(getIsPreviouslyAnsweredNo(state, 0, [1, 2])).toEqual(false);
     });
 
     it('if no match, returns false', () => {
-      const state = [
-        [0, 1, 2, false],
-      ];
+      const state = [[0, 1, 2, false]];
 
-      expect(getIsPreviouslyAnsweredNo(state, 1, [1, 2]))
-        .toEqual(false);
+      expect(getIsPreviouslyAnsweredNo(state, 1, [1, 2])).toEqual(false);
     });
   });
 });

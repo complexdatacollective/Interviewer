@@ -1,21 +1,21 @@
-/* eslint-disable */
-import { isElectron, isCordova } from '../utils/Environment';
+import { App } from '@capacitor/app';
 
-const getVersion = () => {
+import { isCapacitor, isElectron } from './Environment';
+
+const getVersion = async () => {
   if (isElectron()) {
-    const remote = require('electron').remote;  // eslint-disable-line global-require
-
-    return new Promise((resolve) => {
-      const version = remote.app.getVersion();
-      resolve(version);
-    });
+    if (window.electronAPI?.app?.getVersion) {
+      return window.electronAPI.app.getVersion();
+    }
+    return '0.0.0';
   }
 
-  if (isCordova()) {
-    return cordova.getAppVersion.getVersionNumber();  // eslint-disable-line no-undef
+  if (isCapacitor()) {
+    const info = await App.getInfo();
+    return info.version;
   }
 
-  return new Promise((resolve) => { resolve('0.0.0'); });
+  return '0.0.0';
 };
 
 export default getVersion;

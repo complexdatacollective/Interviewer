@@ -7,9 +7,8 @@
 }
 
 @mixin platform-not-ios {
-  @at-root .app--electron #{&}, .app-android #{&} {
+  @at-root .app--electron #{&},
+    .app-android #{&} {
     @content;
   }
 }
-
-

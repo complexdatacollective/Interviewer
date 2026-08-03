@@ -1,18 +1,9 @@
 /* eslint-env jest */
+import { makeTestingApp, matchImageSnapshot } from './helpers';
+import { goToStage, startInterview, timelineNext } from './playbook';
 import {
-  makeTestingApp,
-  startApps,
-  stopApps,
-  matchImageSnapshot,
-} from './helpers';
-import {
-  startInterview,
-  goToStage,
-  timelineNext,
-} from './playbook';
-import {
-  createNodes,
   createEdges,
+  createNodes,
   loadDevelopmentProtocol,
 } from './playbook-development-protocol';
 

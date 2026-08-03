@@ -1,5 +1,3 @@
-/* eslint-disable import/prefer-default-export */
-
 import getParentKeyByNameValue from '../../../utils/getParentKeyByNameValue';
 
 export const convertNamesToUUIDs = (variables, nameOrNames = []) => {

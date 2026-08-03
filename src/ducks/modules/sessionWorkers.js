@@ -1,5 +1,5 @@
-import { supportedWorkers } from '../../utils/WorkerAgent';
 import preloadWorkers from '../../utils/protocol/preloadWorkers';
+import { supportedWorkers } from '../../utils/WorkerAgent';
 
 const SET_WORKER_MAP = 'SET_WORKER_MAP';
 const RESET_WORKER_MAP = 'RESET_WORKER_MAP';
@@ -31,20 +31,18 @@ function resetWorkerMapAction() {
   };
 }
 
-const initializeSessionWorkersThunk = (protocolUID) => (dispatch) => preloadWorkers(protocolUID)
-  .then(
-    (workerUrls) => {
+const initializeSessionWorkersThunk = (protocolUID) => (dispatch) =>
+  preloadWorkers(protocolUID)
+    .then((workerUrls) => {
       const map = workerUrls.reduce((urlMap, workerUrl, i) => {
         if (workerUrl) {
-          // eslint-disable-next-line no-param-reassign
           urlMap[supportedWorkers[i]] = workerUrl;
         }
         return urlMap;
       }, {});
       return dispatch(setWorkerMapAction(map));
-    },
-  )
-  .catch((error) => console.warn('Generating worker map failed: ', error)); // eslint-disable-line no-console
+    })
+    .catch((_error) => {});
 
 const actionCreators = {
   setWorkerMapAction,
@@ -52,12 +50,4 @@ const actionCreators = {
   initializeSessionWorkersThunk,
 };
 
-const actionTypes = {
-  SET_WORKER_MAP,
-  RESET_WORKER_MAP,
-};
-
-export {
-  actionCreators,
-  actionTypes,
-};
+export { actionCreators };

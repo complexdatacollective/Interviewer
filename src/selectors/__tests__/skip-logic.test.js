@@ -1,9 +1,5 @@
-/* eslint-env jest */
-/* eslint-disable @codaco/spellcheck/spell-checker */
-
-import { getNextIndex, isStageSkipped } from '../skip-logic';
-
 import { getProtocolStages } from '../protocol';
+import { getNextIndex, isStageSkipped } from '../skip-logic';
 
 const mockState = {
   activeSessionId: 'a',
@@ -13,7 +9,10 @@ const mockState = {
       network: {
         edges: [
           {
-            id: 1, type: 'friend', to: 1, from: 2,
+            id: 1,
+            type: 'friend',
+            to: 1,
+            from: 2,
           },
         ],
         ego: {},

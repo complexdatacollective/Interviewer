@@ -1,8 +1,10 @@
-import { entityAttributesProperty, entityPrimaryKeyProperty } from '@codaco/shared-consts';
+import { find, get, isMatch, keys, omit, reject } from 'lodash';
+import { v4 as uuid } from 'uuid';
+
 import {
-  reject, find, isMatch, omit, keys, get,
-} from 'lodash';
-import uuid from 'uuid/v4';
+  entityAttributesProperty,
+  entityPrimaryKeyProperty,
+} from '@codaco/shared-consts';
 
 /*
  * For actionCreators see `src/ducks/modules/sessions`
@@ -45,7 +47,11 @@ const getInitialState = () => ({
  * @param attributeData Takes precidence over other attributes
  * @param defaultAttributes Is added before other attributes
  */
-const batchAddNodes = (nodeList, attributeData = {}, defaultAttributes = {}) => ({
+const batchAddNodes = (
+  nodeList,
+  attributeData = {},
+  defaultAttributes = {},
+) => ({
   type: BATCH_ADD_NODES,
   nodeList,
   defaultAttributes,
@@ -62,7 +68,10 @@ function edgeExists(edges, from, to, type) {
   const forwardsEdge = find(edges, { from, to, type });
   const reverseEdge = find(edges, flipEdge({ from, to, type }));
 
-  if ((forwardsEdge && forwardsEdge !== -1) || (reverseEdge && reverseEdge !== -1)) {
+  if (
+    (forwardsEdge && forwardsEdge !== -1) ||
+    (reverseEdge && reverseEdge !== -1)
+  ) {
     const foundEdge = forwardsEdge || reverseEdge;
     return get(foundEdge, entityPrimaryKeyProperty);
   }
@@ -70,7 +79,8 @@ function edgeExists(edges, from, to, type) {
   return false;
 }
 
-export const getEntityAttributes = (node) => node[entityAttributesProperty] || {};
+export const getEntityAttributes = (node) =>
+  node[entityAttributesProperty] || {};
 
 /**
  * Correctly construct the node object based on a
@@ -78,8 +88,7 @@ export const getEntityAttributes = (node) => node[entityAttributesProperty] || {
  */
 const formatNodeAttributes = (modelData, attributeData) => ({
   ...omit(modelData, 'promptId'),
-  [entityPrimaryKeyProperty]:
-    modelData[entityPrimaryKeyProperty] || uuid(),
+  [entityPrimaryKeyProperty]: modelData[entityPrimaryKeyProperty] || uuid(),
   [entityAttributesProperty]: {
     ...modelData[entityAttributesProperty],
     ...attributeData,
@@ -103,8 +112,7 @@ const formatEgoAttributes = (modelData, attributeData) => ({
  */
 const formatEdgeAttributes = (modelData, attributeData) => ({
   ...modelData,
-  [entityPrimaryKeyProperty]:
-    modelData[entityPrimaryKeyProperty] || uuid(),
+  [entityPrimaryKeyProperty]: modelData[entityPrimaryKeyProperty] || uuid(),
   [entityAttributesProperty]: {
     ...modelData[entityAttributesProperty],
     ...attributeData,
@@ -114,19 +122,18 @@ const formatEdgeAttributes = (modelData, attributeData) => ({
 
 const addEdge = (state, action) => ({
   ...state,
-  edges: (
-    () => state.edges.concat(
-      formatEdgeAttributes(
-        action.modelData,
-        action.attributeData,
-      ),
-    )
-  )(),
+  edges: (() =>
+    state.edges.concat(
+      formatEdgeAttributes(action.modelData, action.attributeData),
+    ))(),
 });
 
 const removeEdge = (state, edgeId) => ({
   ...state,
-  edges: reject(state.edges, (edge) => edge[entityPrimaryKeyProperty] === edgeId),
+  edges: reject(
+    state.edges,
+    (edge) => edge[entityPrimaryKeyProperty] === edgeId,
+  ),
 });
 
 export default function reducer(state = getInitialState(), action = {}) {
@@ -136,10 +143,7 @@ export default function reducer(state = getInitialState(), action = {}) {
         ...state,
         nodes: [
           ...state.nodes,
-          formatNodeAttributes(
-            action.modelData,
-            action.attributeData,
-          ),
+          formatNodeAttributes(action.modelData, action.attributeData),
         ],
       };
     }
@@ -178,17 +182,22 @@ export default function reducer(state = getInitialState(), action = {}) {
     case TOGGLE_NODE_ATTRIBUTES: {
       return {
         ...state,
-        nodes: (
-          () => state.nodes.map(
+        nodes: (() =>
+          state.nodes.map(
             (node) => {
-              if (node[entityPrimaryKeyProperty] !== action[entityPrimaryKeyProperty]) {
+              if (
+                node[entityPrimaryKeyProperty] !==
+                action[entityPrimaryKeyProperty]
+              ) {
                 return node;
               }
 
               // If the node's attrs contain the same key/vals, remove them
               if (isMatch(node[entityAttributesProperty], action.attributes)) {
                 const omittedKeys = Object.keys(action.attributes);
-                const nestedProps = omittedKeys.map((key) => `${entityAttributesProperty}.${key}`);
+                const nestedProps = omittedKeys.map(
+                  (key) => `${entityAttributesProperty}.${key}`,
+                );
                 return omit(node, nestedProps);
               }
 
@@ -201,27 +210,29 @@ export default function reducer(state = getInitialState(), action = {}) {
                 },
               };
             }, // end node map function
-          )
-        )(),
+          ))(),
       };
     }
     case UPDATE_NODE: {
       return {
         ...state,
-        nodes: (() => state.nodes.map((node) => {
-          if (node[entityPrimaryKeyProperty] !== action.nodeId) { return node; }
-          return {
-            ...node,
-            ...omit(action.newModelData, 'promptId'),
-            promptIDs: action.newModelData.promptId
-              ? [...node.promptIDs, action.newModelData.promptId] : node.promptIDs,
-            [entityAttributesProperty]: {
-              ...node[entityAttributesProperty],
-              ...action.newAttributeData,
-            },
-          };
-        })
-        )(),
+        nodes: (() =>
+          state.nodes.map((node) => {
+            if (node[entityPrimaryKeyProperty] !== action.nodeId) {
+              return node;
+            }
+            return {
+              ...node,
+              ...omit(action.newModelData, 'promptId'),
+              promptIDs: action.newModelData.promptId
+                ? [...node.promptIDs, action.newModelData.promptId]
+                : node.promptIDs,
+              [entityAttributesProperty]: {
+                ...node[entityAttributesProperty],
+                ...action.newAttributeData,
+              },
+            };
+          }))(),
       };
     }
     case REMOVE_NODE: {
@@ -230,57 +241,60 @@ export default function reducer(state = getInitialState(), action = {}) {
         ...state,
         nodes: reject(
           state.nodes,
-          (node) => node[entityPrimaryKeyProperty] === removeentityPrimaryKeyProperty,
+          (node) =>
+            node[entityPrimaryKeyProperty] === removeentityPrimaryKeyProperty,
         ),
         edges: reject(
           state.edges,
-          (edge) => (
-            edge.from === removeentityPrimaryKeyProperty
-            || edge.to === removeentityPrimaryKeyProperty
-          ),
+          (edge) =>
+            edge.from === removeentityPrimaryKeyProperty ||
+            edge.to === removeentityPrimaryKeyProperty,
         ),
       };
     }
     case ADD_NODE_TO_PROMPT: {
       return {
         ...state,
-        nodes: (() => state.nodes.map(
-          (node) => {
-            if (node[entityPrimaryKeyProperty] !== action.nodeId) { return node; }
+        nodes: (() =>
+          state.nodes.map((node) => {
+            if (node[entityPrimaryKeyProperty] !== action.nodeId) {
+              return node;
+            }
             return {
               ...node,
-              [entityAttributesProperty]:
-                { ...node[entityAttributesProperty], ...action.promptAttributes },
+              [entityAttributesProperty]: {
+                ...node[entityAttributesProperty],
+                ...action.promptAttributes,
+              },
               promptIDs: [...node.promptIDs, action.promptId],
             };
-          },
-        )
-        )(),
+          }))(),
       };
     }
     case REMOVE_NODE_FROM_PROMPT: {
-      const togglePromptAttributes = keys(action.promptAttributes)
-        .reduce(
-          (attributes, attrKey) => ({
-            ...attributes,
-            [attrKey]: !action.promptAttributes[attrKey],
-          }),
-          {},
-        );
+      const togglePromptAttributes = keys(action.promptAttributes).reduce(
+        (attributes, attrKey) => ({
+          ...attributes,
+          [attrKey]: !action.promptAttributes[attrKey],
+        }),
+        {},
+      );
       return {
         ...state,
-        nodes: (() => state.nodes.map(
-          (node) => {
-            if (node[entityPrimaryKeyProperty] !== action.nodeId) { return node; }
+        nodes: (() =>
+          state.nodes.map((node) => {
+            if (node[entityPrimaryKeyProperty] !== action.nodeId) {
+              return node;
+            }
             return {
               ...node,
-              [entityAttributesProperty]:
-                { ...node[entityAttributesProperty], ...togglePromptAttributes },
+              [entityAttributesProperty]: {
+                ...node[entityAttributesProperty],
+                ...togglePromptAttributes,
+              },
               promptIDs: node.promptIDs.filter((id) => id !== action.promptId),
             };
-          },
-        )
-        )(),
+          }))(),
       };
     }
     case ADD_EDGE: {
@@ -289,24 +303,28 @@ export default function reducer(state = getInitialState(), action = {}) {
     case UPDATE_EDGE: {
       return {
         ...state,
-        edges: (() => state.edges.map((edge) => {
-          if (edge[entityPrimaryKeyProperty] !== action.edgeId) { return edge; }
-          return {
-            ...edge,
-            ...action.newModelData,
-            [entityAttributesProperty]: {
-              ...edge[entityAttributesProperty],
-              ...action.newAttributeData,
-            },
-          };
-        })
-        )(),
+        edges: (() =>
+          state.edges.map((edge) => {
+            if (edge[entityPrimaryKeyProperty] !== action.edgeId) {
+              return edge;
+            }
+            return {
+              ...edge,
+              ...action.newModelData,
+              [entityAttributesProperty]: {
+                ...edge[entityAttributesProperty],
+                ...action.newAttributeData,
+              },
+            };
+          }))(),
       };
     }
     case TOGGLE_EDGE: {
       // remove edge if it exists, add it if it doesn't
       const { to, from, type } = action.modelData;
-      if (!to || !from || !type) { return state; }
+      if (!to || !from || !type) {
+        return state;
+      }
 
       // Returns an edge UID if an existing edge is found, otherwise false;
       const existingEdgeId = edgeExists(state.edges, from, to, type);
@@ -326,10 +344,7 @@ export default function reducer(state = getInitialState(), action = {}) {
 
       return {
         ...initialState,
-        ego: formatEgoAttributes(
-          initialState.ego,
-          action.egoAttributeData,
-        ),
+        ego: formatEgoAttributes(initialState.ego, action.egoAttributeData),
       };
     }
     default:

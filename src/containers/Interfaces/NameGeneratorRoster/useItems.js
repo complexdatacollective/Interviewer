@@ -1,25 +1,24 @@
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
+
 import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
+
+import { getEntityAttributes } from '../../../ducks/modules/network';
+import useExternalData from '../../../hooks/useExternalData';
+import { getCardAdditionalProperties } from '../../../selectors/name-generator';
 import {
-  makeGetNodeTypeDefinition,
   getNetworkNodes,
   makeGetNodeLabel,
+  makeGetNodeTypeDefinition,
 } from '../../../selectors/network';
-import { getCardAdditionalProperties } from '../../../selectors/name-generator';
 import getParentKeyByNameValue from '../../../utils/getParentKeyByNameValue';
 import usePropSelector from './usePropSelector';
-import useExternalData from '../../../hooks/useExternalData';
-import { getEntityAttributes } from '../../../ducks/modules/network';
 
 /**
  * Format details needed for list cards
  */
-export const detailsWithVariableUUIDs = (props) => (node) => {
-  const {
-    nodeTypeDefinition,
-    visibleSupplementaryFields,
-  } = props;
+const detailsWithVariableUUIDs = (props) => (node) => {
+  const { nodeTypeDefinition, visibleSupplementaryFields } = props;
 
   const nodeTypeVariables = nodeTypeDefinition.variables;
   const attrs = getEntityAttributes(node);
@@ -40,32 +39,49 @@ export const detailsWithVariableUUIDs = (props) => (node) => {
 
 // Returns all nodes associated with lists (external data)
 const useItems = (props) => {
-  const getNodeLabel = useSelector((state) => (
-    makeGetNodeLabel()(state, props)
-  ));
-  const [externalData, status] = useExternalData(props.stage.dataSource, props.stage.subject);
-  const nodeTypeDefinition = usePropSelector(makeGetNodeTypeDefinition, props, true);
+  const getNodeLabel = useSelector((state) => makeGetNodeLabel()(state, props));
+  const [externalData, status] = useExternalData(
+    props.stage.dataSource,
+    props.stage.subject,
+  );
+  const nodeTypeDefinition = usePropSelector(
+    makeGetNodeTypeDefinition,
+    props,
+    true,
+  );
   const networkNodes = usePropSelector(getNetworkNodes, props);
-  const visibleSupplementaryFields = usePropSelector(getCardAdditionalProperties, props);
-  const excludeItems = networkNodes.map((item) => item[entityPrimaryKeyProperty]);
+  const visibleSupplementaryFields = usePropSelector(
+    getCardAdditionalProperties,
+    props,
+  );
+  const excludeItems = networkNodes.map(
+    (item) => item[entityPrimaryKeyProperty],
+  );
 
   const items = useMemo(() => {
-    if (!externalData) { return []; }
+    if (!externalData) {
+      return [];
+    }
 
-    return externalData
-      .map((item) => ({
-        id: item[entityPrimaryKeyProperty],
-        data: item,
-        props: {
-          label: getNodeLabel(item),
-          data: detailsWithVariableUUIDs({
-            ...props,
-            nodeTypeDefinition,
-            visibleSupplementaryFields,
-          })(item),
-        },
-      }));
-  }, [externalData, getNodeLabel, nodeTypeDefinition, visibleSupplementaryFields]);
+    return externalData.map((item) => ({
+      id: item[entityPrimaryKeyProperty],
+      data: item,
+      props: {
+        label: getNodeLabel(item),
+        data: detailsWithVariableUUIDs({
+          ...props,
+          nodeTypeDefinition,
+          visibleSupplementaryFields,
+        })(item),
+      },
+    }));
+  }, [
+    externalData,
+    getNodeLabel,
+    nodeTypeDefinition,
+    visibleSupplementaryFields,
+    props,
+  ]);
 
   return [status, items, excludeItems];
 };

@@ -1,5 +1,7 @@
 .name-generator-roster-interface {
-  --overlay-background: rgb(58 58 117 / 80%); // sass-lint:disable-line no-color-literals
+  --overlay-background: rgb(
+    58 58 117 / 80%
+  ); // sass-lint:disable-line no-color-literals
 
   @include interface-centering;
 
@@ -52,7 +54,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    text-shadow: 1px 1px .5em var(--color-rich-black);
+    text-shadow: 1px 1px 0.5em var(--color-rich-black);
   }
 
   &__search-panel {

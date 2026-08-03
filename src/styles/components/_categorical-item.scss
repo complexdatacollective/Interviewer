@@ -24,17 +24,21 @@
     }
 
     .node {
-      font-size: calc(var(--base-node-size) * .66);
+      font-size: calc(var(--base-node-size) * 0.66);
     }
   }
 
   .categorical-item__disk {
     @include clip;
-    @include transition-properties((background-color transform border-radius), var(--animation-easing), var(--animation-duration-standard));
+    @include transition-properties(
+      (background-color transform border-radius),
+      var(--animation-easing),
+      var(--animation-duration-standard)
+    );
 
     transform-origin: center;
     background-color: var(--background);
-    border: solid .3rem var(--categorical-item-color);
+    border: solid 0.3rem var(--categorical-item-color);
     position: absolute;
     top: 0;
     left: 0;
@@ -83,7 +87,7 @@
     flex-direction: column;
     justify-content: center;
     overflow: hidden;
-    padding: spacing(.5) spacing(1);
+    padding: spacing(0.5) spacing(1);
     text-align: center;
 
     h3,
@@ -116,12 +120,16 @@
     }
 
     .categorical-item__disk {
-      border: solid .3rem var(--categorical-item-color);
+      border: solid 0.3rem var(--categorical-item-color);
       border-radius: var(--border-radius);
     }
 
     &.categorical-item--hover {
-      @include transition-properties((width height margin), var(--animation-easing), var(--animation-duration-standard));
+      @include transition-properties(
+        (width height margin),
+        var(--animation-easing),
+        var(--animation-duration-standard)
+      );
 
       margin: 0;
     }

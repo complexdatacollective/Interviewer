@@ -1,34 +1,45 @@
-/* eslint-disable no-shadow */
+import { clamp, mapValues, omit, orderBy, values } from 'lodash';
 import { createSelector } from 'reselect';
-import {
-  clamp, orderBy, values, mapValues, omit,
-} from 'lodash';
+
 import { entityAttributesProperty } from '@codaco/shared-consts';
-import { currentStageIndex } from '../utils/matchSessionPath';
-import { getAdditionalAttributes, getSubject } from '../utils/protocol/accessors';
-import { createDeepEqualSelector } from './utils';
-import { initialState } from '../ducks/modules/session';
-import { getProtocolCodebook, getProtocolStages, getCurrentSessionProtocol } from './protocol';
+
 import { get } from '../utils/lodash-replacements';
+import { currentStageIndex } from '../utils/matchSessionPath';
+import {
+  getAdditionalAttributes,
+  getSubject,
+} from '../utils/protocol/accessors';
+import {
+  getCurrentSessionProtocol,
+  getProtocolCodebook,
+  getProtocolStages,
+} from './protocol';
+import { createDeepEqualSelector } from './utils';
 
-const currentPathname = (router) => router && router.location && router.location.pathname;
-const stageIndexForCurrentSession = (state) => currentStageIndex(currentPathname(state.router));
+const currentPathname = (router) => router?.location?.pathname;
+const stageIndexForCurrentSession = (state) =>
+  currentStageIndex(currentPathname(state.router));
 
-export const getActiveSession = (state) => (
-  state.activeSessionId && state.sessions[state.activeSessionId]
-);
+export const getActiveSession = (state) =>
+  state.activeSessionId && state.sessions[state.activeSessionId];
 
 export const getLastActiveSession = (state) => {
   if (Object.keys(state.sessions).length === 0) {
     return {};
   }
 
-  const sessionsCollection = values(mapValues(state.sessions, (session, uuid) => ({
-    sessionUUID: uuid,
-    ...session,
-  })));
+  const sessionsCollection = values(
+    mapValues(state.sessions, (session, uuid) => ({
+      sessionUUID: uuid,
+      ...session,
+    })),
+  );
 
-  const lastActive = orderBy(sessionsCollection, ['updatedAt', 'caseId'], ['desc', 'asc'])[0];
+  const lastActive = orderBy(
+    sessionsCollection,
+    ['updatedAt', 'caseId'],
+    ['desc', 'asc'],
+  )[0];
   return {
     sessionUUID: lastActive.sessionUUID,
     [entityAttributesProperty]: {
@@ -39,21 +50,25 @@ export const getLastActiveSession = (state) => {
 
 export const getStageState = (state) => {
   const session = getActiveSession(state);
-  if (!session) { return undefined; }
+  if (!session) {
+    return undefined;
+  }
   const { stageIndex } = session;
   return get(session, ['stages', stageIndex], undefined);
 };
 
 export const getCaseId = createDeepEqualSelector(
   getActiveSession,
-  (session) => (session && session.caseId),
+  (session) => session?.caseId,
 );
 
 export const getSessionPath = (state, stageIndex) => {
   const sessionId = state.activeSessionId;
   const sessionPath = `/session/${sessionId}`;
 
-  if (stageIndex === undefined) { return sessionPath; }
+  if (stageIndex === undefined) {
+    return sessionPath;
+  }
 
   return `${sessionPath}/${stageIndex}`;
 };
@@ -76,7 +91,7 @@ export const getSessionProgress = (state) => {
   // This can go over 100% when finish screen is not present,
   // so it needs to be clamped
   const percentProgress = clamp(
-    (stageProgress + (promptProgress / (screenCount - 1))) * 100,
+    (stageProgress + promptProgress / (screenCount - 1)) * 100,
     0,
     100,
   );
@@ -107,44 +122,41 @@ export const getSessionProgress = (state) => {
   };
 };
 
-export const anySessionIsActive = (state) => (
-  state.activeSessionId && state.activeSessionId !== initialState
-);
-
 export const getStageForCurrentSession = createSelector(
   (state, props) => getProtocolStages(state, props),
   stageIndexForCurrentSession,
   (stages, stageIndex) => stages[stageIndex],
 );
 
-export const getStageSubject = () => createDeepEqualSelector(
-  getStageForCurrentSession,
-  (stage) => stage.subject,
-);
+export const getStageSubject = () =>
+  createDeepEqualSelector(getStageForCurrentSession, (stage) => stage.subject);
 
-export const getStageSubjectType = () => createDeepEqualSelector(
-  getStageSubject(),
-  (subject) => subject && subject.type,
-);
+export const getStageSubjectType = () =>
+  createDeepEqualSelector(getStageSubject(), (subject) => subject?.type);
 
-export const getCodebookVariablesForType = () => createSelector(
-  (state) => getProtocolCodebook(state),
-  getStageSubject(),
-  (codebook, subject) => codebook
-    && (subject ? codebook[subject.entity][subject.type].variables : codebook.ego.variables),
-);
+export const getCodebookVariablesForType = () =>
+  createSelector(
+    (state) => getProtocolCodebook(state),
+    getStageSubject(),
+    (codebook, subject) =>
+      codebook &&
+      (subject
+        ? codebook[subject.entity][subject.type].variables
+        : codebook.ego.variables),
+  );
 
 export const getPromptIndexForCurrentSession = createSelector(
-  (state) => (
-    state.sessions[state.activeSessionId] && state.sessions[state.activeSessionId].promptIndex
-  ) || 0,
+  (state) =>
+    (state.sessions[state.activeSessionId] &&
+      state.sessions[state.activeSessionId].promptIndex) ||
+    0,
   (promptIndex) => promptIndex,
 );
 
 const getPromptForCurrentSession = createSelector(
   getStageForCurrentSession,
   getPromptIndexForCurrentSession,
-  (stage, promptIndex) => stage && stage.prompts && stage.prompts[promptIndex],
+  (stage, promptIndex) => stage?.prompts?.[promptIndex],
 );
 
 // @return {Array} An object entry ([key, object]) for the current node type
@@ -158,7 +170,7 @@ export const getNodeEntryForCurrentPrompt = createSelector(
       return null;
     }
     const subject = getSubject(stage, prompt);
-    const nodeType = subject && subject.type;
+    const nodeType = subject?.type;
     const nodeTypeDefinition = nodeType && registry.node[nodeType];
     if (nodeTypeDefinition) {
       return [nodeType, nodeTypeDefinition];

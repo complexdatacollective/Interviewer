@@ -1,6 +1,4 @@
-import {
-  isEmpty, find, findKey, has,
-} from 'lodash';
+import { find, findKey, has, isEmpty } from 'lodash';
 
 const findCategoricalKey = (object, toFind) => {
   // make list of possible var_option pairs
@@ -17,10 +15,18 @@ const findCategoricalKey = (object, toFind) => {
   let foundKey = '';
   // check for a categorical variable with a valid option value
   const categoricalVariable = collection.find((pair) => {
-    foundKey = findKey(object, (objectItem) => objectItem.name.toString() === pair.name.toString());
-    return (foundKey && has(object[foundKey], 'options')
-      && find(object[foundKey].options,
-        (option) => option.value.toString() === pair.option.toString()));
+    foundKey = findKey(
+      object,
+      (objectItem) => objectItem.name.toString() === pair.name.toString(),
+    );
+    return (
+      foundKey &&
+      has(object[foundKey], 'options') &&
+      find(
+        object[foundKey].options,
+        (option) => option.value.toString() === pair.option.toString(),
+      )
+    );
   });
   if (has(categoricalVariable, 'option')) {
     return `${foundKey}_${categoricalVariable.option}`;
@@ -56,7 +62,10 @@ const getParentKeyByNameValue = (object, toFind) => {
   // possible location
   if (!foundKey && toFind && (toFind.endsWith('_x') || toFind.endsWith('_y'))) {
     const locationName = toFind.substring(0, toFind.length - 2);
-    foundKey = findKey(object, (objectItem) => objectItem.name === locationName);
+    foundKey = findKey(
+      object,
+      (objectItem) => objectItem.name === locationName,
+    );
     if (foundKey) {
       foundKey += toFind.substring(toFind.length - 2);
     }

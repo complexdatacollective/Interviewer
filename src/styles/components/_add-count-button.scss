@@ -1,6 +1,6 @@
 $add-count-button-height: 6rem;
 $add-count-button-width: 7rem;
-$add-count-button-inner-size: $add-count-button-width * .8; // width of the core circle (without badge)
+$add-count-button-inner-size: $add-count-button-width * 0.8; // width of the core circle (without badge)
 $module-name: add-count-button;
 
 // Provides alternate colors (e.g., to represent different node types)
@@ -12,7 +12,6 @@ $module-name: add-count-button;
     fill: color($flash-color);
   }
 }
-
 
 .#{$module-name} {
   background-color: transparent;
@@ -62,5 +61,4 @@ $module-name: add-count-button;
   &__plus {
     fill: color('charcoal');
   }
-
 }

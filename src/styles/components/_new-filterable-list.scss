@@ -1,4 +1,4 @@
-@use '~@codaco/ui/src/styles/global/core/units';
+@use '@codaco/ui/src/styles/global/core/units';
 
 .new-filterable-list {
   /* stylelint-disable-next-line color-function-notation */
@@ -32,7 +32,13 @@
         $opaque: rgb(0 0 0 / 100%);
         $distance: units.unit(2);
 
-        mask-image: linear-gradient(90deg, transparent, $opaque units.unit(2), $opaque calc(100% - #{units.unit(2)}), transparent 100%);
+        mask-image: linear-gradient(
+          90deg,
+          transparent,
+          $opaque units.unit(2),
+          $opaque calc(100% - #{units.unit(2)}),
+          transparent 100%
+        );
 
         .scroll-container {
           white-space: nowrap;
@@ -113,7 +119,9 @@
   opacity: 0.5;
   margin: 0 units.unit(2);
   padding: units.unit(2);
-  transition: color var(--animation-easing) var(--animation-duration-standard), opacity var(--animation-easing) var(--animation-duration-standard);
+  transition:
+    color var(--animation-easing) var(--animation-duration-standard),
+    opacity var(--animation-easing) var(--animation-duration-standard);
 
   &:hover {
     opacity: 1;

@@ -1,5 +1,7 @@
 .name-generator-list-interface {
-  --overlay-background: rgb(58 58 117 / 67%); // sass-lint:disable-line no-color-literals
+  --overlay-background: rgb(
+    58 58 117 / 67%
+  ); // sass-lint:disable-line no-color-literals
 
   @include interface-centering;
 

@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import { matchSessionPath } from '../matchSessionPath';
 
 describe('session path helpers', () => {

@@ -8,7 +8,9 @@ const defaultMonitorProps = {
 const getMonitorProps = (state) => {
   const { source } = state;
 
-  if (!source) { return { ...defaultMonitorProps }; }
+  if (!source) {
+    return { ...defaultMonitorProps };
+  }
 
   const monitorProps = {
     isDragging: true,

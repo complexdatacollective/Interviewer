@@ -1,5 +1,8 @@
 .session-management-section {
-  background: linear-gradient(#404088, var(--color-cyber-grape)); // sass-lint:disable-line no-color-literals
+  background: linear-gradient(
+    #404088,
+    var(--color-cyber-grape)
+  ); // sass-lint:disable-line no-color-literals
 
   &__main {
     padding: units.unit(4) units.unit(6);

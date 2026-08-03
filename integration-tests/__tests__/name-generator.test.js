@@ -1,19 +1,8 @@
 /* eslint-env jest */
 
-import {
-  makeTestingApp,
-  startApps,
-  stopApps,
-  forceClick,
-  matchImageSnapshot,
-} from './helpers';
-import {
-  startInterview,
-  goToStage,
-} from './playbook';
-import {
-  loadDevelopmentProtocol,
-} from './playbook-development-protocol';
+import { forceClick, makeTestingApp, matchImageSnapshot } from './helpers';
+import { goToStage, startInterview } from './playbook';
+import { loadDevelopmentProtocol } from './playbook-development-protocol';
 
 let app;
 
@@ -44,11 +33,20 @@ describe('Name generator', () => {
     await matchImageSnapshot(app);
 
     // name
-    await app.client.setValue('input[name="6be95f85-c2d9-4daf-9de1-3939418af888"]', 'foo');
+    await app.client.setValue(
+      'input[name="6be95f85-c2d9-4daf-9de1-3939418af888"]',
+      'foo',
+    );
     // nickname
-    await app.client.setValue('input[name="0e75ec18-2cb1-4606-9f18-034d28b07c19"]', 'bar');
+    await app.client.setValue(
+      'input[name="0e75ec18-2cb1-4606-9f18-034d28b07c19"]',
+      'bar',
+    );
     // age
-    await app.client.setValue('input[name="c5fee926-855d-4419-b5bb-54e89010cea6"]', '66');
+    await app.client.setValue(
+      'input[name="c5fee926-855d-4419-b5bb-54e89010cea6"]',
+      '66',
+    );
     // toggle group
     await app.client
       .$('[name="e343a91f-628d-4175-870c-957beffa0154"]')
@@ -68,7 +66,10 @@ describe('Name generator', () => {
     await app.client.click('(//div[@class="node"])[2]');
 
     // edit node
-    await app.client.setValue('input[name="0e75ec18-2cb1-4606-9f18-034d28b07c19"]', 'buzz');
+    await app.client.setValue(
+      'input[name="0e75ec18-2cb1-4606-9f18-034d28b07c19"]',
+      'buzz',
+    );
     await app.client.click('button=Finished');
 
     // check change is visible
@@ -76,23 +77,35 @@ describe('Name generator', () => {
   });
 
   it('Can delete a node', async () => {
-    await app.client.moveToObject('//div[@class="name-generator-interface__nodes"]//div[@class="node"]');
+    await app.client.moveToObject(
+      '//div[@class="name-generator-interface__nodes"]//div[@class="node"]',
+    );
     await app.client.buttonDown(0);
     await app.client.pause(100); // wait for bin to appear
     await app.client.moveToObject('//div[@class="node-bin"]');
     await app.client.buttonUp(0);
 
     // check no nodes in main nodes list
-    await app.client.waitForExist('//div[@class="name-generator-interface__nodes"]//div[@class="node"]', 500, true);
+    await app.client.waitForExist(
+      '//div[@class="name-generator-interface__nodes"]//div[@class="node"]',
+      500,
+      true,
+    );
   });
 
   it('Can use a node from the panel', async () => {
-    await app.client.moveToObject('//div[@class="name-generator-interface__panels"]//div[@class="node"]');
+    await app.client.moveToObject(
+      '//div[@class="name-generator-interface__panels"]//div[@class="node"]',
+    );
     await app.client.buttonDown(0);
-    await app.client.moveToObject('//div[@class="name-generator-interface__nodes"]');
+    await app.client.moveToObject(
+      '//div[@class="name-generator-interface__nodes"]',
+    );
     await app.client.buttonUp(0);
 
     // check for a node in the main nodes list
-    await app.client.waitForExist('//div[@class="name-generator-interface__nodes"]//div[@class="node"]');
+    await app.client.waitForExist(
+      '//div[@class="name-generator-interface__nodes"]//div[@class="node"]',
+    );
   });
 });

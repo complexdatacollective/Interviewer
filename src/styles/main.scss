@@ -1,8 +1,9 @@
-$font-path: '~@codaco/ui/lib/assets/fonts';
-$image-path: '~@codaco/ui/lib/assets/images';
+$font-path: '@codaco/ui/lib/assets/fonts';
+$image-path: '@codaco/ui/lib/assets/images';
 
-@use '~@codaco/ui/src/styles/global/core/units';
-@import '~@codaco/ui/lib/styles/all';
+@use '@codaco/ui/src/styles/global/core/units';
+@import '@codaco/ui/lib/styles/all';
+@import 'ua-compat';
 @import 'helpers/all';
 @import 'components/all';
 @import 'containers/all';
@@ -15,7 +16,7 @@ $image-path: '~@codaco/ui/lib/assets/images';
 
   &:focus {
     outline: none;
-   }
+  }
 }
 
 :root {
@@ -24,7 +25,7 @@ $image-path: '~@codaco/ui/lib/assets/images';
   --session-panel-width: 9rem; // Does *not* change actual timeline width (which is automatically calculated). Used for drop obstacle and stage margins
   --interface-prompt-flex-basis: 8rem;
   --base-font-size: 1.75vmin;
-  --border-radius: .75rem;
+  --border-radius: 0.75rem;
   --padding-unit: 1rem;
   --form-intro-panel-background: var(--color-cyber-grape);
 }
@@ -36,7 +37,23 @@ body {
   color: palette('text');
   background: palette('background');
   width: 100%;
+
+  // `vh` measures the full window on iPadOS 26's resizable windows (which include
+  // a titlebar), pushing content off the bottom. `dvh` tracks the actual visible
+  // viewport. The `vh` line is a fallback for WebKit < 15.4 (no dvh support).
   height: 100vh;
+  height: 100dvh;
+}
+
+body {
+  // iPadOS 26 places the window controls in the top safe area. Inset only the
+  // top so the app's top content (e.g. the settings button) isn't under them;
+  // the dark body background fills the inset so the controls blend with the
+  // app. The bottom is intentionally not inset (the home indicator auto-dims
+  // and content stays usable beneath it). 0 in true fullscreen, so it's a
+  // no-op there. Top only — `.app` is 100vw, so left/right insets would clip.
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top);
 }
 
 a {
@@ -75,4 +92,3 @@ a {
     border-radius: var(--border-radius);
   }
 }
-

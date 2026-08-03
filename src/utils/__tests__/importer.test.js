@@ -1,12 +1,11 @@
-/* eslint-env jest */
-/* eslint-disable @codaco/spellcheck/spell-checker */
+import { beforeAll, describe, it, vi } from 'vitest';
 
-import environments from '../environments';
-// eslint-disable-next-line import/named
 import { getEnvironment } from '../Environment';
+import environments from '../environments';
 
-jest.mock('../filesystem');
-jest.mock('../protocol/protocolPath');
+vi.mock('../Environment');
+vi.mock('../filesystem');
+vi.mock('../protocol/protocolPath');
 
 describe('importer', () => {
   describe('Electron', () => {
@@ -17,9 +16,9 @@ describe('importer', () => {
     it('copies the protocol files to the user data directory', () => {});
   });
 
-  describe('Cordova', () => {
+  describe('Capacitor', () => {
     beforeAll(() => {
-      getEnvironment.mockReturnValue(environments.CORDOVA);
+      getEnvironment.mockReturnValue(environments.CAPACITOR);
     });
 
     it('copies the protocol files to the user data directory', () => {});

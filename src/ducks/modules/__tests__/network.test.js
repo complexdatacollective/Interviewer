@@ -1,17 +1,14 @@
-/* eslint-env jest */
-/* eslint-disable @codaco/spellcheck/spell-checker */
-import uuid from 'uuid/v4';
-import {
-  entityPrimaryKeyProperty as PK,
-  entityAttributesProperty,
-} from '@codaco/shared-consts';
-import reducer,
-{
-  actionTypes,
-  actionCreators,
-} from '../network';
+import { v4 as uuid } from 'uuid';
+import { vi } from 'vitest';
 
-jest.mock('uuid');
+import {
+  entityAttributesProperty,
+  entityPrimaryKeyProperty as PK,
+} from '@codaco/shared-consts';
+
+import reducer, { actionCreators, actionTypes } from '../network';
+
+vi.mock('uuid');
 
 const mockState = {
   ego: {
@@ -128,22 +125,20 @@ describe('network reducer', () => {
 
     // Contains stage attributes and default code attributes
     const newNode = newState.nodes[0];
-    expect(newNode).toEqual(
-      {
-        type: 'ffcd1f42-3c9e-4e51-9a0e-305194a3e601',
-        stageId: '0036b700-9050-11e9-8c88-ff1bcaf707d9',
-        promptIDs: ['ebf658e7-e969-45c4-8a74-af3a2d653e55'],
-        itemType: undefined,
-        _uid: 'b868f61155ce8b570ae5f40337a6f64f5a72f199',
-        attributes: {
-          myStageAttribute: 45,
-          protocolAttribute: 33,
-          overwriteInNode: 15,
-          overwriteInStage: 55,
-          name: 'Jacqueline',
-        },
+    expect(newNode).toEqual({
+      type: 'ffcd1f42-3c9e-4e51-9a0e-305194a3e601',
+      stageId: '0036b700-9050-11e9-8c88-ff1bcaf707d9',
+      promptIDs: ['ebf658e7-e969-45c4-8a74-af3a2d653e55'],
+      itemType: undefined,
+      _uid: 'b868f61155ce8b570ae5f40337a6f64f5a72f199',
+      attributes: {
+        myStageAttribute: 45,
+        protocolAttribute: 33,
+        overwriteInNode: 15,
+        overwriteInStage: 55,
+        name: 'Jacqueline',
       },
-    );
+    });
   });
 
   it('should handle ADD_NODE', () => {
@@ -159,7 +154,12 @@ describe('network reducer', () => {
     );
     expect(newState.nodes.length).toBe(1);
     expect(newState.nodes[0]).toEqual({
-      [PK]: '383a6119e94aa2a1b2e1a5e84b2936b753437a11', [entityAttributesProperty]: { name: 'foo' }, itemType: undefined, promptIDs: [undefined], stageId: undefined, type: undefined,
+      [PK]: '383a6119e94aa2a1b2e1a5e84b2936b753437a11',
+      [entityAttributesProperty]: { name: 'foo' },
+      itemType: undefined,
+      promptIDs: [undefined],
+      stageId: undefined,
+      type: undefined,
     });
 
     const newNode = newState.nodes[0];
@@ -167,14 +167,11 @@ describe('network reducer', () => {
   });
 
   it('preserves UID when adding a node', () => {
-    const newState = reducer(
-      mockState,
-      {
-        type: actionTypes.ADD_NODE,
-        modelData: { [PK]: '22' },
-        attributeData: { name: 'foo' },
-      },
-    );
+    const newState = reducer(mockState, {
+      type: actionTypes.ADD_NODE,
+      modelData: { [PK]: '22' },
+      attributeData: { name: 'foo' },
+    });
     expect(newState.nodes[0][PK]).toEqual('22');
   });
 
@@ -200,7 +197,11 @@ describe('network reducer', () => {
       reducer(
         {
           ...mockState,
-          nodes: [{ [PK]: 1, attributes: { name: 'foo' } }, { [PK]: 2, attributes: { name: 'bar' } }, { [PK]: 3, attributes: { name: 'baz' } }],
+          nodes: [
+            { [PK]: 1, attributes: { name: 'foo' } },
+            { [PK]: 2, attributes: { name: 'bar' } },
+            { [PK]: 3, attributes: { name: 'baz' } },
+          ],
         },
         {
           type: actionTypes.REMOVE_NODE,
@@ -209,14 +210,21 @@ describe('network reducer', () => {
       ),
     ).toEqual({
       ...mockState,
-      nodes: [{ [PK]: 1, attributes: { name: 'foo' } }, { [PK]: 3, attributes: { name: 'baz' } }],
+      nodes: [
+        { [PK]: 1, attributes: { name: 'foo' } },
+        { [PK]: 3, attributes: { name: 'baz' } },
+      ],
     });
   });
 
   it('removes any edges containing a removed node', () => {
     const state = {
       nodes: [{ [PK]: 1 }, { [PK]: 2 }, { [PK]: 3 }],
-      edges: [{ from: 1, to: 2 }, { from: 1, to: 3 }, { from: 2, to: 3 }],
+      edges: [
+        { from: 1, to: 2 },
+        { from: 1, to: 3 },
+        { from: 2, to: 3 },
+      ],
     };
     const newState = reducer(state, { type: actionTypes.REMOVE_NODE, [PK]: 1 });
     expect(newState.edges).not.toContainEqual(state.edges[0]);
@@ -228,7 +236,9 @@ describe('network reducer', () => {
     const newState = reducer(
       {
         ...mockState,
-        nodes: [{ [PK]: 1, id: 1, [entityAttributesProperty]: { name: 'baz' } }],
+        nodes: [
+          { [PK]: 1, id: 1, [entityAttributesProperty]: { name: 'baz' } },
+        ],
       },
       {
         type: actionTypes.UPDATE_NODE,
@@ -237,14 +247,21 @@ describe('network reducer', () => {
         newAttributeData: { name: 'foo' },
       },
     );
-    expect(newState.nodes[0]).toEqual({ [PK]: 1, id: 1, [entityAttributesProperty]: { name: 'foo' } });
+    expect(newState.nodes[0]).toEqual({
+      [PK]: 1,
+      id: 1,
+      [entityAttributesProperty]: { name: 'foo' },
+    });
   });
 
   it('toggles node attributes on', () => {
     const newState = reducer(
       {
         ...mockState,
-        nodes: [{ [PK]: 1, attributes: { name: 'foo' } }, { [PK]: 2, attributes: { name: 'bar' } }],
+        nodes: [
+          { [PK]: 1, attributes: { name: 'foo' } },
+          { [PK]: 2, attributes: { name: 'bar' } },
+        ],
       },
       {
         type: actionTypes.TOGGLE_NODE_ATTRIBUTES,
@@ -261,7 +278,10 @@ describe('network reducer', () => {
     const secondState = reducer(
       {
         ...mockState,
-        nodes: [{ [PK]: 1, attributes: { stage: 1, name: 'foo' } }, { [PK]: 2, attributes: { stage: 1, name: 'bar' } }],
+        nodes: [
+          { [PK]: 1, attributes: { stage: 1, name: 'foo' } },
+          { [PK]: 2, attributes: { stage: 1, name: 'bar' } },
+        ],
       },
       {
         type: actionTypes.TOGGLE_NODE_ATTRIBUTES,
@@ -288,12 +308,14 @@ describe('network reducer', () => {
     expect(reducer(mockState, { type: actionTypes.ADD_EDGE, ...edge })).toEqual(
       {
         ...mockState,
-        edges: [{
-          ...edge.modelData,
-          attributes: {
-            ...edge.attributeData,
+        edges: [
+          {
+            ...edge.modelData,
+            attributes: {
+              ...edge.attributeData,
+            },
           },
-        }],
+        ],
       },
     );
   });
@@ -318,55 +340,66 @@ describe('network reducer', () => {
       attributeData: {},
     };
 
-    expect(reducer(
-      {
-        ...mockState,
-        edges: [
-          { ...edgeA.modelData, attributes: {} },
-          { ...edgeB.modelData, attributes: {} },
-        ],
-      },
-      {
-        type: actionTypes.TOGGLE_EDGE,
-        modelData: edgeA.modelData,
-        attributeData: edgeA.attributeData,
-      },
-    )).toEqual(
-      {
-        ...mockState,
-        edges: [{ ...edgeB.modelData, attributes: {} }],
-      },
-    );
-    expect(reducer(
-      { ...mockState, edges: [{ ...edgeB.modelData, attributes: {} }] },
-      {
-        type: actionTypes.TOGGLE_EDGE,
-        modelData: edgeA.modelData,
-        attributeData: edgeA.attributeData,
-      },
-    )).toEqual(
-      {
-        ...mockState,
-        edges: [{ ...edgeB.modelData, attributes: {} }, { ...edgeA.modelData, attributes: {} }],
-      },
-    );
+    expect(
+      reducer(
+        {
+          ...mockState,
+          edges: [
+            { ...edgeA.modelData, attributes: {} },
+            { ...edgeB.modelData, attributes: {} },
+          ],
+        },
+        {
+          type: actionTypes.TOGGLE_EDGE,
+          modelData: edgeA.modelData,
+          attributeData: edgeA.attributeData,
+        },
+      ),
+    ).toEqual({
+      ...mockState,
+      edges: [{ ...edgeB.modelData, attributes: {} }],
+    });
+    expect(
+      reducer(
+        { ...mockState, edges: [{ ...edgeB.modelData, attributes: {} }] },
+        {
+          type: actionTypes.TOGGLE_EDGE,
+          modelData: edgeA.modelData,
+          attributeData: edgeA.attributeData,
+        },
+      ),
+    ).toEqual({
+      ...mockState,
+      edges: [
+        { ...edgeB.modelData, attributes: {} },
+        { ...edgeA.modelData, attributes: {} },
+      ],
+    });
   });
 
   it('should handle REMOVE_EDGE', () => {
     const edgeA = {
-      [PK]: 123, from: 'foo', to: 'bar', type: 'friend', attributes: {},
+      [PK]: 123,
+      from: 'foo',
+      to: 'bar',
+      type: 'friend',
+      attributes: {},
     };
     const edgeB = {
-      [PK]: 1234, from: 'asdf', to: 'qwerty', type: 'friend', attributes: {},
+      [PK]: 1234,
+      from: 'asdf',
+      to: 'qwerty',
+      type: 'friend',
+      attributes: {},
     };
-    expect(reducer(
-      { ...mockState, edges: [edgeA, edgeB] },
-      { type: actionTypes.REMOVE_EDGE, edgeId: 123 },
-    )).toEqual(
-      {
-        ...mockState,
-        edges: [edgeB],
-      },
-    );
+    expect(
+      reducer(
+        { ...mockState, edges: [edgeA, edgeB] },
+        { type: actionTypes.REMOVE_EDGE, edgeId: 123 },
+      ),
+    ).toEqual({
+      ...mockState,
+      edges: [edgeB],
+    });
   });
 });

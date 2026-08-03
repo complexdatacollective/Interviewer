@@ -1,12 +1,9 @@
-import uuid from 'uuid/v4';
-import {
-  orderBy,
-  values,
-  mapValues,
-  omit,
-} from 'lodash';
+import { mapValues, omit, orderBy, values } from 'lodash';
 import { createSelector } from 'reselect';
+import { v4 as uuid } from 'uuid';
+
 import { entityAttributesProperty } from '@codaco/shared-consts';
+
 import { get } from '../utils/lodash-replacements';
 
 const DefaultFinishStage = {
@@ -16,21 +13,26 @@ const DefaultFinishStage = {
   label: 'Finish Interview',
 };
 
-const getActiveSession = (state) => (
-  state.activeSessionId && state.sessions[state.activeSessionId]
-);
+const getActiveSession = (state) =>
+  state.activeSessionId && state.sessions[state.activeSessionId];
 
 const getLastActiveSession = (state) => {
   if (Object.keys(state.sessions).length === 0) {
     return {};
   }
 
-  const sessionsCollection = values(mapValues(state.sessions, (session, sessionUUID) => ({
-    sessionUUID,
-    ...session,
-  })));
+  const sessionsCollection = values(
+    mapValues(state.sessions, (session, sessionUUID) => ({
+      sessionUUID,
+      ...session,
+    })),
+  );
 
-  const lastActive = orderBy(sessionsCollection, ['updatedAt', 'caseId'], ['desc', 'asc'])[0];
+  const lastActive = orderBy(
+    sessionsCollection,
+    ['updatedAt', 'caseId'],
+    ['desc', 'asc'],
+  )[0];
   return {
     sessionUUID: lastActive.sessionUUID,
     [entityAttributesProperty]: {
@@ -39,7 +41,7 @@ const getLastActiveSession = (state) => {
   };
 };
 
-export const getInstalledProtocols = (state) => state.installedProtocols;
+const getInstalledProtocols = (state) => state.installedProtocols;
 
 export const getCurrentSessionProtocol = createSelector(
   (state, props) => getActiveSession(state, props),
@@ -64,20 +66,27 @@ export const getLastActiveProtocol = (state) => {
   const lastActiveSession = getLastActiveSession(state);
   const lastActiveAttributes = lastActiveSession[entityAttributesProperty];
 
-  const protocolsCollection = values(mapValues(installedProtocols, (protocol, protocolUID) => ({
-    protocolUID,
-    ...protocol,
-  })));
+  const protocolsCollection = values(
+    mapValues(installedProtocols, (protocol, protocolUID) => ({
+      protocolUID,
+      ...protocol,
+    })),
+  );
 
-  const lastInstalledProtocol = orderBy(protocolsCollection, ['installationDate'], ['desc'])[0];
+  const lastInstalledProtocol = orderBy(
+    protocolsCollection,
+    ['installationDate'],
+    ['desc'],
+  )[0];
 
   if (
-    lastActiveAttributes
-    && lastActiveAttributes.updatedAt // Last active session exists
-    && lastActiveAttributes.updatedAt > lastInstalledProtocol.installationDate
+    lastActiveAttributes?.updatedAt && // Last active session exists
+    lastActiveAttributes.updatedAt > lastInstalledProtocol.installationDate
   ) {
     return {
-      ...installedProtocols[lastActiveSession[entityAttributesProperty].protocolUID],
+      ...installedProtocols[
+        lastActiveSession[entityAttributesProperty].protocolUID
+      ],
       protocolUID: lastActiveSession[entityAttributesProperty].protocolUID,
     };
   }
@@ -87,7 +96,7 @@ export const getLastActiveProtocol = (state) => {
 
 export const getActiveProtocolName = createSelector(
   getCurrentSessionProtocol,
-  (protocol) => protocol && protocol.name,
+  (protocol) => protocol?.name,
 );
 
 export const getAssetManifest = createSelector(
@@ -145,7 +154,9 @@ export const getAllVariableUUIDsByEntity = createSelector(
 );
 
 const withFinishStage = (stages = []) => {
-  if (!stages) { return []; }
+  if (!stages) {
+    return [];
+  }
 
   return [...stages, DefaultFinishStage];
 };

@@ -1,5 +1,6 @@
-import { PropTypes } from 'prop-types';
 import { find, get } from 'lodash';
+import { PropTypes } from 'prop-types';
+
 import Monitor from './Monitor';
 
 const defaultMonitorProps = {
@@ -10,7 +11,9 @@ const defaultMonitorProps = {
 const getMonitorProps = (state, props) => {
   const target = find(state.targets, ['id', props.id]);
 
-  if (!target) { return { ...defaultMonitorProps }; }
+  if (!target) {
+    return { ...defaultMonitorProps };
+  }
 
   const monitorProps = {
     isOver: get(target, 'isOver', false),

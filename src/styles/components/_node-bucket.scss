@@ -1,4 +1,4 @@
-@use '~@codaco/ui/src/styles/global/core/units';
+@use '@codaco/ui/src/styles/global/core/units';
 
 .node-bucket {
   // sass-lint:disable-block no-color-literals
@@ -18,6 +18,6 @@
   overflow: hidden;
 
   .node {
-    font-size: calc(var(--base-node-size) * .66);
+    font-size: calc(var(--base-node-size) * 0.66);
   }
 }

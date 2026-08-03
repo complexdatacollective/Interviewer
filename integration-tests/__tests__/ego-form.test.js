@@ -1,16 +1,7 @@
 /* eslint-env jest */
-import {
-  makeTestingApp,
-  matchImageSnapshot,
-} from './helpers';
-import {
-  startInterview,
-  goToStage,
-  timelineNext,
-} from './playbook';
-import {
-  loadDevelopmentProtocol,
-} from './playbook-development-protocol';
+import { makeTestingApp, matchImageSnapshot } from './helpers';
+import { goToStage, startInterview, timelineNext } from './playbook';
+import { loadDevelopmentProtocol } from './playbook-development-protocol';
 
 let app;
 
@@ -46,7 +37,10 @@ describe('EgoForm Interface', () => {
   });
 
   it('Warns, but allows leaving an invalid form via Timeline', async () => {
-    await app.client.setValue('input[name="3377af3f-3c79-41da-9b0b-6570fb519b93"]', 'foo');
+    await app.client.setValue(
+      'input[name="3377af3f-3c79-41da-9b0b-6570fb519b93"]',
+      'foo',
+    );
     await goToStage(app, 'dyadcensus');
     await app.client.waitForVisible('.dialog--confirm');
     await app.client.click('span=Cancel');

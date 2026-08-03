@@ -1,23 +1,23 @@
 @keyframes shake {
   10%,
   90% {
-    transform: translate3d(-.1rem, 0, 0);
+    transform: translate3d(-0.1rem, 0, 0);
   }
 
   20%,
   80% {
-    transform: translate3d(+.2rem, 0, 0);
+    transform: translate3d(+0.2rem, 0, 0);
   }
 
   30%,
   50%,
   70% {
-    transform: translate3d(-.4rem, 0, 0);
+    transform: translate3d(-0.4rem, 0, 0);
   }
 
   40%,
   60% {
-    transform: translate3d(+.4rem, 0, 0);
+    transform: translate3d(+0.4rem, 0, 0);
   }
 }
 
@@ -97,7 +97,7 @@
     &--invalid {
       border-color: var(--error);
       outline-offset: 0.75rem;
-      animation: shake 0.82s cubic-bezier(.36, .07, .19, .97) both;
+      animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
     }
   }
 
@@ -125,9 +125,14 @@
     z-index: 1;
     width: 11rem;
     margin: 0 -1.5rem;
-    background: linear-gradient(to right, transparent 50%, var(--background) 50%);
+    background: linear-gradient(
+      to right,
+      transparent 50%,
+      var(--background) 50%
+    );
     background-size: 200% 100%;
-    transition: background var(--animation-duration-standard) var(--animation-easing);
+    transition: background var(--animation-duration-standard)
+      var(--animation-easing);
   }
 
   &__options-step {

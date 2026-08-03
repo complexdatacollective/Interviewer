@@ -1,11 +1,5 @@
-import {
-  useMemo,
-  useState,
-  useEffect,
-  useRef,
-  useCallback,
-} from 'react';
 import Fuse from 'fuse.js';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 const MIN_QUERY_LENGTH = 1;
 const DEBOUNCE_DELAY = 500;
@@ -71,42 +65,53 @@ const useSearch = (list, options, initialQuery = '') => {
   const fuseOptions = { ...defaultFuseOptions, ...options };
   const fuse = useMemo(() => new Fuse(list, fuseOptions), [list, fuseOptions]);
 
-  const search = useCallback((_query) => {
-    if (isLargeList) {
-      clearTimeout(delayRef.current);
-      setIsWaiting(true);
-    }
+  const search = useCallback(
+    (_query) => {
+      if (isLargeList) {
+        clearTimeout(delayRef.current);
+        setIsWaiting(true);
+      }
 
-    const res = fuse.search(_query);
+      const res = fuse.search(_query);
 
-    const r = res.map(({ item, score }) => ({
-      ...item,
-      relevance: 1 - score, // fuseJS relevance is reverse nomalized (0 is perfect match)
-    }));
+      const r = res.map(({ item, score }) => ({
+        ...item,
+        relevance: 1 - score, // fuseJS relevance is reverse nomalized (0 is perfect match)
+      }));
 
-    if (isLargeList) {
-      delayRef.current = setTimeout(() => {
-        setResults(r);
-        setIsWaiting(false);
-      }, DEBOUNCE_DELAY);
-      return;
-    }
+      if (isLargeList) {
+        delayRef.current = setTimeout(() => {
+          setResults(r);
+          setIsWaiting(false);
+        }, DEBOUNCE_DELAY);
+        return;
+      }
 
-    setResults(r);
-    setIsWaiting(false);
-  }, [fuse, isLargeList]);
+      setResults(r);
+      setIsWaiting(false);
+    },
+    [fuse, isLargeList],
+  );
+
+  // `search` is recreated every render here (it depends on `fuse`, which is
+  // rebuilt whenever `list`/`options` change identity each render). Depending on
+  // it below would re-run the effect every render -> setResults -> re-render ->
+  // infinite loop. Keep the latest `search` in a ref and depend only on `query`.
+  const searchRef = useRef(search);
+  searchRef.current = search;
 
   useEffect(() => {
     if (!hasQuery) {
       return;
     }
 
-    search(query);
-  }, [query]);
+    searchRef.current(query);
+  }, [query, hasQuery]);
 
-  const returnResults = useMemo(() => (
-    hasQuery ? results : list
-  ), [hasQuery, list, results]);
+  const returnResults = useMemo(
+    () => (hasQuery ? results : list),
+    [hasQuery, list, results],
+  );
 
   return [returnResults, query, setQuery, isWaiting, hasQuery];
 };

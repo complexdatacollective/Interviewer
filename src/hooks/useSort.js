@@ -1,5 +1,6 @@
-import { useMemo, useState } from 'react';
 import { isEqual } from 'lodash';
+import { useMemo, useState } from 'react';
+
 import createSorter from '../utils/createSorter';
 
 const defaultSortOrder = {
@@ -41,9 +42,8 @@ const useSort = (list, initialSortOrder = defaultSortOrder) => {
   const [sortType, setSortType] = useState(initialType);
   const [sortDirection, setSortDirection] = useState(initialDirection);
 
-  const toggleSortDirection = () => setSortDirection(
-    (d) => (d === 'desc' ? 'asc' : 'desc'),
-  );
+  const toggleSortDirection = () =>
+    setSortDirection((d) => (d === 'desc' ? 'asc' : 'desc'));
 
   const updateSortByProperty = (newProperty) => {
     // If no property, reset to initial
@@ -65,7 +65,9 @@ const useSort = (list, initialSortOrder = defaultSortOrder) => {
   };
 
   const sortedList = useMemo(() => {
-    if (!sortByProperty) { return list; }
+    if (!sortByProperty) {
+      return list;
+    }
 
     const rule = {
       property: sortByProperty,

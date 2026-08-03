@@ -1,4 +1,4 @@
-import uuid from 'uuid';
+import { v4 as uuid } from 'uuid';
 
 const OPEN_DIALOG = Symbol('PROTOCOL/OPEN_DIALOG');
 const CLOSE_DIALOG = Symbol('PROTOCOL/CLOSE_DIALOG');
@@ -39,27 +39,32 @@ const initialState = {
   ],
 };
 
-const openDialog = (dialog) => (dispatch) => new Promise((resolve) => {
-  const onConfirm = () => {
-    if (dialog.onConfirm) { dialog.onConfirm(); }
-    resolve(true);
-  };
+const openDialog = (dialog) => (dispatch) =>
+  new Promise((resolve) => {
+    const onConfirm = () => {
+      if (dialog.onConfirm) {
+        dialog.onConfirm();
+      }
+      resolve(true);
+    };
 
-  const onCancel = () => {
-    if (dialog.onCancel) { dialog.onCancel(); }
-    resolve(false);
-  };
+    const onCancel = () => {
+      if (dialog.onCancel) {
+        dialog.onCancel();
+      }
+      resolve(false);
+    };
 
-  dispatch({
-    id: uuid(),
-    type: OPEN_DIALOG,
-    dialog: {
-      ...dialog,
-      onConfirm,
-      onCancel,
-    },
+    dispatch({
+      id: uuid(),
+      type: OPEN_DIALOG,
+      dialog: {
+        ...dialog,
+        onConfirm,
+        onCancel,
+      },
+    });
   });
-});
 
 const closeDialog = (id) => ({
   type: CLOSE_DIALOG,
@@ -71,10 +76,7 @@ function reducer(state = initialState, action = {}) {
     case OPEN_DIALOG:
       return {
         ...state,
-        dialogs: [
-          ...state.dialogs,
-          { id: action.id, ...action.dialog },
-        ],
+        dialogs: [...state.dialogs, { id: action.id, ...action.dialog }],
       };
     case CLOSE_DIALOG:
       return {
@@ -91,14 +93,6 @@ const actionCreators = {
   closeDialog,
 };
 
-const actionTypes = {
-  OPEN_DIALOG,
-  CLOSE_DIALOG,
-};
-
-export {
-  actionCreators,
-  actionTypes,
-};
+export { actionCreators };
 
 export default reducer;

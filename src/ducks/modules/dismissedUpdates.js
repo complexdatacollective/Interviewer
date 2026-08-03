@@ -12,13 +12,13 @@ const dismissUpdate = (version) => ({
   },
 });
 
-export default (state = initialState, { type, payload } = { type: null, payload: null }) => {
+export default (
+  state = initialState,
+  { type, payload } = { type: null, payload: null },
+) => {
   switch (type) {
     case DISMISS_UPDATE:
-      return [
-        ...state,
-        payload.version,
-      ];
+      return [...state, payload.version];
     case RESET:
       return initialState;
     default:
@@ -30,11 +30,6 @@ const getDismissedUpdates = () => (state) => get(state, 'dismissedUpdates');
 
 export const selectors = {
   getDismissedUpdates,
-};
-
-export const actionTypes = {
-  DISMISS_UPDATE,
-  RESET,
 };
 
 export const actionCreators = {

@@ -1,15 +1,12 @@
-/* eslint-env jest */
-/* eslint-disable @codaco/spellcheck/spell-checker */
-
-import { createStore, applyMiddleware } from 'redux';
+import { applyMiddleware, createStore } from 'redux';
 import thunks from 'redux-thunk';
+import { vi } from 'vitest';
+
 import reducer, { actionCreators } from '../dialogs';
 
 describe('dialogs', () => {
   it('initialState', () => {
-    expect(
-      reducer(),
-    ).toEqual({
+    expect(reducer()).toEqual({
       dialogs: [],
     });
   });
@@ -28,19 +25,13 @@ describe('dialogs', () => {
 
       const state = store.getState();
 
-      expect(
-        store.getState(),
-      ).toMatchObject({
-        dialogs: [
-          { ...dialog },
-        ],
+      expect(store.getState()).toMatchObject({
+        dialogs: [{ ...dialog }],
       });
 
       store.dispatch(actionCreators.closeDialog(state.dialogs[0].id));
 
-      expect(
-        store.getState(),
-      ).toMatchObject({
+      expect(store.getState()).toMatchObject({
         dialogs: [],
       });
     });
@@ -50,8 +41,8 @@ describe('dialogs', () => {
     let store;
     const getDialog = () => ({
       foo: 'bar',
-      onCancel: jest.fn(),
-      onConfirm: jest.fn(),
+      onCancel: vi.fn(),
+      onConfirm: vi.fn(),
     });
 
     beforeEach(() => {
@@ -63,7 +54,9 @@ describe('dialogs', () => {
 
       expect.assertions(1);
 
-      expect(store.dispatch(actionCreators.openDialog(dialog))).toBeInstanceOf(Promise);
+      expect(store.dispatch(actionCreators.openDialog(dialog))).toBeInstanceOf(
+        Promise,
+      );
     });
 
     it('Promise resolves to `false` when onCancel is called', () => {
@@ -71,8 +64,9 @@ describe('dialogs', () => {
 
       expect.assertions(1);
 
-      const subject = expect(store.dispatch(actionCreators.openDialog(dialog)))
-        .resolves.toBe(false);
+      const subject = expect(
+        store.dispatch(actionCreators.openDialog(dialog)),
+      ).resolves.toBe(false);
 
       const state = store.getState();
       state.dialogs[0].onCancel();
@@ -85,8 +79,9 @@ describe('dialogs', () => {
 
       expect.assertions(1);
 
-      const subject = expect(store.dispatch(actionCreators.openDialog(dialog)))
-        .resolves.toBe(true);
+      const subject = expect(
+        store.dispatch(actionCreators.openDialog(dialog)),
+      ).resolves.toBe(true);
 
       const state = store.getState();
       state.dialogs[0].onConfirm();

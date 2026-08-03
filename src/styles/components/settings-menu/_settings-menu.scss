@@ -40,7 +40,9 @@
 
         padding: units.unit(4);
         list-style: none;
-        transition: background var(--animation-duration-fast) var(--animation-easing), font-weight var(--animation-duration-fast) var(--animation-easing);
+        transition:
+          background var(--animation-duration-fast) var(--animation-easing),
+          font-weight var(--animation-duration-fast) var(--animation-easing);
         cursor: pointer;
         backface-visibility: hidden;
         font-weight: 700;
@@ -53,7 +55,6 @@
           font-weight: 700;
         }
       }
-
     }
 
     section {
@@ -88,7 +89,7 @@
           }
         }
 
-        >.form-field-container {
+        > .form-field-container {
           .form-field-toggle {
             margin-left: 2rem;
           }
@@ -120,9 +121,7 @@
               width: 100%;
             }
           }
-
         }
-
       }
     }
   }
