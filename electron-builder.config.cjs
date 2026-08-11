@@ -84,12 +84,36 @@ module.exports = {
     // file paths. Keep the pre-monorepo executable name that 6.6.0 shipped.
     executableName: 'network-canvas-interviewer',
     maintainer: 'Joshua Melville <joshmelville@gmail.com>',
+    // Archive targets (tar.gz) take their artifact name from here, and the
+    // default pattern is `${name}`-based — since the monorepo rename that
+    // expands to "@codaco/interviewer-classic", whose slash writes the
+    // artifact into a `release-builds/@codaco/` subdirectory that the release
+    // job's flat `release-builds/*` upload then misses. Spell out the
+    // pre-monorepo name instead. This is also the fallback for every other
+    // Linux target, so deb, rpm and AppImage each restate their own below.
+    artifactName: 'network-canvas-interviewer-${version}-${arch}.${ext}',
     target: [
       { target: 'deb', arch: ['x64', 'arm64'] },
       { target: 'rpm', arch: ['x64', 'arm64'] },
       { target: 'AppImage', arch: ['x64', 'arm64'] },
       { target: 'tar.gz', arch: ['x64', 'arm64'] },
     ],
+  },
+  // `packageName` keeps the deb/rpm package identity on the pre-monorepo name
+  // that 6.6.0 shipped, so existing installs upgrade in place. Without it
+  // electron-builder falls back to the sanitized productName for a scoped
+  // package.json name — "Network Canvas Interviewer", which rpmbuild rejects
+  // because a Name may not contain spaces.
+  deb: {
+    packageName: 'network-canvas-interviewer',
+    artifactName: 'network-canvas-interviewer_${version}_${arch}.${ext}',
+  },
+  rpm: {
+    packageName: 'network-canvas-interviewer',
+    artifactName: 'network-canvas-interviewer-${version}.${arch}.${ext}',
+  },
+  appImage: {
+    artifactName: '${productName}-${version}-${arch}.${ext}',
   },
   publish: [
     {
