@@ -78,6 +78,11 @@ module.exports = {
     notarize: Boolean(process.env.APPLE_API_KEY || process.env.APPLE_ID),
   },
   linux: {
+    // Without this, electron-builder derives the Linux executable name from
+    // package.json's name — since the monorepo rename that is the scoped
+    // "@codaco/interviewer-classic", which AppImage rejects as unsafe for
+    // file paths. Keep the pre-monorepo executable name that 6.6.0 shipped.
+    executableName: 'network-canvas-interviewer',
     maintainer: 'Joshua Melville <joshmelville@gmail.com>',
     target: [
       { target: 'deb', arch: ['x64', 'arm64'] },
