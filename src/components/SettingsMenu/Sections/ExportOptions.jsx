@@ -12,7 +12,6 @@ const ExportOptions = (props) => {
   const {
     exportGraphML,
     exportCSV,
-    unifyNetworks,
     useScreenLayoutCoordinates,
     screenLayoutHeight,
     screenLayoutWidth,
@@ -69,27 +68,6 @@ const ExportOptions = (props) => {
             <strong>attribute list file</strong> for each node type, an
             <strong>edge list file</strong> for each edge type, and an
             <strong>ego attribute file</strong> that also contains session data.
-          </p>
-        </div>
-      </motion.article>
-      <motion.article className="settings-element">
-        <Toggle
-          input={{
-            value: unifyNetworks,
-            onChange: () => toggleSetting('unifyNetworks'),
-          }}
-        />
-        <div>
-          <h2>Merge Sessions</h2>
-          <p>
-            If you enable this option, exporting multiple sessions at the same
-            time will cause them to be merged into a single file, on a
-            per-protocol basis. In the case of CSV export, you will receive one
-            of each type of file for each protocol. In the case of GraphML you
-            will receive a single GraphML file with multiple{' '}
-            <code>&lt;graph&gt;</code> elements. Please note that with the
-            exception of Network Canvas Server, most software does not yet
-            support multiple graphs in a single GraphML file.
           </p>
         </div>
       </motion.article>
@@ -170,7 +148,6 @@ const mapDispatchToProps = {
 const mapStateToProps = (state) => ({
   exportGraphML: state.deviceSettings.exportGraphML,
   exportCSV: state.deviceSettings.exportCSV,
-  unifyNetworks: state.deviceSettings.unifyNetworks,
   useScreenLayoutCoordinates: state.deviceSettings.useScreenLayoutCoordinates,
   screenLayoutWidth: state.deviceSettings.screenLayoutWidth,
   screenLayoutHeight: state.deviceSettings.screenLayoutHeight,
@@ -179,7 +156,6 @@ const mapStateToProps = (state) => ({
 ExportOptions.propTypes = {
   exportGraphML: PropTypes.bool.isRequired,
   exportCSV: PropTypes.bool.isRequired,
-  unifyNetworks: PropTypes.bool.isRequired,
   useScreenLayoutCoordinates: PropTypes.bool.isRequired,
   screenLayoutWidth: PropTypes.number.isRequired,
   screenLayoutHeight: PropTypes.number.isRequired,

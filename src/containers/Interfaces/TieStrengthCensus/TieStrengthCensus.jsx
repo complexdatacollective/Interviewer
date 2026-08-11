@@ -6,9 +6,9 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 
 import BooleanOption from '@codaco/ui/lib/components/Boolean/BooleanOption';
-import { Markdown } from '@codaco/ui/lib/components/Fields';
 
 import withPrompt from '../../../behaviours/withPrompt';
+import { Markdown } from '../../../components/Markdown';
 import Prompts from '../../../components/Prompts';
 import { actionCreators as navigateActions } from '../../../ducks/modules/navigate';
 import { makeNetworkNodesForType as makeGetNodes } from '../../../selectors/interface';

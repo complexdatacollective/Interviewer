@@ -55,7 +55,7 @@ const HeaderSection = () => {
           <img
             src={NCLogo}
             className="header-logo"
-            alt="Network Canvas Interviewer"
+            alt="Network Canvas Interviewer Classic"
           />
         </div>
         <div className="header-mark">

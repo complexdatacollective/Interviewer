@@ -5,7 +5,10 @@ const openDialogOptions = {
   nameFieldLabel: 'Open:',
   defaultPath: 'Protocol.netcanvas',
   filters: [
-    { name: 'Network Canvas Interviewer protocol', extensions: ['netcanvas'] },
+    {
+      name: 'Network Canvas Interviewer Classic protocol',
+      extensions: ['netcanvas'],
+    },
   ],
   properties: ['openFile'],
 };

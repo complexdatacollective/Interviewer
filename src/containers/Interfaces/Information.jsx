@@ -1,10 +1,9 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 
-import { Markdown } from '@codaco/ui/lib/components/Fields';
-
 import AssetMetaProvider from '../../behaviours/AssetMetaProvider';
 import { Audio, BackgroundImage, Video } from '../../components';
+import { Markdown } from '../../components/Markdown';
 import { AssetType, InformationContentType } from '../../protocol-consts';
 
 const getAssetComponent = (asset) => {

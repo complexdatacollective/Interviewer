@@ -8,8 +8,8 @@ import { isDirty, isValid, submit } from 'redux-form';
 import { v4 as uuid } from 'uuid';
 
 import { ProgressBar } from '@codaco/ui';
-import { Markdown } from '@codaco/ui/lib/components/Fields';
 
+import { Markdown } from '../../components/Markdown';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import useReadyForNextStage from '../../hooks/useReadyForNextStage';
 

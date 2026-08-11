@@ -60,7 +60,7 @@ const DeveloperTools = (props) => {
       </motion.article>
       <motion.article className="settings-element">
         <Toggle
-          disabled={!!isAndroid()}
+          disabled={isAndroid()}
           input={{
             value: enableExperimentalTTS,
             onChange: () => toggleSetting('enableExperimentalTTS'),

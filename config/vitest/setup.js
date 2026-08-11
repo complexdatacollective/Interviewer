@@ -5,6 +5,11 @@ import { vi } from 'vitest';
 // Configure Enzyme
 configure({ adapter: new Adapter() });
 
+// jsdom 30 brand-checks CSS.escape's receiver, while legacy JSS 10 captures
+// and invokes the method unbound. Bind the test-environment implementation to
+// match the receiver-independent browser behavior JSS expects.
+CSS.escape = CSS.escape.bind(CSS);
+
 // Polyfills. requestAnimationFrame is backed by a timer, so a queued animation
 // callback (e.g. animejs's engine loop) can fire AFTER jsdom teardown, when
 // globals like requestAnimationFrame are gone — animejs then re-references the

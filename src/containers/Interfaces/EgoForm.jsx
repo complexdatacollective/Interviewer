@@ -7,8 +7,8 @@ import { isDirty, isValid, submit } from 'redux-form';
 
 import { entityAttributesProperty } from '@codaco/shared-consts';
 import { Icon, Scroller } from '@codaco/ui';
-import { Markdown } from '@codaco/ui/lib/components/Fields';
 
+import { Markdown } from '../../components/Markdown';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { actionCreators as sessionsActions } from '../../ducks/modules/sessions';
 import useFlipflop from '../../hooks/useFlipflop';

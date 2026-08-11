@@ -6,8 +6,9 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 
 import { Icon, window as Window } from '@codaco/ui';
-import { MarkdownLabel, Radio } from '@codaco/ui/lib/components/Fields';
+import { Radio } from '@codaco/ui/lib/components/Fields';
 
+import { MarkdownLabel } from '../../components/Markdown';
 import {
   makeGetCategoricalOptions,
   makeGetEdgeColor,

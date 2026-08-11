@@ -24,7 +24,6 @@ const initialState = {
   showGettingStarted: true,
   showWhatsNew: false,
   startFullScreen: false,
-  unifyNetworks: false,
   useDynamicScaling: undefined,
   useFullScreenForms: false,
   useScreenLayoutCoordinates: false,

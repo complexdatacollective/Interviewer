@@ -76,10 +76,8 @@ const mapEventToProgress = (event) => {
 
 /**
  * Build an ExportOptions object from device settings.
- * Note: the maintained @codaco/network-exporters pipeline no longer accepts
- * `exportFilename`/`unifyNetworks`; those legacy options are intentionally
- * dropped. The output filename is derived by the pipeline and surfaced via the
- * sink (see runExport).
+ * The output filename is derived by the pipeline and surfaced via the sink
+ * (see runExport).
  */
 const buildExportOptions = (deviceSettings) => ({
   exportGraphML: deviceSettings.exportGraphML,

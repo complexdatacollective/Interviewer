@@ -49,7 +49,7 @@ function createWindow() {
       width: 1440,
       height: 900,
       center: true,
-      title: 'Network Canvas Interviewer',
+      title: 'Network Canvas Interviewer Classic',
       webPreferences: {
         nodeIntegration: false,
         contextIsolation: true,

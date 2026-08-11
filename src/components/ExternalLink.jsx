@@ -22,6 +22,7 @@ const openExternalLink = (href) => {
     return false;
   }
 
+  window.open(href, '_blank', 'noopener,noreferrer');
   return false;
 };
 
@@ -32,7 +33,12 @@ const ExternalLink = ({ children, href }) => {
   };
 
   return (
-    <a href="#" onClick={handleClick}>
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      onClick={handleClick}
+    >
       {children}
     </a>
   );

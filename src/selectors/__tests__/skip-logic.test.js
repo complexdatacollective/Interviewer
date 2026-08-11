@@ -38,9 +38,9 @@ const mockState = {
                   type: 'alter',
                   options: {
                     type: 'person',
-                    attribute: 'name',
+                    attribute: 'id',
                     operator: 'GREATER_THAN',
-                    value: 't',
+                    value: 1,
                   },
                 },
               ],

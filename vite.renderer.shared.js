@@ -44,7 +44,6 @@ export const sharedRendererConfig = {
           'global-builtin',
           'legacy-js-api',
           'color-functions',
-          'mixed-decls',
           'slash-div',
           'if-function',
         ],

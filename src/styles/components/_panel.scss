@@ -10,9 +10,7 @@
   flex: 1 0 5rem;
   display: flex;
   flex-direction: column;
-  background-color: var(
-    --panel-bg-muted
-  ); // Replaced light background palette because it was too strong. This seems to be a one-off color, but migrate to UI if used elsewhere
+  background-color: var(--panel-bg-muted); // Replaced light background palette because it was too strong. This seems to be a one-off color, but migrate to UI if used elsewhere
   border-color: palette('primary');
   border-style: solid;
   border-width: 0;

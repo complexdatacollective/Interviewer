@@ -9,11 +9,11 @@ import {
   entityAttributesProperty,
   entityPrimaryKeyProperty,
 } from '@codaco/shared-consts';
-import { MarkdownLabel } from '@codaco/ui/lib/components/Fields';
 import { getCSSVariableAsString } from '@codaco/ui/lib/utils/CSSVariables';
 
 import { MonitorDragSource } from '../behaviours/DragAndDrop';
 import { NodeList } from '../components';
+import { MarkdownLabel } from '../components/Markdown';
 import { getEntityAttributes } from '../ducks/modules/network';
 import { actionCreators as sessionsActions } from '../ducks/modules/sessions';
 import {

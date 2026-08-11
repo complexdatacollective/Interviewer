@@ -6,7 +6,7 @@ import { CategoricalListItem } from '../CategoricalListItem';
 
 const mockStore = {
   getState: () => ({}),
-  subscribe: () => ({}),
+  subscribe: () => () => {},
 };
 
 const mockProps = {
@@ -36,5 +36,10 @@ describe('CategoricalList component', () => {
     );
 
     expect(component.find(CategoricalListItem)).toHaveLength(2);
+
+    // The mounted tree contains DropTarget behaviours whose setTimeout->rAF
+    // polling loop only stops on unmount; left mounted, a pending timeout can
+    // fire after jsdom teardown, where requestAnimationFrame no longer exists.
+    component.unmount();
   });
 });

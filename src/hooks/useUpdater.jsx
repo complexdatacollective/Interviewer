@@ -4,9 +4,9 @@ import { useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { Button } from '@codaco/ui';
-import { Markdown } from '@codaco/ui/lib/components/Fields';
 
-import ExternalLink, { openExternalLink } from '../components/ExternalLink';
+import { openExternalLink } from '../components/ExternalLink';
+import { Markdown } from '../components/Markdown';
 import { actionCreators as dialogActions } from '../ducks/modules/dialogs';
 import { actionCreators as toastActions } from '../ducks/modules/toasts';
 import {
@@ -19,13 +19,6 @@ import {
 } from '../utils/Environment';
 import getVersion from '../utils/getVersion';
 import useDismissedUpdatesState from './useDismissedUpdatesState';
-
-// Custom renderer for links so that they open correctly in an external browser
-const markdownComponents = {
-  a: ({ children, href }) => (
-    <ExternalLink href={href}>{children}</ExternalLink>
-  ),
-};
 
 export const getPlatformSpecificContent = (assets) => {
   if (isIOS()) {
@@ -128,7 +121,6 @@ const useUpdater = (updateEndpoint, timeout = 0) => {
             </p>
             <Markdown
               className="dialog-release-notes__notes"
-              markdownRenderers={markdownComponents}
               label={releaseNotes}
             />
           </div>
@@ -165,8 +157,8 @@ const useUpdater = (updateEndpoint, timeout = 0) => {
         content: (
           <>
             <p>
-              A new version of Network Canvas Interviewer is available. To
-              upgrade, see the link in the release notes.
+              A new version of Network Canvas Interviewer Classic is available.
+              To upgrade, see the link in the release notes.
             </p>
             <div className="toast-button-group">
               <Button

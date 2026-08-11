@@ -1,5 +1,4 @@
 import { mount } from 'enzyme';
-import * as framer from 'framer-motion';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import { vi } from 'vitest';
@@ -11,8 +10,6 @@ describe('Session Navigation Component', () => {
   const setExpandedMock = vi.fn();
   const backMock = vi.fn();
   const nextMock = vi.fn();
-
-  framer.useInvertedScale = vi.fn(() => ({ scaleX: 1, scaleY: 1 }));
 
   let component = null;
 

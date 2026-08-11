@@ -35,7 +35,7 @@ const checkSchemaVersion = (protocol) => {
 
   return Promise.reject(
     new Error(
-      'The schema version of this protocol is not compatible with this version of Network Canvas Interviewer. Upgrade the protocol using Architect, and try importing it again.',
+      'The schema version of this protocol is not compatible with this version of Network Canvas Interviewer Classic. Upgrade the protocol using Architect, and try importing it again.',
     ),
   );
 };

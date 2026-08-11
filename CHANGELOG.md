@@ -1,5 +1,11 @@
 # network-canvas-interviewer
 
+## 6.6.1
+
+- **Fixed a crash on launch.** Version 6.6.0 could fail to start with a "Cannot find module
+  'lodash/defaults'" error, caused by a required dependency being left out of the packaged
+  app. The app now starts correctly.
+
 ## 6.6.0
 
 - **Updated core dependencies.** The technology the app is built on has been brought up to
@@ -10,6 +16,11 @@
 - **Improved security.** We've adopted current security best practices for building and
   distributing the app — including properly signed and notarized macOS builds — so you can be
   confident the software you download is genuine and safe to run.
+- **Removed the "Merge Sessions" export option.** The updated export pipeline always exports
+  each interview session as separate files. If you need a combined dataset, you can merge the
+  per-session CSV files during analysis instead — see the
+  [Data Export documentation](https://documentation.networkcanvas.com/en/analyze-data/data-export#merge-sessions-by-protocol)
+  for guidance.
 
 ## 6.5.10
 
