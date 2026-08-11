@@ -27,6 +27,9 @@ class ImageReporter {
         process.cwd(),
         'integration-tests/__tests__/__image_snapshots__/__diff_output__/',
       );
+      if (!IMGBB_API_KEY) {
+        return;
+      }
       const files = fs.readdirSync(imagePath);
       files.forEach((value) => {
         imgbbUploader(IMGBB_API_KEY, path.resolve(imagePath, value))
