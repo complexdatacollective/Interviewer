@@ -45,16 +45,16 @@ describe('WorkerAgent', () => {
     expect(agent.sendMessageAsync()).toHaveProperty('cancellationId');
   });
 
-  it('rejects when unavailable', () => {
+  it('rejects when unavailable', async () => {
     agent.worker = null;
-    expect(agent.sendMessageAsync()).rejects.toMatchObject({
+    await expect(agent.sendMessageAsync()).rejects.toMatchObject({
       message: 'Worker unavailable',
     });
   });
 
-  it('rejects when a shared worker has errored', () => {
+  it('rejects when a shared worker has errored', async () => {
     agent.worker.globalError = new Error('mock syntax error');
-    expect(agent.sendMessageAsync()).rejects.toMatchObject({
+    await expect(agent.sendMessageAsync()).rejects.toMatchObject({
       message: expect.stringMatching(agent.worker.globalError.message),
     });
   });

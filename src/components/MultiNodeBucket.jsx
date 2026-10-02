@@ -21,6 +21,13 @@ const MultiNodeBucket = (props) => {
   const [currentListId, setCurrentListId] = useState(null);
   const [sortedNodes, setSortedNodes] = useState([]);
 
+  // This effect synchronises `sortedNodes`/`stagger`/`exit` with the
+  // TransitionGroup's exit-animation timing (a `setTimeout` keyed to the CSS
+  // transition duration), so a listId change can play an exit animation
+  // before the new nodes appear. That timing coordination with the DOM/CSS
+  // transition system is a legitimate use of an effect; the synchronous
+  // branches below are the "no animation needed" fast paths of the same
+  // state machine and can't be split out without altering that timing.
   useEffect(() => {
     const sorter = createSorter(sortOrder); // Uses the new sortOrder via withPrompt
     const sorted = sorter(nodes);

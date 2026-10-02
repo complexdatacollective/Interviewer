@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import sanitizeFilename from 'sanitize-filename';
 
@@ -131,11 +131,23 @@ const DataExportScreen = ({ show, onClose }) => {
     });
   };
 
-  useEffect(() => {
+  // Adjusted during render (comparing against the previously seen show
+  // value) rather than in an effect, so the reset applies in the same
+  // commit as the overlay closing.
+  //
+  // Seeded `true`, not `show`: `step` starts at 3, which renders nothing, and
+  // only `reset()` moves it to 1. The effect this replaced ran on mount, and
+  // that mount run is how a screen mounted closed (the usual case — the Start
+  // Screen mounts it with `show={false}`) became openable at all. Seeding
+  // `true` reproduces it exactly: a mount with `show` false resets, a mount
+  // with `show` already true does not, which is what the effect did.
+  const [prevShow, setPrevShow] = useState(true);
+  if (show !== prevShow) {
+    setPrevShow(show);
     if (!show) {
       reset();
     }
-  }, [show, reset]);
+  }
 
   if (!show) {
     return null;

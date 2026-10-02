@@ -1,0 +1,19 @@
+{
+  "name": "@codaco/vitest-config",
+  "version": "0.1.0",
+  "private": true,
+  "files": [
+    "legacy/**"
+  ],
+  "type": "module",
+  "exports": {
+    "./legacy/disable-animations": "./legacy/disable-animations.js",
+    "./legacy/setup-path": "./legacy/setup-path.js",
+    "./modern/browser-viewport": "./modern/browser-viewport.js",
+    "./modern/with-animations-enabled": "./modern/with-animations-enabled.js"
+  },
+  "dependencies": {},
+  "peerDependencies": {
+    "vitest": "^5.0.3"
+  }
+}

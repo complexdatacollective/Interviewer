@@ -1,14 +1,22 @@
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
+
+import { disableAnimationsSetup } from '@codaco/vitest-config/legacy/setup-path';
+
+const configDirectory = fileURLToPath(new URL('.', import.meta.url));
 
 export default defineConfig({
   plugins: [react()],
   test: {
     globals: true,
     environment: 'jsdom',
-    setupFiles: [path.resolve(__dirname, 'config/vitest/setup.js')],
+    setupFiles: [
+      fileURLToPath(import.meta.resolve(disableAnimationsSetup)),
+      path.resolve(configDirectory, 'config/vitest/setup.js'),
+    ],
     include: ['src/**/*.test.{js,jsx}', 'src/**/__tests__/**/*.{js,jsx}'],
     exclude: [
       'node_modules',
@@ -22,7 +30,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, 'src'),
+      '@': path.resolve(configDirectory, 'src'),
     },
   },
 });

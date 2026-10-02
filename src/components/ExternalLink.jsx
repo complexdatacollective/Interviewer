@@ -17,6 +17,7 @@ const openExternalLink = (href) => {
 
   if (isCapacitor()) {
     Browser.open({ url: href }).catch((error) => {
+      // oxlint-disable-next-line no-console -- only diagnostic for a Capacitor Browser.open rejection; nothing else reports this failure
       console.error('[external link] failed to open:', error);
     });
     return false;

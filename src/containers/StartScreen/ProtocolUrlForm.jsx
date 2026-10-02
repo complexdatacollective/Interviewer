@@ -55,8 +55,7 @@ const ProtocolUrlForm = ({ show, handleClose }) => {
       <div className="protocol-url-form">
         <p>
           Enter the full URL to a protocol file below, including{' '}
-          <code>http://</code> or
-          <code>https://</code> at the start.
+          <code>http://</code> or <code>https://</code> at the start.
         </p>
         <Form
           form={formConfig.formName}

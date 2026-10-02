@@ -65,8 +65,8 @@ const ExportOptions = (props) => {
             CSV is a widely used format for storing network data, but this wider
             compatibility comes at the expense of robustness. If you enable this
             format, your networks will be exported as an{' '}
-            <strong>attribute list file</strong> for each node type, an
-            <strong>edge list file</strong> for each edge type, and an
+            <strong>attribute list file</strong> for each node type, an{' '}
+            <strong>edge list file</strong> for each edge type, and an{' '}
             <strong>ego attribute file</strong> that also contains session data.
           </p>
         </div>

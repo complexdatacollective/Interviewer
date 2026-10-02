@@ -6,6 +6,7 @@ import { actionCreators as toastActions } from '../ducks/modules/toasts';
 import { store } from '../ducks/store';
 import { runExport } from './export/runExport';
 import { saveExportBlob } from './export/saveExport';
+import getVersion from './getVersion';
 import { getRemoteProtocolID } from './networkFormat';
 
 const { dispatch, getState } = store;
@@ -79,7 +80,10 @@ const mapEventToProgress = (event) => {
  * The output filename is derived by the pipeline and surfaced via the sink
  * (see runExport).
  */
-const buildExportOptions = (deviceSettings) => ({
+const buildExportOptions = (deviceSettings, appVersion) => ({
+  // Written to every session's ego data (APP_VERSION) so an export records
+  // which Interviewer produced it.
+  appVersion,
   exportGraphML: deviceSettings.exportGraphML,
   exportCSV: deviceSettings.exportCSV,
   globalOptions: {
@@ -161,7 +165,7 @@ export const exportToFile = async (selectedSessionIds) => {
     installedProtocols,
   );
 
-  const options = buildExportOptions(deviceSettings);
+  const options = buildExportOptions(deviceSettings, await getVersion());
   const sessionIds = interviews.map((interview) => interview.id);
 
   // Lazily created so `abort()` can interrupt an in-flight run; defaults to a

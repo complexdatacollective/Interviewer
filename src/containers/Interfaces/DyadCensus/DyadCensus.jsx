@@ -46,6 +46,9 @@ const introVariants = {
   hide: { opacity: 0, scale: 0 },
 };
 
+const YesLabel = () => <h1>Yes</h1>;
+const NoLabel = () => <h1>No</h1>;
+
 /**
  * Dyad Census Interface
  */
@@ -248,13 +251,13 @@ const DyadCensus = ({
                                   <BooleanOption
                                     selected={!!hasEdge && hasEdge !== null}
                                     onClick={handleChange(true)}
-                                    label={() => <h1>Yes</h1>}
+                                    label={YesLabel}
                                   />
                                   <BooleanOption
                                     classes="boolean-option--no"
                                     onClick={handleChange(false)}
                                     selected={!hasEdge && hasEdge !== null}
-                                    label={() => <h1>No</h1>}
+                                    label={NoLabel}
                                     negative
                                   />
                                 </div>

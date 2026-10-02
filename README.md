@@ -89,7 +89,6 @@ Note: for Apple Silicon users, you need to install the `electron` package manual
 | `dev:[platform]`   | Run a live-reloading build of the app, targeted at the platform you specify. Requires the live server to be running (see start task). |
 | `build:[platform]` | Compiles assets and prepares app for production on the given platform.                                                                |
 | `test`             | Runs testing suite.                                                                                                                   |
-| `generate-icons`   | Uses icon-gen package to generate iconsets and icon files for OSX and Windows.                                                        |
 | `dist:[platform]`  | Uses electron-packager or cordova to package a release for the specified platform.                                                    |
 | `lint`             | Lints the project according to our eslint configuration                                                                               |
 | `sass-lint`        | Lints the project's SASS files only, according to our sass-lint configuration.                                                        |

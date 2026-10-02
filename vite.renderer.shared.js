@@ -14,12 +14,28 @@ export const sharedRendererConfig = {
     alias: {
       '@': rendererRoot,
       '~': resolve(__dirname, 'node_modules'),
-      // Shim for react-resize-aware which has a broken build (uses jsx without importing it)
-      'react-resize-aware': resolve(
-        __dirname,
-        'src/shims/react-resize-aware.js',
-      ),
     },
+  },
+  build: {
+    commonjsOptions: {
+      include: [/node_modules/],
+      transformMixedEsModules: true,
+    },
+    dynamicImportVarsOptions: {
+      // Vite leaves dynamic imports in node_modules untransformed by default.
+      // protocol-validation loads its validators with
+      // import(`./schemas/${version}.js`), which then resolves against the
+      // bundle instead of the package and fails for every protocol
+      // ("Couldn't find validator for schema version N"). Transform that one
+      // package so its schema files are bundled as chunks.
+      exclude: [/^(?!.*\/@codaco\/protocol-validation\/).*\/node_modules\//],
+    },
+    // @codaco/ui reads animation settings by JSON.parse-ing CSS custom
+    // properties (--animation-easing-json: [0.4, 0, 0.2, 1]). The CSS minifier
+    // shortens those numbers to `.4`, which is not JSON, so every transition
+    // threw and the mobile (web) build never rendered an interview. Ship CSS
+    // unminified, as the Electron renderer already does.
+    cssMinify: false,
   },
   plugins: [react()],
   worker: { format: 'es' },

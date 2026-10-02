@@ -1,5 +1,5 @@
 import { difference } from 'lodash';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { SessionCard } from '@codaco/ui/lib/components/Cards';
@@ -40,8 +40,8 @@ const SessionSelect = ({ selectedSessions, setSelectedSessions }) => {
   );
 
   // Memoized so the value is stable across renders that don't change its
-  // inputs. Without this, the filtering effect below (which calls a setter)
-  // would see a new array every render and loop infinitely.
+  // inputs, which keeps the filteredSessions memo below from recomputing
+  // on every render.
   const formattedSessions = useMemo(
     () =>
       Object.keys(sessions).map((sessionUUID) => {
@@ -74,18 +74,11 @@ const SessionSelect = ({ selectedSessions, setSelectedSessions }) => {
     [sessions, installedProtocols, selectedSessions, handleSessionCardClick],
   );
 
-  const [filteredSessions, setFilteredSessions] = useState(formattedSessions);
+  const filteredSessions = useMemo(
+    () => getFilteredList(formattedSessions, filterTerm, null),
+    [formattedSessions, filterTerm],
+  );
   const filteredIds = filteredSessions.map(({ sessionUUID }) => sessionUUID);
-
-  useEffect(() => {
-    const newFilteredSessions = getFilteredList(
-      formattedSessions,
-      filterTerm,
-      null,
-    );
-
-    setFilteredSessions(newFilteredSessions);
-  }, [filterTerm, formattedSessions]);
 
   const isSelectAll =
     selectedSessions.length > 0 &&

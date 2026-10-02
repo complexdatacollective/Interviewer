@@ -9,8 +9,8 @@
 import { randomUUID } from 'node:crypto';
 import path from 'node:path';
 
+import decompress from '@xhmikosr/decompress';
 import archiver from 'archiver';
-import decompress from 'decompress';
 import { app, BrowserWindow, dialog, ipcMain, shell } from 'electron';
 import fse from 'fs-extra';
 

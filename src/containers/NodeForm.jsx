@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { submit } from 'redux-form';
 
@@ -66,11 +66,16 @@ const NodeForm = (props) => {
 
   // When a selected node is passed in, we are editing an existing node.
   // We need to show the form and populate it with the node's data.
-  useEffect(() => {
+  // Adjusted during render (comparing against the previously seen
+  // selectedNode) rather than in an effect, so it applies in the same
+  // commit as the prop change.
+  const [prevSelectedNode, setPrevSelectedNode] = useState(selectedNode);
+  if (selectedNode !== prevSelectedNode) {
+    setPrevSelectedNode(selectedNode);
     if (selectedNode) {
       setShow(true);
     }
-  }, [selectedNode]);
+  }
 
   const FormComponent = useMemo(() => {
     if (useFullScreenForms) {

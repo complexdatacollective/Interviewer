@@ -70,7 +70,10 @@ const EgoForm = ({
     };
   }, [isFormDirty, isFormValid]);
 
-  // Detect if the scrollable element has overflowing content
+  // Detect if the scrollable element has overflowing content. This reads
+  // layout geometry from the DOM, which is only known after the browser has
+  // painted, so it genuinely needs an effect rather than being derivable
+  // during render.
   useEffect(() => {
     const element = document.querySelector(
       '.ego-form__form-container-scroller',

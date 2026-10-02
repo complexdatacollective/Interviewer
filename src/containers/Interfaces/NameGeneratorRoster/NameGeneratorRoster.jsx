@@ -2,7 +2,7 @@ import cx from 'classnames';
 import { AnimatePresence, motion } from 'framer-motion';
 import { isEmpty, isUndefined } from 'lodash';
 import PropTypes from 'prop-types';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { compose } from 'redux';
 
@@ -141,10 +141,6 @@ const NameGeneratorRoster = (props) => {
   );
 
   registerBeforeNext(handleBeforeLeaving);
-
-  useEffect(() => {
-    setShowMinWarning(false);
-  }, []);
 
   const searchOptions = ((options) => {
     if (!options || isEmpty(options)) {

@@ -9,6 +9,10 @@ import Picker from '../../components/Picker';
 import { actionCreators as dialogActions } from '../../ducks/modules/dialogs';
 import { actionCreators as installedProtocolActions } from '../../ducks/modules/installedProtocols';
 
+const SelectableProtocolCard = ({ uid, onSelect, ...props }) => (
+  <ProtocolCard {...props} onClickHandler={() => onSelect(uid)} />
+);
+
 const ManageProtocolsOverlay = ({ show, onClose }) => {
   const [selectedProtocols, setSelectedProtocols] = useState([]);
   const installedProtocols = useSelector((state) => state.installedProtocols);
@@ -27,6 +31,7 @@ const ManageProtocolsOverlay = ({ show, onClose }) => {
         uid: protocolUID,
         key: protocolUID,
         selected: selectedProtocols.includes(protocolUID),
+        onSelect: handleProtocolCardClick,
         [entityAttributesProperty]: {
           schemaVersion,
           lastModified,
@@ -77,13 +82,6 @@ const ManageProtocolsOverlay = ({ show, onClose }) => {
       protocolUUID,
     ]);
   };
-
-  const SelectableProtocolCard = ({ uid, ...props }) => (
-    <ProtocolCard
-      {...props}
-      onClickHandler={() => handleProtocolCardClick(uid)}
-    />
-  );
 
   return (
     <Picker

@@ -299,8 +299,7 @@ const SlidesForm = (props) => {
             exit={{ opacity: 0, y: 100 }}
           >
             <h6 className="progress-container__status-text">
-              <strong>{activeIndex}</strong> of
-              <strong>{items.length}</strong>
+              <strong>{activeIndex}</strong> of <strong>{items.length}</strong>
             </h6>
             <ProgressBar
               orientation="horizontal"

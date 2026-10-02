@@ -29,11 +29,8 @@ export default defineConfig({
   renderer: {
     ...sharedRendererConfig,
     build: {
+      ...sharedRendererConfig.build,
       outDir: resolve(__dirname, 'out/renderer'),
-      commonjsOptions: {
-        include: [/node_modules/],
-        transformMixedEsModules: true,
-      },
       rollupOptions: {
         input: resolve(__dirname, 'src/index.html'),
       },

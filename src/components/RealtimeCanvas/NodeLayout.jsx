@@ -47,6 +47,8 @@ class NodeLayout extends React.Component {
       network: { nodes },
     } = this.context;
 
+    let createdEl = false;
+
     this.layoutEls = nodes.map((_, index) => {
       if (this.layoutEls[index]) {
         return this.layoutEls[index];
@@ -57,9 +59,18 @@ class NodeLayout extends React.Component {
       nodeEl.style.transform = 'translate(-50%, -50%)';
       nodeEl.style.display = 'none';
       this.ref.current.append(nodeEl);
+      createdEl = true;
 
       return nodeEl;
     });
+
+    // render() portals each node into its element, so a node whose element
+    // did not exist yet rendered nothing. Render again now that it does;
+    // otherwise a node placed on the canvas stays invisible until something
+    // else happens to re-render the layout.
+    if (createdEl) {
+      this.forceUpdate();
+    }
   };
 
   update = () => {

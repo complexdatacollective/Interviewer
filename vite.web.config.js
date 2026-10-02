@@ -8,12 +8,9 @@ export default defineConfig({
   ...sharedRendererConfig,
   base: './',
   build: {
+    ...sharedRendererConfig.build,
     outDir: resolve(__dirname, 'dist-web'),
     emptyOutDir: true,
-    commonjsOptions: {
-      include: [/node_modules/],
-      transformMixedEsModules: true,
-    },
     rollupOptions: { input: resolve(rendererRoot, 'index.html') },
   },
   // host: true (0.0.0.0) so on-device targets can reach the dev server — the

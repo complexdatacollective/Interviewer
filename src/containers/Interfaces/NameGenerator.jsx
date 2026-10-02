@@ -1,6 +1,6 @@
 import { has, isUndefined, omit } from 'lodash';
 import PropTypes from 'prop-types';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { compose } from 'redux';
@@ -78,11 +78,18 @@ const NameGenerator = (props) => {
 
   const maxNodesReached = stageNodeCount >= maxNodes;
 
-  useEffect(() => {
-    if (stageNodeCount >= minNodes) {
+  // Automatically clear the warning once enough nodes have been added.
+  // Adjusted during render (comparing against the previously seen value)
+  // rather than in an effect, so the reset applies in the same commit as
+  // the node count change.
+  const minNodesMet = stageNodeCount >= minNodes;
+  const [prevMinNodesMet, setPrevMinNodesMet] = useState(minNodesMet);
+  if (minNodesMet !== prevMinNodesMet) {
+    setPrevMinNodesMet(minNodesMet);
+    if (minNodesMet) {
       setShowMinWarning(false);
     }
-  }, [stageNodeCount, minNodes]);
+  }
 
   // Prevent leaving the stage if the minimum number of nodes has not been met
   const handleBeforeLeaving = (direction, destination) => {

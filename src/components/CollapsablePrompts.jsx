@@ -1,6 +1,6 @@
 import MinimizeIcon from '@material-ui/icons/Minimize';
 import { AnimatePresence, motion } from 'framer-motion';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 import { Button } from '@codaco/ui';
 
@@ -26,12 +26,16 @@ const CollapsablePrompts = React.memo((props) => {
     },
   };
 
-  // Reset the minimization when the prompt changes
-  useEffect(() => {
+  // Reset the minimization when the prompt changes. Adjusted during render
+  // (comparing against the previously seen prompt index) rather than in an
+  // effect, so the reset applies in the same commit as the prompt change.
+  const [prevPromptIndex, setPrevPromptIndex] = useState(currentPromptIndex);
+  if (currentPromptIndex !== prevPromptIndex) {
+    setPrevPromptIndex(currentPromptIndex);
     if (minimized) {
       setMinimized(false);
     }
-  }, [currentPromptIndex]);
+  }
 
   return (
     <motion.div

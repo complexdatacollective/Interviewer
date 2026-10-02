@@ -59,13 +59,22 @@ const compileWorker = (src, funcName) => {
     `;
 };
 
+// Architect's stage preview passes the protocol's working directory, an
+// absolute path, as its UID (its asset:// URLs rely on that); installed
+// protocols have plain IDs under userData/protocols.
+const isAbsolutePath = (value) =>
+  typeof value === 'string' && /^(\/|[A-Za-z]:[\\/])/.test(value);
+
 /**
  * preloadWorkers
  * @description Read custom worker scripts from the protocol package, if any.
  * By preloading any existing, we can bootstrap before protocol.json is parsed.
  */
 const preloadWorkers = async (protocolUID) => {
-  const basePath = await protocolPath(protocolUID);
+  const basePath =
+    !isCapacitor() && isAbsolutePath(protocolUID)
+      ? protocolUID
+      : await protocolPath(protocolUID);
 
   // On Capacitor, reading a non-existent worker file logs a native error, so
   // list the protocol directory up front and only read workers that exist.

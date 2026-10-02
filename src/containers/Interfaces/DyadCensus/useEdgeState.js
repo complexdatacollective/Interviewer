@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
 
@@ -137,12 +137,19 @@ const useEdgeState = (
   };
 
   // we're only going to reset manually (when deps change), because
-  // we are internally keeping track of the edge state.
-  useEffect(() => {
+  // we are internally keeping track of the edge state. Adjusted during
+  // render (comparing against the previously seen deps) rather than in an
+  // effect, so the reset applies in the same commit as the deps change.
+  const [prevDeps, setPrevDeps] = useState(deps);
+  const depsChanged =
+    deps.length !== prevDeps.length ||
+    deps.some((dep, index) => !Object.is(dep, prevDeps[index]));
+  if (depsChanged) {
+    setPrevDeps(deps);
     setEdgeState(getEdgeInNetwork(edges, pair, edgeType));
     setIsTouched(false);
     setIsChanged(false);
-  }, deps);
+  }
 
   return [getHasEdge(), setEdge, isTouched, isChanged];
 };

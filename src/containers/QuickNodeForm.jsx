@@ -82,17 +82,26 @@ const QuickAddForm = ({
     setShowForm(false);
   };
 
-  // Handle showing/hiding the tooltip based on the nodeLabel
-  // Logic: wait 5 seconds after the user last typed something
+  // The tooltip always hides the instant the label changes. Adjusted during
+  // render (comparing against the previously seen nodeLabel) rather than in
+  // an effect, so it applies in the same commit as the label change.
+  const [prevNodeLabelForTooltip, setPrevNodeLabelForTooltip] =
+    useState(nodeLabel);
+  if (nodeLabel !== prevNodeLabelForTooltip) {
+    setPrevNodeLabelForTooltip(nodeLabel);
+    setShowTooltip(false);
+  }
+
+  // Handle showing the tooltip based on the nodeLabel.
+  // Logic: wait 5 seconds after the user last typed something. This timer
+  // scheduling is a legitimate synchronisation with the browser's clock.
   useEffect(() => {
     if (nodeLabel !== '') {
-      setShowTooltip(false);
       clearTimeout(tooltipTimer.current);
       tooltipTimer.current = setTimeout(() => {
         setShowTooltip(true);
       }, 5000);
     } else {
-      setShowTooltip(false);
       clearTimeout(tooltipTimer.current);
     }
   }, [nodeLabel]);
@@ -112,12 +121,17 @@ const QuickAddForm = ({
     }
   };
 
-  useEffect(() => {
+  // Adjusted during render (comparing against the previously seen disabled
+  // value) rather than in an effect, so it applies in the same commit as
+  // the prop change.
+  const [prevDisabled, setPrevDisabled] = useState(disabled);
+  if (disabled !== prevDisabled) {
+    setPrevDisabled(disabled);
     if (disabled) {
       setShowForm(false);
       setNodeLabel('');
     }
-  }, [disabled]);
+  }
 
   return (
     <motion.div

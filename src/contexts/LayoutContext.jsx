@@ -1,5 +1,11 @@
 import { clamp, noop } from 'lodash';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { useDispatch } from 'react-redux';
 
 import { entityPrimaryKeyProperty } from '@codaco/shared-consts';
@@ -84,7 +90,7 @@ export const LayoutProvider = ({
   } = useForceSimulation(simulationListener);
 
   const [simulationEnabled, setSimulationEnabled] = useState(true);
-  const [links, setLinks] = useState([]);
+  const links = useMemo(() => getLinks({ nodes, edges }), [nodes, edges]);
 
   const previousIsRunning = useRef(false);
   const getPosition = useRef(() => undefined);
@@ -157,11 +163,6 @@ export const LayoutProvider = ({
       setSimulationEnabled(false);
     }, 0);
   }, [simulationEnabled, reheat, stop]);
-
-  useEffect(() => {
-    const nextLinks = getLinks({ nodes, edges });
-    setLinks(nextLinks);
-  }, [edges, nodes]);
 
   useEffect(() => {
     if (!allowAutomaticLayout) {

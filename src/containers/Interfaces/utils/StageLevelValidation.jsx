@@ -41,15 +41,15 @@ const SelfDismissingNote = (Wrapped) => {
       }
     }, [timeoutDuration]);
 
-    useEffect(() => {
-      if (show) {
-        setVisible(true);
-      }
-
-      if (!show) {
-        setVisible(false);
-      }
-    }, [show]);
+    // Sync `visible` to the `show` prop whenever it changes, without
+    // clobbering the divergence created by the self-dismiss timer below.
+    // Adjusted during render (comparing against the previously seen `show`)
+    // rather than in an effect, so it applies in the same commit.
+    const [prevShow, setPrevShow] = useState(show);
+    if (show !== prevShow) {
+      setPrevShow(show);
+      setVisible(show);
+    }
 
     useEffect(() => {
       if (mouseOver) {

@@ -46,6 +46,33 @@ describe('preloadWorkers', () => {
     });
   });
 
+  describe('worker path', () => {
+    beforeAll(() => {
+      readFile.mockReturnValue(
+        Promise.resolve('function nodeLabelWorker() {}'),
+      );
+    });
+
+    it('reads an installed protocol’s worker from its protocol folder', async () => {
+      readFile.mockClear();
+      await preloadWorkers('development');
+      expect(readFile).toHaveBeenCalledWith(
+        expect.stringMatching(/\/protocols\/development\/nodeLabelWorker\.js$/),
+      );
+    });
+
+    // Architect's preview passes its working directory as the protocol UID;
+    // joining that onto userData/protocols looked for the worker at a path
+    // that does not exist, so preview nodes lost their custom labels.
+    it('reads a preview protocol’s worker from its working directory', async () => {
+      readFile.mockClear();
+      await preloadWorkers('/tmp/architect/protocols/abc');
+      expect(readFile).toHaveBeenCalledWith(
+        '/tmp/architect/protocols/abc/nodeLabelWorker.js',
+      );
+    });
+  });
+
   describe('when script doesn’t exist', () => {
     beforeAll(() => {
       readFile.mockRejectedValue(new Error('ENOENT'));
