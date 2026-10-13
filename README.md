@@ -101,6 +101,27 @@ Note: for Apple Silicon users, you need to install the `electron` package manual
 
 See below for installation, options, and information on platform specifics.
 
+## Mobile release builds
+
+The Capacitor projects in `android/` and `ios/` take their version from
+`package.json`. `pnpm version:sync`, which the `cap:sync`, `cap:run:*` and
+`cap:dev:*` scripts run first, writes the version name and a build number of
+`(major * 10000 + minor * 100 + patch) * 100` (6.6.2 -> 6060200) to both
+projects. Google Play and App Store Connect need a new, higher build number
+for every upload, so to upload the same version again, raise the last two
+digits (6060201) in both `android/app/build.gradle` (`versionCode`) and
+Xcode (_Build_). `version:sync` keeps the raised number until the version
+changes.
+
+Run `pnpm cap:sync` before building either platform.
+
+- **Android**: open `android/` in Android Studio and use _Build -> Generate
+  Signed App Bundle or APK_ with the Play upload key. Keep keystores out of
+  the repo.
+- **iOS**: open `ios/App/App.xcodeproj` in Xcode, choose the team under
+  _Signing & Capabilities_, then _Product -> Archive_ and _Distribute App_.
+  The app is iPad-only.
+
 ## Cordova Builds
 
 1. Install [cordova](https://cordova.apache.org) on your system: `npm install -g cordova`

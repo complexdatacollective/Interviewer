@@ -17,7 +17,11 @@ export default defineConfig({
       fileURLToPath(import.meta.resolve(disableAnimationsSetup)),
       path.resolve(configDirectory, 'config/vitest/setup.js'),
     ],
-    include: ['src/**/*.test.{js,jsx}', 'src/**/__tests__/**/*.{js,jsx}'],
+    include: [
+      'src/**/*.test.{js,jsx}',
+      'src/**/__tests__/**/*.{js,jsx}',
+      'scripts/**/*.test.mjs',
+    ],
     exclude: [
       'node_modules',
       'dist',

@@ -47,7 +47,7 @@ export const isCapacitor = () =>
   typeof window.Capacitor.isNativePlatform === 'function' &&
   window.Capacitor.isNativePlatform();
 
-const getCapacitorPlatform = () =>
+export const getCapacitorPlatform = () =>
   isCapacitor() ? window.Capacitor.getPlatform() : 'web';
 
 export const isIOS = () => getCapacitorPlatform() === 'ios';

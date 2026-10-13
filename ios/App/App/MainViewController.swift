@@ -6,6 +6,10 @@ import UIKit
 /// so a swipe near an edge doesn't pull in system UI mid-interview. (The home
 /// indicator is managed by CAPBridgeViewController and can't be re-overridden here.)
 class MainViewController: CAPBridgeViewController {
+  override open func capacitorDidLoad() {
+    bridge?.registerPluginInstance(LegacyCordovaDataPlugin())
+  }
+
   override var prefersStatusBarHidden: Bool {
     return true
   }

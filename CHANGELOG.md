@@ -1,5 +1,15 @@
 # network-canvas-interviewer
 
+## 6.6.3
+
+- **Restored protocols and interviews after upgrading the iOS and Android apps.** Upgrading an
+  iPad or Android tablet from Interviewer 6.5 or earlier to 6.6.2 made every installed protocol
+  and interview disappear. The data was still on the device: 6.6.2 stores it in a different
+  place and did not look where earlier versions kept it. This version finds the earlier data on
+  first launch and brings it back, alongside anything recorded since upgrading to 6.6.2.
+  **If your device is affected, do not delete or reinstall the app** — that would remove the
+  earlier data for good. Install this update instead. The desktop app was not affected.
+
 ## 6.6.2
 
 - **Fixed interviews not starting in the iOS and Android apps.** Starting or resuming an
