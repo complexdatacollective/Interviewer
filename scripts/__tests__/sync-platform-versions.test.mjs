@@ -11,6 +11,11 @@ import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { vi } from 'vitest';
+
+// The app setup mocks fs; these script integration tests need real fixture files.
+vi.unmock('node:fs');
+
 const script = resolve(
   dirname(fileURLToPath(import.meta.url)),
   '../sync-platform-versions.mjs',
